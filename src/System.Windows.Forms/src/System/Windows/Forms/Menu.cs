@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
-    using System.Security.Permissions;    
     using System.Collections;
     using System.Windows.Forms.Design;
     using System.Drawing;
@@ -94,7 +93,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MenuIsParentDescr))
         ]
         public virtual bool IsParent {
-            [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)]
             get {
                 return null != items && ItemCount > 0;
             }
@@ -227,6 +225,11 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Shipped as is in Everett
         ]
         protected internal void CloneMenu(Menu menuSrc) {
+            if (menuSrc == null)
+            {
+                throw new ArgumentNullException(nameof(menuSrc));
+            }
+
             MenuItem[] newItems = null;
             if (menuSrc.items != null) {
                 int count = menuSrc.MenuItems.Count;
@@ -244,9 +247,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         protected virtual IntPtr CreateMenuHandle() {
             return UnsafeNativeMethods.CreatePopupMenu();
         }
@@ -318,8 +320,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         public MenuItem FindMenuItem(int type, IntPtr value) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FindMenuItemInternal(type, value);
         }
 
@@ -497,12 +497,18 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly") // Shipped as is in Everett
         ]
         public virtual void MergeMenu(Menu menuSrc) {
+            if (menuSrc == null)
+            {
+                throw new ArgumentNullException(nameof(menuSrc));
+            }
+            if (menuSrc == this)
+            {
+                throw new ArgumentException(SR.MenuMergeWithSelf, nameof(menuSrc));
+            }
+
             int i, j;
             MenuItem item;
             MenuItem itemDst;
-
-            if (menuSrc == this)
-                throw new ArgumentException(SR.MenuMergeWithSelf, "menuSrc");
 
             if (menuSrc.items != null && items == null) {
                 MenuItems.Clear();                
@@ -575,10 +581,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode),
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData) {
             MenuItem item = FindMenuItemInternal(FindShortcut, (IntPtr)(int)keyData);
             return item != null? item.ShortcutClick(): false;
@@ -625,7 +627,7 @@ namespace System.Windows.Forms {
             if (menu == null)
                 return;
 
-            char menuKey = Char.ToUpper((char) NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
+            char menuKey = char.ToUpper((char) NativeMethods.Util.LOWORD(m.WParam), CultureInfo.CurrentCulture);
 
             m.Result = menu.WmMenuCharInternal(menuKey);
         }
@@ -662,7 +664,7 @@ namespace System.Windows.Forms {
             return mi.OwnerDraw &&
                    mi.Mnemonic == 0 &&
                    mi.Text.Length > 0 &&
-                   Char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
+                   char.ToUpper(mi.Text[0], CultureInfo.CurrentCulture) == key;
         }
 
         /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.MenuItemCollection"]/*' />
@@ -813,6 +815,10 @@ namespace System.Windows.Forms {
             ///     more than once to the same menu.
             /// </devdoc>
             public virtual int Add(int index, MenuItem item) {
+                if (item == null)
+                {
+                    throw new ArgumentNullException(nameof(item));
+                }
                 
                 // MenuItems can only belong to one menu at a time
                 if (item.Menu != null) {
@@ -997,7 +1003,7 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
             /// </devdoc>
-            public virtual int  IndexOfKey(String key) {
+            public virtual int  IndexOfKey(string key) {
                   // Step 0 - Arg validation
                   if (string.IsNullOrEmpty(key)){
                         return -1; // we dont support empty or null keys.

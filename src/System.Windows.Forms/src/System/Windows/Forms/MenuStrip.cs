@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
 
     /// <include file='doc\MenuStrip.uex' path='docs/doc[@for="MenuStrip"]/*' />
@@ -224,7 +223,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
 
             if (ToolStripManager.ModalMenuFilter.InMenuMode) {
@@ -252,7 +250,6 @@ namespace System.Windows.Forms {
         /// Summary of WndProc.
         /// </devdoc>
         /// <param name=m></param>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             if (m.Msg == NativeMethods.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
@@ -284,6 +281,14 @@ namespace System.Windows.Forms {
                     }
                     return AccessibleRole.MenuBar;
                 }
+            }
+
+            internal override object GetPropertyValue(int propertyID) {
+                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_MenuBarControlTypeId;
+                }
+
+                return base.GetPropertyValue(propertyID);
             }
         }
 

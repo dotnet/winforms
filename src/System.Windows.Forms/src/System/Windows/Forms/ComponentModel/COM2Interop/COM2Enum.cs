@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -109,12 +109,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int bestMatch = -1;
         
             for (int i = 0; i < stringValues.Length; i++) {
-                if (String.Compare(names[i], s, true, CultureInfo.InvariantCulture) == 0 ||
-                    String.Compare(stringValues[i], s, true, CultureInfo.InvariantCulture) == 0) {
+                if (string.Compare(names[i], s, true, CultureInfo.InvariantCulture) == 0 ||
+                    string.Compare(stringValues[i], s, true, CultureInfo.InvariantCulture) == 0) {
                     return values[i];
                 }
                 
-                if (bestMatch == -1 && 0 == String.Compare(names[i], s, true, CultureInfo.InvariantCulture)) {
+                if (bestMatch == -1 && 0 == string.Compare(names[i], s, true, CultureInfo.InvariantCulture)) {
                     bestMatch = i;
                 }
             }
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 // convert to Int32, UInt32 respectively
                 string strVal = v.ToString();
                 for (int i = 0; i < values.Length; i++) {
-                    if (String.Compare(stringValues[i], strVal, true, CultureInfo.InvariantCulture) == 0) {
+                    if (string.Compare(stringValues[i], strVal, true, CultureInfo.InvariantCulture) == 0) {
                         return names[i];
                     }
                 }

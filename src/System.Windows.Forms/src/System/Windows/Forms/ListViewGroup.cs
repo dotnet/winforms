@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Win32;
 using System.Globalization;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms {
                                
@@ -270,12 +269,11 @@ namespace System.Windows.Forms {
         }                
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.GetObjectData"]/*' />
-        [SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context) {
             info.AddValue("Header", this.Header);
             info.AddValue("HeaderAlignment", this.HeaderAlignment);
             info.AddValue("Tag", this.Tag);
-            if (!String.IsNullOrEmpty(this.Name)) {
+            if (!string.IsNullOrEmpty(this.Name)) {
                 info.AddValue("Name", this.Name);
             }
             if (items != null && items.Count > 0) {
@@ -380,7 +378,7 @@ namespace System.Windows.Forms {
                 }
 
                 for (int i = 0; i < list.Count; i ++) {
-                    if (String.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) == 0) {
+                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) == 0) {
                         return this[i];
                     }
                 }
@@ -395,7 +393,7 @@ namespace System.Windows.Forms {
                 }
 
                 for (int i = 0; i < this.list.Count; i ++) {
-                    if (String.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) ==0) {
+                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) ==0) {
                         index = i;
                         break;
                     }

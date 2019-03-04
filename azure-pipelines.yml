@@ -9,14 +9,15 @@ variables:
   # clean the local repo on the build agents
   Build.Repository.Clean: true
   
-# only trigger ci builds for the master branch
+# trigger ci builds for completed checkins into master and any release branches
 trigger:
 - master
+- release/*
 
-# To be added in the future when VSTS supports this feature
-# only trigger pull request builds for the master branch
-# pr:
-# - master
+# trigger ci builds on pull requests into master and any release branches
+pr:
+- master
+- release/*
 
 # Call the ci.yml template, which does the real work
 jobs:
@@ -24,6 +25,6 @@ jobs:
   parameters:
     ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
       # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-      agentPool: dotnet-internal-temp
+      agentPool: dotnet-internal-temp-vs2019
       # runAsPublic is used in expressions, which can't read from user-defined variables
       runAsPublic: false

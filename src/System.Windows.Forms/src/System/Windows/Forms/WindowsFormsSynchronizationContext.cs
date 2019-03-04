@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,8 +7,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.ComponentModel;
-using System.Security;
-using System.Security.Permissions;
 
 namespace System.Windows.Forms
 {
@@ -73,7 +71,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Send"]/*' />
         // This is never called because we decide whether to Send or Post and we always post
-        public override void Send(SendOrPostCallback d, Object state) {
+        public override void Send(SendOrPostCallback d, object state) {
             Thread destinationThread = DestinationThread;
             if (destinationThread == null || !destinationThread.IsAlive) {
                 throw new InvalidAsynchronousStateException(SR.ThreadNoLongerValid);
@@ -87,7 +85,7 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\WindowsFormsSynchronizationContext.uex' path='docs/doc[@for="WindowsFormsSynchronizationContext.Post"]/*' />
-        public override void Post(SendOrPostCallback d, Object state) {
+        public override void Post(SendOrPostCallback d, object state) {
             Debug.Assert(controlToSendTo != null, "Should always have the marshaling control by this point");
 
             if (controlToSendTo != null) {
@@ -137,16 +135,7 @@ namespace System.Windows.Forms
                 if (currentContext == null || currentContext.GetType() == typeof(SynchronizationContext)) {
                     previousSyncContext = currentContext;
 
-                    // 
-
-
-                    new PermissionSet(PermissionState.Unrestricted).Assert();
-                    try {
-                        AsyncOperationManager.SynchronizationContext = new WindowsFormsSynchronizationContext();
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    AsyncOperationManager.SynchronizationContext = new WindowsFormsSynchronizationContext();
                 }
             }
             finally {
@@ -163,7 +152,6 @@ namespace System.Windows.Forms
                 WindowsFormsSynchronizationContext winFormsSyncContext = AsyncOperationManager.SynchronizationContext as WindowsFormsSynchronizationContext;
                 if (winFormsSyncContext != null) {
                     try {
-                        new PermissionSet(PermissionState.Unrestricted).Assert();
                         if (previousSyncContext == null) {
                             AsyncOperationManager.SynchronizationContext = new SynchronizationContext();
                         }
@@ -173,7 +161,6 @@ namespace System.Windows.Forms
                     }
                     finally {
                         previousSyncContext = null;
-                        CodeAccessPermission.RevertAssert();
                     }
                 }
             }

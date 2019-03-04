@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -38,10 +38,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                // get the integer value out of the native...
                //
-               if (nativeValue is UInt32){
-                  intVal = (int)(UInt32)nativeValue;
+               if (nativeValue is uint)
+            {
+                  intVal = (int)(uint)nativeValue;
                }
-               else if (nativeValue is Int32){
+               else if (nativeValue is int)
+            {
                   intVal = (int)nativeValue;
                }
 

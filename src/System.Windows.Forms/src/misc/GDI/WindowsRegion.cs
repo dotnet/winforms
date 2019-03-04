@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -48,16 +48,16 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsRegion(Rectangle rect) {
             CreateRegion(rect);
         }
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsRegion(int x, int y, int width, int height) {
             CreateRegion(new Rectangle(x,y,width, height));
         }
@@ -105,8 +105,8 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public object Clone() {
             // WARNING: WindowsRegion currently supports rectangulare regions only, if the WindowsRegion was created
             //          from an HRegion and it is not rectangular this method won't work as expected.
@@ -126,8 +126,8 @@ namespace System.Experimental.Gdi
 
         /// <devdoc>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private void CreateRegion(Rectangle rect) {
             Debug.Assert(nativeHandle == IntPtr.Zero, "nativeHandle should be null, we're leaking handle");
             this.nativeHandle = IntSafeNativeMethods.CreateRectRgn(rect.X, rect.Y, rect.X+rect.Width, rect.Y+rect.Height);
@@ -186,7 +186,7 @@ namespace System.Experimental.Gdi
         /// </devdoc>
         public Rectangle ToRectangle() {            
             if( this.IsInfinite ) {
-                return new Rectangle( -Int32.MaxValue, -Int32.MaxValue, Int32.MaxValue, Int32.MaxValue );
+                return new Rectangle( -int.MaxValue, -int.MaxValue, int.MaxValue, int.MaxValue );
             }
 
             IntNativeMethods.RECT rect = new IntNativeMethods.RECT();

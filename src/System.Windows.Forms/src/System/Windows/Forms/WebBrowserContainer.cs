@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         //
         // IOleContainer methods:
         //
-        int UnsafeNativeMethods.IOleContainer.ParseDisplayName(Object pbc, string pszDisplayName, int[] pchEaten, Object[] ppmkOut) {
+        int UnsafeNativeMethods.IOleContainer.ParseDisplayName(object pbc, string pszDisplayName, int[] pchEaten, object[] ppmkOut) {
             if (ppmkOut != null)
                 ppmkOut[0] = null;
              return NativeMethods.E_NOTIMPL;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
                 ArrayList list = new ArrayList();
                 ListAXControls(list, true);
                 if (list.Count > 0) {
-                    Object[] temp = new Object[list.Count];
+                    object[] temp = new object[list.Count];
                     list.CopyTo(temp, 0);
                     ppenum = new AxHost.EnumUnknown(temp);
                     return NativeMethods.S_OK;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -30,11 +30,11 @@ namespace System.Windows.Forms {
     ]
     public class NumericUpDown : UpDownBase, ISupportInitialize {
 
-        private static readonly Decimal    DefaultValue         = Decimal.Zero;
-        private static readonly Decimal    DefaultMinimum       = Decimal.Zero;
-        private static readonly Decimal    DefaultMaximum       = (Decimal)100.0;
+        private static readonly decimal DefaultValue         = decimal.Zero;
+        private static readonly decimal DefaultMinimum       = decimal.Zero;
+        private static readonly decimal DefaultMaximum       = (decimal)100.0;
         private const           int        DefaultDecimalPlaces = 0;
-        private static readonly Decimal    DefaultIncrement     = Decimal.One;
+        private static readonly decimal DefaultIncrement     = decimal.One;
         private const bool       DefaultThousandsSeparator      = false;
         private const bool       DefaultHexadecimal             = false;
         private const int        InvalidValue                   = -1;
@@ -52,20 +52,20 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     The amount to increment by.
         /// </devdoc>
-        private Decimal increment = DefaultIncrement;
+        private decimal increment = DefaultIncrement;
 
         // Display the thousands separator?
         private bool thousandsSeparator = DefaultThousandsSeparator;
 
         // Minimum and maximum values
-        private Decimal minimum = DefaultMinimum;
-        private Decimal maximum = DefaultMaximum;
+        private decimal minimum = DefaultMinimum;
+        private decimal maximum = DefaultMaximum;
 
         // Hexadecimal
         private bool hexadecimal = DefaultHexadecimal;
 
         // Internal storage of the current value
-        private Decimal currentValue = DefaultValue;
+        private decimal currentValue = DefaultValue;
         private bool    currentValueChanged;
 
         // Event handler for the onValueChanged event
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatData)),
         SRDescription(nameof(SR.NumericUpDownIncrementDescr))
         ]
-        public Decimal Increment {
+        public decimal Increment {
 
             get {
                 if (this.accelerationsCurrentIndex != InvalidValue) {
@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
             }
 
             set {
-                if (value < (Decimal)0.0) {
+                if (value < (decimal)0.0) {
                     throw new ArgumentOutOfRangeException(nameof(Increment), string.Format(SR.InvalidArgument, "Increment", value.ToString(CultureInfo.CurrentCulture)));
                 }
                 else {
@@ -205,7 +205,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.NumericUpDownMaximumDescr))
         ]
-        public Decimal Maximum {
+        public decimal Maximum {
 
             get {
                 return maximum;
@@ -232,7 +232,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All),
         SRDescription(nameof(SR.NumericUpDownMinimumDescr))
         ]
-        public Decimal Minimum {
+        public decimal Minimum {
 
             get {
                 return minimum;
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
         Bindable(true),
         SRDescription(nameof(SR.NumericUpDownValueDescr))
         ]
-        public Decimal Value {
+        public decimal Value {
 
             get {
                 if (UserEdit) {
@@ -409,7 +409,7 @@ namespace System.Windows.Forms {
         //
         // Returns the provided value constrained to be within the min and max.
         //
-        private Decimal Constrain(Decimal value) {
+        private decimal Constrain(decimal value) {
 
             Debug.Assert(minimum <= maximum,
                          "minimum > maximum");
@@ -443,7 +443,7 @@ namespace System.Windows.Forms {
                 ParseEditText();
             }
 
-            Decimal newValue = currentValue;
+            decimal newValue = currentValue;
 
             // Operations on Decimals can throw OverflowException.
             //
@@ -518,7 +518,7 @@ namespace System.Windows.Forms {
                 
             string keyInput = e.KeyChar.ToString();
                 
-            if (Char.IsDigit(e.KeyChar)) {
+            if (char.IsDigit(e.KeyChar)) {
                 // Digits are OK
             }
             else if (keyInput.Equals(decimalSeparator) || keyInput.Equals(groupSeparator) || 
@@ -598,7 +598,7 @@ namespace System.Windows.Forms {
                         Value = Constrain(Convert.ToDecimal(Convert.ToInt32(Text, 16)));
                     }
                     else {
-                        Value = Constrain(Decimal.Parse(Text, CultureInfo.CurrentCulture));                
+                        Value = Constrain(decimal.Parse(Text, CultureInfo.CurrentCulture));                
                     }
                 }
             }
@@ -715,8 +715,8 @@ namespace System.Windows.Forms {
             if (UserEdit) {
                 ParseEditText();
             }
-            
-            Decimal newValue = currentValue;
+
+            decimal newValue = currentValue;
 
             // Operations on Decimals can throw OverflowException.
             //
@@ -741,7 +741,7 @@ namespace System.Windows.Forms {
             string text;
             
             if (Hexadecimal) {
-                text = ((Int64)num).ToString("X", CultureInfo.InvariantCulture);
+                text = ((long)num).ToString("X", CultureInfo.InvariantCulture);
                 Debug.Assert(text == text.ToUpper(CultureInfo.InvariantCulture), "GetPreferredSize assumes hex digits to be uppercase.");
             }
             else {
@@ -813,7 +813,7 @@ namespace System.Windows.Forms {
             int numDigits = (int)Math.Floor(Math.Log(Math.Max(-(double)Minimum, (double)Maximum), baseSize));
             int maxDigits;
             if (this.Hexadecimal) {
-                maxDigits = (int)Math.Floor(Math.Log(Int64.MaxValue, baseSize));
+                maxDigits = (int)Math.Floor(Math.Log(long.MaxValue, baseSize));
             }
             else {
                 maxDigits = (int)Math.Floor(Math.Log((double)decimal.MaxValue, baseSize));
@@ -847,7 +847,7 @@ namespace System.Windows.Forms {
             if (maxDigitsReached) {
                 string shortText;
                 if (this.Hexadecimal) {
-                    shortText = ((Int64) testNumber).ToString("X", CultureInfo.InvariantCulture);
+                    shortText = ((long) testNumber).ToString("X", CultureInfo.InvariantCulture);
                 }
                 else {
                     shortText = testNumber.ToString(CultureInfo.CurrentCulture);

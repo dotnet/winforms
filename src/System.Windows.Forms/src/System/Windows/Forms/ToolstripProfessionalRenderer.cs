@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
                 if (vertical) {
                     if (!item.IsOnDropDown) {
                         // center so that it matches office
-                        bounds.Y +=3;
+                        bounds.Y += 3;
                         bounds.Height = Math.Max(0, bounds.Height -6);
                     }
                 }

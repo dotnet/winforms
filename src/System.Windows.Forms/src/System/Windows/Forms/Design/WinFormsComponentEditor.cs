@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -19,7 +19,6 @@ namespace System.Windows.Forms.Design {
     ///       of <see cref='System.ComponentModel.IComponent'/>
     ///       objects.</para>
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     public abstract class WindowsFormsComponentEditor : ComponentEditor {
         
         /// <include file='doc\WinFormsComponentEditor.uex' path='docs/doc[@for="WindowsFormsComponentEditor.EditComponent"]/*' />

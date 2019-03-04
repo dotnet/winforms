@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         private float fillWeight, usedFillWeight;
         private DataGridViewAutoSizeColumnMode autoSizeMode;
         private int boundColumnIndex = -1;
-        private string dataPropertyName = String.Empty;
+        private string dataPropertyName = string.Empty;
         private TypeConverter boundColumnConverter = null;
 
         // needed for IComponent
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             this.usedFillWeight = DATAGRIDVIEWCOLUMN_defaultFillWeight;
             this.Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
             this.MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
-            this.name = String.Empty;
+            this.name = string.Empty;
             this.bandIsRow = false;
             this.displayIndex = -1;
             this.cellTemplate = cellTemplate;
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
             {
                 if (value == null)
                 {
-                    value = String.Empty;
+                    value = string.Empty;
                 }
                 if (value != this.dataPropertyName)
                 {
@@ -316,7 +316,7 @@ namespace System.Windows.Forms
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.IsNullValueDefault ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
-                    !String.IsNullOrEmpty(defaultCellStyle.Format) ||
+                    !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.NotSet ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||
@@ -363,9 +363,9 @@ namespace System.Windows.Forms
             {
                 if (this.displayIndex != value)
                 {
-                    if (value == Int32.MaxValue)
+                    if (value == int.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, Int32.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue.ToString(CultureInfo.CurrentCulture)));
                     }
                     if (this.DataGridView != null)
                     {
@@ -428,7 +428,7 @@ namespace System.Windows.Forms
             set
             {
                 Debug.Assert(value >= -1);
-                Debug.Assert(value < Int32.MaxValue);
+                Debug.Assert(value < int.MaxValue);
 
                 this.displayIndex = value;
             }
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
             {
                 if ((value != null || this.HasHeaderCell) &&
                     this.HeaderCell.ValueType != null &&
-                    this.HeaderCell.ValueType.IsAssignableFrom(typeof(System.String)))
+                    this.HeaderCell.ValueType.IsAssignableFrom(typeof(string)))
                 {
                     this.HeaderCell.Value = value;
                 }
@@ -851,7 +851,7 @@ namespace System.Windows.Forms
                 // I talked w/ MarkRi and he is perfectly fine w/ DataGridViewColumn::Name changing w/o ColumnNameChanged 
                 // being fired.
                 //
-                if (this.Site != null && !String.IsNullOrEmpty(this.Site.Name))
+                if (this.Site != null && !string.IsNullOrEmpty(this.Site.Name))
                 {
                     this.name = this.Site.Name;
                 }
@@ -861,7 +861,7 @@ namespace System.Windows.Forms
             set
             {                
                 string oldName = this.name;
-                if (String.IsNullOrEmpty(value))
+                if (string.IsNullOrEmpty(value))
                 {
                     this.name = string.Empty;
                 }
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (String.Compare(this.ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
+                if (string.Compare(this.ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
                 {
                     this.HeaderCell.ToolTipText = value;
 

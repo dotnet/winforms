@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -51,8 +51,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
-            String stringValue = value as String;
-            if (stringValue != null && String.Compare(stringValue, SR.toStringNone, true, culture) == 0) {
+            string stringValue = value as string;
+            if (stringValue != null && string.Compare(stringValue, SR.toStringNone, true, culture) == 0) {
                 return -1;
             }
 

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     using Runtime.Versioning;
     using System;
 
-    [Security.SuppressUnmanagedCodeSecurityAttribute]
     internal class CommonUnsafeNativeMethods
     {
         #region PInvoke General
@@ -21,22 +20,22 @@ namespace System.Windows.Forms
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 
         [DllImport(ExternDll.Kernel32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Ansi)]
-        [ResourceExposure(ResourceScope.Process)]
+        
         public static extern IntPtr GetProcAddress(HandleRef hModule, string lpProcName);
         [DllImport(ExternDll.Kernel32, SetLastError = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
+        
         public static extern IntPtr GetModuleHandle(string modName);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true, BestFitMapping = false)]
-        [ResourceExposure(ResourceScope.Machine)]
+        
         private static extern IntPtr LoadLibraryEx(string lpModuleName, IntPtr hFile, uint dwFlags);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-        [ResourceExposure(ResourceScope.Machine)]
+        
         private static extern IntPtr LoadLibrary(string libname);
 
         [DllImport(ExternDll.Kernel32, CharSet = CharSet.Auto, SetLastError = true)]
-        [ResourceExposure(ResourceScope.None)]
+        
         public static extern bool FreeLibrary(HandleRef hModule);
 
         /// <summary>
@@ -75,11 +74,11 @@ namespace System.Windows.Forms
         // Keeping them here will reduce duplicating code but may have to take care of security warnings (if any).
         // These APIs are available starting Windows 10, version 1607 only.
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
+        
         internal static extern DpiAwarenessContext GetThreadDpiAwarenessContext();
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
+        
         internal static extern DpiAwarenessContext SetThreadDpiAwarenessContext(DpiAwarenessContext dpiContext);
 
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Windows.Forms.ComponentModel.Com2Interop;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.PropertyGridInternal;
@@ -26,8 +25,6 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public class PropertyGrid : ContainerControl, IComPropertyBrowser, UnsafeNativeMethods.IPropertyNotifySink {
 
@@ -81,7 +78,7 @@ namespace System.Windows.Forms {
         private GridEntry peDefault;
         private GridEntry peMain;
         private GridEntryCollection currentPropEntries;
-        private Object[]   currentObjects;
+        private object[]   currentObjects;
         
         private int                                 paintFrozen;
         private Color                               lineColor = SystemInformation.HighContrast ? (AccessibilityImprovements.Level1 ? SystemColors.ControlDarkDark : SystemColors.ControlDark )
@@ -205,7 +202,7 @@ namespace System.Windows.Forms {
                 separator1 = CreateSeparatorButton();
                 separator2 = CreateSeparatorButton();
 
-                toolStrip = new ToolStrip();
+                toolStrip = AccessibilityImprovements.Level3 ? new PropertyGridToolStrip(this) : new ToolStrip();
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
                 toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
@@ -753,6 +750,15 @@ namespace System.Windows.Forms {
                }
             }
         }
+
+        /// <summary>
+        /// Gets the help control accessibility object.
+        /// </summary>
+        internal AccessibleObject HelpAccessibleObject {
+            get {
+                return doccomment.AccessibilityObject;
+            }
+        }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.HelpBackColor"]/*' />
         /// <devdoc>
@@ -829,6 +835,33 @@ namespace System.Windows.Forms {
                 OnLayoutInternal(false);
                 Invalidate();
                 doccomment.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets the hot commands control accessible object.
+        /// </summary>
+        internal AccessibleObject HotCommandsAccessibleObject {
+            get {
+                return hotcommands.AccessibilityObject;
+            }
+        }
+
+        /// <summary>
+        /// Gets the main entry accessible object.
+        /// </summary>
+        internal AccessibleObject GridViewAccessibleObject {
+            get {
+                return gridView.AccessibilityObject;
+            }
+        }
+
+        /// <summary>
+        /// Gets the value indicating whether the main entry is visible.
+        /// </summary>
+        internal bool GridViewVisible {
+            get {
+                return gridView != null && gridView.Visible;
             }
         }
 
@@ -1064,7 +1097,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior)),
         TypeConverter(typeof(SelectedObjectConverter))
         ]
-        public Object SelectedObject {
+        public object SelectedObject {
             get {
                 if (currentObjects == null || currentObjects.Length == 0) {
                     return null;
@@ -1076,7 +1109,7 @@ namespace System.Windows.Forms {
                     SelectedObjects = new object[0];
                 }
                 else {
-                    SelectedObjects = new Object[]{value};
+                    SelectedObjects = new object[]{value};
                 }
             }
         }
@@ -1128,8 +1161,8 @@ namespace System.Windows.Forms {
                             }
        
                             Type oldType = GetUnwrappedObject(i).GetType();
-       
-                            Object objTemp = value[i];
+
+                            object objTemp = value[i];
        
                             if (objTemp is ICustomTypeDescriptor) {
                                 objTemp = ((ICustomTypeDescriptor)objTemp).GetPropertyOwner(null);
@@ -1162,7 +1195,7 @@ namespace System.Windows.Forms {
                         peDefault = null;
 
                         if (value == null) {
-                            currentObjects = new Object[0];
+                            currentObjects = new object[0];
                         }
                         else {
                             currentObjects = (object[])value.Clone();
@@ -1209,7 +1242,7 @@ namespace System.Windows.Forms {
                         // make sure we've also got events on all the objects
                         if (showEvents && viewTabs != null && viewTabs.Length > EVENTS && (viewTabs[EVENTS] is EventsTab)) {
                             showEvents = viewTabButtons[EVENTS].Visible;
-                            Object tempObj;
+                            object tempObj;
                             PropertyDescriptorCollection events;
                             Attribute[] attrs = new Attribute[BrowsableAttributes.Count];
                             BrowsableAttributes.CopyTo(attrs, 0);
@@ -1384,6 +1417,15 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Gets the value indicating whether the Property grid is sorted by categories.
+        /// </summary>
+        internal bool SortedByCategories {
+            get {
+                return (PropertySort & PropertySort.Categorized) != 0;
+            }
+        }
+
         [Browsable(false), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
@@ -1438,6 +1480,15 @@ namespace System.Windows.Forms {
                 OnLayoutInternal(false);
                 Invalidate();
                 toolStrip.Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// Gets the toolbar control accessibility object.
+        /// </summary>
+        internal AccessibleObject ToolbarAccessibleObject {
+            get {
+                return toolStrip.AccessibilityObject;
             }
         }
 
@@ -1723,7 +1774,7 @@ namespace System.Windows.Forms {
         }
 
  
-        internal void AddRefTab(Type tabType, Object component, PropertyTabScope type, bool setupToolbar) {
+        internal void AddRefTab(Type tabType, object component, PropertyTabScope type, bool setupToolbar) {
             PropertyTab tab = null;
             int tabIndex = -1;
 
@@ -1780,7 +1831,7 @@ namespace System.Windows.Forms {
                                 continue;
                             }
 
-                            if (String.Compare(tab.TabName, viewTabs[i].TabName, false, CultureInfo.InvariantCulture) < 0) {
+                            if (string.Compare(tab.TabName, viewTabs[i].TabName, false, CultureInfo.InvariantCulture) < 0) {
                                 tabIndex = i;
                                 break;
                             }
@@ -1808,10 +1859,10 @@ namespace System.Windows.Forms {
 
             if (tab != null && component != null) {
                 try {
-                    Object[] tabComps = tab.Components;
+                    object[] tabComps = tab.Components;
                     int oldArraySize = tabComps == null ? 0 : tabComps.Length;
 
-                    Object[] newComps = new Object[oldArraySize + 1];
+                    object[] newComps = new object[oldArraySize + 1];
                     if (oldArraySize > 0) {
                         Array.Copy(tabComps, newComps, oldArraySize);
                     }
@@ -1864,6 +1915,18 @@ namespace System.Windows.Forms {
             internal bool inGridViewCreate = false;
         #endif
 
+        /// <summary>
+        /// Constructs the new instance of the accessibility object for current PropertyGrid control.
+        /// </summary>
+        /// <returns></returns>
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            if (AccessibilityImprovements.Level3) {
+                return new PropertyGridAccessibleObject(this);
+            }
+
+            return base.CreateAccessibilityInstance();
+        }
+
         private /*protected virtual*/ PropertyGridView CreateGridView(IServiceProvider sp) {
 #if DEBUG
             try {
@@ -1893,7 +1956,7 @@ namespace System.Windows.Forms {
 
             if (tab == null) {
                 ConstructorInfo constructor = tabType.GetConstructor(new Type[] {typeof(IServiceProvider)});
-                Object param = null;
+                object param = null;
                 if (constructor == null) {
     
                     // try a IDesignerHost ctor
@@ -1909,7 +1972,7 @@ namespace System.Windows.Forms {
     
     
                 if (param != null && constructor != null) {
-                    tab = (PropertyTab) constructor.Invoke(new Object[] {param});
+                    tab = (PropertyTab) constructor.Invoke(new object[] {param});
                 }
                 else {
                     // just call the default ctor
@@ -2217,7 +2280,7 @@ namespace System.Windows.Forms {
             GetPropertyGridView().DropDownDone();
         }
         
-        private bool EnablePropPageButton(Object obj) {
+        private bool EnablePropPageButton(object obj) {
             if (obj == null) {
                 btnViewPropertyPages.Enabled = false;
                 return false;
@@ -2370,7 +2433,7 @@ namespace System.Windows.Forms {
             gridView.RecursivelyExpand(peMain, false, true, PropertyGridView.MaxRecurseExpand);
         }
 
-        private static Type[] GetCommonTabs(Object[] objs, PropertyTabScope tabScope) {
+        private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope) {
 
             if (objs == null || objs.Length == 0) {
                 return new Type[0];
@@ -2453,12 +2516,37 @@ namespace System.Windows.Forms {
             return peDefault;
         }
 
+        /// <summary>
+        /// Gets the element from point.
+        /// </summary>
+        /// <param name="point">The point where to search the element.</param>
+        /// <returns>The element found in the current point.</returns>
+        internal Control GetElementFromPoint(Point point) {
+            if (ToolbarAccessibleObject.Bounds.Contains(point)) {
+                return toolStrip;
+            }
+
+            if (GridViewAccessibleObject.Bounds.Contains(point)) {
+                return gridView;
+            }
+
+            if (HotCommandsAccessibleObject.Bounds.Contains(point)) {
+                return hotcommands;
+            }
+
+            if (HelpAccessibleObject.Bounds.Contains(point)) {
+                return doccomment;
+            }
+
+            return null;
+        }
+
         private object GetUnwrappedObject(int index) {
             if (currentObjects == null || index < 0 || index > currentObjects.Length) {
                 return null;
             }
 
-            Object obj = currentObjects[index];
+            object obj = currentObjects[index];
             if (obj is ICustomTypeDescriptor) {
                 obj = ((ICustomTypeDescriptor)obj).GetPropertyOwner(null);
             }
@@ -2503,7 +2591,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         void IComPropertyBrowser.LoadState(RegistryKey optRoot) {
             if (optRoot != null) {
-                Object val = optRoot.GetValue("PbrsAlpha", "0");
+                object val = optRoot.GetValue("PbrsAlpha", "0");
 
                 if (val != null && val.ToString().Equals("1")) {
                     this.PropertySort = PropertySort.Alphabetical;
@@ -2523,7 +2611,7 @@ namespace System.Windows.Forms {
 
                 bool update = false;
                 if (val is string) {
-                    int ratio = Int32.Parse((string)val, CultureInfo.InvariantCulture);
+                    int ratio = int.Parse((string)val, CultureInfo.InvariantCulture);
                     if (ratio > 0) {
                         dcSizeRatio = ratio;
                         update = true;
@@ -2532,7 +2620,7 @@ namespace System.Windows.Forms {
 
                 val = optRoot.GetValue("PbrsHotCommandHeightRatio", "-1");
                 if (val is string) {
-                    int ratio = Int32.Parse((string)val, CultureInfo.InvariantCulture);
+                    int ratio = int.Parse((string)val, CultureInfo.InvariantCulture);
                     if (ratio > 0) {
                         dcSizeRatio = ratio;
                         update = true;
@@ -2554,7 +2642,7 @@ namespace System.Windows.Forms {
 
         // when the active document is changed, check all the components so see if they
         // are offering up any new tabs
-        private void OnActiveDesignerChanged(Object sender, ActiveDesignerEventArgs e) {
+        private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs e) {
 
             if (e.OldDesigner != null && e.OldDesigner == designerHost) {
                 this.ActiveDesigner = null;
@@ -2594,10 +2682,10 @@ namespace System.Windows.Forms {
                 if (!gridView.GetInPropertySet() || fullRefresh) {
                     Refresh(fullRefresh);
                 }
-    
+
                 // this is so changes to names of native
                 // objects will be reflected in the combo box
-                Object obj = GetUnwrappedObject(0);
+                object obj = GetUnwrappedObject(0);
                 if (ComNativeDescriptor.Instance.IsNameDispId(obj, dispID) || dispID == NativeMethods.ActiveX.DISPID_Name) {
                     OnComComponentNameChanged(new ComponentRenameEventArgs(obj, null, TypeDescriptor.GetClassName(obj)));
                 }
@@ -2608,7 +2696,7 @@ namespace System.Windows.Forms {
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
         /// </devdoc>
-        private void OnChildMouseMove(Object sender, MouseEventArgs me) {
+        private void OnChildMouseMove(object sender, MouseEventArgs me) {
             Point newPt = Point.Empty;
             if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt)) {
                 // forward the message
@@ -2621,7 +2709,7 @@ namespace System.Windows.Forms {
         /// We forward messages from several of our children
         /// to our mouse move so we can put up the spliter over their borders
         /// </devdoc>
-        private void OnChildMouseDown(Object sender, MouseEventArgs me) {
+        private void OnChildMouseDown(object sender, MouseEventArgs me) {
             Point newPt = Point.Empty;
 
             if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt)) {
@@ -2631,7 +2719,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        private void OnComponentAdd(Object sender, ComponentEventArgs e) {
+        private void OnComponentAdd(object sender, ComponentEventArgs e) {
 
             PropertyTabAttribute attribute = (PropertyTabAttribute) TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
 
@@ -2647,7 +2735,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void OnComponentChanged(Object sender, ComponentChangedEventArgs e) {
+        private void OnComponentChanged(object sender, ComponentChangedEventArgs e) {
             bool batchMode = GetFlag(BatchMode);
             if (batchMode || GetFlag(InternalChange) || gridView.GetInPropertySet() ||
                (currentObjects == null) || (currentObjects.Length == 0)) {
@@ -2667,7 +2755,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void OnComponentRemove(Object sender, ComponentEventArgs e) {
+        private void OnComponentRemove(object sender, ComponentEventArgs e) {
 
             PropertyTabAttribute attribute = (PropertyTabAttribute) TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
 
@@ -3050,7 +3138,7 @@ namespace System.Windows.Forms {
 
 
 
-        private void OnButtonClick(Object sender, EventArgs e) {
+        private void OnButtonClick(object sender, EventArgs e) {
             // we don't want to steal focus from the property pages...
             if (sender != btnViewPropertyPages) {
                 gridView.FocusInternal();
@@ -3167,7 +3255,7 @@ namespace System.Windows.Forms {
                     this.AccessibilityObject.RaiseAutomationNotification(
                         Automation.AutomationNotificationKind.ActionCompleted,
                         Automation.AutomationNotificationProcessing.All,
-                        string.Format(CultureInfo.CurrentCulture, string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value)));
+                        string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
                 }
             }
         }
@@ -3251,7 +3339,7 @@ namespace System.Windows.Forms {
             }
         }
         
-        private void OnViewSortButtonClick(Object sender, EventArgs e) {
+        private void OnViewSortButtonClick(object sender, EventArgs e) {
             try {
             
                this.FreezePainting = true;
@@ -3300,7 +3388,7 @@ namespace System.Windows.Forms {
             
         }
 
-        private void OnViewTabButtonClick(Object sender, EventArgs e) {
+        private void OnViewTabButtonClick(object sender, EventArgs e) {
             try {
             
                this.FreezePainting = true;
@@ -3315,13 +3403,13 @@ namespace System.Windows.Forms {
          
         }
 
-        private void OnViewButtonClickPP(Object sender, EventArgs e) {
+        private void OnViewButtonClickPP(object sender, EventArgs e) {
 
             if (btnViewPropertyPages.Enabled &&
                 currentObjects != null &&
                 currentObjects.Length > 0) {
-                Object baseObject = currentObjects[0];
-                Object obj = baseObject;
+                object baseObject = currentObjects[0];
+                object obj = baseObject;
 
                 bool success = false;
 
@@ -3386,7 +3474,7 @@ namespace System.Windows.Forms {
                 }
                 catch (Exception ex)
                 {
-                    String errString = SR.ErrorPropertyPageFailed;
+                    string errString = SR.ErrorPropertyPageFailed;
                     if (uiSvc != null)
                     {
                         uiSvc.ShowError(ex, errString);
@@ -3512,9 +3600,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Returns the last child control that can take focus
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
-        [PermissionSet(SecurityAction.LinkDemand, Name = "FullTrust")]
-        [PermissionSet(SecurityAction.InheritanceDemand, Name = "FullTrust")]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             switch (keyData & Keys.KeyCode) {
@@ -3749,7 +3834,7 @@ namespace System.Windows.Forms {
             SetupToolbar();
         }
 
-        internal void ReleaseTab(Type tabType, Object component) {
+        internal void ReleaseTab(Type tabType, object component) {
             PropertyTab tab = null;
             int tabIndex = -1;
             for (int i = 0; i < viewTabs.Length; i++) {
@@ -3765,7 +3850,7 @@ namespace System.Windows.Forms {
                 return;
             }
 
-            Object[] components = tab.Components;
+            object[] components = tab.Components;
             bool killTab = false;
 
             try {
@@ -3850,7 +3935,7 @@ namespace System.Windows.Forms {
 
                 // clear the component refs of the tabs
                 for (int i = 0; i < viewTabs.Length; i++) {
-                    viewTabs[i].Components = new Object[0];
+                    viewTabs[i].Components = new object[0];
                 }
             }
         }
@@ -4409,7 +4494,7 @@ namespace System.Windows.Forms {
             
             for (int i = 0; i < currentObjects.Length; i++) {
                 try {
-                    Object obj = GetUnwrappedObject(i);
+                    object obj = GetUnwrappedObject(i);
 
                     if (!Marshal.IsComObject(obj)) {
                         continue;
@@ -4531,6 +4616,10 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        /// Indicates whether or not the control supports UIA Providers via
+        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        /// </summary>
         internal override bool SupportsUiaProviders {
             get {
                 return AccessibilityImprovements.Level3;
@@ -4620,7 +4709,6 @@ namespace System.Windows.Forms {
 
 
         [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -4825,8 +4913,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabCollection"]/*' />
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
         public class PropertyTabCollection : ICollection {
         
             internal static PropertyTabCollection Empty = new PropertyTabCollection(null);
@@ -5144,5 +5230,287 @@ namespace System.Windows.Forms {
         }
     }
 
+    /// <summary>
+    /// Represents the PropertyGrid accessibility object.
+    /// Is used only in Accessibility Improvements of level3 to show correct accessible hierarchy.
+    /// </summary>
+    [ComVisible(true)]
+    internal class PropertyGridAccessibleObject : Control.ControlAccessibleObject {
+
+        private PropertyGrid _owningPropertyGrid;
+
+        /// <summary>
+        /// Initializes new instance of PropertyGridAccessibleObject
+        /// </summary>
+        /// <param name="owningPropertyGrid">The PropertyGrid owning control.</param>
+        public PropertyGridAccessibleObject(PropertyGrid owningPropertyGrid) : base(owningPropertyGrid) {
+            _owningPropertyGrid = owningPropertyGrid;
+        }
+
+        /// <summary>
+        /// Return the child element at the specified point, if one exists,
+        /// otherwise return this element if the point is on this element,
+        /// otherwise return null.
+        /// </summary>
+        /// <param name="x">x coordinate of point to check</param>
+        /// <param name="y">y coordinate of point to check</param>
+        /// <returns>Return the child element at the specified point, if one exists,
+        /// otherwise return this element if the point is on this element,
+        /// otherwise return null.
+        /// </returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) {
+            Point clientPoint = _owningPropertyGrid.PointToClient(new Point((int)x, (int)y));
+
+            var element = _owningPropertyGrid.GetElementFromPoint(clientPoint);
+            if (element != null) {
+                return element.AccessibilityObject;
+            }
+
+            return base.ElementProviderFromPoint(x, y);
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            switch(direction) {
+                case UnsafeNativeMethods.NavigateDirection.Parent:
+                    return null;
+                case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                    return GetChildFragment(0);
+                case UnsafeNativeMethods.NavigateDirection.LastChild:
+                    var childFragmentCount = GetChildFragmentCount();
+                    if (childFragmentCount > 0) {
+                        return GetChildFragment(childFragmentCount - 1);
+                    }
+                    break;
+            }
+
+            return base.FragmentNavigate(direction);
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction regarding the provided child element.
+        /// </summary>
+        /// <param name="childFragment">The child element regarding which the target element is searched.</param>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal UnsafeNativeMethods.IRawElementProviderFragment ChildFragmentNavigate(AccessibleObject childFragment, UnsafeNativeMethods.NavigateDirection direction) {
+            switch(direction) {
+                case UnsafeNativeMethods.NavigateDirection.Parent:
+                    return this;
+                case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                    int fragmentCount = GetChildFragmentCount();
+                    int childFragmentIndex = GetChildFragmentIndex(childFragment);
+                    int nextChildFragmentIndex = childFragmentIndex + 1;
+                    if (fragmentCount > nextChildFragmentIndex) {
+                        return GetChildFragment(nextChildFragmentIndex);
+                    }
+
+                    return null;
+                case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    fragmentCount = GetChildFragmentCount();
+                    childFragmentIndex = GetChildFragmentIndex(childFragment);
+                    if (childFragmentIndex > 0) {
+                        return GetChildFragment(childFragmentIndex - 1);
+                    }
+
+                    return null;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Return the element that is the root node of this fragment of UI.
+        /// </summary>
+        internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
+            get {
+                return this;
+            }
+        }
+
+        /// <summary>
+        /// Gets the accessible child corresponding to the specified index.</para>
+        /// </summary>
+        /// <param name="index">The child index.</param>
+        /// <returns>The accessible child.</returns>
+        internal AccessibleObject GetChildFragment(int index) {
+            if (index < 0) {
+                return null;
+            }
+            
+            if (_owningPropertyGrid.ToolbarVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.ToolbarAccessibleObject;
+                }
+
+                index--;
+            }
+
+            if (_owningPropertyGrid.GridViewVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.GridViewAccessibleObject;
+                }
+
+                index--;
+            }
+            
+            if (_owningPropertyGrid.CommandsVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.HotCommandsAccessibleObject;
+                }
+
+                index--;
+            }
+            
+            if (_owningPropertyGrid.HelpVisible) {
+                if (index == 0) {
+                    return _owningPropertyGrid.HelpAccessibleObject;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the number of children belonging to an accessible object.
+        /// </summary>
+        /// <returns>The number of children.</returns>
+        internal int GetChildFragmentCount() {
+            int childCount = 0;
+
+            if (_owningPropertyGrid.ToolbarVisible) {
+                childCount++;
+            }
+
+            if (_owningPropertyGrid.GridViewVisible) {
+                childCount++;
+            }
+
+            if (_owningPropertyGrid.CommandsVisible) {
+                childCount++;
+            }
+
+            if (_owningPropertyGrid.HelpVisible) {
+                childCount++;
+            }
+
+            return childCount;
+        }
+
+        /// <summary>
+        /// Return the element in this fragment which has the keyboard focus,
+        /// </summary>
+        /// <returns>Return the element in this fragment which has the keyboard focus,
+        /// if any; otherwise return null.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus() {
+            return GetFocused();
+        }
+
+        /// <summary>
+        /// Gets the child control index.
+        /// </summary>
+        /// <param name="controlAccessibleObject">The control accessible object which index should be found.</param>
+        /// <returns>The child accessible index or -1 if not found.</returns>
+        internal int GetChildFragmentIndex(AccessibleObject controlAccessibleObject) {
+            int childFragmentCount = GetChildFragmentCount();
+            for (int i = 0; i < childFragmentCount; i++) {
+                var childFragment = GetChildFragment(i);
+                if (childFragment == controlAccessibleObject) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+    }
+
+    /// <summary>
+    /// Represents the PropertyGrid inner ToolStrip control.
+    /// Is used starting with Accessibility Improvements of level 3.
+    /// </summary>
+    internal class PropertyGridToolStrip : ToolStrip {
+
+        private PropertyGrid _parentPropertyGrid;
+
+        /// <summary>
+        /// Initializes new instance of PropertyGridToolStrip control.
+        /// </summary>
+        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
+        public PropertyGridToolStrip(PropertyGrid parentPropertyGrid) {
+            _parentPropertyGrid = parentPropertyGrid;
+        }
+
+        /// <summary>
+        /// Indicates whether or not the control supports UIA Providers via
+        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        /// </summary>
+        internal override bool SupportsUiaProviders {
+            get {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Constructs the new instance of the accessibility object for this control.
+        /// </summary>
+        /// <returns>The accessibility object for this control.</returns>
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            return new PropertyGridToolStripAccessibleObject(this, _parentPropertyGrid);
+        }
+    }
+
+    /// <summary>
+    /// Represents the PropertyGridToolStrip control accessibility object.
+    /// </summary>
+    [ComVisible(true)]
+    internal class PropertyGridToolStripAccessibleObject : ToolStrip.ToolStripAccessibleObject {
+
+        private PropertyGrid _parentPropertyGrid;
+
+        /// <summary>
+        /// Constructs new instance of PropertyGridToolStripAccessibleObject
+        /// </summary>
+        /// <param name="owningPropertyGridToolStrip">The PropertyGridToolStrip owning control.</param>
+        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
+        public PropertyGridToolStripAccessibleObject(PropertyGridToolStrip owningPropertyGridToolStrip, PropertyGrid parentPropertyGrid) : base(owningPropertyGridToolStrip) {
+            _parentPropertyGrid = parentPropertyGrid;
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
+            if (propertyGridAccessibleObject != null) {
+                var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                if (navigationTarget != null) {
+                    return navigationTarget;
+                }
+            }
+
+            return base.FragmentNavigate(direction);
+        }
+
+        /// <summary>
+        /// Request value of specified property from an element.
+        /// </summary>
+        /// <param name="propertyId">Identifier indicating the property to return</param>
+        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+        internal override object GetPropertyValue(int propertyID) {
+            if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                return NativeMethods.UIA_ToolBarControlTypeId;
+            } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                return Name;
+            }
+
+            return base.GetPropertyValue(propertyID);
+        }
+    }
 }
 

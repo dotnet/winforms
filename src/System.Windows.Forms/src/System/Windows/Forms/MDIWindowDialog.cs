@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -15,9 +15,6 @@ namespace System.Windows.Forms {
     /// <devdoc>
     /// </devdoc>
     /// <internalonly/>
-    [
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-    ]
     internal sealed class MdiWindowDialog : Form {
         private System.Windows.Forms.ListBox itemList;
         private System.Windows.Forms.Button okButton;

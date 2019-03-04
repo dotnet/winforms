@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,8 +9,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Diagnostics;
     using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
-    using System.Security;
         
 
     /// <include file='doc\ToolStripScrollButton.uex' path='docs/doc[@for="ToolStripScrollButton"]/*' />
@@ -176,7 +174,6 @@ namespace System.Windows.Forms {
                 base.SetBoundsCore(x, y, width, height, specified);
             }
 
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             protected override void WndProc(ref Message m) {
 
                 if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {

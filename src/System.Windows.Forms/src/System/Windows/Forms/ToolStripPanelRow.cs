@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2261,7 +2261,7 @@ namespace System.Windows.Forms {
                     arrayListEnumerator = ((IEnumerable)list).GetEnumerator();
                 }
            
-                public virtual Object Current {
+                public virtual object Current {
                     get {
                         ToolStripPanelCell cell = arrayListEnumerator.Current as ToolStripPanelCell;
                         Debug.Assert(cell != null, "Expected ToolStripPanel cells only!!!" + arrayListEnumerator.Current.GetType().ToString());
@@ -2270,7 +2270,7 @@ namespace System.Windows.Forms {
                 }
             
             
-                public Object Clone() {
+                public object Clone() {
                     return MemberwiseClone();
                 }
             

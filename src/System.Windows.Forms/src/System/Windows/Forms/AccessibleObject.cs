@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,8 +13,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject"]/*' />
     /// <devdoc>
@@ -41,7 +39,11 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.IGridItemProvider,
                                     UnsafeNativeMethods.IEnumVariant,
                                     UnsafeNativeMethods.IOleWindow,
-                                    UnsafeNativeMethods.ILegacyIAccessibleProvider {
+                                    UnsafeNativeMethods.ILegacyIAccessibleProvider,
+                                    UnsafeNativeMethods.ISelectionProvider,
+                                    UnsafeNativeMethods.ISelectionItemProvider,
+                                    UnsafeNativeMethods.IRawElementProviderHwndOverride,
+                                    UnsafeNativeMethods.IScrollItemProvider {
 
         // Member variables
 
@@ -247,7 +249,6 @@ namespace System.Windows.Forms
         ///    <para>When overridden in a derived class, gets or sets the parent of an accessible object.</para>
         /// </devdoc>
         public virtual AccessibleObject Parent {
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 if (systemIAccessible != null) {
                     return WrapIAccessible(systemIAccessible.accParent);
@@ -295,7 +296,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         public virtual string Value {
             // Does nothing by default
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get {
                 if (systemIAccessible != null) {
                     try {
@@ -310,7 +310,6 @@ namespace System.Windows.Forms
                 return "";
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             set {
                 if (systemIAccessible != null) {
                     try {
@@ -422,11 +421,7 @@ namespace System.Windows.Forms
         public virtual int GetHelpTopic(out string fileName) {
             if (systemIAccessible != null) {
                 try {
-                    int retVal = systemIAccessible.get_accHelpTopic(out fileName, NativeMethods.CHILDID_SELF);
-                    if (fileName != null && fileName.Length > 0) {
-                        IntSecurity.DemandFileIO(FileIOPermissionAccess.PathDiscovery, fileName);
-                    }
-                    return retVal;
+                    return systemIAccessible.get_accHelpTopic(out fileName, NativeMethods.CHILDID_SELF);
                 }
                 catch (COMException e) {
                     if (e.ErrorCode != NativeMethods.DISP_E_MEMBERNOTFOUND) {
@@ -792,6 +787,14 @@ namespace System.Windows.Forms
         }
 
         //
+        // Overridable methods for IRawElementProviderHwndOverride interface
+        //
+
+        internal virtual UnsafeNativeMethods.IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd) {
+            return null;
+        }
+
+        //
         // Overridable methods for IRangeValueProvider pattern interface
         //
 
@@ -826,6 +829,67 @@ namespace System.Windows.Forms
             get {
                 return double.NaN;
             }
+        }
+
+        //
+        // Overridable methods for ISelectionProvider interface
+        //
+
+        internal virtual UnsafeNativeMethods.IRawElementProviderSimple[] GetSelection() {
+            return null;
+        }
+
+        internal virtual bool CanSelectMultiple {
+            get {
+                return false;
+            }
+        }
+
+        internal virtual bool IsSelectionRequired {
+            get {
+                return false;
+            }
+        }
+
+        //
+        // Overridable methods for ISelectionItemProvider interface
+        //
+
+        internal virtual void SelectItem() {
+        }
+
+        internal virtual void AddToSelection() {
+        }
+
+        internal virtual void RemoveFromSelection() {
+        }
+
+        internal virtual bool IsItemSelected {
+            get {
+                return false;
+            }
+        }
+
+        internal virtual UnsafeNativeMethods.IRawElementProviderSimple ItemSelectionContainer {
+            get {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        /// </summary>
+        /// <param name="parent">The parent accessible object.</param>
+        internal virtual void SetParent(AccessibleObject parent)
+        {
+        }
+
+        /// <summary>
+        /// Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+        /// </summary>
+        /// <param name="child">The child accessible object.</param>
+        internal virtual void SetDetachableChild(AccessibleObject child)
+        {
         }
 
         int UnsafeNativeMethods.IServiceProvider.QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObject) {
@@ -1175,9 +1239,7 @@ namespace System.Windows.Forms
         /// Perform the default action
         /// </para>
         /// </devdoc>
-        void IAccessible.accDoDefaultAction(Object childID) {
-
-            IntSecurity.UnmanagedCode.Demand();
+        void IAccessible.accDoDefaultAction(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1220,7 +1282,7 @@ namespace System.Windows.Forms
         /// Perform a hit test
         /// </para>
         /// </devdoc>
-        Object IAccessible.accHitTest(
+        object IAccessible.accHitTest(
                                  int xLeft,
                                  int yTop) {
 
@@ -1260,7 +1322,7 @@ namespace System.Windows.Forms
                                out int pyTop,
                                out int pcxWidth,
                                out int pcyHeight,
-                               Object childID) {
+                               object childID) {
             
             pxLeft = 0;
             pyTop = 0;
@@ -1332,11 +1394,9 @@ namespace System.Windows.Forms
         /// Navigate to another accessible object.
         /// </para>
         /// </devdoc>
-        Object IAccessible.accNavigate(
+        object IAccessible.accNavigate(
                                   int navDir,
-                                  Object childID) {
-
-            IntSecurity.UnmanagedCode.Demand();
+                                  object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1362,7 +1422,7 @@ namespace System.Windows.Forms
 
             if (systemIAccessible != null) {
                 try {
-                    Object retObject;
+                    object retObject;
                     if (!SysNavigate(navDir, childID, out retObject))
                         retObject = systemIAccessible.accNavigate(navDir, childID);
                     return retObject;
@@ -1384,9 +1444,7 @@ namespace System.Windows.Forms
         /// Select an accessible object.
         /// </para>
         /// </devdoc>
-        void IAccessible.accSelect(int flagsSelect, Object childID) {
-
-            IntSecurity.UnmanagedCode.Demand();
+        void IAccessible.accSelect(int flagsSelect, object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1426,7 +1484,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///      Performs the default action associated with this accessible object.
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public virtual void DoDefaultAction() {
             // By default, just does the system default action if available
             //
@@ -1522,7 +1579,7 @@ namespace System.Windows.Forms
         /// Return the default action
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accDefaultAction(Object childID) {
+        string IAccessible.get_accDefaultAction(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1562,7 +1619,7 @@ namespace System.Windows.Forms
         /// Return the object or child description
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accDescription(Object childID) {
+        string IAccessible.get_accDescription(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1647,7 +1704,7 @@ namespace System.Windows.Forms
         /// Return help for this accessible object.
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accHelp(Object childID) {
+        string IAccessible.get_accHelp(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1684,7 +1741,7 @@ namespace System.Windows.Forms
         /// Return the object or child help topic
         /// </para>
         /// </devdoc>
-        int IAccessible.get_accHelpTopic(out string pszHelpFile, Object childID) {
+        int IAccessible.get_accHelpTopic(out string pszHelpFile, object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1722,11 +1779,11 @@ namespace System.Windows.Forms
         /// Return the object or child keyboard shortcut
         /// </para>
         /// </devdoc>
-        string IAccessible.get_accKeyboardShortcut(Object childID) {
+        string IAccessible.get_accKeyboardShortcut(object childID) {
             return get_accKeyboardShortcutInternal(childID);
         }
 
-        internal virtual string get_accKeyboardShortcutInternal(Object childID) {
+        internal virtual string get_accKeyboardShortcutInternal(object childID) {
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -1811,8 +1868,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         object IAccessible.accParent {
             get {
-                IntSecurity.UnmanagedCode.Demand();
-
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.accParent: this = " + this.ToString());
                 AccessibleObject parent = Parent;
                 if (parent != null) {
@@ -1936,8 +1991,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         string IAccessible.get_accValue(object childID) {
 
-            IntSecurity.UnmanagedCode.Demand();
-
             if (IsClientObject) {
                 ValidateChildID(ref childID);
 
@@ -1975,7 +2028,7 @@ namespace System.Windows.Forms
         /// </para>
         /// </devdoc>
         void IAccessible.set_accName(
-                              Object childID,
+                              object childID,
                               string newName) {
 
             if (IsClientObject) {
@@ -2010,10 +2063,8 @@ namespace System.Windows.Forms
         /// </para>
         /// </devdoc>
         void IAccessible.set_accValue(
-                               Object childID,
+                               object childID,
                                string newValue) {
-
-            IntSecurity.UnmanagedCode.Demand();
 
             if (IsClientObject) {
                 ValidateChildID(ref childID);
@@ -2063,7 +2114,6 @@ namespace System.Windows.Forms
         ///     effectively 'preempting' what WindowFromAccessibleObject() would do.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd) {
             // See if we have an inner object that can provide the window handle
             if (systemIOleWindow != null) {
@@ -2086,7 +2136,6 @@ namespace System.Windows.Forms
         ///     See GetWindow() above for details.
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode) {
             // See if we have an inner object that can provide help
             if (systemIOleWindow != null) {
@@ -2147,7 +2196,6 @@ namespace System.Windows.Forms
         ///    <para>When overridden in a derived class,
         ///       navigates to another object.</para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public virtual AccessibleObject Navigate(AccessibleNavigation navdir) {
         
             // Some default behavior for objects with AccessibleObject children
@@ -2197,7 +2245,6 @@ namespace System.Windows.Forms
         ///       Selects this accessible object.
         ///    </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public virtual void Select(AccessibleSelection flags) {
         
             // By default, do the system behavior
@@ -2282,21 +2329,18 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         internal IAccessible GetSystemIAccessibleInternal() {
             return this.systemIAccessible;
         }
 
         /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected void UseStdAccessibleObjects(IntPtr handle) {
             UseStdAccessibleObjects(handle, AccessibleObjectId);
         }
         
         /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.UseStdAccessibleObjects1"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected void UseStdAccessibleObjects(IntPtr handle, int objid) {
             // Get a standard accessible Object
             Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
@@ -2333,7 +2377,7 @@ namespace System.Windows.Forms
         ///     IAccessible.accNavigate on the 'inner' system accessible object.
         /// </devdoc>
         /// <internalonly/>
-        private bool SysNavigate(int navDir, Object childID, out Object retObject) {
+        private bool SysNavigate(int navDir, object childID, out object retObject) {
             retObject = null;
 
             // Only override system navigation relative to ourselves (since we can't interpret OLEACC child ids)
@@ -2366,7 +2410,7 @@ namespace System.Windows.Forms
             else if (childID.Equals(NativeMethods.DISP_E_PARAMNOTFOUND)) {
                 childID = 0;
             }
-            else if (!(childID is Int32)) {
+            else if (!(childID is int)) {
                 // AccExplorer seems to occasionally pass in objects instead of an int ChildID.
                 //
                 childID = 0;
@@ -2545,6 +2589,10 @@ namespace System.Windows.Forms
             }
         }
 
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd) {
+            return GetOverrideProviderForHwnd(hwnd);
+        }
+
         bool UnsafeNativeMethods.IRangeValueProvider.IsReadOnly {
             get {
                 return IsReadOnly;
@@ -2585,6 +2633,46 @@ namespace System.Windows.Forms
             SetValue(value);
         }
 
+        object[] UnsafeNativeMethods.ISelectionProvider.GetSelection() {
+            return GetSelection();
+        }
+
+        bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple {
+            get {
+                return CanSelectMultiple;
+            }
+        }
+
+        bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired {
+            get {
+                return IsSelectionRequired;
+            }
+        }
+
+        void UnsafeNativeMethods.ISelectionItemProvider.Select() {
+            SelectItem();
+        }
+
+        void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection() {
+            AddToSelection();
+        }
+
+        void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection() {
+            RemoveFromSelection();
+        }
+
+        bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected {
+            get {
+                return IsItemSelected;
+            }
+        }
+
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer {
+            get {
+                return ItemSelectionContainer;
+            }
+        }
+
         /// <summary>
         /// Raises the UIA Notification event.
         /// The event is available starting with Windows 10, version 1709.
@@ -2614,7 +2702,7 @@ namespace System.Windows.Forms
                     notificationKind,
                     notificationProcessing,
                     notificationText,
-                    String.Empty);
+                    string.Empty);
             }
             catch (EntryPointNotFoundException) {
                 // The UIA Notification event is not available, so don't attempt to raise it again.
@@ -2641,6 +2729,36 @@ namespace System.Windows.Forms
 
             return false;
         }
+
+        internal bool RaiseAutomationPropertyChangedEvent(int propertyId, object oldValue, object newValue) {
+            if (UnsafeNativeMethods.UiaClientsAreListening()) {
+                int result = UnsafeNativeMethods.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
+                return result == NativeMethods.S_OK;
+            }
+
+            return false;
+        }
+
+        internal bool RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType structureChangeType, int[] runtimeId) {
+            if (UnsafeNativeMethods.UiaClientsAreListening()) {
+                int result = UnsafeNativeMethods.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId == null ? 0 : runtimeId.Length);
+                return result == NativeMethods.S_OK;
+            }
+
+            return false;
+        }
+
+        #region IScrollItemProvider implementation
+
+        void UnsafeNativeMethods.IScrollItemProvider.ScrollIntoView() {
+            ScrollIntoView();
+        }
+
+        internal virtual void ScrollIntoView() {
+            Debug.Fail($"{nameof(this.ScrollIntoView)}() is not overriden");
+        }
+
+        #endregion
 
         private class EnumVariantObject : UnsafeNativeMethods.IEnumVariant {
         
@@ -2669,17 +2787,8 @@ namespace System.Windows.Forms
             void UnsafeNativeMethods.IEnumVariant.Reset() {
                 currentChild = 0;
     
-                // 
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    if (owner.systemIEnumVariant != null)
-                        owner.systemIEnumVariant.Reset();
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                if (owner.systemIEnumVariant != null)
+                    owner.systemIEnumVariant.Reset();
             }
             
             /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.EnumVariantObject.UnsafeNativeMethods.IEnumVariant.Skip"]/*' />
@@ -2689,17 +2798,8 @@ namespace System.Windows.Forms
             void UnsafeNativeMethods.IEnumVariant.Skip(int n) {
                 currentChild += n;
 
-                // 
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    if (owner.systemIEnumVariant != null)
-                        owner.systemIEnumVariant.Skip(n);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                if (owner.systemIEnumVariant != null)
+                    owner.systemIEnumVariant.Skip(n);
             }    
 
             /// <include file='doc\AccessibleObject.uex' path='docs/doc[@for="AccessibleObject.EnumVariantObject.UnsafeNativeMethods.IEnumVariant.Next"]/*' />
@@ -2745,16 +2845,7 @@ namespace System.Windows.Forms
             /// </devdoc>
             private void NextFromSystem(int n, IntPtr rgvar, int[] ns) {
 
-                // 
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    owner.systemIEnumVariant.Next(n, rgvar, ns);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                owner.systemIEnumVariant.Next(n, rgvar, ns);
 
                 currentChild += ns[0];
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibleObject.IEV.Next: Delegating to systemIEnumVariant");
@@ -2819,18 +2910,9 @@ namespace System.Windows.Forms
             private static bool GotoItem(UnsafeNativeMethods.IEnumVariant iev, int index, IntPtr variantPtr) {
                 int[] ns = new int[1];
 
-                // 
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    iev.Reset();
-                    iev.Skip(index);
-                    iev.Next(1, variantPtr, ns);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                iev.Reset();
+                iev.Skip(index);
+                iev.Next(1, variantPtr, ns);
 
                 return (ns[0] == 1);
             }
@@ -2869,7 +2951,10 @@ namespace System.Windows.Forms
                                     UnsafeNativeMethods.IGridItemProvider,
                                     UnsafeNativeMethods.IEnumVariant,
                                     UnsafeNativeMethods.IOleWindow,
-                                    UnsafeNativeMethods.ILegacyIAccessibleProvider {
+                                    UnsafeNativeMethods.ILegacyIAccessibleProvider,
+                                    UnsafeNativeMethods.ISelectionProvider,
+                                    UnsafeNativeMethods.ISelectionItemProvider,
+                                    UnsafeNativeMethods.IRawElementProviderHwndOverride {
 
         private IAccessible publicIAccessible;                       // AccessibleObject as IAccessible
         private UnsafeNativeMethods.IEnumVariant publicIEnumVariant; // AccessibleObject as IEnumVariant
@@ -2893,13 +2978,13 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IGridProvider publicIGridProvider;                            // AccessibleObject as IGridProvider
         private UnsafeNativeMethods.IGridItemProvider publicIGridItemProvider;                    // AccessibleObject as IGridItemProvider
         private UnsafeNativeMethods.ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;   // AccessibleObject as ILegayAccessibleProvider
+        private UnsafeNativeMethods.ISelectionProvider publicISelectionProvider;                  // AccessibleObject as ISelectionProvider
+        private UnsafeNativeMethods.ISelectionItemProvider publicISelectionItemProvider;          // AccessibleObject as ISelectionItemProvider
+        private UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
         ///     Create a new wrapper. Protect this with UnmanagedCode Permission
         /// </summary>
-        [
-        SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)
-        ]
         internal InternalAccessibleObject(AccessibleObject accessibleImplemention) {
             // Get all the casts done here to catch any issues early 
             publicIAccessible = (IAccessible) accessibleImplemention;
@@ -2921,6 +3006,9 @@ namespace System.Windows.Forms
             publicIGridProvider = (UnsafeNativeMethods.IGridProvider)accessibleImplemention;
             publicIGridItemProvider = (UnsafeNativeMethods.IGridItemProvider)accessibleImplemention;
             publicILegacyIAccessibleProvider = (UnsafeNativeMethods.ILegacyIAccessibleProvider)accessibleImplemention;
+            publicISelectionProvider = (UnsafeNativeMethods.ISelectionProvider)accessibleImplemention;
+            publicISelectionItemProvider = (UnsafeNativeMethods.ISelectionItemProvider)accessibleImplemention;
+            publicIRawElementProviderHwndOverride = (UnsafeNativeMethods.IRawElementProviderHwndOverride)accessibleImplemention;
             // Note: Deliberately not holding onto AccessibleObject to enforce all access through the interfaces
         }
 
@@ -2954,107 +3042,86 @@ namespace System.Windows.Forms
         //
 
         void UnsafeNativeMethods.IAccessibleInternal.accDoDefaultAction(object childID) {
-            IntSecurity.UnmanagedCode.Assert();
             publicIAccessible.accDoDefaultAction(childID);
         }
         
         object UnsafeNativeMethods.IAccessibleInternal.accHitTest(int xLeft, int yTop) {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIAccessible.accHitTest(xLeft, yTop));
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        void UnsafeNativeMethods.IAccessibleInternal.accLocation(out int l, out int t, out int w, out int h, object childID) {
             publicIAccessible.accLocation(out l, out t, out w, out h, childID);
         }
 
         object UnsafeNativeMethods.IAccessibleInternal.accNavigate(int navDir, object childID) {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIAccessible.accNavigate(navDir, childID));
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.accSelect(int flagsSelect, Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        void UnsafeNativeMethods.IAccessibleInternal.accSelect(int flagsSelect, object childID) {
             publicIAccessible.accSelect(flagsSelect, childID);
         }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accChild(object childID) {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIAccessible.get_accChild(childID));
         }
 
         int UnsafeNativeMethods.IAccessibleInternal.get_accChildCount() {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.accChildCount;
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accDefaultAction(Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        string UnsafeNativeMethods.IAccessibleInternal.get_accDefaultAction(object childID) {
             return publicIAccessible.get_accDefaultAction(childID);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accDescription(Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        string UnsafeNativeMethods.IAccessibleInternal.get_accDescription(object childID) {
             return publicIAccessible.get_accDescription(childID);
         }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accFocus() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIAccessible.accFocus);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accHelp(Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        string UnsafeNativeMethods.IAccessibleInternal.get_accHelp(object childID) {
             return publicIAccessible.get_accHelp(childID);
         }
 
-        int UnsafeNativeMethods.IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        int UnsafeNativeMethods.IAccessibleInternal.get_accHelpTopic(out string pszHelpFile, object childID) {
             return publicIAccessible.get_accHelpTopic(out pszHelpFile, childID);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accKeyboardShortcut(Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        string UnsafeNativeMethods.IAccessibleInternal.get_accKeyboardShortcut(object childID) {
             return publicIAccessible.get_accKeyboardShortcut(childID);
         }
 
-        string UnsafeNativeMethods.IAccessibleInternal.get_accName(Object childID) {
-            IntSecurity.UnmanagedCode.Assert();
+        string UnsafeNativeMethods.IAccessibleInternal.get_accName(object childID) {
             return publicIAccessible.get_accName(childID);
         }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accParent() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIAccessible.accParent);
         }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accRole(object childID) {
-		    IntSecurity.UnmanagedCode.Assert();
 		    return publicIAccessible.get_accRole(childID);
 	    }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accSelection() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIAccessible.accSelection);
         }
 
         object UnsafeNativeMethods.IAccessibleInternal.get_accState(object childID) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accState(childID);
         }
 
         string UnsafeNativeMethods.IAccessibleInternal.get_accValue(object childID) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIAccessible.get_accValue(childID);
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.set_accName(Object childID, string newName) {
-            IntSecurity.UnmanagedCode.Assert();
+        void UnsafeNativeMethods.IAccessibleInternal.set_accName(object childID, string newName) {
             publicIAccessible.set_accName(childID, newName);
         }
 
-        void UnsafeNativeMethods.IAccessibleInternal.set_accValue(Object childID, string newValue) {
-            IntSecurity.UnmanagedCode.Assert();
+        void UnsafeNativeMethods.IAccessibleInternal.set_accValue(object childID, string newValue) {
             publicIAccessible.set_accValue(childID, newValue);
         }
 
@@ -3063,22 +3130,18 @@ namespace System.Windows.Forms
         //
 
         void UnsafeNativeMethods.IEnumVariant.Clone(UnsafeNativeMethods.IEnumVariant[] v) {
-            IntSecurity.UnmanagedCode.Assert();
             publicIEnumVariant.Clone(v);
         }
 
         int UnsafeNativeMethods.IEnumVariant.Next(int n, IntPtr rgvar, int[] ns) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIEnumVariant.Next(n, rgvar, ns);
         }
 
         void UnsafeNativeMethods.IEnumVariant.Reset() {
-            IntSecurity.UnmanagedCode.Assert();
             publicIEnumVariant.Reset();
         }
 
         void UnsafeNativeMethods.IEnumVariant.Skip(int n) {
-            IntSecurity.UnmanagedCode.Assert();
             publicIEnumVariant.Skip(n);
         }
 
@@ -3087,12 +3150,10 @@ namespace System.Windows.Forms
         //
 
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIOleWindow.GetWindow(out hwnd);
         }
 
         void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode) {
-            IntSecurity.UnmanagedCode.Assert();
             publicIOleWindow.ContextSensitiveHelp(fEnterMode);
         }
 
@@ -3141,7 +3202,6 @@ namespace System.Windows.Forms
         }
 
         object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters) {
-            IntSecurity.UnmanagedCode.Demand();
             return publicIReflect.InvokeMember(name, invokeAttr, binder, publicIAccessible, args, modifiers, culture, namedParameters);
         }
 
@@ -3157,8 +3217,6 @@ namespace System.Windows.Forms
         //
 
         int UnsafeNativeMethods.IServiceProvider.QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObject) {
-            IntSecurity.UnmanagedCode.Assert();
-
             ppvObject = IntPtr.Zero;
             int hr = publicIServiceProvider.QueryService(ref service, ref riid, out ppvObject);
             if (hr >= NativeMethods.S_OK) {
@@ -3174,14 +3232,10 @@ namespace System.Windows.Forms
         //
 
         object UnsafeNativeMethods.IAccessibleEx.GetObjectForChild(int idChild) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIAccessibleEx.GetObjectForChild(idChild);
         }
 
         int UnsafeNativeMethods.IAccessibleEx.GetIAccessiblePair(out object ppAcc, out int pidChild) {
-
-            IntSecurity.UnmanagedCode.Assert();
-
             // We always want to return the internal accessible object
             ppAcc = this;
             pidChild = NativeMethods.CHILDID_SELF;
@@ -3189,14 +3243,10 @@ namespace System.Windows.Forms
         }
 
         int[] UnsafeNativeMethods.IAccessibleEx.GetRuntimeId() {
-
-            IntSecurity.UnmanagedCode.Assert();
             return publicIAccessibleEx.GetRuntimeId();
         }
 
         int UnsafeNativeMethods.IAccessibleEx.ConvertReturnedElement(object pIn, out object ppRetValOut) {
-
-            IntSecurity.UnmanagedCode.Assert();
             return publicIAccessibleEx.ConvertReturnedElement(pIn, out ppRetValOut);
         }
 
@@ -3206,21 +3256,17 @@ namespace System.Windows.Forms
 
         UnsafeNativeMethods.ProviderOptions UnsafeNativeMethods.IRawElementProviderSimple.ProviderOptions {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRawElementProviderSimple.ProviderOptions;
             }
         }
 
         UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderSimple.HostRawElementProvider {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRawElementProviderSimple.HostRawElementProvider;
             }
         }
 
         object UnsafeNativeMethods.IRawElementProviderSimple.GetPatternProvider(int patternId) {
-            IntSecurity.UnmanagedCode.Assert();
-
             object obj = publicIRawElementProviderSimple.GetPatternProvider(patternId);
             if (obj != null) {
 
@@ -3256,6 +3302,12 @@ namespace System.Windows.Forms
                 else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_LegacyIAccessiblePatternId) {
                     return (UnsafeNativeMethods.ILegacyIAccessibleProvider)this;
                 }
+                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_SelectionPatternId) {
+                    return (UnsafeNativeMethods.ISelectionProvider)this;
+                }
+                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_SelectionItemPatternId) {
+                    return (UnsafeNativeMethods.ISelectionItemProvider)this;
+                }
                 else {
                     return null;
                 }
@@ -3266,7 +3318,6 @@ namespace System.Windows.Forms
         }
 
         object UnsafeNativeMethods.IRawElementProviderSimple.GetPropertyValue(int propertyID) {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIRawElementProviderSimple.GetPropertyValue(propertyID);
         }
 
@@ -3275,35 +3326,29 @@ namespace System.Windows.Forms
         //
 
         object UnsafeNativeMethods.IRawElementProviderFragment.Navigate(UnsafeNativeMethods.NavigateDirection direction) {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIRawElementProviderFragment.Navigate(direction));
         }
 
         int[] UnsafeNativeMethods.IRawElementProviderFragment.GetRuntimeId() {
-            IntSecurity.UnmanagedCode.Assert();
             return publicIRawElementProviderFragment.GetRuntimeId();
         }
 
         object[] UnsafeNativeMethods.IRawElementProviderFragment.GetEmbeddedFragmentRoots() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsArrayOfNativeAccessibles(publicIRawElementProviderFragment.GetEmbeddedFragmentRoots());
         }
 
         void UnsafeNativeMethods.IRawElementProviderFragment.SetFocus() {
-            IntSecurity.UnmanagedCode.Assert();
             publicIRawElementProviderFragment.SetFocus();
         }
 
         NativeMethods.UiaRect UnsafeNativeMethods.IRawElementProviderFragment.BoundingRectangle {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRawElementProviderFragment.BoundingRectangle;
             }
         }
 
         UnsafeNativeMethods.IRawElementProviderFragmentRoot UnsafeNativeMethods.IRawElementProviderFragment.FragmentRoot {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 if (AccessibilityImprovements.Level3) {
                     return publicIRawElementProviderFragment.FragmentRoot;
                 }
@@ -3317,12 +3362,10 @@ namespace System.Windows.Forms
         //
 
         object UnsafeNativeMethods.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIRawElementProviderFragmentRoot.ElementProviderFromPoint(x, y));
         }
 
         object UnsafeNativeMethods.IRawElementProviderFragmentRoot.GetFocus() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIRawElementProviderFragmentRoot.GetFocus());
         }
 
@@ -3332,89 +3375,75 @@ namespace System.Windows.Forms
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.DefaultAction {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.DefaultAction;
             }
         }
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.Description {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.Description;
             }
         }
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.Help {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.Help;
             }
         }
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.KeyboardShortcut {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.KeyboardShortcut;
             }
         }
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.Name {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.Name;
             }
         }
 
         uint UnsafeNativeMethods.ILegacyIAccessibleProvider.Role {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.Role;
             }
         }
 
         uint UnsafeNativeMethods.ILegacyIAccessibleProvider.State {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.State;
             }
         }
 
         string UnsafeNativeMethods.ILegacyIAccessibleProvider.Value {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.Value;
             }
         }
 
         int UnsafeNativeMethods.ILegacyIAccessibleProvider.ChildId {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicILegacyIAccessibleProvider.ChildId;
             }
         }
 
         void UnsafeNativeMethods.ILegacyIAccessibleProvider.DoDefaultAction() {
-            IntSecurity.UnmanagedCode.Assert();
             publicILegacyIAccessibleProvider.DoDefaultAction();
         }
 
         IAccessible UnsafeNativeMethods.ILegacyIAccessibleProvider.GetIAccessible() {
-            IntSecurity.UnmanagedCode.Assert();
             return publicILegacyIAccessibleProvider.GetIAccessible();
         }
 
         object[] UnsafeNativeMethods.ILegacyIAccessibleProvider.GetSelection() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsArrayOfNativeAccessibles(publicILegacyIAccessibleProvider.GetSelection());
         }
 
         void UnsafeNativeMethods.ILegacyIAccessibleProvider.Select(int flagsSelect) {
-            IntSecurity.UnmanagedCode.Assert();
             publicILegacyIAccessibleProvider.Select(flagsSelect);
         }
 
         void UnsafeNativeMethods.ILegacyIAccessibleProvider.SetValue(string szValue) {
-            IntSecurity.UnmanagedCode.Assert();
             publicILegacyIAccessibleProvider.SetValue(szValue);
         }
 
@@ -3423,7 +3452,6 @@ namespace System.Windows.Forms
         //
 
         void UnsafeNativeMethods.IInvokeProvider.Invoke() {
-            IntSecurity.UnmanagedCode.Assert();
             publicIInvokeProvider.Invoke();
         }
 
@@ -3433,20 +3461,17 @@ namespace System.Windows.Forms
 
         bool UnsafeNativeMethods.IValueProvider.IsReadOnly {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIValueProvider.IsReadOnly;
             }
         }
 
         string UnsafeNativeMethods.IValueProvider.Value {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIValueProvider.Value;
             }
         }
 
         void UnsafeNativeMethods.IValueProvider.SetValue(string newValue) {
-            IntSecurity.UnmanagedCode.Assert();
             publicIValueProvider.SetValue(newValue);
         }
 
@@ -3456,48 +3481,41 @@ namespace System.Windows.Forms
 
         bool UnsafeNativeMethods.IRangeValueProvider.IsReadOnly {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIValueProvider.IsReadOnly;
             }
         }
 
         double UnsafeNativeMethods.IRangeValueProvider.LargeChange {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRangeValueProvider.LargeChange;
             }
         }
 
         double UnsafeNativeMethods.IRangeValueProvider.Maximum {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRangeValueProvider.Maximum;
             }
         }
 
         double UnsafeNativeMethods.IRangeValueProvider.Minimum {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRangeValueProvider.Minimum;
             }
         }
 
         double UnsafeNativeMethods.IRangeValueProvider.SmallChange {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRangeValueProvider.SmallChange;
             }
         }
 
         double UnsafeNativeMethods.IRangeValueProvider.Value {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIRangeValueProvider.Value;
             }
         }
 
         void UnsafeNativeMethods.IRangeValueProvider.SetValue(double newValue) {
-            IntSecurity.UnmanagedCode.Assert();
             publicIRangeValueProvider.SetValue(newValue);
         }
 
@@ -3506,18 +3524,15 @@ namespace System.Windows.Forms
         //
 
         void UnsafeNativeMethods.IExpandCollapseProvider.Expand() {
-            IntSecurity.UnmanagedCode.Assert();
             publicIExpandCollapseProvider.Expand();
         }
 
         void UnsafeNativeMethods.IExpandCollapseProvider.Collapse() {
-            IntSecurity.UnmanagedCode.Assert();
             publicIExpandCollapseProvider.Collapse();
         }
 
         UnsafeNativeMethods.ExpandCollapseState UnsafeNativeMethods.IExpandCollapseProvider.ExpandCollapseState {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIExpandCollapseProvider.ExpandCollapseState;
             }
         }
@@ -3527,13 +3542,11 @@ namespace System.Windows.Forms
         //
 
         void UnsafeNativeMethods.IToggleProvider.Toggle() {
-            IntSecurity.UnmanagedCode.Assert();
             publicIToggleProvider.Toggle();
         }
 
         UnsafeNativeMethods.ToggleState UnsafeNativeMethods.IToggleProvider.ToggleState {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIToggleProvider.ToggleState;
             }
         }
@@ -3543,18 +3556,15 @@ namespace System.Windows.Forms
         //
 
         object[] UnsafeNativeMethods.ITableProvider.GetRowHeaders() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsArrayOfNativeAccessibles(publicITableProvider.GetRowHeaders());
         }
 
         object[] UnsafeNativeMethods.ITableProvider.GetColumnHeaders() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsArrayOfNativeAccessibles(publicITableProvider.GetColumnHeaders());
         }
 
         UnsafeNativeMethods.RowOrColumnMajor UnsafeNativeMethods.ITableProvider.RowOrColumnMajor {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicITableProvider.RowOrColumnMajor;
             }
         }
@@ -3564,12 +3574,10 @@ namespace System.Windows.Forms
         //
 
         object[] UnsafeNativeMethods.ITableItemProvider.GetRowHeaderItems() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsArrayOfNativeAccessibles(publicITableItemProvider.GetRowHeaderItems());
         }
 
         object[] UnsafeNativeMethods.ITableItemProvider.GetColumnHeaderItems() {
-            IntSecurity.UnmanagedCode.Assert();
             return AsArrayOfNativeAccessibles(publicITableItemProvider.GetColumnHeaderItems());
         }
 
@@ -3578,20 +3586,17 @@ namespace System.Windows.Forms
         //
 
         object UnsafeNativeMethods.IGridProvider.GetItem(int row, int column) {
-            IntSecurity.UnmanagedCode.Assert();
             return AsNativeAccessible(publicIGridProvider.GetItem(row, column));
         }
 
         int UnsafeNativeMethods.IGridProvider.RowCount {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIGridProvider.RowCount;
             }
         }
 
         int UnsafeNativeMethods.IGridProvider.ColumnCount {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIGridProvider.ColumnCount;
             }
         }
@@ -3602,36 +3607,30 @@ namespace System.Windows.Forms
                 
         int UnsafeNativeMethods.IGridItemProvider.Row {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIGridItemProvider.Row;
             }
         }
 
         int UnsafeNativeMethods.IGridItemProvider.Column {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIGridItemProvider.Column;
             }
         }
 
         int UnsafeNativeMethods.IGridItemProvider.RowSpan {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIGridItemProvider.RowSpan;
             }
         }
 
         int UnsafeNativeMethods.IGridItemProvider.ColumnSpan {
             get {
-                IntSecurity.UnmanagedCode.Assert();
                 return publicIGridItemProvider.ColumnSpan;
             }
         }
 
         UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IGridItemProvider.ContainingGrid {
             get {
-                IntSecurity.UnmanagedCode.Assert();
-
                 // Do not wrap returned UIA provider by InternalAccessibleObject in Level 3.
                 if (AccessibilityImprovements.Level3) {
                     return publicIGridItemProvider.ContainingGrid;
@@ -3639,6 +3638,100 @@ namespace System.Windows.Forms
 
                 return AsNativeAccessible(publicIGridItemProvider.ContainingGrid) as UnsafeNativeMethods.IRawElementProviderSimple;
             }
+        }
+
+        //
+        // ISelectionProvider implementation
+        //
+
+        /// <summary>
+        /// Get the currently selected elements
+        /// </summary>
+        /// <returns>An AutomationElement array containing the currently selected elements</returns>
+        object[] UnsafeNativeMethods.ISelectionProvider.GetSelection() {
+            return publicISelectionProvider.GetSelection();
+        }
+
+        /// <summary>
+        /// Indicates whether the control allows more than one element to be selected
+        /// </summary>
+        /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
+        /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
+        bool UnsafeNativeMethods.ISelectionProvider.CanSelectMultiple {
+            get {
+                return publicISelectionProvider.CanSelectMultiple;
+            }
+        }
+
+        /// <summary>
+        /// Indicates whether the control requires at least one element to be selected
+        /// </summary>
+        /// <returns>Boolean indicating whether the control requires at least one element to be selected</returns>
+        /// <remarks>If this is false, then the control allows all elements to be unselected</remarks>
+        bool UnsafeNativeMethods.ISelectionProvider.IsSelectionRequired {
+            get {
+                return publicISelectionProvider.IsSelectionRequired;
+            }
+        }
+
+        //
+        // ISelectionItemProvider implementation
+        //
+
+        /// <summary>
+        /// Sets the current element as the selection
+        /// This clears the selection from other elements in the container.
+        /// </summary>
+        void UnsafeNativeMethods.ISelectionItemProvider.Select() {
+            publicISelectionItemProvider.Select();
+        }
+
+        /// <summary>
+        /// Adds current element to selection.
+        /// </summary>
+        void UnsafeNativeMethods.ISelectionItemProvider.AddToSelection() {
+            publicISelectionItemProvider.AddToSelection();
+        }
+
+        /// <summary>
+        /// Removes current element from selection.
+        /// </summary>
+        void UnsafeNativeMethods.ISelectionItemProvider.RemoveFromSelection() {
+            publicISelectionItemProvider.RemoveFromSelection();
+        }
+
+        /// <summary>
+        /// Check whether an element is selected.
+        /// </summary>
+        /// <returns>Returns true if the element is selected.</returns>
+        bool UnsafeNativeMethods.ISelectionItemProvider.IsSelected {
+            get {
+                return publicISelectionItemProvider.IsSelected;
+            }
+        }
+
+        /// <summary>
+        /// The logical element that supports the SelectionPattern for this Item.
+        /// </summary>
+        /// <returns>Returns a IRawElementProviderSimple.</returns>
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.ISelectionItemProvider.SelectionContainer {
+            get {
+                return publicISelectionItemProvider.SelectionContainer;
+            }
+        }
+
+        //
+        // IRawElementProviderHwndOverride implementation
+        //
+
+        /// <summary>
+        /// Request a provider for the specified component. The returned provider can supply additional
+        /// properties or override properties of the specified component.
+        /// </summary>
+        /// <param name="hwnd">The window handle of the component.</param>
+        /// <returns>Return the provider for the specified component, or null if the component is not being overridden.</returns>
+        UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IRawElementProviderHwndOverride.GetOverrideProviderForHwnd(IntPtr hwnd) {
+            return publicIRawElementProviderHwndOverride.GetOverrideProviderForHwnd(hwnd);
         }
 
     } // end class InternalAccessibleObject

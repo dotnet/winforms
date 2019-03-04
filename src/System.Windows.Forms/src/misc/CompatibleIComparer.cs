@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -33,12 +33,12 @@ namespace System.Collections.Specialized {
             }
         }
 
-        bool IEqualityComparer.Equals(Object a, Object b) {
+        bool IEqualityComparer.Equals(object a, object b) {
             return Object.Equals(a, b);
         }
 
-        public virtual int GetHashCode(Object o) {
-            String obj = o as string;
+        public virtual int GetHashCode(object o) {
+            string obj = o as string;
             if (obj == null) {
                 return o.GetHashCode();
             }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
 
     using System;
     using System.Drawing.Design;    
@@ -1121,9 +1119,6 @@ namespace System.Windows.Forms {
         ///     Returns a TreeNode object for the given HTREEITEM handle
         /// </devdoc>
         public static TreeNode FromHandle(TreeView tree, IntPtr handle) {
-            // 
-
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return tree.NodeFromHandle(handle);
         }
 
@@ -1516,7 +1511,7 @@ namespace System.Windows.Forms {
 
             if (treeView.CheckBoxes && treeView.StateImageList != null) {
 
-               if (!String.IsNullOrEmpty(this.StateImageKey)) {
+               if (!string.IsNullOrEmpty(this.StateImageKey)) {
                   this.StateImageIndex = (this.Checked) ? 1 : 0;
                   this.StateImageKey = treeView.StateImageList.Images.Keys[this.StateImageIndex];
                }
@@ -1606,6 +1601,23 @@ namespace System.Windows.Forms {
                     total += children[i].GetNodeCount(true);
             }
             return total;
+        }
+
+        /// <devdoc>
+        ///     Check for any circular reference in the ancestors chain.
+        /// </devdoc>
+        internal void CheckParentingCycle(TreeNode candidateToAdd)
+        {
+            TreeNode node = this;
+
+            while (node != null)
+            {
+                if (node == candidateToAdd)
+                {
+                    throw new ArgumentException(SR.TreeNodeCircularReference);
+                }
+                node = node.parent;
+            }
         }
 
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.InsertNodeAt"]/*' />
@@ -1829,8 +1841,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// Review: Changing this would break VB users. so suppresing this message.
         /// 
-     	[SecurityPermissionAttribute(SecurityAction.Demand, Flags=SecurityPermissionFlag.SerializationFormatter), 		
-         SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.SerializationFormatter)]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected virtual void Serialize(SerializationInfo si, StreamingContext context) {
             if (propBag != null) {
@@ -1952,7 +1962,6 @@ namespace System.Windows.Forms {
         /// ISerializable private implementation
         /// </devdoc>
         /// <internalonly/>
-    	[SecurityPermissionAttribute(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
              Serialize(si, context);
         }

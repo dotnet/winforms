@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -23,8 +23,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     using System.Drawing.Imaging;
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Threading;
 
@@ -188,10 +186,12 @@ namespace System.Windows.Forms {
         ]
         public bool BarBreak {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_BARBREAK) != 0;
             }
 
             set {
+                CheckIfDisposed();
                 data.SetState(STATE_BARBREAK, value);
             }
         }
@@ -212,10 +212,12 @@ namespace System.Windows.Forms {
         ]
         public bool Break {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_BREAK) != 0;
             }
 
             set {
+                CheckIfDisposed();
                 data.SetState(STATE_BREAK, value);
             }
         }
@@ -233,10 +235,13 @@ namespace System.Windows.Forms {
         ]
         public bool Checked {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_CHECKED) != 0;
             }
 
             set {
+                CheckIfDisposed();
+
                 //if trying to set checked=true - if we're a top-level item (from a mainmenu) or have children, don't do this...
                 if (value == true && (ItemCount != 0 || (Parent != null && (Parent is MainMenu)))) {
                     throw new ArgumentException(SR.MenuItemInvalidCheckProperty);
@@ -258,8 +263,12 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MenuItemDefaultDescr))
         ]        
         public bool DefaultItem {
-            get { return(data.State & STATE_DEFAULT) != 0;}
+            get {
+                CheckIfDisposed();
+                return(data.State & STATE_DEFAULT) != 0;
+            }
             set {
+                CheckIfDisposed();
                 if (menu != null) {
                     if (value) {
                         UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(menu, menu.handle), MenuID, false);
@@ -287,9 +296,11 @@ namespace System.Windows.Forms {
         ]
         public bool OwnerDraw {
             get {
+                CheckIfDisposed();
                 return((data.State & STATE_OWNERDRAW) != 0);
             }
             set {
+                CheckIfDisposed();
                 data.SetState(STATE_OWNERDRAW, value);
             }
            
@@ -309,10 +320,12 @@ namespace System.Windows.Forms {
         ]
         public bool Enabled {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_DISABLED) == 0;
             }
 
             set {
+                CheckIfDisposed();
                 data.SetState(STATE_DISABLED, !value);
             }
         }
@@ -406,9 +419,11 @@ namespace System.Windows.Forms {
         ]
         public bool MdiList {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_MDILIST) != 0;
             }
             set {
+                CheckIfDisposed();
                 data.MdiList = value;
                 CleanListItems(this);
             }
@@ -433,7 +448,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc> 
         protected int MenuID {
-            get { return data.GetMenuID();}
+            get
+            {
+                CheckIfDisposed();
+                return data.GetMenuID();
+            }
         }
 
         /// <include file='doc\MenuItem.uex' path='docs/doc[@for="MenuItem.Selected"]/*' />
@@ -502,9 +521,11 @@ namespace System.Windows.Forms {
         ]
         public MenuMerge MergeType {
             get {
+                CheckIfDisposed();
                 return data.mergeType;
             }
             set {
+                CheckIfDisposed();
 
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)MenuMerge.Add, (int)MenuMerge.Remove)){
@@ -529,9 +550,11 @@ namespace System.Windows.Forms {
         ]
         public int MergeOrder {
             get {
+                CheckIfDisposed();
                 return data.mergeOrder;
             }
             set {
+                CheckIfDisposed();
                 data.MergeOrder = value;
             }
         }
@@ -548,6 +571,7 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         public char Mnemonic {
             get {
+                CheckIfDisposed();
                 return data.Mnemonic;
             }
         }
@@ -577,9 +601,11 @@ namespace System.Windows.Forms {
         ]
         public bool RadioCheck {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_RADIOCHECK) != 0;
             }
             set {
+                CheckIfDisposed();
                 data.SetState(STATE_RADIOCHECK, value);
             }
         }
@@ -605,9 +631,11 @@ namespace System.Windows.Forms {
         ]
         public string Text {
             get {
+                CheckIfDisposed();
                 return data.caption;
             }
             set {
+                CheckIfDisposed();
                 data.SetCaption(value);
             }
         }
@@ -626,10 +654,13 @@ namespace System.Windows.Forms {
         ]
         public Shortcut Shortcut {
             get {
+                CheckIfDisposed();
                 return data.shortcut;
             }
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set {
+                CheckIfDisposed();
+
                 if (!Enum.IsDefined(typeof(Shortcut), value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Shortcut));
                 }
@@ -655,10 +686,11 @@ namespace System.Windows.Forms {
         ]
         public bool ShowShortcut {
             get {
-
+                CheckIfDisposed();
                 return data.showShortcut;
             }
             set {
+                CheckIfDisposed();
                 if (value != data.showShortcut) {
                     data.showShortcut = value;
                     UpdateMenuItem(true);
@@ -680,9 +712,11 @@ namespace System.Windows.Forms {
         ]
         public bool Visible {
             get {
+                CheckIfDisposed();
                 return(data.State & STATE_HIDDEN) == 0;
             }
             set {
+                CheckIfDisposed();
                 data.Visible = value;
             }
         }
@@ -697,9 +731,11 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.MenuItemOnClickDescr))]
         public event EventHandler Click {
             add {
+                CheckIfDisposed();
                 data.onClick += value;
             }
             remove {
+                CheckIfDisposed();
                 data.onClick -= value;
             }
         }
@@ -716,9 +752,11 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
             add {
+                CheckIfDisposed();
                 data.onDrawItem += value;
             }
             remove {
+                CheckIfDisposed();
                 data.onDrawItem -= value;
             }
         }
@@ -733,9 +771,11 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
             add {
+                CheckIfDisposed();
                 data.onMeasureItem += value;
             }
             remove {
+                CheckIfDisposed();
                 data.onMeasureItem -= value;
             }
         }
@@ -779,9 +819,11 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
             add {
+                CheckIfDisposed();
                 data.onPopup += value;
             }
             remove {
+                CheckIfDisposed();
                 data.onPopup -= value;
             }
         }
@@ -797,9 +839,11 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.MenuItemOnSelectDescr))]
         public event EventHandler Select {
             add {
+                CheckIfDisposed();
                 data.onSelect += value;
             }
             remove {
+                CheckIfDisposed();
                 data.onSelect -= value;
             }
         }
@@ -1187,7 +1231,7 @@ namespace System.Windows.Forms {
                                     windowItem.Checked = true;
                                     activeFormAdded = true;
                                 }
-                                windowItem.Text = String.Format(CultureInfo.CurrentUICulture, "&{0} {1}", accel, forms[i].Text);
+                                windowItem.Text = string.Format(CultureInfo.CurrentUICulture, "&{0} {1}", accel, forms[i].Text);
                                 accel++;
                                 formsAddedToMenu++;
                                 senderMenu.MenuItems.Add(windowItem);
@@ -1222,7 +1266,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public virtual MenuItem MergeMenu() {
-            // 
+            CheckIfDisposed();
 
             MenuItem newItem = (MenuItem)Activator.CreateInstance(this.GetType());
             data.AddItem(newItem);
@@ -1250,6 +1294,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual void OnClick(EventArgs e) {
+            CheckIfDisposed();
+
             if (data.UserData is MdiListUserData) {
                 ((MdiListUserData)data.UserData).OnClick(e);
             }
@@ -1269,6 +1315,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual void OnDrawItem(DrawItemEventArgs e) {
+            CheckIfDisposed();
+
             if (data.baseItem != this) {
                 data.baseItem.OnDrawItem(e);
             }
@@ -1285,6 +1333,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e) {
+            CheckIfDisposed();
+
             if (data.baseItem != this) {
                 data.baseItem.OnMeasureItem(e);
             }
@@ -1302,6 +1352,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual void OnPopup(EventArgs e) {
+            CheckIfDisposed();
+
             bool recreate = false;
             for (int i=0; i<ItemCount; i++) {
                 if (items[i].MdiList) {
@@ -1338,6 +1390,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual void OnSelect(EventArgs e) {
+            CheckIfDisposed();
+
             if (data.baseItem != this) {
                 data.baseItem.OnSelect(e);
             }
@@ -1404,8 +1458,8 @@ namespace System.Windows.Forms {
         public override string ToString() {
 
             string s = base.ToString();
-            
-            String menuItemText = String.Empty;
+
+            string menuItemText = string.Empty;
 
             if (data != null && data.caption != null)
                 menuItemText = data.caption;
@@ -1537,6 +1591,14 @@ namespace System.Windows.Forms {
             Marshal.StructureToPtr(mis, m.LParam, false);
 
             m.Result = (IntPtr)1;
+        }
+
+        private void CheckIfDisposed()
+        {
+            if (data == null)
+            {
+                throw new ObjectDisposedException(GetType().FullName);
+            }
         }
 
 
@@ -1788,24 +1850,15 @@ namespace System.Windows.Forms {
 
             public override void OnClick(EventArgs e) {
                 if (boundIndex != -1) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        Form[] forms = parent.FindMdiForms();
-                        Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
+                    Form[] forms = parent.FindMdiForms();
+                    Debug.Assert(forms != null, "Didn't get a list of the MDI Forms.");
                         
-                        if (forms != null && forms.Length > boundIndex) {
-                            Form boundForm = forms[boundIndex];                            
-                            boundForm.Activate();
-                            if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
-                                boundForm.ActiveControl.Focus();
-                            }
+                    if (forms != null && forms.Length > boundIndex) {
+                        Form boundForm = forms[boundIndex];                            
+                        boundForm.Activate();
+                        if (boundForm.ActiveControl != null && !boundForm.ActiveControl.Focused) {
+                            boundForm.ActiveControl.Focus();
                         }
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
                     }
                 }
             }
@@ -1825,30 +1878,18 @@ namespace System.Windows.Forms {
                 Form active = parent.GetMainMenu().GetFormUnsafe().ActiveMdiChild;                
                 Debug.Assert(active != null, "Didn't get the active MDI child");
                 if (forms != null && forms.Length > 0 && active != null) {
+                    using (MdiWindowDialog dialog = new MdiWindowDialog()) {
+                        dialog.SetItems(active, forms);
+                        DialogResult result = dialog.ShowDialog();
+                        if (result == DialogResult.OK) {
 
-
-                    
-                    // 
-
-
-                    IntSecurity.AllWindows.Assert();
-                    try {
-                        using (MdiWindowDialog dialog = new MdiWindowDialog()) {
-                            dialog.SetItems(active, forms);
-                            DialogResult result = dialog.ShowDialog();
-                            if (result == DialogResult.OK) {
-
-                                // AllWindows Assert above allows this...
-                                //
-                                dialog.ActiveChildForm.Activate();
-                                if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
-                                    dialog.ActiveChildForm.ActiveControl.Focus();
-                                }
+                            // AllWindows Assert above allows this...
+                            //
+                            dialog.ActiveChildForm.Activate();
+                            if (dialog.ActiveChildForm.ActiveControl != null && !dialog.ActiveChildForm.ActiveControl.Focused) {
+                                dialog.ActiveChildForm.ActiveControl.Focus();
                             }
                         }
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
                     }
                 }
             }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -21,8 +21,8 @@ namespace System.Windows.Forms
     {
         private const byte DATAGRIDVIEWHEADERCELL_themeMargin = 100;  // used to calculate the margins required for XP theming rendering
 
-        private static Type defaultFormattedValueType = typeof(System.String);
-        private static Type defaultValueType = typeof(System.Object);
+        private static Type defaultFormattedValueType = typeof(string);
+        private static Type defaultValueType = typeof(object);
         private static Type cellType = typeof(DataGridViewHeaderCell);
         private static Rectangle rectThemeMargins = new Rectangle(-1, -1, 0, 0);
         private static readonly int PropValueType = PropertyStore.CreateKey();
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
                     try
                     {
                         string themeFilename = System.IO.Path.GetFileName(System.Windows.Forms.VisualStyles.VisualStyleInformation.ThemeFilename);
-                        if (String.Equals(themeFilename, AEROTHEMEFILENAME, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(themeFilename, AEROTHEMEFILENAME, StringComparison.OrdinalIgnoreCase))
                         {
                             rectThemeMargins = new Rectangle(2, 1, 0, 2);
                         }

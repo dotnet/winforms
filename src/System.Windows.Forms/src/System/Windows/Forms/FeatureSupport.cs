@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,8 +9,6 @@ namespace System.Windows.Forms {
 
     using System;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
         
 
     /// <include file='doc\FeatureSupport.uex' path='docs/doc[@for="FeatureSupport"]/*' />
@@ -57,7 +55,7 @@ namespace System.Windows.Forms {
 
             if (featureId != null && typeof(IFeatureSupport).IsAssignableFrom(c)) {
 
-                featureSupport = (IFeatureSupport) SecurityUtils.SecureCreateInstance(c);
+                featureSupport = (IFeatureSupport) Activator.CreateInstance(c);
 
                 if (featureSupport != null) {
                     return featureSupport.IsPresent(featureId, minimumVersion);
@@ -92,7 +90,7 @@ namespace System.Windows.Forms {
 
             if (featureId != null) 
             {
-                featureSupport = (IFeatureSupport) SecurityUtils.SecureCreateInstance(c);
+                featureSupport = (IFeatureSupport) Activator.CreateInstance(c);
 
                 if (featureSupport != null) {
                     return featureSupport.GetVersionPresent(featureId);

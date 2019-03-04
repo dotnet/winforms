@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,8 +11,6 @@ namespace System.Windows.Forms {
     using System.Runtime.ConstrainedExecution;
     using System.Runtime.CompilerServices;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Diagnostics;
     using System;
     using System.Collections;
@@ -33,17 +31,12 @@ namespace System.Windows.Forms {
     ///       and a window procedure. The class automatically manages window class creation and registration.
     ///    </para>
     /// </devdoc>
-    [
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)
-    ]
     public class NativeWindow : MarshalByRefObject, IWin32Window {
 #if DEBUG
         private static readonly BooleanSwitch AlwaysUseNormalWndProc = new BooleanSwitch("AlwaysUseNormalWndProc", "Skips checking for the debugger when choosing the debuggable WndProc handler");
-        private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
-#else
-        private static readonly TraceSwitch WndProcChoice;
 #endif
+
+        private static readonly TraceSwitch WndProcChoice = new TraceSwitch("WndProcChoice", "Info about choice of WndProc");
 
         /**
          * Table of prime numbers to use as hash table sizes. Each entry is the
@@ -488,54 +481,48 @@ namespace System.Windows.Forms {
             };
             */
 
-            new RegistryPermission(PermissionState.Unrestricted).Assert();
+            Debug.Assert(wndProcFlags == 0x00, "Re-entrancy into IsDebuggerInstalled()");
+
+            RegistryKey debugKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework");
+            if (debugKey == null) {
+                Debug.WriteLineIf(WndProcChoice.TraceVerbose, ".NETFramework key not found");
+                return wndProcFlags;
+            }
             try {
-
-                Debug.Assert(wndProcFlags == 0x00, "Re-entrancy into IsDebuggerInstalled()");
-
-                RegistryKey debugKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\.NETFramework");
-                if (debugKey == null) {
-                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, ".NETFramework key not found");
-                    return wndProcFlags;
-                }
-                try {
-                    object value = debugKey.GetValue("DbgJITDebugLaunchSetting");
-                    if (value != null) {
-                        Debug.WriteLineIf(WndProcChoice.TraceVerbose, "DbgJITDebugLaunchSetting value found, debugger is installed");
-                        int dbgJit = 0;
-                        try {
-                            dbgJit = (int)value;
-                        }
-                        catch (InvalidCastException) {
-                            // If the value isn't a DWORD, then we will 
-                            // continue to use the non-debuggable wndproc
-                            //
-                            dbgJit = 1;
-                        }
-
-                        // From the enum above, 0x01 == "Terminate App"... for
-                        // anything else, we should flag that the debugger
-                        // will catch unhandled exceptions
-                        //
-                        if (dbgJit != 1) {
-                            wndProcFlags |= DebuggerPresent;
-                            wndProcFlags |= LoadConfigSettings;
-                        }
+                object value = debugKey.GetValue("DbgJITDebugLaunchSetting");
+                if (value != null) {
+                    Debug.WriteLineIf(WndProcChoice.TraceVerbose, "DbgJITDebugLaunchSetting value found, debugger is installed");
+                    int dbgJit = 0;
+                    try {
+                        dbgJit = (int)value;
                     }
-                    else if (debugKey.GetValue("DbgManagedDebugger") != null) {
-                        //if there is a debugger installed, check the config files to decide
-                        //whether to allow JIT debugging.
+                    catch (InvalidCastException) {
+                        // If the value isn't a DWORD, then we will 
+                        // continue to use the non-debuggable wndproc
+                        //
+                        dbgJit = 1;
+                    }
+
+                    // From the enum above, 0x01 == "Terminate App"... for
+                    // anything else, we should flag that the debugger
+                    // will catch unhandled exceptions
+                    //
+                    if (dbgJit != 1) {
                         wndProcFlags |= DebuggerPresent;
                         wndProcFlags |= LoadConfigSettings;
                     }
                 }
-                finally {
-                    debugKey.Close();
+                else if (debugKey.GetValue("DbgManagedDebugger") != null) {
+                    //if there is a debugger installed, check the config files to decide
+                    //whether to allow JIT debugging.
+                    wndProcFlags |= DebuggerPresent;
+                    wndProcFlags |= LoadConfigSettings;
                 }
             }
             finally {
-                System.Security.CodeAccessPermission.RevertAssert();
+                debugKey.Close();
             }
+
 
             return wndProcFlags;
         }
@@ -620,13 +607,7 @@ namespace System.Windows.Forms {
 
 
                 if (suppressedGC) {
-                    new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                    try {
-                        GC.ReRegisterForFinalize(this);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    GC.ReRegisterForFinalize(this);
                     suppressedGC = false;
                 }
 
@@ -692,17 +673,6 @@ namespace System.Windows.Forms {
         ]
         public virtual void CreateHandle(CreateParams cp) {
 
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "CreateAnyWindow Demanded");
-            IntSecurity.CreateAnyWindow.Demand();
-
-            if ((cp.Style & NativeMethods.WS_CHILD) != NativeMethods.WS_CHILD
-                || cp.Parent == IntPtr.Zero) {
-
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "TopLevelWindow Demanded");
-                IntSecurity.TopLevelWindow.Demand();
-            }
-
-            // 
             lock (this) { 
                 CheckReleased();
                 WindowClass windowClass = WindowClass.Create(cp.ClassName, cp.ClassStyle);
@@ -737,8 +707,8 @@ namespace System.Windows.Forms {
                             //We need to check the length of the string we're passing into CreateWindowEx().  
                             //If it exceeds the max, we should take the substring....
 
-                            if (cp.Caption != null && cp.Caption.Length > Int16.MaxValue) {
-                                cp.Caption = cp.Caption.Substring(0, Int16.MaxValue);
+                            if (cp.Caption != null && cp.Caption.Length > short.MaxValue) {
+                                cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                             }
 
                             createResult = UnsafeNativeMethods.CreateWindowEx(cp.ExStyle, windowClass.windowClassName,
@@ -845,13 +815,7 @@ namespace System.Windows.Forms {
                 // Now that we have disposed, there is no need to finalize us any more.  So
                 // Mark to the garbage collector that we no longer need finalization.
                 //
-                new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                try {
-                    GC.SuppressFinalize(this);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                GC.SuppressFinalize(this);
                 suppressedGC = true;
             }
         }
@@ -942,7 +906,7 @@ namespace System.Windows.Forms {
             }
             //outside of our predefined table. 
             //compute the hard way. 
-            for (int j = ((minSize - 2) | 1); j < Int32.MaxValue; j += 2) {
+            for (int j = ((minSize - 2) | 1); j < int.MaxValue; j += 2) {
                 bool prime = true;
 
                 if ((j & 1) != 0) {
@@ -1146,13 +1110,7 @@ namespace System.Windows.Forms {
                             // Now that we have disposed, there is no need to finalize us any more.  So
                             // Mark to the garbage collector that we no longer need finalization.
                             //
-                            new SecurityPermission(SecurityPermissionFlag.UnmanagedCode).Assert();
-                            try {
-                                GC.SuppressFinalize(this);
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
-                            }
+                            GC.SuppressFinalize(this);
                             suppressedGC = true;
                         }
                     }
@@ -1443,9 +1401,6 @@ namespace System.Windows.Forms {
         ///     WindowClass encapsulates a window class.
         /// </devdoc>
         /// <internalonly/>
-        [
-        System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags = System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-        ]
         private class WindowClass {
             internal static WindowClass cache;
 
@@ -1537,7 +1492,7 @@ namespace System.Windows.Forms {
                 b.Append(".app.");
                 b.Append(domainQualifier);
                 b.Append('.');
-                String appDomain = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
+                string appDomain = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
                 b.Append(VersioningHelper.MakeVersionSafeName(appDomain, ResourceScope.Process, ResourceScope.AppDomain));
                 return b.ToString();
             }

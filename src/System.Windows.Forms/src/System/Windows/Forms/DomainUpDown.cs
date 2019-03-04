@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     
     using System.Runtime.InteropServices;
     using System.ComponentModel;
@@ -66,7 +65,7 @@ namespace System.Windows.Forms {
         public DomainUpDown() : base() {   
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
             SetState2(STATE2_USEPREFERREDSIZECACHE, true);  
-            Text = String.Empty;
+            Text = string.Empty;
         }                
                 
         // Properties
@@ -398,7 +397,7 @@ namespace System.Windows.Forms {
         protected override void OnTextBoxKeyPress(object source, KeyPressEventArgs e) {
             if (ReadOnly) {
                 char[] character = new char[] { e.KeyChar };
-                UnicodeCategory uc = Char.GetUnicodeCategory(character[0]);
+                UnicodeCategory uc = char.GetUnicodeCategory(character[0]);
 
                 if (uc == UnicodeCategory.LetterNumber
                     || uc == UnicodeCategory.LowercaseLetter
@@ -693,7 +692,7 @@ namespace System.Windows.Forms {
                     return 0;
                 }
 
-                return String.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
+                return string.Compare(p.ToString(), q.ToString(), false, CultureInfo.CurrentCulture);
             }
         }
 
@@ -804,7 +803,6 @@ namespace System.Windows.Forms {
             }
             
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return parent;
                 }
@@ -865,7 +863,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return parent;
                 }
@@ -887,7 +884,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Value"]/*' />
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return name;
                 }

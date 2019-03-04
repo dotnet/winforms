@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -38,10 +38,10 @@ namespace System.Windows.Forms {
             string strValue = value as string;
             if (strValue != null) {
                
-               if (String.Compare(strValue, SR.toStringDefault, true, culture) == 0) {
+               if (string.Compare(strValue, SR.toStringDefault, true, culture) == 0) {
                    return -1;
                } 
-               else if (String.Compare(strValue, SR.toStringNone, true, culture) == 0) {
+               else if (string.Compare(strValue, SR.toStringNone, true, culture) == 0) {
                    return -2;
                }
             }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,8 +16,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
     using System.ComponentModel.Design.Serialization;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Globalization;
     using System.Windows.Forms.Internal;
 
@@ -836,11 +834,8 @@ namespace System.Windows.Forms {
                     Region rgn = new Region(bounds);  // create region 
                     rgn.Exclude(regionRect);          // exclude the center part
 
-                    // set it into the toolstripdropdown�s region
-                    IntSecurity.ChangeWindowRegionForTopLevel.Assert();
-                    this.Region = rgn;     
-                    // RevertAssert automatically called here when exiting function.
-                 
+                    // set it into the toolstripdropdown’s region
+                    this.Region = rgn;                
                 }
                 
                 // ForceSynchronousPaint - peeks through the message queue, looking for WM_PAINTs 
@@ -892,7 +887,6 @@ namespace System.Windows.Forms {
                     ForceSynchronousPaint();
                 }
 
-                [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 protected override void WndProc(ref Message m){                
                     if (m.Msg == NativeMethods.WM_NCHITTEST){
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
@@ -972,7 +966,7 @@ namespace System.Windows.Forms {
 
             Point clientLocation = PointToClient(screenLocation);
             if (!this.DragBounds.Contains(clientLocation)) {
-                Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "RC.MoveControl - Point {0} is not in current rafting container drag bounds {1}, calling MoveOutsideContainer", clientLocation, DragBounds));
+                Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "RC.MoveControl - Point {0} is not in current rafting container drag bounds {1}, calling MoveOutsideContainer", clientLocation, DragBounds));
                 MoveOutsideContainer(toolStripToDrag, screenLocation);
                 return;
             }
@@ -1044,7 +1038,7 @@ namespace System.Windows.Forms {
                 
                 ToolStripPanelRow row = PointToRow(clientLocation);
                 if (row == null) {
-                    Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
+                    Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere is no row corresponding to this point, creating a new one."));
 
                     // there's no row at this point so lets create one
                     int index = this.RowsInternal.Count;
@@ -1092,7 +1086,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 else if (!row.CanMove(toolStripToDrag)) {
-                    Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelRowCreationDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we cant add the control to it, creating/inserting new row."));
+                    Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we cant add the control to it, creating/inserting new row."));
 
                     // we have a row at that point, but its too full or doesnt want
                     // anyone to join it.
@@ -1100,7 +1094,7 @@ namespace System.Windows.Forms {
 
                     if (currentToolStripPanelRow != null && currentToolStripPanelRow.ControlsInternal.Count == 1) {
                         if (index > 0 && index-1 == RowsInternal.IndexOf(currentToolStripPanelRow)) {
-                            Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelRowCreationDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row."));
+                            Debug.WriteLineIf(ToolStripPanelRow.ToolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tAttempts to leave the current row failed as there's no space in the next row.  Since there's only one control, just keep the row."));
                             return;
                         }
                     }
@@ -1119,7 +1113,7 @@ namespace System.Windows.Forms {
                     }
                 }
                 if (changedRow) {
-                    Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
+                    Debug.WriteLineIf(ToolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
                     if (currentToolStripPanelRow != null) {
                         currentToolStripPanelRow.LeaveRow(toolStripToDrag);
                     }
@@ -1136,22 +1130,16 @@ namespace System.Windows.Forms {
                     if (RowsInternal.IndexOf(row) > 0) {
                         // When joining a new row, move the cursor to to the location of
                         // the grip, otherwise budging the mouse can pull it down into the next row.
-                        IntSecurity.AdjustCursorPosition.Assert();
-                        try {
-                            Point cursorLoc = toolStripToDrag.PointToScreen(toolStripToDrag.GripRectangle.Location);
-                            if (Orientation == Orientation.Vertical) {
-                                cursorLoc.X += toolStripToDrag.GripRectangle.Width /2;
-                                cursorLoc.Y = Cursor.Position.Y;
-                            }
-                            else {
-                                cursorLoc.Y += toolStripToDrag.GripRectangle.Height /2;
-                                cursorLoc.X = Cursor.Position.X;                                
-                            }
-                            Cursor.Position = cursorLoc;
+                        Point cursorLoc = toolStripToDrag.PointToScreen(toolStripToDrag.GripRectangle.Location);
+                        if (Orientation == Orientation.Vertical) {
+                            cursorLoc.X += toolStripToDrag.GripRectangle.Width /2;
+                            cursorLoc.Y = Cursor.Position.Y;
                         }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
+                        else {
+                            cursorLoc.Y += toolStripToDrag.GripRectangle.Height /2;
+                            cursorLoc.X = Cursor.Position.X;                                
                         }
+                        Cursor.Position = cursorLoc;
                     }
                 }
 
@@ -1234,10 +1222,10 @@ namespace System.Windows.Forms {
                         if (currentlyAssignedRow != row) {
                             int goodRowIndex = (currentlyAssignedRow != null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
                             if (goodRowIndex == -1) {
-                                Debug.Fail(String.Format(CultureInfo.CurrentCulture, "ToolStripPanelRow has not been assigned!  Should be set to {0}.", i));
+                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ToolStripPanelRow has not been assigned!  Should be set to {0}.", i));
                             }
                             else {
-                                Debug.Fail(String.Format(CultureInfo.CurrentCulture, "Detected orphan cell! {0} is in row {1}. It shouldnt have a cell in {2}! \r\n\r\nTurn on DEBUG_PAINT in ToolStripPanel and ToolStripPanelRow to investigate.", cell.Control.Name, goodRowIndex, i));
+                                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Detected orphan cell! {0} is in row {1}. It shouldnt have a cell in {2}! \r\n\r\nTurn on DEBUG_PAINT in ToolStripPanel and ToolStripPanelRow to investigate.", cell.Control.Name, goodRowIndex, i));
                             }
                         }
                     }
@@ -1253,7 +1241,7 @@ namespace System.Windows.Forms {
            for (int i = 0; i < RowsInternal.Count; i++) {
                 Debug.Write("Row " + i.ToString(CultureInfo.CurrentCulture) + ": ");
                 for (int  j = 0; j < RowsInternal[i].ControlsInternal.Count; j++) {
-                    Debug.Write(String.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));                                   
+                    Debug.Write(string.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));                                   
                 }
                 Debug.Write("\r\n");
            }
@@ -1278,14 +1266,14 @@ namespace System.Windows.Forms {
                         ISupportToolStripPanel draggedToolStrip1 = c1 as ISupportToolStripPanel;
                         ISupportToolStripPanel draggedToolStrip2 = c2 as ISupportToolStripPanel;
                 
-                        string fail = String.Format(CultureInfo.CurrentCulture, 
+                        string fail = string.Format(CultureInfo.CurrentCulture, 
                             "OVERLAP detection:\r\n{0}: {1} row {2} row bounds {3}",
                             c1.Name == null ? "" : c1.Name, 
                             c1.Bounds,
                             !RowsInternal.Contains(draggedToolStrip1.ToolStripPanelRow) ? "unknown" : RowsInternal.IndexOf(draggedToolStrip1.ToolStripPanelRow).ToString(CultureInfo.CurrentCulture),
                             draggedToolStrip1.ToolStripPanelRow.Bounds);
                         
-                         fail += String.Format(CultureInfo.CurrentCulture, 
+                         fail += string.Format(CultureInfo.CurrentCulture, 
                              "\r\n{0}: {1} row {2} row bounds {3}",
                              c2.Name == null ? "" : c2.Name, 
                              c2.Bounds,

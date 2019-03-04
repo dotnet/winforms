@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Windows.Forms;
     using System.Windows.Forms.Design;
@@ -123,7 +121,7 @@ namespace System.Windows.Forms
         private static readonly object EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED = new object();
         private static readonly object EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED = new object();
         private static readonly object EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED = new object();
-        private static readonly object EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED = new Object();
+        private static readonly object EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED = new object();
         private static readonly object EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED = new object();
         private static readonly object EVENT_DATAGRIDVIEWROWENTER = new object();
         private static readonly object EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED = new object();
@@ -401,7 +399,7 @@ namespace System.Windows.Forms
         // ToolTip
         private DataGridViewToolTip toolTipControl;
         // the tool tip string we get from cells
-        private string toolTipCaption = String.Empty;
+        private string toolTipCaption = string.Empty;
         
         private const int maxTTDISPINFOBufferLength = 80;
 
@@ -2085,6 +2083,16 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// Indicates whether the ComboBox editing control was just detached. (focused out to another cell)
+        /// </summary>
+        internal bool ComboBoxControlWasDetached { get; set; }
+
+        /// <summary>
+        /// Indicates whether the TextBox editing control was just detached. (focused out to another cell)
+        /// </summary>
+        internal bool TextBoxControlWasDetached { get; set; }
+
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersVisible"]/*' />
         /// <devdoc>
         ///    <para>
@@ -2353,7 +2361,7 @@ namespace System.Windows.Forms
             {
                 if (this.dataConnection == null)
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 else
                 {
@@ -2837,15 +2845,7 @@ namespace System.Windows.Forms
             {
                 if (this.editingPanelAccessibleObject == null)
                 {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try
-                    {
-                        editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, this.EditingPanel);
-                    }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    editingPanelAccessibleObject = new DataGridViewEditingPanelAccessibleObject(this, this.EditingPanel);
                 }
 
                 return editingPanelAccessibleObject;
@@ -3692,20 +3692,6 @@ namespace System.Windows.Forms
                 if (!this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked])
                 {
                     this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = false;
-                    try
-                    {
-                        IntSecurity.AllWindows.Demand();
-                    }
-                    catch (SecurityException)
-                    {
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = true;
-                    }
-                    catch
-                    {
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = true; // To be on the safe side
-                        this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked] = true;
-                        throw;
-                    }
                     this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked] = true;
                 }
                 return this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted];
@@ -4776,21 +4762,21 @@ namespace System.Windows.Forms
                         {
                             // the tool tip hasn't yet been activated
                             // activate it now
-                            this.toolTipControl.Activate(!String.IsNullOrEmpty(this.toolTipCaption));
+                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
                         }
 
                         if (!value && !this.ShowRowErrors && !this.ShowCellToolTips)
                         {
                             // there is no reason to keep the tool tip activated
                             // deactivate it
-                            this.toolTipCaption = String.Empty;
+                            this.toolTipCaption = string.Empty;
                             this.toolTipControl.Activate(false /*activate*/);
                         }
 
                         if (!value && (this.ShowRowErrors || this.ShowCellToolTips))
                         {
                             // reset the tool tip
-                            this.toolTipControl.Activate(!String.IsNullOrEmpty(this.toolTipCaption));
+                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
                         }
 
                         // Some autosizing may have to be applied since the potential presence of error icons influences the preferred sizes.
@@ -4830,20 +4816,20 @@ namespace System.Windows.Forms
                         {
                             // the tool tip hasn't yet been activated
                             // activate it now
-                            this.toolTipControl.Activate(!String.IsNullOrEmpty(this.toolTipCaption) /*activate*/);
+                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption) /*activate*/);
                         }
 
                         if (!value && !this.ShowRowErrors && !this.ShowCellErrors)
                         {
                             // there is no reason to keep the tool tip activated
                             // deactivate it
-                            this.toolTipCaption = String.Empty;
+                            this.toolTipCaption = string.Empty;
                             this.toolTipControl.Activate(false /*activate*/);
                         }
 
                         if (!value && (this.ShowRowErrors || this.ShowCellErrors))
                         {
-                            bool activate = !String.IsNullOrEmpty(this.toolTipCaption);
+                            bool activate = !string.IsNullOrEmpty(this.toolTipCaption);
                             Point mouseCoord = System.Windows.Forms.Control.MousePosition;
                             activate &= this.ClientRectangle.Contains(PointToClient(mouseCoord));
 
@@ -4925,21 +4911,21 @@ namespace System.Windows.Forms
                         {
                             // the tool tip hasn't yet been activated
                             // activate it now
-                            this.toolTipControl.Activate(!String.IsNullOrEmpty(this.toolTipCaption));
+                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
                         }
 
                         if (!value && !this.ShowCellErrors && !this.ShowCellToolTips)
                         {
                             // there is no reason to keep the tool tip activated
                             // deactivate it
-                            this.toolTipCaption = String.Empty;
+                            this.toolTipCaption = string.Empty;
                             this.toolTipControl.Activate(false /*activate*/);
                         }
 
                         if (!value && (this.ShowCellErrors || this.ShowCellToolTips))
                         {
                             // reset the tool tip
-                            this.toolTipControl.Activate(!String.IsNullOrEmpty(this.toolTipCaption));
+                            this.toolTipControl.Activate(!string.IsNullOrEmpty(this.toolTipCaption));
                         }
                     }
 

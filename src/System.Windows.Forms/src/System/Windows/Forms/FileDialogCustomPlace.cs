@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -37,7 +37,7 @@ namespace System.Windows.Forms
             {
                 if (string.IsNullOrEmpty(this._path))
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 return this._path;
             }
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                this._path = String.Empty;
+                this._path = string.Empty;
                 this._knownFolderGuid = value;
             }
         }

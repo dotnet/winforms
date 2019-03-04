@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -320,15 +320,7 @@ namespace System.Windows.Forms
                 dgvabsOther.right == this.right;
         }
 
-        /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.GetHashCode"]/*' />
-        /// <internalonly/>
-        public override int GetHashCode() 
-        {
-            return WindowsFormsUtils.GetCombinedHashCodes((int) this.top,
-                                                              (int) this.left,
-                                                              (int) this.bottom,
-                                                              (int) this.right);
-        }
+        public override int GetHashCode() => HashCode.Combine(top, left, bottom, right);
 
         /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.ToString"]/*' />
         /// <internalonly/>

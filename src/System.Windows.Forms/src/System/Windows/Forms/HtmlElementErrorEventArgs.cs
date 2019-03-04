@@ -1,85 +1,45 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
+namespace System.Windows.Forms
+{
 
-namespace System.Windows.Forms {
-
-    /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs"]/*' />
     /// <devdoc>
-    ///    <para>EventArgs for onerror event of HtmlElement</para>
+    /// EventArgs for onerror event of HtmlElement
     /// </devdoc>
-    public sealed class HtmlElementErrorEventArgs : EventArgs {
-        private string description;
-        private string urlString;
-        private Uri url;
-        private int lineNumber;
-        private bool handled;
+    public sealed class HtmlElementErrorEventArgs : EventArgs
+    {
+        private readonly string _urlString;
+        private Uri _url;
 
         internal HtmlElementErrorEventArgs(string description, string urlString, int lineNumber)
         {
-            this.description = description;
-            this.urlString = urlString;
-            this.lineNumber = lineNumber;
+            Description = description;
+            _urlString = urlString;
+            LineNumber = lineNumber;
         }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.Description"]/*' />
         /// <devdoc>
-        ///    <para>Description of error</para>
+        /// Description of error
         /// </devdoc>
-        public string Description
-        {
-            get
-            {
-                return description;
-            }
-        }
+        public string Description { get; }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.Handled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the <see cref='System.Windows.Forms.HtmlWindow.Error'/>
-        ///       event was handled.
-        ///    </para>
+        /// Gets or sets a value indicating whether the <see cref='System.Windows.Forms.HtmlWindow.Error'/>
+        /// event was handled.
         /// </devdoc>
-        public bool Handled {
-            get {
-                return handled;
-            }
-            set {
-                handled = value;
-            }
-        }
+        public bool Handled { get; set; }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.LineNumber"]/*' />
         /// <devdoc>
-        ///    <para>Line number where error occurred</para>
+        /// Line number where error occurred
         /// </devdoc>
-        public int LineNumber
-        {
-            get
-            {
-                return lineNumber;
-            }
-        }
+        public int LineNumber { get; }
 
-        /// <include file='doc\HtmlElementErrorEventArgs.uex' path='docs/doc[@for="HtmlElementErrorEventArgs.Url"]/*' />
         /// <devdoc>
-        ///    <para>Url where error occurred</para>
+        /// Url where error occurred
         /// </devdoc>
-        public Uri Url
-        {
-            get
-            {
-                if (url == null)
-                {
-                    url = new Uri(urlString);
-                }
-                return url;
-            }
-        }
+        public Uri Url => _url ?? (_url = new Uri(_urlString));
     }
 }
 

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -65,12 +65,7 @@ namespace System.Windows.Forms {
             return  Column.ToString(CultureInfo.CurrentCulture) + "," + Row.ToString(CultureInfo.CurrentCulture);
         }
         
-        public override int GetHashCode() {
-            // Structs should implement GetHashCode for perf
-           return WindowsFormsUtils.GetCombinedHashCodes(
-                                                        this.row,
-                                                        this.column);
-        }
+        public override int GetHashCode() => HashCode.Combine(row, column);
     }
     
     internal class TableLayoutPanelCellPositionTypeConverter : TypeConverter {
@@ -145,13 +140,17 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
+        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+        {
+            if (propertyValues == null)
+            {
+                throw new ArgumentNullException(nameof(propertyValues));
+            }
 
             return new TableLayoutPanelCellPosition(
                 (int)propertyValues["Column"],
                 (int)propertyValues["Row"]
-             );
-        
+            );
         }
         
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) {

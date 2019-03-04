@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     using System;
-    using System.Security.Permissions;
     using System.Windows.Forms.ButtonInternal;
 
     using System.ComponentModel;
@@ -304,7 +303,6 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.ClassName = "BUTTON";
@@ -663,7 +661,6 @@ namespace System.Windows.Forms {
         ///     Overridden to handle mnemonics properly.
         /// </devdoc>
         /// <internalonly/>        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
                 if (FocusInternal()) {
@@ -748,7 +745,6 @@ namespace System.Windows.Forms {
             }                        
 
             /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 CheckBox cb = this.Owner as CheckBox;
 

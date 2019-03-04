@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,10 +16,9 @@ namespace System.Windows.Forms.Design {
     /// <devdoc>
     ///    <para>Provides a base class for property tabs.</para>
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
     public abstract class PropertyTab : IExtenderProvider {
 
-        private Object[] components; 
+        private object[] components; 
         private Bitmap   bitmap;
         private bool     checkedBmp;
 
@@ -34,8 +33,8 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets a bitmap to display in the property tab.</para>
         /// </devdoc>
         public virtual Bitmap Bitmap {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (!checkedBmp && bitmap == null) {
                     string bmpName = GetType().Name + ".bmp";
@@ -58,7 +57,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets or sets the array of components the property tab is associated with.</para>
         /// </devdoc>
-        public virtual Object[] Components {
+        public virtual object[] Components {
             get {
                 return components;
             }
@@ -92,7 +91,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object be can extended.</para>
         /// </devdoc>
-        public virtual bool CanExtend(Object extendee) {
+        public virtual bool CanExtend(object extendee) {
             return true;
         }
 
@@ -117,7 +116,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets the default property of the specified component.</para>
         /// </devdoc>
-        public virtual PropertyDescriptor GetDefaultProperty(Object component) {
+        public virtual PropertyDescriptor GetDefaultProperty(object component) {
             return TypeDescriptor.GetDefaultProperty(component);
         }
 
@@ -126,7 +125,7 @@ namespace System.Windows.Forms.Design {
         /// <devdoc>
         ///    <para>Gets the properties of the specified component.</para>
         /// </devdoc>
-        public virtual PropertyDescriptorCollection GetProperties(Object component) {
+        public virtual PropertyDescriptorCollection GetProperties(object component) {
             return GetProperties(component, null);
         }
 

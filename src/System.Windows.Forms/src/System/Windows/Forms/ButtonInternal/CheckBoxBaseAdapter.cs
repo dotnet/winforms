@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.ButtonInternal {
         }
 
         protected void AdjustFocusRectangle(LayoutData layout) { 
-            if (AccessibilityImprovements.Level2 && String.IsNullOrEmpty(Control.Text)) {
+            if (AccessibilityImprovements.Level2 && string.IsNullOrEmpty(Control.Text)) {
                 // When a CheckBox has no text, AutoSize sets the size to zero 
                 // and thus there's no place around which to draw the focus rectangle.
                 // So, when AutoSize == true we want the focus rectangle to be rendered inside the box.

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
                 return(text == null) ? "" : text;
             }
             set {
-                if (String.IsNullOrEmpty(value)) {
+                if (string.IsNullOrEmpty(value)) {
                     value = null;
                 }
                 
@@ -475,7 +475,7 @@ namespace System.Windows.Forms {
                             width = buttonSize.Width;
                         }
                         else {
-                            if (this.parent.ImageList != null || !String.IsNullOrEmpty(Text)) {
+                            if (this.parent.ImageList != null || !string.IsNullOrEmpty(Text)) {
                                 Size imageSize = this.parent.ImageSize;
                                 Size textSize = Size.Ceiling(g.MeasureString(Text, parent.Font));
                                 if (this.parent.TextAlign == ToolBarTextAlign.Right) {

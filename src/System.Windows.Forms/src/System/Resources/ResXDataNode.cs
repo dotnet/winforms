@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,6 +9,7 @@ namespace System.Resources {
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters.Binary;
     using System;
+    using System.Linq;
     using System.Windows.Forms;
     using System.Reflection;
     using Microsoft.Win32;
@@ -23,7 +24,6 @@ namespace System.Resources {
     using System.Xml;
     using System.ComponentModel.Design;
     using System.Globalization;
-    using System.Security.Permissions;
     using System.Runtime.Versioning;
 
     /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode"]/*' />
@@ -31,12 +31,11 @@ namespace System.Resources {
     ///    
     /// </devdoc>
     [Serializable]
-    [PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public sealed class ResXDataNode : ISerializable {
 
-        private static readonly char[] SpecialChars = new char[]{' ', '\r', '\n'};
+        private static readonly char[] SpecialChars = new char[] {' ', '\r', '\n'};
 
-        private DataNodeInfo        nodeInfo;
+        private DataNodeInfo nodeInfo;
 
         private string name;
         private string comment;
@@ -47,8 +46,8 @@ namespace System.Resources {
         private string fileRefType;
         private string fileRefTextEncoding;
 
-        private object              value;
-        private ResXFileRef         fileRef;
+        private object value;
+        private ResXFileRef fileRef;
 
         private IFormatter binaryFormatter = null;
 
@@ -70,19 +69,21 @@ namespace System.Resources {
         // this is a deep clone
         //</devdoc>
         internal ResXDataNode DeepClone() {
-            ResXDataNode result = new ResXDataNode();
-            result.nodeInfo = (this.nodeInfo != null) ? this.nodeInfo.Clone() : null; // nodeinfo is just made up of immutable objects, we don't need to clone it
-            result.name = this.name;
-            result.comment = this.comment;
-            
-            result.typeName = this.typeName;
-            result.fileRefFullPath = this.fileRefFullPath;
-            result.fileRefType = this.fileRefType;
-            result.fileRefTextEncoding = this.fileRefTextEncoding;
-            result.value = this.value; // we don't clone the value, because we don't know how
-            result.fileRef = (this.fileRef != null) ? this.fileRef.Clone() : null;
-            result.typeNameConverter = this.typeNameConverter;
-            return result;
+            return new ResXDataNode
+            {
+                // nodeinfo is just made up of immutable objects, we don't need to clone it
+                nodeInfo = this.nodeInfo?.Clone(),
+                name = this.name,
+                comment = this.comment,
+                typeName = this.typeName,
+                fileRefFullPath = this.fileRefFullPath,
+                fileRefType = this.fileRefType,
+                fileRefTextEncoding = this.fileRefTextEncoding,
+                // we don't clone the value, because we don't know how
+                value = this.value,
+                fileRef = this.fileRef?.Clone(),
+                typeNameConverter = this.typeNameConverter
+            };
         }
             
         /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.ResXDataNode"]/*' />
@@ -110,7 +111,8 @@ namespace System.Resources {
             Type valueType = (value == null) ? typeof(object) : value.GetType();
             if (value != null && !valueType.IsSerializable) {
                 throw new InvalidOperationException(string.Format(SR.NotSerializableType, name, valueType.FullName));
-            } else if (value!= null) {
+            }
+            if (value != null) {
                 this.typeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, this.typeNameConverter);
             } 
                                     
@@ -131,14 +133,11 @@ namespace System.Resources {
                                                                                                         // So we don't have to localize it.
         ]
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter) {
-            if(name == null) {
-                throw (new ArgumentNullException(nameof(name)));
+            if(string.IsNullOrEmpty(name)) {
+                throw new ArgumentNullException(nameof(name));
             }
             if(fileRef == null) {
-                throw (new ArgumentNullException(nameof(fileRef)));
-            }
-            if(name.Length == 0) {
-                throw (new ArgumentException(nameof(name)));
+                throw new ArgumentNullException(nameof(fileRef));
             }
             this.name = name;
             this.fileRef = fileRef;
@@ -187,10 +186,10 @@ namespace System.Resources {
                 if(result == null && nodeInfo != null) {
                     result = nodeInfo.Comment;
                 }
-                return (result == null ? "" : result);
+                return result ?? string.Empty;
             }
             set {
-                comment= value;
+                comment = value;
             }
         }
 
@@ -212,10 +211,10 @@ namespace System.Resources {
             ]
             set {
                 if(value == null) {
-                    throw (new ArgumentNullException(nameof(Name)));
+                    throw new ArgumentNullException(nameof(Name));
                 }
                 if(value.Length == 0) {
-                    throw (new ArgumentException(nameof(Name)));
+                    throw new ArgumentException(nameof(Name));
                 }
                 name = value;
             }
@@ -227,16 +226,15 @@ namespace System.Resources {
         /// </devdoc>
         public ResXFileRef FileRef {
             get {
-                if(FileRefFullPath==null) {
+                if(FileRefFullPath == null) {
                     return null;
                 }
-                if(fileRef == null) {
-                    if(String.IsNullOrEmpty(fileRefTextEncoding)) 
-                    {
-                        fileRef = new ResXFileRef(FileRefFullPath, FileRefType);
-                    } else {
-                        fileRef = new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
-                    }
+                if(fileRef == null)
+                {
+                    fileRef = 
+                        String.IsNullOrEmpty(fileRefTextEncoding) 
+                            ? new ResXFileRef(FileRefFullPath, FileRefType) 
+                            : new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
                 }
                 return fileRef;
             }
@@ -245,32 +243,19 @@ namespace System.Resources {
         
         private string FileRefFullPath {
             get {
-                string result = (fileRef==null ? null : fileRef.FileName);
-                if(result == null) {
-                    result = fileRefFullPath;
-                }
-                return result;
+                return fileRef?.FileName ?? fileRefFullPath;
             }
         }
 
         private string FileRefType {
             get {
-                string result = (fileRef==null ? null : fileRef.TypeName);
-                if(result == null) {
-                    result = fileRefType;
-                }
-                return result;
+                return fileRef?.TypeName ?? fileRefType;
             }
         }
 
         private string FileRefTextEncoding {
             get {
-                string result = (fileRef==null ? null : (fileRef.TextFileEncoding == null ? null : fileRef.TextFileEncoding.BodyName));
-                if(result == null) {
-                    result = fileRefTextEncoding;
-                }
-
-                return result;
+                return fileRef?.TextFileEncoding?.BodyName ?? fileRefTextEncoding;
             }
         }
 
@@ -293,25 +278,20 @@ namespace System.Resources {
                 output.Append(crlf);
                 return output.ToString();
             }
-            else {
-                return raw;
-            }
+            
+            return raw;
         }
 
-        private void FillDataNodeInfoFromObject(DataNodeInfo nodeInfo, object value) {           
-            CultureInfo ci = value as CultureInfo;
-            if( ci != null) { // special-case CultureInfo, cannot use CultureInfoConverter for serialization
+        private void FillDataNodeInfoFromObject(DataNodeInfo nodeInfo, object value) {
+            if(value is CultureInfo ci) { // special-case CultureInfo, cannot use CultureInfoConverter for serialization
                 nodeInfo.ValueData = ci.Name;
                 nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(CultureInfo), this.typeNameConverter);
             }
-            else if (value is string) {
-                nodeInfo.ValueData = (string)value;
-                if(value == null) {
-                    nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter);
-                }
+            else if (value is string str) {
+                nodeInfo.ValueData = str;
             }
-            else if (value is byte[]) {
-                nodeInfo.ValueData = ToBase64WrappedString((byte[])value);
+            else if (value is byte[] bytes) {
+                nodeInfo.ValueData = ToBase64WrappedString(bytes);
                 nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(typeof(byte[]), this.typeNameConverter);
             }
             else {
@@ -343,8 +323,7 @@ namespace System.Resources {
                 bool fromByteArray = tc.CanConvertFrom(typeof(byte[]));
                 if (toByteArray && fromByteArray) {
                     byte[] data = (byte[])tc.ConvertTo(value, typeof(byte[]));
-                    string text = ToBase64WrappedString(data);
-                    nodeInfo.ValueData = text;
+                    nodeInfo.ValueData = ToBase64WrappedString(data);
                     nodeInfo.MimeType = ResXResourceWriter.ByteArraySerializedObjectMimeType;
                     nodeInfo.TypeName = MultitargetUtil.GetAssemblyQualifiedName(valueType, this.typeNameConverter);
                     return;
@@ -356,38 +335,45 @@ namespace System.Resources {
                 }
                 else {
                     if (binaryFormatter == null) {
-                        binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                        binaryFormatter.Binder = new ResXSerializationBinder(this.typeNameConverter);
+                        binaryFormatter = new BinaryFormatter
+                        {
+                            Binder = new ResXSerializationBinder(this.typeNameConverter)
+                        };
                     }
 
-                    MemoryStream ms = new MemoryStream();
-                    binaryFormatter.Serialize(ms, value);
-                    string text = ToBase64WrappedString(ms.ToArray());
-                    nodeInfo.ValueData = text;
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        binaryFormatter.Serialize(ms, value);
+                        nodeInfo.ValueData = ToBase64WrappedString(ms.ToArray());
+                    }
+
                     nodeInfo.MimeType = ResXResourceWriter.DefaultSerializedObjectMimeType;
                 }
             }
         
         }
         
-
         private object GenerateObjectFromDataNodeInfo(DataNodeInfo dataNodeInfo, ITypeResolutionService typeResolver) {
             object result = null;
             string mimeTypeName = dataNodeInfo.MimeType;
             // default behavior: if we dont have a type name, it's a string
-            string typeName = (dataNodeInfo.TypeName == null || dataNodeInfo.TypeName.Length==0 ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), this.typeNameConverter) : dataNodeInfo.TypeName);
+            string typeName = 
+                string.IsNullOrEmpty(dataNodeInfo.TypeName) 
+                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), this.typeNameConverter) 
+                    : dataNodeInfo.TypeName;
             
-            if (mimeTypeName != null && mimeTypeName.Length > 0) {
-                if (String.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
-                    || String.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
-                    || String.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType)) {
+            if (!string.IsNullOrEmpty(mimeTypeName)) {
+                if (string.Equals(mimeTypeName, ResXResourceWriter.BinSerializedObjectMimeType)
+                    || string.Equals(mimeTypeName, ResXResourceWriter.Beta2CompatSerializedObjectMimeType)
+                    || string.Equals(mimeTypeName, ResXResourceWriter.CompatBinSerializedObjectMimeType)) {
                     string text = dataNodeInfo.ValueData;
-                    byte[] serializedData;
-                    serializedData = FromBase64WrappedString(text);
+                    byte[] serializedData = FromBase64WrappedString(text);
 
                     if (binaryFormatter == null) {
-                        binaryFormatter = new BinaryFormatter();
-                        binaryFormatter.Binder = new ResXSerializationBinder(typeResolver);
+                        binaryFormatter = new BinaryFormatter
+                        {
+                            Binder = new ResXSerializationBinder(typeResolver)
+                        };
                     }
                     IFormatter formatter = binaryFormatter;
                     if (serializedData != null && serializedData.Length > 0) {
@@ -398,15 +384,14 @@ namespace System.Resources {
                     }
                 }
                 
-                else if (String.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
-                    if (typeName != null && typeName.Length > 0) {
+                else if (string.Equals(mimeTypeName, ResXResourceWriter.ByteArraySerializedObjectMimeType)) {
+                    if (!string.IsNullOrEmpty(typeName)) {
                         Type type = ResolveType(typeName, typeResolver);
                         if (type != null) {
                             TypeConverter tc = TypeDescriptor.GetConverter(type);
                             if (tc.CanConvertFrom(typeof(byte[]))) {
                                 string text = dataNodeInfo.ValueData;
-                                byte[] serializedData;
-                                serializedData = FromBase64WrappedString(text);
+                                byte[] serializedData = FromBase64WrappedString(text);
         
                                 if (serializedData != null) {
                                     result = tc.ConvertFrom(serializedData);
@@ -423,7 +408,7 @@ namespace System.Resources {
                     }
                 }
             }
-            else if (typeName != null && typeName.Length > 0) {
+            else if (!string.IsNullOrEmpty(typeName)) {
                 Type type = ResolveType(typeName, typeResolver);
                 if (type != null) {
                     if (type == typeof(ResXNullRef)) {
@@ -501,12 +486,9 @@ namespace System.Resources {
         ///    Might return the position in the resx file of the current node, if known
         ///    otherwise, will return Point(0,0) since point is a struct 
         /// </devdoc>
-        public Point GetNodePosition() {
-            if(nodeInfo == null) {
-                return new Point();
-            } else {
-                return nodeInfo.ReaderPosition;
-            }
+        public Point GetNodePosition()
+        {
+            return nodeInfo?.ReaderPosition ?? new Point();
         }
 
         /// <include file='doc\ResXDataNode.uex' path='docs/doc[@for="ResXDataNode.GetValueTypeName"]/*' />
@@ -516,12 +498,12 @@ namespace System.Resources {
         /// </devdoc>
         public string GetValueTypeName(ITypeResolutionService typeResolver) {
             // the type name here is always a FQN
-            if(typeName != null && typeName.Length >0) {
-                if (typeName.Equals(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter))) {
-                    return MultitargetUtil.GetAssemblyQualifiedName(typeof(object), this.typeNameConverter);
-                } else {
-                    return typeName;
-                }
+            if(!string.IsNullOrEmpty(typeName))
+            {
+                return 
+                    typeName == MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter) 
+                        ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), this.typeNameConverter) 
+                        : typeName;
             }
             string result = FileRefType;
             Type objectType = null;
@@ -534,10 +516,10 @@ namespace System.Resources {
                 // we dont have a fileref, try to resolve the type of the datanode
                 result = nodeInfo.TypeName;
                 // if typename is null, the default is just a string
-                if(result == null || result.Length==0) {
+                if(string.IsNullOrEmpty(result)) {
                     // we still dont know... do we have a mimetype? if yes, our only option is to 
                     // deserialize to know what we're dealing with... very inefficient...
-                    if(nodeInfo.MimeType != null && nodeInfo.MimeType.Length > 0) {
+                    if(!string.IsNullOrEmpty(nodeInfo.MimeType)) {
                         object insideObject = null;
 
                         try {
@@ -596,11 +578,10 @@ namespace System.Resources {
                 Type objectType = ResolveType(FileRefType , typeResolver);
                 if(objectType != null) {
                     // we have the FQN for this type
-                    if(FileRefTextEncoding != null) {
-                        fileRef = new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
-                    } else {
-                        fileRef = new ResXFileRef(FileRefFullPath, FileRefType);
-                    }
+                    fileRef = 
+                        FileRefTextEncoding != null 
+                            ? new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding)) 
+                            : new ResXFileRef(FileRefFullPath, FileRefType);
                     TypeConverter tc = TypeDescriptor.GetConverter(typeof(ResXFileRef));
                     result = tc.ConvertFrom(fileRef.ToString());
                 } else {
@@ -608,7 +589,7 @@ namespace System.Resources {
                     TypeLoadException newTle = new TypeLoadException(newMessage);
                     throw (newTle);
                 }
-            } else if(result == null && nodeInfo.ValueData!= null) {
+            } else if(nodeInfo.ValueData != null) {
                 // it's embedded, we deserialize it
                 result = GenerateObjectFromDataNodeInfo(nodeInfo, typeResolver);
             } else {
@@ -632,56 +613,53 @@ namespace System.Resources {
 
             if (text.IndexOfAny(SpecialChars) != -1) {
                 StringBuilder sb = new StringBuilder(text.Length);
-                for (int i=0; i<text.Length; i++) {
-                    switch (text[i]) {
+                foreach (var ch in text)
+                {
+                    switch (ch) {
                         case ' ':
                         case '\r':
                         case '\n':
                             break;
                         default:
-                            sb.Append(text[i]);
+                            sb.Append(ch);
                             break;
                     }
                 }
                 return Convert.FromBase64String(sb.ToString());
             }
-            else {
-                return Convert.FromBase64String(text);
-            }
+            
+            return Convert.FromBase64String(text);
         }
 
-
         private Type ResolveType(string typeName, ITypeResolutionService typeResolver) {
-            Type t = null;            
+            Type resolvedType = null;            
             if (typeResolver != null) {
 
                 // If we cannot find the strong-named type, then try to see
                 // if the TypeResolver can bind to partial names. For this, 
                 // we will strip out the partial names and keep the rest of the
                 // strong-name information to try again.
-                //
 
-                t = typeResolver.GetType(typeName, false);
-                if (t == null) {
+                resolvedType = typeResolver.GetType(typeName, false);
+                if (resolvedType == null) {
                     
-                    string[] typeParts = typeName.Split(new char[] {','});
+                    string[] typeParts = typeName.Split(',');
 
                     // Break up the type name from the rest of the assembly strong name.
-                    //
                     if (typeParts != null && typeParts.Length >= 2) {
                         string partialName = typeParts[0].Trim();
                         string assemblyName = typeParts[1].Trim();                            
                         partialName = partialName + ", " + assemblyName;
-                        t = typeResolver.GetType(partialName, false);
+                        resolvedType = typeResolver.GetType(partialName, false);
                     }
                 }
             }
 
-            if (t == null) {
-                t = Type.GetType(typeName, false);
+            if (resolvedType == null) {
+                resolvedType = Type.GetType(typeName, false);
             }
             
-            return t;
+            return resolvedType;
         }
                 
 
@@ -689,8 +667,6 @@ namespace System.Resources {
         /// <devdoc>
         ///    Get the value contained in this datanode
         /// </devdoc>        
-        // NOTE: No LinkDemand for SerializationFormatter necessary here, since this class already  
-        // has a FullTrust LinkDemand.
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             DataNodeInfo nodeInfo = GetDataNodeInfo();
             si.AddValue("Name", nodeInfo.Name, typeof(string));
@@ -701,13 +677,14 @@ namespace System.Resources {
         }
 
         private ResXDataNode(SerializationInfo info, StreamingContext context) {
-            DataNodeInfo nodeInfo = new DataNodeInfo();
-            nodeInfo.Name = (string)info.GetValue("Name", typeof(string));
-            nodeInfo.Comment = (string)info.GetValue("Comment", typeof(string));
-            nodeInfo.TypeName = (string)info.GetValue("TypeName", typeof(string));
-            nodeInfo.MimeType = (string)info.GetValue("MimeType", typeof(string));
-            nodeInfo.ValueData = (string)info.GetValue("ValueData", typeof(string));
-            this.nodeInfo = nodeInfo;
+            this.nodeInfo = new DataNodeInfo
+            {
+                Name = (string)info.GetValue("Name", typeof(string)),
+                Comment = (string)info.GetValue("Comment", typeof(string)),
+                TypeName = (string)info.GetValue("TypeName", typeof(string)),
+                MimeType = (string)info.GetValue("MimeType", typeof(string)),
+                ValueData = (string)info.GetValue("ValueData", typeof(string))
+            };
             InitializeDataNode(null);
         }
     }
@@ -721,14 +698,15 @@ namespace System.Resources {
         internal Point ReaderPosition; //only used to track position in the reader
 
         internal DataNodeInfo Clone() {
-            DataNodeInfo result  = new DataNodeInfo();
-            result.Name = this.Name;
-            result.Comment = this.Comment;
-            result.TypeName = this.TypeName;
-            result.MimeType = this.MimeType;
-            result.ValueData = this.ValueData;
-            result.ReaderPosition = new Point(this.ReaderPosition.X, this.ReaderPosition.Y);
-            return result;
+            return new DataNodeInfo
+            {
+                Name = this.Name,
+                Comment = this.Comment,
+                TypeName = this.TypeName,
+                MimeType = this.MimeType,
+                ValueData = this.ValueData,
+                ReaderPosition = new Point(this.ReaderPosition.X, this.ReaderPosition.Y)
+            };
         }
     }
 
@@ -755,9 +733,9 @@ namespace System.Resources {
 
             typeName = typeName + ", " + assemblyName;
 
-            Type t = typeResolver.GetType(typeName);
-            if (t == null) {
-                string[] typeParts = typeName.Split(new char[] {','});
+            Type type = typeResolver.GetType(typeName);
+            if (type == null) {
+                string[] typeParts = typeName.Split(',');
 
                 // Break up the assembly name from the rest of the assembly strong name.
                 // we try 1) FQN 2) FQN without a version 3) just the short name
@@ -765,20 +743,20 @@ namespace System.Resources {
                     string partialName = typeParts[0].Trim();
 
                     for (int i = 1; i < typeParts.Length; ++i) {
-                        string s = typeParts[i].Trim();
-                        if (!s.StartsWith("Version=") && !s.StartsWith("version=")) {
-                            partialName = partialName + ", " + s;
+                        string typePart = typeParts[i].Trim();
+                        if (!typePart.StartsWith("Version=") && !typePart.StartsWith("version=")) {
+                            partialName = partialName + ", " + typePart;
                         }
                     }
-                    t = typeResolver.GetType(partialName);
-                    if(t == null) {
-                        t = typeResolver.GetType(typeParts[0].Trim());
+                    type = typeResolver.GetType(partialName);
+                    if(type == null) {
+                        type = typeResolver.GetType(typeParts[0].Trim());
                     }
                 }
             }
 
             // Binder couldn't handle it, let the default loader take over.
-            return t;
+            return type;
         }
 
         //
@@ -817,7 +795,6 @@ namespace System.Resources {
         }
     }
 
-
     internal class AssemblyNamesTypeResolutionService : ITypeResolutionService {
         private AssemblyName[] names;
         private Hashtable cachedAssemblies;
@@ -828,17 +805,13 @@ namespace System.Resources {
         internal AssemblyNamesTypeResolutionService(AssemblyName[] names) {
             this.names = names;
         }
-
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
         public Assembly GetAssembly(AssemblyName name) {
             return GetAssembly(name, true);
         }
 
         //
         [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         public Assembly GetAssembly(AssemblyName name, bool throwOnError) {
 
             Assembly result = null;
@@ -862,21 +835,21 @@ namespace System.Resources {
                 if(result != null) {
                     cachedAssemblies[name] = result;
                 } 
-                else if (names != null) {
-                    for(int i=0;i<names.Length; i++) {
-                        if(name.Equals(names[i])) {
-                            try {
-                                result = Assembly.LoadFrom(GetPathOfAssembly(name));
-                                if(result != null) {
-                                    cachedAssemblies[name] = result;
-                                }
+                else if (names != null)
+                {
+                    foreach (AssemblyName asmName in names.Where(an => an.Equals(name)))
+                    {
+                        try {
+                            result = Assembly.LoadFrom(GetPathOfAssembly(asmName));
+                            if(result != null) {
+                                cachedAssemblies[asmName] = result;
                             }
-                            catch {
-                                if(throwOnError) {
-                                    throw;
-                                }
+                        }
+                        catch {
+                            if(throwOnError) {
+                                throw;
                             }
-                        }   
+                        }
                     }
                 }
             }
@@ -884,13 +857,10 @@ namespace System.Resources {
             return result;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         public string GetPathOfAssembly(AssemblyName name) {
             return name.CodeBase;
         }
 
-      
         public Type GetType(string name) {
             return GetType(name, true);
         }
@@ -936,12 +906,13 @@ namespace System.Resources {
 
                     if (assemblyName != null) {
                         List<AssemblyName> assemblyList = new List<AssemblyName>(names.Length);
-                        for (int i = 0; i < names.Length; i++) {
-                            if (string.Compare(assemblyName.Name, names[i].Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                                assemblyList.Insert(0, names[i]);
+                        foreach (AssemblyName asmName in names)
+                        {
+                            if (string.Compare(assemblyName.Name, asmName.Name, StringComparison.OrdinalIgnoreCase) == 0) {
+                                assemblyList.Insert(0, asmName);
                             }
                             else {
-                                assemblyList.Add(names[i]);
+                                assemblyList.Add(asmName);
                             }
                         }
                         names = assemblyList.ToArray();
@@ -949,15 +920,16 @@ namespace System.Resources {
                 }
 
                 // Search each reference assembly
-                for(int i = 0; i < names.Length; i++) {
-                    Assembly a = GetAssembly(names[i], false);
-                    if (a != null) {
-                        result = a.GetType(name, false, ignoreCase);
+                foreach (AssemblyName asmName in names)
+                {
+                    Assembly asm = GetAssembly(asmName, false);
+                    if (asm != null) {
+                        result = asm.GetType(name, false, ignoreCase);
                         if(result == null) {
                             int indexOfComma = name.IndexOf(",");
                             if(indexOfComma != -1) {
                                 string shortName = name.Substring(0, indexOfComma );
-                                result = a.GetType(shortName, false, ignoreCase);
+                                result = asm.GetType(shortName, false, ignoreCase);
                             }
                         }
                     }

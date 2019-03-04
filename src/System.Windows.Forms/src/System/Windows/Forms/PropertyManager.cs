@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.Current"]/*' />
-        public override Object Current {
+        public override object Current {
             get {
                 return this.dataSource;
             }
@@ -34,15 +34,15 @@ namespace System.Windows.Forms {
             OnCurrentChanged(EventArgs.Empty);
         }
 
-        internal override void SetDataSource(Object dataSource) {
-            if (this.dataSource != null && !String.IsNullOrEmpty(this.propName)) {
+        internal override void SetDataSource(object dataSource) {
+            if (this.dataSource != null && !string.IsNullOrEmpty(this.propName)) {
                 propInfo.RemoveValueChanged(this.dataSource, new EventHandler(PropertyChanged));
                 propInfo = null;
             }
 
             this.dataSource = dataSource;
 
-            if (this.dataSource != null && !String.IsNullOrEmpty(this.propName)) {
+            if (this.dataSource != null && !string.IsNullOrEmpty(this.propName)) {
                 propInfo = TypeDescriptor.GetProperties(dataSource).Find(propName, true);
                 if (propInfo == null)
                     throw new ArgumentException(string.Format(SR.PropertyManagerPropDoesNotExist, propName, dataSource.ToString()));
@@ -57,13 +57,13 @@ namespace System.Windows.Forms {
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
                                                                                                     // it would be a breaking change.
         ]
-        internal PropertyManager(Object dataSource) : base(dataSource){}
+        internal PropertyManager(object dataSource) : base(dataSource){}
 
         [
             SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not set the dataSource
                                                                                                     // it would be a breaking change.
         ]
-        internal PropertyManager(Object dataSource, string propName) : base() {
+        internal PropertyManager(object dataSource, string propName) : base() {
             this.propName = propName;
             this.SetDataSource(dataSource);
         }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override String GetListName() {
+        internal override string GetListName() {
             return TypeDescriptor.GetClassName(dataSource) + "." + propName;
         }
 
@@ -113,7 +113,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyManager.uex' path='docs/doc[@for="PropertyManager.GetListName"]/*' />
-        protected internal override String GetListName(ArrayList listAccessors) {
+        protected internal override string GetListName(ArrayList listAccessors) {
             return "";
         }
 

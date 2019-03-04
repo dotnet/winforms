@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -33,7 +33,6 @@ namespace System.Internal
     using System.Reflection;
     using System.Text;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Globalization;
 
 
@@ -41,13 +40,6 @@ namespace System.Internal
     /// <devdoc>
     /// Debug help utility.
     /// </devdoc>
-    [
-    ReflectionPermission(SecurityAction.Assert, MemberAccess=true),
-    EnvironmentPermission(SecurityAction.Assert, Unrestricted=true),
-    FileIOPermission(SecurityAction.Assert, Unrestricted=true),
-    SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode),
-    UIPermission(SecurityAction.Assert, Unrestricted=true)
-    ]
     internal sealed class DbgUtil
     {
         public const int 
@@ -225,7 +217,7 @@ namespace System.Internal
         {
             int MAX_SIZE = 255;
             StringBuilder buffer = new StringBuilder(MAX_SIZE);
-            string message = String.Empty;
+            string message = string.Empty;
             int err = 0;
 
             try
@@ -252,7 +244,7 @@ namespace System.Internal
                 message = ex.ToString();
             } 
 
-            return String.Format( CultureInfo.CurrentCulture, "0x{0:x8} - {1}", err, message);
+            return string.Format( CultureInfo.CurrentCulture, "0x{0:x8} - {1}", err, message);
         }
 
         /// <devdoc>
@@ -284,7 +276,7 @@ namespace System.Internal
         /// </devdoc>
         public static string StackFramesToStr( int maxFrameCount )
         {
-            string trace = String.Empty;
+            string trace = string.Empty;
 
             try
             {
@@ -330,7 +322,7 @@ namespace System.Internal
                         continue;
                     }
 
-                    string args = String.Empty;
+                    string args = string.Empty;
                     string fileName = sf.GetFileName();
 
                     int backSlashIndex = fileName == null ? -1 : fileName.LastIndexOf( '\\' );
@@ -350,7 +342,7 @@ namespace System.Internal
                         args = args.Substring(0, args.Length - 2);
                     }
                 
-                    trace += String.Format(CultureInfo.CurrentCulture, "at {0} {1}.{2}({3})\r\n", fileName, mi.DeclaringType, mi.Name, args );
+                    trace += string.Format(CultureInfo.CurrentCulture, "at {0} {1}.{2}({3})\r\n", fileName, mi.DeclaringType, mi.Name, args );
                 }
             }
             catch( Exception ex )
@@ -379,7 +371,7 @@ namespace System.Internal
         /// </devdoc>
         public static string StackTraceToStr( string message, int frameCount )
         {
-            return String.Format( CultureInfo.CurrentCulture, "{0}\r\nTop Stack Trace:\r\n{1}", message, DbgUtil.StackFramesToStr(frameCount));
+            return string.Format( CultureInfo.CurrentCulture, "{0}\r\nTop Stack Trace:\r\n{1}", message, DbgUtil.StackFramesToStr(frameCount));
         }
 
         /// <devdoc>

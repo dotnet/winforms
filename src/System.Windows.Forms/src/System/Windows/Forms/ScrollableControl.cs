@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
 
     using System;
-    using System.Security.Permissions;
     using System.Reflection;
     using System.Windows.Forms.Layout;
     using System.ComponentModel;
@@ -225,7 +224,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -1464,7 +1462,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_VSCROLL:
@@ -1661,7 +1658,7 @@ namespace System.Windows.Forms {
             public int Top {
                  get { 
                     if (owner == null) {
-                        return bottom;
+                        return top;
                     }
                     else {
                         return owner.Padding.Top; 
@@ -1679,23 +1676,16 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Equals"]/*' />
-            /// <internalonly/>
-            public override bool Equals(object other) {
-                DockPaddingEdges dpeOther = other as DockPaddingEdges;
-
-                if (dpeOther != null) {
-                    return this.owner.Padding.Equals(dpeOther.owner.Padding);
-                }
-                return false;
+            public override bool Equals(object other)
+            {
+                return other is DockPaddingEdges dpeOther &&
+                    Left == dpeOther.Left &&
+                    Top == dpeOther.Top &&
+                    Right == dpeOther.Right &&
+                    Bottom == dpeOther.Bottom;
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.GetHashCode"]/*' />
-            /// <internalonly/>
-            public override int GetHashCode() {
-                return base.GetHashCode();
-            }
-
+            public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
             /// <internalonly/>
             private void ResetAll() {
@@ -1726,10 +1716,9 @@ namespace System.Windows.Forms {
                 this.owner.Padding.Scale(dx, dy);
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.ToString"]/*' />
-            /// <internalonly/>
-            public override string ToString() {
-                return "";      // used to say "(DockPadding)" but that's useless
+            public override string ToString()
+            {
+                return $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
             }
 
             /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="DockPaddingEdges.ICloneable.Clone"]/*' />

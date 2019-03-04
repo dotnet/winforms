@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -43,7 +43,7 @@ namespace System.Windows.Forms {
             if (value is string) {
 
                 string text = ((string)value).Replace('%', ' ').Trim();
-                double val = Double.Parse(text, CultureInfo.CurrentCulture);
+                double val = double.Parse(text, CultureInfo.CurrentCulture);
                 int indexOfPercent = ((string)value).IndexOf("%");
                 if (indexOfPercent > 0 && (val >= 0.0 && val <= 1.0)) {
                     val /= 100.0;

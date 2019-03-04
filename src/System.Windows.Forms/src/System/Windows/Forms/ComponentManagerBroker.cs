@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -102,8 +102,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Static ctor.  We just set up a few per-process globals here
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
         static ComponentManagerBroker() {
             int pid = SafeNativeMethods.GetCurrentProcessId();
             _syncObject = new object();

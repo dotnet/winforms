@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -301,6 +301,9 @@ namespace System.Windows.Forms {
             if (node.handle != IntPtr.Zero)
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
 
+            // Check for ParentingCycle
+            owner.CheckParentingCycle(node);
+
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;
             if (tv != null && tv.Sorted) {
@@ -397,7 +400,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     <para>The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.</para>
         /// </devdoc>
-        public virtual int  IndexOfKey(String key) {
+        public virtual int  IndexOfKey(string key) {
             // Step 0 - Arg validation
             if (string.IsNullOrEmpty(key)){
                 return -1; // we dont support empty or null keys.
@@ -432,6 +435,9 @@ namespace System.Windows.Forms {
         public virtual void Insert(int index, TreeNode node) {
             if (node.handle != IntPtr.Zero)
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), "node");
+
+            // Check for ParentingCycle
+            owner.CheckParentingCycle(node);
 
             // If the TreeView is sorted, index is ignored
             TreeView tv = owner.TreeView;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -26,8 +26,8 @@ namespace System.Experimental.Gdi
 #endif
     sealed class WindowsSolidBrush : WindowsBrush
     {
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         protected override void CreateBrush()
         { 
             IntPtr nativeHandle = IntSafeNativeMethods.CreateSolidBrush(ColorTranslator.ToWin32( this.Color));
@@ -39,22 +39,22 @@ namespace System.Experimental.Gdi
             this.NativeHandle = nativeHandle;  // sets the handle value in the base class.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsSolidBrush(DeviceContext dc)  : base(dc)
         {
             // CreateBrush() on demand.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsSolidBrush(DeviceContext dc, Color color) : base( dc, color )
         {
             // CreateBrush() on demand.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public override object Clone()
         { 
             return new WindowsSolidBrush(this.DC, this.Color);
@@ -62,7 +62,7 @@ namespace System.Experimental.Gdi
 
         public override string ToString()
         {
-            return String.Format( CultureInfo.InvariantCulture, "{0}: Color={1}", this.GetType().Name,  this.Color );
+            return string.Format( CultureInfo.InvariantCulture, "{0}: Color={1}", this.GetType().Name,  this.Color );
         }
     }
 }

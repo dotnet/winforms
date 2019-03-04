@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security.Permissions;
     using System.Windows.Forms.VisualStyles;
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;
@@ -146,7 +145,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw) {
@@ -709,19 +707,9 @@ namespace System.Windows.Forms {
         ///     control.
         /// </devdoc>
         /// <internalonly/>        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             if (IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
-                // Reviewed: This seems safe, because SelectNextControl does not allow
-                // you to step out of the current control - it only selects children. With
-                // this assumption, it is okay to assert here.
-                IntSecurity.ModifyFocus.Assert();
-                try {
-                    SelectNextControl(null, true, true, true, false);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                SelectNextControl(null, true, true, true, false);
                 return true;
             }
             return false;
@@ -775,7 +763,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.WndProc"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
        
             if (OwnerDraw) {

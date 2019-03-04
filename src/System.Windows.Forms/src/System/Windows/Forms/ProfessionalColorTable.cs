@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -17,7 +17,7 @@ namespace System.Windows.Forms {
         private Dictionary<KnownColors,Color> professionalRGB = null;
         private bool usingSystemColors  = false;
         private bool useSystemColors    = false;
-        private string lastKnownColorScheme = String.Empty;
+        private string lastKnownColorScheme = string.Empty;
 
 
         private const string oliveColorScheme      =  "HomeStead";

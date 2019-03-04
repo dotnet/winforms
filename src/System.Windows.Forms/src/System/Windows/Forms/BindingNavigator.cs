@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -34,7 +34,7 @@ namespace System.Windows.Forms {
         private ToolStripItem positionItem;
         private ToolStripItem countItem;
 
-        private String countItemFormat = SR.BindingNavigatorCountItemFormat;
+        private string countItemFormat = SR.BindingNavigatorCountItemFormat;
 
         private EventHandler onRefreshItems = null;
 
@@ -462,7 +462,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance)),
         SRDescription(nameof(SR.BindingNavigatorCountItemFormatPropDescr))
         ]
-        public String CountItemFormat {
+        public string CountItemFormat {
             get {
                 return countItemFormat;
             }
@@ -548,7 +548,7 @@ namespace System.Windows.Forms {
 
             // Update record count indicator
             if (countItem != null) {
-                countItem.Text = DesignMode ? CountItemFormat : String.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
+                countItem.Text = DesignMode ? CountItemFormat : string.Format(CultureInfo.CurrentCulture, CountItemFormat, count);
             }
         }
 

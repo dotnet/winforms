@@ -1,1426 +1,997 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using System.Drawing.Design;
-    using Microsoft.Win32;
-
-    /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies key codes and modifiers.
-    ///    </para>
+    /// Specifies key codes and modifiers.
     /// </devdoc>
-    [
-    Flags,
-    TypeConverterAttribute(typeof(KeysConverter)), 
-    Editor("System.Windows.Forms.Design.ShortcutKeysEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
-    ]
-    [System.Runtime.InteropServices.ComVisible(true)]
-    [
-        SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")    // Certain memberd of Keys enum are actually meant to be OR'ed.
-    ]
-    public enum Keys {
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.KeyCode"]/*' />
+    [Flags]
+    [TypeConverterAttribute(typeof(KeysConverter))]
+    [Editor("System.Windows.Forms.Design.ShortcutKeysEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [ComVisible(true)]
+    [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")] // Certain memberd of Keys enum are actually meant to be OR'ed.
+    public enum Keys
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The bit mask to extract a key code from a key value.
-        ///       
-        ///    </para>
+        /// The bit mask to extract a key code from a key value.
         /// </devdoc>
         KeyCode = 0x0000FFFF,
 
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Modifiers"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The bit mask to extract modifiers from a key value.
-        ///       
-        ///    </para>
+        /// The bit mask to extract modifiers from a key value.
         /// </devdoc>
         Modifiers = unchecked((int)0xFFFF0000),
 
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.None"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       No key pressed.
-        ///    </para>
+        /// No key pressed.
         /// </devdoc>
         None           = 0x00,
 
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LButton"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The left mouse button.
-        ///       
-        ///    </para>
+        /// The left mouse button.
         /// </devdoc>
         LButton        = 0x01,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.RButton"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The right mouse button.
-        ///    </para>
+        /// The right mouse button.
         /// </devdoc>
         RButton        = 0x02,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Cancel"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The CANCEL key.
-        ///    </para>
+        /// The CANCEL key.
         /// </devdoc>
         Cancel         = 0x03,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.MButton"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The middle mouse button (three-button mouse).
-        ///    </para>
+        /// The middle mouse button (three-button mouse).
         /// </devdoc>
         MButton        = 0x04,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.XButton1"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The first x mouse button (five-button mouse).
-        ///    </para>
+        /// The first x mouse button (five-button mouse).
         /// </devdoc>
         XButton1       = 0x05,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.XButton2"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The second x mouse button (five-button mouse).
-        ///    </para>
+        /// The second x mouse button (five-button mouse).
         /// </devdoc>
         XButton2       = 0x06,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Back"]/*' />
+
         /// <devdoc>
         ///    <para>
-        ///       The BACKSPACE key.
+        /// The BACKSPACE key.
         ///    </para>
         /// </devdoc>
         Back           = 0x08,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Tab"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The TAB key.
-        ///    </para>
+        /// The TAB key.
         /// </devdoc>
         Tab            = 0x09,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LineFeed"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The CLEAR key.
-        ///    </para>
+        /// The CLEAR key.
         /// </devdoc>
         LineFeed       = 0x0A,
+
         /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Clear"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       The CLEAR key.
-        ///    </para>
+        /// The CLEAR key.
         /// </devdoc>
         Clear          = 0x0C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Return"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The RETURN key.
-        ///
-        ///    </para>
+        /// The RETURN key.
         /// </devdoc>
         Return         = 0x0D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Enter"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The ENTER key.
-        ///       
-        ///    </para>
+        /// The ENTER key.
         /// </devdoc>
         Enter          = Return,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.ShiftKey"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The SHIFT key.
-        ///    </para>
+        /// The SHIFT key.
         /// </devdoc>
         ShiftKey      = 0x10,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.ControlKey"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The CTRL key.
-        ///    </para>
+        /// The CTRL key.
         /// </devdoc>
         ControlKey    = 0x11,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Menu"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The ALT key.
-        ///    </para>
+        /// The ALT key.
         /// </devdoc>
         Menu           = 0x12,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Pause"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The PAUSE key.
-        ///    </para>
+        /// The PAUSE key.
         /// </devdoc>
         Pause          = 0x13,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Capital"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The CAPS LOCK key.
-        ///
-        ///    </para>
+        /// The CAPS LOCK key.
         /// </devdoc>
         Capital        = 0x14,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.CapsLock"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The CAPS LOCK key.
-        ///    </para>
+        /// The CAPS LOCK key.
         /// </devdoc>
         CapsLock       = 0x14,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Kana"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Kana mode key.
-        ///    </para>
+        /// The IME Kana mode key.
         /// </devdoc>
         KanaMode      = 0x15,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.HanguelMode"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Hanguel mode key.
-        ///    </para>
+        /// The IME Hanguel mode key.
         /// </devdoc>
         HanguelMode   = 0x15,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.HangulMode"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Hangul mode key.
-        ///    </para>
+        /// The IME Hangul mode key.
         /// </devdoc>
         HangulMode    = 0x15,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.JunjaMode"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Junja mode key.
-        ///    </para>
+        /// The IME Junja mode key.
         /// </devdoc>
         JunjaMode     = 0x17,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.FinalMode"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Final mode key.
-        ///    </para>
+        /// The IME Final mode key.
         /// </devdoc>
         FinalMode     = 0x18,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.HanjaMode"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Hanja mode key.
-        ///    </para>
+        /// The IME Hanja mode key.
         /// </devdoc>
         HanjaMode     = 0x19,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.KanjiMode"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Kanji mode key.
-        ///    </para>
+        /// The IME Kanji mode key.
         /// </devdoc>
         KanjiMode     = 0x19,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Escape"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The ESC key.
-        ///    </para>
+        /// The ESC key.
         /// </devdoc>
         Escape         = 0x1B,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.IMEConvert"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME Convert key.
-        ///    </para>
+        /// The IME Convert key.
         /// </devdoc>
         IMEConvert    = 0x1C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.IMENonconvert"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The IME NonConvert key.
-        ///    </para>
+        /// The IME NonConvert key.
         /// </devdoc>
         IMENonconvert = 0x1D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.IMEAccept"]/*' />
-	/// <devdoc>
-        ///    <para>
-        ///       The IME Accept key.
-        ///    </para>
+	   
+        /// <devdoc>
+        /// The IME Accept key.
         /// </devdoc>
         IMEAccept     = 0x1E,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.IMEAceept"]/*' />
-	/// <devdoc>
-        ///    <para>
-        ///       The IME Accept key.
-        ///    </para>
+	    
+        /// <devdoc>
+        /// The IME Accept key.
         /// </devdoc>
         IMEAceept     = IMEAccept,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.IMEModeChange"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The IME Mode change request.
-        ///    </para>
+        /// The IME Mode change request.
         /// </devdoc>
         IMEModeChange = 0x1F,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Space"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The SPACEBAR key.
-        ///    </para>
+        /// The SPACEBAR key.
         /// </devdoc>
         Space          = 0x20,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Prior"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PAGE UP key.
-        ///    </para>
+        /// The PAGE UP key.
         /// </devdoc>
         Prior          = 0x21,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.PageUp"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PAGE UP key.
-        ///    </para>
+        /// The PAGE UP key.
         /// </devdoc>
         PageUp         = Prior,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Next"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PAGE DOWN key.
-        ///    </para>
+        /// The PAGE DOWN key.
         /// </devdoc>
         Next           = 0x22,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.PageDown"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PAGE DOWN key.
-        ///    </para>
+        /// The PAGE DOWN key.
         /// </devdoc>
         PageDown       = Next,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.End"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The END key.
-        ///    </para>
+        /// The END key.
         /// </devdoc>
         End            = 0x23,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Home"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The HOME key.
-        ///    </para>
+        /// The HOME key.
         /// </devdoc>
         Home           = 0x24,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Left"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The LEFT ARROW key.
-        ///    </para>
+        /// The LEFT ARROW key.
         /// </devdoc>
         Left           = 0x25,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Up"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The UP ARROW key.
-        ///    </para>
+        /// The UP ARROW key.
         /// </devdoc>
         Up             = 0x26,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Right"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The RIGHT ARROW key.
-        ///    </para>
+        /// The RIGHT ARROW key.
         /// </devdoc>
         Right          = 0x27,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Down"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The DOWN ARROW key.
-        ///    </para>
+        /// The DOWN ARROW key.
         /// </devdoc>
         Down           = 0x28,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Select"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The SELECT key.
-        ///    </para>
+        /// The SELECT key.
         /// </devdoc>
         Select         = 0x29,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Print"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PRINT key.
-        ///    </para>
+        /// The PRINT key.
         /// </devdoc>
         Print          = 0x2A,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Execute"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The EXECUTE key.
-        ///    </para>
+        /// The EXECUTE key.
         /// </devdoc>
         Execute        = 0x2B,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Snapshot"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PRINT SCREEN key.
-        ///
-        ///    </para>
+        /// The PRINT SCREEN key.
         /// </devdoc>
         Snapshot       = 0x2C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.PrintScreen"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PRINT SCREEN key.
-        ///    </para>
+        /// The PRINT SCREEN key.
         /// </devdoc>
         PrintScreen    = Snapshot,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Insert"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The INS key.
-        ///    </para>
+        /// The INS key.
         /// </devdoc>
         Insert         = 0x2D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Delete"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The DEL key.
-        ///    </para>
+        /// The DEL key.
         /// </devdoc>
         Delete         = 0x2E,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Help"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The HELP key.
-        ///    </para>
+        /// The HELP key.
         /// </devdoc>
         Help           = 0x2F,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D0"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 0 key.
-        ///    </para>
+        /// The 0 key.
         /// </devdoc>
         D0             = 0x30, // 0
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D1"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 1 key.
-        ///    </para>
+        /// The 1 key.
         /// </devdoc>
         D1             = 0x31, // 1
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D2"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 2 key.
-        ///    </para>
+        /// The 2 key.
         /// </devdoc>
         D2             = 0x32, // 2
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D3"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 3 key.
-        ///    </para>
+        /// The 3 key.
         /// </devdoc>
         D3             = 0x33, // 3
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D4"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 4 key.
-        ///    </para>
+        /// The 4 key.
         /// </devdoc>
         D4             = 0x34, // 4
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D5"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 5 key.
-        ///    </para>
+        /// The 5 key.
         /// </devdoc>
         D5             = 0x35, // 5
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D6"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 6 key.
-        ///    </para>
+        /// The 6 key.
         /// </devdoc>
         D6             = 0x36, // 6
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D7"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 7 key.
-        ///    </para>
+        /// The 7 key.
         /// </devdoc>
         D7             = 0x37, // 7
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D8"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 8 key.
-        ///    </para>
+        /// The 8 key.
         /// </devdoc>
         D8             = 0x38, // 8
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D9"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 9 key.
-        ///    </para>
+        /// The 9 key.
         /// </devdoc>
         D9             = 0x39, // 9
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.A"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The A key.
-        ///    </para>
+        /// The A key.
         /// </devdoc>
         A              = 0x41,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.B"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The B key.
-        ///    </para>
+        /// The B key.
         /// </devdoc>
         B              = 0x42,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.C"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The C key.
-        ///    </para>
+        /// The C key.
         /// </devdoc>
         C              = 0x43,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.D"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The D key.
-        ///    </para>
+        /// The D key.
         /// </devdoc>
         D              = 0x44,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.E"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The E key.
-        ///    </para>
+        /// The E key.
         /// </devdoc>
         E              = 0x45,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F key.
-        ///    </para>
+        /// The F key.
         /// </devdoc>
         F              = 0x46,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.G"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The G key.
-        ///    </para>
+        /// The G key.
         /// </devdoc>
         G              = 0x47,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.H"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The H key.
-        ///    </para>
+        /// The H key.
         /// </devdoc>
         H              = 0x48,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.I"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The I key.
-        ///    </para>
+        /// The I key.
         /// </devdoc>
         I              = 0x49,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.J"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The J key.
-        ///    </para>
+        /// The J key.
         /// </devdoc>
         J              = 0x4A,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.K"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The K key.
-        ///    </para>
+        /// The K key.
         /// </devdoc>
         K              = 0x4B,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.L"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The L key.
-        ///    </para>
+        /// The L key.
         /// </devdoc>
         L              = 0x4C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.M"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The M key.
-        ///    </para>
+        /// The M key.
         /// </devdoc>
         M              = 0x4D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.N"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The N key.
-        ///    </para>
+        /// The N key.
         /// </devdoc>
         N              = 0x4E,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.O"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The O key.
-        ///    </para>
+        /// The O key.
         /// </devdoc>
         O              = 0x4F,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.P"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The P key.
-        ///    </para>
+        /// The P key.
         /// </devdoc>
         P              = 0x50,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Q"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Q key.
-        ///    </para>
+        /// The Q key.
         /// </devdoc>
         Q              = 0x51,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.R"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The R key.
-        ///    </para>
+        /// The R key.
         /// </devdoc>
         R              = 0x52,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.S"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The S key.
-        ///    </para>
+        /// The S key.
         /// </devdoc>
         S              = 0x53,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.T"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The T key.
-        ///    </para>
+        /// The T key.
         /// </devdoc>
         T              = 0x54,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.U"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The U key.
-        ///    </para>
+        /// The U key.
         /// </devdoc>
         U              = 0x55,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.V"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The V key.
-        ///    </para>
+        /// The V key.
         /// </devdoc>
         V              = 0x56,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.W"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The W key.
-        ///    </para>
+        /// The W key.
         /// </devdoc>
         W              = 0x57,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.X"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The X key.
-        ///    </para>
+        /// The X key.
         /// </devdoc>
         X              = 0x58,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Y"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Y key.
-        ///    </para>
+        /// The Y key.
         /// </devdoc>
         Y              = 0x59,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Z"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Z key.
-        ///    </para>
+        /// The Z key.
         /// </devdoc>
         Z              = 0x5A,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LWin"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The left Windows logo key (Microsoft Natural Keyboard).
-        ///    </para>
+        /// The left Windows logo key (Microsoft Natural Keyboard).
         /// </devdoc>
         LWin           = 0x5B,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.RWin"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The right Windows logo key (Microsoft Natural Keyboard).
-        ///    </para>
+        /// The right Windows logo key (Microsoft Natural Keyboard).
         /// </devdoc>
         RWin           = 0x5C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Apps"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Application key (Microsoft Natural Keyboard).
-        ///    </para>
+        /// The Application key (Microsoft Natural Keyboard).
         /// </devdoc>
+        
         Apps           = 0x5D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Sleep"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Computer Sleep key.
-        ///    </para>
+        /// The Computer Sleep key.
         /// </devdoc>
         Sleep          = 0x5F,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad0"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 0 key on the numeric keypad.
-        ///    </para>
+        /// The 0 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumPad0        = 0x60,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad1"]/*' />
+       
         /// <devdoc>
-        ///    <para>
-        ///       The 1 key on the numeric keypad.
-        ///    </para>
+        /// The 1 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumPad1        = 0x61,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad2"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 2 key on the numeric keypad.
-        ///    </para>
+        /// The 2 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad2        = 0x62,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad3"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 3 key on the numeric keypad.
-        ///    </para>
+        /// The 3 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad3        = 0x63,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad4"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 4 key on the numeric keypad.
-        ///    </para>
+        /// The 4 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad4        = 0x64,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad5"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 5 key on the numeric keypad.
-        ///    </para>
+        /// The 5 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad5        = 0x65,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad6"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 6 key on the numeric keypad.
-        ///    </para>
+        /// The 6 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad6        = 0x66,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad7"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 7 key on the numeric keypad.
-        ///    </para>
+        /// The 7 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad7        = 0x67,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad8"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 8 key on the numeric keypad.
-        ///    </para>
+        /// The 8 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad8        = 0x68,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumPad9"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The 9 key on the numeric keypad.
-        ///    </para>
+        /// The 9 key on the numeric keypad.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         NumPad9        = 0x69,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Multiply"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Multiply key.
-        ///    </para>
+        /// The Multiply key.
         /// </devdoc>
         Multiply       = 0x6A,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Add"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Add key.
-        ///    </para>
+        /// The Add key.
         /// </devdoc>
         Add            = 0x6B,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Separator"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Separator key.
-        ///    </para>
+        /// The Separator key.
         /// </devdoc>
         Separator      = 0x6C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Subtract"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Subtract key.
-        ///    </para>
+        /// The Subtract key.
         /// </devdoc>
         Subtract       = 0x6D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Decimal"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Decimal key.
-        ///    </para>
+        /// The Decimal key.
         /// </devdoc>
         Decimal        = 0x6E,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Divide"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Divide key.
-        ///    </para>
+        /// The Divide key.
         /// </devdoc>
         Divide         = 0x6F,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F1"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F1 key.
-        ///    </para>
+        /// The F1 key.
         /// </devdoc>
         F1             = 0x70,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F2"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F2 key.
-        ///    </para>
+        /// The F2 key.
         /// </devdoc>
         F2             = 0x71,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F3"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F3 key.
-        ///    </para>
+        /// The F3 key.
         /// </devdoc>
         F3             = 0x72,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F4"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F4 key.
-        ///    </para>
+        /// The F4 key.
         /// </devdoc>
         F4             = 0x73,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F5"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F5 key.
-        ///    </para>
+        /// The F5 key.
         /// </devdoc>
         F5             = 0x74,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F6"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F6 key.
-        ///    </para>
+        /// The F6 key.
         /// </devdoc>
         F6             = 0x75,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F7"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F7 key.
-        ///    </para>
+        /// The F7 key.
         /// </devdoc>
         F7             = 0x76,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F8"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F8 key.
-        ///    </para>
+        /// The F8 key.
         /// </devdoc>
         F8             = 0x77,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F9"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F9 key.
-        ///    </para>
+        /// The F9 key.
         /// </devdoc>
         F9             = 0x78,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F10"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F10 key.
-        ///    </para>
+        /// The F10 key.
         /// </devdoc>
         F10            = 0x79,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F11"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F11 key.
-        ///    </para>
+        /// The F11 key.
         /// </devdoc>
         F11            = 0x7A,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F12"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F12 key.
-        ///    </para>
+        /// The F12 key.
         /// </devdoc>
         F12            = 0x7B,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F13"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F13 key.
-        ///    </para>
+        /// The F13 key.
         /// </devdoc>
         F13            = 0x7C,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F14"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F14 key.
-        ///    </para>
+        /// The F14 key.
         /// </devdoc>
         F14            = 0x7D,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F15"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F15 key.
-        ///    </para>
+        /// The F15 key.
         /// </devdoc>
         F15            = 0x7E,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F16"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F16 key.
-        ///    </para>
+        /// The F16 key.
         /// </devdoc>
         F16            = 0x7F,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F17"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F17 key.
-        ///    </para>
+        /// The F17 key.
         /// </devdoc>
         F17            = 0x80,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F18"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F18 key.
-        ///    </para>
+        /// The F18 key.
         /// </devdoc>
         F18            = 0x81,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F19"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F19 key.
-        ///    </para>
+        /// The F19 key.
         /// </devdoc>
         F19            = 0x82,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F20"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F20 key.
-        ///    </para>
+        /// The F20 key.
         /// </devdoc>
         F20            = 0x83,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F21"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F21 key.
-        ///    </para>
+        /// The F21 key.
         /// </devdoc>
         F21            = 0x84,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F22"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F22 key.
-        ///    </para>
+        /// The F22 key.
         /// </devdoc>
         F22            = 0x85,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F23"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F23 key.
-        ///    </para>
+        /// The F23 key.
         /// </devdoc>
         F23            = 0x86,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.F24"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The F24 key.
-        ///    </para>
+        /// The F24 key.
         /// </devdoc>
         F24            = 0x87,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NumLock"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The NUM LOCK key.
-        ///    </para>
+        /// The NUM LOCK key.
         /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // PM team has reviewed and decided on naming changes already
         NumLock        = 0x90,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Scroll"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The SCROLL LOCK key.
-        ///    </para>
+        /// The SCROLL LOCK key.
         /// </devdoc>
         Scroll         = 0x91,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LShiftKey"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The left SHIFT key.
-        ///    </para>
+        /// The left SHIFT key.
         /// </devdoc>
         LShiftKey     = 0xA0,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.RShiftKey"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The right SHIFT key.
-        ///    </para>
+        /// The right SHIFT key.
         /// </devdoc>
         RShiftKey     = 0xA1,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LControlKey"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The left CTRL key.
-        ///    </para>
+        /// The left CTRL key.
         /// </devdoc>
         LControlKey   = 0xA2,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.RControlKey"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The right CTRL key.
-        ///    </para>
+        /// The right CTRL key.
         /// </devdoc>
         RControlKey   = 0xA3,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LMenu"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The left ALT key.
-        ///    </para>
+        /// The left ALT key.
         /// </devdoc>
         LMenu          = 0xA4,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.RMenu"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The right ALT key.
-        ///    </para>
+        /// The right ALT key.
         /// </devdoc>
         RMenu          = 0xA5,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserBack"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Back key.
-        ///    </para>
+        /// The Browser Back key.
         /// </devdoc>
         BrowserBack   = 0xA6,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserForward"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Forward key.
-        ///    </para>
+        /// The Browser Forward key.
         /// </devdoc>
         BrowserForward= 0xA7,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserRefresh"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Refresh key.
-        ///    </para>
+        /// The Browser Refresh key.
         /// </devdoc>
         BrowserRefresh= 0xA8,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserStop"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Stop key.
-        ///    </para>
+        /// The Browser Stop key.
         /// </devdoc>
         BrowserStop   = 0xA9,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserSearch"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Search key.
-        ///    </para>
+        /// The Browser Search key.
         /// </devdoc>
         BrowserSearch = 0xAA,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserFavorites"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Favorites key.
-        ///    </para>
+        /// The Browser Favorites key.
         /// </devdoc>
         BrowserFavorites = 0xAB,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.BrowserHome"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Browser Home key.
-        ///    </para>
+        /// The Browser Home key.
         /// </devdoc>
         BrowserHome   = 0xAC,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.VolumeMute"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Volume Mute key.
-        ///    </para>
+        /// The Volume Mute key.
         /// </devdoc>
         VolumeMute    = 0xAD,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.VolumeDown"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Volume Down key.
-        ///    </para>
+        /// The Volume Down key.
         /// </devdoc>
         VolumeDown    = 0xAE,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.VolumeUp"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Volume Up key.
-        ///    </para>
+        /// The Volume Up key.
         /// </devdoc>
         VolumeUp      = 0xAF,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.MediaNextTrack"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Media Next Track key.
-        ///    </para>
+        /// The Media Next Track key.
         /// </devdoc>
         MediaNextTrack = 0xB0,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.MediaPreviousTrack"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Media Previous Track key.
-        ///    </para>
+        /// The Media Previous Track key.
         /// </devdoc>
         MediaPreviousTrack = 0xB1,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.MediaStop"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Media Stop key.
-        ///    </para>
+        /// The Media Stop key.
         /// </devdoc>
         MediaStop     = 0xB2,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.MediaPlayPause"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Media Play Pause key.
-        ///    </para>
+        /// The Media Play Pause key.
         /// </devdoc>
         MediaPlayPause = 0xB3,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LaunchMail"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Launch Mail key.
-        ///    </para>
+        /// The Launch Mail key.
         /// </devdoc>
         LaunchMail    = 0xB4,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.SelectMedia"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Select Media key.
-        ///    </para>
+        /// The Select Media key.
         /// </devdoc>
         SelectMedia   = 0xB5,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LaunchApplication1"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Launch Application1 key.
-        ///    </para>
+        /// The Launch Application1 key.
         /// </devdoc>
         LaunchApplication1 = 0xB6,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.LaunchApplication2"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Launch Application2 key.
-        ///    </para>
+        /// The Launch Application2 key.
         /// </devdoc>
         LaunchApplication2 = 0xB7,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemSemicolon"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Semicolon key.
-        ///    </para>
+        /// The Oem Semicolon key.
         /// </devdoc>
         OemSemicolon  = 0xBA,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem1"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 1 key.
-        ///    </para>
+        /// The Oem 1 key.
         /// </devdoc>
         Oem1 = OemSemicolon,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oemplus"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem plus key.
-        ///    </para>
+        /// The Oem plus key.
         /// </devdoc>
         Oemplus       = 0xBB,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oemcomma"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem comma key.
-        ///    </para>
+        /// The Oem comma key.
         /// </devdoc>
         Oemcomma      = 0xBC,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemMinus"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Minus key.
-        ///    </para>
+        /// The Oem Minus key.
         /// </devdoc>
         OemMinus      = 0xBD,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemPeriod"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Period key.
-        ///    </para>
+        /// The Oem Period key.
         /// </devdoc>
         OemPeriod     = 0xBE,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemQuestion"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Question key.
-        ///    </para>
+        /// The Oem Question key.
         /// </devdoc>
         OemQuestion   = 0xBF,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem2"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 2 key.
-        ///    </para>
+        /// The Oem 2 key.
         /// </devdoc>
         Oem2 = OemQuestion,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oemtilde"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem tilde key.
-        ///    </para>
+        /// The Oem tilde key.
         /// </devdoc>
         Oemtilde      = 0xC0,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem3"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 3 key.
-        ///    </para>
+        /// The Oem 3 key.
         /// </devdoc>
         Oem3 = Oemtilde,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemOpenBrackets"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Open Brackets key.
-        ///    </para>
+        /// The Oem Open Brackets key.
         /// </devdoc>
         OemOpenBrackets = 0xDB,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem4"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 4 key.
-        ///    </para>
+        /// The Oem 4 key.
         /// </devdoc>
         Oem4 = OemOpenBrackets,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemPipe"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Pipe key.
-        ///    </para>
+        /// The Oem Pipe key.
         /// </devdoc>
         OemPipe       = 0xDC,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem5"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 5 key.
-        ///    </para>
+        /// The Oem 5 key.
         /// </devdoc>
         Oem5 = OemPipe,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemCloseBrackets"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Close Brackets key.
-        ///    </para>
+        /// The Oem Close Brackets key.
         /// </devdoc>
         OemCloseBrackets = 0xDD,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem6"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 6 key.
-        ///    </para>
+        /// The Oem 6 key.
         /// </devdoc>
         Oem6 = OemCloseBrackets,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemQuotes"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Quotes key.
-        ///    </para>
+        /// The Oem Quotes key.
         /// </devdoc>
         OemQuotes     = 0xDE,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem7"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 7 key.
-        ///    </para>
+        /// The Oem 7 key.
         /// </devdoc>
         Oem7 = OemQuotes,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem8"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem8 key.
-        ///    </para>
+        /// The Oem8 key.
         /// </devdoc>
         Oem8          = 0xDF,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemBackslash"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem Backslash key.
-        ///    </para>
+        /// The Oem Backslash key.
         /// </devdoc>
         OemBackslash  = 0xE2,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Oem102"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Oem 102 key.
-        ///    </para>
+        /// The Oem 102 key.
         /// </devdoc>
         Oem102 = OemBackslash,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.ProcessKey"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PROCESS KEY key.
-        ///    </para>
+        /// The PROCESS KEY key.
         /// </devdoc>
         ProcessKey     = 0xE5,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Packet"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The Packet KEY key.
-        ///    </para>
+        /// The Packet KEY key.
         /// </devdoc>
         Packet     = 0xE7,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Attn"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The ATTN key.
-        ///    </para>
+        /// The ATTN key.
         /// </devdoc>
         Attn           = 0xF6,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Crsel"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The CRSEL key.
-        ///    </para>
+        /// The CRSEL key.
         /// </devdoc>
         Crsel          = 0xF7,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Exsel"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The EXSEL key.
-        ///    </para>
+        /// The EXSEL key.
         /// </devdoc>
         Exsel          = 0xF8,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.EraseEof"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The ERASE EOF key.
-        ///    </para>
+        /// The ERASE EOF key.
         /// </devdoc>
         EraseEof          = 0xF9,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Play"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PLAY key.
-        ///    </para>
+        /// The PLAY key.
         /// </devdoc>
         Play           = 0xFA,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Zoom"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The ZOOM key.
-        ///    </para>
+        /// The ZOOM key.
         /// </devdoc>
         Zoom           = 0xFB,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.NoName"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       A constant reserved for future use.
-        ///    </para>
+        /// A constant reserved for future use.
         /// </devdoc>
         NoName         = 0xFC,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Pa1"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The PA1 key.
-        ///    </para>
+        /// The PA1 key.
         /// </devdoc>
         Pa1            = 0xFD,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.OemClear"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The CLEAR key.
-        ///    </para>
+        /// The CLEAR key.
         /// </devdoc>
         OemClear      = 0xFE,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Shift"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The SHIFT modifier key.
-        ///    </para>
+        /// The SHIFT modifier key.
         /// </devdoc>
         Shift   = 0x00010000,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Control"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The
-        ///       CTRL modifier key.
-        ///
-        ///    </para>
+        /// The  CTRL modifier key.
         /// </devdoc>
         Control = 0x00020000,
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Alt"]/*' />
+        
         /// <devdoc>
-        ///    <para>
-        ///       The ALT modifier key.
-        ///
-        ///    </para>
+        /// The ALT modifier key.
         /// </devdoc>
         Alt     = 0x00040000,
     }

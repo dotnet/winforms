@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Layout;
     using System.Reflection;
     using System.Runtime.Serialization;
-    using System.Security.Permissions;
     
     /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="TableLayoutSettings"]/*' />
     /// <devdoc>this is a wrapper class to expose interesting properties of TableLayout</devdoc>
@@ -51,7 +50,7 @@ namespace System.Windows.Forms {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
             string stringVal = serializationInfo.GetString("SerializedString");
 
-            if (!String.IsNullOrEmpty(stringVal) && converter != null) {
+            if (!string.IsNullOrEmpty(stringVal)) {
                 TableLayoutSettings tls = converter.ConvertFromInvariantString(stringVal) as TableLayoutSettings;
                 if (tls != null) {
                     this.ApplySettings(tls);
@@ -208,7 +207,6 @@ namespace System.Windows.Forms {
         internal bool IsStub {
             get {
                 if ( _stub != null) {
-                    Debug.Assert( _stub.IsValid, "seems like we're still partying on an object that's given over its rows and columns, that's a nono.");
                     return true;
                 }
                 return false;
@@ -228,31 +226,47 @@ namespace System.Windows.Forms {
             }
            
         }
+
         #region Extended Properties   
-        public int GetColumnSpan(object control) {
-            if (control == null) {
+
+        public int GetColumnSpan(object control)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
             }
-            if (IsStub) {
+
+            if (IsStub)
+            {
                 return _stub.GetColumnSpan(control);
             }
-            else {
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 return TableLayout.GetLayoutInfo(element).ColumnSpan;
             }
         }
 
-        public void SetColumnSpan(object control, int value) {
-            if(value < 1) {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "ColumnSpan", (value).ToString(CultureInfo.CurrentCulture)));
+        public void SetColumnSpan(object control, int value)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
             }
-            if (IsStub) {
+            if (value < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "ColumnSpan", value));
+            }
+
+            if (IsStub)
+            {
                 _stub.SetColumnSpan(control, value);
             }
-            else {
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);	
-                // LayoutInfo.SetColumnSpan() throws ArgumentException if out of range.
-                if (element.Container != null) {
+                if (element.Container != null)
+                {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
                 TableLayout.GetLayoutInfo(element).ColumnSpan = value;
@@ -262,150 +276,206 @@ namespace System.Windows.Forms {
             
         }
 
-        public int GetRowSpan(object control) {
-            if (IsStub) {
+        public int GetRowSpan(object control)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
+            }
+
+            if (IsStub)
+            {
                 return _stub.GetRowSpan(control);
             }
-            else {
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 return TableLayout.GetLayoutInfo(element).RowSpan;
             }
         }
         
-        public void SetRowSpan(object control, int value) {
-            if(value < 1) {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "RowSpan", (value).ToString(CultureInfo.CurrentCulture)));
-            }
-            if (control == null) {
+        public void SetRowSpan(object control, int value)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
             }
+            if (value < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "RowSpan", value));
+            }
 
-            if (IsStub) {
+            if (IsStub)
+            {
                 _stub.SetRowSpan(control, value);
             }
-            else {
-
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                // LayoutInfo.SetColumnSpan() throws ArgumentException if out of range.
-                if (element.Container != null) {
+                if (element.Container != null)
+                {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
                 TableLayout.GetLayoutInfo(element).RowSpan = value;
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.RowSpan);
                 Debug.Assert(GetRowSpan(element) == value, "row span should equal to the value we set");
             }
-            
         }
 
-        //get the row position of the element
+        /// <devdoc>
+        /// Get the row position of the element
+        /// </devdoc>
         [SRDescription(nameof(SR.GridPanelRowDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
-        public int GetRow(object control) {
-            if (control == null) {
+        public int GetRow(object control)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
             }
-            if (IsStub) {
+
+            if (IsStub)
+            {
                 return _stub.GetRow(control);
             }
-            else {
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
                 return layoutInfo.RowPosition; 
             }
         }
 
-        //set the row position of the element
-        //if we set the row position to -1, it will automatically switch the control from 
-        //absolutely positioned to non-absolutely positioned
-        public void SetRow(object control, int row) {
-            if (control == null) {
+        /// <devdoc>
+        /// Set the row position of the element
+        /// If we set the row position to -1, it will automatically switch the control from 
+        /// absolutely positioned to non-absolutely positioned
+        /// </devdoc>
+        public void SetRow(object control, int row)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
             }
-            if (row < -1) {
-                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "Row", (row).ToString(CultureInfo.CurrentCulture)));
-            }   
-            SetCellPosition(control, row, -1,  /*rowSpecified=*/true, /*colSpecified=*/false);
-        
+            if (row < -1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "Row", row));
+            }
+
+            SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
         }
 
-        //get the column position of the element
+        /// <devdoc>
+        /// Get the column position of the element
+        /// </devdoc>
         [SRDescription(nameof(SR.TableLayoutSettingsGetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
-        public TableLayoutPanelCellPosition GetCellPosition(object control) {
-            if (control == null) {
+        public TableLayoutPanelCellPosition GetCellPosition(object control)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
             }
+
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
 
-        //get the column position of the element
+        /// <devdoc>
+        /// Set the column position of the element
+        /// </devdoc>
         [SRDescription(nameof(SR.TableLayoutSettingsSetCellPositionDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
-        public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition) {
-           if (control == null) {
+        public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
-           }
-           SetCellPosition(control, cellPosition.Row, cellPosition.Column,  /*rowSpecified=*/true, /*colSpecified=*/true);
-           
+            }
+
+            SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
 
-        //get the column position of the element
+        /// <devdoc>
+        /// Get the column position of the element
+        /// </devdoc>
         [SRDescription(nameof(SR.GridPanelColumnDescr))]
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(-1)]
-        public int GetColumn(object control) {
-           if (control == null) {
+        public int GetColumn(object control)
+        {
+            if (control == null)
+            {
                 throw new ArgumentNullException(nameof(control));
             }
-            if (IsStub) {
+
+            if (IsStub)
+            {
                 return _stub.GetColumn(control);
             }
-            else {
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
                 return layoutInfo.ColumnPosition; 
            }
         }
         
-        //set the column position of the element
-        //if we set the column position to -1, it will automatically switch the control from 
-        //absolutely positioned to non-absolutely positioned
-        public void SetColumn(object control, int column) {
-            if (column < -1) {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "Column", (column).ToString(CultureInfo.CurrentCulture)));
+        /// <devdoc>
+        /// Set the column position of the element
+        /// If we set the column position to -1, it will automatically switch the control from 
+        /// absolutely positioned to non-absolutely positioned
+        /// </devdoc>
+        public void SetColumn(object control, int column)
+        {
+            if (control == null)
+            {
+                throw new ArgumentNullException(nameof(control));
             }
-            if (IsStub) {
+            if (column < -1)
+            {
+                throw new ArgumentException(string.Format(SR.InvalidArgument, "Column", column));
+            }
+
+            if (IsStub)
+            {
                 _stub.SetColumn(control, column);
             }
-            else {
-                 SetCellPosition(control, -1, column,  /*rowSpecified=*/false, /*colSpecified=*/true);
+            else
+            {
+                SetCellPosition(control, -1, column, rowSpecified: false, colSpecified: true);
             }
         }
 
-        private void SetCellPosition(object control, int row, int column,  bool rowSpecified, bool colSpecified) {
-
-            if (IsStub) {
-                if (colSpecified) {
-                     _stub.SetColumn(control, column);
+        private void SetCellPosition(object control, int row, int column,  bool rowSpecified, bool colSpecified)
+        {
+            if (IsStub)
+            {
+                if (colSpecified)
+                {
+                    _stub.SetColumn(control, column);
                 }
-                if (rowSpecified) {
+                if (rowSpecified)
+                {
                     _stub.SetRow(control, row);
                 }
             }
-            else {
-
+            else
+            {
                 IArrangedElement element = LayoutEngine.CastToArrangedElement(control);
-                if (element.Container != null) {
+                if (element.Container != null)
+                {
                     TableLayout.ClearCachedAssignments(TableLayout.GetContainerInfo(element.Container));
                 }
                 TableLayout.LayoutInfo layoutInfo = TableLayout.GetLayoutInfo(element);
-                if (colSpecified) {
+                if (colSpecified)
+                {
                     layoutInfo.ColumnPosition = column;
                 }
-                if (rowSpecified) {
+                if (rowSpecified)
+                {
                     layoutInfo.RowPosition = row;
                 }
                 LayoutTransaction.DoLayout(element.Container, element, PropertyNames.TableIndex);
@@ -415,24 +485,25 @@ namespace System.Windows.Forms {
         }
         
         ///<devdoc>
-        ///get the element which covers the specified row and column. return null if we can't find one
+        /// Get the element which covers the specified row and column. return null if we can't find one
         ///</devdoc>
-        internal IArrangedElement GetControlFromPosition (int column, int row) {
+        internal IArrangedElement GetControlFromPosition (int column, int row)
+        {
             return TableLayout.GetControlFromPosition(Owner, column, row);
         }
 
-        internal TableLayoutPanelCellPosition GetPositionFromControl (IArrangedElement element) {
+        internal TableLayoutPanelCellPosition GetPositionFromControl (IArrangedElement element)
+        {
             return TableLayout.GetPositionFromControl(Owner, element);
         }
         
         #endregion
         
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.SerializationFormatter)] 		
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             TypeConverter converter = TypeDescriptor.GetConverter(this);
-            string stringVal = (converter != null) ? converter.ConvertToInvariantString(this) : null;
+            string stringVal = converter.ConvertToInvariantString(this);
             
-            if (!String.IsNullOrEmpty(stringVal)) {
+            if (!string.IsNullOrEmpty(stringVal)) {
                 si.AddValue("SerializedString", stringVal);
             }
         }
@@ -454,9 +525,6 @@ namespace System.Windows.Forms {
                         PropertyDescriptor prop = TypeDescriptor.GetProperties(c)["Name"];
                         if (prop != null && prop.PropertyType == typeof(string)) {
                             controlInfo.Name = prop.GetValue(c);
-                        }
-                        else {
-                            Debug.Fail("Name property missing on control");
                         }
 
                         controlInfo.Row = GetRow(c);
@@ -532,9 +600,7 @@ namespace System.Windows.Forms {
                                 if (prop != null && prop.PropertyType == typeof(string)) {
                                     name = prop.GetValue(tableControl) as string;
                                 }
-                                else {
-                                    Debug.Fail("Name property missing on control");
-                                }
+
                                 if (WindowsFormsUtils.SafeCompareStrings(name, controlName as string, /* ignoreCase = */ false)) {
                                     settings.SetRow(tableControl, controlInfo.Row);
                                     settings.SetColumn(tableControl, controlInfo.Column);
@@ -693,7 +759,6 @@ namespace System.Windows.Forms {
                                 style.GetType().GetConstructor(new Type[] {typeof(SizeType), typeof(int)}),
                                 new object[] {style.SizeType, style.Size});
                         default:
-                            Debug.Fail("Unsupported SizeType.");
                             break;
                     }
                 }

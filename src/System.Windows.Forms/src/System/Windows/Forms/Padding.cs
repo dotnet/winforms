@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -212,14 +212,7 @@ namespace System.Windows.Forms {
             return !(p1 == p2);
         }
         
-        /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.GetHashCode"]/*' />
-        public override int GetHashCode() {
-            // Padding class should implement GetHashCode for perf
-            return Left
-                ^ WindowsFormsUtils.RotateLeft(Top, 8)
-                ^ WindowsFormsUtils.RotateLeft(Right, 16)
-                ^ WindowsFormsUtils.RotateLeft(Bottom, 24);
-        }
+        public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
         /// <include file='doc\Padding.uex' path='docs/doc[@for="Padding.ToString"]/*' />
         public override string ToString() {

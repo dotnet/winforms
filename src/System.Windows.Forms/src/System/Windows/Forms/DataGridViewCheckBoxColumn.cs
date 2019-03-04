@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeDefaultCellStyle()
         {
-            Object defaultNullValue;
+            object defaultNullValue;
             DataGridViewCheckBoxCell templateCell = this.CellTemplate as DataGridViewCheckBoxCell;
             if (templateCell == null)
             {
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
                     defaultCellStyle.Font != null ||
                     !defaultCellStyle.NullValue.Equals(defaultNullValue) ||
                     !defaultCellStyle.IsDataSourceNullValueDefault ||
-                    !String.IsNullOrEmpty(defaultCellStyle.Format) ||
+                    !string.IsNullOrEmpty(defaultCellStyle.Format) ||
                     !defaultCellStyle.FormatProvider.Equals(System.Globalization.CultureInfo.CurrentCulture) ||
                     defaultCellStyle.Alignment != DataGridViewContentAlignment.MiddleCenter ||
                     defaultCellStyle.WrapMode != DataGridViewTriState.NotSet ||

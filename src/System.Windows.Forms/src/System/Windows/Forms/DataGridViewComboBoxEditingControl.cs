@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 if (valueStr != null)
                 {
                     this.Text = valueStr;
-                    if (String.Compare(valueStr, this.Text, true, CultureInfo.CurrentCulture) != 0)
+                    if (string.Compare(valueStr, this.Text, true, CultureInfo.CurrentCulture) != 0)
                     {
                         this.SelectedIndex = -1;
                     }
@@ -195,6 +195,11 @@ namespace System.Windows.Forms
     {
         private DataGridViewComboBoxEditingControl ownerControl;
 
+        /// <summary>
+        /// The parent is changed when the editing control is attached to another editing cell.
+        /// </summary>
+        private AccessibleObject _parentAccessibleObject = null;
+
         public DataGridViewComboBoxEditingControlAccessibleObject(DataGridViewComboBoxEditingControl ownerControl) : base(ownerControl)
         {
             this.ownerControl = ownerControl;
@@ -202,9 +207,10 @@ namespace System.Windows.Forms
 
         public override AccessibleObject Parent
         {
+            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get
             {
-                return (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.EditingPanel.AccessibilityObject;
+                return _parentAccessibleObject;
             }
         }
 
@@ -213,7 +219,13 @@ namespace System.Windows.Forms
             switch (direction)
             {
                 case UnsafeNativeMethods.NavigateDirection.Parent:
-                    return Parent;
+                    var owner = Owner as IDataGridViewEditingControl;
+                    if (owner != null && owner.EditingControlDataGridView.EditingControl == owner)
+                    {
+                        return _parentAccessibleObject;
+                    }
+
+                    return null;
             }
 
             return base.FragmentNavigate(direction);
@@ -253,6 +265,15 @@ namespace System.Windows.Forms
             {
                 return ownerControl.DroppedDown ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
             }
+        }
+
+        /// <summary>
+        /// Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        /// </summary>
+        /// <param name="parent">The parent accessible object.</param>
+        internal override void SetParent(AccessibleObject parent)
+        {
+            _parentAccessibleObject = parent;
         }
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -204,7 +204,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase.UnsafeNativeMethods.IOleClientSite.GetMoniker"]/*' />
         /// <internalonly/>
-        int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out Object moniker) {
+        int UnsafeNativeMethods.IOleClientSite.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker) {
             moniker = null;
             return NativeMethods.E_NOTIMPL;
         }
@@ -463,7 +463,7 @@ namespace System.Windows.Forms {
             if (connectionPoint != null)
                 return;
 
-            Object nativeObject = this.Host.activeXInstance;
+            object nativeObject = this.Host.activeXInstance;
             if (nativeObject != null) {
                 try
                 {

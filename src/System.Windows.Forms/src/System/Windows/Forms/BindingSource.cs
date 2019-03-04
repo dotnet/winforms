@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -18,11 +18,10 @@ namespace System.Windows.Forms {
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Globalization;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
 
     [
@@ -57,10 +56,10 @@ namespace System.Windows.Forms {
 
         // Public property values
         private object dataSource = null;
-        private string dataMember = String.Empty;
+        private string dataMember = string.Empty;
         private string sort = null;
         private string filter = null;
-        private CurrencyManager currencyManager;
+        private readonly CurrencyManager currencyManager;
         private bool raiseListChangedEvents = true;
         private bool parentsCurrentItemChanging = false;
         private bool disposedOrFinalized = false;
@@ -104,7 +103,7 @@ namespace System.Windows.Forms {
         ///////////////////////////////////////////////////////////////////////////////
 
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingSource"]/* />
-        public BindingSource() : this(null, String.Empty) {
+        public BindingSource() : this(null, string.Empty) {
         }
 
         /// <include file='doc\BindingSource.uex' path='docs/doc[@for="BindingSource.BindingSource1"]/* />
@@ -183,7 +182,7 @@ namespace System.Windows.Forms {
             EnsureInnerList();
 
             // If no data member specified, just return the main currency manager
-            if (String.IsNullOrEmpty(dataMember)) {
+            if (string.IsNullOrEmpty(dataMember)) {
                 return this.currencyManager;
             }
 
@@ -209,7 +208,7 @@ namespace System.Windows.Forms {
 
             // Look for an existing binding source that uses this data member, and return that
             foreach (string key in this.relatedBindingSources.Keys) {
-                if (String.Equals(key, dataMember, StringComparison.OrdinalIgnoreCase)) {
+                if (string.Equals(key, dataMember, StringComparison.OrdinalIgnoreCase)) {
                     return this.relatedBindingSources[key];
                 }
             }
@@ -243,7 +242,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value == null) {
-                    value = String.Empty;
+                    value = string.Empty;
                 }
 
                 if (!dataMember.Equals(value)) {
@@ -306,7 +305,7 @@ namespace System.Windows.Forms {
                     return iblv.Filter;
                 }
                 else {
-                    return String.Empty;
+                    return string.Empty;
                 }
             }
 
@@ -315,7 +314,7 @@ namespace System.Windows.Forms {
                     return;
                 }
 
-                if (String.Equals(value, this.InnerListFilter, StringComparison.Ordinal)) {
+                if (string.Equals(value, this.InnerListFilter, StringComparison.Ordinal)) {
                     return;
                 }
 
@@ -351,7 +350,7 @@ namespace System.Windows.Forms {
                     return;
                 }
 
-                if (String.Compare(value, this.InnerListSort, false, CultureInfo.InvariantCulture) == 0) {
+                if (string.Compare(value, this.InnerListSort, false, CultureInfo.InvariantCulture) == 0) {
                     return;
                 }
 
@@ -640,7 +639,7 @@ namespace System.Windows.Forms {
 
         private static string BuildSortString(ListSortDescriptionCollection sortsColln) {
                 if (sortsColln == null) {
-                    return String.Empty;
+                    return string.Empty;
                 }
 
                 StringBuilder sb = new StringBuilder(sortsColln.Count);
@@ -648,7 +647,7 @@ namespace System.Windows.Forms {
                 for (int i = 0; i < sortsColln.Count; ++i) {
                     sb.Append(sortsColln[i].PropertyDescriptor.Name +
                               ((sortsColln[i].SortDirection == ListSortDirection.Ascending) ? " ASC" : " DESC") +
-                              ((i < sortsColln.Count - 1) ? "," : String.Empty));
+                              ((i < sortsColln.Count - 1) ? "," : string.Empty));
                 }
 
                 return sb.ToString();
@@ -686,7 +685,7 @@ namespace System.Windows.Forms {
             Type genericType = typeof(BindingList<>);
             Type bindingType = genericType.MakeGenericType(new Type[] { type });
 
-            return (IList) SecurityUtils.SecureCreateInstance(bindingType);
+            return (IList) Activator.CreateInstance(bindingType);
         }
 
         // Create an object of the given type. Throw an exception if this fails.
@@ -695,7 +694,7 @@ namespace System.Windows.Forms {
             Exception instanceException = null;
 
             try {
-                instancedObject = SecurityUtils.SecureCreateInstance(type);
+                instancedObject = Activator.CreateInstance(type);
             }
             catch (TargetInvocationException ex) {
                 instanceException = ex; // Default ctor threw an exception
@@ -792,7 +791,7 @@ namespace System.Windows.Forms {
         //
         // Overload of IBindingList.Find that takes a string instead of a property descriptor (for convenience).
         //
-        public int Find(String propertyName, object key) {
+        public int Find(string propertyName, object key) {
             PropertyDescriptor pd = (itemShape == null) ? null : itemShape.Find(propertyName, true);
 
             if (pd == null) {
@@ -863,7 +862,7 @@ namespace System.Windows.Forms {
             }
 
             // If data member has not been specified, leave the data member property alone
-            if (String.IsNullOrEmpty(this.dataMember)) {
+            if (string.IsNullOrEmpty(this.dataMember)) {
                 return true;
             }
 
@@ -1047,7 +1046,7 @@ namespace System.Windows.Forms {
             // track if the current list changed
             bool currentItemChanged = true;
 
-            if (!String.IsNullOrEmpty(this.dataMember)) {
+            if (!string.IsNullOrEmpty(this.dataMember)) {
                 object currentValue = null;
                 IList currentList = null;
 
@@ -1113,7 +1112,7 @@ namespace System.Windows.Forms {
 
         // << Some of this code is taken from System.Data.DataTable::ParseSortString method >>
         private ListSortDescriptionCollection ParseSortString(string sortString) {
-            if (String.IsNullOrEmpty(sortString)) {
+            if (string.IsNullOrEmpty(sortString)) {
                 return new ListSortDescriptionCollection();
             }
 
@@ -1127,10 +1126,10 @@ namespace System.Windows.Forms {
                 // Handle ASC and DESC
                 int length = current.Length;
                 bool ascending = true;
-                if (length >= 5 && String.Compare(current, length - 4, " ASC", 0, 4, true, CultureInfo.InvariantCulture) == 0) {
+                if (length >= 5 && string.Compare(current, length - 4, " ASC", 0, 4, true, CultureInfo.InvariantCulture) == 0) {
                     current = current.Substring(0, length - 4).Trim();
                 }
-                else if (length >= 6 && String.Compare(current, length - 5, " DESC", 0, 5, true, CultureInfo.InvariantCulture) == 0) {
+                else if (length >= 6 && string.Compare(current, length - 5, " DESC", 0, 5, true, CultureInfo.InvariantCulture) == 0) {
                     ascending = false;
                     current = current.Substring(0, length - 5).Trim();
                 }
@@ -1414,23 +1413,23 @@ namespace System.Windows.Forms {
         ///////////////////////////////////////////////////////////////////////////////
 
         private void WireCurrencyManager(CurrencyManager cm) {
-            if (cm != null) {
-                cm.PositionChanged    += new EventHandler(CurrencyManager_PositionChanged);
-                cm.CurrentChanged     += new EventHandler(CurrencyManager_CurrentChanged);
-                cm.CurrentItemChanged += new EventHandler(CurrencyManager_CurrentItemChanged);
-                cm.BindingComplete    += new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
-                cm.DataError          += new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
-            }
+            Debug.Assert(cm != null);
+
+            cm.PositionChanged    += new EventHandler(CurrencyManager_PositionChanged);
+            cm.CurrentChanged     += new EventHandler(CurrencyManager_CurrentChanged);
+            cm.CurrentItemChanged += new EventHandler(CurrencyManager_CurrentItemChanged);
+            cm.BindingComplete    += new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
+            cm.DataError          += new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
         }
 
         private void UnwireCurrencyManager(CurrencyManager cm) {
-            if (cm != null) {
-                cm.PositionChanged    -= new EventHandler(CurrencyManager_PositionChanged);
-                cm.CurrentChanged     -= new EventHandler(CurrencyManager_CurrentChanged);
-                cm.CurrentItemChanged -= new EventHandler(CurrencyManager_CurrentItemChanged);
-                cm.BindingComplete    -= new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
-                cm.DataError          -= new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
-            }
+            Debug.Assert(cm != null);
+
+            cm.PositionChanged    -= new EventHandler(CurrencyManager_PositionChanged);
+            cm.CurrentChanged     -= new EventHandler(CurrencyManager_CurrentChanged);
+            cm.CurrentItemChanged -= new EventHandler(CurrencyManager_CurrentItemChanged);
+            cm.BindingComplete    -= new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
+            cm.DataError          -= new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
         }
 
         private void WireDataSource() {
@@ -1516,17 +1515,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        // Respond to late completion of the DataSource's initialization, by completing our own initialization.
-        // This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
-        // BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
-        //
-        private void DataSource_Initialized(object sender, EventArgs e) {
-            ISupportInitializeNotification dsInit = (this.DataSource as ISupportInitializeNotification);
-
-            Debug.Assert(dsInit != null, "BindingSource: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
-            Debug.Assert(dsInit.IsInitialized, "BindingSource: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
-
-            if (dsInit != null) {
+        /// <devdoc>
+        /// Respond to late completion of the DataSource's initialization, by completing our own initialization.
+        /// This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
+        /// BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
+        /// </devdoc>
+        private void DataSource_Initialized(object sender, EventArgs e)
+        {
+            if (DataSource is ISupportInitializeNotification dsInit)
+            {
                 dsInit.Initialized -= new EventHandler(DataSource_Initialized);
             }
 
@@ -1743,7 +1740,7 @@ namespace System.Windows.Forms {
         public virtual PropertyDescriptorCollection GetItemProperties(PropertyDescriptor[] listAccessors) {
             object ds = ListBindingHelper.GetList(this.dataSource);
 
-            if (ds is ITypedList && !String.IsNullOrEmpty(this.dataMember)) {
+            if (ds is ITypedList && !string.IsNullOrEmpty(this.dataMember)) {
                 return ListBindingHelper.GetListItemProperties(ds, this.dataMember, listAccessors);
             }
             else {

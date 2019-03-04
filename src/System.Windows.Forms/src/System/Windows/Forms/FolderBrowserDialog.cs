@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                selectedPath = (value == null) ? String.Empty : value;
+                selectedPath = (value == null) ? string.Empty : value;
             }
         }
 
@@ -184,7 +184,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                descriptionText = (value == null) ? String.Empty : value;
+                descriptionText = (value == null) ? string.Empty : value;
             }
         }
 
@@ -235,8 +235,8 @@ namespace System.Windows.Forms
         public override void Reset() 
         {
             rootFolder = System.Environment.SpecialFolder.Desktop;
-            descriptionText = String.Empty;
-            selectedPath = String.Empty;
+            descriptionText = string.Empty;
+            selectedPath = string.Empty;
             showNewFolderButton = true;
         }
 

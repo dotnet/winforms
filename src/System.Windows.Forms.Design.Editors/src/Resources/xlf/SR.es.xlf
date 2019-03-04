@@ -4,117 +4,157 @@
     <body>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
-        <target state="new">Anchor Editor</target>
+        <target state="translated">Editor de delimitadores</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">Parte inferior</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">Izquierda</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">Derecha</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">Parte superior</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="new">The item '{0}' cannot be removed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="new">{0} Collection Editor</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="new">Read-only component(s) selected.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="new">{0} &amp;properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="new">Multi-Select &amp;Properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="new">&amp;Properties:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="new">Add or remove {0} objects</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
-        <target state="new">Color Picker</target>
+        <target state="translated">Selector de color</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorPaletteTab">
         <source>Custom</source>
-        <target state="new">Custom</target>
+        <target state="translated">Personalizado</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="new">Web</target>
+        <target state="translated">Web</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">Sistema</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorAccName">
         <source>Dock Picker</source>
-        <target state="new">Dock Picker</target>
+        <target state="translated">Selector de acoplamiento</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="new">Bottom</target>
+        <target state="translated">Parte inferior</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
         <source>Fill</source>
-        <target state="new">Fill</target>
+        <target state="translated">Rellenar</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorLeftAccName">
         <source>Left</source>
-        <target state="new">Left</target>
+        <target state="translated">Izquierda</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorNoneAccName">
         <source>None</source>
-        <target state="new">None</target>
+        <target state="translated">Ninguno</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorRightAccName">
         <source>Right</source>
-        <target state="new">Right</target>
+        <target state="translated">Derecha</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="new">Top</target>
+        <target state="translated">Parte superior</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
         <source>All Files(*.*)|*.*</source>
-        <target state="new">All Files(*.*)|*.*</target>
+        <target state="translated">Todos los archivos (*.*)|*.*</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericOpenFile">
         <source>Open File</source>
-        <target state="new">Open File</target>
+        <target state="translated">Abrir archivo</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">Winforms Designer no se admite en esta plataforma.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
-        <target state="new">(Unknown)</target>
+        <target state="translated">(Se desconoce)</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
         <source>Bitmap files</source>
-        <target state="new">Bitmap files</target>
+        <target state="translated">Archivos de mapas de bits</target>
         <note />
       </trans-unit>
       <trans-unit id="imageFileDescription">
         <source>All image files</source>
-        <target state="new">All image files</target>
+        <target state="translated">Todos los archivos de imagen</target>
         <note />
       </trans-unit>
       <trans-unit id="metafileFileDescription">
         <source>Metafiles</source>
-        <target state="new">Metafiles</target>
+        <target state="translated">Metarchivos</target>
         <note />
       </trans-unit>
     </body>

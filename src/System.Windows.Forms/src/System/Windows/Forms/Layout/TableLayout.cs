@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -32,10 +32,10 @@ namespace System.Windows.Forms.Layout {
         // Private value type used by the Sort methods.
         private struct SorterObjectArray
         {
-            private Object[] keys;
+            private object[] keys;
             private IComparer comparer;    
     
-            internal SorterObjectArray(Object[] keys, IComparer comparer) {
+            internal SorterObjectArray(object[] keys, IComparer comparer) {
                 if (comparer == null) comparer = Comparer.Default;
                 this.keys = keys;
                 this.comparer = comparer;
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Layout {
                 if (a != b) {
                     try {
                         if (comparer.Compare(keys[a], keys[b]) > 0) {
-                            Object temp = keys[a];
+                            object temp = keys[a];
                             keys[a] = keys[b];
                             keys[b] = temp;
                         }
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Layout {
                     SwapIfGreaterWithItems(i, j);      // swap the low with the high
                     SwapIfGreaterWithItems(middle, j); // swap the middle with the high
 
-                    Object x = keys[middle];
+                    object x = keys[middle];
                     do {
                         // Add a try block here to detect IComparers (or their
                         // underlying IComparables, etc) that are bogus.
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Layout {
                         }
                         if (i > j) break;
                         if (i < j) {
-                            Object key = keys[i];
+                            object key = keys[i];
                             keys[i] = keys[j];
                             keys[j] = key;
                         }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Layout {
             }
         }
     
-        private static void Sort(Object[] array, IComparer comparer) {
+        private static void Sort(object[] array, IComparer comparer) {
             if (array == null)
                 throw new ArgumentNullException(nameof(array));
 
@@ -354,7 +354,7 @@ namespace System.Windows.Forms.Layout {
             
             if(numCols > 0) {
                 // The user specified the number of column (the simple/fast case)
-                xAssignRowsAndColumns(containerInfo, childrenInfo, numCols, numRows == 0 ? Int32.MaxValue : numRows, growStyle);
+                xAssignRowsAndColumns(containerInfo, childrenInfo, numCols, numRows == 0 ? int.MaxValue : numRows, growStyle);
             } else if(numRows > 0) {
                 // The user specified rows only (we need to compute the number of columns)
                 
@@ -372,7 +372,7 @@ namespace System.Windows.Forms.Layout {
                 }
             } else {
                 // No rows or columns specified, just do a vertical stack.
-                xAssignRowsAndColumns(containerInfo, childrenInfo, /* numCols = */  Math.Max(minColumn,1), /* numRows = */ Int32.MaxValue, growStyle);
+                xAssignRowsAndColumns(containerInfo, childrenInfo, /* numCols = */  Math.Max(minColumn,1), /* numRows = */ int.MaxValue, growStyle);
             }
         }
 
@@ -498,8 +498,8 @@ namespace System.Windows.Forms.Layout {
                     fixedElement = GetNextLayoutInfo(fixedChildrenInfo, ref fixedElementIndex, /*absolutelyPositioned*/true);
                 }               
                 currentCol = colStop;
-                numRows    = (numRows    == Int32.MaxValue) ? rowStop : Math.Max(numRows, rowStop);
-                numColumns = (numColumns == Int32.MaxValue) ? colStop : Math.Max(numColumns, colStop);                     
+                numRows    = (numRows    == int.MaxValue) ? rowStop : Math.Max(numRows, rowStop);
+                numColumns = (numColumns == int.MaxValue) ? colStop : Math.Max(numColumns, colStop);                     
             }  
 
             Debug.Assert(numRows <= maxRows, "number of rows allocated shouldn't exceed max number of rows");
@@ -517,7 +517,7 @@ namespace System.Windows.Forms.Layout {
 				numRows = Math.Max(containerInfo.MaxRows, numRows);
             }
             else { // add columns
-                numRows = (maxRows == Int32.MaxValue) ? numRows : maxRows;
+                numRows = (maxRows == int.MaxValue) ? numRows : maxRows;
                 numColumns = Math.Max(containerInfo.MaxColumns, numColumns);
             }
 
@@ -699,7 +699,7 @@ namespace System.Windows.Forms.Layout {
 
             // The Int16.MaxValue check will tell us whether we are actually constrained or not. This is not ideal.
 
-            if (dontHonorConstraint && (proposedConstraints.Width < Int16.MaxValue)) {
+            if (dontHonorConstraint && (proposedConstraints.Width < short.MaxValue)) {
                 TableLayoutPanel tlp = containerInfo.Container as TableLayoutPanel;
                 if (tlp != null && tlp.ParentInternal != null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance) {
                     if (tlp.Dock == DockStyle.Top || tlp.Dock == DockStyle.Bottom || tlp.Dock == DockStyle.Fill) {
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.Layout {
 
             // The Int16.MaxValue check will tell us whether we are actually constrained or not. This is not ideal.
             
-            if (dontHonorConstraint && (proposedConstraints.Height < Int16.MaxValue)) {
+            if (dontHonorConstraint && (proposedConstraints.Height < short.MaxValue)) {
                 TableLayoutPanel tlp = containerInfo.Container as TableLayoutPanel;
                 if (tlp != null && tlp.ParentInternal != null && tlp.ParentInternal.LayoutEngine == DefaultLayout.Instance) {
                     if (tlp.Dock == DockStyle.Left || tlp.Dock == DockStyle.Right || tlp.Dock == DockStyle.Fill) {
@@ -981,7 +981,6 @@ namespace System.Windows.Forms.Layout {
         ///</devdoc>
         private int DistributeStyles(int cellBorderWidth, IList styles, Strip[] strips, int maxSize, bool dontHonorConstraint) {
             int usedSpace = 0;
-            float desiredScaleSpace = 0;
             //first, allocate the minimum space required for each element
 
             float totalPercent = 0;
@@ -1012,7 +1011,6 @@ namespace System.Windows.Forms.Layout {
                         default:
                             totalAbsoluteAndAutoSizeAllocatedSpace += strip.MinSize;
                             hasAutoSizeColumn = true;
-                            Debug.Assert(style.SizeType == SizeType.AutoSize, "Unsupported SizeType.");
                             break;
                     }
                 }
@@ -1117,13 +1115,7 @@ namespace System.Windows.Forms.Layout {
             //  - usually we only do this if we're not in preferred size (remaingSpace would be < 0)
             //  - and there are no % style columns
             
-            if(/*!dontHonorConstraint && */hasAutoSizeColumn && remainingSpace > 0) {
-                float scaleAdjustment = 1.0f;
-                if(remainingSpace < desiredScaleSpace) {
-                    scaleAdjustment = remainingSpace / desiredScaleSpace;
-                }
-                remainingSpace -= (int) Math.Ceiling(desiredScaleSpace);
-                
+            if(hasAutoSizeColumn && remainingSpace > 0) {                
                 for(int i = 0; i < strips.Length; i++) {                    
                     Strip strip = strips[i];
                     SizeType sizeType = i < styles.Count ? ((TableLayoutStyle)styles[i]).SizeType : SizeType.AutoSize;
@@ -1278,7 +1270,6 @@ namespace System.Windows.Forms.Layout {
 
         internal TableLayoutPanelCellPosition GetPositionFromControl(IArrangedElement container, IArrangedElement child) {
             if (container == null || child == null) {
-                Debug.Fail("Why are we here when child or container is null?");
                 return new TableLayoutPanelCellPosition(-1,-1);
             }
             ArrangedElementCollection children = container.Children;

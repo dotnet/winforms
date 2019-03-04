@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Windows.Forms.ButtonInternal;
     using System.Windows.Forms.Layout;
-    using System.Security.Permissions;
     using System.Security;
     using System.Windows.Forms.Design; 
     /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton"]/*' />
@@ -192,7 +191,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton.ProcessMnemonic"]/*' />
 
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
              // checking IsMnemonic is not necesssary - toolstrip does this for us.

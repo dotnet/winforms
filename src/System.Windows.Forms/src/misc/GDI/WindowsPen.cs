@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -57,28 +57,28 @@ namespace System.Experimental.Gdi
         private string AllocationSite = DbgUtil.StackTrace;
 #endif
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsPen(DeviceContext dc) :
             this( dc, WindowsPenStyle.Default, cosmeticPenWidth, Color.Black )
         { 
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsPen(DeviceContext dc, Color color ) :
             this( dc, WindowsPenStyle.Default, cosmeticPenWidth, color )
         {
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsPen(DeviceContext dc, WindowsBrush windowsBrush ) :
             this( dc, WindowsPenStyle.Default, cosmeticPenWidth, windowsBrush )
         {
         }
 
-        [ResourceExposure(ResourceScope.Process)]
+        
         public WindowsPen(DeviceContext dc, WindowsPenStyle style, int width, Color color)
         {
             this.style = style;
@@ -89,8 +89,8 @@ namespace System.Experimental.Gdi
             // CreatePen() created on demand.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsPen(DeviceContext dc, WindowsPenStyle style, int width, WindowsBrush windowsBrush )
         {
             Debug.Assert(windowsBrush != null, "null windowsBrush" );
@@ -104,8 +104,8 @@ namespace System.Experimental.Gdi
             // CreatePen() created on demand.
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private void CreatePen()
         { 
             if (this.width > 1)    // Geometric pen.
@@ -131,8 +131,8 @@ namespace System.Experimental.Gdi
             }
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public object Clone()
         {
             return (this.wndBrush != null) ? 
@@ -187,7 +187,7 @@ namespace System.Experimental.Gdi
 
         public override string ToString()
         {
-            return String.Format( CultureInfo.InvariantCulture, "{0}: Style={1}, Color={2}, Width={3}, Brush={4}", 
+            return string.Format( CultureInfo.InvariantCulture, "{0}: Style={1}, Color={2}, Width={3}, Brush={4}", 
                 this.GetType().Name, 
                 this.style, 
                 this.color, 

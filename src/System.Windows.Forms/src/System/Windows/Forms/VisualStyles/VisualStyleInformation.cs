@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -69,7 +69,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return (filename.ToString());
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -85,7 +85,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return (colorScheme.ToString());
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return (size.ToString());
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return name.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -133,7 +133,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return company.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return author.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
         
@@ -165,7 +165,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return copyright.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return url.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return version.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 
@@ -215,7 +215,7 @@ namespace System.Windows.Forms.VisualStyles {
                     return description.ToString();
                 }
 
-                return String.Empty;
+                return string.Empty;
             }
         }
 

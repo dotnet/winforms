@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(control));
             }
             else if (_wrappedToolStrip == null) {
-               throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
+               throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);
             }
             CommonProperties.SetAutoSize(this, true);
              _wrappedToolStrip.LocationChanging += new ToolStripLocationCancelEventHandler(this.OnToolStripLocationChanging);

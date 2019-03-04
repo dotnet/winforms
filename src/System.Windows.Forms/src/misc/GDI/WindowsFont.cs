@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -18,7 +18,6 @@ namespace System.Experimental.Gdi
     using System.Drawing;
     using System.Drawing.Text;
     using System.Security;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 
@@ -61,8 +60,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates the font handle.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private void CreateFont()
         {
             Debug.Assert( hFont == IntPtr.Zero, "hFont is not null, this will generate a handle leak." );
@@ -99,8 +98,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Contructor to construct font from a face name.
         /// </devdoc>>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsFont( string faceName ) :
             this(faceName, defaultFontSize, FontStyle.Regular, IntNativeMethods.DEFAULT_CHARSET, WindowsFontQuality.Default)
         {
@@ -110,8 +109,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Contructor to construct font from a face name, a desired size and with the specified style.
         /// </devdoc>>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsFont( string faceName, float size ) :
             this(faceName, size, FontStyle.Regular, IntNativeMethods.DEFAULT_CHARSET, WindowsFontQuality.Default)
         {
@@ -120,8 +119,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Contructor to construct font from a face name, a desired size and with the specified style.
         /// </devdoc>>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsFont( string faceName, float size, FontStyle style ) :
             this(faceName, size, style, IntNativeMethods.DEFAULT_CHARSET, WindowsFontQuality.Default)
         {
@@ -131,8 +130,8 @@ namespace System.Experimental.Gdi
         ///     Contructor to construct font from a face name, a desired size in points and with the specified style
         ///     and character set. The screen dc is used for calculating the font em height.
         /// </devdoc>>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public WindowsFont( string faceName, float size, FontStyle style, byte charSet, WindowsFontQuality fontQuality )
         {   
             Debug.Assert( size > 0.0f, "size has a negative value." );
@@ -174,8 +173,8 @@ namespace System.Experimental.Gdi
         ///     Pass false in the createHandle param to create a 'compatible' font (handle-less, to be used for measuring/comparing) or
         ///     when the handle has already been created.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private WindowsFont( IntNativeMethods.LOGFONT lf, bool createHandle )
         {
             Debug.Assert( lf != null, "lf is null" );
@@ -215,14 +214,14 @@ namespace System.Experimental.Gdi
         ///     Contructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc MapMode
         ///     and resolution (normally: MM_TEXT and 96 dpi).
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont FromFont(Font font)
         {
             return FromFont(font, WindowsFontQuality.Default);
         }
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont FromFont(Font font, WindowsFontQuality fontQuality) 
         {
             string familyName = font.FontFamily.Name;
@@ -246,8 +245,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates a WindowsFont from the font selected in the supplied dc.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont FromHdc( IntPtr hdc )
         {
             IntPtr hFont = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, hdc), IntNativeMethods.OBJ_FONT);
@@ -261,8 +260,8 @@ namespace System.Experimental.Gdi
         ///     Creates a WindowsFont from the handle to a native GDI font.  It does not take ownership of the 
         ///     passed-in handle, the caller needs to delete the hFont when done with the WindowsFont.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont FromHfont( IntPtr hFont )
         {
             return FromHfont( hFont, false );
@@ -272,8 +271,8 @@ namespace System.Experimental.Gdi
         ///     Creates a WindowsFont from the handle to a native GDI font and optionally takes ownership of managing
         ///     the lifetime of the handle. 
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsFont FromHfont( IntPtr hFont, bool takeOwnership )
         {
             IntNativeMethods.LOGFONT lf = new IntNativeMethods.LOGFONT();
@@ -363,16 +362,16 @@ namespace System.Experimental.Gdi
         public override int GetHashCode() 
         {
             // similar to Font.GetHashCode().
-            return (int)((((UInt32)this.Style   << 13) | ((UInt32)this.Style   >> 19)) ^
-                         (((UInt32)this.CharSet << 26) | ((UInt32)this.CharSet >>  6)) ^
-                         (((UInt32)this.Size    <<  7) | ((UInt32)this.Size    >> 25)));
+            return (int)((((uint)this.Style   << 13) | ((uint)this.Style   >> 19)) ^
+                         (((uint)this.CharSet << 26) | ((uint)this.CharSet >>  6)) ^
+                         (((uint)this.Size    <<  7) | ((uint)this.Size    >> 25)));
         }
 
         /// <devdoc>
         ///     Clones this object.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public object Clone()
         {
             return new WindowsFont( this.logFont, true );

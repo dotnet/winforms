@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
         private static int Compare(int lcid, string s1, string s2, int options) {
             if (s1 == null) return s2 == null? 0: -1;
             if (s2 == null) return 1;
-            return String.Compare(s1, s2, false, CultureInfo.CurrentCulture);
+            return string.Compare(s1, s2, false, CultureInfo.CurrentCulture);
         }
 
         /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.CompareKeys"]/*' />

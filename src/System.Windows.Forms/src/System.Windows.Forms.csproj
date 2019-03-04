@@ -5,7 +5,7 @@
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CLSCompliant>false</CLSCompliant>
-    <NoWarn>$(NoWarn);618;649</NoWarn>
+    <NoWarn>$(NoWarn);618</NoWarn>
     <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
   </PropertyGroup>
@@ -16,14 +16,15 @@
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
-    <PackageReference Include="System.Media.SoundPlayer" Version="$(SystemMediaSoundPlayerPackageVersion)" />
-    <PackageReference Include="System.Security.Cryptography.Cng" Version="$(SystemSecurityCryptographyCngPackageVersion)" />
+    <PackageReference Include="System.Windows.Extensions" Version="$(SystemWindowsExtensionsPackageVersion)" />
     <PackageReference Include="System.Security.Permissions" Version="$(SystemSecurityPermissionsPackageVersion)" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+    <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
+    <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
+    <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
   </ItemGroup>
 
   <ItemGroup>

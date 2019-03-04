@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
     internal class BindToObject {
         private PropertyDescriptor fieldInfo;
         private BindingMemberInfo dataMember;
-        private Object dataSource;
+        private object dataSource;
         private BindingManagerBase bindingManager;
         private Binding owner;
         private string errorText = string.Empty;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal BindToObject(Binding owner, Object dataSource, string dataMember) {
+        internal BindToObject(Binding owner, object dataSource, string dataMember) {
             this.owner = owner;
             this.dataSource = dataSource;
             this.dataMember = new BindingMemberInfo(dataMember);
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
             return text ?? string.Empty;
         }
 
-        internal Object GetValue() {
+        internal object GetValue() {
             object obj = bindingManager.Current;
 
             // Update IDataErrorInfo text: it's ok to get this now because we're going to need
@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal void SetValue(Object value) {
+        internal void SetValue(object value) {
             object obj = null;
 
             if (fieldInfo != null) {
@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal Object DataSource {
+        internal object DataSource {
             get {
                 return dataSource;
             }

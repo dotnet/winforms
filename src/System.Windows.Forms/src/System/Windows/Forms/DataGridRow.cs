@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,15 +7,12 @@ namespace System.Windows.Forms {
     using System.Runtime.Versioning;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
-
     using System;
     using System.Runtime.InteropServices;
-    
     using System.Windows.Forms;
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using System.Security.Permissions;
     using Microsoft.Win32;
     using System.Collections;
 
@@ -31,7 +28,7 @@ namespace System.Windows.Forms {
         private int       height;
         // protected DataRow   dataRow;
         private IntPtr       tooltipID = new IntPtr(-1);
-        private string    tooltip = String.Empty;
+        private string    tooltip = string.Empty;
         AccessibleObject  accessibleObject;
 
         // for accessibility...
@@ -56,7 +53,6 @@ namespace System.Windows.Forms {
         private static Bitmap starBmp = null;
         protected const int xOffset = 3;
         protected const int yOffset = 2;
-
 
         /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRow"]/*' />
         /// <devdoc>
@@ -210,8 +206,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetBitmap(string bitmapName) {
             Bitmap b = null;
             try {
@@ -262,8 +256,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed in the row header of a new row.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetStarBitmap() {
             if (starBmp == null)
                 starBmp = GetBitmap("DataGridRow.star.bmp");
@@ -275,8 +267,6 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the bitmap displayed in the row header that indicates a row can 
         ///       be edited.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetPencilBitmap() {
             if (pencilBmp == null)
                 pencilBmp = GetBitmap("DataGridRow.pencil.bmp");
@@ -287,8 +277,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets or sets the bitmap displayed on a row with an error.</para>
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetErrorBitmap() {
             if (errorBmp == null)
                 errorBmp = GetBitmap("DataGridRow.error.bmp");
@@ -296,16 +284,12 @@ namespace System.Windows.Forms {
             return errorBmp;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetLeftArrowBitmap() {
             if (leftArrow == null)
                 leftArrow = GetBitmap("DataGridRow.left.bmp");
             return leftArrow;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         protected Bitmap GetRightArrowBitmap() {
             if (rightArrow == null)
                 rightArrow = GetBitmap("DataGridRow.right.bmp");
@@ -621,17 +605,17 @@ namespace System.Windows.Forms {
 
             string errString = ((IDataErrorInfo) errorInfo).Error;
             if (errString == null)
-                errString = String.Empty;
+                errString = string.Empty;
 
             if (tooltip != errString) {
-                if (!String.IsNullOrEmpty(tooltip)) {
+                if (!string.IsNullOrEmpty(tooltip)) {
                     DataGrid.ToolTipProvider.RemoveToolTip(tooltipID);
-                    tooltip = String.Empty;
+                    tooltip = string.Empty;
                     tooltipID = new IntPtr(-1);
                 }
             }
 
-            if (String.IsNullOrEmpty(errString))
+            if (string.IsNullOrEmpty(errString))
                 return;
 
             // we now have an error string: paint the errorIcon and add the tooltip
@@ -776,7 +760,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return DataGrid.AccessibilityObject;
                 }
@@ -815,7 +798,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return Name;
                 }
@@ -849,12 +831,10 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-
             /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.DataGridRowAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Down:
@@ -883,7 +863,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
                 // Focus the PropertyGridView window
                 //
@@ -925,7 +904,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.AccessibleObject;
                 }
@@ -968,7 +946,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (owner is DataGridAddNewRow) {
                         return null;
@@ -978,7 +955,6 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set {
                     if (!(owner is DataGridAddNewRow)) {
                         object realValue =  DataGridRowAccessibleObject.DisplayStringToCell(DataGrid, owner.RowNumber, column, value);
@@ -987,7 +963,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 Select(AccessibleSelection.TakeFocus | AccessibleSelection.TakeSelection);
             }
@@ -1008,7 +983,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:
@@ -1050,7 +1024,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
                 // Focus the PropertyGridView window
                 //
@@ -1066,6 +1039,5 @@ namespace System.Windows.Forms {
             }
 
         }
-
     }
 }

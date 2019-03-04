@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -36,8 +36,8 @@ namespace System.Windows.Forms
 
         private byte flagsState;  // see DATAGRIDVIEWTEXTBOXCELL_ consts above
 
-        private static Type defaultFormattedValueType = typeof(System.String);
-        private static Type defaultValueType = typeof(System.Object);
+        private static Type defaultFormattedValueType = typeof(string);
+        private static Type defaultValueType = typeof(object);
         private static Type cellType = typeof(DataGridViewTextBoxCell);
 
         /// <include file='doc\DataGridViewTextBoxCell.uex' path='docs/doc[@for="DataGridViewTextBoxCell.DataGridViewTextBoxCell"]/*' />
@@ -369,7 +369,7 @@ namespace System.Windows.Forms
                 rowIndex < 0 ||
                 this.OwningColumn == null ||
                 !this.DataGridView.ShowCellErrors ||
-                String.IsNullOrEmpty(GetErrorText(rowIndex)))
+                string.IsNullOrEmpty(GetErrorText(rowIndex)))
             {
                 return Rectangle.Empty;
             }
@@ -780,7 +780,7 @@ namespace System.Windows.Forms
             }
             else if (computeErrorIconBounds)
             {
-                if (!String.IsNullOrEmpty(errorText))
+                if (!string.IsNullOrEmpty(errorText))
                 {
                     resultBounds = ComputeErrorIconBounds(errorBounds);
                 }

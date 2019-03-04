@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,11 +13,11 @@ namespace System.Windows.Forms
     
     internal class Formatter
     {
-        static private Type stringType = typeof(String);
+        static private Type stringType = typeof(string);
         static private Type booleanType = typeof(bool);
         static private Type checkStateType = typeof(CheckState);
-        static private Object parseMethodNotFound = new Object();
-        static private Object defaultDataSourceNullValue = System.DBNull.Value;
+        static private object parseMethodNotFound = new object();
+        static private object defaultDataSourceNullValue = System.DBNull.Value;
 
         /// <devdoc>
         ///
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
                 //
                 if (targetType == stringType)
                 {
-                    return String.Empty;
+                    return string.Empty;
                 }
                 
                 if (targetType == checkStateType) {
@@ -122,7 +122,7 @@ namespace System.Windows.Forms
             //
 
             if (targetType == stringType) {
-                if (value is IFormattable && !String.IsNullOrEmpty(formatString)) {
+                if (value is IFormattable && !string.IsNullOrEmpty(formatString)) {
                     return (value as IFormattable).ToString(formatString, formatInfo);
                 }
             }
@@ -370,7 +370,7 @@ namespace System.Windows.Forms
                     return false;
                 }
                 // Always do a case insensitive comparison for strings
-                return String.Compare(valueStr, formattedNullValueStr, true, GetFormatterCulture(formatInfo)) == 0;
+                return string.Compare(valueStr, formattedNullValueStr, true, GetFormatterCulture(formatInfo)) == 0;
             }
             else {
                 // Otherwise perform default comparison based on object types
@@ -383,7 +383,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private static string GetCantConvertMessage(object value, Type targetType) {
             string stringResId = (value == null) ? SR.Formatter_CantConvertNull : SR.Formatter_CantConvert;
-            return String.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
+            return string.Format(CultureInfo.CurrentCulture, stringResId, value, targetType.Name);
         }
 
         /// <devdoc>

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,8 +12,6 @@ namespace System.Windows.Forms {
     using System.Collections.Specialized;    
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Layout;
-    using System.Security.Permissions;
-    using System.Security;
     
     /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip"]/*' />
     [ComVisible(true),
@@ -302,10 +300,10 @@ namespace System.Windows.Forms {
             if (LayoutStyle == ToolStripLayoutStyle.Table) {
                 
                 if (proposedSize.Width == 1) {
-                    proposedSize.Width = Int32.MaxValue;
+                    proposedSize.Width = int.MaxValue;
                 }
                 if (proposedSize.Height == 1) {
-                    proposedSize.Height = Int32.MaxValue;
+                    proposedSize.Height = int.MaxValue;
                 }
                 if (Orientation == Orientation.Horizontal) {
                     return GetPreferredSizeHorizontal(this, proposedSize) + Padding.Size;
@@ -545,7 +543,6 @@ namespace System.Windows.Forms {
           }
       }
 
-      [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
       protected override void  WndProc(ref Message m)            {                
           if ((m.Msg == NativeMethods.WM_NCHITTEST) && SizingGrip) {
             // if we're within the grip bounds tell windows
@@ -601,14 +598,12 @@ namespace System.Windows.Forms {
                 this.BackColor = Color.Transparent;
             }            
             protected override CreateParams CreateParams {
-               [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     CreateParams cp = base.CreateParams;
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL;
                     return cp;            
                 }
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             protected override void WndProc(ref Message m) {
                  if (m.Msg == NativeMethods.WM_NCHITTEST) {
                     int x = NativeMethods.Util.LOWORD(m.LParam);

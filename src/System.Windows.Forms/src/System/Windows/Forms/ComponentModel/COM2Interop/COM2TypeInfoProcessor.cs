@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -31,11 +31,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     /// </devdoc>
     internal class Com2TypeInfoProcessor {
         
-        #if DEBUG
         private static TraceSwitch DbgTypeInfoProcessorSwitch = new TraceSwitch("DbgTypeInfoProcessor", "Com2TypeInfoProcessor: debug Com2 type info processing");
-        #else
-        private static TraceSwitch DbgTypeInfoProcessorSwitch;
-        #endif
         
         private Com2TypeInfoProcessor() {
         }
@@ -62,7 +58,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         /// Given an Object, this attempts to locate its type ifo
         /// </devdoc>
-        public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(Object obj, bool wantCoClass) {
+        public static UnsafeNativeMethods.ITypeInfo FindTypeInfo(object obj, bool wantCoClass) {
             UnsafeNativeMethods.ITypeInfo  pTypeInfo = null;
 
             // this is kind of odd.  What's going on here is that
@@ -109,7 +105,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
         /// all available type infos will be returned, otherwise the primary one will be alled.
         /// </devdoc>
-        public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(Object obj, bool wantCoClass){
+        public static UnsafeNativeMethods.ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass){
             
             UnsafeNativeMethods.ITypeInfo[] typeInfos = null;
             int n = 0;
@@ -195,8 +191,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// Gets the properties for a given Com2 Object.  The returned Com2Properties
         /// Object contains the properties and relevant data about them.
         /// </devdoc>
-        public static Com2Properties GetProperties(Object obj) {
-            
+        public static Com2Properties GetProperties(object obj) {
+
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties");
             
             if (obj == null || !Marshal.IsComObject(obj)) {
@@ -266,7 +262,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    propList.AddRange(props);
                }
             }
-            
+
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Com2TypeInfoProcessor.GetProperties : returning " + propList.Count.ToString(CultureInfo.InvariantCulture) + " properties");
 
             // done!
@@ -318,7 +314,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// user defined, which and may be aliased into other type infos.  This function
         /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </devdoc>
-        private static Type GetValueTypeFromTypeDesc(NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, Object[] typeData, StructCache structCache) {
+        private static Type GetValueTypeFromTypeDesc(NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData, StructCache structCache) {
             IntPtr hreftype;
             int hr = 0;
 
@@ -430,7 +426,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return null;
         }
 
-        private static PropertyDescriptor[] InternalGetProperties(Object obj, UnsafeNativeMethods.ITypeInfo typeInfo, int dispidToGet, ref int defaultIndex) {
+        private static PropertyDescriptor[] InternalGetProperties(object obj, UnsafeNativeMethods.ITypeInfo typeInfo, int dispidToGet, ref int defaultIndex) {
         
             if (typeInfo == null) {
                 return null;
@@ -476,7 +472,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int defaultProp = -1;
             
             int hr = NativeMethods.S_OK;
-            Object[] pvar = new Object[1];
+            object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
             // for each item in uur list, create the descriptor an check
@@ -494,7 +490,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "IDispatch::Invoke(PROPGET, " +  pi.Name + ") threw an exception :" + ex.ToString());
                     }
                     if (!NativeMethods.Succeeded(hr)) {
-                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
+                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Adding Browsable(false) to property '" + pi.Name + "' because Invoke(dispid=0x{0:X} ,DISPATCH_PROPERTYGET) returned hr=0x{1:X}.  Properties that do not return S_OK are hidden by default.", pi.DispId, hr));
                         pi.Attributes.Add(new BrowsableAttribute(false));
                         pi.NonBrowsable = true;
                     }
@@ -535,7 +531,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
 
             if (pPropName == null){
-               Debug.Fail(String.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
+               Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
                return null;
             }
 
@@ -557,7 +553,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             // figure out the value type
             if (pi.ValueType == null) {
-                Object[] pTypeData = new Object[1];
+                object[] pTypeData = new object[1];
                 try {
                     pi.ValueType = GetValueTypeFromTypeDesc(typeDesc, typeInfo, pTypeData, structCache);
                 }
@@ -642,7 +638,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     hr = typeInfo.GetFuncDesc(i, ref pFuncDesc);
 
                     if (!NativeMethods.Succeeded(hr) || pFuncDesc == IntPtr.Zero) {
-                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring function item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
+                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring function item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", i, hr));
                         continue;
                     }
 
@@ -745,7 +741,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     ArrayList vars = new ArrayList();
 
                     NativeMethods.tagVARDESC varDesc = (NativeMethods.tagVARDESC)structCache.GetStruct(typeof(NativeMethods.tagVARDESC));
-                    Object varValue = null;
+                    object varValue = null;
                     string enumName = null;
                     string name = null;
                     string helpstr = null;
@@ -760,7 +756,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         hr = enumTypeInfo.GetVarDesc(i, ref pVarDesc);
 
                         if (!NativeMethods.Succeeded(hr) || pVarDesc == IntPtr.Zero) {
-                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", hr));
+                            Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetVarDesc returned hr=0x{1:X} or NULL", hr));
                             continue;
                         }
 
@@ -783,7 +779,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
 
                             if (!NativeMethods.Succeeded(hr)) {
-                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", hr));
+                                Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring item 0x{0:X} because ITypeInfo::GetDocumentation returned hr=0x{1:X} or NULL", hr));
                                 continue;
                             }
 
@@ -899,7 +895,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     hr = typeInfo.GetVarDesc(i, ref pVarDesc);
                     if (!NativeMethods.Succeeded(hr) || pVarDesc == IntPtr.Zero) {
-                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, String.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", hr));
+                        Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "ProcessTypeInfoEnum: ignoring variable item 0x{0:X} because ITypeInfo::GetFuncDesc returned hr=0x{1:X} or NULL", hr));
                         continue;
                     }
 
@@ -939,28 +935,28 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_NULL:
                 return null;
             case NativeMethods.tagVT.VT_I1:
-                return typeof(SByte);
+                return typeof(sbyte);
             case NativeMethods.tagVT.VT_UI1:
-                return typeof(Byte);
+                return typeof(byte);
 
             case NativeMethods.tagVT.VT_I2:
-                return typeof(Int16);
+                return typeof(short);
             case NativeMethods.tagVT.VT_UI2:
-                return typeof(UInt16);
+                return typeof(ushort);
                 
 
             case NativeMethods.tagVT.VT_I4:
             case NativeMethods.tagVT.VT_INT:
-                return typeof(Int32);
+                return typeof(int);
             
             case NativeMethods.tagVT.VT_UI4:
             case NativeMethods.tagVT.VT_UINT:
-                return typeof(UInt32);
+                return typeof(uint);
             
             case NativeMethods.tagVT.VT_I8:
-                return typeof(Int64);
+                return typeof(long);
             case NativeMethods.tagVT.VT_UI8:
-                return typeof(UInt64);
+                return typeof(ulong);
 
             case NativeMethods.tagVT.VT_R4:
                 return typeof(float);
@@ -969,7 +965,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return typeof(double);
 
             case NativeMethods.tagVT.VT_CY:
-                return typeof(Decimal);
+                return typeof(decimal);
             case NativeMethods.tagVT.VT_DATE:
                 return typeof(DateTime);
             case NativeMethods.tagVT.VT_BSTR:
@@ -980,7 +976,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_DISPATCH:
                 return typeof(UnsafeNativeMethods.IDispatch);
             case NativeMethods.tagVT.VT_UNKNOWN:
-                return typeof(Object);
+                return typeof(object);
 
             case NativeMethods.tagVT.VT_ERROR:
             case NativeMethods.tagVT.VT_HRESULT:
@@ -1096,7 +1092,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 #endif
            
            private Queue GetQueue(Type t, bool create) {
-               Object queue = queuedTypes[t];
+                object queue = queuedTypes[t];
                
                if (queue == null && create){
                   queue = new Queue();
@@ -1109,10 +1105,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return (Queue)queue;
            }
            
-           public Object GetStruct(Type t) {
+           public object GetStruct(Type t) {
                Queue queue = GetQueue(t, true);
-               
-               Object str = null;
+
+                object str = null;
                
                if (queue.Count == 0) {
                   str = Activator.CreateInstance(t);
@@ -1129,7 +1125,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                return str;
            }
            
-           public void ReleaseStruct(Object str) {
+           public void ReleaseStruct(object str) {
                Type t = str.GetType();
                Queue queue = GetQueue(t, false);
                
@@ -1157,7 +1153,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             readonly ArrayList   attributes = new ArrayList();
             int                  readOnly = ReadOnlyUnknown;
             bool                 isDefault;
-            Object               typeData;
+            object typeData;
             bool                 nonbrowsable = false;
             int                  index;
 
@@ -1210,8 +1206,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
     
     // just so we can recognize a variant properly...
     /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2Variant"]/*' />
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class Com2Variant {
     }
 }

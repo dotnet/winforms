@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -207,7 +207,7 @@ namespace System.Windows.Forms {
                 }
                 
                 for (int n = 0; n < formatCount; n++) {
-                    if (String.Equals(formatList[n].Name, format, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(formatList[n].Name, format, StringComparison.OrdinalIgnoreCase))
                         return formatList[n];
                 }
         

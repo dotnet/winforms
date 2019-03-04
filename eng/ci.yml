@@ -1,8 +1,6 @@
 parameters:
-
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp
-
+  agentPool: dotnet-external-temp-vs2019
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
   runAsPublic: true
 
@@ -44,16 +42,14 @@ jobs:
           value: ''
 
         # needed for helix jobs
-        # The win10 pool isn't ready for us yet, so using 8.1 in the meantime
-        # When ready, change value to 'Windows.10.Amd64.Open'
         - name: _HelixAgentPool
-          value: 'Windows.81.Amd64.Open'
-        # - name: _WinformsControlsTestBinDir
-        #   value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
-        # - name: _WinformsFuncTestBinDir
-        #   value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
-        # - name: _HelixStagingDir
-        #   value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+          value: 'Windows.10.Amd64.Open'
+        - name: _WinformsControlsTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
+        - name: _WinformsFuncTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
+        - name: _HelixStagingDir
+          value: $(BUILD.STAGINGDIRECTORY)\helix\functests
 
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
@@ -68,7 +64,7 @@ jobs:
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
           - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
           # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
@@ -84,10 +80,10 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
-          # The win10 pool isn't ready for us yet, so using 8.1 in the meantime
+          # The win10 pool isn't ready for us yet, so using Windows.81.Amd64 in the meantime
           # When ready, change value to 'Windows.10.Amd64'
           - name: _HelixAgentPool
-            value: 'Windows.81.Amd64'
+            value: 'Windows.10.Amd64'
 
       strategy:
         matrix:
@@ -95,13 +91,7 @@ jobs:
             _BuildConfig: Debug
             # override some variables for debug
             _PublishType: none
-
-            # Test signing is running into sporadic failures on build machines, so disable it for now
-            # TODO: revert this once https://github.com/dotnet/core-eng/issues/4734 is resolved
-            #_SignType: test
-            _SignType: ''
-            _Sign: false
-
+            _SignType: test
             _DotNetPublishToBlobFeed : false
           Build_Release:
             _BuildConfig: Release
@@ -110,32 +100,16 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Build and rename binlog
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -build
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
+        displayName: Build
 
-      # # Copy files for helix job
-      # - task: CopyFiles@2
-      #   inputs:
-      #     sourceFolder: $(_WinformsControlsTestBinDir)
-      #     contents: '**' 
-      #     targetFolder: $(_HelixStagingDir)
-      #     cleanTargetFolder: true
-      #     #overWrite: false # Optional
-      #   displayName: Copy winforms controls tests to helix staging dir
-      # - task: CopyFiles@2
-      #   inputs:
-      #     sourceFolder: $(_WinformsFuncTestBinDir)
-      #     contents: '**' 
-      #     targetFolder: $(_HelixStagingDir)
-      #     overWrite: true
-      #   displayName: Copy xUnit func tests to helix staging dir
-
+      # Run unit tests on Helix
       - template: /eng/common/templates/steps/send-to-helix.yml
         parameters:
           HelixSource: $(_HelixSource)
@@ -148,18 +122,37 @@ jobs:
           XUnitRuntimeTargetFramework: netcoreapp2.0
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
-          # This version MUST be in the official releases at https://dotnet.microsoft.com/download/dotnet-core/3.0
+          # This version MUST be in the official releases (build apps - SDK) at https://dotnet.microsoft.com/download/dotnet-core/3.0
           # and does not necessarily match the internal dot net sdk we build against
-          DotNetCliVersion: '3.0.100-preview-009812'
+          DotNetCliVersion: '3.0.100-preview-010184'
           #EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
           #IsExternal: false
           condition: succeeded()
           continueOnError: false
 
-      # Publish the nuget package as a build artifact
-      # Only do this if the build is internal AND the config is 'Release' (this ensures package contents are real signed)
+      # Run integration tests and rename binlog
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -integrationTest
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+        displayName: Run Integration Tests
+
+      # Create Nuget package, sign, and publish; and rename binlog
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
+        displayName: Pack, Sign, and Publish
+
+      # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
+
+        # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
         - task: PublishPipelineArtifact@0
           inputs:
             artifactName: 'Package'
@@ -168,3 +161,7 @@ jobs:
           continueOnError: true
           condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
 
+        # Run component governance detection (only for release; only for internal)
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: Component Governance Detection
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))

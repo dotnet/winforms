@@ -1,11 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 
 namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
-    using System.Security;
 
     using System.Diagnostics;
 
@@ -237,7 +236,7 @@ namespace System.Windows.Forms {
                                                  new HandleRef(null, UnsafeNativeMethods.GetModuleHandle(null)),
                                                  0);
                 if (hhook == IntPtr.Zero)
-                    throw new SecurityException(SR.SendKeysHookFailed);
+                    throw new System.Security.SecurityException(SR.SendKeysHookFailed);
             }
         }
 
@@ -342,7 +341,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private static int MatchKeyword(string keyword) {
             for (int i = 0; i < keywords.Length; i++)
-                if (String.Equals(keywords[i].keyword, keyword, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(keywords[i].keyword, keyword, StringComparison.OrdinalIgnoreCase))
                     return keywords[i].vk;
 
             return -1;
@@ -421,7 +420,7 @@ namespace System.Windows.Forms {
                         // okay, we're in a {<KEYWORD>...} situation.  look for the keyword
                         //
                         while (j < keysLen && keys[j] != '}'
-                               && !Char.IsWhiteSpace(keys[j])) {
+                               && !char.IsWhiteSpace(keys[j])) {
                             j++;
                         }
                         
@@ -435,9 +434,9 @@ namespace System.Windows.Forms {
 
                         // see if we have a space, which would mean a repeat count.
                         //
-                        if (Char.IsWhiteSpace(keys[j])) {
+                        if (char.IsWhiteSpace(keys[j])) {
                             int digit;
-                            while (j < keysLen && Char.IsWhiteSpace(keys[j])) {
+                            while (j < keysLen && char.IsWhiteSpace(keys[j])) {
                                 j++;
                             }
                             
@@ -445,12 +444,12 @@ namespace System.Windows.Forms {
                                 throw new ArgumentException(SR.SendKeysKeywordDelimError);                            
                             }
                             
-                            if (Char.IsDigit(keys[j])) {
+                            if (char.IsDigit(keys[j])) {
                                 digit = j;
-                                while (j < keysLen && Char.IsDigit(keys[j])) {
+                                while (j < keysLen && char.IsDigit(keys[j])) {
                                     j++;
                                 }
-                                repeat = Int32.Parse(keys.Substring(digit, j - digit), CultureInfo.InvariantCulture);
+                                repeat = int.Parse(keys.Substring(digit, j - digit), CultureInfo.InvariantCulture);
                             }
                         }
                         
@@ -865,8 +864,6 @@ namespace System.Windows.Forms {
         
 
         private static void Send(string keys, Control control, bool wait) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "UnmanagedCode Demanded");
-            IntSecurity.UnmanagedCode.Demand();
 
             if (keys == null || keys.Length == 0) return;
 

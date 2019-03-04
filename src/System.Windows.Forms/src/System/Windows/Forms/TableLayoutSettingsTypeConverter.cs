@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -144,11 +144,9 @@ namespace System.Windows.Forms.Layout {
             string attributeValue = GetAttributeValue(node, attribute);
             if (!string.IsNullOrEmpty(attributeValue)) {
                 int result;
-                if (Int32.TryParse(attributeValue, out result)) {
+                if (int.TryParse(attributeValue, out result)) {
                     return result;
                 }
-                // dont throw because we should just gracefully fall back to valueIfNotFound;
-                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Failed to parse int: {0}", attributeValue));
             }
             return valueIfNotFound;
         }
@@ -196,7 +194,7 @@ namespace System.Windows.Forms.Layout {
 
                         // ---- SizeType Parsing -----------------
                         nextIndex = currentIndex;
-                        while (Char.IsLetter(styleString[nextIndex])) {
+                        while (char.IsLetter(styleString[nextIndex])) {
                             nextIndex++;
                         }
                         SizeType type = (SizeType)Enum.Parse(sizeTypeType, styleString.Substring(currentIndex, nextIndex - currentIndex), true);
@@ -224,7 +222,6 @@ namespace System.Windows.Forms.Layout {
                         string floatString = floatStringBuilder.ToString();
                         float width;
                         if (!float.TryParse(floatString, NumberStyles.Float, CultureInfo.InvariantCulture.NumberFormat, out width)) {
-                            Debug.Fail(string.Format(CultureInfo.CurrentCulture, "Failed to parse float for style: {0}", floatString));
                             width = 0F;
                         }
 
