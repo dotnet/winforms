@@ -43,7 +43,7 @@ jobs:
 
         # needed for helix jobs
         - name: _HelixAgentPool
-          value: 'Windows.81.Amd64.Open'
+          value: 'Windows.10.Amd64.Open'
         - name: _WinformsControlsTestBinDir
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
         - name: _WinformsFuncTestBinDir
@@ -84,7 +84,7 @@ jobs:
           # The win10 pool isn't ready for us yet, so using Windows.81.Amd64 in the meantime
           # When ready, change value to 'Windows.10.Amd64'
           - name: _HelixAgentPool
-            value: 'Windows.81.Amd64'
+            value: 'Windows.10.Amd64'
           - name: _HelixToken
             value: '$(helix-token)'
 
@@ -121,7 +121,7 @@ jobs:
           HelixTargetQueues: $(_HelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
           Creator: ${{ parameters.repoName }}         # required for public / external (when there is no access token)
-          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
+          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj' # **/*.Tests.csproj
           XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
           XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail
           XUnitRunnerVersion: '2.4.1'                 # Should match XUnitRunnerConsoleVersion in eng/Versions.props
