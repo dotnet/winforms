@@ -113,6 +113,8 @@ jobs:
       - template: /eng/common/templates/steps/send-to-helix.yml
         parameters:
           HelixSource: $(_HelixSource)
+          HelixType: 'tests/default/'      
+          HelixBuild: $(Build.BuildNumber)
           HelixTargetQueues: $(_HelixAgentPool)
           HelixAccessToken: $(helix-token)
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj'
@@ -120,6 +122,8 @@ jobs:
           XUnitPublishTargetFramework: netcoreapp3.0
           # This controls what tfm to pick from the xunit package, it must exist in that package or the helix job will fail
           XUnitRuntimeTargetFramework: netcoreapp2.0
+          # Should match XUnitRunnerConsoleVersion in eng/Versions.props
+          XUnitRunnerVersion: '2.4.1' 
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
           # This version MUST be in the official releases (build apps - SDK) at https://dotnet.microsoft.com/download/dotnet-core/3.0
@@ -127,7 +131,6 @@ jobs:
           DotNetCliVersion: '3.0.100-preview-010184'
           #EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
-          #IsExternal: false
           condition: succeeded()
           continueOnError: false
 
