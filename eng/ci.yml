@@ -13,6 +13,7 @@ jobs:
     enablePublishTestResults: true
     enablePublishBuildAssets: true
     enableTelemetry: true
+    helixRepo: $(repoName)
 
     jobs:
     - job: Windows_NT
