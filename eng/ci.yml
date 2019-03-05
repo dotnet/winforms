@@ -128,7 +128,7 @@ jobs:
           IncludeDotNetCli: true
           DotNetCliPackageType: 'sdk'
           DotNetCliVersion: '3.0.100-preview-010184'  # MUST be official release: https://dotnet.microsoft.com/download/dotnet-core/3.0 ; does not need to match sdk we build against
-          #EnableXUnitReporter: true
+          EnableXUnitReporter: true
           WaitForWorkItemCompletion: true
           DisplayNamePrefix: 'Send Unit Tests to Helix'
           condition: succeeded()
