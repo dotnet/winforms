@@ -11,22 +11,16 @@ namespace System.Windows.Forms {
 
     using System.Diagnostics;
     using System;
-    using System.IO;
-    using System.Windows.Forms;
-    using System.Windows.Forms.Layout;
     using System.Drawing;
-    using Microsoft.Win32;
-    using System.Drawing.Text;
     using System.Drawing.Imaging;
     using System.Drawing.Drawing2D;
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Internal;
-    using System.Runtime.Versioning;
 
     /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint"]/*' />
     /// <devdoc>
     ///      The ControlPaint class provides a series of methods that can be used to
-    ///      paint common Windows UI pieces.  Many windows forms controls use this class to paint
+    ///      paint common Windows UI pieces. Many windows forms controls use this class to paint
     ///      their UI elements.
     /// </devdoc>
     public sealed class ControlPaint {
@@ -225,7 +219,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.CreateHBitmapTransparencyMask"]/*' />
         /// <devdoc>
-        ///     Creates a Win32 HBITMAP out of the image.  You are responsible for
+        ///     Creates a Win32 HBITMAP out of the image. You are responsible for
         ///     de-allocating the HBITMAP with Windows.DeleteObject(handle).
         ///     If the image uses transparency, the background will be filled with the specified color.
         ///     From MSDN:
@@ -275,7 +269,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.CreateHBitmapColorMask"]/*' />
         /// <devdoc>
-        ///     Creates a Win32 HBITMAP out of the image.  You are responsible for
+        ///     Creates a Win32 HBITMAP out of the image. You are responsible for
         ///     de-allocating the HBITMAP with Windows.DeleteObject(handle).
         ///     If the image uses transparency, the background will be filled with the specified color.
         ///     From MSDN:
@@ -295,7 +289,7 @@ namespace System.Windows.Forms {
             // Now the trick is to make colorBitmap black wherever the transparent
             // color is located, but keep the original color everywhere else.
             // We've already got the original bitmap, so all we need to do is
-            // to and with the inverse of the mask (ROP DSna).  When going from
+            // to and with the inverse of the mask (ROP DSna). When going from
             // monochrome to color, Windows sets all 1 bits to the background
             // color, and all 0 bits to the foreground color.
             //
@@ -309,7 +303,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, source));
             UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, target));
 
-            return  System.Internal.HandleCollector.Add(colorMask, NativeMethods.CommonHandles.GDI);;
+            return System.Internal.HandleCollector.Add(colorMask, NativeMethods.CommonHandles.GDI);
         }
 
         internal static IntPtr CreateHalftoneHBRUSH() {
@@ -425,11 +419,11 @@ namespace System.Windows.Forms {
         internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect) {
               DrawBackgroundImage(g, backgroundImage, backColor, backgroundImageLayout, bounds, clipRect, Point.Empty, RightToLeft.No);
         }
-        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect,  Point scrollOffset) {
+        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset) {
               DrawBackgroundImage(g, backgroundImage, backColor, backgroundImageLayout, bounds, clipRect, scrollOffset, RightToLeft.No);
         }
         
-        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect,  Point scrollOffset, RightToLeft rightToLeft) {
+        internal static void DrawBackgroundImage(Graphics g, Image backgroundImage, Color backColor, ImageLayout backgroundImageLayout, Rectangle bounds, Rectangle clipRect, Point scrollOffset, RightToLeft rightToLeft) {
             if (g == null) {
                 throw new ArgumentNullException(nameof(g));
             }
@@ -862,7 +856,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D"]/*' />
         /// <devdoc>
-        ///     Draws a 3D style border at the given rectangle.  The default 3D style of
+        ///     Draws a 3D style border at the given rectangle. The default 3D style of
         ///     Etched is used.
         /// </devdoc>
         public static void DrawBorder3D(Graphics graphics, Rectangle rectangle) {
@@ -872,7 +866,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D1"]/*' />
         /// <devdoc>
-        ///     Draws a 3D style border at the given rectangle.  You may specify the style
+        ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance.
         /// </devdoc>
         public static void DrawBorder3D(Graphics graphics, Rectangle rectangle, Border3DStyle style) {
@@ -882,7 +876,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D2"]/*' />
         /// <devdoc>
-        ///     Draws a 3D style border at the given rectangle.  You may specify the style
+        ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance, and which sides of the 3D rectangle you wish to
         ///     draw.
         /// </devdoc>
@@ -892,7 +886,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D3"]/*' />
         /// <devdoc>
-        ///     Draws a 3D style border at the given rectangle.  The default 3D style of
+        ///     Draws a 3D style border at the given rectangle. The default 3D style of
         ///     ETCHED is used.
         /// </devdoc>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height) {
@@ -902,7 +896,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D4"]/*' />
         /// <devdoc>
-        ///     Draws a 3D style border at the given rectangle.  You may specify the style
+        ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance.
         /// </devdoc>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height, Border3DStyle style) {
@@ -912,7 +906,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawBorder3D5"]/*' />
         /// <devdoc>
-        ///     Draws a 3D style border at the given rectangle.  You may specify the style
+        ///     Draws a 3D style border at the given rectangle. You may specify the style
         ///     of the 3D appearance, and which sides of the 3D rectangle you wish to
         ///     draw.
         /// </devdoc>
@@ -928,8 +922,8 @@ namespace System.Windows.Forms {
 
             // Windows just draws the border to size, and then
             // shrinks the rectangle so the user can paint the
-            // client area.  We can't really do that, so we do
-            // the opposite:  We precalculate the size of the border
+            // client area. We can't really do that, so we do
+            // the opposite: We precalculate the size of the border
             // and enlarge the rectangle so the client size is
             // preserved.
             //
@@ -948,9 +942,9 @@ namespace System.Windows.Forms {
         }
         
         /// <devdoc>
-        ///     Helper function that draws a more complex border.  This is used by DrawBorder for less common
-        ///     rendering cases.  We split DrawBorder into DrawBorderSimple and DrawBorderComplex so we maximize
-        ///     the % of the function call.  It is less performant to have large functions that do many things.
+        ///     Helper function that draws a more complex border. This is used by DrawBorder for less common
+        ///     rendering cases. We split DrawBorder into DrawBorderSimple and DrawBorderComplex so we maximize
+        ///     the % of the function call. It is less performant to have large functions that do many things.
         /// </devdoc>
         private static void DrawBorderComplex(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             if (graphics == null) {
@@ -1051,7 +1045,7 @@ namespace System.Windows.Forms {
         }
         
         /// <devdoc>
-        ///     Helper function that draws a simple border.  This is used by DrawBorder for the most common rendering cases.
+        ///     Helper function that draws a simple border. This is used by DrawBorder for the most common rendering cases.
         /// </devdoc>
         private static void DrawBorderSimple(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style) {
             // Common case: system color with solid pen
@@ -1063,7 +1057,7 @@ namespace System.Windows.Forms {
             if (stockBorder) {
                 pen = SystemPens.FromSystemColor(color);
             }
-            else  {
+            else {
                 pen = new Pen(color);
                 if (style != ButtonBorderStyle.Solid) {
                     pen.DashStyle = BorderStyleToDashStyle(style);
@@ -1218,7 +1212,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFlatCheckBox1"]/*' />
         /// <devdoc>
-        ///     Draws a Win32 checkbox control in the given rectangle with the given state.  This
+        ///     Draws a Win32 checkbox control in the given rectangle with the given state. This
         ///     draws a flat looking check box that is suitable for use in list boxes, etc. We
         ///     custom draw this because the windows version is soooo ugly.
         /// </devdoc>
@@ -1269,7 +1263,7 @@ namespace System.Windows.Forms {
                 rectangle.X -= 1;
             }
 
-            // Surrounding border.  We inset this by one pixel so we match how
+            // Surrounding border. We inset this by one pixel so we match how
             // the 3D checkbox is drawn.
             //
             Pen pen = SystemPens.ControlDark;
@@ -1278,7 +1272,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFocusRectangle"]/*' />
         /// <devdoc>
-        ///      Draws a focus rectangle.  A focus rectangle is a dotted rectangle that Windows
+        ///      Draws a focus rectangle. A focus rectangle is a dotted rectangle that Windows
         ///      uses to indicate what control has the current keyboard focus.
         /// </devdoc>
         public static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle) {
@@ -1287,7 +1281,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawFocusRectangle1"]/*' />
         /// <devdoc>
-        ///      Draws a focus rectangle.  A focus rectangle is a dotted rectangle that Windows
+        ///      Draws a focus rectangle. A focus rectangle is a dotted rectangle that Windows
         ///      uses to indicate what control has the current keyboard focus.
         /// </devdoc>
         public static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color foreColor, Color backColor) {
@@ -1359,7 +1353,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawGrabHandle"]/*' />
         /// <devdoc>
-        ///      Draws a standard selection grab handle with the given dimensions.  Grab
+        ///      Draws a standard selection grab handle with the given dimensions. Grab
         ///      handles are used by components to indicate to the user that they can
         ///      be directly maniupulated.
         /// </devdoc>
@@ -1727,8 +1721,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawReversibleFrame"]/*' />
         /// <devdoc>
-        ///      Draws a rectangular frame on the screen.  The operation of this can be
-        ///      "reversed" by drawing the same rectangle again.  This is similar to
+        ///      Draws a rectangular frame on the screen. The operation of this can be
+        ///      "reversed" by drawing the same rectangle again. This is similar to
         ///      inverting a region of the screen except that it behaves better for
         ///      a wider variety of colors.
         /// </devdoc>
@@ -1779,7 +1773,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawReversibleLine"]/*' />
         /// <devdoc>
-        ///      Draws a reversible line on the screen.  A reversible line can
+        ///      Draws a reversible line on the screen. A reversible line can
         ///      be erased by just drawing over it again.
         /// </devdoc>
         public static void DrawReversibleLine(Point start, Point end, Color backColor) {
@@ -1824,7 +1818,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawSelectionFrame"]/*' />
         /// <devdoc>
-        ///      Draws a standard selection frame.  A selection frame is a frame that is
+        ///      Draws a standard selection frame. A selection frame is a frame that is
         ///      drawn around a selected component at design time.
         /// </devdoc>
         public static void DrawSelectionFrame(Graphics graphics, bool active, Rectangle outsideRect, Rectangle insideRect, Color backColor) {
@@ -1848,7 +1842,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawSizeGrip"]/*' />
         /// <devdoc>
-        ///      Draws a size grip at the given location.  The color of the size grip is based
+        ///      Draws a size grip at the given location. The color of the size grip is based
         ///      on the given background color.
         /// </devdoc>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, Rectangle bounds) {
@@ -1857,7 +1851,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.DrawSizeGrip1"]/*' />
         /// <devdoc>
-        ///      Draws a size grip at the given location.  The color of the size grip is based
+        ///      Draws a size grip at the given location. The color of the size grip is based
         ///      on the given background color.
         /// </devdoc>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, int x, int y, int width, int height) {
@@ -1953,8 +1947,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.FillReversibleRectangle"]/*' />
         /// <devdoc>
-        ///      Draws a filled rectangle on the screen.  The operation of this can be
-        ///      "reversed" by drawing the same rectangle again.  This is similar to
+        ///      Draws a filled rectangle on the screen. The operation of this can be
+        ///      "reversed" by drawing the same rectangle again. This is similar to
         ///      inverting a region of the screen except that it behaves better for
         ///      a wider variety of colors.
         /// </devdoc>
@@ -2069,7 +2063,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.GetColorRop"]/*' />
         /// <devdoc>
-        ///     This makes a choice from a set of raster op codes, based on the color given.  If the
+        ///     This makes a choice from a set of raster op codes, based on the color given. If the
         ///     color is considered to be "dark", the raster op provided by dark will be returned.
         /// </devdoc>
         private static int GetColorRop(Color color, int darkROP, int lightROP) {
@@ -2132,7 +2126,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.GetFocusPen"]/*' />
         /// <devdoc>
-        ///      Retrieves the pen used to draw a focus rectangle around a control.  The focus
+        ///      Retrieves the pen used to draw a focus rectangle around a control. The focus
         ///      rectangle is typically drawn when the control has keyboard focus.
         /// </devdoc>
         private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast) {
@@ -2360,7 +2354,7 @@ namespace System.Windows.Forms {
             int x = bound.X;
             int y = bound.Y;
             int right = bound.Right;
-            int bottom  = bound.Bottom;
+            int bottom = bound.Bottom;
             //draw the outside bounding rectangle
             switch(borderStyle) {
                 case TableLayoutPanelCellBorderStyle.None:
@@ -2605,14 +2599,14 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        internal static  TextFormatFlags TranslateAlignmentForGDI(ContentAlignment align) {
+        internal static TextFormatFlags TranslateAlignmentForGDI(ContentAlignment align) {
             TextFormatFlags result;
             if ((align & anyBottom) != 0)
-                result =  TextFormatFlags.Bottom;
+                result = TextFormatFlags.Bottom;
             else if ((align & anyMiddle) != 0)
-                result =  TextFormatFlags.VerticalCenter;
+                result = TextFormatFlags.VerticalCenter;
             else
-                result =  TextFormatFlags.Top;
+                result = TextFormatFlags.Top;
             return result;
         }
 
@@ -2630,14 +2624,14 @@ namespace System.Windows.Forms {
             return result;
         }
 
-        internal static  TextFormatFlags TranslateLineAlignmentForGDI(ContentAlignment align) {
+        internal static TextFormatFlags TranslateLineAlignmentForGDI(ContentAlignment align) {
              TextFormatFlags result;
             if ((align & anyRight) != 0)
-                result =  TextFormatFlags.Right;
+                result = TextFormatFlags.Right;
             else if ((align & anyCenter) != 0)
-                result =  TextFormatFlags.HorizontalCenter;
+                result = TextFormatFlags.HorizontalCenter;
             else
-                result =  TextFormatFlags.Left;
+                result = TextFormatFlags.Left;
             return result;
         }
 
@@ -2701,7 +2695,7 @@ namespace System.Windows.Forms {
             TextFormatFlags flags = ControlPaint.TextFormatFlagsForAlignmentGDI( textAlign );
 
             // The effect of the TextBoxControl flag is that in-word line breaking will occur if needed, this happens when AutoSize 
-            // is false and a one-word line still doesn't fit the binding box (width).  The other effect is that partially visible 
+            // is false and a one-word line still doesn't fit the binding box (width). The other effect is that partially visible
             // lines are clipped; this is how GDI+ works by default.
             flags |= TextFormatFlags.WordBreak | TextFormatFlags.TextBoxControl;
 
@@ -2758,7 +2752,7 @@ namespace System.Windows.Forms {
                 int b = color.B;
                 int max, min;        /* max and min RGB values */
                 int sum, dif;
-                int  Rdelta,Gdelta,Bdelta;  /* intermediate value: % of spread from max */
+                int Rdelta,Gdelta,Bdelta;  /* intermediate value: % of spread from max */
 
                 /* calculate lightness */
                 max = Math.Max( Math.Max(r,g), b);
@@ -2980,7 +2974,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private Color ColorFromHLS(int hue, int luminosity, int saturation) {
                 byte r,g,b;                      /* RGB component values */
-                int  magic1,magic2;       /* calculated magic numbers (really!) */
+                int magic1,magic2;       /* calculated magic numbers (really!) */
 
                 if (saturation == 0) {                /* achromatic case */
                     r = g = b = (byte)((luminosity * RGBMax) / HLSMax);
