@@ -52,8 +52,6 @@ jobs:
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
         - name: _HelixToken
           value: ''
-        - name: SYSTEM_ACCESSTOKEN
-          value: $(System.AccessToken) # sets EnableAzurePipelinesReporter to true by default
 
 
         # Override some values if we're building internally (not public)
