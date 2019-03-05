@@ -189,7 +189,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        return systemIAccessible?.get_accKeyboardShortcut(NativeMethods.CHILDID_SELF);
+                        return systemIAccessible.get_accKeyboardShortcut(NativeMethods.CHILDID_SELF);
                     }
                     catch (COMException e) when (e.ErrorCode == NativeMethods.DISP_E_MEMBERNOTFOUND)
                     {
