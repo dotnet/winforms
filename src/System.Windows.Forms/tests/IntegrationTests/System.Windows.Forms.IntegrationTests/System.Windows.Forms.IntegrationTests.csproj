@@ -13,8 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
-    <!-- Including reference to WinformsControlsTest so that it will be fetched and built by Helix -->
-    <ProjectReference Include="..\WinformsControlsTest\WinformsControlsTest.csproj" />
   </ItemGroup>
 
 </Project>
