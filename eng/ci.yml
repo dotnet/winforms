@@ -81,8 +81,7 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
-          # The win10 pool isn't ready for us yet, so using Windows.81.Amd64 in the meantime
-          # When ready, change value to 'Windows.10.Amd64'
+          # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
           - name: _HelixAgentPool
             value: 'Windows.10.Amd64'
           - name: _HelixToken
@@ -121,7 +120,7 @@ jobs:
           HelixTargetQueues: $(_HelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
           Creator: ${{ parameters.repoName }}         # required for public / external (when there is no access token)
-          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj' # **/*.Tests.csproj
+          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)/src/**/*.Tests.csproj' # System.Windows.Forms/tests/UnitTests/System.Windows.Forms.Tests.csproj
           XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
           XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail
           XUnitRunnerVersion: '2.4.1'                 # Should match XUnitRunnerConsoleVersion in eng/Versions.props
