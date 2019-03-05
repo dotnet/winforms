@@ -41,8 +41,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "facade", "facade", "{434C00
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "unit", "unit", "{583F1292-AE8D-4511-B8D8-A81FE4642DDC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "func", "func", "{680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "integration", "integration", "{680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.IntegrationTests", "src\System.Windows.Forms\tests\IntegrationTests\System.Windows.Forms.IntegrationTests\System.Windows.Forms.IntegrationTests.csproj", "{238195CE-7CCE-4469-ACD8-EA00E88D947A}"
