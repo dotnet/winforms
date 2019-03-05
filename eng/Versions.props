@@ -24,12 +24,17 @@
     <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19154.14</MicrosoftDotNetGenFacadesPackageVersion>
     <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19154.14</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
-  <!-- Additional dependencies -->
+  <!-- XUnit-related unchanging dependencies -->
+  <PropertyGroup>
+    <XUnitVersion>2.4.1</XUnitVersion>
+    <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
+    <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
+    <XUnitRunnerVisualStudioVersion>$(xunitVersion)</XUnitRunnerVisualStudioVersion>
+    <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
+  </PropertyGroup>
+  <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
-    <XUnitVersion>2.4.1</XUnitVersion>
-    <XUnitRunnerConsoleVersion>2.4.1</XUnitRunnerConsoleVersion>
-    <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
   </PropertyGroup>
