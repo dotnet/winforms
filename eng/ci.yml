@@ -113,27 +113,13 @@ jobs:
         displayName: Build
 
       # Run unit tests on Helix
-      - template: /eng/common/templates/steps/send-to-helix.yml
+      - template: /eng/helixtest.yml
         parameters:
           HelixSource: ${{ parameters.repoName }}
-          HelixType: 'tests/default'      
-          HelixBuild: $(Build.BuildNumber)
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
-          Creator: ${{ parameters.repoName }}         # required for public / external (when there is no access token)
           # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj'
-          XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
-          XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail
-          XUnitRunnerVersion: '2.4.1'                 # Should match XUnitRunnerConsoleVersion in eng/Versions.props
-          IncludeDotNetCli: true
-          DotNetCliPackageType: 'sdk'
-          DotNetCliVersion: '3.0.100-preview-010184'  # MUST be official release: https://dotnet.microsoft.com/download/dotnet-core/3.0 ; does not need to match sdk we build against
-          EnableXUnitReporter: true
-          WaitForWorkItemCompletion: true
-          DisplayNamePrefix: 'Run Unit Tests on Helix'
-          condition: succeeded()
-          continueOnError: false
       
       # Run integration tests and rename binlog
       # These are not ready to run on Helix because:
