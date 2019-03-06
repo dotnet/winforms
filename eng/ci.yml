@@ -115,7 +115,7 @@ jobs:
       # Run unit tests on Helix
       - template: /eng/helixtest.yml
         parameters:
-          HelixSource: ${{ parameters.repoName }}
+          RepoName: ${{ parameters.repoName }}
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
           # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
