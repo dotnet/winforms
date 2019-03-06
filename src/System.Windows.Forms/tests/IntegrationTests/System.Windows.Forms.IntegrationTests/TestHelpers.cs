@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Func.Tests
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'));
-            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;	
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;	// required
             // ...
 
             return StartProcess(startInfo);
