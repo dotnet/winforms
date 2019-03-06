@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
   </ItemGroup>
   
-  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" AfterTargets="ResolvePackageDependenciesForBuild">
+  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
     <ItemGroup>
       <_desktopReference Include="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == '$(MicrosoftTargetingPackNETFrameworkv472Package)'" />
       <Reference Remove="@(_desktopReference)" />
