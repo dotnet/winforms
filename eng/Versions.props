@@ -26,10 +26,11 @@
   </PropertyGroup>
   <!-- XUnit-related unchanging dependencies -->
   <PropertyGroup>
-    <XUnitVersion>2.4.1</XUnitVersion>
+    <XUnitVersion>2.4.1-pre.build.4059</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
-    <XUnitRunnerVisualStudioVersion>$(xunitVersion)</XUnitRunnerVisualStudioVersion>
+    <XUnitRunnerVisualStudioVersion>$(XUnitVersion)</XUnitRunnerVisualStudioVersion>
+    <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
