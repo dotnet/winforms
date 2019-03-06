@@ -3,7 +3,8 @@ parameters:
   RepoName: ''            
   HelixTargetQueues: ''    
   HelixAccessToken: ''          
-  XUnitProjects: ''        
+  XUnitProjects: ''
+  DisplayNamePrefix: ''        
 
 steps:
 - template: /eng/common/templates/steps/send-to-helix.yml
@@ -23,6 +24,6 @@ steps:
     DotNetCliVersion: '3.0.100-preview-010184'  # MUST be official release: https://dotnet.microsoft.com/download/dotnet-core/3.0 ; does not need to match sdk we build against
     EnableXUnitReporter: true
     WaitForWorkItemCompletion: true
-    DisplayNamePrefix: 'Run Unit Tests on Helix'
+    DisplayNamePrefix: ${{ parameters.DisplayNamePrefix }}
     condition: succeeded()
     continueOnError: false

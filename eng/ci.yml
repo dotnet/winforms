@@ -113,13 +113,14 @@ jobs:
         displayName: Build
 
       # Run unit tests on Helix
-      - template: /eng/helixtest.yml
+      - template: /eng/ci-helix-test.yml
         parameters:
           RepoName: ${{ parameters.repoName }}
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
           # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj'
+          DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix'
       
       # Run integration tests and rename binlog
       # These are not ready to run on Helix because:
