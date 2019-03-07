@@ -709,12 +709,13 @@ namespace System.Windows.Forms {
             }
         }
 
+#if (WINFORMS_NAMESPACE || WINFORMS_DESIGN_NAMESPACE)
         public static bool UseVisualStyles {
             get {
                 return useVisualStyles;
             }
         }
-
+#endif
         internal static string WindowsFormsVersion {
             get {
                 // Notice   : Don't never ever change this name, since window class of Winforms control is dependent on this.
