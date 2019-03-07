@@ -4,11 +4,10 @@
 
 using System.Drawing;
 using System.IO;
-using System.Resources;
 using System.Text;
 using Xunit;
 
-namespace System.Windows.Forms.Tests
+namespace System.Resources.Tests
 {
     public class ResXFileRef_Converter
     {
