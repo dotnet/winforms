@@ -1,6 +1,7 @@
 parameters:
-  # All parameters are required for our purposes; see send-to-helix.yml for details
-  RepoName: ''            
+  # All parameters are required for our purposes (except HelixType); see send-to-helix.yml for details
+  RepoName: ''
+  HelixType: 'tests/default'            
   HelixTargetQueues: ''    
   HelixAccessToken: ''          
   XUnitProjects: ''
@@ -10,7 +11,7 @@ steps:
 - template: /eng/common/templates/steps/send-to-helix.yml
   parameters:
     HelixSource: ${{ parameters.RepoName }}
-    HelixType: 'tests/default'      
+    HelixType: ${{ parameters.HelixType }} 
     HelixBuild: $(Build.BuildNumber)
     HelixTargetQueues: ${{ parameters.HelixTargetQueues }}
     HelixAccessToken: ${{ parameters.HelixAccessToken }}            # only defined for internal CI
