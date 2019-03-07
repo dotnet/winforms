@@ -7,6 +7,8 @@
 The migration process includes two steps: **preparing your project for porting** to
 .NET Core and **porting** itself.
 
+For additional information and assistance, we recommend checking out [this article on the dotnet blog][dotnet-blog-port-guide] as well as the [accompanying video tutorial][dotnet-blog-port-video].
+
 ## Prepare your project for porting
 
 1. **Run [.NET Portability Analyzer][api-port]** first to determine if there are
@@ -108,6 +110,8 @@ System.PlatformNotSupportedException: 'Configuration files are not supported.'
 
 [comment]: <> (URI Links)
 
+[dotnet-blog-port-guide]: https://devblogs.microsoft.com/dotnet/how-to-port-desktop-applications-to-net-core-3-0/
+[dotnet-blog-port-video]: https://www.youtube.com/watch?v=upVQEUc_KwU
 [api-port]: https://blogs.msdn.microsoft.com/dotnet/2018/08/08/are-your-windows-forms-and-wpf-applications-ready-for-net-core-3-0/
 [pkg-config]: https://docs.microsoft.com/en-us/nuget/reference/migrate-packages-config-to-package-reference
 [sdk-tool]:https://github.com/hvanbakel/CsprojToVs2017
