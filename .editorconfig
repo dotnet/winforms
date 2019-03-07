@@ -161,8 +161,8 @@ indent_size = 2
 [*.{props,targets,config,nuspec}]
 indent_size = 2
 
-# resx Files
-[=.resx]
+# resx files
+[*.resx]
 charset = utf-8-bom
 insert_final_newline = true
 
