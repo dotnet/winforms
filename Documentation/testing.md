@@ -46,7 +46,7 @@ To test from Visual Studio, open Winforms.sln in Visual Studio and test how you 
 
 ### Troubleshooting Visual Studio unit test errors
 
-* When testing from Visual Studio, test errors show up as normal in the test explorer.
+* When testing from Visual Studio, test errors show up as normal in the Test Explorer.
 * To troubleshoot, debug the selected test and set breakpoints as you normally would.
 
 ## Adding new unit tests
@@ -56,14 +56,14 @@ Tests are built and executed by file name convention
 * Every WinForms binary has its own folder under src in the repository root (src\System.Windows.Forms, for example)
 * Each of those folders has a tests folder under it (src\System.Windows.Forms\tests, for example)
 * Each tests folder contains an xUnit test project (System.Windows.Forms.Tests.csproj)
-  * These test projects automatically build when running .\build
-  * The tests from these projects automatically execute when running .\build -test
+  * These test projects automatically build when running `.\build`
+  * The tests from these projects automatically execute when running `.\build -test`
 
 ### Therefore, you just need to put your tests in the right place in order for them to run
 
 * Browse to the tests folder for the binary you are testing
-* There should be one file per class being tested, and the file name should match the class name.
-  * For example, if I wanted to test the Button class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
+* There should be one file per class being tested, and the file name should match the class name followed by a "Tests" suffix.
+  * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a ButtonTests.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
 
@@ -71,14 +71,14 @@ Tests are built and executed by file name convention
 
 #### Naming
 
-* Test files names should match the class they are testing
-  * For example, tests for the Button class should be in Button.cs
-* Test class names should match the class they are testing, followed by "Tests"
-  * For example, tests for the Button class should in the ButtonTests class
+* Test files names should match the class they are testing followed by a "Tests" suffix
+  * For example, tests for the `Button` class should be in ButtonTests.cs
+* Test class names should match the class they are testing, followed by a "Tests" suffix
+  * For example, tests for the `Button` class should in the `ButtonTests` class
 * Test names should start with the class they are testing
-  * For example, all tests for the button class should start with "Button"
+  * For example, all tests for the `Button` class should start with "Button"
 * Test names should end with a description of what the test does
-  * For example, Button_AutoSizeModeGetSet
+  * For example, `Button_AutoSizeModeGetSet`
   * This is very useful when viewing test results, and when browsing in the test explorer
 
 #### Strategy
@@ -95,7 +95,7 @@ Tests are built and executed by file name convention
 ##### Avoid duplicating tests just for different inputs
 
 * Use `[Theory]` for this, followed by either `[InlineData]` or `[MemberData]`. See existing tests for examples on how to use these attributes
-* The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an ArgumentException for invalid inputs, that should be a separate test.
+* The exception to this is if the code behavior is fundamentally different based on the inputs. For example, if a method throws an `ArgumentException` for invalid inputs, that should be a separate test.
 
 ##### One test (or test data) per code path please
 
@@ -108,7 +108,7 @@ Tests are built and executed by file name convention
 
 ## Functional Testing
 
-Currently, there is a single functional test suite in the repository: the WinformsControlsTest. There is an xUnit project that executes various commands against this binary.
+Currently, there is a single functional test suite in the repository: the **WinformsControlsTest**. There is an xUnit project that executes various commands against this binary.
 
 ### Functional testing from the command line
 
@@ -150,13 +150,13 @@ Functional tests are built and executed by file name convention
 * Every WinForms binary has its own folder under src in the repository root (src\System.Windows.Forms, for example)
 * Each of those folders has a tests folder under it (src\System.Windows.Forms\tests, for example), each of which may contain an IntegrationTests folder
 * Each of these folders contains an IntegrationTest xUnit project (System.Windows.Forms.IntegrationTests.csproj)
-  * These test projects automatically build when running .\build
-  * The tests from these projects automatically execute when running .\build -integrationTest
+  * These test projects automatically build when running `.\build`
+  * The tests from these projects automatically execute when running `.\build -integrationTest`
 
 ### Therefore, you just need to put your tests in the right place in order for them to run
 
 * Browse to the tests folder for the binary you are testing
 * There should be one file per class being tested, and the file name should match the class name.
-  * For example, if I wanted to test the Button class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
+  * For example, if I wanted to test the `Button` class in System.Windows.Forms.dll, I would look for a Button.cs under src\System.Windows.Forms\tests
 * If the file exists, add your tests there. If it doesn't exist, feel free to create it.
   * **Note that you don't have to modify the csproj at all.** Since the project is a Microsoft.NET.Sdk project, all source files next to it are automatically included
