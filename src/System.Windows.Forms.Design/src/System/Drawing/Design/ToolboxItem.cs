@@ -1043,7 +1043,6 @@ namespace System.Drawing.Design
                 {
                     string propertyName = GetPropertyName(key);
                     value = _item.ValidatePropertyValue(propertyName, value);
-                    CheckSerializable(value);
                     _item.CheckUnlocked();
                     base[propertyName] = value;
                 }
@@ -1053,17 +1052,8 @@ namespace System.Drawing.Design
             {
                 string propertyName = GetPropertyName(key);
                 value = _item.ValidatePropertyValue(propertyName, value);
-                CheckSerializable(value);
                 _item.CheckUnlocked();
                 base.Add(propertyName, value);
-            }
-
-            private void CheckSerializable(object value)
-            {
-                if (value != null && !(value.GetType().IsSerializable || value is ISerializable))
-                {
-                    throw new ArgumentException(string.Format(SR.ToolboxItemValueNotSerializable, value.GetType().FullName));
-                }
             }
 
             public override void Clear()

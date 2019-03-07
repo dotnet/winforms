@@ -18,6 +18,7 @@
             Assert.Equal("Bitmap", underTest.DisplayName);
             Assert.Equal("Bitmap", underTest.ToString());
             Assert.False(underTest.Locked);
+            Assert.True(underTest.GetType().IsSerializable);
         }
 
         [Fact]

@@ -161,6 +161,11 @@ indent_size = 2
 [*.{props,targets,config,nuspec}]
 indent_size = 2
 
+# resx Files
+[=.resx]
+charset = utf-8-bom
+insert_final_newline = true
+
 # Shell scripts
 [*.sh]
 end_of_line = lf
