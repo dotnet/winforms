@@ -388,7 +388,7 @@ namespace System.ComponentModel.Design
                     {
                         if (host != null && t == null)
                         {
-                            t = host.CreateTransaction(SR.GetResourceString(SR.ComponentDesignerAddEvent, defaultEvent.Name));
+                            t = host.CreateTransaction(string.Format(SR.ComponentDesignerAddEvent, defaultEvent.Name));
                         }
                     }
                     catch (CheckoutException cxe)
