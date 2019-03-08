@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
-    <ProjectReference Include="..\WinformsControlsTest\WinformsControlsTest.csproj" />
   </ItemGroup>
 
 </Project>
