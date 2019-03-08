@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,8 +8,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Permissions;
     /// <devdoc/> this class is just a conceptual wrapper around ToolStripDropDownMenu. </devdoc>
     [
     ComVisible(true),
@@ -43,7 +41,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContextMenuStripSourceControlDescr))
         ]
         public Control SourceControl {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return SourceControlInternal;
             }

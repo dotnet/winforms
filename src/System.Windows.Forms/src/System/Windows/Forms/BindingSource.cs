@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -18,11 +18,10 @@ namespace System.Windows.Forms {
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Globalization;
     using System.Reflection;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
 
     [
@@ -60,7 +59,7 @@ namespace System.Windows.Forms {
         private string dataMember = string.Empty;
         private string sort = null;
         private string filter = null;
-        private CurrencyManager currencyManager;
+        private readonly CurrencyManager currencyManager;
         private bool raiseListChangedEvents = true;
         private bool parentsCurrentItemChanging = false;
         private bool disposedOrFinalized = false;
@@ -686,7 +685,7 @@ namespace System.Windows.Forms {
             Type genericType = typeof(BindingList<>);
             Type bindingType = genericType.MakeGenericType(new Type[] { type });
 
-            return (IList) SecurityUtils.SecureCreateInstance(bindingType);
+            return (IList) Activator.CreateInstance(bindingType);
         }
 
         // Create an object of the given type. Throw an exception if this fails.
@@ -695,7 +694,7 @@ namespace System.Windows.Forms {
             Exception instanceException = null;
 
             try {
-                instancedObject = SecurityUtils.SecureCreateInstance(type);
+                instancedObject = Activator.CreateInstance(type);
             }
             catch (TargetInvocationException ex) {
                 instanceException = ex; // Default ctor threw an exception
@@ -1414,23 +1413,23 @@ namespace System.Windows.Forms {
         ///////////////////////////////////////////////////////////////////////////////
 
         private void WireCurrencyManager(CurrencyManager cm) {
-            if (cm != null) {
-                cm.PositionChanged    += new EventHandler(CurrencyManager_PositionChanged);
-                cm.CurrentChanged     += new EventHandler(CurrencyManager_CurrentChanged);
-                cm.CurrentItemChanged += new EventHandler(CurrencyManager_CurrentItemChanged);
-                cm.BindingComplete    += new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
-                cm.DataError          += new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
-            }
+            Debug.Assert(cm != null);
+
+            cm.PositionChanged    += new EventHandler(CurrencyManager_PositionChanged);
+            cm.CurrentChanged     += new EventHandler(CurrencyManager_CurrentChanged);
+            cm.CurrentItemChanged += new EventHandler(CurrencyManager_CurrentItemChanged);
+            cm.BindingComplete    += new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
+            cm.DataError          += new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
         }
 
         private void UnwireCurrencyManager(CurrencyManager cm) {
-            if (cm != null) {
-                cm.PositionChanged    -= new EventHandler(CurrencyManager_PositionChanged);
-                cm.CurrentChanged     -= new EventHandler(CurrencyManager_CurrentChanged);
-                cm.CurrentItemChanged -= new EventHandler(CurrencyManager_CurrentItemChanged);
-                cm.BindingComplete    -= new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
-                cm.DataError          -= new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
-            }
+            Debug.Assert(cm != null);
+
+            cm.PositionChanged    -= new EventHandler(CurrencyManager_PositionChanged);
+            cm.CurrentChanged     -= new EventHandler(CurrencyManager_CurrentChanged);
+            cm.CurrentItemChanged -= new EventHandler(CurrencyManager_CurrentItemChanged);
+            cm.BindingComplete    -= new BindingCompleteEventHandler(CurrencyManager_BindingComplete);
+            cm.DataError          -= new BindingManagerDataErrorEventHandler(CurrencyManager_DataError);
         }
 
         private void WireDataSource() {
@@ -1516,17 +1515,15 @@ namespace System.Windows.Forms {
             }
         }
 
-        // Respond to late completion of the DataSource's initialization, by completing our own initialization.
-        // This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
-        // BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
-        //
-        private void DataSource_Initialized(object sender, EventArgs e) {
-            ISupportInitializeNotification dsInit = (this.DataSource as ISupportInitializeNotification);
-
-            Debug.Assert(dsInit != null, "BindingSource: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
-            Debug.Assert(dsInit.IsInitialized, "BindingSource: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
-
-            if (dsInit != null) {
+        /// <devdoc>
+        /// Respond to late completion of the DataSource's initialization, by completing our own initialization.
+        /// This situation can arise if the call to the DataSource's EndInit() method comes after the call to the
+        /// BindingSource's EndInit() method (since code-generated ordering of these calls is non-deterministic).
+        /// </devdoc>
+        private void DataSource_Initialized(object sender, EventArgs e)
+        {
+            if (DataSource is ISupportInitializeNotification dsInit)
+            {
                 dsInit.Initialized -= new EventHandler(DataSource_Initialized);
             }
 

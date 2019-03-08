@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -8,7 +8,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing.Imaging;
     using System;
-    using System.Security.Permissions;
     using System.Drawing.Drawing2D;
     using System.Drawing;
     using System.Drawing.Design;
@@ -26,9 +25,9 @@ namespace System.Windows.Forms {
     ///    </para>
     /// </devdoc>
     [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)
+        ComVisible(true),
+        ClassInterface(ClassInterfaceType.AutoDispatch),
+        Designer("System.Windows.Forms.Design.ButtonBaseDesigner, " + AssemblyRef.SystemDesign)
     ]
     public abstract class ButtonBase : Control {
  
@@ -91,11 +90,11 @@ namespace System.Windows.Forms {
         ///    extends beyond the width of the button. </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        Browsable(true), 
-        EditorBrowsable(EditorBrowsableState.Always),
-        SRDescription(nameof(SR.ButtonAutoEllipsisDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(false),
+            Browsable(true), 
+            EditorBrowsable(EditorBrowsableState.Always),
+            SRDescription(nameof(SR.ButtonAutoEllipsisDescr))
         ]
         public bool AutoEllipsis {
             get {
@@ -148,15 +147,14 @@ namespace System.Windows.Forms {
             }
         }
 
-
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.BackColor"]/*' />
         /// <devdoc>
         ///     The background color of this control. This is an ambient property and
         ///     will always return a non-null value.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ControlBackColorDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public override Color BackColor {
             get {
@@ -193,7 +191,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.CreateParams"]/*' />
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 if (!OwnerDraw) {
@@ -267,10 +264,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(FlatStyle.Standard),
-        Localizable(true),
-        SRDescription(nameof(SR.ButtonFlatStyleDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DefaultValue(FlatStyle.Standard),
+            Localizable(true),
+            SRDescription(nameof(SR.ButtonFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
             get {
@@ -291,10 +288,10 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         [
-        Browsable(true),
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonFlatAppearance)),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
+            Browsable(true),
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.ButtonFlatAppearance)),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
         ]
         public FlatButtonAppearance FlatAppearance {
             get {
@@ -314,13 +311,11 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRDescription(nameof(SR.ButtonImageDescr)),
-        Localizable(true),
-        SRCategory(nameof(SR.CatAppearance))
+            SRDescription(nameof(SR.ButtonImageDescr)),
+            Localizable(true),
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             get {
                 if (image == null && imageList != null) {
                     int actualIndex = imageIndex.ActualIndex;
@@ -365,10 +360,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        DefaultValue(ContentAlignment.MiddleCenter),
-        Localizable(true),
-        SRDescription(nameof(SR.ButtonImageAlignDescr)),
-        SRCategory(nameof(SR.CatAppearance))
+            DefaultValue(ContentAlignment.MiddleCenter),
+            Localizable(true),
+            SRDescription(nameof(SR.ButtonImageAlignDescr)),
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public ContentAlignment ImageAlign {
             get {
@@ -394,13 +389,13 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        TypeConverterAttribute(typeof(ImageIndexConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Localizable(true),
-        DefaultValue(-1),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.ButtonImageIndexDescr)),
-        SRCategory(nameof(SR.CatAppearance))
+            TypeConverterAttribute(typeof(ImageIndexConverter)),
+            Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+            Localizable(true),
+            DefaultValue(-1),
+            RefreshProperties(RefreshProperties.Repaint),
+            SRDescription(nameof(SR.ButtonImageIndexDescr)),
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public int ImageIndex {
             get {
@@ -434,13 +429,13 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        TypeConverterAttribute(typeof(ImageKeyConverter)),
-        Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        Localizable(true),
-        DefaultValue(""),
-        RefreshProperties(RefreshProperties.Repaint),
-        SRDescription(nameof(SR.ButtonImageIndexDescr)),
-        SRCategory(nameof(SR.CatAppearance))
+            TypeConverterAttribute(typeof(ImageKeyConverter)),
+            Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+            Localizable(true),
+            DefaultValue(""),
+            RefreshProperties(RefreshProperties.Repaint),
+            SRDescription(nameof(SR.ButtonImageIndexDescr)),
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public string ImageKey {
             get {
@@ -468,10 +463,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        DefaultValue(null),
-        SRDescription(nameof(SR.ButtonImageListDescr)),
-        RefreshProperties(RefreshProperties.Repaint),        
-        SRCategory(nameof(SR.CatAppearance))
+            DefaultValue(null),
+            SRDescription(nameof(SR.ButtonImageListDescr)),
+            RefreshProperties(RefreshProperties.Repaint),        
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public ImageList ImageList {
             get {
@@ -505,7 +500,6 @@ namespace System.Windows.Forms {
                         value.Disposed += disposedHandler;                                               
                     }                    
 
-                    
                     Invalidate();
                 }
             }
@@ -627,8 +621,8 @@ namespace System.Windows.Forms {
         }
 
         [
-        Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
-        SettingsBindable(true)
+            Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
+            SettingsBindable(true)
         ]
         public override string Text {
             get {
@@ -646,10 +640,10 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        DefaultValue(ContentAlignment.MiddleCenter),
-        Localizable(true),
-        SRDescription(nameof(SR.ButtonTextAlignDescr)),
-        SRCategory(nameof(SR.CatAppearance))
+            DefaultValue(ContentAlignment.MiddleCenter),
+            Localizable(true),
+            SRDescription(nameof(SR.ButtonTextAlignDescr)),
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public virtual ContentAlignment TextAlign {
             get {
@@ -673,10 +667,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.TextImageRelation"]/*' />
-        [DefaultValue(TextImageRelation.Overlay),
-        Localizable(true),
-        SRDescription(nameof(SR.ButtonTextImageRelationDescr)),
-        SRCategory(nameof(SR.CatAppearance))]
+        [
+            DefaultValue(TextImageRelation.Overlay),
+            Localizable(true),
+            SRDescription(nameof(SR.ButtonTextImageRelationDescr)),
+            SRCategory(nameof(SR.CatAppearance))
+        ]
         public TextImageRelation TextImageRelation {
             get {
                 return textImageRelation;
@@ -698,9 +694,9 @@ namespace System.Windows.Forms {
         ///       the control.</para>
         /// </devdoc>
         [
-        SRDescription(nameof(SR.ButtonUseMnemonicDescr)),
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatAppearance))
+            SRDescription(nameof(SR.ButtonUseMnemonicDescr)),
+            DefaultValue(true),
+            SRCategory(nameof(SR.CatAppearance))
         ]
         public bool UseMnemonic {
             get {
@@ -818,14 +814,7 @@ namespace System.Windows.Forms {
             SetFlag(FlagMouseOver, true);
             Invalidate();
             if (!DesignMode && AutoEllipsis && ShowToolTip && textToolTip != null) {
-                // 
-                IntSecurity.AllWindows.Assert();
-                try { 
-                    textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                textToolTip.Show(WindowsFormsUtils.TextWithoutMnemonics(Text), this);
             }
             // call base last, so if it invokes any listeners that disable the button, we
             // don't have to recheck
@@ -842,14 +831,7 @@ namespace System.Windows.Forms {
         protected override void OnMouseLeave(EventArgs eventargs) {
             SetFlag(FlagMouseOver, false);    
             if (textToolTip != null) {
-                // 
-                IntSecurity.AllWindows.Assert();
-                try {
-                    textToolTip.Hide(this);
-                }
-                finally {
-                    System.Security.CodeAccessPermission.RevertAssert();
-                }
+                textToolTip.Hide(this);
             }
             Invalidate();
             // call base last, so if it invokes any listeners that disable the button, we
@@ -998,9 +980,7 @@ namespace System.Windows.Forms {
             Debug.Fail("Derived classes need to provide a meaningful implementation.");
             return null;
         }
-
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
         internal virtual StringFormat CreateStringFormat() {
             if( Adapter == null ) {
                 Debug.Fail("Adapter not expected to be null at this point");
@@ -1181,9 +1161,9 @@ namespace System.Windows.Forms {
         ///     Determines whether to use compatible text rendering engine (GDI+) or not (GDI).
         /// </devdoc>
         [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
+            DefaultValue(false),
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
             get{
@@ -1208,8 +1188,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.UseVisualStyleBackColor"]/*' />
         /// <internalonly/>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))
         ]
         public bool UseVisualStyleBackColor {
             get {
@@ -1243,7 +1223,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.WndProc"]/*' />
         
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -1322,7 +1301,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 ((ButtonBase)Owner).OnClick(EventArgs.Empty);
             }

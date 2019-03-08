@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,21 +10,17 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
-using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Globalization;
 
 namespace System.Windows.Forms {
     /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory"]/*' />
-    [PermissionSetAttribute(SecurityAction.LinkDemand, Name = "FullTrust")]
     public sealed class HtmlHistory : IDisposable
     {
         private UnsafeNativeMethods.IOmHistory htmlHistory;
         private bool disposed;
 
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         internal HtmlHistory(UnsafeNativeMethods.IOmHistory history)
         {
             this.htmlHistory = history;

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System.Drawing.Imaging;
     using System.Drawing.Drawing2D;
     using System.Diagnostics;
-    using System.Security.Permissions;
     using System.Globalization;
     using System.Runtime.Versioning;
 
@@ -417,8 +416,8 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCell.GetFormattedValue"]/*' />
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
+        
+        
         protected override object GetFormattedValue(object value,
                                                     int rowIndex,
                                                     ref DataGridViewCellStyle cellStyle,
@@ -1019,13 +1018,11 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get 
                 {
                     return base.Value;
                 }
 
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 set
                 {
                     // do nothing.
@@ -1033,7 +1030,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 // do nothing if Level < 3

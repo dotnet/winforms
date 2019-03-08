@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -16,8 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
 
     using Microsoft.Win32;
-    using System.Security;
-    using System.Security.Permissions;
 
     /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog"]/*' />
     /// <devdoc>
@@ -64,9 +62,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(true),
-        SRDescription(nameof(SR.CDallowFullOpenDescr))
+            SRCategory(nameof(SR.CatBehavior)), 
+            DefaultValue(true),
+            SRDescription(nameof(SR.CDallowFullOpenDescr))
         ]
         public virtual bool AllowFullOpen {
             get {
@@ -86,9 +84,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(false),
-        SRDescription(nameof(SR.CDanyColorDescr))
+            SRCategory(nameof(SR.CatBehavior)), 
+            DefaultValue(false),
+            SRDescription(nameof(SR.CDanyColorDescr))
         ]
         public virtual bool AnyColor {
             get {
@@ -107,8 +105,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatData)), 
-        SRDescription(nameof(SR.CDcolorDescr))
+            SRCategory(nameof(SR.CatData)), 
+            SRDescription(nameof(SR.CDcolorDescr))
         ]
         public Color Color {
             get {
@@ -132,9 +130,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.CDcustomColorsDescr))
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.CDcustomColorsDescr))
         ]
         public int[] CustomColors {
             get { return(int[]) customColors.Clone();}
@@ -153,9 +151,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)), 
-        DefaultValue(false),
-        SRDescription(nameof(SR.CDfullOpenDescr))
+            SRCategory(nameof(SR.CatAppearance)), 
+            DefaultValue(false),
+            SRDescription(nameof(SR.CDfullOpenDescr))
         ]
         public virtual bool FullOpen {
             get {
@@ -175,12 +173,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected virtual IntPtr Instance {
-            [
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             get { return UnsafeNativeMethods.GetModuleHandle(null);}
         }
 
@@ -195,7 +187,6 @@ namespace System.Windows.Forms {
             }
         }
 
-
         /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
@@ -204,9 +195,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(false),
-        SRDescription(nameof(SR.CDshowHelpDescr))
+            SRCategory(nameof(SR.CatBehavior)), 
+            DefaultValue(false),
+            SRDescription(nameof(SR.CDshowHelpDescr))
         ]
         public virtual bool ShowHelp {
             get {
@@ -227,9 +218,9 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)), 
-        DefaultValue(false),
-        SRDescription(nameof(SR.CDsolidColorOnlyDescr))
+            SRCategory(nameof(SR.CatBehavior)), 
+            DefaultValue(false),
+            SRDescription(nameof(SR.CDsolidColorOnlyDescr))
         ]
         public virtual bool SolidColorOnly {
             get {

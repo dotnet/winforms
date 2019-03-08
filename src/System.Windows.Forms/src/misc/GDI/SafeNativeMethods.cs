@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -22,7 +22,6 @@ namespace System.Experimental.Gdi
     ///   This is done to be able to compile the GDI code in both assemblies System.Drawing
     ///   and System.Windows.Forms.
     /// </devdoc>
-    [System.Security.SuppressUnmanagedCodeSecurityAttribute()]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY
     public
 #else
@@ -54,10 +53,10 @@ namespace System.Experimental.Gdi
         // Brush.
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint = "CreateSolidBrush", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
+        
         private static extern IntPtr IntCreateSolidBrush(int crColor);
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static IntPtr CreateSolidBrush(int crColor) 
         {
             IntPtr hBrush = System.Internal.HandleCollector.Add(IntCreateSolidBrush(crColor), IntSafeNativeMethods.CommonHandles.GDI);
@@ -68,10 +67,10 @@ namespace System.Experimental.Gdi
         // Pen.
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint = "CreatePen", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
+        
         private static extern IntPtr IntCreatePen(int fnStyle, int nWidth, int crColor);
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static IntPtr CreatePen(int fnStyle, int nWidth, int crColor)
         {
             IntPtr hPen = System.Internal.HandleCollector.Add(IntCreatePen(fnStyle, nWidth, crColor), IntSafeNativeMethods.CommonHandles.GDI);
@@ -80,10 +79,10 @@ namespace System.Experimental.Gdi
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint = "ExtCreatePen", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
+        
         private static extern IntPtr IntExtCreatePen(int fnStyle, int dwWidth, IntNativeMethods.LOGBRUSH lplb, int dwStyleCount, [MarshalAs(UnmanagedType.LPArray)] int[] lpStyle);
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static IntPtr ExtCreatePen(int fnStyle, int dwWidth, IntNativeMethods.LOGBRUSH lplb, int dwStyleCount, int[] lpStyle)
         {
             IntPtr hPen = System.Internal.HandleCollector.Add(IntExtCreatePen(fnStyle, dwWidth, lplb, dwStyleCount, lpStyle), IntSafeNativeMethods.CommonHandles.GDI);
@@ -94,10 +93,10 @@ namespace System.Experimental.Gdi
         // Region
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreateRectRgn", CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
+        
         public static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2) 
         {
             IntPtr hRgn = System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), IntSafeNativeMethods.CommonHandles.GDI);
@@ -108,11 +107,11 @@ namespace System.Experimental.Gdi
         // Misc.
            
         [DllImport(ExternDll.Kernel32, SetLastError=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.AppDomain)]
+        
         public static extern int GetUserDefaultLCID();
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
+        
         public static extern bool GdiFlush();
     }
 }

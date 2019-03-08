@@ -7,10 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Design.Primitives" Version="$(SystemDrawingDesignPrimitivesPackageVersion)" />
+    <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
   </ItemGroup>
   
 </Project>

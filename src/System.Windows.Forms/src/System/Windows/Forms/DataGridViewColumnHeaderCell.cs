@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,6 @@ namespace System.Windows.Forms
     using System.Drawing;
     using System.ComponentModel;
     using System.Windows.Forms.VisualStyles;
-    using System.Security.Permissions;
     using System.Windows.Forms.Internal;
     using System.Globalization;
 
@@ -309,12 +308,14 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCell.GetInheritedStyle"]/*' />
         public override DataGridViewCellStyle GetInheritedStyle(DataGridViewCellStyle inheritedCellStyle, int rowIndex, bool includeColors)
         {
+            if (DataGridView == null)
+            {
+                throw new InvalidOperationException(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle);
+            }
             if (rowIndex != -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
-
-            Debug.Assert(this.DataGridView != null);
 
             DataGridViewCellStyle inheritedCellStyleTmp = (inheritedCellStyle == null) ? new DataGridViewCellStyle() : inheritedCellStyle;
 
@@ -1321,7 +1322,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCellAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.ParentPrivate;
@@ -1376,7 +1376,6 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.Name;
@@ -1384,7 +1383,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCellAccessibleObject.DoDefaultAction"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction()
             {
                 DataGridViewColumnHeaderCell dataGridViewCell = (DataGridViewColumnHeaderCell)this.Owner;
@@ -1410,7 +1408,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCellAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 if (this.Owner.OwningColumn == null)
@@ -1514,7 +1511,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCellAccessibleObject.Select"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags)
             {
                 if (this.Owner == null)

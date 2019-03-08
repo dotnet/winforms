@@ -1,8 +1,7 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Security.Permissions;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
@@ -224,7 +223,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewAccessibleObject.uex' path='docs/doc[@for="DataGridViewAccessibleObject.Navigate"]/*' />
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
                 switch (navigationDirection)
@@ -281,7 +279,7 @@ namespace System.Windows.Forms
                         case NativeMethods.UIA_NamePropertyId:
                             return this.Name;
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return owner.Focused;
+                            return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                             return owner.CanFocus;
                         case NativeMethods.UIA_IsEnabledPropertyId:
@@ -346,7 +344,6 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetRowHeaders()
             {
                 if (!this.owner.RowHeadersVisible)
@@ -362,7 +359,6 @@ namespace System.Windows.Forms
                 return result;
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal override UnsafeNativeMethods.IRawElementProviderSimple[] GetColumnHeaders()
             {
                 if (!this.owner.ColumnHeadersVisible)
@@ -380,14 +376,12 @@ namespace System.Windows.Forms
 
             internal override UnsafeNativeMethods.RowOrColumnMajor RowOrColumnMajor
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return UnsafeNativeMethods.RowOrColumnMajor.RowOrColumnMajor_RowMajor;
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal override UnsafeNativeMethods.IRawElementProviderSimple GetItem(int row, int column)
             {
                 if (row >= 0 && row < this.owner.Rows.Count &&
@@ -401,7 +395,6 @@ namespace System.Windows.Forms
 
             internal override int RowCount
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.RowCount;
@@ -410,7 +403,6 @@ namespace System.Windows.Forms
 
             internal override int ColumnCount
             {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get
                 {
                     return this.owner.ColumnCount;
@@ -526,7 +518,12 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
-                        return dataGridView.CurrentCell.AccessibilityObject;
+                        var currentCell = dataGridView.CurrentCell;
+                        if (currentCell != null && dataGridView.IsCurrentCellInEditMode)
+                        {
+                            return currentCell.AccessibilityObject;
+                        }
+                        break;
                     case UnsafeNativeMethods.NavigateDirection.FirstChild:
                     case UnsafeNativeMethods.NavigateDirection.LastChild:
                         return dataGridView.EditingControlAccessibleObject;

@@ -4,107 +4,107 @@
     <body>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
-        <target state="new">Optimized Code Generation</target>
+        <target state="translated">Génération de code optimisé</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenSettings">
         <source>Code Generation Settings</source>
-        <target state="new">Code Generation Settings</target>
+        <target state="translated">Paramètres de génération de code</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingCat">
         <source>InSitu Editing</source>
-        <target state="new">InSitu Editing</target>
+        <target state="translated">Modification InSitu</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDesc">
         <source>Controls whether InSitu editing is enabled.</source>
-        <target state="new">Controls whether InSitu editing is enabled.</target>
+        <target state="translated">Contrôle si la modification InSitu est activée.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_EnableInSituEditingDisplay">
         <source>Enable InSitu Editing</source>
-        <target state="new">Enable InSitu Editing</target>
+        <target state="translated">Activer la modification InSitu</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDesc">
         <source>Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</source>
-        <target state="new">Sets the default X and Y grid setting on designers when LayoutMode  = SnapToGrid.</target>
+        <target state="translated">Définit les paramètres de grille X et Y par défaut sur les concepteurs quand LayoutMode = SnapToGrid.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_GridSizeDisplayName">
         <source>Default Grid Cell Size</source>
-        <target state="new">Default Grid Cell Size</target>
+        <target state="translated">Taille de cellule de grille par défaut</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_LayoutSettings">
         <source>Layout Settings</source>
-        <target state="new">Layout Settings</target>
+        <target state="translated">Paramètres de disposition</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShow">
         <source>Controls whether designer smart tag windows should be shown by default.</source>
-        <target state="new">Controls whether designer smart tag windows should be shown by default.</target>
+        <target state="translated">Contrôle si les fenêtres des balises actives du concepteur doivent être affichées par défaut.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName">
         <source>Automatically Open Smart Tags</source>
-        <target state="new">Automatically Open Smart Tags</target>
+        <target state="translated">Ouvrir automatiquement les balises actives</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ObjectBoundSmartTagSettings">
         <source>Object Bound Smart Tag Settings</source>
-        <target state="new">Object Bound Smart Tag Settings</target>
+        <target state="translated">Paramètres des balises actives liées à un objet</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_OptimizedCodeGen">
         <source>Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</source>
-        <target state="new">Enabled optimized code generation.  Some controls may not be compatible with this mode.  For this change to take effect, Visual Studio must be closed and re-opened.</target>
+        <target state="translated">Génération de code optimisé activée. Certains contrôles peuvent ne pas être compatibles avec ce mode. Pour que cette modification soit appliquée, Visual Studio doit être fermé et rouvert.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDesc">
         <source>Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</target>
+        <target state="translated">Contrôle si les concepteurs doivent afficher une grille de dimensionnement lorsque LayoutMode = SnapToGrid.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_ShowGridDisplayName">
         <source>Show Grid</source>
-        <target state="new">Show Grid</target>
+        <target state="translated">Afficher la grille</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDesc">
         <source>Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</source>
-        <target state="new">Controls whether designers should snap to grid dots when LayoutMode = SnapToGrid.</target>
+        <target state="translated">Contrôle si les concepteurs doivent s'aligner sur des points de la grille lorsque LayoutMode = SnapToGrid.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_SnapToGridDisplayName">
         <source>Snap to Grid</source>
-        <target state="new">Snap to Grid</target>
+        <target state="translated">Aligner sur la grille</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSmartTags">
         <source>Controls whether designers should show smart tag popup windows.</source>
-        <target state="new">Controls whether designers should show smart tag popup windows.</target>
+        <target state="translated">Contrôle si les concepteurs doivent afficher des fenêtres contextuelles de balises actives.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_UseSnapLines">
         <source>Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</source>
-        <target state="new">Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</target>
+        <target state="translated">Contrôle si les concepteurs doivent utiliser des lignes d'alignement. Si tel est le cas, les lignes d'alignement sont utilisées à titre de guides. Dans le cas contraire, un quadrillage est utilisé.</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
-        <target state="new">This IDataObject doesn't support SetData.</target>
+        <target state="translated">Ce IDataObject ne prend pas en charge SetData.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
         <source>This method/object is not implemented by design.</source>
-        <target state="new">This method/object is not implemented by design.</target>
+        <target state="translated">Cette méthode ou cet objet n'est pas implémenté(e) dans la conception.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
-        <target state="new">Winforms Designer is not supported on this platform.</target>
+        <target state="translated">Le concepteur WinForms n'est pas pris en charge sur cette plateforme.</target>
         <note />
       </trans-unit>
     </body>

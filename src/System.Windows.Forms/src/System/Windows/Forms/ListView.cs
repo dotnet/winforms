@@ -1,27 +1,25 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 
 namespace System.Windows.Forms {
-    using System.Runtime.Serialization.Formatters;
+    using Microsoft.Win32;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.Design;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.Drawing.Design;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing.Design;
-    using System.Security.Permissions;
-    using System.Security;
-    using System.Drawing;
+    using System.Runtime.Serialization.Formatters;
     using System.Windows.Forms.Internal;
-    using System.ComponentModel.Design;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Globalization;
     using System.Windows.Forms.Layout;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.VisualStyles;
 
     /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView"]/*' />
@@ -664,7 +662,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -2241,27 +2238,19 @@ namespace System.Windows.Forms {
                 return;
             }
 
-            // 
-
-            FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-            fiop.Assert();
-            try {
-                System.IO.FileInfo fi;
-                for (int i = 0; i <= this.bkImgFileNamesCount; i ++) {
-                    fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
-                    if (fi.Exists) {
-                        // 
-                        // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
-                        // I could not find any resources which explain in detail when the IImgCtx objects
-                        // release the temporary file. So if we get a FileIO when we delete the temporary file
-                        // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
-                        try {
-                            fi.Delete();
-                        } catch (System.IO.IOException){}
-                    }
+            System.IO.FileInfo fi;
+            for (int i = 0; i <= this.bkImgFileNamesCount; i ++) {
+                fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
+                if (fi.Exists) {
+                    // 
+                    // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
+                    // I could not find any resources which explain in detail when the IImgCtx objects
+                    // release the temporary file. So if we get a FileIO when we delete the temporary file
+                    // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
+                    try {
+                        fi.Delete();
+                    } catch (System.IO.IOException){}
                 }
-            } finally {
-                System.Security.PermissionSet.RevertAssert();
             }
 
             this.bkImgFileNames = null;
@@ -2787,24 +2776,16 @@ namespace System.Windows.Forms {
                 // the list view needs the FileIOPermission when the app runs on an UNC share
                 // and the list view creates / destroys temporary files for its background image
                 
-                // 
-
-                FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                fiop.Assert();
-                try {
-                    System.IO.FileInfo fi = new System.IO.FileInfo(fileName);
-                    if (fi.Exists) {
-                        // 
-                        // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
-                        // I could not find any resources which explain in detail when the IImgCtx objects
-                        // release the temporary file. So if we get a FileIO when we delete the temporary file
-                        // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
-                        try {
-                            fi.Delete();
-                        } catch (System.IO.IOException){}
-                    }
-                } finally {
-                    System.Security.PermissionSet.RevertAssert();
+                System.IO.FileInfo fi = new System.IO.FileInfo(fileName);
+                if (fi.Exists) {
+                    // 
+                    // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
+                    // I could not find any resources which explain in detail when the IImgCtx objects
+                    // release the temporary file. So if we get a FileIO when we delete the temporary file
+                    // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
+                    try {
+                        fi.Delete();
+                    } catch (System.IO.IOException){}
                 }
             }
         }
@@ -2889,44 +2870,35 @@ namespace System.Windows.Forms {
                     // we need the fileIoPermission when the app runs on an UNC share and
                     // the list view creates/deletes temporary files for its background image
                     
-                    // 
-
-                    FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                    fiop.Assert();
-
-                    try {
-                        System.IO.FileInfo fi;
-                        if (!string.IsNullOrEmpty(this.backgroundImageFileName)) {
-                            fi = new System.IO.FileInfo(this.backgroundImageFileName);
-                            Debug.Assert(fi.Exists, "who deleted our temp file?");
-                            // 
-                            // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
-                            // I could not find any resources which explain in detail when the IImgCtx objects
-                            // release the temporary file. So if we get a FileIO when we delete the temporary file
-                            // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
-                            try {
-                                fi.Delete();
-                            } catch (System.IO.IOException){}
-                            this.backgroundImageFileName = string.Empty;
-                        }
-                        for (int i = 0; i <= this.bkImgFileNamesCount; i++) {
-                            fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
-                            Debug.Assert(fi.Exists, "who deleted our temp file?");
-                            // 
-                            // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
-                            // I could not find any resources which explain in detail when the IImgCtx objects
-                            // release the temporary file. So if we get a FileIO when we delete the temporary file
-                            // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
-                            try {
-                                fi.Delete();
-                            } catch (System.IO.IOException){}
-                        }
-
-                        this.bkImgFileNames = null;
-                        this.bkImgFileNamesCount = -1;
-                    } finally {
-                        System.Security.PermissionSet.RevertAssert();
+                    System.IO.FileInfo fi;
+                    if (!string.IsNullOrEmpty(this.backgroundImageFileName)) {
+                        fi = new System.IO.FileInfo(this.backgroundImageFileName);
+                        Debug.Assert(fi.Exists, "who deleted our temp file?");
+                        // 
+                        // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
+                        // I could not find any resources which explain in detail when the IImgCtx objects
+                        // release the temporary file. So if we get a FileIO when we delete the temporary file
+                        // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
+                        try {
+                            fi.Delete();
+                        } catch (System.IO.IOException){}
+                        this.backgroundImageFileName = string.Empty;
                     }
+                    for (int i = 0; i <= this.bkImgFileNamesCount; i++) {
+                        fi = new System.IO.FileInfo(this.bkImgFileNames[i]);
+                        Debug.Assert(fi.Exists, "who deleted our temp file?");
+                        // 
+                        // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
+                        // I could not find any resources which explain in detail when the IImgCtx objects
+                        // release the temporary file. So if we get a FileIO when we delete the temporary file
+                        // we don't do anything about it ( because we don't know what is a good time to try to delete the file again ).
+                        try {
+                            fi.Delete();
+                        } catch (System.IO.IOException){}
+                    }
+
+                    this.bkImgFileNames = null;
+                    this.bkImgFileNamesCount = -1;
                 }
 
             }
@@ -3182,8 +3154,6 @@ namespace System.Windows.Forms {
 
             ApplyUpdateCachedItems();
             if (IsHandleCreated && !ListViewHandleDestroyed) {
-                Debug.Assert(listItemsArray == null, "listItemsArray not null, even though handle created");
-
                 NativeMethods.LVFINDINFO info = new NativeMethods.LVFINDINFO();
                 info.lParam = (IntPtr) item.ID;
                 info.flags = NativeMethods.LVFI_PARAM;
@@ -4680,27 +4650,14 @@ namespace System.Windows.Forms {
                 // the list view needs these permissions when the app runs on an UNC share
                 // and the list view creates / destroys temporary files for its background image
 
-                // 
-
-                EnvironmentPermission envPermission = new EnvironmentPermission(EnvironmentPermissionAccess.Read, "TEMP");
-                FileIOPermission fiop = new FileIOPermission(PermissionState.Unrestricted);
-                System.Security.PermissionSet permSet = new System.Security.PermissionSet(PermissionState.Unrestricted);
-                permSet.AddPermission(envPermission);
-                permSet.AddPermission(fiop);
-                permSet.Assert();
-
                 // save the image to a temporary file name
-                try {
-                    string tempDirName = System.IO.Path.GetTempPath();
-                    System.Text.StringBuilder sb = new System.Text.StringBuilder(1024);
-                    UnsafeNativeMethods.GetTempFileName(tempDirName, this.GenerateRandomName(), 0, sb);
+                string tempDirName = System.IO.Path.GetTempPath();
+                System.Text.StringBuilder sb = new System.Text.StringBuilder(1024);
+                UnsafeNativeMethods.GetTempFileName(tempDirName, this.GenerateRandomName(), 0, sb);
 
-                    this.backgroundImageFileName = sb.ToString();
+                this.backgroundImageFileName = sb.ToString();
 
-                    this.BackgroundImage.Save(this.backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
-                } finally {
-                    System.Security.PermissionSet.RevertAssert();
-                }
+                this.BackgroundImage.Save(this.backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
                 lvbkImage.pszImage = this.backgroundImageFileName;
                 lvbkImage.cchImageMax = this.backgroundImageFileName.Length + 1;
@@ -5652,7 +5609,6 @@ namespace System.Windows.Forms {
         private Font GetListHeaderFont(){
             IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
             IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), NativeMethods.WM_GETFONT, 0, 0);
-            IntSecurity.ObjectFromWin32Handle.Assert();
             return Font.FromHfont(hFont);
         }
 
@@ -6088,17 +6044,11 @@ namespace System.Windows.Forms {
         private void WmPrint(ref Message m) {
             base.WndProc(ref m);
             if ((NativeMethods.PRF_NONCLIENT & (int)m.LParam) != 0 && Application.RenderWithVisualStyles && this.BorderStyle == BorderStyle.Fixed3D) {
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    using (Graphics g = Graphics.FromHdc(m.WParam)) {
-                        Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
-                        g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
-                        rect.Inflate(-1, -1);
-                        g.DrawRectangle(SystemPens.Window, rect);
-                    }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                using (Graphics g = Graphics.FromHdc(m.WParam)) {
+                    Rectangle rect = new Rectangle(0, 0, this.Size.Width - 1, this.Size.Height - 1);
+                    g.DrawRectangle(new Pen(VisualStyleInformation.TextControlBorder), rect);
+                    rect.Inflate(-1, -1);
+                    g.DrawRectangle(SystemPens.Window, rect);
                 }
             }
         }
@@ -6107,7 +6057,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {

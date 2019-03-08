@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -22,7 +22,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Security;
-    using System.Security.Permissions;
     using System.Security.Policy;
     using System.Threading;
     using System.Windows.Forms.Design;
@@ -422,9 +421,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public static Form ActiveForm {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
                 Control c = Control.FromHandleInternal(hwnd);
                 if (c != null && c is Form) {
@@ -979,7 +975,6 @@ namespace System.Windows.Forms {
         ///    If a subclass overrides this function, it must call the base implementation.
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
 
@@ -1432,34 +1427,14 @@ namespace System.Windows.Forms {
                 /// 
                 if (formState[FormStateIsRestrictedWindowChecked] == 0) {
                     formState[FormStateIsRestrictedWindow] = 0;
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Checking for restricted window...");
-                    Debug.Indent();
 #if DEBUG
                     if (AlwaysRestrictWindows.Enabled) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Always restricted switch is on...");
                         formState[FormStateIsRestrictedWindow] = 1;
                         formState[FormStateIsRestrictedWindowChecked] = 1;
-                        Debug.Unindent();
                         return true;
                     }
 #endif
 
-                    try {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "WindowAdornmentModification Demanded");
-                        IntSecurity.WindowAdornmentModification.Demand();
-                    }
-                    catch (SecurityException) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Caught security exception, we are restricted...");
-                        formState[FormStateIsRestrictedWindow] = 1;
-                    }
-                    catch {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "Caught non-security exception...");
-                        Debug.Unindent();
-                        formState[FormStateIsRestrictedWindow] = 1; // To be on the safe side
-                        formState[FormStateIsRestrictedWindowChecked] = 1;
-                        throw;
-                    }
-                    Debug.Unindent();
                     formState[FormStateIsRestrictedWindowChecked] = 1;
                 }
 
@@ -1857,9 +1832,6 @@ namespace System.Windows.Forms {
         ]
         public Form MdiParent {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 return MdiParentInternal;
             }
             set {
@@ -1953,7 +1925,6 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormMergedMenuDescr)),
         ]
         public MainMenu MergedMenu {
-            [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
             get {
                 return this.MergedMenuPrivate;
             }
@@ -2132,7 +2103,6 @@ namespace System.Windows.Forms {
         ]
         public Form Owner {
             get {
-                IntSecurity.GetParent.Demand();
                 return OwnerInternal;
             }
             set {
@@ -2584,7 +2554,6 @@ namespace System.Windows.Forms {
                     bool oldLayered = (formState[FormStateLayered] == 1);
                     if (value != Color.Empty)
                     {
-                        IntSecurity.TransparentWindows.Demand();
                         AllowTransparency = true;
                         formState[FormStateLayered] = 1;
                     }
@@ -3052,9 +3021,6 @@ namespace System.Windows.Forms {
         ///    <para>Activates the form and gives it focus.</para>
         /// </devdoc>
         public void Activate() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-
             if (Visible && IsHandleCreated) {
                 if (IsMdiChild) {
                     MdiParentInternal.MdiClient.SendMessage(NativeMethods.WM_MDIACTIVATE, Handle, 0);
@@ -3074,9 +3040,6 @@ namespace System.Windows.Forms {
         ///     to be used directly from your code.
         /// </devdoc>
         protected void ActivateMdiChild(Form form) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-            
             ActivateMdiChildInternal(form);
         }
 
@@ -3742,7 +3705,6 @@ namespace System.Windows.Forms {
         ///       </para>
         /// </devdoc>
         [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected override void DefWndProc(ref Message m) {
@@ -4211,25 +4173,12 @@ namespace System.Windows.Forms {
                 //way we can safely ignore these from the url list
                 ArrayList loadedAssembliesFromGac = new ArrayList();
 
-                // 
-
-                FileIOPermission fiop = new FileIOPermission( PermissionState.None );
-                fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                fiop.Assert();
-
-                try
+                foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+                    if (asm.GlobalAssemblyCache)
                     {
-                        if (asm.GlobalAssemblyCache)
-                        {
-                            loadedAssembliesFromGac.Add(asm.CodeBase.ToUpper(CultureInfo.InvariantCulture));
-                        }
+                        loadedAssembliesFromGac.Add(asm.CodeBase.ToUpper(CultureInfo.InvariantCulture));
                     }
-                }
-                finally
-                {
-                    CodeAccessPermission.RevertAssert();
                 }
 
                 //now, build up a sitelist which contains a friendly string
@@ -4263,17 +4212,7 @@ namespace System.Windows.Forms {
                 //
                 if (siteList.Count == 0) {
                     //here, we'll set the local machine name to the site string
-                    //
-
-                    // 
-
-                    new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                    try {
-                        securitySite = Environment.MachineName;
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    securitySite = Environment.MachineName;
                 }
                 else if (siteList.Count == 1)
                 {
@@ -4362,7 +4301,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overriden to handle MDI mnemonic processing properly.
         /// </devdoc>        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             // MDI container form has at least one control, the MDI client which contains the MDI children. We need
             // to allow the MDI children process the mnemonic before any other control in the MDI container (like
@@ -4936,15 +4874,7 @@ namespace System.Windows.Forms {
 
                 UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), ptToSnap);
                 if (!button.IsWindowObscured) {
-                    // 
-
-                    IntSecurity.AdjustCursorPosition.Assert();
-                    try {
-                        Cursor.Position = new Point(ptToSnap.x, ptToSnap.y);
-                    }
-                    finally {
-                        System.Security.CodeAccessPermission.RevertAssert();
-                    }
+                    Cursor.Position = new Point(ptToSnap.x, ptToSnap.y);
                 }
             }
         }
@@ -5193,9 +5123,6 @@ namespace System.Windows.Forms {
         ///     Processes a command key. Overrides Control.processCmdKey() to provide
         ///     additional handling of main menu command keys and Mdi accelerators.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             if (base.ProcessCmdKey(ref msg, keyData)) return true;
 
@@ -5233,7 +5160,6 @@ namespace System.Windows.Forms {
         /// The method performs no processing on keys that include the ALT or
         ///     CONTROL modifiers.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None) {
                 Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -5276,7 +5202,6 @@ namespace System.Windows.Forms {
         ///    Processes a dialog character For a MdiChild.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogChar(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Form.ProcessDialogChar [" + charCode.ToString() + "]");
@@ -5305,9 +5230,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessKeyPreview"]/*' />
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected override bool ProcessKeyPreview(ref Message m) {
             if (formState[FormStateKeyPreview] != 0 && ProcessKeyEventArgs(ref m))
                 return true;
@@ -5315,7 +5237,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessTabKey"]/*' />
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             if (SelectNextControl(ActiveControl, forward, true, true, true))
                 return true;
@@ -5658,9 +5579,6 @@ namespace System.Windows.Forms {
         ///     Selects this form, and optionally selects the next/previous control.
         /// </devdoc>
         protected override void Select(bool directed, bool forward) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
-            
             SelectInternal(directed, forward);
         }
 
@@ -5670,11 +5588,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         // SECURITY WARNING: This method bypasses a security demand. Use with caution!
         private void SelectInternal(bool directed, bool forward) {
-            // SelectNextControl & set_ActiveControl below demand a ModifyFocus permission, let's revert it.
-            // Reviewed : This method is to be called by Form only so asserting here is safe.
-            //
-            IntSecurity.ModifyFocus.Assert();
-
             if (directed) {
                 SelectNextControl(null, forward, true, true, false);
             }
@@ -7407,7 +7320,6 @@ namespace System.Windows.Forms {
         ///     Base wndProc encapsulation.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_NCACTIVATE:

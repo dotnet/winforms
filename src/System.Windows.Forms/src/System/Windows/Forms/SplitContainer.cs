@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,8 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Collections;
     using System.Drawing.Drawing2D;
@@ -1956,7 +1954,6 @@ namespace System.Windows.Forms {
                         c.ActiveControl = this;
                     }
                     else {
-                        IntSecurity.ModifyFocus.Demand();
                         cc.SetActiveControlInternal(this);
                     }
                 }
@@ -2139,24 +2136,12 @@ namespace System.Windows.Forms {
             initialSplitterDistance = splitterDistance;
             initialSplitterRectangle = SplitterRectangle;
 
-            // 
-
-
-
-
-
-
-            IntSecurity.UnmanagedCode.Assert();
-            try {
-                if (splitContainerMessageFilter == null)
-                {
-                   splitContainerMessageFilter = new SplitContainerMessageFilter(this);
-                }
-                Application.AddMessageFilter(splitContainerMessageFilter);
+            if (splitContainerMessageFilter == null)
+            {
+                splitContainerMessageFilter = new SplitContainerMessageFilter(this);
             }
-            finally {
-                CodeAccessPermission.RevertAssert();
-            }
+            Application.AddMessageFilter(splitContainerMessageFilter);
+
             CaptureInternal = true;
             DrawSplitBar(DRAW_START);
         }
@@ -2374,7 +2359,6 @@ namespace System.Windows.Forms {
         ///    on the form. For the arrow keys,
         ///    !!!
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
@@ -2407,7 +2391,6 @@ namespace System.Windows.Forms {
         ///   This will process the TabKey for the SplitContainer. The Focus needs to Shift from controls to the Left of the Splitter
         ///   to the splitter and then to the controls on the right of the splitter. This override implements this Logic.
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessTabKey(bool forward) {
             //Dont Focus the Splitter if TabStop == False or if the Splitter is Fixed !!
             if (!TabStop || IsSplitterFixed) {
@@ -2461,7 +2444,6 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
                 case NativeMethods.WM_SETCURSOR:
@@ -2513,9 +2495,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
-            [
-            System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Flags=System.Security.Permissions.SecurityPermissionFlag.UnmanagedCode)
-            ]
             bool IMessageFilter.PreFilterMessage(ref Message m) {
                 if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
                     if ((m.Msg == NativeMethods.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)

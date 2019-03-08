@@ -1,15 +1,12 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 #define DEBUG_PREFERREDSIZE
 
-
-
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Control+ActiveXFontMarshaler..ctor()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.PreProcessControlMessageInternal(System.Windows.Forms.Control, System.Windows.Forms.Message):System.Windows.Forms.PreProcessControlState")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands", Scope="member", Target="System.Windows.Forms.Control.OnPreviewKeyDown(System.Windows.Forms.PreviewKeyDownEventArgs):System.Void")]
-
 
 namespace System.Windows.Forms {
     using Accessibility;
@@ -27,8 +24,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Globalization;
-    using System.Security.Permissions;
-    using System.Security;
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
@@ -56,13 +51,13 @@ namespace System.Windows.Forms {
     ///       with visual representation.</para>
     /// </devdoc>
     [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Text)),
-    DefaultEvent(nameof(Click)),
-    Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
-    DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
-    ToolboxItemFilter("System.Windows.Forms")
+        ComVisible(true),
+        ClassInterface(ClassInterfaceType.AutoDispatch),
+        DefaultProperty(nameof(Text)),
+        DefaultEvent(nameof(Click)),
+        Designer("System.Windows.Forms.Design.ControlDesigner, " + AssemblyRef.SystemDesign),
+        DesignerSerializer("System.Windows.Forms.Design.ControlCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign),
+        ToolboxItemFilter("System.Windows.Forms")
     ]
     public partial class Control :
     Component,
@@ -91,14 +86,8 @@ namespace System.Windows.Forms {
         internal static string GetAllocationStack() {
             if (ControlFinalization.TraceVerbose) {
             //  the operation is safe (data obtained from the CLR). This code is for debugging purposes only.
-                new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                try {
-                    return Environment.StackTrace;
-                }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-                }
+                return Environment.StackTrace;
+            }
             else {
                 return "Enable 'ControlFinalization' switch to see stack of allocation";
             }
@@ -303,7 +292,7 @@ namespace System.Windows.Forms {
 
         // Initially check for illegal multithreading based on whether the
         // debugger is attached.
-        [ResourceExposure(ResourceScope.Process)]
+        
         private static bool checkForIllegalCrossThreadCalls = Debugger.IsAttached;
         private static ContextCallback invokeMarshaledCallbackHelperDelegate;
 
@@ -546,7 +535,6 @@ example usage
                 clientHeight = height - (rect.bottom - rect.top);
             }
 
-
             // Set up for async operations on this thread.
             if (autoInstallSyncContext) {
                 WindowsFormsSynchronizationContext.InstallIfNeeded();
@@ -600,9 +588,9 @@ example usage
         ///      The Accessibility Object for this Control
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlAccessibilityObjectDescr))
         ]
         public AccessibleObject AccessibilityObject {
             get {
@@ -684,10 +672,10 @@ example usage
         ///      The default action description of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
         ]
         public string AccessibleDefaultActionDescription {
             get {
@@ -703,10 +691,10 @@ example usage
         ///      The accessible description of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            DefaultValue(null),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
         ]
         public string AccessibleDescription {
             get {
@@ -722,10 +710,10 @@ example usage
         ///      The accessible name of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlAccessibleNameDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            DefaultValue(null),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlAccessibleNameDescr))
         ]
         public string AccessibleName {
             get {
@@ -742,9 +730,9 @@ example usage
         ///      The accessible role of the control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAccessibility)),
-        DefaultValue(AccessibleRole.Default),
-        SRDescription(nameof(SR.ControlAccessibleRoleDescr))
+            SRCategory(nameof(SR.CatAccessibility)),
+            DefaultValue(AccessibleRole.Default),
+            SRDescription(nameof(SR.ControlAccessibleRoleDescr))
         ]
         public AccessibleRole AccessibleRole {
 
@@ -793,8 +781,6 @@ example usage
         ///     to another method so we do not force JIT the ActiveX codebase.
         /// </devdoc>
         private Font ActiveXAmbientFont {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             get {
                 return ActiveXInstance.AmbientFont;
             }
@@ -855,9 +841,9 @@ example usage
         ///     this control will allow drag and drop operations and events to be used.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.ControlAllowDropDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(false),
+            SRDescription(nameof(SR.ControlAllowDropDescr))
         ]
         public virtual bool AllowDrop {
             get {
@@ -866,15 +852,6 @@ example usage
 
             set {
                 if (GetState(STATE_ALLOWDROP) != value) {
-                    // Since we won't call SetAcceptDrops without a handle,
-                    // we do the security demand here. Without this demand
-                    // we are still safe, but you get the exception at an
-                    // odd time. This gives a better experience.
-                    //
-                    if (value && !IsHandleCreated) {
-                        IntSecurity.ClipboardRead.Demand();
-                    }
-
                     SetState(STATE_ALLOWDROP, value);
 
                     if (IsHandleCreated) {
@@ -922,11 +899,11 @@ example usage
         ///     edges.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        DefaultValue(CommonProperties.DefaultAnchor),
-        SRDescription(nameof(SR.ControlAnchorDescr)),
-        RefreshProperties(RefreshProperties.Repaint)
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true),
+            DefaultValue(CommonProperties.DefaultAnchor),
+            SRDescription(nameof(SR.ControlAnchorDescr)),
+            RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual AnchorStyles Anchor {
             get {
@@ -983,9 +960,9 @@ example usage
         /// Default is the upper left hand corner of the control.
         /// </devdoc>
         [
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DefaultValue(typeof(Point), "0, 0")
+            Browsable(false),
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            DefaultValue(typeof(Point), "0, 0")
         ]
         public virtual Point AutoScrollOffset {
             get {
@@ -1022,8 +999,6 @@ example usage
         ///                   from BackBrush to BackColorBrush due to a naming conflict with DataGrid's BackBrush.
         /// </devdoc>
         internal IntPtr BackColorBrush {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             get {
                 object customBackBrush = Properties.GetObject(PropBackBrush);
                 if (customBackBrush != null) {
@@ -1072,9 +1047,9 @@ example usage
         ///     will always return a non-null value.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
-        SRDescription(nameof(SR.ControlBackColorDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DispId(NativeMethods.ActiveX.DISPID_BACKCOLOR),
+            SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public virtual Color BackColor {
             get {
@@ -1140,10 +1115,10 @@ example usage
         ///     The background image of the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(null),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlBackgroundImageDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DefaultValue(null),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlBackgroundImageDescr))
         ]
         public virtual Image BackgroundImage {
             get {
@@ -1173,10 +1148,10 @@ example usage
         ///     The BackgroundImageLayout of the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(ImageLayout.Tile),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DefaultValue(ImageLayout.Tile),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
         ]
         public virtual ImageLayout BackgroundImageLayout {
             get {
@@ -1296,9 +1271,9 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContext"]/*' />
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlBindingContextDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlBindingContextDescr))
         ]
         public virtual BindingContext BindingContext {
             get {
@@ -1325,10 +1300,10 @@ example usage
         ///    <para>The bottom coordinate of this control.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlBottomDescr)),
-        SRCategory(nameof(SR.CatLayout))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlBottomDescr)),
+            SRCategory(nameof(SR.CatLayout))
         ]
         public int Bottom {
             get {
@@ -1342,10 +1317,10 @@ example usage
         ///     control in parent client coordinates.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlBoundsDescr)),
-        SRCategory(nameof(SR.CatLayout))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlBoundsDescr)),
+            SRCategory(nameof(SR.CatLayout))
         ]
         public Rectangle Bounds {
             get {
@@ -1372,10 +1347,10 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatFocus)),
-        SRDescription(nameof(SR.ControlCanFocusDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatFocus)),
+            SRDescription(nameof(SR.ControlCanFocusDescr))
         ]
         public bool CanFocus {
             get {
@@ -1411,10 +1386,10 @@ example usage
         ///       is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatFocus)),
-        SRDescription(nameof(SR.ControlCanSelectDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatFocus)),
+            SRDescription(nameof(SR.ControlCanSelectDescr))
         ]
         public bool CanSelect {
             // We implement this to allow only AxHost to override canSelectCore, but still
@@ -1430,10 +1405,10 @@ example usage
         ///    <para> Indicates whether the control has captured the mouse.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatFocus)),
-        SRDescription(nameof(SR.ControlCaptureDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatFocus)),
+            SRDescription(nameof(SR.ControlCaptureDescr))
         ]
         public bool Capture {
             get {
@@ -1441,10 +1416,6 @@ example usage
             }
 
             set {
-                if (value) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetCapture Demanded");
-                    IntSecurity.GetCapture.Demand();
-                }
                 CaptureInternal = value;
             }
         }
@@ -1471,9 +1442,9 @@ example usage
         ///       Indicates whether entering the control causes validation on the controls requiring validation.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatFocus)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.ControlCausesValidationDescr))
+            SRCategory(nameof(SR.CatFocus)),
+            DefaultValue(true),
+            SRDescription(nameof(SR.ControlCausesValidationDescr))
         ]
         public bool CausesValidation {
             get {
@@ -1549,9 +1520,10 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CheckForIllegalCrossThreadCalls"]/*' />
-        [ Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-          SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
-          DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+        [ 
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            SRDescription(nameof(SR.ControlCheckForIllegalCrossThreadCalls)),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public static bool CheckForIllegalCrossThreadCalls {
             get { return checkForIllegalCrossThreadCalls; }
@@ -1563,10 +1535,10 @@ example usage
         ///     The client rect of the control.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRCategory(nameof(SR.CatLayout)),
-        SRDescription(nameof(SR.ControlClientRectangleDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRCategory(nameof(SR.CatLayout)),
+            SRDescription(nameof(SR.ControlClientRectangleDescr))
         ]
         public Rectangle ClientRectangle {
             get {
@@ -1579,10 +1551,10 @@ example usage
         ///     The size of the clientRect.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlClientSizeDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlClientSizeDescr))
         ]
         public Size ClientSize {
             get {
@@ -1613,13 +1585,13 @@ example usage
         ///     Retrieves the company name of this specific component.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            DescriptionAttribute(nameof(SR.ControlCompanyNameDescr))
         ]
         public string CompanyName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return VersionInfo.CompanyName;
             }
@@ -1631,9 +1603,9 @@ example usage
         ///       focus. This property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlContainsFocusDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlContainsFocusDescr))
         ]
         public bool ContainsFocus {
             get {
@@ -1668,10 +1640,10 @@ example usage
         ///     and a context menu strip are assigned, context menu will be shown instead of context menu strip.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ControlContextMenuDescr)),
-        Browsable(false)
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(null),
+            SRDescription(nameof(SR.ControlContextMenuDescr)),
+            Browsable(false)
         ]
         public virtual ContextMenu ContextMenu {
             get {
@@ -1700,9 +1672,9 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuChanged"]/*' />
         [
-        SRCategory(nameof(SR.CatPropertyChanged)),
-        SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
-        Browsable(false)
+            SRCategory(nameof(SR.CatPropertyChanged)),
+            SRDescription(nameof(SR.ControlOnContextMenuChangedDescr)),
+            Browsable(false)
         ]
         public event EventHandler ContextMenuChanged {
             add {
@@ -1713,7 +1685,6 @@ example usage
             }
         }
 
-
        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
        /// <devdoc>
        ///     The contextMenuStrip associated with this control. The contextMenuStrip
@@ -1721,9 +1692,9 @@ example usage
        ///     Note: if a context menu is also assigned, it will take precidence over this property.
        /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(null),
-        SRDescription(nameof(SR.ControlContextMenuDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            DefaultValue(null),
+            SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenuStrip ContextMenuStrip {
             get {
@@ -1750,6 +1721,7 @@ example usage
              }
 
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
@@ -1766,9 +1738,9 @@ example usage
         ///     Collection of child controls.
         /// </devdoc>
         [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRDescription(nameof(SR.ControlControlsDescr))
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
+            SRDescription(nameof(SR.ControlControlsDescr))
         ]
         public ControlCollection Controls {
             get {
@@ -1787,9 +1759,9 @@ example usage
         ///    <para>Indicates whether the control has been created. This property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlCreatedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlCreatedDescr))
         ]
         public bool Created {
             get {
@@ -1804,10 +1776,6 @@ example usage
         ///     below:
         /// </devdoc>
         protected virtual CreateParams CreateParams {
-            [
-                SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-                SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-            ]
             get {
 
                 // CLR4.0 or later, comctl32.dll needs to be loaded explicitly.
@@ -1982,8 +1950,6 @@ example usage
         /// </devdoc>
         /// <internalonly/>
         internal int CreateThreadId {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             get {
                 if (IsHandleCreated) {
                     int pid;
@@ -2001,9 +1967,9 @@ example usage
         ///     control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        SRDescription(nameof(SR.ControlCursorDescr)),
-        AmbientValue(null)
+            SRCategory(nameof(SR.CatAppearance)),
+            SRDescription(nameof(SR.ControlCursorDescr)),
+            AmbientValue(null)
         ]
         public virtual Cursor Cursor {
             get {
@@ -2041,9 +2007,6 @@ example usage
                 Cursor localCursor = (Cursor)Properties.GetObject(PropCursor);
                 Cursor resolvedCursor = Cursor;
                 if (localCursor != value) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyCursor Demanded");
-                    IntSecurity.ModifyCursor.Demand();
-
                     Properties.SetObject(PropCursor, value);
                 }
 
@@ -2084,11 +2047,11 @@ example usage
         ///     Retrieves the bindings for this control.
         /// </devdoc>
         [
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-        SRCategory(nameof(SR.CatData)),
-        SRDescription(nameof(SR.ControlBindingsDescr)),
-        RefreshProperties(RefreshProperties.All),
-        ParenthesizePropertyName(true)
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
+            SRCategory(nameof(SR.CatData)),
+            SRDescription(nameof(SR.ControlBindingsDescr)),
+            RefreshProperties(RefreshProperties.All),
+            ParenthesizePropertyName(true)
         ]
         public ControlBindingsCollection DataBindings
         {
@@ -2131,8 +2094,6 @@ example usage
         ///     different defaults.
         /// </devdoc>
         public static Font DefaultFont {
-            [ResourceExposure(ResourceScope.None)]
-            [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
             get {
                 if (defaultFont == null) {
                     defaultFont = SystemFonts.DefaultFont;
@@ -2189,7 +2150,6 @@ example usage
             ContextMenu = null;
         }
 
-
         private void DetachContextMenuStrip(object sender, EventArgs e) {
             ContextMenuStrip = null;
         }
@@ -2243,9 +2203,9 @@ example usage
         ///     area differs from their display area.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlDisplayRectangleDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlDisplayRectangleDescr))
         ]
         public virtual Rectangle DisplayRectangle {
             [SuppressMessage("Microsoft.Security", "CA2119:SealMethodsThatSatisfyPrivateInterfaces")]
@@ -2260,9 +2220,9 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlDisposedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlDisposedDescr))
         ]
         public bool IsDisposed {
             get {
@@ -2289,9 +2249,9 @@ example usage
         ///       property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlDisposingDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlDisposingDescr))
         ]
         public bool Disposing {
             get {
@@ -2307,11 +2267,11 @@ example usage
         ///     top of the container, extending the length of the container.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        RefreshProperties(RefreshProperties.Repaint),
-        DefaultValue(CommonProperties.DefaultDock),
-        SRDescription(nameof(SR.ControlDockDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true),
+            RefreshProperties(RefreshProperties.Repaint),
+            DefaultValue(CommonProperties.DefaultDock),
+            SRDescription(nameof(SR.ControlDockDescr))
         ]
         public virtual DockStyle Dock {
             get {
@@ -2352,8 +2312,8 @@ example usage
         ///    <para>This will enable or disable double buffering.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        SRDescription(nameof(SR.ControlDoubleBufferedDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            SRDescription(nameof(SR.ControlDoubleBufferedDescr))
         ]
         protected virtual bool DoubleBuffered {
             get {
@@ -2361,7 +2321,6 @@ example usage
             }
             set {
                 if (value != DoubleBuffered) {
-                    
                     if (value) {
                         SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, value);
                     }
@@ -2385,10 +2344,10 @@ example usage
         ///    <para>Indicates whether the control is currently enabled.</para>
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        Localizable(true),
-        DispId(NativeMethods.ActiveX.DISPID_ENABLED),
-        SRDescription(nameof(SR.ControlEnabledDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            Localizable(true),
+            DispId(NativeMethods.ActiveX.DISPID_ENABLED),
+            SRDescription(nameof(SR.ControlEnabledDescr))
         ]
         public bool Enabled {
             get {
@@ -2435,9 +2394,9 @@ example usage
         ///    <para>Indicates whether the control has focus. This property is read-only.</para>
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlFocusedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlFocusedDescr))
         ]
         public virtual bool Focused {
             get {
@@ -2451,16 +2410,14 @@ example usage
         ///     by default for painting and text in the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        Localizable(true),
-        DispId(NativeMethods.ActiveX.DISPID_FONT),
-        AmbientValue(null),
-        SRDescription(nameof(SR.ControlFontDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            Localizable(true),
+            DispId(NativeMethods.ActiveX.DISPID_FONT),
+            AmbientValue(null),
+            SRDescription(nameof(SR.ControlFontDescr))
         ]
         public virtual Font Font {
             [return : MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef=typeof(ActiveXFontMarshaler))]
-            [ResourceExposure(ResourceScope.None)]
-            [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
             get {
                 Font font = (Font)Properties.GetObject(PropFont);
                 if (font != null) {
@@ -2661,9 +2618,9 @@ example usage
         ///     The foreground color of the control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatAppearance)),
-        DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
-        SRDescription(nameof(SR.ControlForeColorDescr))
+            SRCategory(nameof(SR.CatAppearance)),
+            DispId(NativeMethods.ActiveX.DISPID_FORECOLOR),
+            SRDescription(nameof(SR.ControlForeColorDescr))
         ]
         public virtual Color ForeColor {
             get {
@@ -2765,8 +2722,6 @@ example usage
                     }
                 }
             
-              
-
                 CacheTextInternal = true;
                 try {
                     prefSize = GetPreferredSizeCore(proposedSize);
@@ -2800,10 +2755,10 @@ example usage
         ///     has not yet been created, this will force handle creation.
         /// </devdoc>
         [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        DispId(NativeMethods.ActiveX.DISPID_HWND),
-        SRDescription(nameof(SR.ControlHandleDescr))
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            DispId(NativeMethods.ActiveX.DISPID_HWND),
+            SRDescription(nameof(SR.ControlHandleDescr))
         ]
         public IntPtr Handle {
             get {
@@ -2836,9 +2791,9 @@ example usage
         ///     same effect.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHasChildrenDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlHasChildrenDescr))
         ]
         public bool HasChildren {
             get {
@@ -2858,10 +2813,10 @@ example usage
         ///     The height of this control
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHeightDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlHeightDescr))
         ]
         public int Height {
             get {
@@ -2917,9 +2872,9 @@ example usage
         ///     Whether or not this control has a handle associated with it.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlHandleCreatedDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlHandleCreatedDescr))
         ]
         public bool IsHandleCreated {
             get { return window.Handle != IntPtr.Zero; }
@@ -2977,7 +2932,6 @@ example usage
                         }
                     }
 
-
                     Graphics g = CreateGraphics();
                     try {
                         emptyRegion = working.IsEmpty(g);
@@ -3027,13 +2981,12 @@ example usage
         ///     invoke methods.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlInvokeRequiredDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlInvokeRequiredDescr))
         ]
         public bool InvokeRequired {
             get {
-
                 using (new MultithreadSafeCallScope())
                 {
                     HandleRef hwnd;
@@ -3064,10 +3017,10 @@ example usage
         ///      i.e. whether it should be visible to accessibility applications.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlIsAccessibleDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlIsAccessibleDescr))
         ]
         public bool IsAccessible {
             get {
@@ -3115,11 +3068,11 @@ example usage
         ///     since we might call CreateParams here - you dig!
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),        
-        Browsable(false),
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.IsMirroredDescr))        
+            SRCategory(nameof(SR.CatLayout)),        
+            Browsable(false),
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.IsMirroredDescr))        
         ]
         public bool IsMirrored {
             get {
@@ -3159,10 +3112,10 @@ example usage
         ///     The left coordinate of this control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlLeftDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Always),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlLeftDescr))
         ]
         public int Left {
             get {
@@ -3178,9 +3131,9 @@ example usage
         ///     The location of this control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        SRDescription(nameof(SR.ControlLocationDescr))
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true),
+            SRDescription(nameof(SR.ControlLocationDescr))
         ]
         public Point Location {
             get {
@@ -3204,9 +3157,9 @@ example usage
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Margin"]/*' />
         [
-        SRDescription(nameof(SR.ControlMarginDescr)),
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true)
+            SRDescription(nameof(SR.ControlMarginDescr)),
+            SRCategory(nameof(SR.CatLayout)),
+            Localizable(true)
         ]
         public Padding Margin
         {
@@ -3276,7 +3229,6 @@ example usage
                 Debug.Assert(MinimumSize == value, "Error detected while setting MinimumSize.");
             }
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ModifierKeys"]/*' />
         /// <devdoc>
@@ -3370,16 +3322,13 @@ example usage
         ///     The parent of this control.
         /// </devdoc>
         [
-        SRCategory(nameof(SR.CatBehavior)),
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlParentDescr))
+            SRCategory(nameof(SR.CatBehavior)),
+            Browsable(false),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlParentDescr))
         ]
         public Control Parent {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
-
                 return ParentInternal;
             }
             set {
@@ -3408,13 +3357,13 @@ example usage
         ///     Retrieves the product name of this specific component.
         /// </devdoc>
         [
-        Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.ControlProductNameDescr))
+            Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced),
+            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
+            SRDescription(nameof(SR.ControlProductNameDescr))
         ]
         public string ProductName {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return VersionInfo.ProductName;
             }
@@ -3430,8 +3379,8 @@ example usage
         SRDescription(nameof(SR.ControlProductVersionDescr))
         ]
         public string ProductVersion {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return VersionInfo.ProductVersion;
             }
@@ -3511,11 +3460,6 @@ example usage
                 return (Region)Properties.GetObject(PropRegion);
             }
             set {
-                if (GetState(STATE_TOPLEVEL)) {
-                    Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ChangeWindowRegion Demanded");
-                    IntSecurity.ChangeWindowRegionForTopLevel.Demand();
-                }
-
                 Region oldRegion = Region;
                 if (oldRegion != value) {
                     Properties.SetObject(PropRegion, value);
@@ -4049,8 +3993,6 @@ example usage
         ]
         public Control TopLevelControl {
             get {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-                IntSecurity.GetParent.Demand();
                 return TopLevelControlInternal;
             }
         }
@@ -4417,11 +4359,9 @@ example usage
         SRDescription(nameof(SR.ControlWindowTargetDescr))
         ]
         public IWindowTarget WindowTarget {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 return window.WindowTarget;
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             set {
                 window.WindowTarget = value;
             }
@@ -5060,11 +5000,9 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             add {
                 Events.AddHandler(EventPreviewKeyDown, value);
             }
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             remove {
                 Events.RemoveHandler(EventPreviewKeyDown, value);
             }
@@ -5166,8 +5104,8 @@ example usage
         ///     Helper method for retrieving an ActiveX property.  We abstract these
         ///     to another method so we do not force JIT the ActiveX codebase.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         private IntPtr ActiveXMergeRegion(IntPtr region) {
             return ActiveXInstance.MergeRegion(region);
         }
@@ -5608,20 +5546,18 @@ example usage
         ///     method when it is no longer needed.  The Graphics Object is only valid for
         ///     the duration of the current window's message.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public System.Drawing.Graphics CreateGraphics() {
             using (new MultithreadSafeCallScope())
             {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "CreateGraphicsForControl Demanded");
-                IntSecurity.CreateGraphicsForControl.Demand();
                 return CreateGraphicsInternal();
             }
         }
        
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal System.Drawing.Graphics CreateGraphicsInternal() {
             return Graphics.FromHwndInternal(this.Handle);
         }
@@ -5634,7 +5570,6 @@ example usage
         /// </devdoc>
         [
         EditorBrowsable(EditorBrowsableState.Advanced),
-        UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)
         ]
         protected virtual void CreateHandle() {
             IntPtr userCookie = IntPtr.Zero;
@@ -5779,8 +5714,6 @@ example usage
         /// </devdoc>
         /* Primarily here for Form to override */
         [
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected virtual void DefWndProc(ref Message m) {
@@ -5794,8 +5727,6 @@ example usage
         ///     always call base.destroyHandle.
         /// </devdoc>
         [
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows),
             EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         protected virtual void DestroyHandle() {
@@ -5962,7 +5893,6 @@ example usage
         ///     that implements System.Runtime.Serialization.ISerializable. data can also be any Object that
         ///     implements System.Windows.Forms.IDataObject.
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Clipboard=UIPermissionClipboard.OwnClipboard)]
         public DragDropEffects DoDragDrop(object data, DragDropEffects allowedEffects) {            
             int[] finalEffect = new int[] {(int)DragDropEffects.None};
             UnsafeNativeMethods.IOleDropSource dropSource = new DropSource( this );
@@ -6009,7 +5939,6 @@ example usage
             SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"),          // Using Bitmap instead of Image intentionally
             SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters"), // targetBounds is the name of the param passed in.
                                                                                                          // So we don't have to localize it.
-            UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)
         ]
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds) {
 
@@ -6118,7 +6047,6 @@ example usage
         ///     Retrieves the form that this control is on. The control's parent
         ///     may not be the same as the form.
         /// </devdoc>
-        [UIPermission(SecurityAction.Demand, Window=UIPermissionWindow.AllWindows)]
         public Form FindForm() {
             return FindFormInternal();
         }
@@ -6209,8 +6137,6 @@ example usage
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool Focus() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::Focus - " + this.Name);
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ModifyFocus Demanded");
-            IntSecurity.ModifyFocus.Demand();
 
             //here, we call our internal method (which form overrides)
             //see comments in FocusInternal
@@ -6242,7 +6168,6 @@ example usage
                 }
             }
 
-
             return Focused;
         }
 
@@ -6256,8 +6181,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromChildHandle(IntPtr handle) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FromChildHandleInternal(handle);
         }
 
@@ -6277,8 +6200,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Control FromHandle(IntPtr handle) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-            IntSecurity.ControlFromHandleOrLocation.Demand();
             return FromHandleInternal(handle);
         }
 
@@ -6300,7 +6221,6 @@ example usage
         internal Size ApplySizeConstraints(int width, int height) {
             return ApplyBoundsConstraints(0,0,width, height).Size;
         }
-
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
         // constraints on their size.
@@ -6326,8 +6246,6 @@ example usage
 
             return new Rectangle(suggestedX, suggestedY, proposedWidth, proposedHeight);
         }
-
-        
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
         /// <devdoc>
@@ -6355,14 +6273,9 @@ example usage
             // for IntSecurity.ControlFromHandleOrLocation == ALLWindows.
 
             Control ctl = FromChildHandleInternal(hwnd);
-            if (ctl != null && !IsDescendant(ctl)) {
-                Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ControlFromHandleOrLocation Demanded");
-                IntSecurity.ControlFromHandleOrLocation.Demand();
-            }
 
             return(ctl == this) ? null : ctl;
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetChildAtPoint"]/*' />
         /// <devdoc>
@@ -6379,8 +6292,6 @@ example usage
         ///     parent controls and forms.
         /// </devdoc>
         public IContainerControl GetContainerControl() {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "GetParent Demanded");
-            IntSecurity.GetParent.Demand();
             return GetContainerControlInternal();
         }
 
@@ -6690,8 +6601,6 @@ example usage
             return holders;
         }
 
-        // 
-
         internal virtual Control GetFirstChildControlInTabOrder(bool forward) {
          
             ControlCollection ctlControls = (ControlCollection)this.Properties.GetObject(PropControlsCollection);
@@ -6908,7 +6817,6 @@ example usage
                 return hWnd;
             }
             else {
-                IntSecurity.AllWindows.Demand();
                 hWnd = window.Handle;
                 if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) {
                     return hWnd;
@@ -6950,7 +6858,6 @@ example usage
         public void Hide() {
             Visible = false;
         }
-
 
         /// <devdoc>
         ///     Sets up the TrackMouseEvent for listening for the
@@ -6994,9 +6901,6 @@ example usage
         //
         // NOTE: this message may not have originally been sent to this HWND.
         //
-
-        [ResourceExposure(ResourceScope.None)]
-        [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
         internal virtual IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg) {
             if (!GetStyle(ControlStyles.UserPaint)) {
                 SafeNativeMethods.SetTextColor(new HandleRef(null, dc), ColorTranslator.ToWin32(ForeColor));
@@ -7105,7 +7009,6 @@ example usage
                 OnInvalidated(new InvalidateEventArgs(bounds));
             }
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate2"]/*' />
         /// <devdoc>
@@ -7458,11 +7361,6 @@ example usage
         ///     pre-processing of a character includes checking whether the character
         ///     is a mnemonic of another control.
         /// </devdoc>
-        
-        // 
-
-
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool IsInputChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
 
@@ -7487,11 +7385,6 @@ example usage
         ///     pre-processing phase. Keys that are pre-processed include TAB, RETURN,
         ///     ESCAPE, and arrow keys.
         /// </devdoc>
-
-        // 
-
-
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool IsInputKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
 
@@ -7543,7 +7436,6 @@ example usage
                 Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "   ...returning false");
                 return false;
             } //if
-
 
             if (text != null) {
                 int pos = -1; // start with -1 to handle double &'s
@@ -7639,18 +7531,7 @@ example usage
                 throw new InvalidOperationException(SR.ErrorNoMarshalingThread);
             }
 
-            // We have to demand unmanaged code permission here for the control hosted in
-            // the browser case. Without this check, we will expose a security hole, because
-            // ActiveXImpl.OnMessage() will assert unmanaged code for everyone as part of
-            // its implementation.
-            // The right fix is to remove the Assert() on top of the ActiveXImpl class, and
-            // visit each method to see if it needs unmanaged code permission, and if so, add
-            // the permission just to that method(s).
-            //
             ActiveXImpl activeXImpl = (ActiveXImpl)Properties.GetObject(PropActiveXImpl);
-            if (activeXImpl != null) {
-                IntSecurity.UnmanagedCode.Demand();
-            }
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
@@ -7741,19 +7622,16 @@ example usage
         }
 
         // Used by form to notify the control that it has been "entered"
-        //
         internal void NotifyEnter() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyEnter() - " + this.Name);
             OnEnter(EventArgs.Empty);
         }
 
         // Used by form to notify the control that it has been "left"
-        //
         internal void NotifyLeave() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::NotifyLeave() - " + this.Name);
             OnLeave(EventArgs.Empty);
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.NotifyInvalidate"]/*' />
         /// <internalonly/>
@@ -7768,7 +7646,6 @@ example usage
         }
 
         // Used by form to notify the control that it is validating.
-        //
         private bool NotifyValidating() {
             CancelEventArgs ev = new CancelEventArgs();
             OnValidating(ev);
@@ -7776,7 +7653,6 @@ example usage
         }
 
         // Used by form to notify the control that it has been validated.
-        //
         private void NotifyValidated() {
             OnValidated(EventArgs.Empty);
         }
@@ -8034,9 +7910,7 @@ example usage
                 Properties.SetInteger(PropFontHeight, -1);
             }
 
-
             // Cleanup any font handle wrapper...
-            //
             DisposeFontHandle();
 
             if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint)) {
@@ -8184,14 +8058,12 @@ example usage
             }
         }
 
-
         // occurs when the parent of this control has recreated
         // its handle.
         // presently internal as we feel this will be rare to
         // require override
         internal virtual void OnParentHandleRecreated() {
             // restore ourselves over to the original control.
-
             // use SetParent directly so as to not raise ParentChanged events
             Control parent = ParentInternal;
             if (parent != null) {
@@ -8207,9 +8079,7 @@ example usage
             if (ReflectParent == ParentInternal)  {
                  RecreateHandle();
             }
-
         }
-
 
         // occurs when the parent of this control is recreating
         // its handle.
@@ -8532,32 +8402,20 @@ example usage
                 }
 
                 // Update accessbility information.
-                //
                 ControlAccessibleObject accObj = Properties.GetObject(PropAccessibility) as ControlAccessibleObject;
                 ControlAccessibleObject ncAccObj = Properties.GetObject(PropNcAccessibility) as ControlAccessibleObject;
 
                 // Cache Handle in a local before asserting so we minimize code running under the Assert.
                 IntPtr handle = Handle;
-                
-                // Reviewed  : ControlAccessibleObject.set_Handle demands UnmanagedCode permission for public use, it doesn't
-                //             expose any security vulnerability indirectly. The sec Assert is safe.
-                //
-                IntSecurity.UnmanagedCode.Assert();
-                
-                try {
-                    if (accObj != null) {
-                        accObj.Handle = handle;
-                    }
-                    if (ncAccObj != null) {
-                        ncAccObj.Handle = handle;
-                    }
+                               
+                if (accObj != null) {
+                    accObj.Handle = handle;
                 }
-                finally {
-                    CodeAccessPermission.RevertAssert();
+                if (ncAccObj != null) {
+                    ncAccObj.Handle = handle;
                 }
 
                 // Set the window text from the Text property.
-                //
                 if (text != null && text.Length != 0) {
                     UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), text);
                 }
@@ -8653,8 +8511,6 @@ example usage
             // label, etc. Without this processing, any time you change a
             // property that forces handle recreation, you lose your text!
             // See the above code in wmCreate
-            //
-
             try {
                 if (!GetAnyDisposingInHierarchy()) {
                     text = Text;
@@ -8671,7 +8527,6 @@ example usage
                 // you ask for the text property after you have destroyed their handle. We
                 // don't want those exceptions to bubble all the way to the top, since
                 // we leave our state in a mess.
-                //
             }
         }
 
@@ -8896,9 +8751,6 @@ example usage
 
             bool parentRequiresLayout = LayoutEngine.Layout(this, levent);
 
-            // 
-
-
             if(parentRequiresLayout && ParentInternal != null) {
                 // LayoutEngine.Layout can return true to request that our parent resize us because
                 // we did not have enough room for our contents.  We can not just call PerformLayout
@@ -9033,7 +8885,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
- 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnDpiChangedBeforeParent"]/*' />
         /// <devdoc>
         /// <para>
@@ -9148,7 +8999,6 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnPaintBackground"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle the erase
@@ -9232,10 +9082,8 @@ example usage
         /// <para>Raises the <see cref='System.Windows.Forms.Control.PreviewKeyDown'/> event.</para>
         /// </devdoc>
         [
-        EditorBrowsable(EditorBrowsableState.Advanced),
-        SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-        SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")
         ]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e) {
             Contract.Requires(e != null);
@@ -9361,8 +9209,6 @@ example usage
             // The rest of this won't do much if BackColor is transparent and there is no BackgroundImage,
             // but we need to call it in the partial alpha case.
 
-            // 
-
             if (BackgroundImage != null && !DisplayInformation.HighContrast && !formRTL) {
 
                 if (BackgroundImageLayout == ImageLayout.Tile) {
@@ -9370,8 +9216,6 @@ example usage
                         PaintTransparentBackground(e, rectangle);
                     }
                 }
-
-                // 
 
                 Point scrollLocation = scrollOffset;
                 ScrollableControl scrollControl = this as ScrollableControl;
@@ -9442,8 +9286,8 @@ example usage
             Rectangle borderRectangle = ClientRectangle;
             borderRectangle.X++;
             borderRectangle.Y++;
-            borderRectangle.Width -=2;
-            borderRectangle.Height-=2;
+            borderRectangle.Width -= 2;
+            borderRectangle.Height-= 2;
 
             Rectangle imageRect = new Rectangle(marginX, marginY, glyphSize.Width, glyphSize.Height);
 
@@ -9507,7 +9351,6 @@ example usage
                 e.Graphics.DrawLine(pen, clientRectangle.Left, clientRectangle.Bottom,
                                     clientRectangle.Right, clientRectangle.Top);
             }
-
 #endif
         }
 
@@ -9550,9 +9393,7 @@ example usage
                         if (graphicsState != null) {
                             g.Restore(graphicsState);   
                         }
-                    }
-                    
-                    
+                    }                    
                 }
                 else {
                     // how to move the rendering area and setup it's size
@@ -9581,9 +9422,7 @@ example usage
                             }
                         }
                     }
-
-                }
-                        
+                }                        
             }
             else {
                 // For whatever reason, our parent can't paint our background, but we need some kind of background
@@ -9721,8 +9560,6 @@ example usage
                 }
 #endif
 #endif
-
-
             }
             finally {
                 CacheTextInternal = false;
@@ -9900,8 +9737,6 @@ example usage
         ///     preProcessMessage().
         ///     </para>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         public virtual bool PreProcessMessage(ref Message msg) {
          //   Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessMessage " + msg.ToString());
 
@@ -9921,17 +9756,7 @@ example usage
                     ret = false;
                 }
                 else {
-                    // 
-
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    try {
-                        ret = ProcessDialogKey(keyData);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    ret = ProcessDialogKey(keyData);
                 }
             }
             else if (msg.Msg == NativeMethods.WM_CHAR || msg.Msg == NativeMethods.WM_SYSCHAR) {
@@ -9950,11 +9775,12 @@ example usage
             return ret;
         }
 
-        [EditorBrowsable(EditorBrowsableState.Advanced),
-         SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-         SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly"),
-         SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters"),
-         SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")]  // using ref is OK.
+        [
+            EditorBrowsable(EditorBrowsableState.Advanced),
+            SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly"),
+            SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters"),
+            SuppressMessage("Microsoft.Design", "CA1045:DoNotPassTypesByReference")
+        ]  // using ref is OK.
         public PreProcessControlState PreProcessControlMessage(ref Message msg) {
             return PreProcessControlMessageInternal(null, ref msg);
         }
@@ -10069,10 +9895,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessCmdKey " + msg.ToString());
             ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
@@ -10198,8 +10020,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]     
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool ProcessDialogChar(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
             return parent == null? false: parent.ProcessDialogChar(charCode);
@@ -10229,8 +10049,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]        
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected virtual bool ProcessDialogKey(Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessDialogKey " + keyData.ToString());
             return parent == null? false: parent.ProcessDialogKey(keyData);
@@ -10256,10 +10074,6 @@ example usage
         /// Controls will seldom, if ever, need to override this method.
         ///     </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual bool ProcessKeyEventArgs(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyEventArgs " + m.ToString());
             KeyEventArgs ke = null;
@@ -10343,10 +10157,6 @@ example usage
         ///     returned.
         /// Controls will seldom, if ever, need to override this method.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected internal virtual bool ProcessKeyMessage(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyMessage " + m.ToString());
             if (parent != null && parent.ProcessKeyPreview(ref m)) return true;
@@ -10378,10 +10188,6 @@ example usage
         ///     returned.
         ///     </para>
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual bool ProcessKeyPreview(ref Message m) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessKeyPreview " + m.ToString());
             return parent == null? false: parent.ProcessKeyPreview(ref m);
@@ -10412,8 +10218,6 @@ example usage
         ///     to indicate that the control has no mnemonic.
         ///     </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.InheritanceDemand, Window=UIPermissionWindow.AllWindows)]
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal virtual bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.ProcessMnemonic [0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture) + "]");
@@ -10591,9 +10395,7 @@ example usage
         ///     Forces the recreation of the handle for this control. Inheriting controls
         ///     must call base.RecreateHandle.
         /// </devdoc>
-        [
-        EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RecreateHandle() {
             RecreateHandleCore();
         }
@@ -10688,7 +10490,6 @@ example usage
                         }
                     }
                     
-
                     // Restore control focus
                     if (focused) {
                         FocusInternal();
@@ -10737,8 +10538,6 @@ example usage
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected static bool ReflectMessage(IntPtr hWnd, ref Message m) {
-            Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "SendMessages Demanded");
-            IntSecurity.SendMessages.Demand();
             return ReflectMessageInternal(hWnd, ref m);
         }
         
@@ -10758,6 +10557,18 @@ example usage
         public virtual void Refresh() {
             Invalidate(true);
             Update();
+        }
+
+        /// <summary>
+        /// /Releases UI Automation provinder for specified window.
+        /// </summary>
+        /// <param name="handle">The window handle.</param>
+        internal virtual void ReleaseUiaProvider(IntPtr handle) {
+            // When a window that previously returned providers has been destroyed, 
+            // you should notify UI Automation by calling the UiaReturnRawElementProvider 
+            // as follows: UiaReturnRawElementProvider(hwnd, 0, 0, NULL). This call tells 
+            // UI Automation that it can safely remove all map entries that refer to the specified window.
+            UnsafeNativeMethods.UiaReturnRawElementProvider(new HandleRef(this, handle), new IntPtr(0), new IntPtr(0), null);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ResetMouseEventArgs"]/*' />
@@ -10810,7 +10621,6 @@ example usage
             bool performedLayout = false;
 
             if (layoutSuspendCount > 0) {
-
                 if (layoutSuspendCount == 1) {
                     layoutSuspendCount++;
                     try {
@@ -10834,7 +10644,6 @@ example usage
                 SetState2(STATE2_CLEARLAYOUTARGS, true);
             }
                 
-
             /*
 
             We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
@@ -10873,7 +10682,6 @@ example usage
                         throw new ThreadStateException(SR.ThreadMustBeSTA);
                     }
                     if (accept) {
-                        IntSecurity.ClipboardRead.Demand();
 
                         Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "Registering as drop target: " + Handle.ToString());
                         // Register
@@ -11193,10 +11001,7 @@ example usage
             
             MaximumSize = maxSize;
             MinimumSize = minSize;
-            
-            
         }
-
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ScaleCore"]/*' />
         /// <devdoc>
@@ -11321,7 +11126,6 @@ example usage
             return null;
         }
 
-
         /// <devdoc>
         ///     Unsafe internal version of SelectNextControl - Use with caution!
         /// </devdoc>
@@ -11341,10 +11145,6 @@ example usage
                 IContainerControl c = ParentInternal.GetContainerControlInternal();
 
                 if (c != null) {
-                    // 
-
-
-
                     ((Control)c).SelectNextControlInternal(this, true, true, true, true);
                 }
             }
@@ -11355,7 +11155,6 @@ example usage
         ///     have a handle, it will be created.
         /// </devdoc>
         internal IntPtr SendMessage(int msg, int wparam, int lparam) {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
 
@@ -11367,6 +11166,7 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, ref wparam, ref lparam);
         }
+        
         internal IntPtr SendMessage(int msg, int wparam, IntPtr lparam) {
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, (IntPtr)wparam, lparam);
@@ -11387,7 +11187,6 @@ example usage
         ///     have a handle, it will be created.
         /// </devdoc>
         internal IntPtr SendMessage(int msg, int wparam, ref NativeMethods.RECT lparam) {
-            Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, ref lparam);
         }
 
@@ -11408,6 +11207,7 @@ example usage
             Debug.Assert(IsHandleCreated, "Performance alert!  Calling Control::SendMessage and forcing handle creation.  Re-work control so handle creation is not required to set properties.  If there is no work around, wrap the call in an IsHandleCreated check.");
             return UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), msg, wparam, lparam);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SendToBack"]/*' />
         /// <devdoc>
         ///     sends this control to the back of the z-order
@@ -11420,7 +11220,6 @@ example usage
                 SafeNativeMethods.SetWindowPos(new HandleRef(window, Handle), NativeMethods.HWND_BOTTOM, 0, 0, 0, 0,
                                                NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
             }
-
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetBounds"]/*' />
@@ -11578,7 +11377,6 @@ example usage
 
         internal Size SizeFromClientSize(int width, int height) {
             NativeMethods.RECT rect = new NativeMethods.RECT(0, 0, width, height);
-
             CreateParams cp = CreateParams;
             AdjustWindowRectEx(ref rect, cp.Style, HasMenu, cp.ExStyle);
             return rect.Size;
@@ -11663,13 +11461,6 @@ example usage
         protected void SetStyle(ControlStyles flag, bool value) {
             // WARNING: if we ever add argument checking to "flag", we will need
             // to move private styles like Layered to State.
-            // Calling SetStyle(ControlStyles.EnableNotifyMessage,...) should require UnmanagedCode
-            if ((flag & ControlStyles.EnableNotifyMessage) != 0 && value)
-            {
-                // demand security permission for this condition.
-                // this will throw security exception in semi-trust.
-                IntSecurity.UnmanagedCode.Demand();
-            }
             controlStyle = value? controlStyle | flag: controlStyle & ~flag;
         }
 
@@ -11694,17 +11485,6 @@ example usage
                 throw new InvalidOperationException(SR.TopLevelNotAllowedIfActiveX);
             }
             else {
-                if (value) {
-                    if (this is Form) {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "TopLevelWindow Demanded");
-                        IntSecurity.TopLevelWindow.Demand();
-                    }
-                    else {
-                        Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "UnrestrictedWindows Demanded");
-                        IntSecurity.UnrestrictedWindows.Demand();
-                    }
-                }
-
                 SetTopLevelInternal(value);
             }
         }
@@ -12022,7 +11802,6 @@ example usage
             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)(value? styleFlags | flag: styleFlags & ~flag)));
         }
 
-
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Show"]/*' />
         /// <devdoc>
         ///     Makes the control display by setting the visible property to true
@@ -12077,8 +11856,6 @@ example usage
         ///     Suspends the layout logic for the control.
         /// </devdoc>
         public void SuspendLayout() {
-
-           
             layoutSuspendCount++;
             if (layoutSuspendCount == 1) {
                 OnLayoutSuspended();
@@ -12370,7 +12147,6 @@ example usage
             }
         }
 
-        //
         // Give a chance for derived controls to do what they want, just before we resize.
         internal virtual void OnBoundsUpdate(int x, int y, int width, int height)
         {
@@ -12415,7 +12191,6 @@ example usage
             DefWndProc(ref m);
         }
 
-
         /// <devdoc>
         ///     Handles the WM_CAPTURECHANGED message
         /// </devdoc>
@@ -12425,6 +12200,7 @@ example usage
             DefWndProc(ref m);
 
         }
+        
         /// <devdoc>
         ///     Handles the WM_COMMAND message
         /// </devdoc>
@@ -12445,6 +12221,7 @@ example usage
         internal virtual void WmContextMenu(ref Message m) {
             WmContextMenu(ref m, this);
         }
+        
         /// <devdoc>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
@@ -12469,8 +12246,6 @@ example usage
                 else {
                     client = PointToClientInternal(new Point(x, y));
                 }
-
-                // 
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
                 if (ClientRectangle.Contains( client )) {
@@ -12634,13 +12409,7 @@ example usage
             if (m.Msg == NativeMethods.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
                 // If the requested object identifier is UiaRootObjectId, 
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
                 m.Result = UnsafeNativeMethods.UiaReturnRawElementProvider(
                     new HandleRef(this, Handle),
                     m.WParam,
@@ -12653,16 +12422,7 @@ example usage
             AccessibleObject ctrlAccessibleObject = GetAccessibilityObject(unchecked((int)(long)m.LParam));
 
             if (ctrlAccessibleObject != null) {
-                // 
-
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    intAccessibleObject = new InternalAccessibleObject(ctrlAccessibleObject);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                intAccessibleObject = new InternalAccessibleObject(ctrlAccessibleObject);
             }
 
             // See "How to Handle WM_GETOBJECT" in MSDN
@@ -12701,18 +12461,11 @@ example usage
                         //
                         punkAcc = Marshal.GetIUnknownForObject(iacc);
 
-                        // 
-
-
-
-
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             m.Result = UnsafeNativeMethods.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(ctrlAccessibleObject, punkAcc));
                             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "LresultFromObject returned " + m.Result.ToString());
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             Marshal.Release(punkAcc);
                         }
                     }
@@ -12897,6 +12650,11 @@ example usage
                 UnhookMouseEvent();
             }
 
+            if (SupportsUiaProviders)
+            {
+                ReleaseUiaProvider(Handle);
+            }
+
             OnHandleDestroyed(EventArgs.Empty);
 
             if (!Disposing) {
@@ -13039,8 +12797,6 @@ example usage
         /// </devdoc>
         private void WmDpiChangedAfterParent(ref Message m) {
             DefWndProc(ref m);
-
-            uint dpi = UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
 
             OnDpiChangedAfterParent(EventArgs.Empty);
         }
@@ -13185,7 +12941,6 @@ example usage
                 
                 DefWndProc(ref m);
             }
-
         }
 
         /// <devdoc>
@@ -13197,7 +12952,6 @@ example usage
                 DefWndProc(ref m);
             }
         }
-
 
         /// <devdoc>
         ///     Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus
@@ -13492,13 +13246,7 @@ example usage
                         // Reviewed : Taking focus and activating a control in response
                         //          : to a user gesture (WM_SETFOCUS) is OK.
                         //
-                        IntSecurity.ModifyFocus.Assert();
-                        try {
-                            activateSucceed = c.ActivateControl(this);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        activateSucceed = c.ActivateControl(this);
                     }
 
                     if (!activateSucceed) {
@@ -13681,16 +13429,7 @@ example usage
         ///     through the preProcessMessage function. Inheriting controls should
         ///     call base.wndProc for any messages that they don't handle.
         /// </devdoc>
-        [
-            SecurityPermission(SecurityAction.InheritanceDemand, Flags=SecurityPermissionFlag.UnmanagedCode),
-            SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)
-        ]
         protected virtual void WndProc(ref Message m) {
-            //
-            // 
-
-
-
 
             /*
             if( GetState(STATE_DISPOSED))
@@ -13728,18 +13467,23 @@ example usage
                 case NativeMethods.WM_COMMAND:
                     WmCommand(ref m);
                     break;
+                    
                 case NativeMethods.WM_CLOSE:
                     WmClose(ref m);
                     break;
+                    
                 case NativeMethods.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
+                    
                 case NativeMethods.WM_DISPLAYCHANGE:
                     WmDisplayChange(ref m);
                     break;
+                    
                 case NativeMethods.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
+                    
                 case NativeMethods.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
@@ -13785,7 +13529,8 @@ example usage
                         }
                     }
                     DefWndProc(ref m);
-                break;
+                    break;
+                    
                 case NativeMethods.WM_INPUTLANGCHANGE:
                     WmInputLangChange(ref m);
                     break;
@@ -13797,6 +13542,7 @@ example usage
                 case NativeMethods.WM_MEASUREITEM:
                     WmMeasureItem(ref m);
                     break;
+                    
                 case NativeMethods.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
@@ -13820,13 +13566,14 @@ example usage
                 case NativeMethods.WM_SYSKEYUP:
                     WmKeyChar(ref m);
                     break;
+                    
                 case NativeMethods.WM_CREATE:
                     WmCreate(ref m);
                     break;
+                    
                 case NativeMethods.WM_DESTROY:
                     WmDestroy(ref m);
                     break;
-
 
                 case NativeMethods.WM_CTLCOLOR:
                 case NativeMethods.WM_CTLCOLORBTN:
@@ -13852,6 +13599,7 @@ example usage
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORSTATIC:                    
                     WmCtlColorControl(ref m);
                     break;
+                    
                 case NativeMethods.WM_HSCROLL:
                 case NativeMethods.WM_VSCROLL:
                 case NativeMethods.WM_DELETEITEM:
@@ -13862,119 +13610,153 @@ example usage
                         DefWndProc(ref m);
                     }
                     break;
+                    
                 case NativeMethods.WM_IME_CHAR:
                     WmImeChar(ref m);
                     break;
+                    
                 case NativeMethods.WM_IME_STARTCOMPOSITION:
                     WmImeStartComposition(ref m);
                     break;
+                    
                 case NativeMethods.WM_IME_ENDCOMPOSITION:
                     WmImeEndComposition(ref m);
                     break;
+                    
                 case NativeMethods.WM_IME_NOTIFY:
                     WmImeNotify(ref m);
                     break;
+                    
                 case NativeMethods.WM_KILLFOCUS:
                     WmKillFocus(ref m);
                     break;
+                    
                 case NativeMethods.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_LBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     break;
+                    
                 case NativeMethods.WM_LBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Left, 1);
                     break;
+                    
                 case NativeMethods.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     break;
+                    
                 case NativeMethods.WM_MBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Middle, 1);
                     break;
+                    
                 case NativeMethods.WM_XBUTTONDOWN:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
+                    
                 case NativeMethods.WM_XBUTTONUP:
                     WmMouseUp(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
+                    
                 case NativeMethods.WM_XBUTTONDBLCLK:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_MOUSELEAVE:
                     WmMouseLeave(ref m);
                     break;
+                    
                 case NativeMethods.WM_DPICHANGED_BEFOREPARENT:
                     WmDpiChangedBeforeParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
+                    
                 case NativeMethods.WM_DPICHANGED_AFTERPARENT:
                     WmDpiChangedAfterParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
+                    
                 case NativeMethods.WM_MOUSEMOVE:
                     WmMouseMove(ref m);
                     break;
+                    
                 case NativeMethods.WM_MOUSEWHEEL:
                     WmMouseWheel(ref m);
                     break;
+                    
                 case NativeMethods.WM_MOVE:
                     WmMove(ref m);
                     break;
+                    
                 case NativeMethods.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
+                    
                 case NativeMethods.WM_NOTIFYFORMAT:
                     WmNotifyFormat(ref m);
                     break;
+                    
                 case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
                     m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
+                    
                 case NativeMethods.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
+                    
                 case NativeMethods.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
+                    
                 case NativeMethods.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     break;
+                    
                 case NativeMethods.WM_RBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Right, 1);
                     break;
+                    
                 case NativeMethods.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
+                    
                 case NativeMethods.WM_MOUSEHOVER:
                     WmMouseHover(ref m);
                     break;
+                    
                 case NativeMethods.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
+                    
                 case NativeMethods.WM_QUERYNEWPALETTE:
                     WmQueryNewPalette(ref m);
                     break;
+                    
                 case NativeMethods.WM_UPDATEUISTATE:
                     WmUpdateUIState(ref m);
                     break;
+                    
                 case NativeMethods.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
+                    
                 default:
                     // If we received a thread execute message, then execute it.
                     //
@@ -14258,16 +14040,19 @@ example usage
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent) {
                 OnDragEnter(drgEvent);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragOver"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs drgEvent) {
                 OnDragOver(drgEvent);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragLeave"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
                 OnDragLeave(e);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragDrop"]/*' />
         /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs drgEvent) {
@@ -14282,6 +14067,7 @@ example usage
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
                 OnGiveFeedback(giveFeedbackEventArgs);
         }
+        
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
         /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
@@ -14292,9 +14078,7 @@ example usage
         /// <devdoc>
         ///     Collection of controls...
         /// </devdoc>
-        [
-            ListBindable(false), ComVisible(false)
-        ]
+        [ListBindable(false), ComVisible(false)]
         public class ControlCollection : ArrangedElementCollection, IList, ICloneable {
 
             private Control owner;
@@ -14409,8 +14193,6 @@ example usage
                 // exception thrown from AssignParent if the following throws an exception.
                 LayoutTransaction.DoLayout(owner, value, PropertyNames.Parent);
                 owner.OnControlAdded(new ControlEventArgs(value));
-
-                
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Add"]/*' />
@@ -14466,7 +14248,6 @@ example usage
             public bool Contains(Control control) {
                 return InnerList.Contains(control);
             }
-
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Find"]/*' />
             /// <devdoc>
@@ -14693,7 +14474,6 @@ example usage
 
                 }
             }
-
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlCollection.Clear"]/*' />
             public virtual void Clear() {
@@ -15928,9 +15708,7 @@ example usage
             ///      Retrieves the ambient font for the control.
             /// </devdoc>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            internal Font AmbientFont {
-                [ResourceExposure(ResourceScope.None)]
-                [ResourceConsumption(ResourceScope.Process, ResourceScope.Process)]
+            internal Font AmbientFont {                               
                 get {
                     AmbientProperty prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
@@ -15944,15 +15722,9 @@ example usage
 
 
                                 UnsafeNativeMethods.IFont ifont = (UnsafeNativeMethods.IFont)obj;
-                                IntSecurity.ObjectFromWin32Handle.Assert();
                                 Font font = null;
-                                try {
-                                    hfont = ifont.GetHFont();
-                                    font = Font.FromHfont(hfont);
-                                }
-                                finally {
-                                    CodeAccessPermission.RevertAssert();
-                                }
+                                hfont = ifont.GetHFont();
+                                font = Font.FromHfont(hfont);
                                 prop.Value = font;
                             }
                             catch (Exception e) {
@@ -16036,7 +15808,6 @@ example usage
             ///     return false if the control is not sited).
             /// </devdoc>
             internal bool IsIE {
-                [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (!checkedIE) {
                         if (clientSite == null) {
@@ -16330,7 +16101,6 @@ example usage
                     };
                 }
 
-
                 e = new ActiveXVerbEnum(axVerbs);
                 return NativeMethods.S_OK;
             }
@@ -16395,17 +16165,9 @@ example usage
                     UnsafeNativeMethods.IDispatch disp = (UnsafeNativeMethods.IDispatch)clientSite;
                     object[] pvt = new object[1];
                     Guid g = Guid.Empty;
-                    int hr = NativeMethods.E_FAIL;
-
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        hr = disp.Invoke(dispid, ref g, NativeMethods.LOCALE_USER_DEFAULT,
-                                         NativeMethods.DISPATCH_PROPERTYGET, new NativeMethods.tagDISPPARAMS(),
-                                         pvt, null, null);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    int hr = disp.Invoke(dispid, ref g, NativeMethods.LOCALE_USER_DEFAULT,
+                                        NativeMethods.DISPATCH_PROPERTYGET, new NativeMethods.tagDISPPARAMS(),
+                                        pvt, null, null);
                     if (NativeMethods.Succeeded(hr)) {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "IDispatch::Invoke succeeded. VT=" + pvt[0].GetType().FullName);
                         obj = pvt[0];
@@ -16432,7 +16194,6 @@ example usage
             /// <devdoc>
             /// </devdoc>
             /// <internalonly/>
-            [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
             internal int GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
                 if (accelCount == -1) {
                     ArrayList mnemonicList = new ArrayList();
@@ -16595,7 +16356,6 @@ example usage
             /// <devdoc>
             ///      In place activates this Object.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
             internal void InPlaceActivate(int verb)
             {
                 // If we don't have a client site, then there's not much to do.
@@ -16763,13 +16523,7 @@ example usage
                 //
                 UnsafeNativeMethods.IOleInPlaceSite oleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
                 if (oleClientSite != null) {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        oleClientSite.OnInPlaceDeactivate();
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    oleClientSite.OnInPlaceDeactivate();
                 }
 
                 control.Visible = false;
@@ -16827,7 +16581,6 @@ example usage
             internal void Load(UnsafeNativeMethods.IStorage stg) {
                 UnsafeNativeMethods.IStream stream = null;
 
-                IntSecurity.UnmanagedCode.Assert();
                 try {
                     stream = stg.OpenStream(this.GetStreamName(), IntPtr.Zero, NativeMethods.STGM_READ | NativeMethods.STGM_SHARE_EXCLUSIVE, 0);
                 }
@@ -16840,9 +16593,6 @@ example usage
                     else {
                         throw;
                     }
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
                 }
 
                 Load(stream);
@@ -16881,15 +16631,7 @@ example usage
 
                     try {
                         object obj = null;
-                        int hr = NativeMethods.E_FAIL;
-
-                        IntSecurity.UnmanagedCode.Assert();
-                        try {
-                            hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        int hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
 
                         if (NativeMethods.Succeeded(hr) && obj != null) {
                             Debug.Indent();
@@ -17000,8 +16742,6 @@ example usage
             ///      to SetWindowRgn.  The region does not have to be destroyed.
             ///      The original region is destroyed if a new region is returned.
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             internal IntPtr MergeRegion(IntPtr region) {
                 if (clipRegion == IntPtr.Zero) {
                     return region;
@@ -17012,8 +16752,6 @@ example usage
                 }
 
                 try {
-                    // 
-
                     IntPtr newRegion = SafeNativeMethods.CreateRectRgn(0, 0, 0, 0);
                     try {
                         SafeNativeMethods.CombineRgn(new HandleRef(null, newRegion), new HandleRef(null, region), new HandleRef(this, clipRegion), NativeMethods.RGN_DIFF);
@@ -17093,7 +16831,6 @@ example usage
                     }
 
                     // Special properties that we care about
-                    //
                     object obj = new object();
 
                     switch (dispID) {
@@ -17130,14 +16867,8 @@ example usage
                 if (activeXState[uiActive] && fActivate != 0 && inPlaceFrame != null) {
                     // we have to explicitly say we don't wany any border space.
                     //
-                    int hr;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        hr = inPlaceFrame.SetBorderSpace(null);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    int hr = inPlaceFrame.SetBorderSpace(null);
+
                     if (NativeMethods.Failed(hr) && hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
                         UnsafeNativeMethods.ThrowExceptionForHR(hr);
                     }
@@ -17150,13 +16881,7 @@ example usage
             internal void OnFocus(bool focus) {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AXSource: SetFocus:  " + focus.ToString());
                 if (activeXState[inPlaceActive] && clientSite is UnsafeNativeMethods.IOleControlSite) {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        ((UnsafeNativeMethods.IOleControlSite)clientSite).OnFocus(focus ? 1 : 0);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    ((UnsafeNativeMethods.IOleControlSite)clientSite).OnFocus(focus ? 1 : 0);
                 }
 
                 if (focus && activeXState[inPlaceActive] && !activeXState[uiActive]) {
@@ -17194,7 +16919,6 @@ example usage
 
                     prop = LookupAmbient(NativeMethods.ActiveX.DISPID_AMBIENT_FONT);
 
-                    IntSecurity.UnmanagedCode.Assert();
                     try
                     {
                         IntPtr hfont = IntPtr.Zero;
@@ -17212,9 +16936,6 @@ example usage
                         // Do NULL, so we just defer to the default font
                         prop.Value = null;
                     }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
                 }
 
                 // Now use the rest of the goo that we got passed in.
@@ -17229,13 +16950,7 @@ example usage
                     SetAdvise(NativeMethods.DVASPECT_CONTENT, 0, (IAdviseSink)pQaContainer.pAdviseSink);
                 }
                 
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out status);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                ((UnsafeNativeMethods.IOleObject)control).GetMiscStatus(NativeMethods.DVASPECT_CONTENT, out status);
                 pQaControl.dwMiscStatus = status;
 
                 // Advise the event sink so VB6 can catch events raised from UserControls.
@@ -17253,7 +16968,6 @@ example usage
 
                     if (eventInterface != null) {
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             // For the default source interface, call IConnectionPoint.Advise with the supplied event sink.
                             // This is easier said than done. See notes in AdviseHelper.AdviseConnectionPoint.
@@ -17263,9 +16977,6 @@ example usage
                             if (ClientUtils.IsSecurityOrCriticalException(e)) {
                                 throw;
                             }
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
                         }
                     }
                 }
@@ -17315,7 +17026,6 @@ example usage
                     // implements IConnectionPoint for the proxy object via the CCW or COM-callable wrapper.
                     // We use the helper class ComConnectionPoint to get to the CCW directly to to call the interface. 
                     // It is critical to call Dispose to ensure that the IUnknown is released.
-
                     using (ComConnectionPoint cp = cpc.FindConnectionPoint(eventInterface)) {
                         using (SafeIUnknown punkEventsSink = new SafeIUnknown(sink, true)) {
                             // Finally...we can call IConnectionPoint.Advise to hook up a native COM event sink
@@ -17551,15 +17261,7 @@ example usage
             ///      Implements IPersistStorage::Save
             /// </devdoc>
             internal void Save(UnsafeNativeMethods.IStorage stg, bool fSameAsLoad) {
-                UnsafeNativeMethods.IStream stream = null;
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                UnsafeNativeMethods.IStream stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
                 Save(stream, true);
                 UnsafeNativeMethods.ReleaseComObject(stream);
@@ -17575,13 +17277,8 @@ example usage
                 //
                 PropertyBagStream bag = new PropertyBagStream();
                 Save(bag, fClearDirty, false);
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    bag.Write(stream);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                bag.Write(stream);
+
                 if (UnsafeNativeMethods.IsComObject(stream)) {
                     UnsafeNativeMethods.ReleaseComObject(stream);
                 }
@@ -17590,7 +17287,6 @@ example usage
             /// <devdoc>
             ///      Implements IPersistPropertyBag::Save
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
             internal void Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties) {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(control,
                     new Attribute[] {DesignerSerializationVisibilityAttribute.Visible});
@@ -17650,7 +17346,6 @@ example usage
             /// <internalonly/>
             private void SendOnSave() {
                 int cnt = adviseList.Count;
-                IntSecurity.UnmanagedCode.Assert();
                 for (int i = 0; i < cnt; i++) {
                     IAdviseSink s = (IAdviseSink)adviseList[i];
                     Debug.Assert(s != null, "NULL in our advise list");
@@ -17704,36 +17399,18 @@ example usage
                             // to ask SystemEvents to shutdown.  This is to
                             // prevent a crash.
 
-                            // 
-
-
-
-
-
-                            new PermissionSet(PermissionState.Unrestricted).Assert();
-                            try {
-                                MethodInfo method = typeof(SystemEvents).GetMethod("Shutdown",
-                                                                                  BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                                  null, new Type[0], new ParameterModifier[0]);
-                                Debug.Assert(method != null, "No Shutdown method on SystemEvents");
-                                if (method != null) {
-                                    method.Invoke(null, null);
-                                }
-                            }
-                            finally {
-                                CodeAccessPermission.RevertAssert();
+                            MethodInfo method = typeof(SystemEvents).GetMethod("Shutdown",
+                                                                                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
+                                                                                null, new Type[0], new ParameterModifier[0]);
+                            Debug.Assert(method != null, "No Shutdown method on SystemEvents");
+                            if (method != null) {
+                                method.Invoke(null, null);
                             }
                         }
                     }
 
                     if (UnsafeNativeMethods.IsComObject(clientSite)) {
-                        IntSecurity.UnmanagedCode.Assert();
-                        try {
-                            Marshal.FinalReleaseComObject(clientSite);
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
-                        }
+                        Marshal.FinalReleaseComObject(clientSite);
                     }
                 }
 
@@ -17781,22 +17458,12 @@ example usage
                         //
                         // 
 
-
-
-
-
-                        new PermissionSet(PermissionState.Unrestricted).Assert();
-                        try {
-                            MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
-                                                                              BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
-                                                                              null, new Type[0], new ParameterModifier[0]);
-                            Debug.Assert(method != null, "No Startup method on SystemEvents");
-                            if (method != null) {
-                                method.Invoke(null, null);
-                            }
-                        }
-                        finally {
-                            CodeAccessPermission.RevertAssert();
+                        MethodInfo method = typeof(SystemEvents).GetMethod("Startup",
+                                                                            BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.InvokeMethod,
+                                                                            null, new Type[0], new ParameterModifier[0]);
+                        Debug.Assert(method != null, "No Startup method on SystemEvents");
+                        if (method != null) {
+                            method.Invoke(null, null);
                         }
                     }
                 }
@@ -17806,7 +17473,6 @@ example usage
             /// <devdoc>
             ///      Implements IOleObject::SetExtent
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
             internal void SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
                 if ((dwDrawAspect & NativeMethods.DVASPECT_CONTENT) != 0) {
 
@@ -18055,7 +17721,6 @@ example usage
             /// </devdoc>
             internal int TranslateAccelerator(ref NativeMethods.MSG lpmsg) {
                
-
 #if DEBUG
                 if (CompModSwitches.ActiveX.TraceInfo) {
                     if (!control.IsHandleCreated) {
@@ -18113,7 +17778,6 @@ example usage
                     }
                 }
 
-
                 // SITE processing.  We're not interested in the message, but the site may be.
                 
                 int hr = NativeMethods.S_FALSE;
@@ -18127,13 +17791,8 @@ example usage
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_SHIFT) < 0)     keyState |= 1;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_CONTROL) < 0)   keyState |= 2;
                     if (UnsafeNativeMethods.GetKeyState(NativeMethods.VK_MENU) < 0)      keyState |= 4;
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+
+                    hr = ioleClientSite.TranslateAccelerator(ref lpmsg, keyState);
                 }
                 
                 return hr;
@@ -18159,7 +17818,6 @@ example usage
                 }
 
                 //May need this for SetActiveObject & OnUIDeactivate, so leave until function return
-                IntSecurity.UnmanagedCode.Assert();
                 Debug.Assert(inPlaceFrame != null, "No inplace frame -- how dod we go UI active?");
                 inPlaceFrame.SetActiveObject(null, null);
 
@@ -18219,12 +17877,10 @@ example usage
                         adjustRect = rc;
                         activeXState[adjustingRect] = true;
 
-                        IntSecurity.UnmanagedCode.Assert();
                         try {
                             ioleClientSite.OnPosRectChange(rc);
                         }
                         finally {
-                            CodeAccessPermission.RevertAssert();
                             adjustRect = null;
                             activeXState[adjustingRect] = false;
                         }
@@ -18252,7 +17908,6 @@ example usage
 
                 UnsafeNativeMethods.IOleControlSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleControlSite;
                 if (ioleClientSite != null) {
-                    IntSecurity.UnmanagedCode.Assert();
                     ioleClientSite.OnControlInfoChanged();
                 }
             }
@@ -18278,13 +17933,7 @@ example usage
                 //       is to make sure we don't call OnViewChange in this case.
                 //
                 if (viewAdviseSink != null && !activeXState[saving]) {
-                    IntSecurity.UnmanagedCode.Assert();
-                    try {
-                        viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
 
                     if (activeXState[viewAdviseOnlyOnce]) {
                         if (UnsafeNativeMethods.IsComObject(viewAdviseSink)) {
@@ -18318,7 +17967,6 @@ example usage
                     }
                 }
 
-                IntSecurity.UnmanagedCode.Assert();
                 controlWindowTarget.OnMessage(ref m);
             }
 
@@ -18329,7 +17977,6 @@ example usage
             private class PropertyBagStream : UnsafeNativeMethods.IPropertyBag {
                 private Hashtable bag = new Hashtable();
 
-                [SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode)]
                 internal void Read(UnsafeNativeMethods.IStream istream) {
                     // visual basic's memory streams don't support seeking, so we have to
                     // work around this limitation here.  We do this by copying
@@ -18369,7 +18016,6 @@ example usage
                     }
                 }
 
-                [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 int UnsafeNativeMethods.IPropertyBag.Read(string pszPropName, ref object pVar, UnsafeNativeMethods.IErrorLog pErrorLog)
                 {
                     if (!bag.Contains(pszPropName))
@@ -18379,14 +18025,12 @@ example usage
                     return NativeMethods.S_OK;
                 }
 
-                [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 int UnsafeNativeMethods.IPropertyBag.Write(string pszPropName, ref object pVar)
                 {
                     bag[pszPropName] = pVar;
                     return NativeMethods.S_OK;
                 }
 
-                [SecurityPermission(SecurityAction.Assert, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 internal void Write(UnsafeNativeMethods.IStream istream)
                 {
                     Stream stream = new DataStreamFromComStream(istream);
@@ -18429,19 +18073,7 @@ example usage
                 if (service == typeof(HtmlDocument)) {
 
                     UnsafeNativeMethods.IOleContainer iOlecontainer;
-                    int hr;
-                    try {
-                        // 
-
-
-
-                        IntSecurity.UnmanagedCode.Assert();
-                        hr = clientSite.GetContainer(out iOlecontainer);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-
+                    int hr = clientSite.GetContainer(out iOlecontainer);
 
                     if (NativeMethods.Succeeded(hr)
                             && (iOlecontainer is UnsafeNativeMethods.IHTMLDocument)) {
@@ -18456,13 +18088,11 @@ example usage
 
                 }
                 else if (clientSite.GetType().IsAssignableFrom(service)) {
-                    IntSecurity.UnmanagedCode.Demand();
                     retVal = clientSite;
                 }
 
                 return retVal;
             }
-
 
             /** Indicates whether the component is in design mode. */
             public bool DesignMode {
@@ -18515,16 +18145,7 @@ example usage
                 NativeMethods.tagFONTDESC fontDesc = new NativeMethods.tagFONTDESC();
                 NativeMethods.LOGFONT logFont = new NativeMethods.LOGFONT();
 
-                // 
-
-
-                IntSecurity.ObjectFromWin32Handle.Assert();
-                try {
-                    font.ToLogFont(logFont);
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                font.ToLogFont(logFont);
 
                 fontDesc.lpstrName = font.Name;
                 fontDesc.cySize = (long)(font.SizeInPoints * 10000);
@@ -18553,19 +18174,10 @@ example usage
 
             public object MarshalNativeToManaged(IntPtr pObj) {
                 UnsafeNativeMethods.IFont nativeFont = (UnsafeNativeMethods.IFont)Marshal.GetObjectForIUnknown(pObj);
-                IntPtr hfont = IntPtr.Zero;
-
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    hfont = nativeFont.GetHFont();
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                IntPtr hfont = nativeFont.GetHFont();
 
                 Font font = null;
 
-                IntSecurity.ObjectFromWin32Handle.Assert();
                 try {
                     font = Font.FromHfont(hfont);
                 }
@@ -18575,9 +18187,6 @@ example usage
                     }
 
                     font = Control.DefaultFont;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
                 }
 
                 return font;
@@ -18800,8 +18409,6 @@ example usage
             NativeMethods.RECT destRect;
 
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Process | ResourceScope.Machine, ResourceScope.Process | ResourceScope.Machine)]
             internal MetafileDCWrapper(HandleRef hOriginalDC, Size size) {
                 Debug.Assert(UnsafeNativeMethods.GetObjectType(hOriginalDC) == NativeMethods.OBJ_ENHMETADC,
                     "Why wrap a non-Enhanced MetaFile DC?");
@@ -18964,7 +18571,6 @@ example usage
             }
         }
 
-
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject"]/*' />
         /// <devdoc>
         ///      An implementation of AccessibleChild for use with Controls
@@ -18996,16 +18602,7 @@ example usage
                 // we will invoke 3rd party HandleCreated event handlers
                 IntPtr handle = ownerControl.Handle;
 
-                // Reviewed  : ControlAccessibleObject.set_Handle demands UnmanagedCode permission for public use, it doesn't
-                //             expose any security vulnerability indirectly. The sec Assert is safe.
-                //
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    this.Handle = handle;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                this.Handle = handle;
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.ControlAccessibleObject1"]/*' />
@@ -19021,16 +18618,7 @@ example usage
                 this.ownerControl = ownerControl;
                 IntPtr handle = ownerControl.Handle;
 
-                // Reviewed  : ControlAccessibleObject.set_Handle demands UnmanagedCode permission for public use, it doesn't
-                //             expose any security vulnerability indirectly. The sec Assert is safe.
-                //
-                IntSecurity.UnmanagedCode.Assert();
-                try {
-                    this.Handle = handle;
-                }
-                finally {
-                    CodeAccessPermission.RevertAssert();
-                }
+                this.Handle = handle;
             }
 
             /// <devdoc>
@@ -19187,9 +18775,6 @@ example usage
                 }
 
                 set {
-                    // Demand security permission for this!
-                    IntSecurity.UnmanagedCode.Demand();
-
                     if (handle != value) {
                         handle = value;
 
@@ -19213,7 +18798,7 @@ example usage
                         }
 
                         if (freeLib) {
-                            UnsafeNativeMethods.FreeLibrary(new HandleRef(null, oleAccAvailable));
+                            CommonUnsafeNativeMethods.FreeLibrary(new HandleRef(null, oleAccAvailable));
                         }
 
                     }
@@ -19272,8 +18857,6 @@ example usage
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
-                [SecurityPermission(SecurityAction.InheritanceDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return base.Parent;
                 }
@@ -19383,9 +18966,6 @@ example usage
                     handler(Owner, args);
 
                     fileName = args.HelpNamespace;
-                    if (!string.IsNullOrEmpty(fileName)) {
-                        IntSecurity.DemandFileIO(FileIOPermissionAccess.PathDiscovery, fileName);
-                    }
 
                     try {
                         topic = int.Parse(args.HelpKeyword, CultureInfo.InvariantCulture);
@@ -19670,8 +19250,6 @@ example usage
             ///     The company name associated with the component.
             /// </devdoc>
             internal string CompanyName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
                 get {
                     if (companyName == null) {
                         object[] attrs = owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
@@ -19706,14 +19284,11 @@ example usage
                 }
             }
 
-
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlVersionInfo.ProductName"]/*' />
             /// <devdoc>
             ///     The product name associated with this component.
             /// </devdoc>
             internal string ProductName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
                 get {
                     if (productName == null) {
                         object[] attrs = owner.GetType().Module.Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
@@ -19753,8 +19328,6 @@ example usage
             ///     The product version associated with this component.
             /// </devdoc>
             internal string ProductVersion {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
                 get {
                     if (productVersion == null) {
                         // custom attribute
@@ -19783,44 +19356,18 @@ example usage
                 }
             }
 
-
             /// <devdoc>
             ///     Retrieves the FileVersionInfo associated with the main module for
             ///     the component.
             /// </devdoc>
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
             private FileVersionInfo GetFileVersionInfo() {
                 if (versionInfo == null) {
-                    string path;
+                    string path = owner.GetType().Module.FullyQualifiedName;
 
-                    // 
-
-                    FileIOPermission fiop = new FileIOPermission( PermissionState.None );
-                    fiop.AllFiles = FileIOPermissionAccess.PathDiscovery;
-                    fiop.Assert();
-                    try {
-                        path = owner.GetType().Module.FullyQualifiedName;
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
-
-                    // 
-
-                    new FileIOPermission(FileIOPermissionAccess.Read, path).Assert();
-                    try {
-                        versionInfo = FileVersionInfo.GetVersionInfo(path);
-                    }
-                    finally {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    versionInfo = FileVersionInfo.GetVersionInfo(path);
                 }
-
                 return versionInfo;
-
             }
-
         }
 
         private sealed class MultithreadSafeCallScope : IDisposable

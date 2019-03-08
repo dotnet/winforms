@@ -7,7 +7,7 @@ Windows Forms (WinForms) is a UI framework for building Windows desktop applicat
 
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
 
-> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See here for a workaround invoking the Classic Framework Designer](winforms-designer.md).
+> Note: The Windows Forms visual designer is not yet available and will be part of a Visual Studio 2019 update. [See here for a workaround invoking the Classic Framework Designer](Documentation/winforms-designer.md).
 
 To learn about project priorities as well as status and ship dates see the [Windows Forms Roadmap](roadmap.md).
 
@@ -17,7 +17,7 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 
 ## Getting started
 
-* [.NET Core 3.0 SDK Preview 1][.net-core-3.0-sdk-preview-1]
+* [.NET Core 3.0 SDK Preview][.net-core-3.0-sdk-preview]
 * [Getting started instructions][getting-started]
 * [Contributing guide][contributing]
 * [Porting guide][porting-guidelines]
@@ -44,8 +44,8 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 
 Some of the best ways to contribute are to try things out, file bugs, join in design conversations, and fix issues.
 
-* The [contributing guidelines][contributing]and the more general [.NET Core contributing guide][corefx-contributing] define contributing rules.
-* The [Developer Guide](developer-guide.md) defines the setup and workflow for working on this repository.
+* The [contributing guidelines][contributing] and the more general [.NET Core contributing guide][corefx-contributing] define contributing rules.
+* The [Developer Guide][developing] defines the setup and workflow for working on this repository.
 * If you have a question or have found a bug, [file an issue][issue-new].
 * Use [daily builds][getting-started] if you want to contribute and stay up to date with the team.
 
@@ -77,16 +77,13 @@ This project uses the [.NET Foundation Code of Conduct][dotnet-code-of-conduct] 
 
 See the [.NET home repository][dotnet-home] to find other .NET-related projects.
 
-[comment]: <> (Multi-use Internal Links)
-
-[getting-started]: getting-started.md
-[contributing]: contributing.md
-[porting-guidelines]: porting-guidelines.md
-
-[comment]: <> (URI Links)
+[getting-started]: Documentation/getting-started.md
+[contributing]: Documentation/contributing.md
+[porting-guidelines]: Documentation/porting-guidelines.md
+[developing]: Documentation/developer-guide.md
 
 [wpf]: https://github.com/dotnet/wpf
-[.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
+[.net-core-3.0-sdk-preview]: https://dotnet.microsoft.com/download/dotnet-core/3.0
 [corefx-contributing]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
 [issue-new]: https://github.com/dotnet/winforms/issues/new
 [developer-community]: https://developercommunity.visualstudio.com/spaces/61/index.html

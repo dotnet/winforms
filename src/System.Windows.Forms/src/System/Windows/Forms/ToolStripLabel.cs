@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,8 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
-    using System.Security;
     using System.Windows.Forms.Design;    
 
     /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel"]/*' />
@@ -335,7 +333,6 @@ namespace System.Windows.Forms {
         }
         
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessMnemonic(char charCode) {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
             if (ParentInternal != null) {
@@ -378,7 +375,20 @@ namespace System.Windows.Forms {
                     base.DoDefaultAction();
                 }
             }
-         
+
+            internal override object GetPropertyValue(int propertyID) {
+                if (AccessibilityImprovements.Level3) {
+                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                        return NativeMethods.UIA_TextControlTypeId;
+                    }
+                    else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId) {
+                        return this.State;
+                    }
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
             public override AccessibleRole Role {
                get {
                    AccessibleRole role = Owner.AccessibleRole;

@@ -1,86 +1,46 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///     TypeValidationEventArgs.  Provides data for the TypeValidationEventHandler event.
+    /// Provides data for the TypeValidationEventHandler event.
     /// </summary>
     public class TypeValidationEventArgs : EventArgs
     {
-        private Type   validatingType;
-        private string message;
-        private bool   isValidInput;
-        private object returnValue;
-        private bool   cancel;
-
         public TypeValidationEventArgs(Type validatingType, bool isValidInput, object returnValue, string message)
         {
-            this.validatingType = validatingType;
-            this.isValidInput   = isValidInput;
-            this.returnValue    = returnValue;
-            this.message        = message;
+            ValidatingType = validatingType;
+            IsValidInput = isValidInput;
+            ReturnValue = returnValue;
+            Message = message;
         }
 
         /// <devdoc>
-        ///     Specifies whether focus should be allowed to be shifted from the control.
+        /// The position where the test failed the mask constraint.
         /// </devdoc>
-        public bool Cancel
-        {
-            get
-            {
-                return this.cancel;
-            }
-            set
-            {
-                this.cancel = value;
-            }
-        }
+        public Type ValidatingType { get; }
 
         /// <devdoc>
-        ///     The exception thrown by the validating object while performing the data validation.
+        /// The exception thrown by the validating object while performing the data validation.
         /// </devdoc>
-        public bool IsValidInput
-        {
-            get
-            {
-                return this.isValidInput;
-            }
-        }
+        public bool IsValidInput { get; }
 
         /// <devdoc>
-        ///     A message about the validation operation.  Intended to be populated with an exception information if 
-        ///     any thrown.
+        /// A message about the validation operation. Intended to be populated with
+        /// an exception information if any thrown.
         /// </devdoc>
-        public string Message
-        {
-            get
-            {
-                return this.message;
-            }
-        }
+        public string Message { get; }
 
         /// <devdoc>
-        ///     The value returned from the Parse method.
+        /// The value returned from the Parse method.
         /// </devdoc>
-        public object ReturnValue
-        {
-            get
-            {
-                return this.returnValue;
-            }
-        }
+        public object ReturnValue { get; }
 
         /// <devdoc>
-        ///     The position where the test failed the mask constraint.
+        /// Specifies whether focus should be allowed to be shifted from the control.
         /// </devdoc>
-        public Type ValidatingType
-        {
-            get 
-            { 
-                return this.validatingType; 
-            }
-        }
+        public bool Cancel { get; set; }
     }
 }

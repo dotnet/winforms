@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <PropertyGroup>
-    <ImportNetSdkFromRepoToolset>false</ImportNetSdkFromRepoToolset>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-
   </PropertyGroup>
-  <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />  
-  <Import Project="$(MSBuildThisFileDirectory)eng\FacadeAssemblies.props" />
+  
+  <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
+  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
+  <Import Project="eng\FacadeAssemblies.props" />
+
+  <PropertyGroup Condition="'$(CopyrightNetFoundation)' != ''">
+    <Copyright>$(CopyrightNetFoundation)</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
 
   <!-- Make sure the pdb is a separate file, and not embedded inside the dll (which is the ArcadeSDK default behavior) -->
   <!-- Note that this MUST COME AFTER the import of Sdk.props -->

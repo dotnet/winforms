@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -45,8 +45,8 @@ namespace System.Windows.Forms
         }
 
         /// this graphics requires disposal.
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static Graphics CreateMeasurementGraphics() {
             return Graphics.FromHdcInternal(WindowsGraphicsCacheManager.MeasurementGraphics.DeviceContext.Hdc);
         }
@@ -542,8 +542,8 @@ namespace System.Windows.Forms
             private Graphics graphics;
             Rectangle translatedBounds;
 
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             public DCMapping(HandleRef hDC, Rectangle bounds) {
                 if (hDC.Handle == IntPtr.Zero) {
                     throw new ArgumentNullException(nameof(hDC));
@@ -666,8 +666,8 @@ namespace System.Windows.Forms
             /// </devdoc>
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public Graphics Graphics {
-                [ResourceExposure(ResourceScope.Process)]
-                [ResourceConsumption(ResourceScope.Process)]
+                
+                
                 get {
                     Debug.Assert(this.dc != null, "unexpected null dc!");
 

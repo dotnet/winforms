@@ -1,22 +1,17 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
     using System.Text;
     using System.Runtime.Remoting;
-
     using System;
     using System.Collections;
-    
     using System.Windows.Forms;
-    using System.Security.Permissions;
-    
     using System.ComponentModel;
     using System.Drawing;
     using System.Drawing.Imaging;
     using Microsoft.Win32;
-    
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System.Runtime.Versioning;
@@ -610,7 +605,6 @@ namespace System.Windows.Forms {
             return width;
         }
 
-
         // will return the width of the best fit for the column
         //
         private int GetColDataBoxWidth(Graphics g, int colNum) {
@@ -734,8 +728,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine, ResourceScope.Machine)]
         private Bitmap GetBitmap(string bitmapName, Color transparentColor) {
             Bitmap b = null;
             try {
@@ -748,8 +740,6 @@ namespace System.Windows.Forms {
             return b;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
@@ -757,8 +747,6 @@ namespace System.Windows.Forms {
             return rightArrow;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
@@ -1080,7 +1068,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return owner.dataGrid.AccessibilityObject;
                 }
@@ -1111,13 +1098,11 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return null;
                 }
             }
             
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 owner.dataGrid.NavigateBack();
             }
@@ -1171,12 +1156,10 @@ namespace System.Windows.Forms {
                 return null;
             }
 
-
             /// <include file='doc\DataGridParentRows.uex' path='docs/doc[@for="DataGridParentRows.DataGridParentRowsAccessibleObject.Navigate"]/*' />
             /// <devdoc>
             ///      Navigate to the next or previous grid entry.
             /// </devdoc>
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override AccessibleObject Navigate(AccessibleNavigation navdir) {
                 switch (navdir) {
                     case AccessibleNavigation.Right:
@@ -1204,7 +1187,6 @@ namespace System.Windows.Forms {
 
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void Select(AccessibleSelection flags) {
             }
         }

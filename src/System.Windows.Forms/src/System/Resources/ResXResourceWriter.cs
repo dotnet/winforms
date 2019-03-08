@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -24,8 +24,6 @@ namespace System.Resources {
     ///     ResX resource writer. See the text in "ResourceSchema" for more 
     ///     information.
     /// </devdoc>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name="FullTrust")]
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.LinkDemand, Name="FullTrust")]
     public class ResXResourceWriter : IResourceWriter {
         internal const string TypeStr = "type";
         internal const string NameStr = "name";
@@ -45,14 +43,6 @@ namespace System.Resources {
         private Hashtable cachedAliases;
 
         private static TraceSwitch ResValueProviderSwitch = new TraceSwitch("ResX", "Debug the resource value provider");
-
-        // 
-
-
-
-
-
-
 
         internal static readonly string Beta2CompatSerializedObjectMimeType = "text/microsoft-urt/psuedoml-serialized/base64";
 
@@ -88,65 +78,6 @@ namespace System.Resources {
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResourceSchema"]/*' />
         /// <internalonly/>
         public static readonly string ResourceSchema = @"
-    <!-- 
-    Microsoft ResX Schema 
-    
-    Version " + Version + @"
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name=""resmimetype"">text/microsoft-resx</resheader>
-    <resheader name=""version"">" + Version + @"</resheader>
-    <resheader name=""reader"">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name=""writer"">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name=""Name1""><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name=""Color1"" type=""System.Drawing.Color, System.Drawing"">Blue</data>
-    <data name=""Bitmap1"" mimetype=""" + BinSerializedObjectMimeType + @""">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name=""Icon1"" type=""System.Drawing.Icon, System.Drawing"" mimetype=""" + ByteArraySerializedObjectMimeType + @""">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of ""resheader"" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - " + BinSerializedObjectMimeType + @" is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: " + BinSerializedObjectMimeType + @"
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: " + SoapSerializedObjectMimeType + @"
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: " + ByteArraySerializedObjectMimeType + @"
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
     <xsd:schema id=""root"" xmlns="""" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:msdata=""urn:schemas-microsoft-com:xml-msdata"">
         <xsd:import namespace=""http://www.w3.org/XML/1998/namespace""/>
         <xsd:element name=""root"" msdata:IsDataSet=""true"">
@@ -195,12 +126,10 @@ namespace System.Resources {
         </xsd:schema>
         ";
         
-        IFormatter binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter ();
         string fileName;
         Stream stream;
         TextWriter textWriter;
         XmlTextWriter xmlTextWriter;
-        string basePath;
 
         bool hasBeenSaved;
         bool initialized;
@@ -211,14 +140,7 @@ namespace System.Resources {
         /// <devdoc>
         ///     Base Path for ResXFileRefs.
         /// </devdoc>
-        public string BasePath {
-            get {
-                return basePath;
-            }
-            set {
-                basePath = value;
-            }
-        }
+        public string BasePath { get; set; }
 
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResXResourceWriter"]/*' />
         /// <devdoc>
@@ -402,8 +324,8 @@ namespace System.Resources {
         /// </devdoc>
         // NOTE: Part of IResourceWriter - not protected by class level LinkDemand.
         public void AddResource(string name, object value) {
-            if (value is ResXDataNode) {
-                AddResource((ResXDataNode)value);
+            if (value is ResXDataNode node) {
+                AddResource(node);
             }
             else {
                 AddDataRow(DataStr, name, value);
@@ -433,13 +355,12 @@ namespace System.Resources {
             string modifiedBasePath = BasePath;
             
             if (!string.IsNullOrEmpty(modifiedBasePath)) {
-                if (!(modifiedBasePath.EndsWith("\\")))
+                if (!modifiedBasePath.EndsWith("\\"))
                 {
                     modifiedBasePath += "\\";
                 }
-                if (fileRef != null) {
-                    fileRef.MakeFilePathRelative(modifiedBasePath);
-                }
+
+                fileRef?.MakeFilePathRelative(modifiedBasePath);
             }
             DataNodeInfo info = nodeClone.GetDataNodeInfo();
             AddDataRow(DataStr, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
@@ -457,39 +378,45 @@ namespace System.Resources {
         ///     it will be saved that way, otherwise it will be serialized
         ///     and stored as in binary.
         /// </devdoc>
-        private void AddDataRow(string elementName, string name, object value) {
+        private void AddDataRow(string elementName, string name, object value)
+        {
             Debug.WriteLineIf(ResValueProviderSwitch.TraceVerbose, "  resx: adding resource " + name);
-            if (value is string) {
-                AddDataRow(elementName, name, (string)value);
-            }
-            else if (value is byte[]) {
-                AddDataRow(elementName, name, (byte[])value);
-            }
-            else if(value is ResXFileRef) {
-                ResXFileRef fileRef = (ResXFileRef)value;
-                ResXDataNode node = new ResXDataNode(name, fileRef, this.typeNameConverter);
-                if (fileRef != null) {
-                    fileRef.MakeFilePathRelative(BasePath);
+            switch (value)
+            {
+                case string str:
+                    AddDataRow(elementName, name, str);
+                    break;
+                case byte[] bytes:
+                    AddDataRow(elementName, name, bytes);
+                    break;
+                case ResXFileRef fileRef:
+                {
+                    ResXDataNode node = new ResXDataNode(name, fileRef, this.typeNameConverter);
+                    DataNodeInfo info = node.GetDataNodeInfo();
+                    AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
+                    break;
                 }
-                DataNodeInfo info = node.GetDataNodeInfo();
-                AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
-            } else {
-                ResXDataNode node = new ResXDataNode(name, value, this.typeNameConverter);
-                DataNodeInfo info = node.GetDataNodeInfo();
-                AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
+                default:
+                {
+                    ResXDataNode node = new ResXDataNode(name, value, this.typeNameConverter);
+                    DataNodeInfo info = node.GetDataNodeInfo();
+                    AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
+                    break;
+                }
             }
         }        
 
         /// <devdoc>
         ///     Adds a string resource to the resources.
         /// </devdoc>
-        private void AddDataRow(string elementName, string name, string value) {
-            if(value == null) {
-                // if it's a null string, set it here as a resxnullref
-                AddDataRow(elementName, name, value, MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter), null, null);                
-            } else {
-                AddDataRow(elementName, name, value, null, null, null);
-            }
+        private void AddDataRow(string elementName, string name, string value)
+        {
+            // if it's a null string, set it here as a resxnullref
+            string typeName =
+                value == null
+                    ? MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXNullRef), this.typeNameConverter)
+                    : null;
+            AddDataRow(elementName, name, value, typeName, null, null);     
         }
 
         /// <devdoc>
@@ -566,7 +493,6 @@ namespace System.Resources {
 
         private void AddAssemblyRow(string elementName, string alias, string name)
         {
-
             Writer.WriteStartElement(elementName); {
                 if (!string.IsNullOrEmpty(alias)) {
                       Writer.WriteAttributeString(AliasStr, alias);
@@ -582,11 +508,11 @@ namespace System.Resources {
 
         private string GetAliasFromName(AssemblyName assemblyName)
         {
-             if (cachedAliases == null)
+            if (cachedAliases == null)
             {
                 cachedAliases = new Hashtable();
             }
-            string alias =  (string) cachedAliases[assemblyName.FullName]; 
+            string alias = (string)cachedAliases[assemblyName.FullName]; 
             if (string.IsNullOrEmpty(alias))
             {
                 alias =  assemblyName.Name;
@@ -638,7 +564,6 @@ namespace System.Resources {
              return ((indexStart == -1) ? typeName : typeName.Substring(0, indexStart));
         }
 
-
         private string GetFullName(string typeName) {
              int indexStart = typeName.IndexOf(",");
              if(indexStart == -1)
@@ -665,24 +590,11 @@ namespace System.Resources {
                 output.Append(crlf);
                 return output.ToString();
             }
-            else {
-                return raw;
-            }
+            
+            return raw;
         }
 
         private string TypeNameWithAssembly(Type type) {
-            // 
-
-
-
-
-
-
-
-
-
-
-
             string result = MultitargetUtil.GetAssemblyQualifiedName(type, this.typeNameConverter);
             return result;
         }

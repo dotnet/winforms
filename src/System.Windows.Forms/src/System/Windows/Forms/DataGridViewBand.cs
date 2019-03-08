@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -10,8 +10,6 @@ namespace System.Windows.Forms
     using System.Text;
     using System;
     using System.Globalization;
-    using System.Security;
-    using System.Security.Permissions;
         
     /// <include file='doc\DataGridViewBand.uex' path='docs/doc[@for="DataGridViewBand"]/*' />
     /// <devdoc>
@@ -347,7 +345,7 @@ namespace System.Windows.Forms
                 {
                     Type cellType = this.DefaultHeaderCellType;
 
-                    headerCell = (DataGridViewHeaderCell) SecurityUtils.SecureCreateInstance(cellType);
+                    headerCell = (DataGridViewHeaderCell) Activator.CreateInstance(cellType);
                     headerCell.DataGridViewInternal = this.DataGridView;
                     if (this.bandIsRow)
                     {
@@ -641,6 +639,11 @@ namespace System.Windows.Forms
             }
             set
             {
+                if (!Enum.IsDefined(typeof(DataGridViewTriState), value))
+                {
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridViewTriState));
+                }
+
                 DataGridViewTriState oldResizable = this.Resizable;
                 if (value == DataGridViewTriState.NotSet)
                 {
@@ -657,7 +660,6 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Assert(value == DataGridViewTriState.False, "TriState only supports NotSet, True, False");
                             this.StateInternal = this.State & ~DataGridViewElementStates.Resizable;
                         }
                     }

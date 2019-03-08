@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -85,7 +85,6 @@ namespace System.Windows.Forms.Design
             LOGPIXELSY = 90;
 
         [DllImport(ExternDll.Kernel32, ExactSpelling = true, CharSet = CharSet.Unicode)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern int MultiByteToWideChar(int CodePage, int dwFlags,
             byte[] lpMultiByteStr, int cchMultiByte, char[] lpWideCharStr, int cchWideChar);
 
@@ -270,11 +269,9 @@ namespace System.Windows.Forms.Design
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool GetClientRect(IntPtr hWnd, [In] [Out] COMRECT rect);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool PeekMessage([In] [Out] ref MSG msg, IntPtr hwnd, int msgMin, int msgMax, int remove);
 
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
@@ -3901,113 +3898,86 @@ namespace System.Windows.Forms.Design
             WM_PRINT = 0x0317;
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr GetCursor();
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool GetCursorPos([In] [Out] POINT pt);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr WindowFromPoint(int x, int y);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, [In] [Out] HDHITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In] [Out] TV_HITTESTINFO lParam);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern short GetKeyState(int keyCode);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In] [Out] ref RECT rect, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In] [Out] POINT pt, int cPoints);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
         private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool GetUpdateRect(IntPtr hwnd, [In] [Out] ref RECT rc, bool fErase);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool ExternalDeleteObject(HandleRef hObject);
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         private static extern bool IntDeleteObject(IntPtr hObject);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool TranslateMessage([In] [Out] ref MSG msg);
 
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern int DispatchMessage([In] ref MSG msg);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool GetWindowRect(IntPtr hWnd, [In] [Out] ref RECT rect);
 
         [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern int RevokeDragDrop(IntPtr hwnd);
 
-        [ResourceExposure(ResourceScope.None)]
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr ChildWindowFromPointEx(IntPtr hwndParent, int x, int y, int uFlags);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Usage", "CA2205:UseManagedEquivalentsOfWin32Api")]
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool IsWindowVisible(IntPtr hWnd);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr GetFocus();
 
         [StructLayout(LayoutKind.Sequential)]
@@ -4107,7 +4077,6 @@ namespace System.Windows.Forms.Design
             //private static extern int lstrlen(String s);
 
             [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-            [ResourceExposure(ResourceScope.None)]
             internal static extern int RegisterWindowMessage(string msg);
         }
 
@@ -4408,16 +4377,13 @@ namespace System.Windows.Forms.Design
         public const string uuid_IEnumVariant = "{00020404-0000-0000-C000-000000000046}";
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        [ResourceExposure(ResourceScope.Machine)]
         public static extern ITypeLib LoadRegTypeLib(ref Guid clsid, short majorVersion, short minorVersion, int lcid);
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
-        [ResourceExposure(ResourceScope.Machine)]
         public static extern ITypeLib LoadTypeLib([In] [MarshalAs(UnmanagedType.LPWStr)] string typelib);
 
         [DllImport(ExternDll.Oleaut32, PreserveSig = false)]
         [return: MarshalAs(UnmanagedType.BStr)]
-        [ResourceExposure(ResourceScope.Machine)]
         public static extern string QueryPathOfRegTypeLib(ref Guid guid, short majorVersion, short minorVersion,
             int lcid);
 

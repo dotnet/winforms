@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -14,8 +14,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
-    using System.Security;
-    using System.Security.Permissions;
     using System.Text;
     using System.Windows.Forms.ComponentModel;
     using System.Globalization;
@@ -725,8 +723,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         internal override StringFormat CreateStringFormat() {
             StringFormat stringFormat = base.CreateStringFormat();
             if (string.IsNullOrEmpty(Text)) {
@@ -898,12 +896,7 @@ namespace System.Windows.Forms {
 
             try {
                 Link focusLink = FocusLink;
-                if (focusLink == null) {
-                    // 
-
-
-                    IntSecurity.ModifyFocus.Assert();
-                    
+                if (focusLink == null) {                   
                     // Set focus on first link.  
                     // This will raise the OnGotFocus event again but it will not be processed because processingOnGotFocus is true.
                     Select(true /*directed*/, true /*forward*/);
@@ -1526,7 +1519,6 @@ namespace System.Windows.Forms {
         ///       will seldom, if ever, need to override this method.
         ///    </para>
         /// </devdoc>
-        [UIPermission(SecurityAction.LinkDemand, Window=UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData) {
             if ((keyData & (Keys.Alt | Keys.Control)) != Keys.Alt) {
                 Keys keyCode = keyData & Keys.KeyCode;
@@ -1915,7 +1907,6 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
                 case NativeMethods.WM_SETCURSOR:
@@ -2625,17 +2616,7 @@ namespace System.Windows.Forms {
             public override Rectangle Bounds {
                 get {
                     Region region = link.VisualRegion;
-                    Graphics g = null;
-
-                    IntSecurity.ObjectFromWin32Handle.Assert();
-                    try
-                    {
-                        g = Graphics.FromHwnd(link.Owner.Handle);
-                    }
-                    finally 
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
+                    Graphics g = Graphics.FromHwnd(link.Owner.Handle);
 
                     // Make sure we have a region for this link
                     //
@@ -2705,7 +2686,6 @@ namespace System.Windows.Forms {
             }
 
             public override AccessibleObject Parent {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     return link.Owner.AccessibilityObject;                
                 }
@@ -2733,7 +2713,6 @@ namespace System.Windows.Forms {
             }
 
             public override string Value {
-                [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
                 get {
                     if (AccessibilityImprovements.Level1) {
                         // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
@@ -2744,7 +2723,6 @@ namespace System.Windows.Forms {
                 }
             }
 
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             public override void DoDefaultAction() {
                 link.Owner.OnLinkClicked(new LinkLabelLinkClickedEventArgs(link));
             }

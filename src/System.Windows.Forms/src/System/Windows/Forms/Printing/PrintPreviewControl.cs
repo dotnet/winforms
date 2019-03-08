@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -12,12 +12,10 @@ namespace System.Windows.Forms {
     using System.Runtime.Remoting;
     using System.Diagnostics;
     using System;
-    using System.Security.Permissions;
     using System.Drawing;
     using Microsoft.Win32;
     using System.ComponentModel;
     using System.Drawing.Printing;
-    using CodeAccessPermission = System.Security.CodeAccessPermission;
     using System.Globalization;
 
     /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl"]/*' />
@@ -165,7 +163,6 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override CreateParams CreateParams {
-            [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
             get {
                 CreateParams cp = base.CreateParams;
                 cp.Style |= NativeMethods.WS_HSCROLL;
@@ -447,7 +444,6 @@ namespace System.Windows.Forms {
             if (document == null)
                 pageInfo = new PreviewPageInfo[0];
             else {
-                IntSecurity.SafePrinting.Demand(); 
 
                 PrintController oldController = document.PrintController;
                 PreviewPrintController previewController = new PreviewPrintController();
@@ -908,7 +904,6 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WndProc"]/*' />
         /// <internalonly/>
-        [SecurityPermission(SecurityAction.LinkDemand, Flags=SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case NativeMethods.WM_VSCROLL:

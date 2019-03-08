@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1029,16 +1029,101 @@ namespace System.Windows.Forms.PropertyGridInternal {
         [ComVisible(true)]
         protected class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject {
 
+            private PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;
+
             public PropertyDescriptorGridEntryAccessibleObject(PropertyDescriptorGridEntry owner) : base(owner) {
+                _owningPropertyDescriptorGridEntry = owner;
             }
 
             internal override bool IsIAccessibleExSupported() {
                 return true;
             }
 
+            /// <summary>
+            /// Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                if (AccessibilityImprovements.Level3) {
+                    switch (direction) {
+                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                            var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                            var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                            bool currentGridEntryFound = false;
+                            return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                            propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                            propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                            currentGridEntryFound = false;
+                            return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                            return GetFirstChild();
+                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                            return GetLastChild();
+                    }
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            private UnsafeNativeMethods.IRawElementProviderFragment GetFirstChild() {
+                if (_owningPropertyDescriptorGridEntry.ChildCount > 0) {
+                    return _owningPropertyDescriptorGridEntry.Children.GetEntry(0).AccessibilityObject;
+                }
+
+                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry) {
+                    if (propertyGridView.SelectedGridEntry.Enumerable) {
+                        return propertyGridView.DropDownListBoxAccessibleObject;
+                    }
+
+                    return propertyGridView.EditAccessibleObject;
+                }
+
+                return null;
+            }
+
+            private UnsafeNativeMethods.IRawElementProviderFragment GetLastChild() {
+                if (_owningPropertyDescriptorGridEntry.ChildCount > 0) {
+                    return _owningPropertyDescriptorGridEntry.Children
+                        .GetEntry(_owningPropertyDescriptorGridEntry.ChildCount - 1).AccessibilityObject;
+                }
+
+                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                if (_owningPropertyDescriptorGridEntry == propertyGridView.SelectedGridEntry) {
+                    if (propertyGridView.SelectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible) {
+                        return propertyGridView.DropDownButton.AccessibilityObject;
+                    }
+
+                    return propertyGridView.EditAccessibleObject;
+                }
+
+                return null;
+            }
+
+            internal override bool IsPatternSupported(int patternId) {
+                if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_ValuePatternId) {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
+
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_IsEnabledPropertyId) {
                     return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
+                }
+
+                if (AccessibilityImprovements.Level3) {
+                    if (propertyID == NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId) {
+                        return string.Empty;
+                    }
+                    else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
+                        return true;
+                    }
                 }
 
                 return base.GetPropertyValue(propertyID);

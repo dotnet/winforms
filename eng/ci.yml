@@ -1,7 +1,7 @@
 parameters:
 
   # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp
+  agentPool: dotnet-external-temp-vs2019
 
   # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
   runAsPublic: true
@@ -43,6 +43,16 @@ jobs:
         - name: _OfficialBuildIdArgs
           value: ''
 
+        # needed for helix jobs
+        - name: _HelixAgentPool
+          value: 'Windows.10.Amd64.Open'
+        - name: _WinformsControlsTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
+        - name: _WinformsFuncTestBinDir
+          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
+        - name: _HelixStagingDir
+          value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+
         # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
@@ -56,7 +66,7 @@ jobs:
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
           - name: _PublishBlobFeedUrl
-            value: https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
+            value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
           # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
           # until the agent is running on the machine. They can be overridden any time before they are resolved,
@@ -71,6 +81,9 @@ jobs:
               /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+
+          - name: _HelixAgentPool
+            value: 'Windows.10.Amd64'
 
       strategy:
         matrix:
@@ -87,19 +100,40 @@ jobs:
       - checkout: self
         clean: true
 
-      # Build, test, pack, and sign
-      - script: eng\common\cibuild.cmd
-          -configuration $(_BuildConfig) 
+      # Build and rename binlog
+      - script: eng\cibuild.cmd
           -prepareMachine
-          $(_PublishArgs)
-          $(_SignArgs)
+          -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
-        displayName: Windows Build / Publish
+          -build
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
+        displayName: Build
 
-      # Run component governance detection (only for release)
-      - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
-        displayName: Component Governance Detection
-        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+      # Run unit tests and rename binlog
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -test
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+        displayName: Run Unit Tests     
+
+      # Run integration tests and rename binlog
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -integrationTest
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+        displayName: Run Integration Tests
+
+      # Create Nuget package, sign, and publish; and rename binlog
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -pack
+          -sign $(_SignArgs)
+          -publish $(_PublishArgs)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
+        displayName: Pack, Sign, and Publish
 
       # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
@@ -111,4 +145,9 @@ jobs:
             targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
           displayName: Publish package to build artifacts
           continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
+        # Run component governance detection (only for release; only for internal)
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: Component Governance Detection
           condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))

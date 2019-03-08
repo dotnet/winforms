@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -45,8 +45,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         ///     Converts the native value into a managed value
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         public override object ConvertNativeToManaged(object nativeValue, Com2PropertyDescriptor pd) {
 
             if (nativeValue == null) {
@@ -91,8 +89,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         ///     Converts the managed value into a native value
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
         public override object ConvertManagedToNative(object managedValue, Com2PropertyDescriptor pd, ref bool cancelSet) {
             // don't cancel the set
             cancelSet = false;
