@@ -34,4 +34,8 @@
       <ExcludeByFile />
   </PropertyGroup>
 
+  <!-- Make sure coverage targets are defined even in projects where coverlet is not installed -->
+  <Target Name="InstrumentModulesAfterBuild" />
+  <Target Name="GenerateCoverageResult" />
+
 </Project>
