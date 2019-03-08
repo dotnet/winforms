@@ -51,6 +51,8 @@ jobs:
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
         - name: _HelixStagingDir
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+        - name: _HelixSource
+          value: ${{ parameters.repoName }}/$(Build.SourceBranch)
         - name: _HelixToken
           value: ''
         - name: _HelixCreator
@@ -92,10 +94,10 @@ jobs:
           # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
           - name: _UnitTestHelixAgentPool
             value: 'Windows.10.Amd64'
-          # helix-token is a secret AzDO pipeline build variable; set here: 
-          # https://dnceng.visualstudio.com/internal/_apps/hub/ms.vss-ciworkflow.build-ci-hub?_a=edit-build-definition&id=164&view=Tab_Variables
+          - name: _HelixSource
+            value: official/${{ parameters.repoName }}/$(Build.SourceBranch)
           - name: _HelixToken
-            value: '$(HelixApiAccessToken)'
+            value: '$(HelixApiAccessToken)' # from DotNet-HelixApi-Access group
           - name: _HelixCreator
             value: '' #if _HelixToken is set, Creator must be empty
 
@@ -126,7 +128,7 @@ jobs:
       # Run unit tests on Helix
       - template: /eng/ci-helix-test.yml
         parameters:
-          RepoName: ${{ parameters.repoName }}
+          HelixSource: $(_HelixSource)
           HelixType: 'tests/unit'
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
