@@ -57,5 +57,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>1d2edb248bc2dc37fa0669053b0c88f3bffffb26</Sha>
     </Dependency>
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="2.0.0-beta.19156.20">
+      <Uri>https://github.com/dotnet/arcade</Uri>
+      <Sha>b94a591377451bda3ac80e597d7faff03a06c29e</Sha>
+    </Dependency>
   </ToolsetDependencies>
 </Dependencies>
