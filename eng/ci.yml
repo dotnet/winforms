@@ -73,8 +73,9 @@ jobs:
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
-          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved until the agent
-          # is running on the machine. They can be overridden any time before they are resolved, like in the job matrix below (see Build_Debug)
+          # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
+          # are not resolved until the agent is running on the machine. They can be overridden any 
+          # time before they are resolved, like in the job matrix below (see Build_Debug)
           - name: _SignArgs
             value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
