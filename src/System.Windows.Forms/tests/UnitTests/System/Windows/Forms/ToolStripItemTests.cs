@@ -1016,6 +1016,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
+        /*
         public static IEnumerable<object[]> Font_Get_TestData()
         {
             yield return new object[] { new SubToolStripItem(), ToolStripManager.DefaultFont };
@@ -1047,7 +1048,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Equal(expected, item.Font);
         }
-
+        */
         public static IEnumerable<object[]> Font_Set_TestData()
         {
             foreach (Enum displayStyle in Enum.GetValues(typeof(ToolStripItemDisplayStyle)))
