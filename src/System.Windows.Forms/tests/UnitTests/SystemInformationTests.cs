@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace System.Windows.Forms.Tests
 {
-    public class SystemInformationTest
+    public class SystemInformationTests
     {
         private const int LogicalDpi = 96;
 

@@ -9,7 +9,7 @@ using System.Linq;
 using WinForms.Common.Tests;
 using Xunit;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms.Tests
 {
     public class ContextMenuTests
     {

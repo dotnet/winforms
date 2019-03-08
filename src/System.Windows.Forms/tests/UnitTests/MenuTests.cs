@@ -9,7 +9,7 @@ using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 
-namespace System.Windows.Forms
+namespace System.Windows.Forms.Tests
 {
     public class MenuTests
     {
@@ -684,7 +684,7 @@ namespace System.Windows.Forms
         public void Menu_ToString_Invoke_ReturnsExpected()
         {
             var menu = new SubMenu(new MenuItem[] { new MenuItem() });
-            Assert.Equal("System.Windows.Forms.MenuTests+SubMenu, Items.Count: 1", menu.ToString());
+            Assert.Equal("System.Windows.Forms.Tests.MenuTests+SubMenu, Items.Count: 1", menu.ToString());
         }
 
         internal static void AssertEqualMenuItems(MenuItem[] expected, MenuItem[] actual)
