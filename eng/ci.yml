@@ -1,8 +1,10 @@
 parameters:
-  # This section is required because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp-vs2019 
-  runAsPublic: true                      
-  repoName: dotnet/winforms              
+
+  # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
+  agentPool: dotnet-external-temp-vs2019
+
+  # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
+  runAsPublic: true
 
 jobs:
 - template: /eng/common/templates/jobs/jobs.yml
@@ -13,7 +15,7 @@ jobs:
     enablePublishTestResults: true
     enablePublishBuildAssets: true
     enableTelemetry: true
-    helixRepo: $(repoName)
+    helixRepo: dotnet/winforms
 
     jobs:
     - job: Windows_NT
@@ -42,7 +44,7 @@ jobs:
           value: ''
 
         # needed for helix jobs
-        - name: _UnitTestHelixAgentPool
+        - name: _HelixAgentPool
           value: 'Windows.10.Amd64.Open'
         - name: _WinformsControlsTestBinDir
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
@@ -50,11 +52,8 @@ jobs:
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
         - name: _HelixStagingDir
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
-        - name: _HelixToken
-          value: ''
 
-
-        # Override some values if we're building internally (not public)
+        # Override some values if we're building internally
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
           # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
@@ -69,8 +68,9 @@ jobs:
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
-          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved until the agent
-          # is running on the machine. They can be overridden any time before they are resolved, like in the job matrix below (see Build_Debug)
+          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
+          # until the agent is running on the machine. They can be overridden any time before they are resolved,
+          # like in the job matrix below (see Build_Debug)
           - name: _SignArgs
             value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
@@ -82,11 +82,8 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
-          # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
-          - name: _UnitTestHelixAgentPool
+          - name: _HelixAgentPool
             value: 'Windows.10.Amd64'
-          - name: _HelixToken
-            value: '$(helix-token)'
 
       strategy:
         matrix:
@@ -112,21 +109,15 @@ jobs:
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
 
-      # Run unit tests on Helix
-      - template: /eng/ci-helix-test.yml
-        parameters:
-          RepoName: ${{ parameters.repoName }}
-          HelixType: 'tests/unit'
-          HelixTargetQueues: $(_UnitTestHelixAgentPool)
-          HelixAccessToken: $(_HelixToken)            # only defined for internal CI
-          # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
-          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj'
-          DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix'
-      
+      # Run unit tests and rename binlog
+      - script: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -test
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+        displayName: Run Unit Tests     
+
       # Run integration tests and rename binlog
-      # These are not ready to run on Helix because:
-        # 1. Helix doesn't build projects (it only uses publish); we need .dotnet and also bin from build
-        # 2. we need an interactive pool for SendKeys to work
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
