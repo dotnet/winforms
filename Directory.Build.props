@@ -23,6 +23,7 @@
   <!-- For the purposes of generating code coverage as part of the build -->
   <PropertyGroup Condition="'$(Coverage)' == 'true'">
       <CollectCoverage>true</CollectCoverage>
+       <SingleHit>true</SingleHit> <!--see https://github.com/dotnet/machinelearning/pull/2843/files#r262544802-->
       <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- required due to https://github.com/tonerdo/coverlet/issues/72 -->
       <CoverletOutputFormat>opencover</CoverletOutputFormat>
       <CoverletOutput>$(BaseOutputPath)$(PlatformConfig)\coverage\$(MSBuildProjectName).coverage</CoverletOutput>

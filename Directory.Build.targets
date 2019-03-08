@@ -7,19 +7,4 @@
   <ItemGroup>
     <PackageReference Update="Microsoft.NETCore.Platforms" Version="$(MicrosoftNETCorePlatformsPackageVersion)" />
   </ItemGroup>
-
-  <!-- For the purposes of generating code coverage as part of the build -->
-  <!-- Workaround for https://github.com/tonerdo/coverlet/pull/318 is released -->
-  <Target Name="UpdateTargetPathForCoverage" BeforeTargets="InstrumentModulesNoBuild;InstrumentModulesAfterBuild">
-    <PropertyGroup>
-      <_CoverletOriginalTargetPath>$(TargetPath)</_CoverletOriginalTargetPath>
-      <TargetPath>$([System.IO.Path]::GetDirectoryName($(TargetPath)))\NonExistent.dll</TargetPath>
-    </PropertyGroup>
-  </Target>
-  <Target Name="UpdateTargetPathAfterCoverage" AfterTargets="InstrumentModulesNoBuild;InstrumentModulesAfterBuild">
-    <PropertyGroup>
-      <TargetPath>$(_CoverletOriginalTargetPath)</TargetPath>
-    </PropertyGroup>
-  </Target>
 </Project>
-
