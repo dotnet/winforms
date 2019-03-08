@@ -34,15 +34,15 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
             }
 
-            var dotnetPath = DotNetPath();
-            if (!Directory.Exists(dotnetPath))
-            {
-                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
+            var dotnetPath = DotNetPath();	
+            if (!Directory.Exists(dotnetPath))	
+            {	
+                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");	
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'));
-            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;	// required
             // ...
 
             return StartProcess(startInfo);
