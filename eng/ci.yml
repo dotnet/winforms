@@ -1,5 +1,6 @@
 parameters:
-  # This section is required because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
+  # This section is required because agent pool can't 
+  # be read from a user-defined variable (Azure DevOps limitation)
   agentPool: dotnet-external-temp-vs2019 
   runAsPublic: true                      
   repoName: dotnet/winforms              
@@ -52,12 +53,15 @@ jobs:
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
         - name: _HelixToken
           value: ''
+        - name: _HelixCreator
+          value: ${{ parameters.repoName }}
 
 
         # Override some values if we're building internally (not public)
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
-          # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
+          # note: You have to use list syntax here (-name: value) or 
+          # you will get errors about declaring the same variable multiple times
           - name: _PublishType
             value: blob
           - name: _SignType
@@ -87,6 +91,8 @@ jobs:
             value: 'Windows.10.Amd64'
           - name: _HelixToken
             value: '$(helix-token)'
+          - name: _HelixCreator
+            value: '' #if _HelixToken is set, Creator must be empty
 
       strategy:
         matrix:
@@ -119,6 +125,7 @@ jobs:
           HelixType: 'tests/unit'
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
+          Creator: $(_HelixCreator)
           # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj'
           DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix'
