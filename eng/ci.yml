@@ -93,8 +93,10 @@ jobs:
             _PublishType: none
             _SignType: test
             _DotNetPublishToBlobFeed : false
+            _Coverage: true
           Build_Release:
             _BuildConfig: Release
+            _Coverage: false
 
       steps:
       - checkout: self
@@ -106,6 +108,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -build
+          /p:Coverage=$(_Coverage)
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
 
@@ -115,6 +118,8 @@ jobs:
           $(_OfficialBuildIdArgs)
           -test
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+          /p:Coverage=$(_Coverage)
+          /m:1
         displayName: Run Unit Tests     
 
       # Run integration tests and rename binlog
@@ -124,6 +129,15 @@ jobs:
           -integrationTest
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
         displayName: Run Integration Tests
+
+      # Upload code coverage data
+      - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
+            eng/CodeCoverage.proj
+            /p:Configuration=$(_BuildConfig)
+            /p:CodeCovToken=$(CODECOV_TOKEN)
+            /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
+        displayName: Upload coverage to codecov.io
+        condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd

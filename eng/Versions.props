@@ -31,5 +31,7 @@
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
     <CoverletMSBuildPackageVersion>2.6.0</CoverletMSBuildPackageVersion>
+    <CodecovVersion>1.1.1</CodecovVersion>
+    <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
 </Project>
