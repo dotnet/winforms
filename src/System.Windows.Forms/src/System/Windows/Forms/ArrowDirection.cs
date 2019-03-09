@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Windows.Forms
 {
     /// <devdoc>
-    // this enum is tightly coupled to Orientation so you can determine quickly
+    // This enum is tightly coupled to Orientation so you can determine quickly
     // an orientation from a direction. (direction & Orientation.Vertical == Orientation.Vertical)
     /// </devdoc>
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
