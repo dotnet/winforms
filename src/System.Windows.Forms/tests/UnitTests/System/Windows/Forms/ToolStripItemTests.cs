@@ -1016,20 +1016,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, callCount);
         }
 
-        /*
-        public static IEnumerable<object[]> Font_Get_TestData()
+        public static IEnumerable<object[]> Font_GetDefault_TestData()
         {
-            yield return new object[] { new SubToolStripItem(), ToolStripManager.DefaultFont };
-            yield return new object[] { new SubToolStripItem("text", null, null), ToolStripManager.DefaultFont };
-            yield return new object[] { new SubToolStripItem("text", null, null, "name"), ToolStripManager.DefaultFont };
-
-            var toolStrip = new ToolStrip
-            {
-                Font = SystemFonts.MenuFont
-            };
-            var toolStripItem = new SubToolStripItem();
-            toolStrip.Items.Add(toolStripItem);
-            yield return new object[] { toolStripItem, SystemFonts.MenuFont };
+            yield return new object[] { new SubToolStripItem() };
+            yield return new object[] { new SubToolStripItem("text", null, null) };
+            yield return new object[] { new SubToolStripItem("text", null, null, "name") };
 
             var toolStripParent = new ToolStrip
             {
@@ -1039,16 +1030,28 @@ namespace System.Windows.Forms.Tests
             {
                 Parent = toolStripParent
             };
-            yield return new object[] { toolStripParentItem, ToolStripManager.DefaultFont};
+            yield return new object[] { toolStripParentItem };
         }
 
         [Theory]
-        [MemberData(nameof(Font_Get_TestData))]
-        public void ToolStripItem_Font_Get_ReturnsExpected(ToolStripItem item, Font expected)
+        [MemberData(nameof(Font_GetDefault_TestData))]
+        public void ToolStripItem_Font_GetDefault_ReturnsExpected(ToolStripItem item)
         {
-            Assert.Equal(expected, item.Font);
+            Assert.Equal(ToolStripManager.DefaultFont, item.Font);
         }
-        */
+
+        [Fact]
+        public void ToolStripItem_Font_GetWithParent_ReturnsExpected()
+        {
+            var toolStrip = new ToolStrip
+            {
+                Font = SystemFonts.MenuFont
+            };
+            var toolStripItem = new SubToolStripItem();
+            toolStrip.Items.Add(toolStripItem);
+            Assert.Equal(SystemFonts.MenuFont, toolStripItem.Font);
+        }
+
         public static IEnumerable<object[]> Font_Set_TestData()
         {
             foreach (Enum displayStyle in Enum.GetValues(typeof(ToolStripItemDisplayStyle)))
