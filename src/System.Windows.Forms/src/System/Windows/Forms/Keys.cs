@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(KeysConverter))]
     [Editor("System.Windows.Forms.Design.ShortcutKeysEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
     [ComVisible(true)]
-    [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags")] // Certain memberd of Keys enum are actually meant to be OR'ed.
+    [SuppressMessage("Microsoft.Usage", "CA2217:DoNotMarkEnumsWithFlags", Justification = "Certain memberd of Keys enum are actually meant to be OR'ed.")]
     public enum Keys
     {
         /// <devdoc>
@@ -81,7 +81,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         LineFeed       = 0x0A,
 
-        /// <include file='doc\Keys.uex' path='docs/doc[@for="Keys.Clear"]/*' />
         /// The CLEAR key.
         /// </devdoc>
         Clear          = 0x0C,

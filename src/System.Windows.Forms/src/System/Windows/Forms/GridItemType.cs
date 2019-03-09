@@ -4,16 +4,11 @@
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\GridItemType.uex' path='docs/doc[@for="GridItemType"]/*' />
-    public enum GridItemType {
-        /// <include file='doc\GridItemType.uex' path='docs/doc[@for="GridItemType.Property"]/*' />
+    public enum GridItemType
+    {
         Property,
-        /// <include file='doc\GridItemType.uex' path='docs/doc[@for="GridItemType.Category"]/*' />
         Category,
-        /// <include file='doc\GridItemType.uex' path='docs/doc[@for="GridItemType.ArrayValue"]/*' />
         ArrayValue, 
-        /// <include file='doc\GridItemType.uex' path='docs/doc[@for="GridItemType.Root"]/*' />
         Root
     }
-
 }

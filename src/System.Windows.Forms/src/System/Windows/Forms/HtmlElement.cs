@@ -1412,18 +1412,5 @@ namespace System.Windows.Forms
 
 
     }
-
-    /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation"]/*' />
-    public enum HtmlElementInsertionOrientation
-    {
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation.BeforeBegin"]/*' />
-        BeforeBegin,
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation.AfterBegin"]/*' />
-        AfterBegin,
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation.BeforeEnd"]/*' />
-        BeforeEnd,
-        /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElementInsertionOrientation.AfterEnd"]/*' />
-        AfterEnd
-    }
 }
 

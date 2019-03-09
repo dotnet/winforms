@@ -2,56 +2,29 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-
-    /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies how the user activates items and the appearance
-    ///       of items as the mouse cursor moves over them.
-    ///
-    ///    </para>
+    /// Specifies how the user activates items and the appearance of items as the
+    /// mouse cursor moves over them.
     /// </devdoc>
-    public enum ItemActivation {
-
-        /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation.Standard"]/*' />
+    public enum ItemActivation
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Activate items with a double-click.
-        ///       Items do not change appearance.
-        ///
-        ///    </para>
+        /// Activate items with a double-click.
+        /// Items do not change appearance.
         /// </devdoc>
         Standard = 0,
 
-        /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation.OneClick"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Activate
-        ///       items with a single click. The cursor changes shape and the item
-        ///       text changes color.
-        ///
-        ///    </para>
+        /// Activate items with a single click. The cursor changes shape and the
+        /// item text changes color.
         /// </devdoc>
         OneClick = 1,
 
-        /// <include file='doc\ItemActivation.uex' path='docs/doc[@for="ItemActivation.TwoClick"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Activate items with a
-        ///       double click. The item text changes color.
-        ///
-        ///    </para>
+        /// Activate items with a double click. The item text changes color.
         /// </devdoc>
         TwoClick = 2,
-
     }
 }
