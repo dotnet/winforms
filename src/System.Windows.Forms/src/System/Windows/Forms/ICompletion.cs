@@ -3,21 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 #if false
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-
-    /// <include file='doc\ICompletion.uex' path='docs/doc[@for="ICompletion"]/*' />
-    /// <internalonly/>
-    /// <devdoc>
-    /// </devdoc>
-    public interface ICompletion { 
-       /// <include file='doc\ICompletion.uex' path='docs/doc[@for="ICompletion.CompletionStatusChanged"]/*' />
+namespace System.Windows.Forms
+{
+    public interface ICompletion
+    {
        /// <devdoc>
-        ///     This function will be called by the ThreadPool's worker threads when a
-        ///     packet is ready.
-        ///     
+        /// This function will be called by the ThreadPool's worker threads when a
+        /// packet is ready.
         /// </devdoc>
         void CompletionStatusChanged(bool status, int size, NativeMethods.OVERLAPPED overlapped);
     }
