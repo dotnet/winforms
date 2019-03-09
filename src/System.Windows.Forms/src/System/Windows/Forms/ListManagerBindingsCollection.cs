@@ -58,9 +58,13 @@ namespace System.Windows.Forms
 
         protected override void RemoveCore(Binding dataBinding)
         {
+            if (dataBinding == null)
+            {
+                throw new ArgumentNullException(nameof(dataBinding));
+            }
             if (dataBinding.BindingManagerBase != _bindingManagerBase)
             {
-                throw new ArgumentException(SR.BindingsCollectionForeign);
+                throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
             }
 
             dataBinding.SetListManager(null);

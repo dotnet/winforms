@@ -21,7 +21,6 @@ namespace System.Windows.Forms
 
         public ControlBindingsCollection(IBindableComponent control)
         {
-            Debug.Assert(control != null, "How could a controlbindingscollection not have a control associated with it!");
             this._control = control;
         }
 
@@ -113,11 +112,11 @@ namespace System.Windows.Forms
             }
             if (dataBinding.BindableComponent == _control)
             {
-                throw new ArgumentException(SR.BindingsCollectionAdd1);
+                throw new ArgumentException(SR.BindingsCollectionAdd1, nameof(dataBinding));
             }
             if (dataBinding.BindableComponent != null)
             {
-                throw new ArgumentException(SR.BindingsCollectionAdd2);
+                throw new ArgumentException(SR.BindingsCollectionAdd2, nameof(dataBinding));
             }
 
             // important to set prop first for error checking.
@@ -128,14 +127,13 @@ namespace System.Windows.Forms
 
         internal void CheckDuplicates(Binding binding)
         {
-            if (binding.PropertyName.Length == 0)
-            {
-                return;
-            }
+            Debug.Assert(!string.IsNullOrEmpty(binding.PropertyName), "The caller should check for this.");
+
             for (int i = 0; i < Count; i++)
             {
-                if (binding != this[i] && this[i].PropertyName.Length > 0 &&
-                    (string.Compare(binding.PropertyName, this[i].PropertyName, false, CultureInfo.InvariantCulture) == 0))
+                Binding current = this[i];
+                if (binding != current && !string.IsNullOrEmpty(current.PropertyName) &&
+                    string.Equals(binding.PropertyName, current.PropertyName, StringComparison.InvariantCulture))
                 {
                     throw new ArgumentException(SR.BindingsCollectionDup, nameof(binding));
                 }
@@ -179,9 +177,13 @@ namespace System.Windows.Forms
 
         protected override void RemoveCore(Binding dataBinding)
         {
+            if (dataBinding == null)
+            {
+                throw new ArgumentNullException(nameof(dataBinding));
+            }
             if (dataBinding.BindableComponent != _control)
             {
-                throw new ArgumentException(SR.BindingsCollectionForeign);
+                throw new ArgumentException(SR.BindingsCollectionForeign, nameof(dataBinding));
             }
 
             dataBinding.SetBindableComponent(null);
