@@ -8,15 +8,15 @@
   </PropertyGroup>
   <!-- Corefx dependencies -->
   <PropertyGroup>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview3.19158.3</MicrosoftWin32RegistryPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview3.19158.3</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview3.19158.3</SystemDrawingCommonPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview3.19158.3</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview3.19158.3</SystemSecurityCryptographyCngPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview3.19158.3</SystemCodeDomPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview3.19158.3</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview3.19158.3</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsVersion>3.0.0-preview3.19158.3</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview3.19158.6</MicrosoftWin32RegistryPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview3.19158.6</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview3.19158.6</SystemDrawingCommonPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview3.19158.6</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview3.19158.6</SystemSecurityCryptographyCngPackageVersion>
+    <SystemCodeDomPackageVersion>4.6.0-preview3.19158.6</SystemCodeDomPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview3.19158.6</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>4.6.0-preview3.19158.6</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsVersion>3.0.0-preview3.19158.6</MicrosoftNETCorePlatformsVersion>
   </PropertyGroup>
   <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
