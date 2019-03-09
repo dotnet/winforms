@@ -98,8 +98,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(destinationType));
             }
 
-            if (destinationType == typeof(string)) {
-                double val = (double)value;
+            if (value is double val && destinationType == typeof(string)) {
                 int perc = (int)(val * 100.0);
                 return perc.ToString(CultureInfo.CurrentCulture) + "%";
             }
