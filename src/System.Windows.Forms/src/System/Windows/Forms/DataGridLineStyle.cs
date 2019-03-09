@@ -2,30 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    /// <include file='doc\DataGridLineStyle.uex' path='docs/doc[@for="DataGridLineStyle"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the style of gridlines in a <see cref='System.Windows.Forms.DataGrid'/>.
-    ///    </para>
+    /// Specifies the style of gridlines in a <see cref='System.Windows.Forms.DataGrid'/>.
     /// </devdoc>
-    public enum DataGridLineStyle {
-        /// <include file='doc\DataGridLineStyle.uex' path='docs/doc[@for="DataGridLineStyle.None"]/*' />
+    public enum DataGridLineStyle
+    {
         /// <devdoc>
-        ///    <para>
-        ///       No gridlines between cells.
-        ///    </para>
+        /// No gridlines between cells.
         /// </devdoc>
         None,
-        /// <include file='doc\DataGridLineStyle.uex' path='docs/doc[@for="DataGridLineStyle.Solid"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       Solid gridlines between cells.
-        ///    </para>
+        /// Solid gridlines between cells.
         /// </devdoc>
         Solid
     }
 }
-        

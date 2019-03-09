@@ -4,11 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    public enum DataGridViewClipboardCopyMode
+    [Flags]
+    internal enum DataGridViewAutoSizeRowCriteriaInternal
     {
-        Disable = 0,
-        EnableWithAutoHeaderText,
-        EnableWithoutHeaderText,
-        EnableAlwaysIncludeHeaderText
+        Header = 0x01,
+        AllColumns = 0x02
     }
 }
