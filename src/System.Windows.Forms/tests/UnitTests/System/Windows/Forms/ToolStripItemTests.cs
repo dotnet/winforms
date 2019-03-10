@@ -1056,14 +1056,14 @@ namespace System.Windows.Forms.Tests
         {
             foreach (Enum displayStyle in Enum.GetValues(typeof(ToolStripItemDisplayStyle)))
             {
-                yield return new object[] { displayStyle, null, ToolStripManager.DefaultFont };
-                yield return new object[] { displayStyle, SystemFonts.MenuFont, SystemFonts.MenuFont };
+                yield return new object[] { displayStyle, null };
+                yield return new object[] { displayStyle, SystemFonts.MenuFont };
             }
         }
 
         [Theory]
         [MemberData(nameof(Font_Set_TestData))]
-        public void ToolStripItem_Font_Set_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value, Font expected)
+        public void ToolStripItem_Font_Set_GetReturnsExpected(ToolStripItemDisplayStyle displayStyle, Font value)
         {
             var item = new SubToolStripItem
             {
@@ -1071,11 +1071,11 @@ namespace System.Windows.Forms.Tests
             };
 
             item.Font = value;
-            Assert.Equal(expected, item.Font);
+            Assert.Equal(value ?? ToolStripManager.DefaultFont, item.Font);
 
             // Set same.
             item.Font = value;
-            Assert.Equal(expected, item.Font);
+            Assert.Equal(value ?? ToolStripManager.DefaultFont, item.Font);
         }
 
         public static IEnumerable<object[]> ForeColor_Get_TestData()
