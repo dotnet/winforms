@@ -36,4 +36,3 @@ namespace System.Windows.Forms
         Up = NativeMethods.ARW_UP,
     }
 }
-

@@ -18,7 +18,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         GrowAndShrink,
 
-
         /// <devdoc>
         /// The control will grow as much as it needs to encompass its contents (e.g.
         /// text for a button, child controls for a container), but will not shrink

@@ -21,6 +21,5 @@ namespace System.Windows.Forms
         /// The appearance of a Windows button.
         /// </devdoc>
         Button = 1,
-
     }
 }

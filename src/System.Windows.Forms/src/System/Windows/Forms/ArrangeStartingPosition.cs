@@ -33,7 +33,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         /// Starts at the upper-left corner of the screen.
         /// </devdoc>
-
         TopLeft = NativeMethods.ARW_TOPLEFT,
 
         /// <devdoc>
@@ -42,4 +41,3 @@ namespace System.Windows.Forms
         TopRight = NativeMethods.ARW_TOPRIGHT,
     }
 }
-
