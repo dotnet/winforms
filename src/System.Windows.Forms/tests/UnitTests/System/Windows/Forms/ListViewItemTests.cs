@@ -49,22 +49,22 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_StringArray_String_Color_Color_Font_ListViewGroup_TestData()
         {
-            yield return new object[] { null, null, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { null }, "", Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, SystemFonts.MenuFont, "text" };
+            yield return new object[] { null, null, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { null }, "", Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_String_Color_Color_Font_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font_ListViewGroup(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group, Color expectedForeColor, Color expectedBackColor, Font expectedFont, string expectedText)
+        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font_ListViewGroup(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey, foreColor, backColor, font, group);
             Assert.Equal(expectedBackColor, item.BackColor);
             Assert.Equal(Rectangle.Empty, item.Bounds);
             Assert.False(item.Checked);
             Assert.False(item.Focused);
-            Assert.Equal(expectedFont, item.Font);
+            Assert.Equal(font ?? Control.DefaultFont, item.Font);
             Assert.Equal(expectedForeColor, item.ForeColor);
             Assert.Equal(group, item.Group);
             Assert.Equal(-1, item.ImageIndex);
@@ -87,22 +87,22 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_StringArray_Int_Color_Color_Font_ListViewGroup_TestData()
         {
-            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, SystemFonts.MenuFont, "text" };
+            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, new ListViewGroup(), SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, new ListViewGroup(), Color.Blue, Color.Red, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_Int_Color_Color_Font_ListViewGroup_TestData))]
-        public void ListViewItem_Ctor_StringArray_Int_Color_Color_Font_ListViewGroup(string[] subItems, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group, Color expectedForeColor, Color expectedBackColor, Font expectedFont, string expectedText)
+        public void ListViewItem_Ctor_StringArray_Int_Color_Color_Font_ListViewGroup(string[] subItems, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem(subItems, imageIndex, foreColor, backColor, font, group);
             Assert.Equal(expectedBackColor, item.BackColor);
             Assert.Equal(Rectangle.Empty, item.Bounds);
             Assert.False(item.Checked);
             Assert.False(item.Focused);
-            Assert.Equal(expectedFont, item.Font);
+            Assert.Equal(font ?? Control.DefaultFont, item.Font);
             Assert.Equal(expectedForeColor, item.ForeColor);
             Assert.Equal(group, item.Group);
             Assert.Equal(imageIndex, item.ImageIndex);
@@ -125,22 +125,22 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_StringArray_String_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { null }, "", Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, SystemFonts.MenuFont, "text" };
+            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[0], null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { null }, "", Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { "text" }, "imageKey", Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_String_Color_Color_Font_TestData))]
-        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, Font expectedFont, string expectedText)
+        public void ListViewItem_Ctor_StringArray_String_Color_Color_Font(string[] subItems, string imageKey, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem(subItems, imageKey, foreColor, backColor, font);
             Assert.Equal(expectedBackColor, item.BackColor);
             Assert.Equal(Rectangle.Empty, item.Bounds);
             Assert.False(item.Checked);
             Assert.False(item.Focused);
-            Assert.Equal(expectedFont, item.Font);
+            Assert.Equal(font ?? Control.DefaultFont, item.Font);
             Assert.Equal(expectedForeColor, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(-1, item.ImageIndex);
@@ -163,22 +163,22 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_StringArray_Int_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont, "" };
-            yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, SystemFonts.MenuFont, "text" };
+            yield return new object[] { null, -1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[0], 0, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { null }, 1, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, "" };
+            yield return new object[] { new string[] { "text" }, 2, Color.Blue, Color.Red, SystemFonts.MenuFont, Color.Blue, Color.Red, "text" };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_StringArray_Int_Color_Color_Font_TestData))]
-        public void ListViewItem_Ctor_StringArray_Int_Color_Color_Font(string[] subItems, int imageIndex, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, Font expectedFont, string expectedText)
+        public void ListViewItem_Ctor_StringArray_Int_Color_Color_Font(string[] subItems, int imageIndex, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, string expectedText)
         {
             var item = new ListViewItem(subItems, imageIndex, foreColor, backColor, font);
             Assert.Equal(expectedBackColor, item.BackColor);
             Assert.Equal(Rectangle.Empty, item.Bounds);
             Assert.False(item.Checked);
             Assert.False(item.Focused);
-            Assert.Equal(expectedFont, item.Font);
+            Assert.Equal(font ?? Control.DefaultFont, item.Font);
             Assert.Equal(expectedForeColor, item.ForeColor);
             Assert.Null(item.Group);
             Assert.Equal(imageIndex, item.ImageIndex);

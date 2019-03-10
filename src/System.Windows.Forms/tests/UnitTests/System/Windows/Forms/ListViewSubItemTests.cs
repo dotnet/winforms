@@ -56,25 +56,25 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_ListViewItem_String_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont };
-            yield return new object[] { new ListViewItem(), "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
-            yield return new object[] { new ListViewItem(), "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
-            yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
+            yield return new object[] { null, null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window };
+            yield return new object[] { new ListViewItem(), "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { new ListViewItem(), "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { new ListViewItem() { BackColor = Color.Yellow, ForeColor = Color.Yellow, Font = SystemFonts.StatusFont }, "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
 
             var listView = new ListView();
             var item = new ListViewItem();
             Assert.Null(item.ListView);
-            yield return new object[] { item, "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
+            yield return new object[] { item, "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
         }
 
         [Theory]
         [MemberData(nameof(Ctor_ListViewItem_String_Color_Color_Font_TestData))]
-        public void ListViewSubItem_Ctor_ListViewItem_String_Color_Color_Font(ListViewItem owner, string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, Font expectedFont)
+        public void ListViewSubItem_Ctor_ListViewItem_String_Color_Color_Font(ListViewItem owner, string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor)
         {
             var subItem = new ListViewItem.ListViewSubItem(owner, text, foreColor, backColor, font);
             Assert.Equal(expectedBackColor, subItem.BackColor);
             Assert.Equal(Rectangle.Empty, subItem.Bounds);
-            Assert.Equal(expectedFont, subItem.Font);
+            Assert.Equal(font ?? Control.DefaultFont, subItem.Font);
             Assert.Equal(expectedForeColor, subItem.ForeColor);
             Assert.Empty(subItem.Name);
             Assert.Null(subItem.Tag);
@@ -144,23 +144,23 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Font_Set_TestData()
         {
-            yield return new object[] { SystemFonts.MenuFont, SystemFonts.MenuFont };
-            yield return new object[] { null, Control.DefaultFont };
+            yield return new object[] { SystemFonts.MenuFont };
+            yield return new object[] { null };
         }
 
         [Theory]
         [MemberData(nameof(Font_Set_TestData))]
-        public void ListViewSubItem_Font_Set_GetReturnsExpected(Font value, Font expected)
+        public void ListViewSubItem_Font_Set_GetReturnsExpected(Font value)
         {
             var subItem = new ListViewItem.ListViewSubItem
             {
                 Font = value
             };
-            Assert.Equal(expected, subItem.Font);
+            Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
             
             // Set again to test caching behaviour.
             subItem.Font = value;
-            Assert.Equal(expected, subItem.Font);
+            Assert.Equal(value ?? Control.DefaultFont, subItem.Font);
         }
 
         [Fact]

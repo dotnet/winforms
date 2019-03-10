@@ -241,14 +241,14 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Add_String_Color_Color_Font_TestData()
         {
-            yield return new object[] { null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont };
-            yield return new object[] {  "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
-            yield return new object[] { "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
+            yield return new object[] { null, Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window };
+            yield return new object[] {  "", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { "reasonable", Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
         }
 
         [Theory]
         [MemberData(nameof(Add_String_Color_Color_Font_TestData))]
-        public void ListViewSubItemCollection_Add_String_Color_Color_Font_Success(string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, Font expectedFont)
+        public void ListViewSubItemCollection_Add_String_Color_Color_Font_Success(string text, Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor)
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(text ?? string.Empty, subItem.Text);
             Assert.Equal(expectedForeColor, subItem.ForeColor);
             Assert.Equal(expectedBackColor, subItem.BackColor);
-            Assert.Equal(expectedFont, subItem.Font);
+            Assert.Equal(font ?? Control.DefaultFont, subItem.Font);
             Assert.Equal(item, subItem.owner);
         }
 
@@ -369,14 +369,14 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> AddRange_StringArrayWithStyles_TestData()
         {
-            yield return new object[] { Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window, Control.DefaultFont };
-            yield return new object[] { Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
-            yield return new object[] { Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue, SystemFonts.MenuFont };
+            yield return new object[] { Color.Empty, Color.Empty, null, SystemColors.WindowText, SystemColors.Window };
+            yield return new object[] { Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
+            yield return new object[] { Color.Red, Color.Blue, SystemFonts.MenuFont, Color.Red, Color.Blue };
         }
 
         [Theory]
         [MemberData(nameof(AddRange_StringArrayWithStyles_TestData))]
-        public void ListViewSubItemCollection_AddRange_StringArrayWithStyles_Success(Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor, Font expectedFont)
+        public void ListViewSubItemCollection_AddRange_StringArrayWithStyles_Success(Color foreColor, Color backColor, Font font, Color expectedForeColor, Color expectedBackColor)
         {
             var item = new ListViewItem();
             var collection = new ListViewItem.ListViewSubItemCollection(item);
@@ -387,11 +387,11 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("text1", collection[0].Text);
             Assert.Equal(expectedForeColor, collection[0].ForeColor);
             Assert.Equal(expectedBackColor, collection[0].BackColor);
-            Assert.Equal(expectedFont, collection[0].Font);
+            Assert.Equal(font ?? Control.DefaultFont, collection[0].Font);
             Assert.Equal("text2", collection[1].Text);
             Assert.Equal(expectedForeColor, collection[1].ForeColor);
             Assert.Equal(expectedBackColor, collection[1].BackColor);
-            Assert.Equal(expectedFont, collection[1].Font);
+            Assert.Equal(font ?? Control.DefaultFont, collection[1].Font);
         }
 
         [Fact]
