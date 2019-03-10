@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+
 namespace System.Windows.Forms.PropertyGridInternal
 {
     internal sealed class GridEntryCollection : GridItemCollection
@@ -20,17 +22,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 throw new ArgumentNullException(nameof(value));
             }
 
-            if (_entries != null)
-            {
-                var newArray = new GridEntry[_entries.Length + value.Length];
-                _entries.CopyTo(newArray, 0);
-                value.CopyTo(newArray, _entries.Length);
-                _entries = newArray;
-            }
-            else
-            {
-                _entries = (GridEntry[])value.Clone();
-            }
+            Debug.Assert(_entries != null, "Entries is initialized in the base class constructor.");
+            var newArray = new GridEntry[_entries.Length + value.Length];
+            _entries.CopyTo(newArray, 0);
+            value.CopyTo(newArray, _entries.Length);
+            _entries = newArray;
         }
 
         public void Clear() => _entries = Array.Empty<GridEntry>();
@@ -51,7 +47,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                if (_owner != null && _entries != null)
+                if (_owner != null)
                 {
                     for (int i = 0; i < _entries.Length; i++)
                     {
