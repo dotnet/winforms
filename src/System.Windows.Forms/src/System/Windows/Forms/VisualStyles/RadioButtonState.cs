@@ -9,7 +9,8 @@ using System.Diagnostics.CodeAnalysis;
 namespace System.Windows.Forms.VisualStyles
 {
     [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")]
-    public enum RadioButtonState {
+    public enum RadioButtonState
+    {
         UncheckedNormal = 1, 
         UncheckedHot = 2, 
         UncheckedPressed = 3, 
