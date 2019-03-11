@@ -14,6 +14,15 @@
   -->
 
   <PropertyGroup>
+    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
+    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <!-- This is a Packaging Project -->
+  <PropertyGroup>
+      <IsPackable>true</IsPackable>
+  </PropertyGroup>
 
     <!-- Don't include this project in the build output -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
@@ -23,9 +32,11 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
 
+  <PropertyGroup>
+    <!-- Do not include Symbols -->
+    <IncludeSymbols>false</IncludeSymbols>
     <!-- Disable a VS-specific target that is failing when building this csproj -->
     <GenerateDependencyFile>false</GenerateDependencyFile>
-
   </PropertyGroup>
 
   <!-- nuspec properties -->
