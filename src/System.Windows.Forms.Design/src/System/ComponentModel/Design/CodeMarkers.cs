@@ -7,9 +7,8 @@ using System.Runtime.InteropServices;
 using Microsoft.Win32;
 using System.Diagnostics.CodeAnalysis;
 
-namespace System.Windows.Forms.Design.System.ComponentModel.Design
+namespace System.ComponentModel.Design
 {
-#pragma warning disable 0436
     internal sealed class CodeMarkers
     {
         // Singleton access
@@ -17,14 +16,6 @@ namespace System.Windows.Forms.Design.System.ComponentModel.Design
 
         static class NativeMethods
         {
-#if Codemarkers_IncludeAppEnum
-            ///// Code markers test function imports
-            [DllImport(TestDllName, EntryPoint = "InitPerf")]
-            public static extern void TestDllInitPerf(System.Int32 iApp);
-
-            [DllImport(TestDllName, EntryPoint = "UnInitPerf")]
-            public static extern void TestDllUnInitPerf(System.Int32 iApp);
-#endif // Codemarkers_IncludeAppEnum
 
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void TestDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
@@ -32,15 +23,6 @@ namespace System.Windows.Forms.Design.System.ComponentModel.Design
             [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             [DllImport(TestDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void TestDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
-
-#if Codemarkers_IncludeAppEnum
-            ///// Code markers product function imports
-            [DllImport(ProductDllName, EntryPoint = "InitPerf")]
-            public static extern void ProductDllInitPerf(System.Int32 iApp);
-
-            [DllImport(ProductDllName, EntryPoint = "UnInitPerf")]
-            public static extern void ProductDllUnInitPerf(System.Int32 iApp);
-#endif // Codemarkers_IncludeAppEnum
 
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void ProductDllPerfCodeMarker(int nTimerID, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 2)] byte[] aUserParams, int cbParams);
@@ -52,14 +34,6 @@ namespace System.Windows.Forms.Design.System.ComponentModel.Design
             ///// global native method imports
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
             public static extern ushort FindAtom([MarshalAs(UnmanagedType.LPWStr)] string lpString);
-
-#if Codemarkers_IncludeAppEnum
-            [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-            public static extern System.UInt16 AddAtom([MarshalAs(UnmanagedType.LPWStr)] string lpString);
-
-            [DllImport("kernel32.dll")]
-            public static extern System.UInt16 DeleteAtom(System.UInt16 atom);
-#endif // Codemarkers_IncludeAppEnum
 
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
             public static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] string lpModuleName);
