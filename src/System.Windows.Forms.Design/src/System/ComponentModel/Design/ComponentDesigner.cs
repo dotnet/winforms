@@ -498,9 +498,9 @@ namespace System.ComponentModel.Design
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     DesignerCommandSet to be used as a site specific service.
-        /// </devdoc>
+        /// </summary>
         private class CDDesignerCommandSet : DesignerCommandSet
         {
             private readonly ComponentDesigner _componentDesigner;
@@ -596,9 +596,9 @@ namespace System.ComponentModel.Design
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///      Raised when a component's name changes.  Here we update the SettingsKey property if necessary.
-        /// </devdoc>
+        /// </summary>
         private void OnComponentRename(object sender, ComponentRenameEventArgs e)
         {
             if (Component is IPersistComponentSettings)
@@ -615,9 +615,9 @@ namespace System.ComponentModel.Design
             }
         }
 
-        /// <devdoc> 
+        /// <summary> 
         ///    shadowing the SettingsKey so we can default it to be RootComponent.Name + "." + Control.Name
-        /// </devdoc>
+        /// </summary>
         private string SettingsKey
         {
             get
@@ -880,9 +880,9 @@ namespace System.ComponentModel.Design
                 _designer = designer;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Accesses the given property name.  This will throw an exception if the property does not exsit on the base component.
-            /// </devdoc>
+            /// </summary>
             public object this[string propertyName]
             {
                 get
@@ -913,17 +913,17 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns true if this shadow properties object contains the given property name.
-            /// </devdoc>
+            /// </summary>
             public bool Contains(string propertyName)
             {
                 return (_properties != null && _properties.ContainsKey(propertyName));
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns the underlying property descriptor for this property on the component
-            /// </devdoc>
+            /// </summary>
             private PropertyDescriptor GetShadowedPropertyDescriptor(string propertyName)
             {
 
@@ -941,10 +941,10 @@ namespace System.ComponentModel.Design
                 return property;
             }
 
-            /// <devdoc>
+            /// <summary>
             ///     Returns true if the given property name should be serialized, or false  if not.
             ///     This is useful in implementing your own ShouldSerialize* methods on shadowed properties.
-            /// </devdoc>
+            /// </summary>
             internal bool ShouldSerializeValue(string propertyName, object defaultValue)
             {
                 if (propertyName == null)
