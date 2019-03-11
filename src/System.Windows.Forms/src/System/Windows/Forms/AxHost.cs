@@ -3626,13 +3626,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind"]/*' />
-        public enum ActiveXInvokeKind {
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind.MethodInvoke"]/*' />
+        public enum ActiveXInvokeKind
+        {
             MethodInvoke,
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind.PropertyGet"]/*' />
             PropertyGet,
-            /// <include file='doc\AxHost.uex' path='docs/doc[@for="ActiveXInvokeKind.PropertySet"]/*' />
             PropertySet
         }
 

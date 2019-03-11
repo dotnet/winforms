@@ -1,21 +1,22 @@
 parameters:
   # All parameters are required for our purposes (except HelixType); see send-to-helix.yml for details
-  RepoName: ''
+  HelixSource: ''
   HelixType: 'tests/default'            
   HelixTargetQueues: ''    
-  HelixAccessToken: ''          
+  HelixAccessToken: ''
+  Creator: ''          
   XUnitProjects: ''
   DisplayNamePrefix: ''        
 
 steps:
 - template: /eng/common/templates/steps/send-to-helix.yml
   parameters:
-    HelixSource: ${{ parameters.RepoName }}
+    HelixSource: ${{ parameters.HelixSource }}
     HelixType: ${{ parameters.HelixType }} 
     HelixBuild: $(Build.BuildNumber)
     HelixTargetQueues: ${{ parameters.HelixTargetQueues }}
     HelixAccessToken: ${{ parameters.HelixAccessToken }}            # only defined for internal CI
-    Creator: ${{ parameters.RepoName }}         # required for public / external (when there is no access token)
+    Creator: ${{ parameters.Creator }}         # required for public / external (when there is no access token)
     XUnitProjects: ${{ parameters.XUnitProjects }} 
     XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
     XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail

@@ -1,5 +1,6 @@
 parameters:
-  # This section is required because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
+  # This section is required because agent pool can't 
+  # be read from a user-defined variable (Azure DevOps limitation)
   agentPool: dotnet-external-temp-vs2019 
   runAsPublic: true                      
   repoName: dotnet/winforms              
@@ -50,14 +51,19 @@ jobs:
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
         - name: _HelixStagingDir
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+        - name: _HelixSource
+          value: ${{ parameters.repoName }}/$(Build.SourceBranch)
         - name: _HelixToken
           value: ''
+        - name: _HelixCreator
+          value: ${{ parameters.repoName }}
 
 
         # Override some values if we're building internally (not public)
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
-          # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
+          # note: You have to use list syntax here (-name: value) or 
+          # you will get errors about declaring the same variable multiple times
           - name: _PublishType
             value: blob
           - name: _SignType
@@ -66,11 +72,14 @@ jobs:
             value: true
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
+          # DotNet-HelixApi-Access provides: HelixApiAccessToken
+          - group: DotNet-HelixApi-Access
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
-          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved until the agent
-          # is running on the machine. They can be overridden any time before they are resolved, like in the job matrix below (see Build_Debug)
+          # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
+          # are not resolved until the agent is running on the machine. They can be overridden any 
+          # time before they are resolved, like in the job matrix below (see Build_Debug)
           - name: _SignArgs
             value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
@@ -85,8 +94,12 @@ jobs:
           # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
           - name: _UnitTestHelixAgentPool
             value: 'Windows.10.Amd64'
+          - name: _HelixSource
+            value: official/${{ parameters.repoName }}/$(Build.SourceBranch)
           - name: _HelixToken
-            value: '$(helix-token)'
+            value: '$(HelixApiAccessToken)' # from DotNet-HelixApi-Access group
+          - name: _HelixCreator
+            value: '' #if _HelixToken is set, Creator must be empty
 
       strategy:
         matrix:
@@ -115,10 +128,11 @@ jobs:
       # Run unit tests on Helix
       - template: /eng/ci-helix-test.yml
         parameters:
-          RepoName: ${{ parameters.repoName }}
+          HelixSource: $(_HelixSource)
           HelixType: 'tests/unit'
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
+          Creator: $(_HelixCreator)
           # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
           XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj'
           DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix'
