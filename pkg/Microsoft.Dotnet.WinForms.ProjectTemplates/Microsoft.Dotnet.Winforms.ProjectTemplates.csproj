@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk" InitialTargets="BuildPackage">
+  <PropertyGroup>
+    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
+    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
+
+  <!-- This is a Packaging Project -->
+  <PropertyGroup>
+      <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PublishWindowsPdb>false</PublishWindowsPdb>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Disable a VS-specific target that is failing when building this csproj -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+  </PropertyGroup>
+
+  <!-- nuspec properties -->
+  <PropertyGroup>
+    <PackageId>Microsoft.Dotnet.Winforms.ProjectTemplates</PackageId>
+    <Description>Project templates for .NET Core Windows Forms projects</Description>
+    <Authors>Microsoft</Authors>
+    <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
+    <!-- Should this be our own copy of this? https://github.com/dotnet/winforms/blob/master/LICENSE.TXT -->
+    <PackageLicenseUrl>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</PackageLicenseUrl>
+    <PackageTags></PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
+    <File Include="content\**\*" />
+    <File Update="@(File)">
+      <TargetPath>%(RecursiveDir)</TargetPath>
+      <SkipPackageFileCheck>true</SkipPackageFileCheck>
+    </File>
+  </ItemGroup>
+
+  <Target Name="BuildPackage">
+    <ItemGroup>
+      <ProjectReference>
+      </ProjectReference>
+    </ItemGroup>
+  </Target>
+
+</Project>
