@@ -4,14 +4,15 @@ parameters:
   HelixType: 'tests/default'            
   HelixTargetQueues: ''    
   HelixAccessToken: ''
-  Creator: ''          
+  Creator: ''  
+  XUnitProjects: ''        
   DisplayNamePrefix: ''        
 
 steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: custom
-    projects: eng/common/helixpublish.proj
+    projects: eng/helixpublish.proj
     custom: msbuild
     arguments: '/bl:$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/SendToHelix.binlog'
   displayName: ${{ parameters.DisplayNamePrefix }}
@@ -23,5 +24,6 @@ steps:
     Creator: ${{ parameters.Creator }}
     WorkItemCommand: ${{ parameters.WorkItemCommand }}
     CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
+    XUnitProjects: ${{ parameters.XUnitProjects }}
   condition: succeeded()
   continueOnError: false

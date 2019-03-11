@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <XUnitProject Include="..\src\**\*.Tests.csproj">
+    <XUnitProject Include="$(XUnitProjects)">
     </XUnitProject>
   </ItemGroup>
 
