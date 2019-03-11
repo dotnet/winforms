@@ -21,6 +21,7 @@
 
   <PropertyGroup>
     <EnableXUnitReporter>true</EnableXUnitReporter>
+    <XUnitPublishTargetFramework>netcoreapp3.0</XUnitPublishTargetFramework>
     <XUnitRuntimeTargetFramework>netcoreapp2.0</XUnitRuntimeTargetFramework>
     <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
   </PropertyGroup>
