@@ -5,7 +5,7 @@
 using System.Collections;
 using System.ComponentModel.Design;
 
-namespace System.Windows.Forms.Design.System.ComponentModel.Design
+namespace System.ComponentModel.Design
 {
     public class DesignerCommandSet
     {

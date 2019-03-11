@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
 
-namespace System.Windows.Forms.Design.System.ComponentModel.Design
+namespace System.ComponentModel.Design
 {
     /// <devdoc>
     ///    <para>Describes and represents inherited properties in an inherited class.</para>
