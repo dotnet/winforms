@@ -17,7 +17,7 @@
     <SystemCodeDomPackageVersion>4.6.0-preview4.19160.8</SystemCodeDomPackageVersion>
     <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19160.8</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19160.8</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsVersion>3.0.0-preview4.19160.8</MicrosoftNETCorePlatformsVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19160.8</MicrosoftNETCorePlatformsPackageVersion>
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
