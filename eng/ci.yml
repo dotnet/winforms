@@ -133,7 +133,6 @@ jobs:
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
           Creator: $(_HelixCreator)
-          XUnitProjects: '../src/**/*.Tests.csproj'
           DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix'
       
       # Run integration tests and rename binlog

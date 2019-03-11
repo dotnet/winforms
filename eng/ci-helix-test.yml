@@ -5,7 +5,6 @@ parameters:
   HelixTargetQueues: ''    
   HelixAccessToken: ''
   Creator: ''          
-  XUnitProjects: ''
   DisplayNamePrefix: ''        
 
 steps:
@@ -15,7 +14,7 @@ steps:
     projects: eng/common/helixpublish.proj
     custom: msbuild
     arguments: '/bl:$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/SendToHelix.binlog'
-  displayName: ${{ parameters.DisplayNamePrefix }} (Windows)
+  displayName: ${{ parameters.DisplayNamePrefix }}
   env:
     HelixSource: ${{ parameters.HelixSource }}
     HelixType: ${{ parameters.HelixType }}
@@ -24,6 +23,5 @@ steps:
     Creator: ${{ parameters.Creator }}
     WorkItemCommand: ${{ parameters.WorkItemCommand }}
     CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
-    XUnitProjects: ${{ parameters.XUnitProjects }}
   condition: succeeded()
   continueOnError: false
