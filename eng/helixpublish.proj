@@ -1,0 +1,45 @@
+<!-- Copy of eng/common/helixpublish.proj -->
+<Project Sdk="Microsoft.DotNet.Helix.Sdk" DefaultTargets="Test">
+
+  <PropertyGroup>
+    <HelixBuild>$(BUILD_BUILDNUMBER)</HelixBuild>
+    <HelixBuild Condition="'$(HelixBuild)' == ''">123460.01</HelixBuild>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeDotNetCli>true</IncludeDotNetCli>
+    <DotNetCliPackageType>sdk</DotNetCliPackageType>
+    <!-- Should match global.json tools.dotnet and sdk.version -->
+    <DotNetCliVersion>3.0.100-preview-010024</DotNetCliVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TestRunNamePrefix>$(AGENT_JOBNAME)</TestRunNamePrefix>
+    <!-- True by default because of System.AccessToken presence -->
+    <!--EnableAzurePipelinesReporter>true</EnableAzurePipelinesReporter--> 
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableXUnitReporter>true</EnableXUnitReporter>
+    <XUnitRuntimeTargetFramework>netcoreapp2.0</XUnitRuntimeTargetFramework>
+    <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <HelixCorrelationPayload Include="$(CorrelationPayloadDirectory)">
+      <PayloadDirectory>%(Identity)</PayloadDirectory>
+    </HelixCorrelationPayload>
+  </ItemGroup>
+
+  <ItemGroup>
+    <XUnitProject Include="$(XUnitProjects)">
+    </XUnitProject>
+  </ItemGroup>
+
+  <!-- Useless stuff to make Arcade SDK happy -->
+  <PropertyGroup>
+    <Language>msbuild</Language>
+  </PropertyGroup>
+  <Target Name="Pack"/>
+
+</Project>

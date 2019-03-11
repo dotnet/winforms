@@ -9,23 +9,21 @@ parameters:
   DisplayNamePrefix: ''        
 
 steps:
-- template: /eng/common/templates/steps/send-to-helix.yml
-  parameters:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: custom
+    projects: eng/common/helixpublish.proj
+    custom: msbuild
+    arguments: '/bl:$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/SendToHelix.binlog'
+  displayName: ${{ parameters.DisplayNamePrefix }} (Windows)
+  env:
     HelixSource: ${{ parameters.HelixSource }}
-    HelixType: ${{ parameters.HelixType }} 
-    HelixBuild: $(Build.BuildNumber)
+    HelixType: ${{ parameters.HelixType }}
     HelixTargetQueues: ${{ parameters.HelixTargetQueues }}
-    HelixAccessToken: ${{ parameters.HelixAccessToken }}            # only defined for internal CI
-    Creator: ${{ parameters.Creator }}         # required for public / external (when there is no access token)
-    XUnitProjects: ${{ parameters.XUnitProjects }} 
-    XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
-    XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail
-    XUnitRunnerVersion: '2.4.1'                 # Should match XUnitRunnerConsoleVersion in eng/Versions.props
-    IncludeDotNetCli: true
-    DotNetCliPackageType: 'sdk'
-    DotNetCliVersion: '3.0.100-preview-010184'  # MUST be official release: https://dotnet.microsoft.com/download/dotnet-core/3.0 ; does not need to match sdk we build against
-    EnableXUnitReporter: true
-    WaitForWorkItemCompletion: true
-    DisplayNamePrefix: ${{ parameters.DisplayNamePrefix }}
-    condition: succeeded()
-    continueOnError: false
+    HelixAccessToken: ${{ parameters.HelixAccessToken }}
+    Creator: ${{ parameters.Creator }}
+    WorkItemCommand: ${{ parameters.WorkItemCommand }}
+    CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
+    XUnitProjects: ${{ parameters.XUnitProjects }}
+  condition: succeeded()
+  continueOnError: false
