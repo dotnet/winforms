@@ -19,11 +19,13 @@ steps:
   env:
     HelixSource: ${{ parameters.HelixSource }}
     HelixType: ${{ parameters.HelixType }}
+    HelixBuild: $(Build.BuildNumber)
     HelixTargetQueues: ${{ parameters.HelixTargetQueues }}
     HelixAccessToken: ${{ parameters.HelixAccessToken }}
     Creator: ${{ parameters.Creator }}
     WorkItemCommand: ${{ parameters.WorkItemCommand }}
     CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
     XUnitProjects: ${{ parameters.XUnitProjects }}
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken) #required to report test results back to AzDO
   condition: succeeded()
   continueOnError: false
