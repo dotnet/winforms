@@ -2,19 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.IO;
 
-    using System.Diagnostics;
-    using System;
-    using System.IO;
-
-    // 
-
-
-
-
-    public interface IFileReaderService {
-        /// <include file='doc\IFileReaderService.uex' path='docs/doc[@for="IFileReaderService.OpenFileFromSource"]/*' />
+namespace System.Windows.Forms
+{
+    public interface IFileReaderService
+    {
         Stream OpenFileFromSource(string relativePath);
     }
 }

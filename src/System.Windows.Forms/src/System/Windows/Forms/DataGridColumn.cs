@@ -14,12 +14,6 @@ namespace System.Windows.Forms{
     using Microsoft.Win32;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="IDataGridColumnStyleEditingNotificationService"]/*' />
-    public interface IDataGridColumnStyleEditingNotificationService {
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing"]/*' />
-        void ColumnStartedEditing(Control editingControl);
-    }
-
     /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle"]/*' />
     /// <devdoc>
     ///    <para>Specifies the appearance and text formatting and behavior of
