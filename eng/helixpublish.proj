@@ -10,7 +10,7 @@
     <IncludeDotNetCli>true</IncludeDotNetCli>
     <DotNetCliPackageType>sdk</DotNetCliPackageType>
     <!-- Should match global.json tools.dotnet and sdk.version -->
-    <DotNetCliVersion>3.0.100-preview-010024</DotNetCliVersion>
+    <DotNetCliVersion>$(DotNetCliVersion)</DotNetCliVersion>
   </PropertyGroup>
 
   <PropertyGroup>
