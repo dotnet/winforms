@@ -116,6 +116,10 @@ jobs:
       - checkout: self
         clean: true
 
+      # Set VSO Variable(s)
+      - powershell: eng\pre-build.ps1
+        displayName: Pre-Build - Set VSO Variables
+
       # Build and rename binlog
       - script: eng\cibuild.cmd
           -prepareMachine
@@ -125,7 +129,17 @@ jobs:
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
 
-      # Run unit tests on Helix
+    # Run Unit Tests
+        # this should no longer be necessary once Helix is ready to report back code coverage
+      - script: eng\cibuild.cmd
+          -prepareMachine
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs)
+          -test
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog #SendToHelix.binlog for helix version        
+        displayName: Run Unit Tests on Build Machine (Debug only)
+        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
+
       - template: /eng/ci-helix-test.yml
         parameters:
           HelixSource: $(_HelixSource)
@@ -133,9 +147,9 @@ jobs:
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)            # only defined for internal CI
           Creator: $(_HelixCreator)
-          # Should be $(BUILD.SOURCESDIRECTOR)System.Windows.Forms/src/**/*.Tests.csproj, but cannot until https://github.com/dotnet/arcade/issues/2156 is fixed
-          XUnitProjects: '$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(BUILD.SOURCESDIRECTORY)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj'
-          DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix'
+          XUnitProjects: '..\src\**\*.Tests.csproj'
+          DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix (Release only)'
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release')) # on helix (with real signing on internal)
       
       # Run integration tests and rename binlog
       # These are not ready to run on Helix because:
@@ -146,7 +160,7 @@ jobs:
           $(_OfficialBuildIdArgs)
           -integrationTest
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
-        displayName: Run Integration Tests
+        displayName: Run Integration Tests on Build Machine
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
