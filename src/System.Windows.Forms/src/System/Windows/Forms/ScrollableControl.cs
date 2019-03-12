@@ -1456,7 +1456,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.WndProc"]/*' />
         /// <devdoc>
-        ///    The button's window procedure.  Inheriting classes can override this
+        ///    The button's window procedure. Inheriting classes can override this
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
@@ -1479,13 +1479,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges"]/*' />
         /// <devdoc>
-        ///    <para>Determines the border padding for
-        ///       docked controls.</para>
+        /// Determines the border padding for docked controls.
         /// </devdoc>
         [TypeConverterAttribute(typeof(DockPaddingEdgesConverter))]
-        public class DockPaddingEdges : ICloneable {
+        public class DockPaddingEdges : ICloneable
+        {
             private ScrollableControl _owner;
             private int _left;
             private int _right;
@@ -1493,92 +1492,91 @@ namespace System.Windows.Forms {
             private int _bottom;
 
             /// <devdoc>
-            ///     Creates a new DockPaddingEdges. The specified owner will
-            ///     be notified when the values are changed.
+            /// Creates a new DockPaddingEdges. The specified owner will be notified when
+            /// the values are changed.
             /// </devdoc>
-            internal DockPaddingEdges(ScrollableControl owner) {
-                this._owner = owner;
+            internal DockPaddingEdges(ScrollableControl owner)
+            {
+                _owner = owner;
             }
 
-            internal DockPaddingEdges(int left, int right, int top, int bottom) {
-                this._left = left;
-                this._right = right;
-                this._top = top;
-                this._bottom = bottom;
+            internal DockPaddingEdges(int left, int right, int top, int bottom)
+            {
+                _left = left;
+                _right = right;
+                _top = top;
+                _bottom = bottom;
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.All"]/*' />
             /// <devdoc>
-            ///    <para>Gets
-            ///       or
-            ///       sets the padding width for all edges of a docked control.</para>
+            /// Gets or ssets the padding width for all edges of a docked control.
             /// </devdoc>
-            [
-            RefreshProperties(RefreshProperties.All),
-            SRDescription(nameof(SR.PaddingAllDescr))
-            ]
-            public int All {
-                get { 
-                    if (_owner == null) {
-                        if (_left == _right && _top == _bottom && _left == _top) {
+            [RefreshProperties(RefreshProperties.All)]
+            [SRDescription(nameof(SR.PaddingAllDescr))]
+            public int All
+            {
+                get
+                {
+                    if (_owner == null)
+                    {
+                        if (_left == _right && _top == _bottom && _left == _top)
+                        {
                             return _left;
                         }
-                        else {
+                        else
+                        {
                             return 0;
                         }
                     }
-                    else {
+                    else
+                    {
                         // The Padding struct uses -1 to indicate that LRTB are in disagreement.
                         // For backwards compatibility, we need to remap -1 to 0, but we need
                         // to be careful because it could be that they explicitly set All to -1.
                         if (_owner.Padding.All == -1
-                            && 
+                            &&
                                 (_owner.Padding.Left != -1
                                 || _owner.Padding.Top != -1
                                 || _owner.Padding.Right != -1
-                                || _owner.Padding.Bottom != -1)) {
+                                || _owner.Padding.Bottom != -1))
+                        {
                             return 0;
                         }
-                        return _owner.Padding.All; 
+                        return _owner.Padding.All;
                     }
                 }
-                set { 
-                    if (_owner == null) {
+                set
+                {
+                    if (_owner == null)
+                    {
                         _left = value;
                         _top = value;
                         _right = value;
                         _bottom = value;
                     }
-                    else {
+                    else
+                    {
                         _owner.Padding = new Padding(value);
                     }
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Bottom"]/*' />
             /// <devdoc>
-            ///    <para>Gets
-            ///       or
-            ///       sets the padding width for the bottom edge of a docked control.</para>
+            /// Gets or sets the padding width for the bottom edge of a docked control.
             /// </devdoc>
-            [
-            RefreshProperties(RefreshProperties.All),
-            SRDescription(nameof(SR.PaddingBottomDescr))
-            ]
-            public int Bottom {
-                get { 
-                    if (_owner == null) {
-                        return _bottom;
-                    }
-                    else {
-                        return _owner.Padding.Bottom; 
-                    }
-                }
-                set {
-                    if (_owner == null) {
+            [RefreshProperties(RefreshProperties.All)]
+            [SRDescription(nameof(SR.PaddingBottomDescr))]
+            public int Bottom
+            {
+                get => _owner == null ? _bottom : _owner.Padding.Bottom;
+                set
+                {
+                    if (_owner == null)
+                    {
                         _bottom = value;
                     }
-                    else {
+                    else
+                    {
                         Padding padding = _owner.Padding;
                         padding.Bottom = value;
                         _owner.Padding = padding;
@@ -1586,29 +1584,22 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Left"]/*' />
             /// <devdoc>
-            ///    <para>Gets
-            ///       or sets the padding width for the left edge of a docked control.</para>
+            /// Gets or sets the padding width for the left edge of a docked control.
             /// </devdoc>
-            [
-            RefreshProperties(RefreshProperties.All),
-            SRDescription(nameof(SR.PaddingLeftDescr))
-            ]
-            public int Left {
-                 get { 
-                    if (_owner == null) {
-                        return _left;
-                    }
-                    else {
-                        return _owner.Padding.Left; 
-                    }
-                }
-                set {
-                    if (_owner == null) {
+            [RefreshProperties(RefreshProperties.All)]
+            [SRDescription(nameof(SR.PaddingLeftDescr))]
+            public int Left
+            {
+                get => _owner == null ? _left : _owner.Padding.Left;
+                set
+                {
+                    if (_owner == null)
+                    {
                         _left = value;
                     }
-                    else {
+                    else
+                    {
                         Padding padding = _owner.Padding;
                         padding.Left = value;
                         _owner.Padding = padding;
@@ -1616,29 +1607,22 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Right"]/*' />
             /// <devdoc>
-            ///    <para>Gets
-            ///       or sets the padding width for the right edge of a docked control.</para>
+            /// Gets or sets the padding width for the right edge of a docked control.
             /// </devdoc>
-            [
-            RefreshProperties(RefreshProperties.All),
-            SRDescription(nameof(SR.PaddingRightDescr))
-            ]
-            public int Right {
-                 get { 
-                    if (_owner == null) {
-                        return _right;
-                    }
-                    else {
-                        return _owner.Padding.Right; 
-                    }
-                }
-                set {
-                    if (_owner == null) {
+            [RefreshProperties(RefreshProperties.All)]
+            [SRDescription(nameof(SR.PaddingRightDescr))]
+            public int Right
+            {
+                get => _owner == null ? _right : _owner.Padding.Right;
+                set
+                {
+                    if (_owner == null)
+                    {
                         _right = value;
                     }
-                    else {
+                    else
+                    {
                         Padding padding = _owner.Padding;
                         padding.Right = value;
                         _owner.Padding = padding;
@@ -1646,29 +1630,22 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.Top"]/*' />
             /// <devdoc>
-            ///    <para>Gets
-            ///       or sets the padding width for the top edge of a docked control.</para>
+            /// Gets or sets the padding width for the top edge of a docked control.
             /// </devdoc>
-            [
-            RefreshProperties(RefreshProperties.All),
-            SRDescription(nameof(SR.PaddingTopDescr))
-            ]
-            public int Top {
-                 get { 
-                    if (_owner == null) {
-                        return _top;
-                    }
-                    else {
-                        return _owner.Padding.Top; 
-                    }
-                }
-                set {
-                    if (_owner == null) {
+            [RefreshProperties(RefreshProperties.All)]
+            [SRDescription(nameof(SR.PaddingTopDescr))]
+            public int Top
+            {
+                get => _owner == null ? _top : _owner.Padding.Top;
+                set
+                {
+                    if (_owner == null)
+                    {
                         _top = value;
                     }
-                    else {
+                    else
+                    {
                         Padding padding = _owner.Padding;
                         padding.Top = value;
                         _owner.Padding = padding;
@@ -1687,70 +1664,43 @@ namespace System.Windows.Forms {
 
             public override int GetHashCode() => HashCode.Combine(Left, Top, Right, Bottom);
 
-            /// <internalonly/>
-            private void ResetAll() {
-                All = 0;
-            }
+            private void ResetAll() => All = 0;
 
-            /// <internalonly/>
-            private void ResetBottom() {
-                Bottom = 0;
-            }
+            private void ResetBottom() => Bottom = 0;
 
-            /// <internalonly/>
-            private void ResetLeft() {
-                Left = 0;
-            }
+            private void ResetLeft() => Left = 0;
 
-            /// <internalonly/>
-            private void ResetRight() {
-                Right = 0;
-            }
+            private void ResetRight() => Right = 0;
 
-            /// <internalonly/>
-            private void ResetTop() {
-                Top = 0;
-            }
+            private void ResetTop() => Top = 0;
 
-            internal void Scale(float dx, float dy) {
-                this._owner.Padding.Scale(dx, dy);
-            }
+            internal void Scale(float dx, float dy) => _owner.Padding.Scale(dx, dy);
 
             public override string ToString()
             {
                 return $"{{Left={Left},Top={Top},Right={Right},Bottom={Bottom}}}";
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="DockPaddingEdges.ICloneable.Clone"]/*' />
-            /// <internalonly/>
-            object ICloneable.Clone() {
-                DockPaddingEdges dpe = new DockPaddingEdges(Left, Right, Top, Bottom);
-                return dpe;
-            }
+            object ICloneable.Clone() => new DockPaddingEdges(Left, Right, Top, Bottom);
         }
 
-
-        /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdgesConverter"]/*' />
-        public class DockPaddingEdgesConverter : TypeConverter {
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdgesConverter.GetProperties"]/*' />
+        public class DockPaddingEdgesConverter : TypeConverter
+        {
             /// <devdoc>
-            ///    Retrieves the set of properties for this type.  By default, a type has
-            ///    does not return any properties.  An easy implementation of this method
-            ///    can just call TypeDescriptor.GetProperties for the correct data type.
+            /// Retrieves the set of properties for this type. By default, a type has does
+            /// not return any properties. An easy implementation of this method can just
+            /// call TypeDescriptor.GetProperties for the correct data type.
             /// </devdoc>
-            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes) {
+            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+            {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(DockPaddingEdges), attributes);
-                return props.Sort(new string[] {"All", "Left", "Top", "Right", "Bottom"});
+                return props.Sort(new string[] { "All", "Left", "Top", "Right", "Bottom" });
             }
 
-            /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdgesConverter.GetPropertiesSupported"]/*' />
             /// <devdoc>
-            ///    Determines if this object supports properties.  By default, this
-            ///    is false.
+            /// Determines if this object supports properties. By default, this is false.
             /// </devdoc>
-            public override bool GetPropertiesSupported(ITypeDescriptorContext context) {
-                return true;
-            }
+            public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
         }
     }
 }
