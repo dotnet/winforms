@@ -1486,25 +1486,25 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [TypeConverterAttribute(typeof(DockPaddingEdgesConverter))]
         public class DockPaddingEdges : ICloneable {
-            private ScrollableControl owner;
-            private int               left;
-            private int               right;
-            private int               top;
-            private int               bottom;
+            private ScrollableControl _owner;
+            private int _left;
+            private int _right;
+            private int _top;
+            private int _bottom;
 
             /// <devdoc>
             ///     Creates a new DockPaddingEdges. The specified owner will
             ///     be notified when the values are changed.
             /// </devdoc>
             internal DockPaddingEdges(ScrollableControl owner) {
-                this.owner = owner;
+                this._owner = owner;
             }
 
             internal DockPaddingEdges(int left, int right, int top, int bottom) {
-                this.left = left;
-                this.right = right;
-                this.top = top;
-                this.bottom = bottom;
+                this._left = left;
+                this._right = right;
+                this._top = top;
+                this._bottom = bottom;
             }
 
             /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DockPaddingEdges.All"]/*' />
@@ -1519,9 +1519,9 @@ namespace System.Windows.Forms {
             ]
             public int All {
                 get { 
-                    if (owner == null) {
-                        if (left == right && top == bottom && left == top) {
-                            return left;
+                    if (_owner == null) {
+                        if (_left == _right && _top == _bottom && _left == _top) {
+                            return _left;
                         }
                         else {
                             return 0;
@@ -1531,26 +1531,26 @@ namespace System.Windows.Forms {
                         // The Padding struct uses -1 to indicate that LRTB are in disagreement.
                         // For backwards compatibility, we need to remap -1 to 0, but we need
                         // to be careful because it could be that they explicitly set All to -1.
-                        if (owner.Padding.All == -1
+                        if (_owner.Padding.All == -1
                             && 
-                                (owner.Padding.Left != -1
-                                || owner.Padding.Top != -1
-                                || owner.Padding.Right != -1
-                                || owner.Padding.Bottom != -1)) {
+                                (_owner.Padding.Left != -1
+                                || _owner.Padding.Top != -1
+                                || _owner.Padding.Right != -1
+                                || _owner.Padding.Bottom != -1)) {
                             return 0;
                         }
-                        return owner.Padding.All; 
+                        return _owner.Padding.All; 
                     }
                 }
                 set { 
-                    if (owner == null) {
-                        left = value;
-                        top = value;
-                        right = value;
-                        bottom = value;
+                    if (_owner == null) {
+                        _left = value;
+                        _top = value;
+                        _right = value;
+                        _bottom = value;
                     }
                     else {
-                        owner.Padding = new Padding(value);
+                        _owner.Padding = new Padding(value);
                     }
                 }
             }
@@ -1567,21 +1567,21 @@ namespace System.Windows.Forms {
             ]
             public int Bottom {
                 get { 
-                    if (owner == null) {
-                        return bottom;
+                    if (_owner == null) {
+                        return _bottom;
                     }
                     else {
-                        return owner.Padding.Bottom; 
+                        return _owner.Padding.Bottom; 
                     }
                 }
                 set {
-                    if (owner == null) {
-                        bottom = value;
+                    if (_owner == null) {
+                        _bottom = value;
                     }
                     else {
-                        Padding padding = owner.Padding;
+                        Padding padding = _owner.Padding;
                         padding.Bottom = value;
-                        owner.Padding = padding;
+                        _owner.Padding = padding;
                     }
                 }
             }
@@ -1597,21 +1597,21 @@ namespace System.Windows.Forms {
             ]
             public int Left {
                  get { 
-                    if (owner == null) {
-                        return left;
+                    if (_owner == null) {
+                        return _left;
                     }
                     else {
-                        return owner.Padding.Left; 
+                        return _owner.Padding.Left; 
                     }
                 }
                 set {
-                    if (owner == null) {
-                        left = value;
+                    if (_owner == null) {
+                        _left = value;
                     }
                     else {
-                        Padding padding = owner.Padding;
+                        Padding padding = _owner.Padding;
                         padding.Left = value;
-                        owner.Padding = padding;
+                        _owner.Padding = padding;
                     }
                 }
             }
@@ -1627,21 +1627,21 @@ namespace System.Windows.Forms {
             ]
             public int Right {
                  get { 
-                    if (owner == null) {
-                        return right;
+                    if (_owner == null) {
+                        return _right;
                     }
                     else {
-                        return owner.Padding.Right; 
+                        return _owner.Padding.Right; 
                     }
                 }
                 set {
-                    if (owner == null) {
-                        right = value;
+                    if (_owner == null) {
+                        _right = value;
                     }
                     else {
-                        Padding padding = owner.Padding;
+                        Padding padding = _owner.Padding;
                         padding.Right = value;
-                        owner.Padding = padding;
+                        _owner.Padding = padding;
                     }
                 }
             }
@@ -1657,21 +1657,21 @@ namespace System.Windows.Forms {
             ]
             public int Top {
                  get { 
-                    if (owner == null) {
-                        return top;
+                    if (_owner == null) {
+                        return _top;
                     }
                     else {
-                        return owner.Padding.Top; 
+                        return _owner.Padding.Top; 
                     }
                 }
                 set {
-                    if (owner == null) {
-                        top = value;
+                    if (_owner == null) {
+                        _top = value;
                     }
                     else {
-                        Padding padding = owner.Padding;
+                        Padding padding = _owner.Padding;
                         padding.Top = value;
-                        owner.Padding = padding;
+                        _owner.Padding = padding;
                     }
                 }
             }
@@ -1713,7 +1713,7 @@ namespace System.Windows.Forms {
             }
 
             internal void Scale(float dx, float dy) {
-                this.owner.Padding.Scale(dx, dy);
+                this._owner.Padding.Scale(dx, dy);
             }
 
             public override string ToString()
