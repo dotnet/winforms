@@ -117,7 +117,7 @@ jobs:
         clean: true
 
       # Set VSO Variable(s)
-      - powershell: eng\buildvars.ps1
+      - powershell: eng\pre-build.ps1
         displayName: Pre-Build - Set VSO Variables
 
       # Build and rename binlog
