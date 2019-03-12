@@ -2,41 +2,42 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Runtime.InteropServices;
+
 #pragma warning disable 108
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.Runtime.CompilerServices;
-    using System.Text;
-
     static class FileDialogNative
     {
         [ComImport]
         [Guid(IIDGuid.IFileOpenDialog)]
         [CoClass(typeof(FileOpenDialogRCW))]
         internal interface NativeFileOpenDialog : IFileOpenDialog
-        { }
+        {
+        }
 
         [ComImport]
         [Guid(IIDGuid.IFileSaveDialog)]
         [CoClass(typeof(FileSaveDialogRCW))]
         internal interface NativeFileSaveDialog : IFileSaveDialog
-        { }
+        {
+        }
 
         [ComImport]
         [ClassInterface(ClassInterfaceType.None)]
         [TypeLibType(TypeLibTypeFlags.FCanCreate)]
         [Guid(CLSIDGuid.FileOpenDialog)]
         internal class FileOpenDialogRCW
-        { }
+        {
+        }
 
         [ComImport]
         [ClassInterface(ClassInterfaceType.None)]
         [TypeLibType(TypeLibTypeFlags.FCanCreate)]
         [Guid(CLSIDGuid.FileSaveDialog)]
         internal class FileSaveDialogRCW
-        { }
+        {
+        }
 
         internal class IIDGuid
         {

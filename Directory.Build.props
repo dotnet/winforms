@@ -5,8 +5,7 @@
   </PropertyGroup>
   
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
-  <Import Project="eng\ReferenceAssemblies.props" />
+  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
   <Import Project="eng\FacadeAssemblies.props" />
 
   <PropertyGroup Condition="'$(CopyrightNetFoundation)' != ''">

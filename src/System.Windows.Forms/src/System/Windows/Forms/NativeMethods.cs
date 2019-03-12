@@ -2158,11 +2158,13 @@ namespace System.Windows.Forms {
 
         }
 
-        [ComVisible(true), ComImport(), Guid("B722BCCB-4E68-101B-A2BC-00AA00404770"),
-        InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown), CLSCompliantAttribute(false)]
+        [ComVisible(true)]
+        [ComImport]
+        [Guid("B722BCCB-4E68-101B-A2BC-00AA00404770")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        [CLSCompliant(false)]
         public interface IOleCommandTarget 
         {
-
             [return: MarshalAs(UnmanagedType.I4)]
             [PreserveSig]
             int QueryStatus(
@@ -2185,9 +2187,6 @@ namespace System.Windows.Forms {
                 int pvaOut);
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.FONTDESC"]/*' />
-        /// <devdoc>
-        /// </devdoc>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         public class FONTDESC {
             public int      cbSizeOfStruct = Marshal.SizeOf(typeof(FONTDESC));
@@ -2393,65 +2392,81 @@ namespace System.Windows.Forms {
             public int dmPanningHeight;
         }
 
-        [ComImport(), Guid("0FF510A3-5FA5-49F1-8CCC-190D71083F3E"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IVsPerPropertyBrowsing {
-            // hides the property at the given dispid from the properties window
-            // implmentors should can return E_NOTIMPL to show all properties that
-            // are otherwise browsable.
-            
+        [ComImport]
+        [Guid("0FF510A3-5FA5-49F1-8CCC-190D71083F3E")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IVsPerPropertyBrowsing
+        {
+            /// <devdoc>
+            /// Hides the property at the given dispid from the properties window
+            /// implmentors should can return E_NOTIMPL to show all properties that
+            /// are otherwise browsable.
+            /// </devdoc>
             [PreserveSig]
             int HideProperty(int dispid,ref bool pfHide);
-          
-            // will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
-            // Returning a non-S_OK return code or false for pfDisplay will suppress this feature
-            
+
+            /// <devdoc>
+            /// Will have the "+" expandable glyph next to them and can be expanded or collapsed by the user
+            /// Returning a non-S_OK return code or false for pfDisplay will suppress this feature
+            /// </devdoc>
             [PreserveSig]
             int DisplayChildProperties(int dispid, 
                                        ref bool pfDisplay);
-          
-            // retrieves the localized name and description for a property.
-            // returning a non-S_OK return code will display the default values
-            
+
+            /// <devdoc>
+            /// Retrieves the localized name and description for a property.
+            /// returning a non-S_OK return code will display the default values
+            /// </devdoc>
             [PreserveSig]
             int GetLocalizedPropertyInfo(int dispid, int localeID, 
                                          [Out, MarshalAs(UnmanagedType.LPArray)]
                                          string[] pbstrLocalizedName, 
                                          [Out, MarshalAs(UnmanagedType.LPArray)]
                                          string[] pbstrLocalizeDescription);
-          
-            // determines if the given (usually current) value for a property is the default.  If it is not default,
-            // the property will be shown as bold in the browser to indcate that it has been modified from the default.
-            
+
+            /// <devdoc>
+            /// Determines if the given (usually current) value for a property is the default.  If it is not default,
+            /// the property will be shown as bold in the browser to indcate that it has been modified from the default.
+            /// </devdoc>
             [PreserveSig]
             int HasDefaultValue(int dispid,
                                ref bool fDefault);
-          
-            // determines if a property should be made read only.  This only applies to properties that are writeable,
+
+            /// <devdoc>
+            /// Determines if a property should be made read only.  This only applies to properties that are writeable,
+            /// </devdoc>
             [PreserveSig]
             int IsPropertyReadOnly(int dispid, 
                                    ref bool fReadOnly);
-                                   
-            
-            // returns the classname for this object.  The class name is the non-bolded text that appears in the 
-            // properties window selection combo.  If this method returns a non-S_OK return code, the default
-            // will be used.  The default is the name string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
+
+            /// <devdoc>
+            /// Returns the classname for this object. The class name is the non-bolded text
+            /// that appears in the properties window selection combo.  If this method returns
+            /// a non-S_OK return code, the default will be used. The default is the name
+            /// string from a call to ITypeInfo::GetDocumentation(MEMID_NIL, ...);
             [PreserveSig]
             int GetClassName([In, Out]ref string pbstrClassName);
-    
-            // checks whether the given property can be reset to some default value.  If return value is non-S_OK or *pfCanReset is 
-            //
+
+            /// <devdoc>
+            /// Checks whether the given property can be reset to some default value.
+            /// If return value is non-S_OK or *pfCanReset is 
+            /// </devdoc>
             [PreserveSig]
             int CanResetPropertyValue(int dispid, [In, Out]ref bool pfCanReset);
-    
-            // given property.  If the return value is S_OK, the property's value will then be refreshed to the new default
-            // values.
+
+            /// <devdoc>
+            /// If the return value is S_OK, the property's value will then be refreshed to the
+            /// new default values.
+            /// </devdoc>
             [PreserveSig]
             int ResetPropertyValue(int dispid);
-       }
+        }
 
-        [ComImport(), Guid("7494683C-37A0-11d2-A273-00C04F8EF4FF"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IManagedPerPropertyBrowsing {
-
+        [ComImport]
+        [Guid("7494683C-37A0-11d2-A273-00C04F8EF4FF")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IManagedPerPropertyBrowsing
+        {
             [PreserveSig]
             int GetPropertyAttributes(int dispid, 
                                       ref int  pcAttributes,
@@ -2459,20 +2474,21 @@ namespace System.Windows.Forms {
                                       ref IntPtr pvariantInitValues);
         }
 
-        [ComImport(), Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvidePropertyBuilder {
-    
-             [PreserveSig]
-             int MapPropertyToBuilder(
+        [ComImport]
+        [Guid("33C0C1D8-33CF-11d3-BFF2-00C04F990235")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IProvidePropertyBuilder
+        {
+            [PreserveSig]
+            int MapPropertyToBuilder(
                 int dispid,
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 int[] pdwCtlBldType,
                 [In, Out, MarshalAs(UnmanagedType.LPArray)]
                 string[] pbstrGuidBldr,
-              
-            [In, Out, MarshalAs(UnmanagedType.Bool)]
+                [In, Out, MarshalAs(UnmanagedType.Bool)]
                 ref bool builderAvailable);
-    
+
             [PreserveSig]
             int ExecuteBuilder(
                 int dispid,
@@ -2797,7 +2813,8 @@ namespace System.Windows.Forms {
         }
 
         // Any change in PRINTDLG, should also be in PRINTDLG_32 and PRINTDLG_64
-        public interface PRINTDLG {
+        public interface PRINTDLG
+        {
             int lStructSize { get; set; }
 
             IntPtr hwndOwner { get; set; }
@@ -3530,38 +3547,42 @@ namespace System.Windows.Forms {
             public int code;
         }
 
-        [ComVisible(true),Guid("626FC520-A41E-11CF-A731-00A0C9082637"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsDual)]
-        internal interface IHTMLDocument {
-
+        [ComVisible(true)]
+        [Guid("626FC520-A41E-11CF-A731-00A0C9082637")]
+        [InterfaceType(ComInterfaceType.InterfaceIsDual)]
+        internal interface IHTMLDocument
+        {
             [return: MarshalAs(UnmanagedType.Interface)]
-              object GetScript();
-
+            object GetScript();
         }
 
-        [ComImport(), Guid("376BD3AA-3845-101B-84ED-08002B2EC713"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IPerPropertyBrowsing {
-             [PreserveSig]
-             int GetDisplayString(
+        [ComImport]
+        [Guid("376BD3AA-3845-101B-84ED-08002B2EC713")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IPerPropertyBrowsing
+        {
+            [PreserveSig]
+            int GetDisplayString(
                 int dispID,
                 [Out, MarshalAs(UnmanagedType.LPArray)]
                 string[] pBstr);
-            
-             [PreserveSig]
-             int MapPropertyToPage(
+
+            [PreserveSig]
+            int MapPropertyToPage(
                 int dispID,
                 [Out]
                 out Guid pGuid);
-            
-             [PreserveSig]
-             int GetPredefinedStrings(
+
+            [PreserveSig]
+            int GetPredefinedStrings(
                 int dispID,
                 [Out]
                 CA_STRUCT pCaStringsOut,
                 [Out]
                 CA_STRUCT pCaCookiesOut);
 
-             [PreserveSig]
-             int GetPredefinedValue(
+            [PreserveSig]
+            int GetPredefinedValue(
                 int dispID,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int dwCookie,
@@ -3569,16 +3590,18 @@ namespace System.Windows.Forms {
                 VARIANT pVarOut);
         }
 
-        [ComImport(), Guid("4D07FC10-F931-11CE-B001-00AA006884E5"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ICategorizeProperties {
-            
-             [PreserveSig]
-             int MapPropertyToCategory(
+        [ComImport]
+        [Guid("4D07FC10-F931-11CE-B001-00AA006884E5")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ICategorizeProperties
+        {
+            [PreserveSig]
+            int MapPropertyToCategory(
                 int dispID,
                 ref int categoryID);
 
-             [PreserveSig]
-             int GetCategoryName(
+            [PreserveSig]
+            int GetCategoryName(
                 int propcat,
                 [In, MarshalAs(UnmanagedType.U4)]
                 int lcid,
@@ -4346,12 +4369,14 @@ namespace System.Windows.Forms {
             public POINT    ptMaxTrackSize = null;
         }
 
-        [ComImport(), Guid("B196B28B-BAB4-101A-B69C-00AA00341D07"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface ISpecifyPropertyPages {
+        [ComImport]
+        [Guid("B196B28B-BAB4-101A-B69C-00AA00341D07")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ISpecifyPropertyPages
+        {
              void GetPages(
                 [Out] 
                 NativeMethods.tagCAUUID pPages);
-
         }
 
         [StructLayout(LayoutKind.Sequential)/*leftover(noAutoOffset)*/]
@@ -5424,29 +5449,32 @@ namespace System.Windows.Forms {
     
         public delegate bool MonitorEnumProc(IntPtr monitor, IntPtr hdc, IntPtr lprcMonitor, IntPtr lParam);
     
-        [ComImport(), Guid("A7ABA9C1-8983-11cf-8F20-00805F2CD064"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvideMultipleClassInfo {
-             // since the inheritance doesn't seem to work...
-             // these are from IProvideClassInfo & IProvideClassInfo2
-             [PreserveSig]
-             UnsafeNativeMethods.ITypeInfo GetClassInfo();
+        [ComImport]
+        [Guid("A7ABA9C1-8983-11cf-8F20-00805F2CD064")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IProvideMultipleClassInfo
+        {
+            // since the inheritance doesn't seem to work...
+            // these are from IProvideClassInfo & IProvideClassInfo2
+            [PreserveSig]
+            UnsafeNativeMethods.ITypeInfo GetClassInfo();
              
-             [PreserveSig]
-             int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
+            [PreserveSig]
+            int GetGUID(int dwGuidKind, [In, Out] ref Guid pGuid);
          
-             [PreserveSig]
-             int GetMultiTypeInfoCount([In, Out] ref int pcti);
+            [PreserveSig]
+            int GetMultiTypeInfoCount([In, Out] ref int pcti);
          
-             // we use arrays for most of these since we never use them anyway.
-             [PreserveSig]
-             int GetInfoOfIndex(int iti, int dwFlags, 
+            // we use arrays for most of these since we never use them anyway.
+            [PreserveSig]
+            int GetInfoOfIndex(int iti, int dwFlags, 
                                 [In, Out]
                                 ref UnsafeNativeMethods.ITypeInfo pTypeInfo, 
-                                int       pTIFlags,
-                                int       pcdispidReserved,
+                                int pTIFlags,
+                                int pcdispidReserved,
                                 IntPtr piidPrimary,
                                 IntPtr piidSource);
-       }
+        }
    
         [StructLayout(LayoutKind.Sequential)]
             public class EVENTMSG {
@@ -5457,8 +5485,11 @@ namespace System.Windows.Forms {
             public IntPtr hwnd;
         }
     
-        [ComImport(), Guid("B196B283-BAB4-101A-B69C-00AA00341D07"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IProvideClassInfo {
+        [ComImport]
+        [Guid("B196B283-BAB4-101A-B69C-00AA00341D07")]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface IProvideClassInfo
+        {
             [return: MarshalAs(UnmanagedType.Interface)]
             UnsafeNativeMethods.ITypeInfo GetClassInfo();
         }
