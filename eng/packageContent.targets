@@ -1,0 +1,27 @@
+﻿<Project>
+
+  <PropertyGroup>
+    <RefPackagePath Condition="'$(RefPackagePath)' == ''">ref/$(TargetFramework)</RefPackagePath>
+    <IncludePdbInPackage Condition="'$(IncludePdbInPackage)' == '' AND '$(IsFacadeAssembly)' != 'true' AND '$(DebugType)' != 'embedded'">true</IncludePdbInPackage>
+    <IncludeResourcesInPackage>true</IncludeResourcesInPackage>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(PackagePath)' == ''">
+    <PackagePath>lib/$(TargetFramework)</PackagePath>
+    <PackagePath Condition="'$(IsFacadeAssembly)' == 'true'">lib/$(TargetFramework);$(RefPackagePath)</PackagePath>
+  </PropertyGroup>
+
+  <Target Name="GetPackageContent"
+          DependsOnTargets="ComputeIntermediateSatelliteAssemblies"
+          Returns="@(PackageFile)">
+    <ItemGroup>
+      <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" />
+      <PackageFile Condition="'$(IncludePdbInPackage)' == 'true'" Include="$(TargetDir)$(TargetName).pdb" PackagePath="$(PackagePath)" />
+      <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true'" Include="$(TargetRefPath)" PackagePath="$(RefPackagePath)" />
+      <PackageFile Condition="'$(IncludeResourcesInPackage)' == 'true'"
+                   Include="@(IntermediateSatelliteAssembliesWithTargetPath->'$(TargetDir)%(Culture)\%(Filename)%(Extension)')"
+                   PackagePath="$(PackagePath)/%(IntermediateSatelliteAssembliesWithTargetPath.Culture)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
