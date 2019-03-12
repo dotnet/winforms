@@ -6,7 +6,8 @@ parameters:
   HelixAccessToken: ''
   Creator: ''  
   XUnitProjects: ''        
-  DisplayNamePrefix: ''        
+  DisplayNamePrefix: ''
+  condition: succeeded()        
 
 steps:
 - task: DotNetCoreCLI@2
@@ -27,5 +28,5 @@ steps:
     CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
     XUnitProjects: ${{ parameters.XUnitProjects }}
     SYSTEM_ACCESSTOKEN: $(System.AccessToken) #required to report test results back to AzDO
-  condition: succeeded()
+  condition: ${{ parameters.condition }}
   continueOnError: false
