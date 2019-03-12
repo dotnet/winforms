@@ -137,20 +137,30 @@ namespace System.Windows.Forms
             }
 
             Padding original = (Padding)context.PropertyDescriptor.GetValue(context.Instance);
-
-            int all = (int)propertyValues["All"];
-            if (original.All != all)
+            try
             {
-                return new Padding(all);
+                int all = (int)propertyValues["All"];
+                if (original.All != all)
+                {
+                    return new Padding(all);
+                }
+                else
+                {
+                    return new Padding(
+                        (int)propertyValues["Left"],
+                        (int)propertyValues["Top"],
+                        (int)propertyValues["Right"],
+                        (int)propertyValues["Bottom"]
+                    );
+                }
             }
-            else
+            catch (InvalidCastException invalidCast)
             {
-                return new Padding(
-                    (int)propertyValues["Left"],
-                    (int)propertyValues["Top"],
-                    (int)propertyValues["Right"],
-                    (int)propertyValues["Bottom"]
-                );
+                throw new ArgumentException(SR.PropertyValueInvalidEntry, nameof(propertyValues), invalidCast);
+            }
+            catch (NullReferenceException nullRef)
+            {
+                throw new ArgumentException(SR.PropertyValueInvalidEntry, nameof(propertyValues), nullRef);
             }
         }
 
