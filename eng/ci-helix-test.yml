@@ -28,5 +28,7 @@ steps:
     CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
     XUnitProjects: ${{ parameters.XUnitProjects }}
     SYSTEM_ACCESSTOKEN: $(System.AccessToken) #required to report test results back to AzDO
+    XUnitPublishTargetFramework: netcoreapp3.0
+    XUnitRuntimeTargetFramework: netcoreapp2.0
   condition: ${{ parameters.condition }}
   continueOnError: false

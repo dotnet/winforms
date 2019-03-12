@@ -2,27 +2,29 @@
 <Project Sdk="Microsoft.DotNet.Helix.Sdk" DefaultTargets="Test">
 
   <PropertyGroup>
-    <HelixBuild>$(BUILD_BUILDNUMBER)</HelixBuild>
+    <!-- Set by ci-helix-test.yml -->
+    <HelixBuild>$(HelixBuild)</HelixBuild>
     <HelixBuild Condition="'$(HelixBuild)' == ''">123460.01</HelixBuild>
   </PropertyGroup>
 
   <PropertyGroup>
     <IncludeDotNetCli>true</IncludeDotNetCli>
     <DotNetCliPackageType>sdk</DotNetCliPackageType>
-    <!-- Should match global.json tools.dotnet and sdk.version -->
+    <!-- Set to match global.json.tools.dotnet by pre-build.ps1 -->
     <DotNetCliVersion>$(DotNetCliVersion)</DotNetCliVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <TestRunNamePrefix>$(AGENT_JOBNAME)</TestRunNamePrefix>
     <!-- True by default because of System.AccessToken presence -->
-    <!--EnableAzurePipelinesReporter>true</EnableAzurePipelinesReporter--> 
+    <!-- EnableAzurePipelinesReporter>true</EnableAzurePipelinesReporter --> 
   </PropertyGroup>
 
   <PropertyGroup>
     <EnableXUnitReporter>true</EnableXUnitReporter>
-    <XUnitPublishTargetFramework>netcoreapp3.0</XUnitPublishTargetFramework>
-    <XUnitRuntimeTargetFramework>netcoreapp2.0</XUnitRuntimeTargetFramework>
+    <!-- Set by ci-helix-test.yml -->
+    <XUnitPublishTargetFramework>$(XUnitPublishTargetFramework)</XUnitPublishTargetFramework>
+    <XUnitRuntimeTargetFramework>$(XUnitRuntimeTargetFramework)</XUnitRuntimeTargetFramework>
     <XUnitRunnerVersion>$(XUnitRunnerConsoleVersion)</XUnitRunnerVersion>
   </PropertyGroup>
 
@@ -33,8 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <XUnitProject Include="$(XUnitProjects)">
-    </XUnitProject>
+    <!-- Set by ci-helix-test.yml -->
+    <XUnitProject Include="$(XUnitProjects)" />
   </ItemGroup>
 
   <!-- Useless stuff to make Arcade SDK happy -->
@@ -42,5 +44,4 @@
     <Language>msbuild</Language>
   </PropertyGroup>
   <Target Name="Pack"/>
-
 </Project>
