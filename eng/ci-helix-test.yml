@@ -4,28 +4,31 @@ parameters:
   HelixType: 'tests/default'            
   HelixTargetQueues: ''    
   HelixAccessToken: ''
-  Creator: ''          
-  XUnitProjects: ''
-  DisplayNamePrefix: ''        
+  Creator: ''  
+  XUnitProjects: ''        
+  DisplayNamePrefix: ''
+  condition: succeeded()        
 
 steps:
-- template: /eng/common/templates/steps/send-to-helix.yml
-  parameters:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: custom
+    projects: eng/helixpublish.proj
+    custom: msbuild
+    arguments: '/bl:$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/SendToHelix.binlog'
+  displayName: ${{ parameters.DisplayNamePrefix }}
+  env:
     HelixSource: ${{ parameters.HelixSource }}
-    HelixType: ${{ parameters.HelixType }} 
+    HelixType: ${{ parameters.HelixType }}
     HelixBuild: $(Build.BuildNumber)
     HelixTargetQueues: ${{ parameters.HelixTargetQueues }}
-    HelixAccessToken: ${{ parameters.HelixAccessToken }}            # only defined for internal CI
-    Creator: ${{ parameters.Creator }}         # required for public / external (when there is no access token)
-    XUnitProjects: ${{ parameters.XUnitProjects }} 
-    XUnitPublishTargetFramework: netcoreapp3.0  # Whatever tfm will work for our test projects for `dotnet publish`
-    XUnitRuntimeTargetFramework: netcoreapp2.0  # Whatever tfm to pick from the xunit package, it must exist in that package or the helix job will fail
-    XUnitRunnerVersion: '2.4.1'                 # Should match XUnitRunnerConsoleVersion in eng/Versions.props
-    IncludeDotNetCli: true
-    DotNetCliPackageType: 'sdk'
-    DotNetCliVersion: '3.0.100-preview-010184'  # MUST be official release: https://dotnet.microsoft.com/download/dotnet-core/3.0 ; does not need to match sdk we build against
-    EnableXUnitReporter: true
-    WaitForWorkItemCompletion: true
-    DisplayNamePrefix: ${{ parameters.DisplayNamePrefix }}
-    condition: succeeded()
-    continueOnError: false
+    HelixAccessToken: ${{ parameters.HelixAccessToken }}
+    Creator: ${{ parameters.Creator }}
+    WorkItemCommand: ${{ parameters.WorkItemCommand }}
+    CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
+    XUnitProjects: ${{ parameters.XUnitProjects }}
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken) #required to report test results back to AzDO
+    XUnitPublishTargetFramework: netcoreapp3.0
+    XUnitRuntimeTargetFramework: netcoreapp2.0
+  condition: ${{ parameters.condition }}
+  continueOnError: false
