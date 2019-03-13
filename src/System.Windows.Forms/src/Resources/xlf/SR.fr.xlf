@@ -11255,7 +11255,7 @@ Pour plus d'informations, contactez votre administrateur système ou l'auteur de
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Une référence circulaire a été faite. Un TreeNode ne peut pas être ajouté en tant que descendant de lui-même.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

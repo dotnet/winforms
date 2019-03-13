@@ -5494,7 +5494,7 @@ Deseja substituí-lo?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
         <source>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</source>
-        <target state="translated">Um valor que indica se será usado o valor da propriedade Descrição como o título para caixas de diálogo do estilo Vista. Essa propriedade não terá efeito em caixas de diálogo do estilo antigo.</target>
+        <target state="translated">Um valor que indica se será usado o valor da propriedade Description como o título para caixas de diálogo do estilo Vista. Essa propriedade não terá efeito em caixas de diálogo do estilo antigo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">
@@ -11255,7 +11255,7 @@ Para obter mais informações, contate o administrador do sistema ou o autor do 
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Foi feita uma referência circular. Um TreeNode não pode ser adicionado como um descendente de si mesmo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
