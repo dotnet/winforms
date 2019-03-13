@@ -4,10 +4,11 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>    
     <CLSCompliant>false</CLSCompliant>
+    <Deterministic>true</Deterministic>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <NoWarn>$(NoWarn);618</NoWarn>
     <DefineConstants>$(DefineConstants);WINFORMS_DESIGN_NAMESPACE;</DefineConstants>
-
   </PropertyGroup>
 
   <ItemGroup>

@@ -2,11 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Automation {
+namespace System.Windows.Forms.Automation
+{
     /// <summary>
     /// Describes the notification characteristics of a particular live region
     /// </summary>
-    public enum AutomationLiveSetting {
+    public enum AutomationLiveSetting
+    {
         /// <summary>
         /// The element does not send notifications if the content of the live region has changed.
         /// </summary>
