@@ -8643,7 +8643,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PropertyCategoryMisc">
         <source>Misc</source>
-        <target state="translated">Sonst.</target>
+        <target state="translated">Sonstiges</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
@@ -11255,7 +11255,7 @@ Weitere Informationen erhalten Sie vom Systemadministrator oder vom Entwickler d
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Es wurde ein Zirkelbezug eingefügt. Ein TreeNode kann nicht als Nachfolger von sich selbst hinzugefügt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
