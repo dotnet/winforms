@@ -7,6 +7,7 @@
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--the obsolete usage in public surface can't be removed-->
     <NoWarn>$(NoWarn);618</NoWarn>
     <DefineConstants>$(DefineConstants);WINFORMS_DESIGN_NAMESPACE;</DefineConstants>
   </PropertyGroup>
