@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <Target Name="GetPackageContent"
-          DependsOnTargets="ComputeIntermediateSatelliteAssemblies"
+          DependsOnTargets="SatelliteDllsProjectOutputGroup"
           Returns="@(PackageFile)">
     <ItemGroup>
       <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" />
@@ -20,8 +20,8 @@
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true'" Include="$(TargetRefPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(PackageAsRefAndLib)' == 'true'" Include="$(TargetPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(IncludeResourcesInPackage)' == 'true'"
-                   Include="@(IntermediateSatelliteAssembliesWithTargetPath->'$(TargetDir)%(Culture)\%(Filename)%(Extension)')"
-                   PackagePath="$(PackagePath)/%(IntermediateSatelliteAssembliesWithTargetPath.Culture)" />
+                   Include="@(SatelliteDllsProjectOutputGroupOutput->'%(FinalOutputPath)')"
+                   PackagePath="$(PackagePath)/%(SatelliteDllsProjectOutputGroupOutput.Culture)" />
     </ItemGroup>
   </Target>
 
