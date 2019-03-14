@@ -121,9 +121,9 @@ jobs:
       - checkout: self
         clean: true
 
-      # Set VSO Variable(s)
-      - powershell: eng\pre-build.ps1
-        displayName: Pre-Build - Set VSO Variables
+      # # Set VSO Variable(s)
+      # - powershell: eng\pre-build.ps1
+      #   displayName: Pre-Build - Set VSO Variables
 
       # Build and rename binlog
       # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with

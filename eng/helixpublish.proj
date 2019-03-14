@@ -11,7 +11,7 @@
     <IncludeDotNetCli>true</IncludeDotNetCli>
     <DotNetCliPackageType>sdk</DotNetCliPackageType>
     <!-- Set to match global.json.tools.dotnet by pre-build.ps1 -->
-    <DotNetCliVersion>$(DotNetCliVersion)</DotNetCliVersion>
+    <!-- <DotNetCliVersion>$(DotNetCliVersion)</DotNetCliVersion> -->
   </PropertyGroup>
 
   <PropertyGroup>
