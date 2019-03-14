@@ -41,6 +41,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Facade", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternalUtilitiesForTests", "src\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj", "{3603561D-907D-494B-9E3C-29D7001018F6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility", "src\Accessibility\src\Accessibility.ilproj", "{351D8601-6E21-45E8-B3B9-847C4540BD4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Accessibility-version", "src\Accessibility\ver\Accessibility-version.csproj", "{6103E743-057D-41C6-946C-23A751A08748}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Accessibility", "Accessibility", "{088DD24C-DF6B-45F3-A8BC-592580A4B2A9}"
+	ProjectSection(SolutionItems) = preProject
+		src\Accessibility\readme.md = src\Accessibility\readme.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +108,14 @@ Global
 		{3603561D-907D-494B-9E3C-29D7001018F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3603561D-907D-494B-9E3C-29D7001018F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3603561D-907D-494B-9E3C-29D7001018F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{351D8601-6E21-45E8-B3B9-847C4540BD4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{351D8601-6E21-45E8-B3B9-847C4540BD4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{351D8601-6E21-45E8-B3B9-847C4540BD4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{351D8601-6E21-45E8-B3B9-847C4540BD4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6103E743-057D-41C6-946C-23A751A08748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6103E743-057D-41C6-946C-23A751A08748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6103E743-057D-41C6-946C-23A751A08748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6103E743-057D-41C6-946C-23A751A08748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -119,6 +136,9 @@ Global
 		{238195CE-7CCE-4469-ACD8-EA00E88D947A} = {680FB14C-7B0C-4D63-9F1A-18ACCDB0F52A}
 		{F1B0790A-1A40-4487-A607-36D21D827E44} = {434C00C3-E498-4BA7-9764-9F0FC8CFE457}
 		{3603561D-907D-494B-9E3C-29D7001018F6} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
+		{351D8601-6E21-45E8-B3B9-847C4540BD4E} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
+		{6103E743-057D-41C6-946C-23A751A08748} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
+		{088DD24C-DF6B-45F3-A8BC-592580A4B2A9} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

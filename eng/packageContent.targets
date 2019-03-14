@@ -18,6 +18,7 @@
       <PackageFile Include="$(TargetPath)" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(IncludePdbInPackage)' == 'true'" Include="$(TargetDir)$(TargetName).pdb" PackagePath="$(PackagePath)" />
       <PackageFile Condition="'$(ProduceReferenceAssembly)' == 'true'" Include="$(TargetRefPath)" PackagePath="$(RefPackagePath)" />
+      <PackageFile Condition="'$(PackageAsRefAndLib)' == 'true'" Include="$(TargetPath)" PackagePath="$(RefPackagePath)" />
       <PackageFile Condition="'$(IncludeResourcesInPackage)' == 'true'"
                    Include="@(IntermediateSatelliteAssembliesWithTargetPath->'$(TargetDir)%(Culture)\%(Filename)%(Extension)')"
                    PackagePath="$(PackagePath)/%(IntermediateSatelliteAssembliesWithTargetPath.Culture)" />

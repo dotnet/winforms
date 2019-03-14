@@ -18,5 +18,9 @@
   <PropertyGroup>
     <DebugType>Full</DebugType>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json</RestoreAdditionalProjectSources>
+  </PropertyGroup>
 
 </Project>

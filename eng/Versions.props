@@ -19,6 +19,10 @@
     <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19163.10</SystemWindowsExtensionsPackageVersion>
     <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19163.10</MicrosoftNETCorePlatformsPackageVersion>
   </PropertyGroup>
+  <!-- CoreCLR-updated dependencies -->
+  <PropertyGroup>
+    <MicrosoftNetCoreIlasmPackageVersion>3.0.0-preview4-27512-77</MicrosoftNetCoreIlasmPackageVersion>
+  </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
     <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19162.7</MicrosoftDotNetGenFacadesPackageVersion>
@@ -35,7 +39,6 @@
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
-    <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
   </PropertyGroup>
