@@ -8653,7 +8653,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
         <source>Scale</source>
-        <target state="translated">Scale</target>
+        <target state="translated">Scala</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryText">

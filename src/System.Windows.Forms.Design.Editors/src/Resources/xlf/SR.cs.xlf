@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="translated">Bottom</target>
+        <target state="translated">Dolů</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
@@ -24,7 +24,7 @@
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="translated">Top</target>
+        <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCantRemoveItem">
@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="translated">Bottom</target>
+        <target state="translated">Dolů</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
@@ -114,7 +114,7 @@
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="translated">Top</target>
+        <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
