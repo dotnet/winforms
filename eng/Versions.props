@@ -33,13 +33,16 @@
     <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>
     <XUnitStaFactPackageVersion>0.3.5</XUnitStaFactPackageVersion>
   </PropertyGroup>
+  <!-- Code Coverage -->
+  <PropertyGroup>
+    <CoverletMSBuildPackageVersion>2.6.0</CoverletMSBuildPackageVersion>
+    <CodecovVersion>1.1.1</CodecovVersion>
+    <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
+  </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
-    <CoverletMSBuildPackageVersion>2.6.0</CoverletMSBuildPackageVersion>
-    <CodecovVersion>1.1.1</CodecovVersion>
-    <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
 </Project>

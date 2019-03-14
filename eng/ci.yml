@@ -123,6 +123,9 @@ jobs:
         displayName: Pre-Build - Set VSO Variables
 
       # Build and rename binlog
+      # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with
+      #       coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
+      #       https://github.com/tonerdo/coverlet/issues/363.
       - script: eng\cibuild.cmd
           -prepareMachine
           -configuration $(_BuildConfig)
@@ -134,6 +137,7 @@ jobs:
 
     # Run Unit Tests
         # this should no longer be necessary once Helix is ready to report back code coverage
+        # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
       - script: eng\cibuild.cmd
           -prepareMachine
           -configuration $(_BuildConfig)
