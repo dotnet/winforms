@@ -139,7 +139,7 @@
       </trans-unit>
       <trans-unit id="AccDGCollapse">
         <source>Collapse</source>
-        <target state="translated">Collapse</target>
+        <target state="translated">摺疊</target>
         <note />
       </trans-unit>
       <trans-unit id="AccDGEdit">
@@ -149,7 +149,7 @@
       </trans-unit>
       <trans-unit id="AccDGExpand">
         <source>Expand</source>
-        <target state="translated">Expand</target>
+        <target state="translated">展開</target>
         <note />
       </trans-unit>
       <trans-unit id="AccDGNavigate">
@@ -189,12 +189,12 @@
       </trans-unit>
       <trans-unit id="AccessibleActionCollapse">
         <source>Collapse</source>
-        <target state="translated">Collapse</target>
+        <target state="translated">摺疊</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
-        <target state="translated">Expand</target>
+        <target state="translated">展開</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionPress">
