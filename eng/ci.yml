@@ -171,15 +171,6 @@ jobs:
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
         displayName: Run Integration Tests on Build Machine
 
-      # Upload code coverage data
-      - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
-          eng/CodeCoverage.proj
-          /p:Configuration=$(_BuildConfig)
-          /p:CodeCovToken=$(CODECOV_TOKEN)
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
-        displayName: Upload coverage to codecov.io
-        condition: and(succeeded(), eq(variables._Coverage, 'true'))
-
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
@@ -189,6 +180,15 @@ jobs:
           -publish $(_PublishArgs)
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
         displayName: Pack, Sign, and Publish
+
+      # Upload code coverage data
+      - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
+          eng/CodeCoverage.proj
+          /p:Configuration=$(_BuildConfig)
+          /p:CodeCovToken=$(CODECOV_TOKEN)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
+        displayName: Upload coverage to codecov.io
+        condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
       # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
