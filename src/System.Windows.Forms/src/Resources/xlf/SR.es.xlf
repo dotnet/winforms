@@ -11705,7 +11705,7 @@ Para obtener más información, póngase en contacto con el administrador del si
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
         <source>MoreInformationLink</source>
-        <target state="translated">Vínculo Más información</target>
+        <target state="translated">MoreInformationLink</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Name">
