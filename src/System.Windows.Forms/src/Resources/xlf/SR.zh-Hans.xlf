@@ -11255,7 +11255,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">已进行了循环引用。TreeNode 无法添加为自身的后代。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
