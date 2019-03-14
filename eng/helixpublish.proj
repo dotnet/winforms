@@ -10,8 +10,8 @@
   <PropertyGroup>
     <IncludeDotNetCli>true</IncludeDotNetCli>
     <DotNetCliPackageType>sdk</DotNetCliPackageType>
-    <!-- Set to match global.json.tools.dotnet by pre-build.ps1 -->
-    <!-- <DotNetCliVersion>$(DotNetCliVersion)</DotNetCliVersion> -->
+    <!-- Set by Arcade using our global.json.tools.dotnet -->
+    <DotNetCliVersion>$(NetCoreSdkVersion)</DotNetCliVersion>
   </PropertyGroup>
 
   <PropertyGroup>
