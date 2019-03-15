@@ -132,7 +132,6 @@ jobs:
     # Run Unit Tests
         # this should no longer be necessary once Helix is ready to report back code coverage
       - script: eng\cibuild.cmd
-          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
@@ -166,7 +165,6 @@ jobs:
         # 1. Helix doesn't build projects (it only uses publish); we need .dotnet and also bin from build
         # 2. we need an interactive pool for SendKeys to work
       - script: eng\cibuild.cmd
-          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -integrationTest
@@ -175,7 +173,6 @@ jobs:
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
-          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -pack
