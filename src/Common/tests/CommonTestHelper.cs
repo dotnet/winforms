@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 using Xunit;
 
 namespace WinForms.Common.Tests
@@ -188,6 +189,53 @@ namespace WinForms.Common.Tests
             var data = new TheoryData<Type>();
             data.Add(null);
             data.Add(typeof(int));
+            return data;
+        }
+
+        public static TheoryData<RightToLeft, RightToLeft> GetRightToLeftTheoryData()
+        {
+            var data = new TheoryData<RightToLeft, RightToLeft>();
+            data.Add(RightToLeft.Inherit, RightToLeft.No);
+            data.Add(RightToLeft.Yes, RightToLeft.Yes);
+            data.Add(RightToLeft.No, RightToLeft.No);
+            return data;
+        }
+
+        public static TheoryData<Size> GetSizeTheoryData()
+        {
+            var data = new TheoryData<Size>();
+            data.Add(new Size());
+            data.Add(new Size(1, 2));
+            data.Add(new Size(-1, -2));
+            return data;
+        }
+
+        public static TheoryData<Rectangle> GetRectangleTheoryData()
+        {
+            var data = new TheoryData<Rectangle>();
+            data.Add(new Rectangle());
+            data.Add(new Rectangle(1, 2, 3, 4));
+            data.Add(new Rectangle(-1, -2, -3, -4));
+            return data;
+        }
+
+        public static TheoryData<Padding> GetPaddingTheoryData()
+        {
+            var data = new TheoryData<Padding>();
+            data.Add(new Padding());
+            data.Add(new Padding(1, 2, 3, 4));
+            data.Add(new Padding(1));
+            data.Add(new Padding(-1, -2, -3, -4));
+            return data;
+        }
+
+        public static TheoryData<Padding, Padding> GetPaddingNormalizedTheoryData()
+        {
+            var data = new TheoryData<Padding, Padding>();
+            data.Add(new Padding(), new Padding());
+            data.Add(new Padding(1, 2, 3, 4), new Padding(1, 2, 3, 4));
+            data.Add(new Padding(1), new Padding(1));
+            data.Add(new Padding(-1, -2, -3, -4), Padding.Empty);
             return data;
         }
 
