@@ -138,7 +138,7 @@ jobs:
           -test
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog #SendToHelix.binlog for helix version        
         displayName: Run Unit Tests on Build Machine (Debug only)
-        condition: and(succeeded()) # ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
+        condition: succeeded() # ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
       # - template: /eng/ci-helix-test.yml
       #   parameters:
