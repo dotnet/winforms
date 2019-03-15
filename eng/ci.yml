@@ -138,18 +138,20 @@ jobs:
           -test
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog #SendToHelix.binlog for helix version        
         displayName: Run Unit Tests on Build Machine (Debug only)
-        condition: succeeded() # ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
+        condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      # - template: /eng/ci-helix-test.yml
-      #   parameters:
-      #     HelixSource: $(_HelixSource)
-      #     HelixType: 'tests/unit'
-      #     HelixTargetQueues: $(_UnitTestHelixAgentPool)
-      #     HelixAccessToken: $(_HelixToken)            # only defined for internal CI
-      #     Creator: $(_HelixCreator)
-      #     XUnitProjects: '..\src\**\*.Tests.csproj'
-      #     DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix (Release only)'
-      #     condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release')) # on helix (with real signing on internal)
+      - powershell: eng\cibuild.ps1
+          -prepareMachine
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs) 
+          -test
+          -projects $(Build.SourcesDirectory)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(Build.SourcesDirectory)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(Build.SourcesDirectory)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj
+          /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\Helix.binlog
+        displayName: Run Unit Tests on Helix Machine (Release only)
+        env:
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+          HelixAccessToken: $(HelixApiAccessToken)
+        condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
       
       # Run integration tests and rename binlog
       # These are not ready to run on Helix because:
