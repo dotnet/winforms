@@ -140,7 +140,8 @@ jobs:
         displayName: Run Unit Tests on Build Machine (Debug only)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      - powershell: eng\cibuild.ps1
+      - powershell: eng\common\build.ps1
+          -ci
           -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs) 
