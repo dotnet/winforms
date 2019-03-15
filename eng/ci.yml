@@ -122,7 +122,7 @@ jobs:
 
       # Build and rename binlog
       - script: eng\cibuild.cmd
-          -prepareMachine
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -build
@@ -132,7 +132,7 @@ jobs:
     # Run Unit Tests
         # this should no longer be necessary once Helix is ready to report back code coverage
       - script: eng\cibuild.cmd
-          -prepareMachine
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
@@ -140,8 +140,7 @@ jobs:
         displayName: Run Unit Tests on Build Machine (Debug only)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      - powershell: eng\common\build.ps1
-          -ci
+      - powershell: eng\cibuild.cmd
           -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs) 
@@ -167,6 +166,7 @@ jobs:
         # 1. Helix doesn't build projects (it only uses publish); we need .dotnet and also bin from build
         # 2. we need an interactive pool for SendKeys to work
       - script: eng\cibuild.cmd
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -integrationTest
@@ -175,6 +175,7 @@ jobs:
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -pack
