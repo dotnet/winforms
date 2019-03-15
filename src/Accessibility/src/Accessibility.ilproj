@@ -13,10 +13,4 @@
                       ReferenceOutputAssembly="false"
                       OutputItemType="ILResourceReference" />
   </ItemGroup>
-
-  <!-- Import design time targets for Roslyn Project System. These are only available if Visual Studio is installed. -->
-  <PropertyGroup>
-    <ManagedDesignTimeTargetsPath Condition="'$(ManagedDesignTimeTargetsPath)'==''">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\Managed\Microsoft.Managed.DesignTime.targets</ManagedDesignTimeTargetsPath>
-  </PropertyGroup>
-  <Import Project="$(ManagedDesignTimeTargetsPath)" Condition="'$(ManagedDesignTimeTargetsPath)' != '' and Exists('$(ManagedDesignTimeTargetsPath)')" />
 </Project>
