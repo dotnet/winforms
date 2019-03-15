@@ -207,4 +207,7 @@
   <data name="UnsafeNativeMethodsNotImplemented" xml:space="preserve">
     <value>Not implemented.</value>
   </data>
+  <data name="DesignerActionPanel_CouldNotFindMethod" xml:space="preserve">
+    <value>Could not find method '{0}'</value>
+  </data>
 </root>

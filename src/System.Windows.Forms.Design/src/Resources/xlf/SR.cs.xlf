@@ -17,6 +17,11 @@
         <target state="new">Integer cannot be converted to a float.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
+        <source>Could not find method '{0}'</source>
+        <target state="new">Could not find method '{0}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
         <target state="translated">Generování optimalizovaného kódu</target>
