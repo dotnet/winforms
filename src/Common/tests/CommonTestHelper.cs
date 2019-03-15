@@ -184,6 +184,14 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Color> GetColorWithEmptyTheoryData()
+        {
+            var data = new TheoryData<Color>();
+            data.Add(Color.Red);
+            data.Add(Color.Empty);
+            return data;
+        }
+
         public static TheoryData<Type> GetTypeWithNullTheoryData()
         {
             var data = new TheoryData<Type>();

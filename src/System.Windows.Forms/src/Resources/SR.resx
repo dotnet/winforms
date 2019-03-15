@@ -4118,6 +4118,9 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewGroupsDescr" xml:space="preserve">
     <value>The groups in the ListView.</value>
   </data>
+  <data name="ListViewGroupCollectionBadListViewGroup" xml:space="preserve">
+    <value>Parameter must be of type ListViewGroup.</value>
+  </data>
   <data name="ListViewHeaderStyleDescr" xml:space="preserve">
     <value>The style of the column headers in Details view.</value>
   </data>
