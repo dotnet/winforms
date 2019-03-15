@@ -6801,6 +6801,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">항목과 하위 항목 주위에 모눈선을 표시합니다. 자세히 보기에서만 표시됩니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">기본값</target>

@@ -6801,6 +6801,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Zeigt Rasterlinien um Elemente und SubItems an (nur in der Details-Ansicht).</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Standard</target>

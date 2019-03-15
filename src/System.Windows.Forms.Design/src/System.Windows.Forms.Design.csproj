@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>System.Windows.Forms.Design</AssemblyName>    
-    <CLSCompliant>false</CLSCompliant>
+    <CLSCompliant>true</CLSCompliant>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

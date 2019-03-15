@@ -580,7 +580,7 @@ namespace System.Windows.Forms {
         
         public static extern int GetWindowTextLength(HandleRef hWnd);
         // this is a wrapper that comctl exposes for the NT function since it doesn't exist natively on 95.
-        [DllImport(ExternDll.Comctl32, ExactSpelling=true), CLSCompliantAttribute(false)]
+        [DllImport(ExternDll.Comctl32, ExactSpelling=true)]
         
         private static extern bool _TrackMouseEvent(NativeMethods.TRACKMOUSEEVENT tme);
         public static bool TrackMouseEvent(NativeMethods.TRACKMOUSEEVENT tme) {

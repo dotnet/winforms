@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <RefPackagePath Condition="'$(RefPackagePath)' == ''">ref/$(TargetFramework)</RefPackagePath>
-    <IncludePdbInPackage Condition="'$(IncludePdbInPackage)' == '' AND '$(IsFacadeAssembly)' != 'true'">true</IncludePdbInPackage>
+    <IncludePdbInPackage Condition="'$(IncludePdbInPackage)' == '' AND '$(IsFacadeAssembly)' != 'true' AND '$(DebugType)' != 'embedded'">true</IncludePdbInPackage>
     <IncludeResourcesInPackage>true</IncludeResourcesInPackage>
   </PropertyGroup>
 

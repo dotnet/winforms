@@ -9,6 +9,9 @@
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
 
+    <!-- Produce a full PDB for facade assemblies -->
+    <DebugType>full</DebugType>
+
     <!-- allow desktop references -->
     <AssetTargetFallback>net472</AssetTargetFallback>
     <NoWarn>$(NoWarn);NU1701</NoWarn>

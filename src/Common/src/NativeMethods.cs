@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms {
         * MISCELLANEOUS
         */
 
-        [StructLayout(LayoutKind.Sequential), CLSCompliant(false)]
+        [StructLayout(LayoutKind.Sequential)]
         public class OLECMD {
             [MarshalAs(UnmanagedType.U4)]
             public   int cmdID = 0;
@@ -2161,8 +2161,7 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [ComImport]
         [Guid("B722BCCB-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]        
         public interface IOleCommandTarget 
         {
             [return: MarshalAs(UnmanagedType.I4)]
@@ -3280,7 +3279,7 @@ namespace System.Windows.Forms {
             public int      FlagsEx;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto), CLSCompliantAttribute(false)]
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class CHOOSEFONT {
             public int      lStructSize = Marshal.SizeOf(typeof(CHOOSEFONT));   // ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
@@ -3425,10 +3424,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        [
-        StructLayout(LayoutKind.Sequential),
-        CLSCompliantAttribute(false)
-        ]
+        [StructLayout(LayoutKind.Sequential)]
         public sealed class  _POINTL {
             public   int x;
             public   int y;
