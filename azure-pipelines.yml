@@ -24,7 +24,5 @@ jobs:
 - template: /eng/ci.yml
   parameters:
     ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-      # agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-      agentPool: BuildPool.Windows.10.Amd64.VS2019.BT
       # runAsPublic is used in expressions, which can't read from user-defined variables
       runAsPublic: false

@@ -1,7 +1,6 @@
 parameters:
   # This section is required because agent pool can't 
   # be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: BuildPool.Windows.10.Amd64.VS2019.BT.Open 
   runAsPublic: true                      
   repoName: dotnet/winforms              
 
@@ -18,7 +17,16 @@ jobs:
 
     jobs:
     - job: Windows_NT
-      pool: ${{ parameters.agentPool }}
+      timeoutInMinutes: 90
+      pool:
+        # for public
+        - ${{ if eq(parameters.runAsPublic, 'true') }}:
+          name: NetCorePublic-Int-Pool
+          queue: BuildPool.Windows.10.Amd64.VS2019.BT.Open 
+        # for internal 
+        - ${{ if eq(parameters.runAsPublic, 'false') }}:
+          name: NetCoreInternal-Int-Pool
+          queue: BuildPool.Windows.10.Amd64.VS2019.BT
 
       variables:
 
