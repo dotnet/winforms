@@ -142,7 +142,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog # Helix.binlog for helix version
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
           /p:Coverage=$(_Coverage)
           /m:1
         displayName: Run Unit Tests on Build Machine (Debug only)
