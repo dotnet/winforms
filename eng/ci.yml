@@ -1,7 +1,7 @@
 parameters:
   # This section is required because agent pool can't 
   # be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp-vs2019 
+  agentPool: BuildPool.Windows.10.Amd64.VS2019.BT.Open 
   runAsPublic: true                      
   repoName: dotnet/winforms              
 
