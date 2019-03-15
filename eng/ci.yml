@@ -136,7 +136,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog #SendToHelix.binlog for helix version        
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog # Helix.binlog for helix version        
         displayName: Run Unit Tests on Build Machine (Debug only)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
@@ -146,12 +146,17 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs) 
           -test
-          -projects $(Build.SourcesDirectory)\src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj;$(Build.SourcesDirectory)\src\System.Windows.Forms.Design\tests\UnitTests\System.Windows.Forms.Design.Tests.csproj;$(Build.SourcesDirectory)\src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj
+          -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
           /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\Helix.binlog
         displayName: Run Unit Tests on Helix Machine (Release only)
         env:
+          HelixSource: $(_HelixSource)
+          HelixType: 'tests/unit'
+          HelixTargetQueues: $(_UnitTestHelixAgentPool)
+          HelixAccessToken: $(_HelixToken)              # only defined for internal CI
+          Creator: $(_HelixCreator)
+          XUnitProjects: '..\src\**\*.Tests.csproj'     # the test projects blob
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-          HelixAccessToken: $(HelixApiAccessToken)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
       
       # Run integration tests and rename binlog
