@@ -138,18 +138,18 @@ jobs:
           -test
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog #SendToHelix.binlog for helix version        
         displayName: Run Unit Tests on Build Machine (Debug only)
-        condition: and(succeeded(), eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
+        condition: succeeded() # ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      - template: /eng/ci-helix-test.yml
-        parameters:
-          HelixSource: $(_HelixSource)
-          HelixType: 'tests/unit'
-          HelixTargetQueues: $(_UnitTestHelixAgentPool)
-          HelixAccessToken: $(_HelixToken)            # only defined for internal CI
-          Creator: $(_HelixCreator)
-          XUnitProjects: '..\src\**\*.Tests.csproj'
-          DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix (Release only)'
-          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release')) # on helix (with real signing on internal)
+      # - template: /eng/ci-helix-test.yml
+      #   parameters:
+      #     HelixSource: $(_HelixSource)
+      #     HelixType: 'tests/unit'
+      #     HelixTargetQueues: $(_UnitTestHelixAgentPool)
+      #     HelixAccessToken: $(_HelixToken)            # only defined for internal CI
+      #     Creator: $(_HelixCreator)
+      #     XUnitProjects: '..\src\**\*.Tests.csproj'
+      #     DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix (Release only)'
+      #     condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release')) # on helix (with real signing on internal)
       
       # Run integration tests and rename binlog
       # These are not ready to run on Helix because:
