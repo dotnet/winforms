@@ -29,37 +29,37 @@
       </trans-unit>
       <trans-unit id="CollectionEditorCantRemoveItem">
         <source>The item '{0}' cannot be removed.</source>
-        <target state="new">The item '{0}' cannot be removed.</target>
+        <target state="translated">Das Element {0} kann nicht entfernt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
-        <target state="new">{0} Collection Editor</target>
+        <target state="translated">{0}-Sammlungs-Editor</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
-        <target state="new">Read-only component(s) selected.</target>
+        <target state="translated">Es wurden schreibgeschützte Komponenten ausgewählt.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorProperties">
         <source>{0} &amp;properties:</source>
-        <target state="new">{0} &amp;properties:</target>
+        <target state="translated">{0}-&amp;Eigenschaften:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesMultiSelect">
         <source>Multi-Select &amp;Properties:</source>
-        <target state="new">Multi-Select &amp;Properties:</target>
+        <target state="translated">Mehrfachauswahl von &amp;Eigenschaften:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesNone">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">&amp;Eigenschaften:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorUndoBatchDesc">
         <source>Add or remove {0} objects</source>
-        <target state="new">Add or remove {0} objects</target>
+        <target state="translated">{0}-Objekte hinzufügen oder entfernen</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
@@ -134,7 +134,7 @@
       </trans-unit>
       <trans-unit id="RTL">
         <source>RTL_False</source>
-        <target state="new">RTL_False</target>
+        <target state="translated">RTL_False</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">

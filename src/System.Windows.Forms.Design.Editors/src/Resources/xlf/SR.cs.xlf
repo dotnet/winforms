@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="translated">Bottom</target>
+        <target state="translated">Dolů</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
@@ -24,42 +24,42 @@
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="translated">Top</target>
+        <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCantRemoveItem">
         <source>The item '{0}' cannot be removed.</source>
-        <target state="new">The item '{0}' cannot be removed.</target>
+        <target state="translated">Položku {0} nelze odebrat.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorCaption">
         <source>{0} Collection Editor</source>
-        <target state="new">{0} Collection Editor</target>
+        <target state="translated">Editor kolekce {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorInheritedReadOnlySelection">
         <source>Read-only component(s) selected.</source>
-        <target state="new">Read-only component(s) selected.</target>
+        <target state="translated">Byly vybrány součásti jen pro čtení.</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorProperties">
         <source>{0} &amp;properties:</source>
-        <target state="new">{0} &amp;properties:</target>
+        <target state="translated">{0} - &amp;vlastnosti:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesMultiSelect">
         <source>Multi-Select &amp;Properties:</source>
-        <target state="new">Multi-Select &amp;Properties:</target>
+        <target state="translated">&amp;Vlastnosti násobného výběru:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesNone">
         <source>&amp;Properties:</source>
-        <target state="new">&amp;Properties:</target>
+        <target state="translated">&amp;Vlastnosti:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorUndoBatchDesc">
         <source>Add or remove {0} objects</source>
-        <target state="new">Add or remove {0} objects</target>
+        <target state="translated">Přidání nebo odebrání objektů (počet: {0})</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="translated">Bottom</target>
+        <target state="translated">Dolů</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
@@ -114,7 +114,7 @@
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="translated">Top</target>
+        <target state="translated">Nahoru</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
@@ -134,7 +134,7 @@
       </trans-unit>
       <trans-unit id="RTL">
         <source>RTL_False</source>
-        <target state="new">RTL_False</target>
+        <target state="translated">RTL_False</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">

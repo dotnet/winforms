@@ -186,4 +186,31 @@
   <data name="InheritanceServiceReadOnlyCollection" xml:space="preserve">
     <value>Read-Only</value>
   </data>
+  <data name="CannotConvertDoubleToDate" xml:space="preserve">
+    <value>Double cannot be converted to a date.</value>
+  </data>
+  <data name="CannotConvertIntToFloat" xml:space="preserve">
+    <value>Integer cannot be converted to a float.</value>
+  </data>
+  <data name="COM2UnhandledVT" xml:space="preserve">
+    <value>Unhandled VT: {0}.</value>
+  </data>
+  <data name="DotNET_ComponentType" xml:space="preserve">
+    <value>.NET Component</value>
+  </data>
+  <data name="ToolboxItemInvalidKey" xml:space="preserve">
+    <value>Argument should be a non-empty string.</value>
+  </data>
+  <data name="ToolboxItemInvalidPropertyType" xml:space="preserve">
+    <value>Property {0} requires an argument of type {1}.</value>
+  </data>
+  <data name="ToolboxItemLocked" xml:space="preserve">
+    <value>Toolbox item cannot be modified.</value>
+  </data>
+  <data name="ToolboxItemValueNotSerializable" xml:space="preserve">
+    <value>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</value>
+  </data>
+  <data name="UnsafeNativeMethodsNotImplemented" xml:space="preserve">
+    <value>Not implemented.</value>
+  </data>
 </root>

@@ -11255,7 +11255,7 @@ Další informace získáte u správce systému nebo autora aplikace.</target>
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Vytvořil se cyklický odkaz. Uzel TreeNode se nedá přidat jako jeho vlastní potomek.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

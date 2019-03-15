@@ -7,6 +7,21 @@
         <target state="new">Adding event '{0}'</target>
         <note />
       </trans-unit>
+      <trans-unit id="COM2UnhandledVT">
+        <source>Unhandled VT: {0}.</source>
+        <target state="new">Unhandled VT: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="new">Double cannot be converted to a date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="new">Integer cannot be converted to a float.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
         <target state="translated">优化代码生成</target>
@@ -97,6 +112,11 @@
         <target state="translated">控制设计器是否应使用对齐线。如果设置为 True，则使用对齐线作为参考线。如果设置为 False，则使用网格线。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DotNET_ComponentType">
+        <source>.NET Component</source>
+        <target state="new">.NET Component</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
         <target state="translated">此 IDataObject 不支持 SetData。</target>
@@ -115,6 +135,31 @@
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">此平台上不支持 Winforms Designer。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemInvalidKey">
+        <source>Argument should be a non-empty string.</source>
+        <target state="new">Argument should be a non-empty string.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemInvalidPropertyType">
+        <source>Property {0} requires an argument of type {1}.</source>
+        <target state="new">Property {0} requires an argument of type {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemLocked">
+        <source>Toolbox item cannot be modified.</source>
+        <target state="new">Toolbox item cannot be modified.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemValueNotSerializable">
+        <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
+        <target state="new">Data type {0} is not serializable. Items added to a property dictionary must be serializable.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UnsafeNativeMethodsNotImplemented">
+        <source>Not implemented.</source>
+        <target state="new">Not implemented.</target>
         <note />
       </trans-unit>
     </body>

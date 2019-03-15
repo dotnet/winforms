@@ -11255,7 +11255,7 @@ Para obtener más información, póngase en contacto con el administrador del si
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Se ha realizado una referencia circular. No se puede agregar un elemento TreeNode como descendiente de sí mismo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
@@ -11705,7 +11705,7 @@ Para obtener más información, póngase en contacto con el administrador del si
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
         <source>MoreInformationLink</source>
-        <target state="translated">Vínculo Más información</target>
+        <target state="translated">MoreInformationLink</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Name">

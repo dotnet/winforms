@@ -8,14 +8,15 @@ using System.Runtime.InteropServices;
 
 #if WINFORMS_NAMESPACE
 using CAPS = System.Windows.Forms.NativeMethods;
+#elif WINFORMS_DESIGN_NAMESPACE
+using CAPS = System.Windows.Forms.NativeMethods;
 #elif DRAWING_NAMESPACE
 using CAPS = System.Drawing.SafeNativeMethods;
 #elif DRAWINGDESIGN_NAMESPACE
 using System.Drawing.Design;
 using CAPS = System.Drawing.Design.NativeMethods;
 #else
-using System.Design;
-using CAPS = System.Design.NativeMethods;
+using CAPS = System.Experimental.Gdi;
 #endif
 
 namespace System.Windows.Forms
