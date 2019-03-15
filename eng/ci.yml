@@ -152,10 +152,13 @@ jobs:
         env:
           HelixSource: $(_HelixSource)
           HelixType: 'tests/unit'
+          HelixBuild: $(Build.BuildNumber)
           HelixTargetQueues: $(_UnitTestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)              # only defined for internal CI
           Creator: $(_HelixCreator)
           XUnitProjects: '..\src\**\*.Tests.csproj'     # the test projects blob
+          XUnitPublishTargetFramework: netcoreapp3.0
+          XUnitRuntimeTargetFramework: netcoreapp2.0
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
       
