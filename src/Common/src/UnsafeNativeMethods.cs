@@ -8341,8 +8341,7 @@ namespace System.Windows.Forms {
 
         [ComVisible(true)]
         [ComImport()]
-        [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliantAttribute(false)]
+        [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]        
         [Guid("F8B80ADA-2C44-48D0-89BE-5FF23C9CD875")]
         internal interface IAccessibleEx {
             // Returns the IAccessibleEx for specified child. Returns
@@ -8462,7 +8461,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("D6DD68D1-86FD-4332-8666-9ABEDEA2D24C")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliantAttribute(false)]
         public interface IRawElementProviderSimple {
             /// <summary>
             /// Indicates the type of provider this is, for example, whether it is a client-side
@@ -8542,7 +8540,6 @@ namespace System.Windows.Forms {
         [Guid("f7063da8-8359-439c-9297-bbc5299a7d87")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [ComImport()]
-        [CLSCompliant(false)]
         public interface IRawElementProviderFragment : IRawElementProviderSimple {
             /// <summary>
             /// Request to return the element in the specified direction
@@ -8608,7 +8605,6 @@ namespace System.Windows.Forms {
         [Guid("620ce2a5-ab8f-40a9-86cb-de3c75599b58")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         [ComImport()]
-        [CLSCompliant(false)]
         public interface IRawElementProviderFragmentRoot : IRawElementProviderFragment {
             /// <summary>
             /// Return the child element at the specified point, if one exists,
@@ -8644,7 +8640,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("56D00BD0-C4F4-433C-A836-1A52A57E0892")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliantAttribute(false)]
         public interface IToggleProvider {
             void Toggle();
 
@@ -8664,8 +8659,7 @@ namespace System.Windows.Forms {
         [ComImport()]
         [ComVisible(true)]
         [Guid("9c860395-97b3-490a-b52a-858cc22af166")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)]
+        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]        
         public interface ITableProvider {
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
             object[] /*IRawElementProviderSimple[]*/ GetRowHeaders();
@@ -8682,7 +8676,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("b9734fa6-771f-4d78-9c90-2517999349cd")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)]
         public interface ITableItemProvider {
             [return: MarshalAs(UnmanagedType.SafeArray, SafeArraySubType = VarEnum.VT_UNKNOWN)]
             object[] /*IRawElementProviderSimple[]*/ GetRowHeaderItems();
@@ -8695,7 +8688,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("b17d6187-0907-464b-a168-0ef17a1572b1")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)] 
         public interface IGridProvider {
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object /*IRawElementProviderSimple*/ GetItem(int row, int column);
@@ -8715,7 +8707,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("d02541f1-fb81-4d64-ae32-f520f8a6dbd1")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)] 
         public interface IGridItemProvider {
             int Row {
                 [return: MarshalAs(UnmanagedType.I4)]
@@ -8757,7 +8748,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("54fcb24b-e18e-47a2-b4d3-eccbe77599a2")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)]
         public interface IInvokeProvider {
             /// <summary>
             /// Request that the control initiate its action.
@@ -8776,7 +8766,6 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         [Guid("2360c714-4bf1-4b26-ba65-9b21316127eb")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        [CLSCompliant(false)]
         public interface IScrollItemProvider {
             /// <summary>
             /// Scrolls the windows containing this automation element to make this element visible.
