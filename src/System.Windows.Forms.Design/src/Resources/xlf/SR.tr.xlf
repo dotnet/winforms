@@ -152,6 +152,51 @@
         <target state="new">Data type {0} is not serializable. Items added to a property dictionary must be serializable.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd0">
+        <source>Add Component</source>
+        <target state="new">Add Component</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd1">
+        <source>Add {0}</source>
+        <target state="new">Add {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange0">
+        <source>Change Component</source>
+        <target state="new">Change Component</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange1">
+        <source>Change {0}</source>
+        <target state="new">Change {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange2">
+        <source>Change {0}.{1}</source>
+        <target state="new">Change {0}.{1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove0">
+        <source>Remove Component</source>
+        <target state="new">Remove Component</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove1">
+        <source>Remove {0}</source>
+        <target state="new">Remove {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRename">
+        <source>Rename {0} to {1}</source>
+        <target state="new">Rename {0} to {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
         <target state="new">Not implemented.</target>

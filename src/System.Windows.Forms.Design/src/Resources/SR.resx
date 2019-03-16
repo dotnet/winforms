@@ -210,4 +210,31 @@
   <data name="DesignerActionPanel_CouldNotFindMethod" xml:space="preserve">
     <value>Could not find method '{0}'</value>
   </data>
+  <data name="UndoEngineComponentAdd0" xml:space="preserve">
+    <value>Add Component</value>
+  </data>
+  <data name="UndoEngineComponentAdd1" xml:space="preserve">
+    <value>Add {0}</value>
+  </data>
+  <data name="UndoEngineComponentChange0" xml:space="preserve">
+    <value>Change Component</value>
+  </data>
+  <data name="UndoEngineComponentChange1" xml:space="preserve">
+    <value>Change {0}</value>
+  </data>
+  <data name="UndoEngineComponentChange2" xml:space="preserve">
+    <value>Change {0}.{1}</value>
+  </data>
+  <data name="UndoEngineComponentRemove0" xml:space="preserve">
+    <value>Remove Component</value>
+  </data>
+  <data name="UndoEngineComponentRemove1" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="UndoEngineComponentRename" xml:space="preserve">
+    <value>Rename {0} to {1}</value>
+  </data>
+  <data name="UndoEngineMissingService" xml:space="preserve">
+    <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
+  </data>
 </root>
