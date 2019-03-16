@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         Top                         = IntTextFormatFlags.Top, // default
         VerticalCenter              = IntTextFormatFlags.VerticalCenter,
 
-        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Not a compound word
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", Justification = "Not a compound word")]
         WordBreak                   = IntTextFormatFlags.WordBreak,
         WordEllipsis                = IntTextFormatFlags.WordEllipsis,
 
