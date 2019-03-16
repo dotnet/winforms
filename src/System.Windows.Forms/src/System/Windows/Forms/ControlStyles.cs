@@ -67,7 +67,7 @@ namespace System.Windows.Forms
 
         /// <devdoc>
         /// If the BackColor is set to a color whose alpha component is less than
-        /// 255 (i.e., BackColor.A &lt; 255), OnPaintBackground will simulate
+        /// 255 (i.e., BackColor.A is less than 255), OnPaintBackground will simulate
         /// transparency by asking its parent control to paint our background.
         /// This is not true transparency -- if there is another control between us
         /// and our parent, we will not show the control in the middle.
