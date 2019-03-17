@@ -6801,6 +6801,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Affiche un quadrillage autour des éléments et des SubItems. Affichage uniquement en mode Détails.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Par défaut</target>
@@ -11255,7 +11260,7 @@ Pour plus d'informations, contactez votre administrateur système ou l'auteur de
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Une référence circulaire a été faite. Un TreeNode ne peut pas être ajouté en tant que descendant de lui-même.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

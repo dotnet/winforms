@@ -9,6 +9,9 @@
     <IsPartialFacadeAssembly>true</IsPartialFacadeAssembly>
     <GenFacadesIgnoreMissingTypes>true</GenFacadesIgnoreMissingTypes>
 
+    <!-- Produce a full PDB for facade assemblies -->
+    <DebugType>full</DebugType>
+
     <!-- allow desktop references -->
     <AssetTargetFallback>net472</AssetTargetFallback>
     <NoWarn>$(NoWarn);NU1701</NoWarn>
@@ -21,7 +24,7 @@
     <PackageReference Include="Microsoft.DotNet.GenFacades" Version="$(MicrosoftDotNetGenFacadesPackageVersion)" PrivateAssets="All" />
   </ItemGroup>
   
-  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" AfterTargets="ResolvePackageDependenciesForBuild">
+  <Target Condition="'$(IsFacadeAssembly)'=='true'" Name="ResolveMatchingContract" BeforeTargets="ResolveAssemblyReferences">
     <ItemGroup>
       <_desktopReference Include="@(Reference)" Condition="'%(Reference.NuGetPackageId)' == '$(MicrosoftTargetingPackNETFrameworkv472Package)'" />
       <Reference Remove="@(_desktopReference)" />

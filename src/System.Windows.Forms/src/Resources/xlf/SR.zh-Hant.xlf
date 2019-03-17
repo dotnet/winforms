@@ -139,7 +139,7 @@
       </trans-unit>
       <trans-unit id="AccDGCollapse">
         <source>Collapse</source>
-        <target state="translated">Collapse</target>
+        <target state="translated">摺疊</target>
         <note />
       </trans-unit>
       <trans-unit id="AccDGEdit">
@@ -149,7 +149,7 @@
       </trans-unit>
       <trans-unit id="AccDGExpand">
         <source>Expand</source>
-        <target state="translated">Expand</target>
+        <target state="translated">展開</target>
         <note />
       </trans-unit>
       <trans-unit id="AccDGNavigate">
@@ -189,12 +189,12 @@
       </trans-unit>
       <trans-unit id="AccessibleActionCollapse">
         <source>Collapse</source>
-        <target state="translated">Collapse</target>
+        <target state="translated">摺疊</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
-        <target state="translated">Expand</target>
+        <target state="translated">展開</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionPress">
@@ -6801,6 +6801,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">顯示項目與子項目周圍的格線。只有在詳細資料檢視中才顯示。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">預設值</target>
@@ -11255,7 +11260,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">已經建立循環參考。TreeNode 無法作為自身的子系新增。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

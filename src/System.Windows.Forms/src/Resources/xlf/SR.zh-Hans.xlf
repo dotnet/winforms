@@ -6801,6 +6801,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">在项和子项周围显示网格线。仅在“详细信息”视图中显示。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">默认值</target>
@@ -11255,7 +11260,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">已进行了循环引用。TreeNode 无法添加为自身的后代。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

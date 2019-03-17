@@ -1,0 +1,34 @@
+# https://docs.codecov.io/docs/codecov-yaml
+# https://github.com/codecov/support/wiki/Codecov-Yaml
+
+coverage:
+  status:
+    project:
+      default: false
+    patch:
+      default: false
+  fixes:
+    - "eng/::/"
+
+comment:
+  layout: "diff, flags"
+
+flags:
+  production:
+    paths:
+      - src/Common/src/
+      - src/System.Design/src/
+      - src/System.Drawing/src/
+      - src/System.Drawing.Design/src/
+      - src/System.Windows.Forms/src/
+      - src/System.Windows.Forms.Design/src/
+      - src/System.Windows.Forms.Design.Editors/src/
+  test:
+    paths:
+      - src/Common/tests/
+      - src/System.Design/tests/
+      - src/System.Drawing/tests/
+      - src/System.Drawing.Design/tests/
+      - src/System.Windows.Forms/tests/
+      - src/System.Windows.Forms.Design/tests/
+      - src/System.Windows.Forms.Design.Editors/tests/

@@ -6801,6 +6801,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Muestra las líneas de la cuadrícula alrededor de los elementos y subelementos. Sólo se muestra en la vista de detalles.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Predeterminado</target>
@@ -11255,7 +11260,7 @@ Para obtener más información, póngase en contacto con el administrador del si
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Se ha realizado una referencia circular. No se puede agregar un elemento TreeNode como descendiente de sí mismo.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
@@ -11705,7 +11710,7 @@ Para obtener más información, póngase en contacto con el administrador del si
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
         <source>MoreInformationLink</source>
-        <target state="translated">Vínculo Más información</target>
+        <target state="translated">MoreInformationLink</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Name">

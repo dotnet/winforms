@@ -6801,6 +6801,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">항목과 하위 항목 주위에 모눈선을 표시합니다. 자세히 보기에서만 표시됩니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">기본값</target>
@@ -11255,7 +11260,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">순환 참조가 만들어졌습니다. TreeNode를 자신의 하위 항목으로 추가할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

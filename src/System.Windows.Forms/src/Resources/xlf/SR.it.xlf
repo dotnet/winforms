@@ -6801,6 +6801,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Visualizza linee della griglia attorno agli elementi e agli elementi secondari. Solo in visualizzazione Dettagli.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Predefinito</target>
@@ -8653,7 +8658,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
         <source>Scale</source>
-        <target state="translated">Scale</target>
+        <target state="translated">Scala</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryText">
@@ -11255,7 +11260,7 @@ Per ulteriori informazioni, contattare l'amministratore del sistema o l'autore d
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">È stato creato un riferimento circolare. Non è possibile aggiungere un elemento TreeNode come discendente di se stesso.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

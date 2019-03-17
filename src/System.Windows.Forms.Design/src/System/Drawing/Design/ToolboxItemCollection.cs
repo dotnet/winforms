@@ -14,34 +14,55 @@ namespace System.Drawing.Design
         /// <summary>
         /// Initializes a new instance of <see cref='System.Drawing.Design.ToolboxItemCollection'/> based on another <see cref='System.Drawing.Design.ToolboxItemCollection'/>.
         /// </summary>
-        public ToolboxItemCollection(ToolboxItemCollection value) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public ToolboxItemCollection(ToolboxItemCollection value)
+        {
+            InnerList.AddRange(value);
+        }
 
         /// <summary>
         /// Initializes a new instance of <see cref='System.Drawing.Design.ToolboxItemCollection'/> containing any array of <see cref='System.Drawing.Design.ToolboxItem'/> objects.
         /// </summary>
-        public ToolboxItemCollection(ToolboxItem[] value) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public ToolboxItemCollection(ToolboxItem[] value)
+        {
+            InnerList.AddRange(value);
+        }
 
         /// <summary>
         /// Represents the entry at the specified index of the <see cref='System.Drawing.Design.ToolboxItem'/>.
         /// </summary>
-        public ToolboxItem this[int index] => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public ToolboxItem this[int index]
+        {
+            get
+            {
+                return ((ToolboxItem)(InnerList[index]));
+            }
+        }
 
         /// <summary>
         /// Gets a value indicating whether the 
         /// <see cref='System.Drawing.Design.ToolboxItemCollection'/> contains the specified <see cref='System.Drawing.Design.ToolboxItem'/>.
         /// </summary>
-        public bool Contains(ToolboxItem value) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public bool Contains(ToolboxItem value)
+        {
+            return InnerList.Contains(value);
+        }
 
         /// <summary>
         /// Copies the <see cref='System.Drawing.Design.ToolboxItemCollection'/> values to a one-dimensional <see cref='System.Array'/> instance at the
         ///    specified index.
         /// </summary>
-        public void CopyTo(ToolboxItem[] array, int index) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public void CopyTo(ToolboxItem[] array, int index)
+        {
+            InnerList.CopyTo(array, index);
+        }
 
         /// <summary>
         /// Returns the index of a <see cref='System.Drawing.Design.ToolboxItem'/> in
         /// the <see cref='System.Drawing.Design.ToolboxItemCollection'/> .
         /// </summary>
-        public int IndexOf(ToolboxItem value) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public int IndexOf(ToolboxItem value)
+        {
+            return InnerList.IndexOf(value);
+        }
     }
 }

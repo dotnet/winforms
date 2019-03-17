@@ -6801,6 +6801,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Öğelerin ve SubItem'ların etrafında kılavuz çizgileri görüntüler. Yalnızca Ayrıntı görünümünde gösterilir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Varsayılan</target>
@@ -8643,7 +8648,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="PropertyCategoryMisc">
         <source>Misc</source>
-        <target state="translated">Çeşitli</target>
+        <target state="translated">Diğer</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
@@ -8828,7 +8833,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">
         <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">{0} nesnesi arabirim keşfini desteklemeyen bir proxy tarafından uzaktan çalıştırılıyor. Bu tür uzak nesne haline getirilmiş nesneler desteklenmez.</target>
+        <target state="translated">{0} nesnesi arabirim keşfini desteklemeyen bir ara sunucu tarafından uzaktan çalıştırılıyor. Bu tür uzak nesne haline getirilmiş nesneler desteklenmez.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
@@ -10065,7 +10070,7 @@ Daha fazla bilgi için sistem yöneticinize veya uygulama geliştiriciye başvur
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">TextBox denetiminin PlaceholderText'ini belirtir. PlaceholderText, Text özelliği null değerli veya boş olduğunda gösterilir ve kullanıcıyı denetimin beklediği girişin ne olduğuna ilişkin yönlendirmek için kullanılabilir. </target>
+        <target state="translated">TextBox denetiminin PlaceholderText özelliğini belirtir. PlaceholderText, Text özelliği null veya boş olduğunda gösterilir ve kullanıcıyı denetimin beklediği girişin ne olduğuna ilişkin yönlendirmek için kullanılabilir. </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11255,7 +11260,7 @@ Daha fazla bilgi için sistem yöneticinize veya uygulama geliştiriciye başvur
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Döngüsel başvuru yapıldı. Bir TreeNode kendi alt öğesi olarak eklenemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

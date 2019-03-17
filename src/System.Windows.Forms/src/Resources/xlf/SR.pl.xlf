@@ -6801,6 +6801,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Wyświetla linie siatki wokół elementów i podelementów. Pokazywany tylko w widoku Details.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
         <source>Default</source>
         <target state="translated">Domyślnie</target>
@@ -11255,7 +11260,7 @@ Aby uzyskać więcej informacji, skontaktuj się z administratorem systemu lub a
       </trans-unit>
       <trans-unit id="TreeNodeCircularReference">
         <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
-        <target state="new">A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</target>
+        <target state="translated">Utworzono odwołanie cykliczne. Nie można dodać elementu TreeNode jako elementu potomnego względem siebie.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">

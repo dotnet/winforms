@@ -709,12 +709,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal static bool UseVisualStyles {
+#if (WINFORMS_NAMESPACE || WINFORMS_DESIGN_NAMESPACE)
+        public static bool UseVisualStyles {
             get {
                 return useVisualStyles;
             }
         }
-
+#endif
         internal static string WindowsFormsVersion {
             get {
                 // Notice   : Don't never ever change this name, since window class of Winforms control is dependent on this.
@@ -4246,37 +4247,6 @@ namespace System.Windows.Forms {
             }
         }
 
-    }
-
-    /// <summary>
-    /// Specifies the HighDpi mode.
-    /// </summary>
-    public enum HighDpiMode
-    {
-        /// <summary>
-        /// The window does not scale for DPI changes and always assumes a scale factor of 100%.
-        /// </summary>
-        DpiUnaware,
-
-        /// <summary>
-        /// The window will query for the DPI of the primary monitor once and use this for the process on all monitors. 
-        /// </summary>
-        SystemAware,
-
-        /// <summary>
-        /// The Window checks for DPI when it's created and adjusts scale factor when the DPI changes.
-        /// </summary>
-        PerMonitor,
-
-        /// <summary>
-        /// Similar to PerMonitor, but enables Child window DPI change notification, improved scaling of comctl32 controls and dialog scaling.
-        /// </summary>
-        PerMonitorV2,
-
-        /// <summary>
-        /// Similar to DpiUnaware, but improves the quality of GDI/GDI+ based content.
-        /// </summary>
-        DpiUnawareGdiScaled
     }
 }
 
