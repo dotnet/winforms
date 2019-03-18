@@ -3,14 +3,6 @@
 [![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
 
-### Code Coverage
-
-|             	| Production 	                                                                                                    | Test Source 	                                                                                                | Combined 	                                                                                            |
-|-------------	|-----------------------------------------------------------------------------------------------------------------	|-------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------  |
-| Master      	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)][coverage]       | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test)][coverage]         | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?)][coverage]          |
-| Release/3.0 	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?flag=production)][coverage] | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?flag=test)][coverage]   | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?)][coverage]    |
-
-
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
 
 Windows Forms also provides one of the most productive ways to create desktop applications based on the visual designer provided in Visual Studio. It enables drag-and-drop of visual controls and other similar functionality that make it easy to build desktop applications.
@@ -47,6 +39,14 @@ The first two tasks are well underway. Most of the source has been published to 
 We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be an incremental process. We welcome test contributions to increase coverage and help us validate PRs more easily.
 
 The Visual Studio WinForms designer is not yet available and will be part of a Visual Studio 2019 update. In short, we need to move to an out-of-proc model (relative to Visual Studio) for the designer.
+
+### Code Coverage
+
+|             	| Production 	                                                                                                    | Test Source 	                                                                                                | Combined 	                                                                                            |
+|-------------	|-----------------------------------------------------------------------------------------------------------------	|-------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------  |
+| Master      	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)][coverage]       | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test)][coverage]         | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?)][coverage]          |
+| Release/3.0 	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?flag=production)][coverage] | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?flag=test)][coverage]   | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?)][coverage]    |
+
 
 ## How to Engage, Contribute, and Provide Feedback
 
