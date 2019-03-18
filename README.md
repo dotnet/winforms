@@ -42,10 +42,10 @@ The Visual Studio WinForms designer is not yet available and will be part of a V
 
 ### Build Status
 
-|             	| Public CI 	                                            | Internal CI 	| Composition CI 	| Core SDK CI 	|
-|-------------	|-------------------------------------------------------	|-------------	|----------------	|-------------	|
-| Master      	| [![Build Status][master-public-build]][public-build]      |             	|                	|             	|
-| Release/3.0 	| [![Build Status][release3-public-build]][public-build]   	|             	|                	|             	|
+|               | Public CI                                                 | Internal CI                                                   | Composition CI                                        | Core SDK CI |
+|-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |------------  |
+| Master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      |             	|
+| Release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    |             	|
 
 
 
@@ -107,7 +107,17 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [dotnet-home]: https://github.com/Microsoft/dotnet
 
 [master-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=master
-[release3-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=release/3.0
+[release3-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=release%2f3.0
 [public-build]: https://dnceng.visualstudio.com/public/_build?definitionId=267
 
+[master-internal-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/164?branchName=master
+[release3-internal-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/164?branchName=release%2f3.0
+[internal-build]: https://dnceng.visualstudio.com/internal/_build?definitionId=164
 
+[master-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=master
+[release3-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=release%2f3.0
+[comp-build]: https://devdiv.visualstudio.com/DevDiv/_build?definitionId=9756
+
+[master-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=master
+[release3-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=release%2f3.0
+[comp-build]: https://devdiv.visualstudio.com/DevDiv/_build?definitionId=9756
