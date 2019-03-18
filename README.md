@@ -1,8 +1,15 @@
 # Windows Forms
 
 [![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master)
-[![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)](https://codecov.io/gh/dotnet/winforms)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
+
+### Code Coverage
+
+|             	| Production 	                                                                                                    | Test Source 	                                                                                                | Combined 	                                                                                            |
+|-------------	|-----------------------------------------------------------------------------------------------------------------	|-------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------  |
+| Master      	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)][coverage]       | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test)][coverage]         | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?)][coverage]          |
+| Release/3.0 	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?flag=production)][coverage] | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?flag=test)][coverage]   | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%23.0/graph/badge.svg?)][coverage]    |
+
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
 
@@ -83,6 +90,7 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [porting-guidelines]: Documentation/porting-guidelines.md
 [developing]: Documentation/developer-guide.md
 
+[coverage]: https://codecov.io/gh/dotnet/winforms
 [wpf]: https://github.com/dotnet/wpf
 [.net-core-3.0-sdk-preview]: https://dotnet.microsoft.com/download/dotnet-core/3.0
 [corefx-contributing]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
