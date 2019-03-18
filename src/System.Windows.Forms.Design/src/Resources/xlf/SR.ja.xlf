@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="ja" original="../SR.resx">
     <body>
+      <trans-unit id="ComponentDesignerAddEvent">
+        <source>Adding event '{0}'</source>
+        <target state="new">Adding event '{0}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
         <target state="new">Unhandled VT: {0}.</target>
@@ -115,6 +120,11 @@
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
         <target state="translated">この IDataObject は SetData をサポートしていません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InheritanceServiceReadOnlyCollection">
+        <source>Read-Only</source>
+        <target state="new">Read-Only</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
