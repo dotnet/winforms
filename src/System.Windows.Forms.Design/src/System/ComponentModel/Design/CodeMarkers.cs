@@ -31,7 +31,7 @@ namespace System.ComponentModel.Design
             [DllImport(ProductDllName, EntryPoint = "PerfCodeMarker")]
             public static extern void ProductDllPerfCodeMarkerString(int nTimerID, [MarshalAs(UnmanagedType.LPWStr, SizeParamIndex = 2)] string aUserParams, int cbParams);
 
-            ///// global native method imports
+            /// global native method imports
             [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
             public static extern ushort FindAtom([MarshalAs(UnmanagedType.LPWStr)] string lpString);
 
