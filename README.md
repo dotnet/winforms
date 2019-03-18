@@ -1,6 +1,5 @@
 # Windows Forms
 
-[![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master)
 [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)](https://codecov.io/gh/dotnet/winforms)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
 
@@ -40,6 +39,17 @@ The first two tasks are well underway. Most of the source has been published to 
 We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be an incremental process. We welcome test contributions to increase coverage and help us validate PRs more easily.
 
 The Visual Studio WinForms designer is not yet available and will be part of a Visual Studio 2019 update. In short, we need to move to an out-of-proc model (relative to Visual Studio) for the designer.
+
+### Build Status
+
+|             	| Public CI 	                                            | Internal CI 	| Composition CI 	| Core SDK CI 	|
+|-------------	|-------------------------------------------------------	|-------------	|----------------	|-------------	|
+| Master      	| [![Build Status][master-public-build]][public-build]      |             	|                	|             	|
+| Release/3.0 	| [![Build Status][release3-public-build]][public-build]   	|             	|                	|             	|
+
+
+
+
 
 ## How to Engage, Contribute, and Provide Feedback
 
@@ -95,3 +105,9 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [dotnet-code-of-conduct]: https://dotnetfoundation.org/code-of-conduct
 [.net-foundation]: https://www.dotnetfoundation.org/projects
 [dotnet-home]: https://github.com/Microsoft/dotnet
+
+[master-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=master
+[release3-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=release/3.0
+[public-build]: https://dnceng.visualstudio.com/public/_build?definitionId=267
+
+
