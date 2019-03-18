@@ -6,18 +6,27 @@
     <PreReleaseVersionLabel>preview4</PreReleaseVersionLabel>
     <!-- Use the compiler in the CLI instead of in the sdk, since the sdk one doesn't work with netcoreapp3.0 yet -->
     <UsingToolMicrosoftNetCompilers>false</UsingToolMicrosoftNetCompilers>
+    <!-- Additional sources required for restore of PackageReferences -->
+    <RestoreSources>
+      $(RestoreSources);
+      https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json
+    </RestoreSources>
   </PropertyGroup>
   <!-- Corefx-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview4.19163.10</MicrosoftWin32RegistryPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview4.19163.10</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview4.19163.10</SystemDrawingCommonPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview4.19163.10</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview4.19163.10</SystemSecurityCryptographyCngPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview4.19163.10</SystemCodeDomPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19163.10</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19163.10</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19163.10</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview4.19164.7</MicrosoftWin32RegistryPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview4.19164.7</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview4.19164.7</SystemDrawingCommonPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview4.19164.7</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview4.19164.7</SystemSecurityCryptographyCngPackageVersion>
+    <SystemCodeDomPackageVersion>4.6.0-preview4.19164.7</SystemCodeDomPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19164.7</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19164.7</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19164.7</MicrosoftNETCorePlatformsPackageVersion>
+  </PropertyGroup>
+  <!-- CoreCLR-updated dependencies -->
+  <PropertyGroup>
+    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27515-71</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
@@ -41,7 +50,6 @@
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
-    <AccessibilityPackageVersion>4.6.0-alpha-27122-5</AccessibilityPackageVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
   </PropertyGroup>

@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.IL">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <!-- Package this as both a reference and implementation -->
+    <PackageAsRefAndLib>true</PackageAsRefAndLib>
+    <!-- ILAsm doesn't produce a PDB - https://github.com/dotnet/coreclr/issues/15299 -->
+    <IncludePdbInPackage>false</IncludePdbInPackage>
+    <PublishWindowsPdb>false</PublishWindowsPdb>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <!-- Reference the version project in order to disassemble its version information to link to this assembly -->
+    <ProjectReference Include="..\ver\Accessibility-version.csproj"
+                      ReferenceOutputAssembly="false"
+                      OutputItemType="ILResourceReference" />
+  </ItemGroup>
+</Project>
