@@ -1,6 +1,5 @@
 # Windows Forms
 
-[![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)](https://codecov.io/gh/dotnet/winforms)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
@@ -22,6 +21,17 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 * [Contributing guide][contributing]
 * [Porting guide][porting-guidelines]
 
+## Build Status
+
+|               | Public CI                                                 | Internal CI                                                   | Composition CI                                        | Core SDK CI                                                   |
+|-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |-------------------------------------------------------------  |
+| Master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      | [![Build Status][master-core-sdk-build]][core-sdk-build]      |
+| Release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    | [![Build Status][release3-core-sdk-build]][core-sdk-build]    |
+
+### Code Coverage
+
+[![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)](https://codecov.io/gh/dotnet/winforms)
+
 ## Status
 
 We are in the process of doing four projects with Windows Forms:
@@ -39,17 +49,6 @@ The first two tasks are well underway. Most of the source has been published to 
 We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be an incremental process. We welcome test contributions to increase coverage and help us validate PRs more easily.
 
 The Visual Studio WinForms designer is not yet available and will be part of a Visual Studio 2019 update. In short, we need to move to an out-of-proc model (relative to Visual Studio) for the designer.
-
-### Build Status
-
-|               | Public CI                                                 | Internal CI                                                   | Composition CI                                        | Core SDK CI |
-|-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |------------  |
-| Master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      |             	|
-| Release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    |             	|
-
-
-
-
 
 ## How to Engage, Contribute, and Provide Feedback
 
@@ -118,6 +117,6 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [release3-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=release%2f3.0
 [comp-build]: https://devdiv.visualstudio.com/DevDiv/_build?definitionId=9756
 
-[master-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=master
-[release3-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=release%2f3.0
-[comp-build]: https://devdiv.visualstudio.com/DevDiv/_build?definitionId=9756
+[master-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
+[release3-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286?branchName=release%2f3.0.1xx
+[core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
