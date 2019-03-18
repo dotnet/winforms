@@ -23,7 +23,7 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 
 ## Build Status & Dependency Flow
 
-|               | Public CI :arrow_right:                                                | Internal CI                                                   | Composition CI                                        | Core SDK CI                                                   |
+|               | Public CI                                   :arrow_right: | Internal CI                                     :arrow_right: | Composition CI                          :arrow_right: | Core SDK CI                                                   |
 |-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |-------------------------------------------------------------  |
 | Master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      | [![Build Status][master-core-sdk-build]][core-sdk-build]      |
 | Release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    | [![Build Status][release3-core-sdk-build]][core-sdk-build]    |
