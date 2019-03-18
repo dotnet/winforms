@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class InheritanceService : IInheritanceService, IDisposable
     {
-        private static TraceSwitch s_inheritanceServiceSwitch = new TraceSwitch("InheritanceService", "InheritanceService : Debug inheritance scan.");
+        private static readonly TraceSwitch s_inheritanceServiceSwitch = new TraceSwitch("InheritanceService", "InheritanceService : Debug inheritance scan.");
         private Hashtable _inheritedComponents;
         // While we're adding an inherited component, we must be wary of components that the inherited component adds as a result of being sited.  These are treated as inherited as well.  To track these, we keep track of the component we're currently adding as well as it's inheritance attribute. During the add, we sync IComponentAdding events and push in the component
         private IComponent _addingComponent;
@@ -76,11 +76,10 @@ namespace System.ComponentModel.Design
             if (site != null)
             {
                 ncs = (INameCreationService)site.GetService(typeof(INameCreationService));
-
                 cs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
                 if (cs != null)
                 {
-                    cs.ComponentAdding += new ComponentEventHandler(this.OnComponentAdding);
+                    cs.ComponentAdding += new ComponentEventHandler(OnComponentAdding);
                 }
             }
 
@@ -91,7 +90,6 @@ namespace System.ComponentModel.Design
                     Type reflect = TypeDescriptor.GetReflectionType(type);
                     FieldInfo[] fields = reflect.GetFields(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic);
                     Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...found " + fields.Length.ToString(CultureInfo.InvariantCulture) + " fields.");
-
                     for (int i = 0; i < fields.Length; i++)
                     {
                         FieldInfo field = fields[i];
@@ -109,7 +107,7 @@ namespace System.ComponentModel.Design
                         Debug.Assert(!field.IsStatic, "Instance binding shouldn't have found this field");
 
                         // If the value of the field is null, then don't mess with it.  If it wasn't assigned when our base class was created then we can't really use it.
-                        Object value = field.GetValue(component);
+                        object value = field.GetValue(component);
                         if (value == null)
                         {
                             Debug.WriteLineIf(s_inheritanceServiceSwitch.TraceVerbose, "...skipping " + name + ": Contains NULL");
@@ -225,7 +223,7 @@ namespace System.ComponentModel.Design
             {
                 if (cs != null)
                 {
-                    cs.ComponentAdding -= new ComponentEventHandler(this.OnComponentAdding);
+                    cs.ComponentAdding -= new ComponentEventHandler(OnComponentAdding);
                 }
 
                 Debug.Unindent();

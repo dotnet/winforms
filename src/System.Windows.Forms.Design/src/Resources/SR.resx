@@ -243,4 +243,61 @@
   <data name="UndoEngineMissingService" xml:space="preserve">
     <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
   </data>
+  <data name="DesignerHostCantDestroyInheritedComponent" xml:space="preserve">
+    <value>Cannot remove or destroy inherited component '{0}'.</value>
+  </data>
+  <data name="DesignerHostCyclicAdd" xml:space="preserve">
+    <value>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</value>
+  </data>
+  <data name="DesignerHostDesignerNeedsComponent" xml:space="preserve">
+    <value>Failure initializing the designer.  It has no Component member.</value>
+  </data>
+  <data name="DesignerHostDestroyComponentTransaction" xml:space="preserve">
+    <value>Deleting '{0}'.</value>
+  </data>
+  <data name="DesignerHostDuplicateName" xml:space="preserve">
+    <value>The name {0} is already in use by another component.</value>
+  </data>
+  <data name="DesignerHostFailedComponentCreate" xml:space="preserve">
+    <value>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</value>
+  </data>
+  <data name="DesignerHostGenericTransactionName" xml:space="preserve">
+    <value>No Description Available</value>
+  </data>
+  <data name="DesignerHostLoaderSpecified" xml:space="preserve">
+    <value>A designer loader has already been configured for this design surface.</value>
+  </data>
+  <data name="DesignerHostNestedTransaction" xml:space="preserve">
+    <value>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</value>
+  </data>
+  <data name="DesignerHostNoBaseClass" xml:space="preserve">
+    <value>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</value>
+  </data>
+  <data name="DesignerHostNoTopLevelDesigner" xml:space="preserve">
+    <value>There is no designer for the class {0}.</value>
+  </data>
+  <data name="DesignerHostUnloading" xml:space="preserve">
+    <value>New components cannot be added while a designer is unloading.</value>
+  </data>
+  <data name="DesignSurfaceContainerDispose" xml:space="preserve">
+    <value>The container cannot be disposed at design time.</value>
+  </data>
+  <data name="DesignSurfaceDesignerNotLoaded" xml:space="preserve">
+    <value>Cannot create a view for this design surface because the designer is not loaded.</value>
+  </data>
+  <data name="DesignSurfaceFatalError" xml:space="preserve">
+    <value>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</value>
+  </data>
+  <data name="DesignSurfaceNoRootComponent" xml:space="preserve">
+    <value>The designer loader did not provide a root component but has not indicated why.</value>
+  </data>
+  <data name="DesignSurfaceNoSupportedTechnology" xml:space="preserve">
+    <value>The designer loaded, but it does not offer a view compatible with this design surface.</value>
+  </data>
+  <data name="DesignSurfaceServiceIsFixed" xml:space="preserve">
+    <value>The service {0} cannot be removed from the service container.</value>
+  </data>
+  <data name="ExtenderProviderServiceDuplicateProvider" xml:space="preserve">
+    <value>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</value>
+  </data>
 </root>
