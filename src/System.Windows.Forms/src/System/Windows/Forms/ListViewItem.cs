@@ -147,17 +147,26 @@ namespace System.Windows.Forms {
             this.BackColor = backColor;
             this.Font = font;
         }
-        
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem7"]/*' />
-        public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this() {
+
+        public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
+        {
+            if (subItems == null)
+            {
+                throw new ArgumentNullException(nameof(subItems));
+            }
 
             this.ImageIndexer.Index = imageIndex;
             this.subItems = subItems;
             this.SubItemCount = this.subItems.Length;
             
             // Update the owner of these subitems
-            //
-            for(int i=0; i < subItems.Length; ++i) {
+            for (int i = 0; i < subItems.Length; i++)
+            {
+                if (subItems[i] == null)
+                {
+                    throw new ArgumentNullException(nameof(subItems));
+                }
+
                 subItems[i].owner = this;
             }
         }
@@ -224,16 +233,25 @@ namespace System.Windows.Forms {
             this.Font = font;
         }
         
-        /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewItem18"]/*' />
-        public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this() {
+        public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this()
+        {
+            if (subItems == null)
+            {
+                throw new ArgumentNullException(nameof(subItems));
+            }
 
             this.ImageIndexer.Key = imageKey;
             this.subItems = subItems;
             this.SubItemCount = this.subItems.Length;
             
             // Update the owner of these subitems
-            //
-            for(int i=0; i < subItems.Length; ++i) {
+            for (int i = 0; i < subItems.Length; i++)
+            {
+                if (subItems[i] == null)
+                {
+                    throw new ArgumentNullException(nameof(subItems));
+                }
+
                 subItems[i].owner = this;
             }
         }
@@ -1578,8 +1596,9 @@ namespace System.Windows.Forms {
         
 
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.ListViewSubItemCollection"]/*' />
-            public ListViewSubItemCollection(ListViewItem owner) {
-                this.owner = owner;
+            public ListViewSubItemCollection(ListViewItem owner)
+            {
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Count"]/*' />
@@ -1637,7 +1656,13 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (index < 0 || index >= Count)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    }
+                    if (value == null)
+                    {
+                        throw new ArgumentNullException(nameof(value));
+                    }
 
                     owner.subItems[index] = value;
                     owner.UpdateSubItems(index);                    
@@ -1682,8 +1707,13 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Add"]/*' />
-            public ListViewSubItem Add(ListViewSubItem item) {
+            public ListViewSubItem Add(ListViewSubItem item)
+            {
+                if (item == null)
+                {
+                    throw new ArgumentNullException(nameof(item));
+                }
+
                 EnsureSubItemSpace(1, -1);
                 item.owner = this.owner;
                 owner.subItems[owner.SubItemCount] = item;
@@ -1760,7 +1790,7 @@ namespace System.Windows.Forms {
                     return IndexOf(Add((ListViewSubItem)item));
                 }
                 else {
-                    throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument);
+                    throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument, nameof(item));
                 }
             }
             
@@ -1813,7 +1843,7 @@ namespace System.Windows.Forms {
                     throw new InvalidOperationException(SR.ErrorCollectionFull);
                 }
                 
-                if (owner.SubItemCount + size > owner.subItems.Length) {
+                if (owner.subItems == null || owner.SubItemCount + size > owner.subItems.Length) {
                 
                     // must grow array.  Don't do it just by size, though;
                     // chunk it for efficiency.
@@ -1916,10 +1946,15 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem.ListViewSubItemCollection.Insert"]/*' />
-            public void Insert(int index, ListViewSubItem item) {
-            
-                if (index < 0 || index > Count) {
+            public void Insert(int index, ListViewSubItem item)
+            {
+                if (index < 0 || index > Count)
+                {
                     throw new ArgumentOutOfRangeException(nameof(index));
+                }
+                if (item == null)
+                {
+                    throw new ArgumentNullException(nameof(item));
                 }
                 
                 item.owner = owner;
@@ -1927,7 +1962,6 @@ namespace System.Windows.Forms {
                 EnsureSubItemSpace(1, index);
             
                 // Insert new item
-                //
                 owner.subItems[index] = item;
                 owner.SubItemCount++;
                 owner.UpdateSubItems(-1);

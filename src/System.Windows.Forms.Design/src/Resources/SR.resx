@@ -180,6 +180,12 @@
   <data name="DragDropSetDataError" xml:space="preserve">
     <value>This IDataObject doesn't support SetData.</value>
   </data>
+  <data name="ComponentDesignerAddEvent" xml:space="preserve">
+    <value>Adding event '{0}'</value>
+  </data>
+  <data name="InheritanceServiceReadOnlyCollection" xml:space="preserve">
+    <value>Read-Only</value>
+  </data>
   <data name="CannotConvertDoubleToDate" xml:space="preserve">
     <value>Double cannot be converted to a date.</value>
   </data>
