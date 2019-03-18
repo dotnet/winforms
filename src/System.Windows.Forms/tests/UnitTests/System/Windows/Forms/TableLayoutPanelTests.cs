@@ -265,11 +265,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, panel.GetColumnSpan(control));
         }
 
-        [Fact]
-        public void TableLayoutPanel_SetColumnSpan_NullControl_ThrowsNullReferenceException()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void TableLayoutPanel_SetColumnSpan_NullControl_ThrowsArgumentNullException(int value)
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<NullReferenceException>(() => panel.SetColumnSpan(null, 1));
+            Assert.Throws<ArgumentNullException>("control", () => panel.SetColumnSpan(null, value));
         }
 
         [Theory]
@@ -290,10 +292,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutPanel_GetRowSpan_NullControl_ThrowsNullReferenceException()
+        public void TableLayoutPanel_GetRowSpan_NullControl_ThrowsArgumentNullException()
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<NullReferenceException>(() => panel.GetRowSpan(null));
+            Assert.Throws<ArgumentNullException>("control", () => panel.GetRowSpan(null));
         }
 
         [Theory]
@@ -501,11 +503,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, panel.GetColumn(control));
         }
 
-        [Fact]
-        public void TableLayoutPanel_SetColumn_NullControl_ThrowsNullReferenceException()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void TableLayoutPanel_SetColumn_NullControl_ThrowsArgumentNullException(int value)
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<NullReferenceException>(() => panel.SetColumn(null, 1));
+            Assert.Throws<ArgumentNullException>("control", () => panel.SetColumn(null, value));
         }
 
         [Fact]

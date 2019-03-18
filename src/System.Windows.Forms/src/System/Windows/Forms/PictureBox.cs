@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -278,8 +278,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxErrorImageDescr))
         ]
         public Image ErrorImage {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultErrorImage] approach used
                 // here to avoid statically loading the default bitmaps from resources at
@@ -375,7 +375,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxImageDescr))
         ]
         public Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
+            
             get {
                 return image;
             }
@@ -479,8 +479,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxInitialImageDescr))
         ]
         public Image InitialImage {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 // Strange pictureBoxState[PICTUREBOXSTATE_useDefaultInitialImage] approach
                 // used here to avoid statically loading the default bitmaps from resources at

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -53,13 +53,13 @@ namespace System.Experimental.Gdi
         ///     Parameterless constructor to use default color.
         ///     Notice that the actual object construction is done in the derived classes.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
+        
         public WindowsBrush(DeviceContext dc)
         {
             this.dc = dc;
         }
 
-        [ResourceExposure(ResourceScope.Process)]
+        
         public WindowsBrush(DeviceContext dc, Color color)
         {
             this.dc = dc;
@@ -137,8 +137,8 @@ namespace System.Experimental.Gdi
         ///     Derived classes implement this method to get a native GDI brush wrapper with the same
         ///     properties as this object.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsBrush FromBrush(DeviceContext dc, Brush originalBrush)
         {
             if(originalBrush is SolidBrush) {
@@ -157,8 +157,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates a WindowsBrush from the DC currently selected HBRUSH
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsBrush FromDC(DeviceContext dc)
         {
             IntPtr hBrush = IntUnsafeNativeMethods.GetCurrentObject(new HandleRef(null, dc.Hdc), IntNativeMethods.OBJ_BRUSH);
@@ -173,8 +173,8 @@ namespace System.Experimental.Gdi
         /// <devdoc>
         ///     Creates a WindowsBrush from a LOGBRUSH.
         /// </devdoc>
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
+        
+        
         public static WindowsBrush FromLogBrush( DeviceContext dc, IntNativeMethods.LOGBRUSH logBrush )
         {
             Debug.Assert( logBrush != null, "logBrush is null" );

@@ -1,13 +1,13 @@
 # Contributing Guide
 
-The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parity with .NET Framework. Priority will be given to changes that align with that goal. See the [roadmap](roadmap.md) to understand project goals.
+The primary focus of .NET Core 3.0 release for Windows Forms is to achieve parity with .NET Framework. Priority will be given to changes that align with that goal. See the [roadmap](../roadmap.md) to understand project goals.
 
 We need the most help with the following types of changes:
 
 * Test fixes, test improvements, and new tests increasing code coverage.
 * Bug fixes that specifically target parity between .NET Core and .NET Framework.
 
-Please [file an issue][issues] for any larger change you would like to propose.
+Please [file an issue][issues] for any larger change you would like to propose. Please choose the template most appropriate for the issue type.
 
 See [Developer Guide](developer-guide.md) to learn how to develop changes for this repository.
 

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -173,10 +173,6 @@ namespace System.Windows.Forms {
 
         internal ListView ListViewInternal
         {
-            get
-            {
-                return listView;
-            }
             set
             {
                 if (listView != value)
@@ -362,6 +358,11 @@ namespace System.Windows.Forms {
             }
             set
             {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 if (this.List.Contains(value)) {
                     return;
                 }
@@ -386,6 +387,11 @@ namespace System.Windows.Forms {
                 return null;
             }
             set {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
                 int index = -1;
 
                 if (this.list == null) {
@@ -423,6 +429,11 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add"]/*' />
         public int Add(ListViewGroup group)
         {
+            if (group == null)
+            {
+                throw new ArgumentNullException(nameof(group));
+            }
+
             if (this.Contains(group)) {
                 return -1;
             }
@@ -457,12 +468,17 @@ namespace System.Windows.Forms {
             if (value is ListViewGroup) {
                 return Add((ListViewGroup)value);
             }
-            throw new ArgumentException(nameof(value));
+            throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
         }
                 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange"]/*' />
         public void AddRange(ListViewGroup[] groups)
         {
+            if (groups == null)
+            {
+                throw new ArgumentNullException(nameof(groups));
+            }
+
             for(int i=0; i < groups.Length; i++) {
                 Add(groups[i]);
             }
@@ -471,6 +487,11 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange2"]/*' />
         public void AddRange(ListViewGroupCollection groups)
         {
+            if (groups == null)
+            {
+                throw new ArgumentNullException(nameof(groups));
+            }
+
             for(int i=0; i < groups.Count; i++) {
                 Add(groups[i]);
             }
@@ -546,6 +567,11 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Insert"]/*' />
         public void Insert(int index, ListViewGroup group) {
+            if (group == null)
+            {
+                throw new ArgumentNullException(nameof(group));
+            }
+
             if (Contains(group)) {
                 return;
             }

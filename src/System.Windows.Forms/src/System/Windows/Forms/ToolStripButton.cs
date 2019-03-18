@@ -281,6 +281,17 @@ namespace System.Windows.Forms {
                 this.ownerItem = ownerItem;
             }
 
+            internal override object GetPropertyValue(int propertyID) {
+                if (AccessibilityImprovements.Level3) {
+                    switch (propertyID) {
+                        case NativeMethods.UIA_ControlTypePropertyId:
+                            return NativeMethods.UIA_ButtonControlTypeId;
+                    }
+                }
+
+                return base.GetPropertyValue(propertyID);
+            }
+
             public override AccessibleRole Role {
                 get {
                     if (ownerItem.CheckOnClick && AccessibilityImprovements.Level1) {

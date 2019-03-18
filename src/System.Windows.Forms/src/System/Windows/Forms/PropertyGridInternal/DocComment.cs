@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -192,6 +192,28 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return 1 + lines*lineHeight;
         }
 
+        /// <summary>
+        /// Constructs the new instance of the accessibility object for this control.
+        /// </summary>
+        /// <returns>The accessibility object for this control.</returns>
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            if (AccessibilityImprovements.Level3) {
+                return new DocCommentAccessibleObject(this, ownerGrid);
+            }
+
+            return base.CreateAccessibilityInstance();
+        }
+
+        /// <summary>
+        /// Indicates whether or not the control supports UIA Providers via
+        /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
+        /// </summary>
+        internal override bool SupportsUiaProviders {
+            get {
+                return AccessibilityImprovements.Level3;
+            }
+        }
+
         internal void UpdateTextRenderingEngine() {
             m_labelTitle.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;
             m_labelDesc.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;
@@ -215,6 +237,56 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 needUpdateUIWithFont = false;
                 PerformLayout();
             }
+        }
+    }
+
+    /// <summary>
+    /// Represents the DocComment control accessible object.
+    /// </summary>
+    [System.Runtime.InteropServices.ComVisible(true)]
+    internal class DocCommentAccessibleObject : Control.ControlAccessibleObject {
+
+        private PropertyGrid _parentPropertyGrid;
+
+        /// <summary>
+        /// Initializes new instance of DocCommentAccessibleObject.
+        /// </summary>
+        /// <param name="owningDocComment">The owning DocComment control.</param>
+        /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
+        public DocCommentAccessibleObject(DocComment owningDocComment, PropertyGrid parentPropertyGrid) : base(owningDocComment) {
+            _parentPropertyGrid = parentPropertyGrid;
+        }
+
+        /// <summary>
+        /// Request to return the element in the specified direction.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction.</returns>
+        internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+            var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
+            if (propertyGridAccessibleObject != null) {
+                var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                if (navigationTarget != null) {
+                    return navigationTarget;
+                }
+            }
+
+            return base.FragmentNavigate(direction);
+        }
+
+        /// <summary>
+        /// Request value of specified property from an element.
+        /// </summary>
+        /// <param name="propertyId">Identifier indicating the property to return</param>
+        /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+        internal override object GetPropertyValue(int propertyID) {
+            if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                return NativeMethods.UIA_PaneControlTypeId;
+            } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                return Name;
+            }
+
+            return base.GetPropertyValue(propertyID);
         }
     }
 }

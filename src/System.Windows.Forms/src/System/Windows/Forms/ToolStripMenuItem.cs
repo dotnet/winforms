@@ -267,8 +267,8 @@ namespace System.Windows.Forms {
         /// Fishes out the appropriate one based on CheckState.
         /// </devdoc>
         internal Image CheckedImage {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 CheckState checkedState = CheckState;
 
@@ -758,8 +758,7 @@ namespace System.Windows.Forms {
             return text;
         }
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine | ResourceScope.Process, ResourceScope.Machine | ResourceScope.Process)]
+        
         private Image GetNativeMenuItemImage(){
 
             if (nativeMenuCommandID == -1 || nativeMenuHandle == IntPtr.Zero) {

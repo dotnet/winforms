@@ -355,8 +355,8 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static Font MenuFont {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
+            
+            
             get {
                 return GetMenuFontHelper(0, false);
             }

@@ -1,43 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 
+Dependencies registred here by Name and Uri will be updated by Maestro via darc update-dependencies 
+  They will be updated either in eng/Versions.props (most) or in global.json (for example: Microsoft.DotNet.Arcade.Sdk) 
+Note: if the Uri is a new place, you will need to add a subscription from that place to us in the appropriate channel 
+  And you can check these with "darc get-dependencies <dash dash>target-repo "winforms" 
+-->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-preview.19080.5">
+    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-preview.19080.5">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="System.Drawing.Common" Version="4.6.0-preview.19080.5">
+    <Dependency Name="System.Drawing.Common" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-preview.19080.5">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-preview.19080.5">
+    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="4.6.0-preview.19080.5">
+    <Dependency Name="System.CodeDom" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview.19080.5">
+    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview.19080.5">
+    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview4.19163.10">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>9e074e4a3f3626fa953f36ab79e3cd3e6db1c9de</Sha>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
-    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19103.1">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-preview4.19163.10">
+      <Uri>https://github.com/dotnet/corefx</Uri>
+      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19162.7">
       <Uri>https://github.com/dotnet/arcade</Uri>
-      <Sha>58be4cadf2cabd4b3b3186576557835a1987a711</Sha>
+      <Sha>443dea11f8649fe12fedf60cfab0a4b2b20bd153</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.DotNet.GenFacades" Version="1.0.0-beta.19162.7">
+      <Uri>https://github.com/dotnet/arcade</Uri>
+      <Sha>443dea11f8649fe12fedf60cfab0a4b2b20bd153</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.DotNet.XUnitExtensions" Version="2.4.0-beta.19162.7">
+      <Uri>https://github.com/dotnet/arcade</Uri>
+      <Sha>443dea11f8649fe12fedf60cfab0a4b2b20bd153</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.DotNet.Helix.Sdk" Version="2.0.0-beta.19162.7">
+      <Uri>https://github.com/dotnet/arcade</Uri>
+      <Sha>443dea11f8649fe12fedf60cfab0a4b2b20bd153</Sha>
     </Dependency>
   </ToolsetDependencies>
 </Dependencies>

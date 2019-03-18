@@ -1,10 +1,9 @@
 parameters:
-
-  # Needed because agent pool can't be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp-vs2019
-
-  # Needed because runAsPublic is used in template expressions, which can't read from user-defined variables
-  runAsPublic: true
+  # This section is required because agent pool can't 
+  # be read from a user-defined variable (Azure DevOps limitation)
+  agentPool: dotnet-external-temp-vs2019 
+  runAsPublic: true                      
+  repoName: dotnet/winforms              
 
 jobs:
 - template: /eng/common/templates/jobs/jobs.yml
@@ -15,7 +14,7 @@ jobs:
     enablePublishTestResults: true
     enablePublishBuildAssets: true
     enableTelemetry: true
-    helixRepo: dotnet/winforms
+    helixRepo: $(repoName)
 
     jobs:
     - job: Windows_NT
@@ -44,7 +43,7 @@ jobs:
           value: ''
 
         # needed for helix jobs
-        - name: _HelixAgentPool
+        - name: _UnitTestHelixAgentPool
           value: 'Windows.10.Amd64.Open'
         - name: _WinformsControlsTestBinDir
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
@@ -52,11 +51,19 @@ jobs:
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
         - name: _HelixStagingDir
           value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+        - name: _HelixSource
+          value: ${{ parameters.repoName }}/$(Build.SourceBranch)
+        - name: _HelixToken
+          value: ''
+        - name: _HelixCreator
+          value: ${{ parameters.repoName }}
 
-        # Override some values if we're building internally
+
+        # Override some values if we're building internally (not public)
         - ${{ if eq(parameters.runAsPublic, 'false') }}:
 
-          # note: You have to use list syntax here (-name: value) or you will get errors about declaring the same variable multiple times
+          # note: You have to use list syntax here (-name: value) or 
+          # you will get errors about declaring the same variable multiple times
           - name: _PublishType
             value: blob
           - name: _SignType
@@ -65,12 +72,14 @@ jobs:
             value: true
           - group: DotNet-Blob-Feed
           - group: DotNet-Symbol-Server-Pats
+          # DotNet-HelixApi-Access provides: HelixApiAccessToken
+          - group: DotNet-HelixApi-Access
           - name: _PublishBlobFeedUrl
             value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
 
-          # note: Even though they are referenced here, user defined variables (like $(_SignType)) are not resolved 
-          # until the agent is running on the machine. They can be overridden any time before they are resolved,
-          # like in the job matrix below (see Build_Debug)
+          # note: Even though they are referenced here, user defined variables (like $(_SignType)) 
+          # are not resolved until the agent is running on the machine. They can be overridden any 
+          # time before they are resolved, like in the job matrix below (see Build_Debug)
           - name: _SignArgs
             value: /p:DotNetSignType=$(_SignType) /p:TeamName=$(_TeamName) /p:Sign=$(_Sign)
           - name: _PublishArgs
@@ -82,8 +91,15 @@ jobs:
           - name: _OfficialBuildIdArgs
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
-          - name: _HelixAgentPool
+          # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
+          - name: _UnitTestHelixAgentPool
             value: 'Windows.10.Amd64'
+          - name: _HelixSource
+            value: official/${{ parameters.repoName }}/$(Build.SourceBranch)
+          - name: _HelixToken
+            value: '$(HelixApiAccessToken)' # from DotNet-HelixApi-Access group
+          - name: _HelixCreator
+            value: '' #if _HelixToken is set, Creator must be empty
 
       strategy:
         matrix:
@@ -93,47 +109,86 @@ jobs:
             _PublishType: none
             _SignType: test
             _DotNetPublishToBlobFeed : false
+            _Coverage: true
           Build_Release:
             _BuildConfig: Release
+            _Coverage: false
 
       steps:
       - checkout: self
         clean: true
 
-      # Restore and build
+      # Set VSO Variable(s)
+      - powershell: eng\pre-build.ps1
+        displayName: Pre-Build - Set VSO Variables
+
+      # Build and rename binlog
+      # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with
+      #       coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
+      #       https://github.com/tonerdo/coverlet/issues/363.
       - script: eng\cibuild.cmd
           -prepareMachine
           -configuration $(_BuildConfig)
-          -bl Build
           $(_OfficialBuildIdArgs)
           -build
+          /p:Coverage=$(_Coverage)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
 
-      # Run unit tests
+    # Run Unit Tests
+        # this should no longer be necessary once Helix is ready to report back code coverage
+        # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
       - script: eng\cibuild.cmd
+          -prepareMachine
           -configuration $(_BuildConfig)
-          -bl Test
           $(_OfficialBuildIdArgs)
           -test
-        displayName: Run Unit Tests
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
+          /p:Coverage=$(_Coverage)
+          /m:1
+        displayName: Run Unit Tests on Build Machine (Debug only)
+        condition: succeeded() # ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      # Run integration tests
+      # - template: /eng/ci-helix-test.yml
+      #   parameters:
+      #     HelixSource: $(_HelixSource)
+      #     HelixType: 'tests/unit'
+      #     HelixTargetQueues: $(_UnitTestHelixAgentPool)
+      #     HelixAccessToken: $(_HelixToken)            # only defined for internal CI
+      #     Creator: $(_HelixCreator)
+      #     XUnitProjects: '..\src\**\*.Tests.csproj'
+      #     DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix (Release only)'
+      #     condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release')) # on helix (with real signing on internal)
+      
+      # Run integration tests and rename binlog
+      # These are not ready to run on Helix because:
+        # 1. Helix doesn't build projects (it only uses publish); we need .dotnet and also bin from build
+        # 2. we need an interactive pool for SendKeys to work
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
-          -bl IntegrationTest
           $(_OfficialBuildIdArgs)
           -integrationTest
-        displayName: Run Integration Tests
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
+        displayName: Run Integration Tests on Build Machine
 
-      # Create Nuget package, sign, and publish
+      # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
           -configuration $(_BuildConfig)
-          -bl PackSignPublish
           $(_OfficialBuildIdArgs)
           -pack
           -sign $(_SignArgs)
           -publish $(_PublishArgs)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
         displayName: Pack, Sign, and Publish
+
+      # Upload code coverage data
+      - script: $(Build.SourcesDirectory)/.dotnet/dotnet msbuild
+          eng/CodeCoverage.proj
+          /p:Configuration=$(_BuildConfig)
+          /p:CodeCovToken=$(CODECOV_TOKEN)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
+        displayName: Upload coverage to codecov.io
+        condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
       # Perform some internal-build-only tasks
       - ${{ if eq(parameters.runAsPublic, 'false') }}:
@@ -145,4 +200,9 @@ jobs:
             targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
           displayName: Publish package to build artifacts
           continueOnError: true
+          condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
+
+        # Run component governance detection (only for release; only for internal)
+        - task: ms.vss-governance-buildtask.governance-build-task-component-detection.ComponentGovernanceComponentDetection@0
+          displayName: Component Governance Detection
           condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -189,13 +189,13 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelIconDescr))
         ]
         public Icon Icon {
-            [ResourceExposure(ResourceScope.Machine)]
+            
             get {
                 // unfortunately we have no way of getting the icon from the control.
                 return this.icon;
             }
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             set {
 
                 if (value != null && (((Icon)value).Height > SystemInformation.SmallIconSize.Height || ((Icon)value).Width > SystemInformation.SmallIconSize.Width)) {

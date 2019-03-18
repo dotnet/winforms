@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -159,6 +159,12 @@ namespace System.Windows.Forms {
             }
         }
 
+        internal AccessibleObject ControlAccessibilityObject {
+            get {
+                return Control?.AccessibilityObject;
+            }
+        }
+
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.DefaultSize"]/*' />
         /// <devdoc>
         /// Deriving classes can override this to configure a default size for their control.
@@ -284,8 +290,8 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 return base.Image;
             }

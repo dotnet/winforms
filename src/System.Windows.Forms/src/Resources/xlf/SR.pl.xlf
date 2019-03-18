@@ -724,7 +724,7 @@
       </trans-unit>
       <trans-unit id="CatAccessibility">
         <source>Accessibility</source>
-        <target state="translated">Ułatwienia dostępu</target>
+        <target state="translated">Dostępność</target>
         <note />
       </trans-unit>
       <trans-unit id="CatAction">
@@ -1110,6 +1110,11 @@
       <trans-unit id="ComboBoxStyleDescr">
         <source>Controls the appearance and functionality of the combo box.</source>
         <target state="translated">Określa wygląd i funkcjonalność pola kombi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="translated">Wybrano: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -2848,7 +2853,7 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
+        <source>DataGridView EditingPanel UI Automation provider</source>
         <target state="translated">Dostawca automatyzacji interfejsu użytkownika DataGridView EditingPanel</target>
         <note />
       </trans-unit>
@@ -3963,13 +3968,25 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_NoException">
-        <source>Exception occurred in the DataGridView.\r\n\r\nTo replace this default dialog box, handle the DataError event.</source>
-        <target state="translated">Wystąpił wyjątek w kontrolce DataGridView.\r\n\r\nAby zamienić to domyślne okno dialogowe, wywołaj zdarzenie DataError.</target>
+        <source>Exception occurred in the DataGridView.
+
+To replace this default dialog box, handle the DataError event.</source>
+        <target state="translated">Wystąpił wyjątek w formancie DataGridView.
+
+Aby zamienić to domyślne okno dialogowe, wywołaj zdarzenie DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
-        <source>The following exception occurred in the DataGridView:\r\n\r\n{0}\r\n\r\nTo replace this default dialog please handle the DataError event.</source>
-        <target state="translated">W kontrolce DataGridView wystąpił następujący wyjątek:\r\n\r\n{0}\r\n\r\nAby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target>
+        <source>The following exception occurred in the DataGridView:
+
+{0}
+
+To replace this default dialog please handle the DataError event.</source>
+        <target state="translated">W formancie DataGridView wystąpił następujący wyjątek:
+
+{0}
+
+Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5063,8 +5080,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgContinueErrorText">
-        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{0}.</source>
-        <target state="translated">Wystąpił nieobsługiwany wyjątek w składniku aplikacji. Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje błąd i podejmie próbę kontynuacji.\r\n\r\n{0}.</target>
+        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
+
+{0}.</source>
+        <target state="translated">Wystąpił nieobsługiwany wyjątek w składniku aplikacji. Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje błąd i podejmie próbę kontynuacji.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5073,8 +5094,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgErrorText">
-        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{0}.</source>
-        <target state="translated">Wystąpił nieobsługiwany wyjątek w aplikacji. Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje błąd i podejmie próbę kontynuacji. Jeśli klikniesz przycisk Zakończ, aplikacja zostanie natychmiast zamknięta.\r\n\r\n{0}.</target>
+        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{0}.</source>
+        <target state="translated">Wystąpił nieobsługiwany wyjątek w aplikacji. Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje błąd i podejmie próbę kontynuacji. Jeśli klikniesz przycisk Zamknij, aplikacja zostanie natychmiast zamknięta.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5088,18 +5113,32 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgFooterNonSwitchable">
-        <source>Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</source>
-        <target state="translated">Aplikacja nie obsługuje debugowania just in time (JIT) formularzy\r\nWindows Forms. Skontaktuj się z autorem\r\naplikacji, aby uzyskać więcej informacji.\r\n</target>
+        <source>Application does not support Windows Forms just-in-time (JIT)
+debugging. Contact the application author for more
+information.
+</source>
+        <target state="translated">Aplikacja nie obsługuje debugowania formularzy Windows w trybie just in time (JIT).
+Skontaktuj się z autorem aplikacji, aby uzyskać więcej
+informacji.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
-        <source>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</source>
-        <target state="translated">Aplikacja nie obsługuje debugowania just in time (JIT).\r\nZobacz koniec tej wiadomości, aby uzyskać szczegółowe informacje.\r\n</target>
+        <source>Application does not support just-in-time (JIT)
+debugging. See the end of this message for details.
+</source>
+        <target state="translated">Aplikacja nie obsługuje debugowania just in time (JIT).
+Zobacz koniec tej wiadomości, aby uzyskać szczegółowe informacje.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking \r\njust-in-time (JIT) debugging instead of this dialog box.\r\n</source>
-        <target state="translated">Szczegółowe informacje na temat wywoływania debugowania just in time (JIT)\r\nzamiast tego okna dialogowego znajdują się na końcu tego komunikatu.\r\n</target>
+        <source>See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+</source>
+        <target state="translated">Szczegółowe informacje na temat wywoływania debugowania w trybie JIT (just in time)
+zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5108,8 +5147,16 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
-        <source>{0}\r\n    Assembly Version: {1}\r\n    Win32 Version: {2}\r\n    CodeBase: {3}\r\n</source>
-        <target state="translated">{0}\r\n    Wersja zestawu: {1}\r\n    Wersja Win32: {2}\r\n    CodeBase: {3}\r\n</target>
+        <source>{0}
+    Assembly Version: {1}
+    Win32 Version: {2}
+    CodeBase: {3}
+</source>
+        <target state="translated">{0}
+    Wersja zestawu: {1}
+    Wersja Win32: {2}
+    CodeBase: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5118,13 +5165,19 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSectionSeperator">
-        <source>\r\n************** {0} **************\r\n</source>
-        <target state="translated">\r\n************** {0} **************\r\n</target>
+        <source>
+************** {0} **************
+</source>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
-        <source>----------------------------------------\r\n</source>
-        <target state="translated">----------------------------------------\r\n</target>
+        <source>----------------------------------------
+</source>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5138,13 +5191,29 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{1}.</source>
-        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Framework Configuration.\r\n\r\nJeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę.\r\n\r\n{1}.</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue.
+
+{1}.</source>
+        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Framework.
+
+Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{1}.</source>
-        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Framework Configuration.\r\n\r\nJeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę. Jeśli klikniesz przycisk Zakończ, aplikacja zostanie natychmiast zamknięta.\r\n\r\n{1}.</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{1}.</source>
+        <target state="translated">Aplikacja próbowała wykonać operację niedozwoloną przez zasady zabezpieczeń. Aby udzielić tej aplikacji wymaganych uprawnień, skontaktuj się z administratorem systemu lub użyj narzędzia Microsoft .NET Framework Configuration.
+
+Jeśli klikniesz przycisk Kontynuuj, aplikacja zignoruje ten błąd i będzie próbowała kontynuować pracę. Jeśli klikniesz przycisk Zamknij, aplikacja zostanie natychmiast zamknięta.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5258,13 +5327,17 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogCreatePrompt">
-        <source>File {0} does not exist.\r\nDo you want to create it?</source>
-        <target state="translated">Plik {0} nie istnieje.\r\nCzy chcesz go utworzyć?</target>
+        <source>File {0} does not exist.
+Do you want to create it?</source>
+        <target state="translated">Plik {0} nie istnieje.
+Czy chcesz go utworzyć?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
-        <source>File {0} does not exist.\r\nVerify that the correct file name was given.</source>
-        <target state="translated">Plik {0} nie istnieje.\r\nSprawdź, czy podano poprawną nazwę pliku.</target>
+        <source>File {0} does not exist.
+Verify that the correct file name was given.</source>
+        <target state="translated">Plik {0} nie istnieje.
+Sprawdź, czy podano prawidłową nazwę pliku.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5283,8 +5356,10 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
-        <source>File {0} already exists.\r\nDo you want to replace it?</source>
-        <target state="translated">Plik {0} już istnieje.\r\nCzy chcesz go zastąpić?</target>
+        <source>File {0} already exists.
+Do you want to replace it?</source>
+        <target state="translated">Plik {0} już istnieje.
+Czy chcesz go zamienić?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5419,7 +5494,7 @@
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
         <source>A value that indicates whether to use the value of the Description property as the dialog title for Vista style dialogs. This property has no effect on old style dialogs.</source>
-        <target state="translated">Wartość wskazująca, czy wartość właściwości Description (Opis) ma być używana jako tytuł okna dialogowego dla okien dialogowych w stylu systemu Vista. Ta właściwość nie ma wpływu na okna dialogowe w starym stylu.</target>
+        <target state="translated">Wartość wskazująca, czy wartość właściwości Description (Opis) ma być używana jako tytuł okien dialogowych w stylu systemu Vista. Ta właściwość nie ma wpływu na okna dialogowe w starym stylu.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormAcceptButtonDescr">
@@ -5878,8 +5953,12 @@
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCallWithStack">
-        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.\r\nStack trace where the illegal operation occurred was:\r\n{1}"</source>
-        <target state="translated">Nieprawidłowa operacja między wątkami: do kontrolki „{0}” uzyskano dostęp z wątku innego niż wątek, w którym została utworzona.\r\nStos śledzenia, w którym wystąpiła niedozwolona operacja:\r\n{1}"</target>
+        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
+Stack trace where the illegal operation occurred was:
+{1}"</source>
+        <target state="translated">Nieprawidłowa operacja między wątkami: do formantu '{0}' uzyskiwany jest dostęp z wątku innego niż wątek, w którym został utworzony.
+Stos śledzenia, w którym wystąpiła zabroniona operacja:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -6720,6 +6799,11 @@
       <trans-unit id="ListViewGridLinesDescr">
         <source>Displays grid lines around items and SubItems. Only shown when in Details view.</source>
         <target state="translated">Wyświetla linie siatki wokół elementów i podelementów. Pokazywany tylko w widoku Details.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8743,8 +8827,8 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
-        <target state="translated"> Wybrano: {0}.</target>
+        <source>{0} selected.</source>
+        <target state="translated">Wybrano: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">
@@ -9268,8 +9352,12 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">Okno jest uruchomione w trybie ograniczonym. Niektóre funkcje interfejsu użytkownika mogą być wyłączone ze względów bezpieczeństwa. \r\n\r\nAby uzyskać więcej informacji, skontaktuj się z administratorem systemu lub autorem aplikacji.</target>
+        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">Okno jest uruchomione w trybie ograniczonym. Niektóre funkcje interfejsu użytkownika mogą być wyłączone ze względów bezpieczeństwa. 
+
+Aby uzyskać więcej informacji, skontaktuj się z administratorem systemu lub autorem aplikacji.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9348,13 +9436,21 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}\r\n\r\n{1}</source>
-        <target state="translated">{0}\r\n\r\n{1}</target>
+        <source>{0}
+
+{1}</source>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">Okno jest uruchomione w trybie nieograniczonym. Chociaż główne okno działa bez ograniczeń, to niektóre funkcje mogą być wyłączone ze względów bezpieczeństwa. \r\n\r\nAby uzyskać więcej informacji, skontaktuj się z administratorem systemu lub autorem aplikacji.</target>
+        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">Okno jest uruchomione w trybie nieograniczonym. Chociaż główne okno działa bez ograniczeń, to niektóre funkcje mogą być wyłączone ze względów bezpieczeństwa. 
+
+Aby uzyskać więcej informacji, skontaktuj się z administratorem systemu lub autorem aplikacji.</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -9974,7 +10070,7 @@
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">Określa właściwość PlaceholderText dla kontrolki TextBox. Właściwość PlaceholderText jest wyświetlana w kontrolce, gdy właściwość Text ma wartość null lub jest pusta i może służyć do informowania użytkownika o tym, jakich danych wejściowych kontrolka oczekuje.</target>
+        <target state="translated">Określa właściwość PlaceholderText dla kontrolki TextBox. Właściwość PlaceholderText jest wyświetlana w kontrolce, gdy właściwość Text ma wartość null lub jest pusta — może ona służyć do informowania użytkownika o tym, jakich danych wejściowych oczekuje kontrolka.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11162,6 +11258,11 @@
         <target state="translated">Wskazuje, czy węzeł drzewa jest w stanie zaznaczenia.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="translated">Utworzono odwołanie cykliczne. Nie można dodać elementu TreeNode jako elementu potomnego względem siebie.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">Parametr musi być typu TreeNode.</target>
@@ -11618,13 +11719,17 @@
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to install this application?</source>
-        <target state="translated">Nie można zweryfikować wydawcy.\r\nCzy na pewno chcesz zainstalować tę aplikację?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to install this application?</source>
+        <target state="translated">Nie można zweryfikować wydawcy.
+Czy na pewno chcesz zainstalować tę aplikację?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to run this application?</source>
-        <target state="translated">Nie można zweryfikować wydawcy.\r\nCzy na pewno chcesz uruchomić tę aplikację?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to run this application?</source>
+        <target state="translated">Nie można zweryfikować wydawcy.
+Czy na pewno chcesz uruchomić tę aplikację?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">

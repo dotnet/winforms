@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -544,8 +544,8 @@ namespace System.Windows.Forms {
 
             [Category("Entry Assembly")]
             public string CodeBase {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return assemblyName.CodeBase;
                 }
@@ -553,8 +553,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string MyDocuments {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Environment.GetFolderPath(Environment.SpecialFolder.Personal);
                 }
@@ -562,8 +562,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string UserAppDataPath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.UserAppDataPath;
                 }
@@ -571,8 +571,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string CommonUserAppDataPath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.CommonAppDataPath;
                 }
@@ -580,8 +580,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string LocalUserAppDataPath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.LocalUserAppDataPath;
                 }
@@ -589,8 +589,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string CompanyName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.CompanyName;
                 }
@@ -598,8 +598,8 @@ namespace System.Windows.Forms {
 
             [Category("Directories")]
             public string AppBase {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
                 }
@@ -607,8 +607,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ConfigurationFile {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
                 }
@@ -616,8 +616,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ProductName {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.ProductName;
                 }
@@ -625,8 +625,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ProductVersion {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.ProductVersion;
                 }
@@ -655,8 +655,8 @@ namespace System.Windows.Forms {
 
             [Category("Application")]
             public string ExecutablePath {
-                [ResourceExposure(ResourceScope.Machine)]
-                [ResourceConsumption(ResourceScope.Machine)]
+                
+                
                 get {
                     return Application.ExecutablePath;
                 }

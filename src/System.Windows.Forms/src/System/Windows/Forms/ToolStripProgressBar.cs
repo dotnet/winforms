@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -26,6 +26,10 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.ToolStripProgressBar"]/*' />
         public ToolStripProgressBar()
             : base(CreateControlInstance()) {
+            ToolStripProgressBarControl toolStripProgressBarControl = Control as ToolStripProgressBarControl;
+            if (toolStripProgressBarControl != null) {
+                toolStripProgressBarControl.Owner = this;
+            }
 
             if (DpiHelper.IsScalingRequirementMet) {
                 scaledDefaultMargin = DpiHelper.LogicalToDeviceUnits(defaultMargin);
@@ -248,9 +252,23 @@ namespace System.Windows.Forms {
             }
         }
 
+        /// <summary>
+        ///     Constructs the new instance of the accessibility object for this ToolStripProgressBar ToolStrip item.
+        /// </summary>
+        /// <returns>
+        ///     The new instance of the accessibility object for this ToolStripProgressBar ToolStrip item
+        /// </returns>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected override AccessibleObject CreateAccessibilityInstance() {
+            if (AccessibilityImprovements.Level3) {
+                return new ToolStripProgressBarAccessibleObject(this);
+            }
+
+            return base.CreateAccessibilityInstance();
+        }
 
         private static Control CreateControlInstance() {
-            ProgressBar progressBar = new ProgressBar();
+            ProgressBar progressBar = AccessibilityImprovements.Level3 ? new ToolStripProgressBarControl() : new ProgressBar();
             progressBar.Size = new Size(100,15);
             return progressBar;
         }
@@ -467,5 +485,93 @@ namespace System.Windows.Forms {
             ProgressBar.PerformStep();
         }
 
+        [System.Runtime.InteropServices.ComVisible(true)]
+        internal class ToolStripProgressBarAccessibleObject : ToolStripItemAccessibleObject {
+            private ToolStripProgressBar ownerItem = null;
+
+            public ToolStripProgressBarAccessibleObject(ToolStripProgressBar ownerItem) : base(ownerItem) {
+              this.ownerItem = ownerItem;
+            }
+         
+            public override AccessibleRole Role {
+               get {
+                   AccessibleRole role = Owner.AccessibleRole;
+                   if (role != AccessibleRole.Default) {
+                       return role;
+                   }
+
+                   return AccessibleRole.ProgressBar;
+               }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                if (direction == UnsafeNativeMethods.NavigateDirection.FirstChild ||
+                    direction == UnsafeNativeMethods.NavigateDirection.LastChild) {
+                    return this.ownerItem.ProgressBar.AccessibilityObject;
+                }
+
+                // Handle Parent and other directions in base ToolStripItem.FragmentNavigate() method.
+                return base.FragmentNavigate(direction);
+            }
+        }
+
+        internal class ToolStripProgressBarControl : ProgressBar {
+
+            private ToolStripProgressBar ownerItem;
+
+            public ToolStripProgressBar Owner {
+                get { return ownerItem; }
+                set { ownerItem = value; }
+            }
+
+            internal override bool SupportsUiaProviders {
+                get {
+                    return AccessibilityImprovements.Level3;
+                }
+            }
+
+            protected override AccessibleObject CreateAccessibilityInstance() {
+                if (AccessibilityImprovements.Level3) {
+                    return new ToolStripProgressBarControlAccessibleObject(this);
+                }
+
+                return base.CreateAccessibilityInstance();
+            }
+        }
+
+        internal class ToolStripProgressBarControlAccessibleObject : ProgressBar.ProgressBarAccessibleObject {
+            public ToolStripProgressBarControlAccessibleObject(ToolStripProgressBarControl toolStripProgressBarControl) : base(toolStripProgressBarControl) {
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
+                get {
+                    var toolStripProgressBarControl = this.Owner as ToolStripProgressBarControl;
+                    if (toolStripProgressBarControl != null) {
+                        return toolStripProgressBarControl.Owner.Owner.AccessibilityObject;
+                    }
+
+                    return base.FragmentRoot;
+                }
+            }
+
+            internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        var toolStripProgressBarControl = Owner as ToolStripProgressBarControl;
+                        if (toolStripProgressBarControl != null) {
+                            return toolStripProgressBarControl.Owner.AccessibilityObject.FragmentNavigate(direction);
+                        }
+                        break;
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
+            internal override object GetPropertyValue(int propertyID) {
+                return base.GetPropertyValue(propertyID);
+            }
+        }
     }
 }

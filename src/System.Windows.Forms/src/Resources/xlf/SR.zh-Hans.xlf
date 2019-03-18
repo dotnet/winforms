@@ -1112,6 +1112,11 @@
         <target state="translated">控制组合框的外观和功能。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ComboBoxValueSelectedFormat">
+        <source>{0} selected</source>
+        <target state="translated">已选择 {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
         <source>New command ID cannot be allocated.</source>
         <target state="translated">无法分配新的命令 ID。</target>
@@ -2848,8 +2853,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewEditingPanelUiaProviderDescription">
-        <source>DataGridView EditingPanel UIA Provider</source>
-        <target state="translated">DataGridView EditingPanel UIA 提供程序</target>
+        <source>DataGridView EditingPanel UI Automation provider</source>
+        <target state="translated">DataGridView EditingPanel UI 自动化提供程序</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewElementPaintingEventArgs_ColumnIndexOutOfRange">
@@ -3963,13 +3968,25 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_NoException">
-        <source>Exception occurred in the DataGridView.\r\n\r\nTo replace this default dialog box, handle the DataError event.</source>
-        <target state="translated">DataGridView 中发生异常。\r\n\r\n要替换此默认对话框，请处理 DataError 事件。</target>
+        <source>Exception occurred in the DataGridView.
+
+To replace this default dialog box, handle the DataError event.</source>
+        <target state="translated">DataGridView 中发生异常。
+
+要替换此默认对话框，请处理 DataError 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
-        <source>The following exception occurred in the DataGridView:\r\n\r\n{0}\r\n\r\nTo replace this default dialog please handle the DataError event.</source>
-        <target state="translated">DataGridView 中发生以下异常:\r\n\r\n{0}\r\n\r\n要替换此默认对话框，请处理 DataError 事件。</target>
+        <source>The following exception occurred in the DataGridView:
+
+{0}
+
+To replace this default dialog please handle the DataError event.</source>
+        <target state="translated">DataGridView 中发生以下异常:
+
+{0}
+
+要替换此默认对话框，请处理 DataError 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5063,8 +5080,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgContinueErrorText">
-        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{0}.</source>
-        <target state="translated">应用程序的组件中发生了未经处理的异常。如果单击“继续”，应用程序将忽略此错误并尝试继续。\r\n\r\n{0}。</target>
+        <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
+
+{0}.</source>
+        <target state="translated">应用程序的组件中发生了未经处理的异常。如果单击“继续”，应用程序将忽略此错误并尝试继续。
+
+{0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5073,8 +5094,12 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgErrorText">
-        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{0}.</source>
-        <target state="translated">应用程序中发生了未经处理的异常。如果单击“继续”，应用程序将忽略此错误并尝试继续。如果单击“退出”，应用程序将立即关闭。\r\n\r\n{0}。</target>
+        <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{0}.</source>
+        <target state="translated">应用程序中发生了未经处理的异常。如果单击“继续”，应用程序将忽略此错误并尝试继续。如果单击“退出”，应用程序将立即关闭。
+
+{0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5088,18 +5113,32 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgFooterNonSwitchable">
-        <source>Application does not support Windows Forms just-in-time (JIT)\r\ndebugging. Contact the application author for more\r\ninformation.\r\n</source>
-        <target state="translated">应用程序不支持 Windows 窗体实时(JIT)\r\n调试。有关更多\r\n信息，请与应用程序的作者联系。\r\n</target>
+        <source>Application does not support Windows Forms just-in-time (JIT)
+debugging. Contact the application author for more
+information.
+</source>
+        <target state="translated">应用程序不支持 Windows 窗体实时(JIT)
+调试。有关更多
+信息，请与应用程序的作者联系。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
-        <source>Application does not support just-in-time (JIT)\r\ndebugging. See the end of this message for details.\r\n</source>
-        <target state="translated">应用程序不支持实时(JIT)\r\n调试。有关详细信息，请参见此消息的结尾。\r\n</target>
+        <source>Application does not support just-in-time (JIT)
+debugging. See the end of this message for details.
+</source>
+        <target state="translated">应用程序不支持实时(JIT)调试。
+有关详细信息，请参见此消息的结尾。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
-        <source>See the end of this message for details on invoking \r\njust-in-time (JIT) debugging instead of this dialog box.\r\n</source>
-        <target state="translated">有关调用\r\n实时(JIT)调试而不是此对话框的详细信息，请参见此消息的结尾。\r\n</target>
+        <source>See the end of this message for details on invoking 
+just-in-time (JIT) debugging instead of this dialog box.
+</source>
+        <target state="translated">有关调用实时(JIT)调试而不是此对话框的详细信息，
+请参见此消息的结尾。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5108,8 +5147,16 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesEntry">
-        <source>{0}\r\n    Assembly Version: {1}\r\n    Win32 Version: {2}\r\n    CodeBase: {3}\r\n</source>
-        <target state="translated">{0}\r\n    程序集版本: {1}\r\n    Win32 版本: {2}\r\n    CodeBase: {3}\r\n</target>
+        <source>{0}
+    Assembly Version: {1}
+    Win32 Version: {2}
+    CodeBase: {3}
+</source>
+        <target state="translated">{0}
+    程序集版本:{1}
+    Win32 版本:{2}
+    基本代码:{3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5118,13 +5165,19 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSectionSeperator">
-        <source>\r\n************** {0} **************\r\n</source>
-        <target state="translated">\r\n************** {0} **************\r\n</target>
+        <source>
+************** {0} **************
+</source>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
-        <source>----------------------------------------\r\n</source>
-        <target state="translated">----------------------------------------\r\n</target>
+        <source>----------------------------------------
+</source>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
@@ -5138,13 +5191,29 @@
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityContinueErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue.\r\n\r\n{1}.</source>
-        <target state="translated">应用程序尝试执行安全策略不允许的操作。若要授予该应用程序所需的权限，请与系统管理员联系，或使用 Microsoft .NET Framework 配置工具。\r\n\r\n如果单击“继续”，应用程序将忽略此错误并尝试继续运行。\r\n\r\n{1}。</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue.
+
+{1}.</source>
+        <target state="translated">应用程序尝试执行安全策略不允许的操作。若要授予该应用程序所需的权限，请与系统管理员联系，或使用 Microsoft .NET Framework 配置工具。
+
+如果单击“继续”，应用程序将忽略此错误并尝试继续运行。
+
+{1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
-        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.\r\n\r\nIf you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.\r\n\r\n{1}.</source>
-        <target state="translated">应用程序尝试执行安全策略不允许的操作。若要授予该应用程序所需的权限，请与系统管理员联系，或使用 Microsoft .NET Framework 配置工具。\r\n\r\n如果单击“继续”，应用程序将忽略此错误并尝试继续运行。如果单击“退出”，应用程序将立即关闭。\r\n\r\n{1}。</target>
+        <source>Application attempted to perform an operation not allowed by the security policy. To grant this application the required permission, contact your system administrator, or use the Microsoft .NET Framework Configuration tool.
+
+If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
+
+{1}.</source>
+        <target state="translated">应用程序尝试执行安全策略不允许的操作。若要授予该应用程序所需的权限，请与系统管理员联系，或使用 Microsoft .NET Framework 配置工具。
+
+如果单击“继续”，应用程序将忽略此错误并尝试继续运行。如果单击“退出”，应用程序将立即关闭。
+
+{1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5258,13 +5327,17 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogCreatePrompt">
-        <source>File {0} does not exist.\r\nDo you want to create it?</source>
-        <target state="translated">文件 {0} 不存在。\r\n是否创建文件?</target>
+        <source>File {0} does not exist.
+Do you want to create it?</source>
+        <target state="translated">文件 {0} 不存在。
+是否创建文件?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
-        <source>File {0} does not exist.\r\nVerify that the correct file name was given.</source>
-        <target state="translated">文件 {0} 不存在。\r\n请验证是否提供了正确的文件名。</target>
+        <source>File {0} does not exist.
+Verify that the correct file name was given.</source>
+        <target state="translated">文件 {0} 不存在。
+请验证是否给出了正确的文件名。</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5283,8 +5356,10 @@
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
-        <source>File {0} already exists.\r\nDo you want to replace it?</source>
-        <target state="translated">文件 {0} 已存在。\r\n是否替换文件?</target>
+        <source>File {0} already exists.
+Do you want to replace it?</source>
+        <target state="translated">文件 {0} 已存在。
+是否替换文件?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5878,8 +5953,12 @@
         <note />
       </trans-unit>
       <trans-unit id="IllegalCrossThreadCallWithStack">
-        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.\r\nStack trace where the illegal operation occurred was:\r\n{1}"</source>
-        <target state="translated">线程间操作无效: 从不是创建控件“{0}”的线程访问它。\r\n发生非法操作的堆栈跟踪是:\r\n{1}”</target>
+        <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
+Stack trace where the illegal operation occurred was:
+{1}"</source>
+        <target state="translated">线程间操作无效: 从不是创建控件“{0}”的线程访问它。
+发生非法操作的堆栈跟踪是:
+“{1}”</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -6720,6 +6799,11 @@
       <trans-unit id="ListViewGridLinesDescr">
         <source>Displays grid lines around items and SubItems. Only shown when in Details view.</source>
         <target state="translated">在项和子项周围显示网格线。仅在“详细信息”视图中显示。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="new">Parameter must be of type ListViewGroup.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8743,7 +8827,7 @@
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridPropertyValueSelectedFormat">
-        <source> {0} selected.</source>
+        <source>{0} selected.</source>
         <target state="translated">已选择 {0}。</target>
         <note />
       </trans-unit>
@@ -9268,8 +9352,12 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">窗口正在受限模式下运行。出于安全原因，可能已禁用部分 UI 功能。\r\n\r\n有关详细信息，请联系系统管理员或应用程序作者。</target>
+        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">窗口正以受限模式运行。出于安全考虑，可能禁用了某些 UI 功能。
+
+有关详细信息，请与系统管理员或应用程序的作者联系。</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
@@ -9348,13 +9436,21 @@
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}\r\n\r\n{1}</source>
-        <target state="translated">{0}\r\n\r\n{1}</target>
+        <source>{0}
+
+{1}</source>
+        <target state="translated">{0}
+
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. \r\n\r\nFor more information, contact your system administrator or the application author.</source>
-        <target state="translated">窗口正在无限制模式下运行。尽管主窗口的运行不受限制，但出于安全考虑，可能会禁用某些功能。\r\n\r\n有关详细信息，请联系系统管理员或应用程序作者。</target>
+        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+
+For more information, contact your system administrator or the application author.</source>
+        <target state="translated">窗口正以无限制模式运行。尽管主窗口在不受限制地运行，但出于安全考虑可能会禁用某些功能。
+
+有关详细信息，请与系统管理员或应用程序的作者联系。</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityVersionColumn">
@@ -11162,6 +11258,11 @@
         <target state="translated">指示树节点是否处于选中状态。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="translated">已进行了循环引用。TreeNode 无法添加为自身的后代。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">参数必须是 TreeNode 类型。</target>
@@ -11618,13 +11719,17 @@
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to install this application?</source>
-        <target state="translated">无法验证发布者。\r\n确定要安装此应用程序吗?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to install this application?</source>
+        <target state="translated">无法验证发行者。
+是否确实安装此应用程序?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.\r\nAre you sure you want to run this application?</source>
-        <target state="translated">无法验证发布者。\r\n确定运行此应用程序吗?</target>
+        <source>Publisher cannot be verified.
+Are you sure you want to run this application?</source>
+        <target state="translated">无法验证发行者。
+是否确实运行此应用程序?</target>
         <note />
       </trans-unit>
       <trans-unit id="TrustManagerPromptUI_Publisher">

@@ -4,22 +4,22 @@
 
 
 namespace System.Windows.Forms {
-    using System.Runtime.Serialization.Formatters;
+    using Microsoft.Win32;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.Design;
+    using System.Diagnostics;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Drawing;
+    using System.Drawing.Design;
+    using System.Globalization;
     using System.Runtime.InteropServices;
     using System.Runtime.Remoting;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing.Design;
-    using System.Drawing;
+    using System.Runtime.Serialization.Formatters;
     using System.Windows.Forms.Internal;
-    using System.ComponentModel.Design;
-    using System.Collections;
-    using Microsoft.Win32;
-    using System.Globalization;
     using System.Windows.Forms.Layout;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Windows.Forms.VisualStyles;
 
     /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView"]/*' />
@@ -3703,7 +3703,6 @@ namespace System.Windows.Forms {
             // finally if the handle is created, do the actual add into the real list view
             //
             if (IsHandleCreated) {
-                Debug.Assert(listItemsArray == null, "listItemsArray not null, even though handle created");
                 InsertItemsNative(displayIndex, items);
             }
 
@@ -4619,9 +4618,7 @@ namespace System.Windows.Forms {
         // does the job of telling win32 listView to remove this group
         private void RemoveGroupNative(ListViewGroup group) {
                Debug.Assert(IsHandleCreated,"RemoveGroupNative precondition: list-view handle must be created");
-               Debug.Assert(ComctlSupportsVisualStyles, "we should have checked this already");
                int retval = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.LVM_REMOVEGROUP, group.ID, IntPtr.Zero);
-               Debug.Assert(retval != -1,"Failed to remove group");
 
                // it is the job of whoever deletes this group to also turn off grouping if this was the last
                // group deleted
@@ -5151,7 +5148,6 @@ namespace System.Windows.Forms {
 
         internal void UpdateGroupNative(ListViewGroup group) {
             Debug.Assert(IsHandleCreated,"UpdateGroupNative precondition: list-view handle must be created");
-            Debug.Assert(ComctlSupportsVisualStyles, "we should have checked this already");
 
             NativeMethods.LVGROUP lvgroup = new NativeMethods.LVGROUP();
             try {
@@ -7413,7 +7409,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.ColumnHeaderCollection"]/*' />
             public ColumnHeaderCollection(ListView owner) {
-                this.owner = owner;
+                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
             }
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnHeaderCollection.this"]/*' />
@@ -7654,7 +7650,11 @@ namespace System.Windows.Forms {
                 int [] indices = new int[values.Length];
 
                 for (int i=0; i<values.Length; i++) {
-                    
+                    if (values[i] == null)
+                    {
+                        throw new ArgumentNullException(nameof(values));
+                    }
+
                     if (values[i].DisplayIndex == -1) {
                         values[i].DisplayIndexInternal = i;
                     }
@@ -7679,7 +7679,7 @@ namespace System.Windows.Forms {
                     return Add((ColumnHeader)value);
                 }
                 else {
-                    throw new ArgumentException(SR.ColumnHeaderCollectionInvalidArgument);
+                    throw new ArgumentException(SR.ColumnHeaderCollectionInvalidArgument, nameof(value));
                 }
             }
 
@@ -7849,7 +7849,7 @@ namespace System.Windows.Forms {
             ///     removes a column from the ListView
             /// </devdoc>
             public virtual void RemoveAt(int index) {
-                if (index < 0 || index >= owner.columnHeaders.Length)
+                if (owner.columnHeaders == null || index < 0 || index >= owner.columnHeaders.Length)
                     throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
 
                 int w = owner.columnHeaders[index].Width; // Update width before detaching from ListView
@@ -8493,7 +8493,6 @@ namespace System.Windows.Forms {
                             throw new ArgumentOutOfRangeException(nameof(displayIndex), string.Format(SR.InvalidArgument, "displayIndex", (displayIndex).ToString(CultureInfo.CurrentCulture)));
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed) {
-                            Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
                             return (ListViewItem)owner.listItemsTable[DisplayIndexToID(displayIndex)];
                         }
                         else {
@@ -8694,7 +8693,6 @@ namespace System.Windows.Forms {
 
                 owner.ApplyUpdateCachedItems();
                 if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed) {
-                    Debug.Assert(owner.listItemsArray == null, "listItemsArray not null, even though handle created");
                     return owner.listItemsTable[item.ID] == item;
                 }
                 else {

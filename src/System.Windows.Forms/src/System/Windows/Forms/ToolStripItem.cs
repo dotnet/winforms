@@ -228,7 +228,6 @@ namespace System.Windows.Forms {
                     Properties.SetObject(PropAccessibility, accessibleObject);
                 }
                 
-                Debug.Assert(accessibleObject != null, "Failed to create accessibility object");
                 return accessibleObject;
             }
         }
@@ -1198,8 +1197,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemImageDescr))
         ]
         public virtual Image Image {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 Image image = (Image)Properties.GetObject(PropImage);
             
@@ -1288,7 +1287,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 
               
@@ -1999,7 +1998,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
                 {
-                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }
                 
                 RightToLeft oldValue = RightToLeft;
@@ -2040,8 +2039,8 @@ namespace System.Windows.Forms {
         }
 
         internal Image MirroredImage {
-            [ResourceExposure(ResourceScope.Machine)]
-            [ResourceConsumption(ResourceScope.Machine)]
+            
+            
             get {
                 if (state[stateInvalidMirroredImage]) {
                     Image image = Image;
@@ -2545,7 +2544,7 @@ namespace System.Windows.Forms {
         }
   
         internal void FireEvent(ToolStripItemEventType met) {
-            FireEvent(new System.EventArgs(), met);
+            FireEvent(EventArgs.Empty, met);
         }
         internal void FireEvent(EventArgs e, ToolStripItemEventType met) {
 
@@ -2737,7 +2736,6 @@ namespace System.Windows.Forms {
         //
 
         private void HandleClick(System.EventArgs e) {  
-            Debug.Assert(Enabled, "Who called me when I am disabled?");
             Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] HandleClick");      
 
             try {
@@ -2904,12 +2902,12 @@ namespace System.Windows.Forms {
                         }
                     }
                     if (shouldFireDoubleClick) {
-                        HandleDoubleClick(new System.EventArgs());
+                        HandleDoubleClick(EventArgs.Empty);
                         // If we actually fired DoubleClick - reset the lastClickTime.
                         lastClickTime = 0;
                     } 
                     else {
-                        HandleClick(new System.EventArgs());
+                        HandleClick(EventArgs.Empty);
                     }
                 }
 
@@ -3957,8 +3955,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToolStripItemAccessibleObject"]/*' />
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem) {
-
-                Debug.Assert(ownerItem != null, "Cannot construct a ToolStripItemAccessibleObject with a null ownerItem");
                 if (ownerItem == null) {
                     throw new ArgumentNullException(nameof(ownerItem));
                 }
@@ -4044,6 +4040,11 @@ namespace System.Windows.Forms {
                 }
             }
 
+            /// <summary>
+            /// Gets the accessible property value.
+            /// </summary>
+            /// <param name="propertyID">The accessible property ID.</param>
+            /// <returns>The accessible property value.</returns>
             internal override object GetPropertyValue(int propertyID) {
 
                 if (AccessibilityImprovements.Level1) {
@@ -4070,7 +4071,7 @@ namespace System.Windows.Forms {
                         case NativeMethods.UIA_IsPasswordPropertyId:
                             return false;
                         case NativeMethods.UIA_HelpTextPropertyId:
-                            return Help;
+                            return Help ?? string.Empty;
                     }
                 }
 
@@ -4294,26 +4295,27 @@ namespace System.Windows.Forms {
                 }
             }
 
+            /// <summary>
+            /// Gets the top level element.
+            /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
                 get {
                     return ownerItem.RootToolStrip?.AccessibilityObject;
                 }
             }
 
+            /// <summary>
+            /// Returns the element in the specified direction.
+            /// </summary>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
                 switch (direction) {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                         return Parent;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        ToolStrip.ToolStripAccessibleObject parent = Parent as ToolStrip.ToolStripAccessibleObject;
-
-                        if (parent == null) {
-                            return null; 
-                        }
-
-                        int index = parent.GetChildIndex(this);
-
+                        int index = GetChildFragmentIndex();
                         if (index == -1) {
                             Debug.Fail("No item matched the index?");
                             return null;
@@ -4321,16 +4323,95 @@ namespace System.Windows.Forms {
 
                         int increment = direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
                         AccessibleObject sibling = null;
-                        // Skipping contol host items, as they are provided by system
-                        do {
+
+                        if (AccessibilityImprovements.Level3) {
                             index += increment;
-                            sibling = index >= 0 && index < parent.GetChildCount() ? parent.GetChild(index) : null;
-                        } while (sibling != null && sibling is Control.ControlAccessibleObject);
+                            int itemsCount = GetChildFragmentCount();
+                            if (index >= 0 && index < itemsCount) {
+                                sibling = GetChildFragment(index);
+                            }
+                        }
+                        else {
+                            // Skipping contol host items, as they are provided by system
+                            do {
+                                index += increment;
+                                sibling = index >= 0 && index < Parent.GetChildCount() ? Parent.GetChild(index) : null;
+                            } while (sibling != null && sibling is Control.ControlAccessibleObject);
+                        }
 
                         return sibling;
                 }
 
                 return base.FragmentNavigate(direction);
+            }
+
+            private AccessibleObject GetChildFragment(int index) {
+                var toolStripParent = Parent as ToolStrip.ToolStripAccessibleObject;
+                if (toolStripParent != null) {
+                    return toolStripParent.GetChildFragment(index);
+                }
+
+                // ToolStripOverflowButtonAccessibleObject is derived from ToolStripDropDownItemAccessibleObject
+                // and we should not process ToolStripOverflowButton as a ToolStripDropDownItem here so check for
+                // the ToolStripOverflowButton firstly as more specific condition.
+                var toolStripOverflowButtonParent = Parent as ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject;
+                if (toolStripOverflowButtonParent != null) {
+                    var toolStripGrandParent = toolStripOverflowButtonParent.Parent as ToolStrip.ToolStripAccessibleObject;
+                    if (toolStripGrandParent != null) {
+                        return toolStripGrandParent.GetChildFragment(index, true);
+                    }
+                }
+
+                var dropDownItemParent = Parent as ToolStripDropDownItemAccessibleObject;
+                if (dropDownItemParent != null) {
+                    return dropDownItemParent.GetChildFragment(index);
+                }
+
+                return null;
+            }
+
+            private int GetChildFragmentCount() {
+                var toolStripParent = Parent as ToolStrip.ToolStripAccessibleObject;
+                if (toolStripParent != null) {
+                    return toolStripParent.GetChildFragmentCount();
+                }
+
+                var toolStripOverflowButtonParent = Parent as ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject;
+                if (toolStripOverflowButtonParent != null) {
+                    var toolStripGrandParent = toolStripOverflowButtonParent.Parent as ToolStrip.ToolStripAccessibleObject;
+                    if (toolStripGrandParent != null) {
+                        return toolStripGrandParent.GetChildOverflowFragmentCount();
+                    }
+                }
+
+                var dropDownItemParent = Parent as ToolStripDropDownItemAccessibleObject;
+                if (dropDownItemParent != null) {
+                    return dropDownItemParent.GetChildCount();
+                }
+
+                return -1;
+            }
+
+            private int GetChildFragmentIndex() {
+                var toolStripParent = Parent as ToolStrip.ToolStripAccessibleObject;
+                if (toolStripParent != null) {
+                    return toolStripParent.GetChildFragmentIndex(this);
+                }
+
+                var toolStripOverflowButtonParent = Parent as ToolStripOverflowButton.ToolStripOverflowButtonAccessibleObject;
+                if (toolStripOverflowButtonParent != null) {
+                    var toolStripGrandParent = toolStripOverflowButtonParent.Parent as ToolStrip.ToolStripAccessibleObject;
+                    if (toolStripGrandParent != null) {
+                        return toolStripGrandParent.GetChildFragmentIndex(this);
+                    }
+                }
+
+                var dropDownItemParent = Parent as ToolStripDropDownItemAccessibleObject;
+                if (dropDownItemParent != null) {
+                    return dropDownItemParent.GetChildFragmentIndex(this);
+                }
+
+                return -1;
             }
 
             internal override void SetFocus() {

@@ -1,12 +1,17 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Windows.Forms;
 
 namespace System.Drawing.Design
 {
@@ -16,17 +21,42 @@ namespace System.Drawing.Design
     [Serializable]
     public class ToolboxItem : ISerializable
     {
+        private static TraceSwitch s_toolboxItemPersist = new TraceSwitch("ToolboxPersisting", "ToolboxItem: write data");
+
+        private static readonly object s_eventComponentsCreated = new object();
+        private static readonly object s_eventComponentsCreating = new object();
+
+        private static bool s_isScalingInitialized = false;
+        private const int ICON_DIMENSION = 16;
+        private static int s_iconWidth = ICON_DIMENSION;
+        private static int s_iconHeight = ICON_DIMENSION;
+
+        private bool _locked;
+        private LockableDictionary _properties;
+        private ToolboxComponentsCreatedEventHandler _componentsCreatedEvent;
+        private ToolboxComponentsCreatingEventHandler _componentsCreatingEvent;
+
         /// <summary>
         /// Initializes a new instance of the ToolboxItem class.
         /// </summary>
-        public ToolboxItem() { }
+        public ToolboxItem() {
+            if (!s_isScalingInitialized)
+            {
+                if (DpiHelper.IsScalingRequired)
+                {
+                    s_iconWidth = DpiHelper.LogicalToDeviceUnitsX(ICON_DIMENSION);
+                    s_iconHeight = DpiHelper.LogicalToDeviceUnitsY(ICON_DIMENSION);
+                }
+                s_isScalingInitialized = true;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the ToolboxItem class using the specified type.
         /// </summary>
         public ToolboxItem(Type toolType) : this()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            Initialize(toolType);
         }
 
         /// <summary>
@@ -35,7 +65,7 @@ namespace System.Drawing.Design
         /// </summary>
         private ToolboxItem(SerializationInfo info, StreamingContext context) : this()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            Deserialize(info, context);
         }
 
         /// <summary>
@@ -44,8 +74,14 @@ namespace System.Drawing.Design
         /// </summary>
         public AssemblyName AssemblyName
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (AssemblyName)Properties["AssemblyName"];
+            }
+            set
+            {
+                Properties["AssemblyName"] = value;
+            }
         }
 
         /// <summary>
@@ -54,8 +90,19 @@ namespace System.Drawing.Design
         /// </summary>
         public AssemblyName[] DependentAssemblies
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                AssemblyName[] names = (AssemblyName[])Properties["DependentAssemblies"];
+                if (names != null)
+                {
+                    return (AssemblyName[])names.Clone();
+                }
+                return null;
+            }
+            set
+            {
+                Properties["DependentAssemblies"] = value.Clone();
+            }
         }
 
         /// <summary>
@@ -64,8 +111,14 @@ namespace System.Drawing.Design
         /// </summary>
         public Bitmap Bitmap
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (Bitmap)Properties["Bitmap"];
+            }
+            set
+            {
+                Properties["Bitmap"] = value;
+            }
         }
 
         /// <summary>
@@ -74,8 +127,14 @@ namespace System.Drawing.Design
         /// </summary>
         public Bitmap OriginalBitmap
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (Bitmap)Properties["OriginalBitmap"];
+            }
+            set
+            {
+                Properties["OriginalBitmap"] = value;
+            }
         }
 
         /// <summary>
@@ -84,8 +143,14 @@ namespace System.Drawing.Design
         /// </summary>
         public string Company
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (string)Properties["Company"];
+            }
+            set
+            {
+                Properties["Company"] = value;
+            }
         }
 
         /// <summary>
@@ -93,7 +158,10 @@ namespace System.Drawing.Design
         /// </summary>
         public virtual string ComponentType
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return SR.DotNET_ComponentType;
+            }
         }
 
         /// <summary>
@@ -102,8 +170,14 @@ namespace System.Drawing.Design
         /// </summary>
         public string Description
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (string)Properties["Description"];
+            }
+            set
+            {
+                Properties["Description"] = value;
+            }
         }
 
         /// <summary>
@@ -111,8 +185,14 @@ namespace System.Drawing.Design
         /// </summary>
         public string DisplayName
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (string)Properties["DisplayName"];
+            }
+            set
+            {
+                Properties["DisplayName"] = value;
+            }
         }
 
         /// <summary>
@@ -121,8 +201,14 @@ namespace System.Drawing.Design
         /// </summary>
         public ICollection Filter
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (ICollection)Properties["Filter"];
+            }
+            set
+            {
+                Properties["Filter"] = value;
+            }
         }
 
         /// <summary>
@@ -132,8 +218,15 @@ namespace System.Drawing.Design
         /// </summary>
         public bool IsTransient
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
+            get
+            {
+                return (bool)Properties["IsTransient"];
+            }
+            set
+            {
+                Properties["IsTransient"] = value;
+            }
         }
 
         /// <summary>
@@ -142,7 +235,10 @@ namespace System.Drawing.Design
         /// </summary>
         public virtual bool Locked
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return _locked;
+            }
         }
 
         /// <summary>
@@ -154,7 +250,15 @@ namespace System.Drawing.Design
         /// </summary>
         public IDictionary Properties
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                if (_properties == null)
+                {
+                    _properties = new LockableDictionary(this, 8 /* # of properties we have */);
+                }
+
+                return _properties;
+            }
         }
 
         /// <summary>
@@ -162,8 +266,14 @@ namespace System.Drawing.Design
         /// </summary>
         public string TypeName
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                return (string)Properties["TypeName"];
+            }
+            set
+            {
+                Properties["TypeName"] = value;
+            }
         }
 
         /// <summary>
@@ -173,7 +283,14 @@ namespace System.Drawing.Design
         /// </summary>
         public virtual string Version
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get
+            {
+                if (AssemblyName != null)
+                {
+                    return AssemblyName.Version.ToString();
+                }
+                return string.Empty;
+            }
         }
 
 
@@ -184,11 +301,11 @@ namespace System.Drawing.Design
         {
             add
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                _componentsCreatedEvent += value;
             }
             remove
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                _componentsCreatedEvent -= value;
             }
         }
 
@@ -199,11 +316,11 @@ namespace System.Drawing.Design
         {
             add
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                _componentsCreatingEvent += value;
             }
             remove
             {
-                throw new NotImplementedException(SR.NotImplementedByDesign);
+                _componentsCreatingEvent -= value;
             }
         }
 
@@ -213,7 +330,8 @@ namespace System.Drawing.Design
         /// </summary>
         protected void CheckUnlocked()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (Locked)
+                throw new InvalidOperationException(SR.ToolboxItemLocked);
         }
 
         /// <summary>
@@ -222,7 +340,7 @@ namespace System.Drawing.Design
         /// <returns></returns>
         public IComponent[] CreateComponents()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return CreateComponents(null);
         }
 
         /// <summary>
@@ -231,7 +349,13 @@ namespace System.Drawing.Design
         /// </summary>
         public IComponent[] CreateComponents(IDesignerHost host)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            OnComponentsCreating(new ToolboxComponentsCreatingEventArgs(host));
+            IComponent[] comps = CreateComponentsCore(host, new Hashtable());
+            if (comps != null && comps.Length > 0)
+            {
+                OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
+            }
+            return comps;
         }
 
         /// <summary>
@@ -241,7 +365,13 @@ namespace System.Drawing.Design
         /// <returns></returns>
         public IComponent[] CreateComponents(IDesignerHost host, IDictionary defaultValues)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            OnComponentsCreating(new ToolboxComponentsCreatingEventArgs(host));
+            IComponent[] comps = CreateComponentsCore(host, defaultValues);
+            if (comps != null && comps.Length > 0)
+            {
+                OnComponentsCreated(new ToolboxComponentsCreatedEventArgs(comps));
+            }
+            return comps;
         }
 
         /// <summary>
@@ -250,7 +380,24 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual IComponent[] CreateComponentsCore(IDesignerHost host)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            ArrayList comps = new ArrayList();
+
+            Type createType = GetType(host, AssemblyName, TypeName, true);
+            if (createType != null)
+            {
+                if (host != null)
+                {
+                    comps.Add(host.CreateComponent(createType));
+                }
+                else if (typeof(IComponent).IsAssignableFrom(createType))
+                {
+                    comps.Add(TypeDescriptor.CreateInstance(null, createType, null, null));
+                }
+            }
+
+            IComponent[] temp = new IComponent[comps.Count];
+            comps.CopyTo(temp, 0);
+            return temp;
         }
 
         /// <summary>
@@ -259,22 +406,131 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual IComponent[] CreateComponentsCore(IDesignerHost host, IDictionary defaultValues)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            IComponent[] components = CreateComponentsCore(host);
+
+            if (host != null)
+            {
+                for (int i = 0; i < components.Length; i++)
+                {
+                    if (host.GetDesigner(components[i]) is IComponentInitializer init)
+                    {
+                        bool removeComponent = true;
+
+                        try
+                        {
+                            init.InitializeNewComponent(defaultValues);
+                            removeComponent = false;
+
+                        }
+                        finally
+                        {
+                            if (removeComponent)
+                            {
+                                for (int index = 0; index < components.Length; index++)
+                                {
+                                    host.DestroyComponent(components[index]);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            return components;
         }
 
         protected virtual void Deserialize(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            // Do this in a couple of passes -- first pass, try to pull	
+            // out our dictionary of property names.  We need to do this	
+            // for backwards compatibilty because if we throw everything	
+            // into the property dictionary we'll duplicate stuff people	
+            // have serialized by hand.	
+
+            string[] propertyNames = null;
+            foreach (SerializationEntry entry in info)
+            {
+                if (entry.Name.Equals("PropertyNames"))
+                {
+                    propertyNames = entry.Value as string[];
+                    break;
+                }
+            }
+
+            if (propertyNames == null)
+            {
+                // For backwards compat, here are the default property	
+                // names we use	
+                propertyNames = new string[] {
+                    "AssemblyName",
+                    "Bitmap",
+                    "DisplayName",
+                    "Filter",
+                    "IsTransient",
+                    "TypeName"
+                };
+            }
+
+            foreach (SerializationEntry entry in info)
+            {
+
+                // Check to see if this name is in our	
+                // propertyNames array.	
+                foreach (string validName in propertyNames)
+                {
+                    if (validName.Equals(entry.Name))
+                    {
+                        Properties[entry.Name] = entry.Value;
+                        break;
+                    }
+                }
+            }
+
+            // Always do "Locked" last (otherwise we can't do the others!)	
+            bool isLocked = info.GetBoolean("Locked");
+            if (isLocked)
+            {
+                Lock();
+            }
         }
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (!(obj.GetType() == GetType()))
+            {
+                return false;
+            }
+
+            ToolboxItem otherItem = (ToolboxItem)obj;
+
+            return TypeName == otherItem.TypeName &&
+                  AreAssemblyNamesEqual(AssemblyName, otherItem.AssemblyName) &&
+                  DisplayName == otherItem.DisplayName;
+        }
+
+        private static bool AreAssemblyNamesEqual(AssemblyName name1, AssemblyName name2)
+        {
+            return name1 == name2 ||
+                   (name1 != null && name2 != null && name1.FullName == name2.FullName);
         }
 
         public override int GetHashCode()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            string typeName = TypeName;
+            int hash = (typeName != null) ? typeName.GetHashCode() : 0;
+
+            return unchecked(hash ^ DisplayName.GetHashCode());
         }
 
         /// <summary>
@@ -283,7 +539,34 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual object FilterPropertyValue(string propertyName, object value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            switch (propertyName)
+            {
+                case "AssemblyName":
+                    if (value != null)
+                        value = ((AssemblyName)value).Clone();
+
+                    break;
+
+                case "DisplayName":
+                case "TypeName":
+                    if (value == null)
+                        value = string.Empty;
+
+                    break;
+
+                case "Filter":
+                    if (value == null)
+                        value = Array.Empty<ToolboxItemFilterAttribute>();
+
+                    break;
+
+                case "IsTransient":
+                    if (value == null)
+                        value = false;
+
+                    break;
+            }
+            return value;
         }
 
         /// <summary>
@@ -293,7 +576,7 @@ namespace System.Drawing.Design
         /// </summary>
         public Type GetType(IDesignerHost host)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return GetType(host, AssemblyName, TypeName, false);
         }
 
         /// <summary>
@@ -302,9 +585,116 @@ namespace System.Drawing.Design
         ///     locate the type.  If reference is true, the given assembly name will be added
         ///     to the designer host's set of references.
         /// </summary>
+        [SuppressMessage("Microsoft.Reliability", "CA2001:AvoidCallingProblematicMethods")]
         protected virtual Type GetType(IDesignerHost host, AssemblyName assemblyName, string typeName, bool reference)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            ITypeResolutionService ts = null;
+            Type type = null;
+
+            if (typeName == null)
+            {
+                throw new ArgumentNullException(nameof(typeName));
+            }
+
+            if (host != null)
+            {
+                ts = (ITypeResolutionService)host.GetService(typeof(ITypeResolutionService));
+            }
+
+            if (ts != null)
+            {
+
+                if (reference)
+                {
+                    if (assemblyName != null)
+                    {
+                        ts.ReferenceAssembly(assemblyName);
+                        type = ts.GetType(typeName);
+                    }
+                    else
+                    {
+                        // Just try loading the type.  If we succeed, then use this as the	
+                        // reference.	
+                        type = ts.GetType(typeName);
+                        if (type == null)
+                        {
+                            type = Type.GetType(typeName);
+                        }
+                        if (type != null)
+                        {
+                            ts.ReferenceAssembly(type.Assembly.GetName());
+                        }
+                    }
+                }
+                else
+                {
+                    if (assemblyName != null)
+                    {
+                        Assembly a = ts.GetAssembly(assemblyName);
+                        if (a != null)
+                        {
+                            type = a.GetType(typeName);
+                        }
+                    }
+
+                    if (type == null)
+                    {
+                        type = ts.GetType(typeName);
+                    }
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(typeName))
+                {
+                    if (assemblyName != null)
+                    {
+                        Assembly a = null;
+                        try
+                        {
+                            a = Assembly.Load(assemblyName);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                        }
+                        catch (BadImageFormatException)
+                        {
+                        }
+                        catch (IOException)
+                        {
+                        }
+
+                        if (a == null && assemblyName.CodeBase != null && assemblyName.CodeBase.Length > 0)
+                        {
+                            try
+                            {
+                                a = Assembly.LoadFrom(assemblyName.CodeBase);
+                            }
+                            catch (FileNotFoundException)
+                            {
+                            }
+                            catch (BadImageFormatException)
+                            {
+                            }
+                            catch (IOException)
+                            {
+                            }
+                        }
+
+                        if (a != null)
+                        {
+                            type = a.GetType(typeName);
+                        }
+                    }
+
+                    if (type == null)
+                    {
+                        type = Type.GetType(typeName, false);
+                    }
+                }
+            }
+
+            return type;
         }
 
         /// <summary>
@@ -312,7 +702,152 @@ namespace System.Drawing.Design
         /// </summary>
         public virtual void Initialize(Type type)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            CheckUnlocked();
+
+            if (type != null)
+            {
+                TypeName = type.FullName;
+                AssemblyName assemblyName = type.Assembly.GetName(true);
+                if (type.Assembly.GlobalAssemblyCache)
+                {
+                    assemblyName.CodeBase = null;
+                }
+
+                Dictionary<string, AssemblyName> parents = new Dictionary<string, AssemblyName>();
+                Type parentType = type;
+                while (parentType != null)
+                {
+                    AssemblyName policiedname = parentType.Assembly.GetName(true);
+
+                    AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedname);
+
+                    if (aname != null && !parents.ContainsKey(aname.FullName))
+                    {
+                        parents[aname.FullName] = aname;
+                    }
+                    parentType = parentType.BaseType;
+                }
+
+                AssemblyName[] parentAssemblies = new AssemblyName[parents.Count];
+                int i = 0;
+                foreach (AssemblyName an in parents.Values)
+                {
+                    parentAssemblies[i++] = an;
+                }
+
+                DependentAssemblies = parentAssemblies;
+
+                AssemblyName = assemblyName;
+                DisplayName = type.Name;
+
+                //if the Type is a reflectonly type, these values must be set through a config object or manually	
+                //after construction.	
+                if (!type.Assembly.ReflectionOnly)
+                {
+
+                    object[] companyattrs = type.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), true);
+                    if (companyattrs != null && companyattrs.Length > 0)
+                    {
+                        if (companyattrs[0] is AssemblyCompanyAttribute company && company.Company != null)
+                        {
+                            Company = company.Company;
+                        }
+                    }
+
+                    //set the description based off the description attribute of the given type.	
+                    DescriptionAttribute descattr = (DescriptionAttribute)TypeDescriptor.GetAttributes(type)[typeof(DescriptionAttribute)];
+                    if (descattr != null)
+                    {
+                        Description = descattr.Description;
+                    }
+
+                    ToolboxBitmapAttribute attr = (ToolboxBitmapAttribute)TypeDescriptor.GetAttributes(type)[typeof(ToolboxBitmapAttribute)];
+                    if (attr != null)
+                    {
+                        Bitmap itemBitmap = attr.GetImage(type, false) as Bitmap;
+                        if (itemBitmap != null)
+                        {
+                            // Original bitmap is used when adding the item to the Visual Studio toolbox 	
+                            // if running on a machine with HDPI scaling enabled.	
+                            OriginalBitmap = itemBitmap;
+                            if ((itemBitmap.Width != s_iconWidth || itemBitmap.Height != s_iconHeight))
+                            {
+                                itemBitmap = new Bitmap(itemBitmap, new Size(s_iconWidth, s_iconHeight));
+                            }
+                        }
+                        Bitmap = itemBitmap;
+                    }
+
+                    bool filterContainsType = false;
+                    ArrayList array = new ArrayList();
+                    foreach (Attribute a in TypeDescriptor.GetAttributes(type))
+                    {
+                        if (a is ToolboxItemFilterAttribute ta)
+                        {
+                            if (ta.FilterString.Equals(TypeName))
+                            {
+                                filterContainsType = true;
+                            }
+                            array.Add(ta);
+                        }
+                    }
+
+                    if (!filterContainsType)
+                    {
+                        array.Add(new ToolboxItemFilterAttribute(TypeName));
+                    }
+
+                    Filter = (ToolboxItemFilterAttribute[])array.ToArray(typeof(ToolboxItemFilterAttribute));
+                }
+            }
+        }
+
+        private AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
+        {
+            if (type == null || policiedAssemblyName == null)
+                return null;
+
+            //if looking for myself, just return it. (not a reference)	
+            if (type.Assembly.FullName == policiedAssemblyName.FullName)
+            {
+                return policiedAssemblyName;
+            }
+
+            //first search for an exact match -- we prefer this over a partial match.	
+            foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
+            {
+                if (name.FullName == policiedAssemblyName.FullName)
+                    return name;
+            }
+
+            //next search for a partial match -- we just compare the Name portions (ignore version and publickey)	
+            foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
+            {
+                if (name.Name == policiedAssemblyName.Name)
+                    return name;
+            }
+
+            //finally, the most expensive -- its possible that retargeting policy is on an assembly whose name changes	
+            // an example of this is the device System.Windows.Forms.Datagrid.dll	
+            // in this case, we need to try to load each device assemblyname through policy to see if it results	
+            // in assemblyname.	
+            foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
+            {
+                Assembly a = null;
+
+                try
+                {
+                    a = Assembly.Load(name);
+                    if (a != null && a.FullName == policiedAssemblyName.FullName)
+                        return name;
+                }
+                catch
+                {
+                    //ignore all exceptions and just fall through if it fails (it shouldn't, but who knows).	
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -321,37 +856,53 @@ namespace System.Drawing.Design
         /// </summary>
         public virtual void Lock()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _locked = true;
         }
 
         /// <summary>
         ///Saves the state of this ToolboxItem to the specified serialization info
         /// </summary>
+        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         protected virtual void Serialize(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (s_toolboxItemPersist.TraceVerbose)
+            {
+                Debug.WriteLine("Persisting: " + GetType().Name);
+                Debug.WriteLine("\tDisplay Name: " + DisplayName);
+            }
+
+            info.AddValue("Locked", Locked);
+            ArrayList propertyNames = new ArrayList(Properties.Count);
+            foreach (DictionaryEntry de in Properties)
+            {
+                propertyNames.Add(de.Key);
+                info.AddValue((string)de.Key, de.Value);
+            }
+            info.AddValue("PropertyNames", (string[])propertyNames.ToArray(typeof(string)));
         }
         /// <summary>
         /// Raises the OnComponentsCreated event. This
         /// will be called when this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
         /// </summary>
+        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnComponentsCreated(ToolboxComponentsCreatedEventArgs args)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _componentsCreatedEvent?.Invoke(this, args);
         }
 
         /// <summary>
         /// Raises the OnCreateComponentsInvoked event. This
         /// will be called before this <see cref='System.Drawing.Design.ToolboxItem'/> creates a component.
         /// </summary>
+        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnComponentsCreating(ToolboxComponentsCreatingEventArgs args)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _componentsCreatingEvent?.Invoke(this, args);
         }
 
         public override string ToString()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return DisplayName;
         }
 
         /// <summary>
@@ -360,7 +911,20 @@ namespace System.Drawing.Design
         /// </summary>
         protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (value == null)
+            {
+                if (!allowNull)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+            }
+            else
+            {
+                if (!expectedType.IsInstanceOfType(value))
+                {
+                    throw new ArgumentException(string.Format(SR.ToolboxItemInvalidPropertyType, propertyName, expectedType.FullName), nameof(value));
+                }
+            }
         }
 
         /// <summary>
@@ -370,12 +934,154 @@ namespace System.Drawing.Design
         /// </summary>
         protected virtual object ValidatePropertyValue(string propertyName, object value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            switch (propertyName)
+            {
+                case "AssemblyName":
+                    ValidatePropertyType(propertyName, value, typeof(AssemblyName), true);
+                    break;
+
+                case "Bitmap":
+                    ValidatePropertyType(propertyName, value, typeof(Bitmap), true);
+                    break;
+
+                case "OriginalBitmap":
+                    ValidatePropertyType(propertyName, value, typeof(Bitmap), true);
+                    break;
+
+                case "Company":
+                case "Description":
+                case "DisplayName":
+                case "TypeName":
+                    ValidatePropertyType(propertyName, value, typeof(string), true);
+                    if (value == null)
+                        value = string.Empty;
+
+                    break;
+
+                case "Filter":
+                    ValidatePropertyType(propertyName, value, typeof(ICollection), true);
+
+                    int filterCount = 0;
+                    ICollection col = (ICollection)value;
+
+                    if (col != null)
+                    {
+                        foreach (object f in col)
+                        {
+                            if (f is ToolboxItemFilterAttribute)
+                            {
+                                filterCount++;
+                            }
+                        }
+                    }
+
+                    ToolboxItemFilterAttribute[] filter = new ToolboxItemFilterAttribute[filterCount];
+
+                    if (col != null)
+                    {
+                        filterCount = 0;
+                        foreach (object f in col)
+                        {
+                            if (f is ToolboxItemFilterAttribute tfa)
+                            {
+                                filter[filterCount++] = tfa;
+                            }
+                        }
+                    }
+
+                    value = filter;
+                    break;
+
+                case "IsTransient":
+                    ValidatePropertyType(propertyName, value, typeof(bool), false);
+                    break;
+            }
+            return value;
         }
 
+        [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            //IntSecurity.UnmanagedCode.Demand();
+            Serialize(info, context);
+        }
+
+        private class LockableDictionary : Hashtable
+        {
+            private readonly ToolboxItem _item;
+            internal LockableDictionary(ToolboxItem item, int capacity) : base(capacity)
+            {
+                _item = item;
+            }
+
+            public override bool IsFixedSize
+            {
+                get
+                {
+                    return _item.Locked;
+                }
+            }
+
+            public override bool IsReadOnly
+            {
+                get
+                {
+                    return _item.Locked;
+                }
+            }
+
+            public override object this[object key]
+            {
+                get
+                {
+                    string propertyName = GetPropertyName(key);
+                    object value = base[propertyName];
+
+                    return _item.FilterPropertyValue(propertyName, value);
+                }
+                set
+                {
+                    string propertyName = GetPropertyName(key);
+                    value = _item.ValidatePropertyValue(propertyName, value);
+                    _item.CheckUnlocked();
+                    base[propertyName] = value;
+                }
+            }
+
+            public override void Add(object key, object value)
+            {
+                string propertyName = GetPropertyName(key);
+                value = _item.ValidatePropertyValue(propertyName, value);
+                _item.CheckUnlocked();
+                base.Add(propertyName, value);
+            }
+
+            public override void Clear()
+            {
+                _item.CheckUnlocked();
+                base.Clear();
+            }
+
+            private string GetPropertyName(object key)
+            {
+                if (key == null)
+                {
+                    throw new ArgumentNullException(nameof(key));
+                }
+
+                if (!(key is string propertyName) || propertyName.Length == 0)
+                {
+                    throw new ArgumentException(string.Format(SR.ToolboxItemInvalidKey), nameof(key));
+                }
+
+                return propertyName;
+            }
+
+            public override void Remove(object key)
+            {
+                _item.CheckUnlocked();
+                base.Remove(key);
+            }
         }
     }
 }
