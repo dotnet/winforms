@@ -621,7 +621,6 @@ namespace System.Windows.Forms
             }
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected internal override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             if (HasDropDownItems)
@@ -633,7 +632,6 @@ namespace System.Windows.Forms
 
 
         /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.ProcessDialogKey"]/*' />
-        [UIPermission(SecurityAction.LinkDemand, Window = UIPermissionWindow.AllWindows)]
         protected internal override bool ProcessDialogKey(Keys keyData)
         {
             Keys keyCode = (Keys)keyData & Keys.KeyCode;
@@ -930,7 +928,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.DoDefaultAction"]/*' />
-        [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         public override void DoDefaultAction()
         {
             ToolStripDropDownItem item = Owner as ToolStripDropDownItem;
