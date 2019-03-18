@@ -1,6 +1,5 @@
 # Windows Forms
 
-[![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
@@ -22,6 +21,20 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 * [Contributing guide][contributing]
 * [Porting guide][porting-guidelines]
 
+## Build Status & Dependency Flow
+
+|               | Public CI                                   :arrow_right: | Internal CI                                     :arrow_right: | Composition CI                          :arrow_right: | Core SDK CI                                                   |
+|-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |-------------------------------------------------------------  |
+| Master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      | [![Build Status][master-core-sdk-build]][core-sdk-build]      |
+| Release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    | [![Build Status][release3-core-sdk-build]][core-sdk-build]    |
+
+### Code Coverage
+
+|               | Production                                        | Test Source                                       | Combined                                          |
+|-------------  |-------------------------------------------------  |-------------------------------------------------  |-------------------------------------------------  |
+| Master        | [![codecov][master-coverage-prod]][coverage]      | [![codecov][master-coverage-test]][coverage]      | [![codecov][master-coverage-all]][coverage]       |
+| Release/3.0   | [![codecov][release3-coverage-prod]][coverage]    | [![codecov][release3-coverage-test]][coverage]    | [![codecov][release3-coverage-all]][coverage]     |
+
 ## Status
 
 We are in the process of doing four projects with Windows Forms:
@@ -39,14 +52,6 @@ The first two tasks are well underway. Most of the source has been published to 
 We have published very few tests and have very limited coverage for PRs at this time as a result. We will be slow in merging PRs as a result. We will add more tests in 2019, however, it will be an incremental process. We welcome test contributions to increase coverage and help us validate PRs more easily.
 
 The Visual Studio WinForms designer is not yet available and will be part of a Visual Studio 2019 update. In short, we need to move to an out-of-proc model (relative to Visual Studio) for the designer.
-
-### Code Coverage
-
-|             	| Production 	                                                                                                    | Test Source 	                                                                                                | Combined 	                                                                                            |
-|-------------	|-----------------------------------------------------------------------------------------------------------------	|-------------------------------------------------------------------------------------------------------------	|-----------------------------------------------------------------------------------------------------  |
-| Master      	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)][coverage]       | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test)][coverage]         | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?)][coverage]          |
-| Release/3.0 	| [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=production)][coverage] | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=test)][coverage]   | [![codecov](https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?)][coverage]    |
-
 
 ## How to Engage, Contribute, and Provide Feedback
 
@@ -90,7 +95,6 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [porting-guidelines]: Documentation/porting-guidelines.md
 [developing]: Documentation/developer-guide.md
 
-[coverage]: https://codecov.io/gh/dotnet/winforms
 [wpf]: https://github.com/dotnet/wpf
 [.net-core-3.0-sdk-preview]: https://dotnet.microsoft.com/download/dotnet-core/3.0
 [corefx-contributing]: https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/contributing.md
@@ -103,3 +107,29 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [dotnet-code-of-conduct]: https://dotnetfoundation.org/code-of-conduct
 [.net-foundation]: https://www.dotnetfoundation.org/projects
 [dotnet-home]: https://github.com/Microsoft/dotnet
+
+[master-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=master
+[release3-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=release%2f3.0
+[public-build]: https://dnceng.visualstudio.com/public/_build?definitionId=267
+
+[master-internal-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/164?branchName=master
+[release3-internal-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/164?branchName=release%2f3.0
+[internal-build]: https://dnceng.visualstudio.com/internal/_build?definitionId=164
+
+[master-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=master
+[release3-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=release%2f3.0
+[comp-build]: https://devdiv.visualstudio.com/DevDiv/_build?definitionId=9756
+
+[master-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
+[release3-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286?branchName=release%2f3.0.1xx
+[core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
+
+[master-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production
+[release3-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=production
+
+[master-coverage-test]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test
+[release3-coverage-test]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=test
+
+[master-coverage-all]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?
+[release3-coverage-all]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?
+[coverage]: https://codecov.io/gh/dotnet/winforms
