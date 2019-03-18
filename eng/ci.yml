@@ -181,6 +181,7 @@ jobs:
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -pack
