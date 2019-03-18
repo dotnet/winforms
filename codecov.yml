@@ -26,8 +26,6 @@ flags:
   test:
     paths:
       - src/Common/tests/
-      - src/System.Design/tests/
-      - src/System.Drawing/tests/
       - src/System.Drawing.Design/tests/
       - src/System.Windows.Forms/tests/
       - src/System.Windows.Forms.Design/tests/
