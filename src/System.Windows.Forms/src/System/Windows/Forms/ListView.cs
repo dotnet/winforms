@@ -5156,7 +5156,6 @@ namespace System.Windows.Forms {
                                                                   NativeMethods.LVM_SETGROUPINFO,
                                                                   group.ID,
                                                                   lvgroup);
-                Debug.Assert(retval != -1, "Failed to set group info");
             }
             finally
             {
