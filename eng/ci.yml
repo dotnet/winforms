@@ -149,7 +149,6 @@ jobs:
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
       - powershell: eng\cibuild.cmd
-          -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs) 
           -test
