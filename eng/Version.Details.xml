@@ -7,43 +7,43 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
 -->
 <Dependencies>
   <ProductDependencies>
-    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="Microsoft.Win32.Registry" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="System.Configuration.ConfigurationManager" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="System.Drawing.Common" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="System.Drawing.Common" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="System.Security.Cryptography.Cng" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="System.CodeDom" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="System.CodeDom" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="System.Security.Permissions" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview4.19163.10">
+    <Dependency Name="System.Windows.Extensions" Version="4.6.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
-    <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-preview4.19163.10">
+    <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-preview4.19164.7">
       <Uri>https://github.com/dotnet/corefx</Uri>
-      <Sha>689e58ec123d8c730d48d1c35c8f7ecbba6c22cf</Sha>
+      <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
     <Dependency Name="Microsoft.DotNet.Arcade.Sdk" Version="1.0.0-beta.19162.7">
       <Uri>https://github.com/dotnet/arcade</Uri>
