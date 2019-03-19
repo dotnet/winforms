@@ -4,6 +4,7 @@
 
 using System.CodeDom;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -2787,8 +2788,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference expression and then  call on the various Serialize Property / Event methods.  This is incompatible with legacy code, and if not handled legacy code may serialize incorrectly or even stack fault.  To handle this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression so that future calls to IsSerialized will succeed.
                             SetLegacyExpression(manager, value);
-                            StatementContext statementCxt = manager.Context[typeof(StatementContext)] as StatementContext;
-                            if (statementCxt != null)
+                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
                             {
                                 saveStatements = statementCxt.StatementCollection[value];
                             }
@@ -2825,8 +2825,10 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             if (result is CodeStatement statement)
                             {
-                                statements = new CodeStatementCollection();
-                                statements.Add(statement);
+                                statements = new CodeStatementCollection
+                                {
+                                    statement
+                                };
                             }
                         }
 
@@ -2987,8 +2989,7 @@ namespace System.ComponentModel.Design.Serialization
                 CodeStatementCollection saveStatements = null;
                 if (value != null)
                 {
-                    StatementContext statementCxt = manager.Context[typeof(StatementContext)] as StatementContext;
-                    if (statementCxt != null)
+                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
                     {
                         saveStatements = statementCxt.StatementCollection[value];
                     }
@@ -3065,6 +3066,247 @@ namespace System.ComponentModel.Design.Serialization
             }
 #endif
             table.SetExpression(value, expression, isPreset);
+        }
+
+        internal static void FillStatementTable(IDesignerSerializationManager manager, IDictionary table, CodeStatementCollection statements)
+        {
+            FillStatementTable(manager, table, null, statements, null);
+        }
+
+        internal static void FillStatementTable(IDesignerSerializationManager manager, IDictionary table, Dictionary<string, string> names, CodeStatementCollection statements, string className)
+        {
+            using (TraceScope("CodeDomSerializerBase::FillStatementTable"))
+            {
+                // Look in the method body to try to find statements with a LHS that points to a name in our nametable.
+                foreach (CodeStatement statement in statements)
+                {
+                    CodeExpression expression = null;
+                    if (statement is CodeAssignStatement assign)
+                    {
+                        Trace("Processing CodeAssignStatement");
+                        expression = assign.Left;
+                    }
+                    else if (statement is CodeAttachEventStatement attachEvent)
+                    {
+                        Trace("Processing CodeAttachEventStatement");
+                        expression = attachEvent.Event;
+                    }
+                    else if (statement is CodeRemoveEventStatement removeEvent)
+                    {
+                        Trace("Processing CodeRemoveEventStatement");
+                        expression = removeEvent.Event;
+                    }
+                    else if (statement is CodeExpressionStatement expressionStmt)
+                    {
+                        Trace("Processing CodeExpressionStatement");
+                        expression = expressionStmt.Expression;
+                    }
+                    else if (statement is CodeVariableDeclarationStatement variableDecl)
+                    {
+                        Trace("Processing CodeVariableDeclarationStatement");
+                        AddStatement(table, variableDecl.Name, variableDecl);
+                        if (names != null && variableDecl.Type != null && !string.IsNullOrEmpty(variableDecl.Type.BaseType))
+                        {
+                            names[variableDecl.Name] = GetTypeNameFromCodeTypeReference(manager, variableDecl.Type);
+                        }
+                        expression = null;
+                    }
+
+                    // Expressions we look for.
+                    CodeDelegateCreateExpression delegateCreateEx;
+                    CodeDelegateInvokeExpression delegateInvokeEx;
+                    CodeDirectionExpression directionEx;
+                    CodeEventReferenceExpression eventReferenceEx;
+                    CodeMethodInvokeExpression methodInvokeEx;
+                    CodeMethodReferenceExpression methodReferenceEx;
+                    CodeArrayIndexerExpression arrayIndexerEx;
+                    CodeFieldReferenceExpression fieldReferenceEx;
+                    CodePropertyReferenceExpression propertyReferenceEx;
+                    CodeVariableReferenceExpression variableReferenceEx;
+
+                    if (expression != null)
+                    {
+                        // Simplify the expression as much as we can, looking for our target object in the process.  If we find an expression that refers to our target object, we're done and can move on to the next statement.
+                        while (true)
+                        {
+                            if (expression is CodeCastExpression castEx)
+                            {
+                                Trace("Simplifying CodeCastExpression");
+                                expression = castEx.Expression;
+                            }
+                            else if ((delegateCreateEx = expression as CodeDelegateCreateExpression) != null)
+                            {
+                                Trace("Simplifying CodeDelegateCreateExpression");
+                                expression = delegateCreateEx.TargetObject;
+                            }
+                            else if ((delegateInvokeEx = expression as CodeDelegateInvokeExpression) != null)
+                            {
+                                Trace("Simplifying CodeDelegateInvokeExpression");
+                                expression = delegateInvokeEx.TargetObject;
+                            }
+                            else if ((directionEx = expression as CodeDirectionExpression) != null)
+                            {
+                                Trace("Simplifying CodeDirectionExpression");
+                                expression = directionEx.Expression;
+                            }
+                            else if ((eventReferenceEx = expression as CodeEventReferenceExpression) != null)
+                            {
+                                Trace("Simplifying CodeEventReferenceExpression");
+                                expression = eventReferenceEx.TargetObject;
+                            }
+                            else if ((methodInvokeEx = expression as CodeMethodInvokeExpression) != null)
+                            {
+                                Trace("Simplifying CodeMethodInvokeExpression");
+                                expression = methodInvokeEx.Method;
+                            }
+                            else if ((methodReferenceEx = expression as CodeMethodReferenceExpression) != null)
+                            {
+                                Trace("Simplifying CodeMethodReferenceExpression");
+                                expression = methodReferenceEx.TargetObject;
+                            }
+                            else if ((arrayIndexerEx = expression as CodeArrayIndexerExpression) != null)
+                            {
+                                Trace("Simplifying CodeArrayIndexerExpression");
+                                expression = arrayIndexerEx.TargetObject;
+                            }
+                            else if ((fieldReferenceEx = expression as CodeFieldReferenceExpression) != null)
+                            {
+                                // For fields we need to check to see if the field name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
+                                // Note:  We cannot validate that this is a name in our nametable.  The nametable only contains names we have discovered through code parsing and will not include data from any inherited objects.  We accept the field now, and then fail later if we try to resolve it to an object and we can't find it.
+                                bool addedStatement = false;
+                                if (fieldReferenceEx.TargetObject is CodeThisReferenceExpression)
+                                {
+                                    Type type = GetType(manager, fieldReferenceEx.FieldName, names);
+                                    if (type != null)
+                                    {
+                                        if (manager.GetSerializer(type, typeof(CodeDomSerializer)) is CodeDomSerializer serializer)
+                                        {
+                                            string componentName = serializer.GetTargetComponentName(statement, expression, type);
+                                            if (!string.IsNullOrEmpty(componentName))
+                                            {
+                                                AddStatement(table, componentName, statement);
+                                                addedStatement = true;
+                                            }
+                                        }
+                                    }
+                                    if (!addedStatement)
+                                    {
+                                        // we still want to do this in case of the "Note" above.
+                                        AddStatement(table, fieldReferenceEx.FieldName, statement);
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    Trace("Simplifying CodeFieldReferenceExpression");
+                                    expression = fieldReferenceEx.TargetObject;
+                                }
+                            }
+                            else if ((propertyReferenceEx = expression as CodePropertyReferenceExpression) != null)
+                            {
+                                // For properties we need to check to see if the property name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
+                                if (propertyReferenceEx.TargetObject is CodeThisReferenceExpression && (names == null || names.ContainsKey(propertyReferenceEx.PropertyName)))
+                                {
+                                    AddStatement(table, propertyReferenceEx.PropertyName, statement);
+                                    break;
+                                }
+                                else
+                                {
+                                    Trace("Simplifying CodePropertyReferenceExpression");
+                                    expression = propertyReferenceEx.TargetObject;
+                                }
+                            }
+                            else if ((variableReferenceEx = expression as CodeVariableReferenceExpression) != null)
+                            {
+                                // For variables we need to check to see if the variable name is equal to the target object. If it is, then we have the expression we want.  We can add the statement here and then break out of our loop.
+                                bool statementAdded = false;
+                                if (names != null)
+                                {
+                                    Type type = GetType(manager, variableReferenceEx.VariableName, names);
+                                    if (type != null)
+                                    {
+                                        if (manager.GetSerializer(type, typeof(CodeDomSerializer)) is CodeDomSerializer serializer)
+                                        {
+                                            string componentName = serializer.GetTargetComponentName(statement, expression, type);
+                                            if (!string.IsNullOrEmpty(componentName))
+                                            {
+                                                AddStatement(table, componentName, statement);
+                                                statementAdded = true;
+                                            }
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    AddStatement(table, variableReferenceEx.VariableName, statement);
+                                    statementAdded = true;
+                                }
+                                if (!statementAdded)
+                                {
+                                    TraceError("Variable {0} used before it was declared.", variableReferenceEx.VariableName);
+                                    manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerUndeclaredName, variableReferenceEx.VariableName), manager));
+                                }
+                                break;
+                            }
+                            else if (expression is CodeThisReferenceExpression || expression is CodeBaseReferenceExpression)
+                            {
+                                // We cannot go any further than "this".  So, we break out of the loop.  We file this statement under the root object.
+                                Debug.Assert(className != null, "FillStatementTable expected a valid className but received null");
+                                if (className != null)
+                                {
+                                    AddStatement(table, className, statement);
+                                }
+                                break;
+                            }
+                            else
+                            {
+                                // We cannot simplify this expression any further, so we stop looping.
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        internal static Type GetType(IDesignerSerializationManager manager, string name, Dictionary<string, string> names)
+        {
+            Type type = null;
+            if (names != null && names.ContainsKey(name))
+            {
+                string typeName = names[name];
+                if (manager != null && !string.IsNullOrEmpty(typeName))
+                {
+                    type = manager.GetType(typeName);
+                }
+            }
+            return type;
+        }
+
+        private static void AddStatement(IDictionary table, string name, CodeStatement statement)
+        {
+
+            OrderedCodeStatementCollection statements;
+            if (table.Contains(name))
+            {
+                statements = (OrderedCodeStatementCollection)table[name];
+            }
+            else
+            {
+                // push in an order key so we know what position this item was in the list of declarations. this allows us to preserve ZOrder.
+                statements = new OrderedCodeStatementCollection
+                {
+                    Order = table.Count,
+                    Name = name
+                };
+                table[name] = statements;
+            }
+            statements.Add(statement);
+        }
+
+        internal class OrderedCodeStatementCollection : CodeStatementCollection
+        {
+            public int Order;
+            public string Name;
         }
     }
 }

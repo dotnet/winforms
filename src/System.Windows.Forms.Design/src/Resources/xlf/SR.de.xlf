@@ -2,6 +2,21 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="de" original="../SR.resx">
     <body>
+      <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
+        <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
+        <target state="new">The serialization store is closed.  New objects cannot be added to a closed store.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
+        <source>Complete deserialization of {0} failed.</source>
+        <target state="new">Complete deserialization of {0} failed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
+        <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
+        <target state="new">This type of serialization store is not supported.  Use a store returned by the CreateStore method.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
         <target state="new">Adding event '{0}'</target>

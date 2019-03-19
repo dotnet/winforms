@@ -279,4 +279,13 @@
   <data name="SerializerMemberTypeNotSerializable" xml:space="preserve">
     <value>Members of type '{0}' cannot be serialized.</value>
   </data>
+  <data name="CodeDomComponentSerializationServiceDeserializationError" xml:space="preserve">
+    <value>Complete deserialization of {0} failed.</value>
+  </data>
+  <data name="CodeDomComponentSerializationServiceUnknownStore" xml:space="preserve">
+    <value>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</value>
+  </data>
+  <data name="CodeDomComponentSerializationServiceClosedStore" xml:space="preserve">
+    <value>The serialization store is closed.  New objects cannot be added to a closed store.</value>
+  </data>
 </root>
