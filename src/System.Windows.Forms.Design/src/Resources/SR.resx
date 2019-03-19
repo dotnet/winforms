@@ -273,4 +273,10 @@
   <data name="SerializerNoSerializerForComponent" xml:space="preserve">
     <value>The object '{0}' failed to serialize itself.  It may not support code generation.</value>
   </data>
+  <data name="SerializerInvalidArrayRank" xml:space="preserve">
+    <value>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</value>
+  </data>
+  <data name="SerializerMemberTypeNotSerializable" xml:space="preserve">
+    <value>Members of type '{0}' cannot be serialized.</value>
+  </data>
 </root>
