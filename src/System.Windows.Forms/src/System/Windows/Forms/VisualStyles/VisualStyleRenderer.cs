@@ -822,7 +822,7 @@ namespace System.Windows.Forms.VisualStyles {
 
             using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
                 HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
-                lastHResult = SafeNativeMethods.GetThemeMargins( new HandleRef( this, Handle ), hdc, part, state, (int) prop, ref margins );
+                lastHResult = SafeNativeMethods.GetThemeMargins( new HandleRef( this, Handle ), hdc, part, state, (int) prop, default(NativeMethods.COMRECT), ref margins );
             }
 
             return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);
