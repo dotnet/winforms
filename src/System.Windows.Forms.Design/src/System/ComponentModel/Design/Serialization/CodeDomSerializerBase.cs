@@ -448,9 +448,8 @@ namespace System.ComponentModel.Design.Serialization
         }
         internal static IDisposable TraceScope(string name)
         {
-#if DEBUG
             if (traceScope == null) traceScope = new Stack();
-
+#if DEBUG
             Trace(name);
             traceScope.Push(name);
 #endif
