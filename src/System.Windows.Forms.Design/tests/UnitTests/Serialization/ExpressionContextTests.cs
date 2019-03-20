@@ -15,14 +15,12 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         {
             CodeExpression expression = new CodeExpression();
             Type type = expression.GetType();
-            object owner = null;
+            object owner = "owner";
             object presetValue = null;
 
             var underTest = new ExpressionContext(expression, type, owner, presetValue);
             Assert.NotNull(underTest);
             Assert.Equal(expression, underTest.Expression);
-            Assert.Equal(expression.GetType(), underTest.ExpressionType);
-            Assert.Equal(type, underTest.GetType());
         }
     }
 }
