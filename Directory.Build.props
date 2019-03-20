@@ -8,7 +8,7 @@
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
   <Import Project="eng\FacadeAssemblies.props" />
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(CopyrightNetFoundation)' != ''">
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
