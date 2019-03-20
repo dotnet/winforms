@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 
@@ -179,8 +180,10 @@ namespace System.ComponentModel.Design
             // We should never add anything while we're unloading.
             if (_state[s_stateUnloading])
             {
-                Exception ex = new Exception(string.Format(SR.DesignerHostUnloading));
-                ex.HelpLink = SR.DesignerHostUnloading;
+                Exception ex = new Exception(SR.DesignerHostUnloading)
+                {
+                    HelpLink = SR.DesignerHostUnloading
+                };
                 throw ex;
             }
 
@@ -234,8 +237,10 @@ namespace System.ComponentModel.Design
                 designer = _surface.CreateDesigner(component, true) as IRootDesigner;
                 if (designer == null)
                 {
-                    Exception ex = new Exception(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName));
-                    ex.HelpLink = SR.DesignerHostNoTopLevelDesigner;
+                    Exception ex = new Exception(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName)
+                    {
+                        HelpLink = SR.DesignerHostNoTopLevelDesigner
+                    };
                     throw ex;
                 }
 
@@ -260,7 +265,7 @@ namespace System.ComponentModel.Design
                     designer.Initialize(component);
                     if (designer.Component == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DesignerHostDesignerNeedsComponent));
+                        throw new InvalidOperationException(SR.DesignerHostDesignerNeedsComponent);
                     }
                 }
                 catch
@@ -287,12 +292,12 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called by DesignerSurface to begin loading the designer.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
+        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         internal void BeginLoad(DesignerLoader loader)
         {
             if (_loader != null && _loader != loader)
             {
-                Exception ex = new InvalidOperationException(string.Format(SR.DesignerHostLoaderSpecified));
+                Exception ex = new InvalidOperationException(SR.DesignerHostLoaderSpecified);
                 ex.HelpLink = SR.DesignerHostLoaderSpecified;
                 throw ex;
             }
@@ -401,7 +406,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                throw new InvalidOperationException(string.Format(SR.DesignSurfaceContainerDispose));
+                throw new InvalidOperationException(SR.DesignSurfaceContainerDispose);
             }
             base.Dispose(disposing);
         }
@@ -666,7 +671,6 @@ namespace System.ComponentModel.Design
 
         internal void RemoveFromContainerPostProcess(IComponent component, IContainer container)
         {
-            // VSWhidbey 464535 
             // At one point during Whidbey, the component used to be unsited earlier in this process and it would be temporarily resited here before raising OnComponentRemoved. The problem with resiting it is that some 3rd party controls take action when a component is sited (such as displaying  a dialog a control is dropped on the form) and resiting here caused them to think they were being initialized for the first time.  To preserve compat, we shouldn't resite the component  during Remove.
             try
             {
@@ -683,7 +687,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called to unload the design surface.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
+        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void Unload()
         {
             _surface.OnUnloading();
@@ -716,7 +720,9 @@ namespace System.ComponentModel.Design
                         {
                             _designers.Remove(comp);
                             try
-                            { designer.Dispose(); }
+                            {
+                                designer.Dispose();
+                            }
                             catch (Exception e)
                             {
                                 string failedComponent = designer != null ? designer.GetType().Name : string.Empty;
@@ -725,7 +731,9 @@ namespace System.ComponentModel.Design
                             }
                         }
                         try
-                        { comp.Dispose(); }
+                        {
+                            comp.Dispose();
+                        }
                         catch (Exception e)
                         {
                             string failedComponent = comp != null ? comp.GetType().Name : string.Empty;
@@ -1129,8 +1137,10 @@ namespace System.ComponentModel.Design
 
                 if (component == null)
                 {
-                    InvalidOperationException ex = new InvalidOperationException(string.Format(SR.DesignerHostFailedComponentCreate, componentType.Name));
-                    ex.HelpLink = SR.DesignerHostFailedComponentCreate;
+                    InvalidOperationException ex = new InvalidOperationException(string.Format(SR.DesignerHostFailedComponentCreate, componentType.Name))
+                    {
+                        HelpLink = SR.DesignerHostFailedComponentCreate
+                    };
                     throw ex;
                 }
 
@@ -1168,7 +1178,7 @@ namespace System.ComponentModel.Design
         {
             if (description == null)
             {
-                description = string.Format(SR.DesignerHostGenericTransactionName);
+                description = SR.DesignerHostGenericTransactionName;
             }
             return new DesignerHostTransaction(this, description);
         }
@@ -1253,7 +1263,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// This is called by the designer loader to indicate that the load has  terminated.  If there were errors, they should be passed in the errorCollection as a collection of exceptions (if they are not exceptions the designer loader host may just call ToString on them).  If the load was successful then errorCollection should either be null or contain an empty collection.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
+        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         void IDesignerLoaderHost.EndLoad(string rootClassName, bool successful, ICollection errorCollection)
         {
             bool wasLoading = _state[s_stateLoading];
@@ -1272,7 +1282,7 @@ namespace System.ComponentModel.Design
             if (successful && _rootComponent == null)
             {
                 ArrayList errorList = new ArrayList();
-                InvalidOperationException ex = new InvalidOperationException(string.Format(SR.DesignerHostNoBaseClass));
+                InvalidOperationException ex = new InvalidOperationException(SR.DesignerHostNoBaseClass);
                 ex.HelpLink = SR.DesignerHostNoBaseClass;
                 errorList.Add(ex);
                 errorCollection = errorList;
@@ -1502,7 +1512,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IServiceContainer.AddService(Type serviceType, object serviceInstance)
         {
-
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
             if (!(GetService(typeof(IServiceContainer)) is IServiceContainer sc))
             {
@@ -1516,7 +1525,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IServiceContainer.AddService(Type serviceType, object serviceInstance, bool promote)
         {
-
             // Our service container is implemented on the parenting DesignSurface object, so we just ask for its service container and run with it.
             if (!(GetService(typeof(IServiceContainer)) is IServiceContainer sc))
             {

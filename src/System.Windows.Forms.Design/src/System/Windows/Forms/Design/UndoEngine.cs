@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected UndoEngine(IServiceProvider provider)
         {
-            _provider = provider ?? throw new ArgumentNullException("provider");
+            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
             _unitStack = new Stack();
             _enabled = true;
 
@@ -317,7 +317,7 @@ namespace System.ComponentModel.Design
         {
             if (serviceType == null)
             {
-                throw new ArgumentNullException("serviceType");
+                throw new ArgumentNullException(nameof(serviceType));
             }
 
             if (_provider != null)
@@ -342,12 +342,10 @@ namespace System.ComponentModel.Design
 
         private void OnComponentAdding(object sender, ComponentEventArgs e)
         {
-
             // Open a new unit unless there is already one open or we are currently executing a unit. If we need to create a unit, we will have to fabricate a good name.
             if (_enabled && _executingUnit == null && _unitStack.Count == 0)
             {
                 string name;
-
                 if (e.Component != null)
                 {
                     name = string.Format(SR.UndoEngineComponentAdd1, GetName(e.Component, true));
@@ -356,7 +354,6 @@ namespace System.ComponentModel.Design
                 {
                     name = SR.UndoEngineComponentAdd0;
                 }
-
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
@@ -449,7 +446,6 @@ namespace System.ComponentModel.Design
                 _unitStack.Push(CreateUndoUnit(name, true));
             }
 
-            // VSWhidbey #312230
             // We need to keep track of all references in the container to the deleted component so  that those references can be fixed up if an undo of this "remove" occurs.       
             if (_enabled && _host != null && _host.Container != null && _componentChangeService != null)
             {
@@ -605,7 +601,7 @@ namespace System.ComponentModel.Design
                 UndoEngine.Trace("Creating undo unit '{0}'", name);
 
                 _name = name;
-                _engine = engine ?? throw new ArgumentNullException("engine");
+                _engine = engine ?? throw new ArgumentNullException(nameof(engine));
                 _reverse = true;
                 if (_engine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                 {
@@ -769,7 +765,6 @@ namespace System.ComponentModel.Design
                         //          - It must be for a DSV.Content property
                         //          - There must be a AddEvent between the Changing and Changed
                         //          - There are no renames in between Changing and Changed.
-                        // See VSWhidbey 483192 for more info
                         if (_events[i] is ChangeUndoEvent ce && ChangeEventsSymmetric(ce.ComponentChangingEventArgs, e) && i != _events.Count - 1)
                         {
                             if (e.Member != null && e.Member.Attributes.Contains(DesignerSerializationVisibilityAttribute.Content) &&
@@ -802,13 +797,6 @@ namespace System.ComponentModel.Design
                 // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.  
                 if (_engine != null && _engine.GetName(e.Component, false) != null)
                 {
-#if false
-                    if (!(comp != null && comp.Site != null)) {
-                        string name = _engine.GetName(e.Component, false);
-                        Debug.Fail("adding event for an unsited component:" + name);
-                    }
-#endif
-
                     // The caller provided us with a component.  This is the common case.  We will add a new change event provided there is not already one open for this component.
                     bool hasChange = false;
 
@@ -894,7 +882,7 @@ namespace System.ComponentModel.Design
                         if (_events[idx] is AddRemoveUndoEvent evt && evt.OpenComponent == e.Component)
                         {
                             evt.Commit(_engine);
-                            // VSWhidbey 400094 - We should only reorder events if there  are change events coming between OnRemoving and OnRemoved.
+                            // We should only reorder events if there  are change events coming between OnRemoving and OnRemoved.
                             // If there are other events (such as AddRemoving), the serialization  done in OnComponentRemoving might refer to components that aren't available.
                             if (idx != _events.Count - 1 && changeEvt != null)
                             {
@@ -907,7 +895,6 @@ namespace System.ComponentModel.Design
                                         onlyChange = false;
                                         break;
                                     }
-
                                 }
 
                                 if (onlyChange)

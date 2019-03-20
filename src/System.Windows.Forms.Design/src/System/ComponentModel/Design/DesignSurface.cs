@@ -13,8 +13,6 @@ namespace System.ComponentModel.Design
     /// <summary>
     /// A design surface is an object that contains multiple designers and presents a user-editable surface for them.
     /// </summary>
-    [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.InheritanceDemand, Name = "FullTrust")]
-    [System.Security.SecurityCritical]
     public class DesignSurface : IDisposable, IServiceProvider
     {
         private IServiceProvider _parentProvider;
@@ -66,7 +64,7 @@ namespace System.ComponentModel.Design
         {
             if (rootComponentType == null)
             {
-                throw new ArgumentNullException("rootComponentType");
+                throw new ArgumentNullException(nameof(rootComponentType));
             }
             BeginLoad(rootComponentType);
         }
@@ -173,7 +171,7 @@ namespace System.ComponentModel.Design
                         }
                     }
                     // loader didn't provide any help.  Just generally fail.
-                    ex = new InvalidOperationException(string.Format(SR.DesignSurfaceNoRootComponent))
+                    ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
@@ -183,7 +181,7 @@ namespace System.ComponentModel.Design
                 IRootDesigner rootDesigner = ((IDesignerHost)_host).GetDesigner(rootComponent) as IRootDesigner;
                 if (rootDesigner == null)
                 {
-                    ex = new InvalidOperationException(string.Format(SR.DesignSurfaceDesignerNotLoaded))
+                    ex = new InvalidOperationException(SR.DesignSurfaceDesignerNotLoaded)
                     {
                         HelpLink = SR.DesignSurfaceDesignerNotLoaded
                     };
@@ -198,7 +196,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // We are out of luck here.  Throw.
-                ex = new NotSupportedException(string.Format(SR.DesignSurfaceNoSupportedTechnology));
+                ex = new NotSupportedException(SR.DesignSurfaceNoSupportedTechnology);
                 ex.HelpLink = SR.DesignSurfaceNoSupportedTechnology;
                 throw ex;
             }
@@ -247,7 +245,7 @@ namespace System.ComponentModel.Design
         {
             if (loader == null)
             {
-                throw new ArgumentNullException("loader");
+                throw new ArgumentNullException(nameof(loader));
             }
 
             if (_host == null)
@@ -267,7 +265,7 @@ namespace System.ComponentModel.Design
         {
             if (rootComponentType == null)
             {
-                throw new ArgumentNullException("rootComponentType");
+                throw new ArgumentNullException(nameof(rootComponentType));
             }
 
             if (_host == null)
@@ -293,7 +291,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (_host == null)
@@ -321,7 +319,7 @@ namespace System.ComponentModel.Design
         {
             if (type == null)
             {
-                throw new ArgumentNullException("type");
+                throw new ArgumentNullException(nameof(type));
             }
 
             // Locate an appropriate constructor for IComponents.
@@ -370,7 +368,7 @@ namespace System.ComponentModel.Design
 
             if (owningComponent == null)
             {
-                throw new ArgumentNullException("owningComponent");
+                throw new ArgumentNullException(nameof(owningComponent));
             }
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }
@@ -508,7 +506,7 @@ namespace System.ComponentModel.Design
                 if (rootComponent == null)
                 {
                     ArrayList newErrors = new ArrayList();
-                    Exception ex = new InvalidOperationException(string.Format(SR.DesignSurfaceNoRootComponent))
+                    Exception ex = new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
                         HelpLink = SR.DesignSurfaceNoRootComponent
                     };
@@ -566,8 +564,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when a designer has finished unloading a document.
         /// </summary>
-        // System.Design does not have APTCA
-        // SEC REVIEW: verify
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloaded(EventArgs e)
         {
@@ -586,18 +582,15 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when a designer is about to begin reloading. When a designer reloads, all of the state for that designer is recreated, including the designer's view. The view should be unparented at this time.
         /// </summary>
-        // System.Design does not have APTCA
-        // SEC REVIEW: verify
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnUnloading(EventArgs e)
         {
             Unloading?.Invoke(this, e);
         }
 
-        /// <summary> Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
+        /// <summary>
+        /// Called when someone has called the Activate method on IDesignerHost.  You should attach a handler to this event that activates the window for this design surface.
         /// </summary>
-        // System.Design does not have APTCA
-        // SEC REVIEW: verify
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnViewActivate(EventArgs e)
         {
@@ -617,7 +610,7 @@ namespace System.ComponentModel.Design
                 _type = type;
             }
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+            [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
             public DefaultDesignerLoader(ICollection components)
             {
                 _components = components;

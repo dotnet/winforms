@@ -226,7 +226,7 @@ namespace System.ComponentModel.Design
         {
             if (reference is null)
             {
-                throw new ArgumentNullException("reference");
+                throw new ArgumentNullException(nameof(reference));
             }
 
             EnsureReferences();
@@ -247,7 +247,7 @@ namespace System.ComponentModel.Design
         {
             if (reference is null)
             {
-                throw new ArgumentNullException("reference");
+                throw new ArgumentNullException(nameof(reference));
             }
 
             EnsureReferences();
@@ -269,7 +269,7 @@ namespace System.ComponentModel.Design
         {
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             EnsureReferences();
@@ -305,7 +305,7 @@ namespace System.ComponentModel.Design
         {
             if (baseType == null)
             {
-                throw new ArgumentNullException("baseType");
+                throw new ArgumentNullException(nameof(baseType));
             }
 
             EnsureReferences();

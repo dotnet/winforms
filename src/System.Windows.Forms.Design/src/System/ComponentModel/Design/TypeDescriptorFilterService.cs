@@ -83,9 +83,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// 
         /// Provides a way to filter the properties from a component that are displayed to the user.
-        /// 
         /// </summary>
         bool ITypeDescriptorFilterService.FilterProperties(IComponent component, IDictionary properties)
         {

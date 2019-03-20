@@ -41,12 +41,11 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Need this since Exception implements ISerializable and we have fields to save out.
         /// </summary>
-        [SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
             {
-                throw new ArgumentNullException("info");
+                throw new ArgumentNullException(nameof(info));
             }
 
             info.AddValue("exceptions", _exceptions);

@@ -140,7 +140,6 @@ namespace System.ComponentModel.Design
                     }
                     catch
                     {
-                        // VSWhidbey 491164
                         // eat exceptions - required for compatibility with Everett.
                     }
                 }
