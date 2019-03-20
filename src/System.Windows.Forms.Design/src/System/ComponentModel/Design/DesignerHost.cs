@@ -237,7 +237,7 @@ namespace System.ComponentModel.Design
                 designer = _surface.CreateDesigner(component, true) as IRootDesigner;
                 if (designer == null)
                 {
-                    Exception ex = new Exception(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName)
+                    Exception ex = new Exception(string.Format(SR.DesignerHostNoTopLevelDesigner, component.GetType().FullName))
                     {
                         HelpLink = SR.DesignerHostNoTopLevelDesigner
                     };

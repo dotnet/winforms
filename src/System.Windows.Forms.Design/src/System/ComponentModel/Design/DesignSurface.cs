@@ -526,8 +526,6 @@ namespace System.ComponentModel.Design
         /// Called when the loading process has completed.  This is invoked for both successful and unsuccessful loads. The EventArgs passed into this method can be used to tell a successful from an unsuccessful load.  It can also be used to create a view for this design surface.  If code in this event handler or override throws an exception,
         /// the designer will be unloaded.
         /// </summary>
-        // System.Design does not have APTCA
-        // SEC REVIEW: verify
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoaded(LoadedEventArgs e)
         {
@@ -545,8 +543,6 @@ namespace System.ComponentModel.Design
         /// <summary>
         /// Called when the loading process is about to begin.
         /// </summary>
-        // System.Design does not have APTCA
-        // SEC REVIEW: verify
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         protected virtual void OnLoading(EventArgs e)
         {

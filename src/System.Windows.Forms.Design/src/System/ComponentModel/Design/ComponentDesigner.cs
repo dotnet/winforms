@@ -156,8 +156,6 @@ namespace System.ComponentModel.Design
         void IDesignerFilter.PostFilterAttributes(IDictionary attributes)
         {
             // If this component is being inherited, mark it as such in the class attributes.
-            // VSWhidbey #424845 - if the InheritanceAttribute is set in attributes, then don't override it
-            // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and through InheritanceAttribute directly is the same.
             if (attributes.Contains(typeof(InheritanceAttribute)))
             {
                 _inheritanceAttribute = attributes[typeof(InheritanceAttribute)] as InheritanceAttribute;
@@ -437,8 +435,6 @@ namespace System.ComponentModel.Design
             }
             catch (InvalidOperationException)
             {
-                // VSWhidbey 434433 - If the doc data for this designer is currently locked, we will get an exception here.                  
-                // In this case, just eat the exception.
                 if (t != null)
                 {
                     t.Cancel();
@@ -479,7 +475,6 @@ namespace System.ComponentModel.Design
                 isRoot = true;
             }
 
-            //Only add the service if it is not already added. VSWhidbey #395676.
             if (component.Site is IServiceContainer sc && GetService(typeof(DesignerCommandSet)) == null)
             {
                 sc.AddService(typeof(DesignerCommandSet), new CDDesignerCommandSet(this));
@@ -696,7 +691,6 @@ namespace System.ComponentModel.Design
         [Obsolete("This method has been deprecated. Use InitializeNewComponent instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         public virtual void OnSetComponentDefaults()
         {
-            // COMPAT: The following code shipped in Everett, so we need to continue to do this. See VSWhidbey #419610 for details.
             ISite site = Component.Site;
             if (site != null)
             {
@@ -732,8 +726,6 @@ namespace System.ComponentModel.Design
         protected virtual void PostFilterAttributes(IDictionary attributes)
         {
             // If this component is being inherited, mark it as such in the class attributes.
-
-            // VSWhidbey #424845 - if the InheritanceAttribute is set in attributes, then don't override it
             // Also, set our member variable to ensure that what you get by querying through the TypeDescriptor and through InheritanceAttribute directly is the same.
             if (attributes.Contains(typeof(InheritanceAttribute)))
             {
