@@ -4,6 +4,8 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
@@ -18,6 +20,20 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
+        private IComponentChangeService componentChangeSvc;
+
+        private Control pendingRemoveControl; // we've gotten an OnComponentRemoving, and are waiting for OnComponentRemove
+
+        private bool checkSnapLineSetting = true;  // Since layout options is global for the duration of the designer, we should only query it once.
+        private bool defaultUseSnapLines = false;
+        private bool gridSnap = true;
+        private bool getDefaultGridSnap = true;
+        private bool parentCanSetGridSnap = true; //  been set explicitly by a user - so to ignore the parent's setting
+
+        private StatusCommandUI statusCommandUI; // UI for setting the StatusBar Information..
+
+        private int suspendChanging = 0;
+
         /// <summary>
         ///     This is called after the user selects a toolbox item (that has a ParentControlDesigner
         ///     associated with it) and draws a reversible rectangle on a designer's surface.  If
@@ -252,7 +268,186 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected Rectangle GetUpdatedRect(Rectangle originalRect, Rectangle dragRect, bool updateSize)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            Rectangle updatedRect = Rectangle.Empty;//the rectangle with updated coords that we will return
+
+            if (SnapToGrid)
+            {
+                Size gridSize = GridSize;
+                Point halfGrid = new Point(gridSize.Width / 2, gridSize.Height / 2);
+
+                updatedRect = dragRect;
+                updatedRect.X = originalRect.X;
+                updatedRect.Y = originalRect.Y;
+
+                // decide to snap the start location to grid ...
+                if (dragRect.X != originalRect.X)
+                {
+                    updatedRect.X = (dragRect.X / gridSize.Width) * gridSize.Width;
+
+                    // Snap the location to the grid point closest to the dragRect location
+                    if (dragRect.X - updatedRect.X > halfGrid.X)
+                    {
+                        updatedRect.X += gridSize.Width;
+                    }
+                }
+
+                if (dragRect.Y != originalRect.Y)
+                {
+                    updatedRect.Y = (dragRect.Y / gridSize.Height) * gridSize.Height;
+
+                    // Snap the location to the grid point closest to the dragRect location
+                    if (dragRect.Y - updatedRect.Y > halfGrid.Y)
+                    {
+                        updatedRect.Y += gridSize.Height;
+                    }
+                }
+
+                // here, we need to calculate the new size depending on how we snap to the grid ...
+                if (updateSize)
+                {
+                    // update the width and the height
+                    updatedRect.Width = ((dragRect.X + dragRect.Width) / gridSize.Width) * gridSize.Width - updatedRect.X;
+                    updatedRect.Height = ((dragRect.Y + dragRect.Height) / gridSize.Height) * gridSize.Height - updatedRect.Y;
+
+                    // ASURT 71552 <subhag> Added so that if the updated dimnesion is smaller than grid dimension then snap that dimension to the grid dimension
+                    if (updatedRect.Width < gridSize.Width)
+                        updatedRect.Width = gridSize.Width;
+                    if (updatedRect.Height < gridSize.Height)
+                        updatedRect.Height = gridSize.Height;
+                }
+            }
+            else
+            {
+                updatedRect = dragRect;
+            }
+
+            return updatedRect;
+        }
+
+        private bool DefaultUseSnapLines
+        {
+            get
+            {
+                if (checkSnapLineSetting)
+                {
+                    checkSnapLineSetting = false;
+                    defaultUseSnapLines = DesignerUtils.UseSnapLines(Component.Site);
+                }
+                return defaultUseSnapLines;
+            }
+        }
+
+        private ParentControlDesigner GetParentControlDesignerOfParent()
+        {
+            Control parent = Control.Parent;
+            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            if (parent != null && host != null)
+            {
+                return (host.GetDesigner(parent) as ParentControlDesigner);
+            }
+            return null;
+        }
+
+        private IServiceProvider ServiceProvider
+        {
+            get
+            {
+                if (Component != null)
+                {
+                    return Component.Site;
+                }
+
+                return null;
+            }
+        }
+
+        private bool SnapToGrid
+        {
+            get
+            {
+                // If snaplines are on, the we never want to snap to grid
+                if (DefaultUseSnapLines)
+                {
+                    return false;
+                }
+                else if (getDefaultGridSnap)
+                {
+                    gridSnap = true;
+                    //Before we check our options page, we need to see if our parent is a ParentControlDesigner, is so, then we will want to inherit all our grid/snap setting from it - instead of our options page
+                    ParentControlDesigner parent = GetParentControlDesignerOfParent();
+                    if (parent != null)
+                    {
+                        gridSnap = parent.SnapToGrid;
+                    }
+                    else
+                    {
+                        object optionValue = DesignerUtils.GetOptionValue(ServiceProvider, "SnapToGrid");
+                        if (optionValue != null && optionValue is bool)
+                        {
+                            gridSnap = (bool)optionValue;
+                        }
+                    }
+                }
+                return gridSnap;
+            }
+            set
+            {
+                if (gridSnap != value)
+                {
+                    if (parentCanSetGridSnap)
+                    {
+                        parentCanSetGridSnap = false;
+                    }
+
+                    if (getDefaultGridSnap)
+                    {
+                        getDefaultGridSnap = false;
+                    }
+                    gridSnap = value;
+
+                    //now, notify all child parent control designers that we have changed our setting 'cause they might to change along with us, unless the user has explicitly set those values...
+                    IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                    if (host != null)
+                    {
+                        foreach (Control child in Control.Controls)
+                        {
+                            if (host.GetDesigner(child) is ParentControlDesigner designer)
+                            {
+                                designer.GridSnapOfParentChanged(gridSnap);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        private void GridSnapOfParentChanged(bool gridSnap)
+        {
+            if (parentCanSetGridSnap)
+            {
+                // If the parent sets us, then treat this as if no one set us
+                bool getDefaultGridSnapTemp = getDefaultGridSnap;
+                SnapToGrid = gridSnap;
+                parentCanSetGridSnap = true;
+                getDefaultGridSnap = getDefaultGridSnapTemp;
+            }
+        }
+        
+        internal void SuspendChangingEvents()
+        {
+            suspendChanging++;
+            Debug.Assert(suspendChanging > 0, "Unbalanced SuspendChangingEvents\\ResumeChangingEvents");
+        }
+
+        internal void ForceComponentChanging()
+        {
+            componentChangeSvc.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
+        }
+        internal void ResumeChangingEvents()
+        {
+            suspendChanging--;
+            Debug.Assert(suspendChanging >= 0, "Unbalanced SuspendChangingEvents\\ResumeChangingEvents");
         }
 
         /// <summary>
@@ -261,7 +456,49 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override void Initialize(IComponent component)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            base.Initialize(component);
+            if (Control is ScrollableControl)
+            {
+                ((ScrollableControl)Control).Scroll += new ScrollEventHandler(this.OnScroll);
+            }
+            EnableDragDrop(true);
+            // Hook load events.  At the end of load, we need to do a scan through all of our child controls to see which ones are being inherited.  We connect these up.
+            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            if (host != null)
+            {
+                componentChangeSvc = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+                if (componentChangeSvc != null)
+                {
+                    componentChangeSvc.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
+                    componentChangeSvc.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                }
+            }
+            // update the Status Command
+            statusCommandUI = new StatusCommandUI(component.Site);
+        }
+
+        private void OnComponentRemoving(object sender, ComponentEventArgs e)
+        {
+            using (Control comp = e.Component as Control)
+            {
+                if (comp != null && comp.Parent != null && comp.Parent == Control)
+                {
+                    pendingRemoveControl = (Control)comp;
+                    //We suspend Component Changing Events for bulk operations to avoid unnecessary serialization\deserialization for undo see bug 488115
+                    if (suspendChanging == 0)
+                    {
+                        componentChangeSvc.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
+                    }
+                }
+            }
+        }
+        private void OnComponentRemoved(object sender, ComponentEventArgs e)
+        {
+            if (e.Component == pendingRemoveControl)
+            {
+                pendingRemoveControl = null;
+                componentChangeSvc.OnComponentChanged(Control, TypeDescriptor.GetProperties(Control)["Controls"], null, null);
+            }
         }
 
         /// <summary>
@@ -385,6 +622,12 @@ namespace System.Windows.Forms.Design
         protected override void PreFilterProperties(IDictionary properties)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
+        }
+
+        internal Point GetSnappedPoint(Point pt)
+        {
+            Rectangle r = GetUpdatedRect(Rectangle.Empty, new Rectangle(pt.X, pt.Y, 0, 0), false);
+            return new Point(r.X, r.Y);
         }
     }
 }

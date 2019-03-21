@@ -573,8 +573,11 @@ namespace System.Windows.Forms {
         public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
-        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
-                                               int x, int y, int cx, int cy, int flags);
+        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
 
         [DllImport(ExternDll.User32, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
@@ -593,6 +596,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern bool RedrawWindow(HandleRef hwnd, NativeMethods.COMRECT rcUpdate, HandleRef hrgnUpdate, int flags);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool RedrawWindow(IntPtr hwnd, NativeMethods.COMRECT rcUpdate, IntPtr hrgnUpdate, int flags);
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern bool InvalidateRect(HandleRef hWnd, ref NativeMethods.RECT rect, bool erase);
@@ -690,6 +697,10 @@ namespace System.Windows.Forms {
         
         public static extern bool BitBlt(HandleRef hDC, int x, int y, int nWidth, int nHeight,
                                          HandleRef hSrcDC, int xSrc, int ySrc, int dwRop);
+
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool BitBlt(IntPtr hDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, int dwRop);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
@@ -899,6 +910,18 @@ namespace System.Windows.Forms {
 
              short Charset {get;set;}
         }
+
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool RoundRect(HandleRef hDC, int left, int top, int right, int bottom, int width, int height);
+
+        [DllImport(ExternDll.Gdi32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
+
+        [ResourceExposure(ResourceScope.None)]
+        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
+        public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
     }
 }
 
