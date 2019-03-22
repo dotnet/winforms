@@ -1923,11 +1923,10 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         catch
                         {
-                            // oh well...
                         }
                     }
 
-                    //VSWhidbey#580599 We need to ensure that no virtual types leak into the runtime code
+                    //We need to ensure that no virtual types leak into the runtime code
                     //So if we ever assign a property value to a Type -- we make sure that the Type is a
                     // real System.Type.
                     Type rhsType = rhs as Type;
@@ -1939,8 +1938,6 @@ namespace System.ComponentModel.Design.Serialization
                     // Next: see if the RHS of this expression was a property reference too.  If it was, then
                     // we will look for a MemberRelationshipService to record the relationship between these
                     // two properties, if supported.
-
-                    // VSWhidbey 504238.
                     // We need to setup this MemberRelationship before we actually set the property value.
                     // If we do it the other way around the new property value will be pushed into the old
                     // relationship, which isn't a problem during normal serialization (since it not very 
