@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../TrustManagerPromptUI.resx">
+  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../TrustManagerPromptUI.resx">
     <body>
       <trans-unit id="$this.AccessibleName">
         <source>TrustManagerDialog</source>
@@ -29,12 +29,12 @@
       </trans-unit>
       <trans-unit id="btnInstall.Text">
         <source>&amp;Install</source>
-        <target state="new">&amp;Install</target>
+        <target state="translated">安裝(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="lblFrom.AccessibleDescription">
         <source>Application Source</source>
-        <target state="new">Application Source</target>
+        <target state="translated">應用程式來源</target>
         <note />
       </trans-unit>
       <trans-unit id="lblFrom.AccessibleName">
@@ -44,12 +44,12 @@
       </trans-unit>
       <trans-unit id="lblFrom.Text">
         <source>From (Hover over the string below to see the full domain):</source>
-        <target state="new">From (Hover over the string below to see the full domain):</target>
+        <target state="translated">從 (停留在下面的字串上即可查看完整網域):</target>
         <note />
       </trans-unit>
       <trans-unit id="lblName.AccessibleDescription">
         <source>Application Name</source>
-        <target state="new">Application Name</target>
+        <target state="translated">應用程式名稱</target>
         <note />
       </trans-unit>
       <trans-unit id="lblName.AccessibleName">
@@ -59,12 +59,12 @@
       </trans-unit>
       <trans-unit id="lblName.Text">
         <source>&amp;Name:</source>
-        <target state="new">&amp;Name:</target>
+        <target state="translated">名稱(&amp;N): </target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleDescription">
         <source>Application Publisher</source>
-        <target state="new">Application Publisher</target>
+        <target state="translated">應用程式發行者</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleName">
@@ -74,12 +74,12 @@
       </trans-unit>
       <trans-unit id="lblPublisher.Text">
         <source>&amp;Publisher:</source>
-        <target state="new">&amp;Publisher:</target>
+        <target state="translated">發行者(&amp;P):</target>
         <note />
       </trans-unit>
       <trans-unit id="lblQuestion.AccessibleDescription">
         <source>Trust Manager Question</source>
-        <target state="new">Trust Manager Question</target>
+        <target state="translated">信任管理員問題</target>
         <note />
       </trans-unit>
       <trans-unit id="lblQuestion.AccessibleName">

@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">Private</target>
+        <target state="translated">Privat</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -6803,7 +6803,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
-        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <target state="translated">Der Parametertyp muss ListViewGroup sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -12194,12 +12194,12 @@ Möchten Sie diese Anwendung wirklich ausführen?</target>
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">Bild-Ab</target>
+        <target state="translated">BILD-AB</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">Bild-Auf</target>
+        <target state="translated">BILD-AUF</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">
