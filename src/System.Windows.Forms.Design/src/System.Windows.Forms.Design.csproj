@@ -10,7 +10,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!--the obsolete usage in public surface can't be removed-->
     <NoWarn>$(NoWarn);618</NoWarn>
-    <DefineConstants>$(DefineConstants);WINFORMS_DESIGN_NAMESPACE;</DefineConstants>
+    <DefineConstants>$(DefineConstants);DRAWING_DESIGN_NAMESPACE;</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

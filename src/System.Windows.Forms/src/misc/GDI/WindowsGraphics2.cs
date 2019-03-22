@@ -5,7 +5,7 @@
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR DRAWING WITH A WINDOWSGRAPHICS.
 // (Compiled in System.Windows.Forms but not in System.Drawing).
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
