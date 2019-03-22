@@ -4,12 +4,10 @@
 
 namespace System.Windows.Forms
 {
-    public enum ColorDepth
+    public enum PowerLineStatus
     {
-        Depth4Bit = 4,
-        Depth8Bit = 8,
-        Depth16Bit = 16,
-        Depth24Bit = 24,
-        Depth32Bit = 32,
+        Offline = 0,
+        Online = 1,
+        Unknown = 255
     }
 }
