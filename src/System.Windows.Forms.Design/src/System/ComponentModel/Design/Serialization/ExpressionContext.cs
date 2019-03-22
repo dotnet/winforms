@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             // To make this public, we cannot have random special cases for what the args mean.
             Debug.Assert(expression != null && expressionType != null && owner != null, "Obsolete use of expression context.");
-_expression = expression ?? throw new ArgumentNullException("expression");
+            _expression = expression ?? throw new ArgumentNullException("expression");
             _expressionType = expressionType ?? throw new ArgumentNullException("expressionType");
             _owner = owner ?? throw new ArgumentNullException("owner");
             _presetValue = presetValue;
