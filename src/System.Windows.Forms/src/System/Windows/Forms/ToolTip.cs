@@ -2639,12 +2639,13 @@ namespace System.Windows.Forms {
         private class TipInfo {
 
            [Flags]
-           public enum Type { 
+           public enum Type
+           { 
                None = 0x0000,
                Auto = 0x0001,
                Absolute = 0x0002,
                SemiAbsolute = 0x0004
-           };
+           }
            
            public  Type     TipType = Type.Auto;
            private string   caption;

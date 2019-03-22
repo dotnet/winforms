@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System;
-
-    public enum ToolStripDropDownDirection {
+namespace System.Windows.Forms
+{
+    public enum ToolStripDropDownDirection
+    {
 
                              // Dir L=0
         AboveLeft  = 0x0000, // 0 0 0   Above =00
@@ -17,6 +16,4 @@ namespace System.Windows.Forms {
         Right      = 0x0005, // 1 0 1 
         Default    = 0x0007  // 1 1 1
     }
-   
-
 }
