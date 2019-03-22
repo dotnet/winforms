@@ -43,8 +43,6 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             IEnumerator modifiedEnum = modified.GetEnumerator();
-
-            // yikes! who wrote this thing?
             if (modifiedEnum == null)
             {
                 Debug.Fail("Collection of type " + modified.GetType().FullName + " doesn't return an enumerator");

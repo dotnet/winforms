@@ -525,40 +525,31 @@ namespace System.ComponentModel.Design.Serialization
                         else
                         {
                             CodeExpressionStatement ces = statement as CodeExpressionStatement;
-
                             if (ces != null)
                             {
                                 DeserializeExpression(manager, null, ces.Expression);
                             }
                             else
                             {
-                                CodeMethodReturnStatement cmrs = statement as CodeMethodReturnStatement;
-
-                                if (cmrs != null)
+                                if (statement is CodeMethodReturnStatement cmrs)
                                 {
                                     DeserializeExpression(manager, null, ces.Expression);
                                 }
                                 else
                                 {
-                                    CodeAttachEventStatement caes = statement as CodeAttachEventStatement;
-
-                                    if (caes != null)
+                                    if (statement is CodeAttachEventStatement caes)
                                     {
                                         DeserializeAttachEventStatement(manager, caes);
                                     }
                                     else
                                     {
-                                        CodeRemoveEventStatement cres = statement as CodeRemoveEventStatement;
-
-                                        if (cres != null)
+                                        if (statement is CodeRemoveEventStatement cres)
                                         {
                                             DeserializeDetachEventStatement(manager, cres);
                                         }
                                         else
                                         {
-                                            CodeLabeledStatement cls = statement as CodeLabeledStatement;
-
-                                            if (cls != null)
+                                            if (statement is CodeLabeledStatement cls)
                                             {
                                                 DeserializeStatement(manager, cls.Statement);
                                             }
@@ -571,7 +562,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
                         }
-                    } // yes, these paranthesis are needed
+                    }
                 }
                 catch (CheckoutException)
                 {
@@ -658,7 +649,7 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("CodeDomSerializerBase::DeserializeAssignStatement"))
             {
                 // Since we're doing an assignment into something, we need to know what that something is.  It can be a property, a variable, or a member. Anything else is invalid.  
-                //Perf: is -> as changes, change ordering based on possibility of occurance
+                //Perf: is -> as changes, change ordering based on possibility of occurence
                 CodeExpression expression = statement.Left;
                 CodePropertyReferenceExpression propertyReferenceEx;
                 CodeFieldReferenceExpression fieldReferenceEx;

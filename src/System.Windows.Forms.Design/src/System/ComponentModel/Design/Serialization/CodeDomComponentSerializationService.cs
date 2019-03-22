@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design.Serialization
         public override SerializationStore LoadStore(Stream stream)
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             return CodeDomSerializationStore.Load(stream);
         }
 
@@ -60,8 +60,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void Serialize(SerializationStore store, object value)
         {
-            if (store == null) throw new ArgumentNullException("store");
-            if (value == null) throw new ArgumentNullException("value");
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            if (value == null) throw new ArgumentNullException(nameof(value));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             cdStore.AddObject(value, false);
         }
@@ -71,8 +71,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeAbsolute(SerializationStore store, object value)
         {
-            if (store == null) throw new ArgumentNullException("store");
-            if (value == null) throw new ArgumentNullException("value");
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            if (value == null) throw new ArgumentNullException(nameof(value));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             cdStore.AddObject(value, true);
         }
@@ -82,9 +82,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeMember(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            if (store == null) throw new ArgumentNullException("store");
-            if (owningObject == null) throw new ArgumentNullException("owningObject");
-            if (member == null) throw new ArgumentNullException("member");
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
+            if (member == null) throw new ArgumentNullException(nameof(member));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             cdStore.AddMember(owningObject, member, false);
         }
@@ -95,9 +95,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeMemberAbsolute(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            if (store == null) throw new ArgumentNullException("store");
-            if (owningObject == null) throw new ArgumentNullException("owningObject");
-            if (member == null) throw new ArgumentNullException("member");
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
+            if (member == null) throw new ArgumentNullException(nameof(member));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             cdStore.AddMember(owningObject, member, true);
         }
@@ -107,7 +107,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override ICollection Deserialize(SerializationStore store)
         {
-            if (store == null) throw new ArgumentNullException("store");
+            if (store == null) throw new ArgumentNullException(nameof(store));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             return cdStore.Deserialize(_provider);
         }
@@ -117,8 +117,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override ICollection Deserialize(SerializationStore store, IContainer container)
         {
-            if (store == null) throw new ArgumentNullException("store");
-            if (container == null) throw new ArgumentNullException("container");
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            if (container == null) throw new ArgumentNullException(nameof(container));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             return cdStore.Deserialize(_provider, container);
         }
@@ -128,8 +128,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void DeserializeTo(SerializationStore store, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
-            if (store == null) throw new ArgumentNullException("store");
-            if (container == null) throw new ArgumentNullException("container");
+            if (store == null) throw new ArgumentNullException(nameof(store));
+            if (container == null) throw new ArgumentNullException(nameof(container));
             if (!(store is CodeDomSerializationStore cdStore)) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceUnknownStore);
             cdStore.DeserializeTo(_provider, container, validateRecycledTypes, applyDefaults);
         }
@@ -245,9 +245,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             internal void AddMember(object value, MemberDescriptor member, bool absolute)
             {
-
                 if (_objectState != null) throw new InvalidOperationException(SR.CodeDomComponentSerializationServiceClosedStore);
-
                 ObjectData data = (ObjectData)_objects[value];
                 if (data == null)
                 {
@@ -1046,6 +1044,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     throw new NotSupportedException();
                 }
+
                 // <summary>
                 // For everything in the serialization manager's container, we need a variable ref, just in case something that has changed has a reference to another object. We also must do this for everything that we are serializing that is not marked as EntireObject.  Otherwise reference could leak and cause the entire object to be serialized.
                 // <summary>
@@ -1441,7 +1440,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (serviceType == null)
                     {
-                        throw new ArgumentNullException("serviceType");
+                        throw new ArgumentNullException(nameof(serviceType));
                     }
 
                     if (serviceType == typeof(IResourceService))
