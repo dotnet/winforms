@@ -37,6 +37,101 @@
         <target state="new">Integer cannot be converted to a float.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignSurfaceContainerDispose">
+        <source>The container cannot be disposed at design time.</source>
+        <target state="new">The container cannot be disposed at design time.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceDesignerNotLoaded">
+        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
+        <target state="new">Cannot create a view for this design surface because the designer is not loaded.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceFatalError">
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
+        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoRootComponent">
+        <source>The designer loader did not provide a root component but has not indicated why.</source>
+        <target state="new">The designer loader did not provide a root component but has not indicated why.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoSupportedTechnology">
+        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
+        <target state="new">The designer loaded, but it does not offer a view compatible with this design surface.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceServiceIsFixed">
+        <source>The service {0} cannot be removed from the service container.</source>
+        <target state="new">The service {0} cannot be removed from the service container.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
+        <source>Could not find method '{0}'</source>
+        <target state="new">Could not find method '{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostCantDestroyInheritedComponent">
+        <source>Cannot remove or destroy inherited component '{0}'.</source>
+        <target state="new">Cannot remove or destroy inherited component '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostCyclicAdd">
+        <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
+        <target state="new">Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDesignerNeedsComponent">
+        <source>Failure initializing the designer.  It has no Component member.</source>
+        <target state="new">Failure initializing the designer.  It has no Component member.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDestroyComponentTransaction">
+        <source>Deleting '{0}'.</source>
+        <target state="new">Deleting '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDuplicateName">
+        <source>The name {0} is already in use by another component.</source>
+        <target state="new">The name {0} is already in use by another component.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostFailedComponentCreate">
+        <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
+        <target state="new">Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostGenericTransactionName">
+        <source>No Description Available</source>
+        <target state="new">No Description Available</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostLoaderSpecified">
+        <source>A designer loader has already been configured for this design surface.</source>
+        <target state="new">A designer loader has already been configured for this design surface.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNestedTransaction">
+        <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
+        <target state="new">The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNoBaseClass">
+        <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
+        <target state="new">Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNoTopLevelDesigner">
+        <source>There is no designer for the class {0}.</source>
+        <target state="new">There is no designer for the class {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostUnloading">
+        <source>New components cannot be added while a designer is unloading.</source>
+        <target state="new">New components cannot be added while a designer is unloading.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
         <target state="translated">최적화된 코드 생성</target>
@@ -135,6 +230,11 @@
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
         <target state="translated">IDataObject는 SetData를 지원하지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExtenderProviderServiceDuplicateProvider">
+        <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
+        <target state="new">The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -280,6 +380,51 @@
       <trans-unit id="TypeNotFoundInTargetFramework">
         <source>Type '{0}' is not available in the target framework.</source>
         <target state="new">Type '{0}' is not available in the target framework.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd0">
+        <source>Add Component</source>
+        <target state="new">Add Component</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd1">
+        <source>Add {0}</source>
+        <target state="new">Add {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange0">
+        <source>Change Component</source>
+        <target state="new">Change Component</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange1">
+        <source>Change {0}</source>
+        <target state="new">Change {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange2">
+        <source>Change {0}.{1}</source>
+        <target state="new">Change {0}.{1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove0">
+        <source>Remove Component</source>
+        <target state="new">Remove Component</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove1">
+        <source>Remove {0}</source>
+        <target state="new">Remove {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRename">
+        <source>Rename {0} to {1}</source>
+        <target state="new">Rename {0} to {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">

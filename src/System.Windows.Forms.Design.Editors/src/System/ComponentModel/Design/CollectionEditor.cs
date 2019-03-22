@@ -1325,7 +1325,6 @@ namespace System.ComponentModel.Design
 
             private void UpdateItemWidths(ListItem item)
             {
-                // VSWhidbey#384112: Its neither safe nor accurate to perform these width calculations prior to normal listbox handle creation. So we nop in this case now.
                 if (!_listbox.IsHandleCreated)
                 {
                     return;
@@ -1485,8 +1484,6 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void Listbox_handleCreated(object sender, EventArgs e)
             {
-                // VSWhidbey#384112: Since we no longer perform width calculations prior to handle
-                // creation now, we need to ensure we do it at least once after handle creation.
                 UpdateItemWidths(null);
             }
 

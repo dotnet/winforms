@@ -5,6 +5,7 @@
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 
@@ -21,6 +22,8 @@ namespace System.Windows.Forms.Design
     ]
     public class DocumentDesigner : ScrollableControlDesigner, IRootDesigner, IToolboxUser, IOleDragClient
     {
+        static internal IDesignerSerializationManager manager;
+
         //our menu editor service
         protected IMenuEditorService menuEditorService = null;
 

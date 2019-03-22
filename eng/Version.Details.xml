@@ -61,14 +61,14 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>443dea11f8649fe12fedf60cfab0a4b2b20bd153</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NET.Sdk.IL" Version="3.0.0-preview4-27515-71">
+    <Dependency Name="Microsoft.NET.Sdk.IL" Version="3.0.0-preview4-27521-73">
       <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>68fad02f41707a5333992cd7701e75aefb4e51c8</Sha>
+      <Sha>f61314dab43e29eaa5c4323a890bc408be014f83</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.ILAsm" Version="3.0.0-preview4-27515-71">
+    <Dependency Name="Microsoft.NETCore.ILAsm" Version="3.0.0-preview4-27521-73">
       <Uri>https://github.com/dotnet/coreclr</Uri>
-      <Sha>68fad02f41707a5333992cd7701e75aefb4e51c8</Sha>
+      <Sha>f61314dab43e29eaa5c4323a890bc408be014f83</Sha>
       <SourceBuildId>5596</SourceBuildId>
     </Dependency>
   </ToolsetDependencies>
