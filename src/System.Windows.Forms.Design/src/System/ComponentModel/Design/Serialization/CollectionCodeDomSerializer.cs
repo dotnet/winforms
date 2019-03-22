@@ -204,7 +204,6 @@ namespace System.ComponentModel.Design.Serialization
                         if (target != null && ShouldClearCollection(manager, collection))
                         {
                             CodeStatementCollection resultCol = result as CodeStatementCollection;
-                            // VSWhidbey 482953
                             // If non empty collection is being serialized, but no statements were generated, there is no need to clear.
                             if (collection.Count > 0 && (result == null || (resultCol != null && resultCol.Count == 0)))
                             {
@@ -437,7 +436,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         CodeExpression expression = null;
-                        // VSWhidbey #266085: If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
+                        // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
                         ExpressionContext newCxt = null;
                         if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
                         {
@@ -532,7 +531,7 @@ namespace System.ComponentModel.Design.Serialization
                             };
                             CodeExpression serializedObj = null;
 
-                            // VSWhidbey #266085: If there is an expression context on the stack at this point, 
+                            // If there is an expression context on the stack at this point, 
                             // we need to fix up the ExpressionType on it to be the element type.
                             ExpressionContext newCxt = null;
 
@@ -615,7 +614,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (genCode)
                         {
                             CodeExpression exp = null;
-                            // VSWhidbey #266085: If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
+                            // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
                             ExpressionContext newCxt = null;
 
                             if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)

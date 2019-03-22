@@ -380,7 +380,7 @@ namespace System.ComponentModel.Design.Serialization
                             prop.ResetValue(instance);
                         }
                         catch (ArgumentException e)
-                        {  // for compatibility with FX4.0, ignore 
+                        {
                             Debug.Assert(false, e.Message);
                         }
                     }
