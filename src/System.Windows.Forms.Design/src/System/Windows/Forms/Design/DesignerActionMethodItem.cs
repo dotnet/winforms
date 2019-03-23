@@ -12,7 +12,6 @@ namespace System.ComponentModel.Design
         private readonly bool _includeAsDesignerVerb;
         private readonly DesignerActionList _actionList;
         private MethodInfo _methodInfo;
-        private IComponent _relatedComponent;
 
         public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category, string description, bool includeAsDesignerVerb)
             : base(displayName, category, description)
@@ -22,31 +21,25 @@ namespace System.ComponentModel.Design
             _includeAsDesignerVerb = includeAsDesignerVerb;
         }
 
-        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName)
-            : this(actionList, memberName, displayName, null, null, false)
+        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName) : this(actionList, memberName, displayName, null, null, false)
         {
         }
 
-        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb)
-            : this(actionList, memberName, displayName, null, null, includeAsDesignerVerb)
+        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, bool includeAsDesignerVerb) : this(actionList, memberName, displayName, null, null, includeAsDesignerVerb)
         {
         }
 
-        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category)
-            : this(actionList, memberName, displayName, category, null, false)
+        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category) : this(actionList, memberName, displayName, category, null, false)
         {
         }
 
-        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category, bool includeAsDesignerVerb)
-            : this(actionList, memberName, displayName, category, null, includeAsDesignerVerb)
+        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category, bool includeAsDesignerVerb) : this(actionList, memberName, displayName, category, null, includeAsDesignerVerb)
         {
         }
 
-        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category, string description)
-            : this(actionList, memberName, displayName, category, description, false)
+        public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName, string category, string description) : this(actionList, memberName, displayName, category, description, false)
         {
         }
-
 
         internal DesignerActionMethodItem()
         {
@@ -54,35 +47,18 @@ namespace System.ComponentModel.Design
 
         public virtual string MemberName
         {
-            get
-            {
-                return _memberName;
-            }
+            get => _memberName;
         }
 
-        public IComponent RelatedComponent
-        {
-            get
-            {
-                return _relatedComponent;
-            }
-            set
-            {
-                _relatedComponent = value;
-            }
-        }
+        public IComponent RelatedComponent { get; set; }
 
         public virtual bool IncludeAsDesignerVerb
         {
-            get
-            {
-                return _includeAsDesignerVerb;
-            }
+            get => _includeAsDesignerVerb;
         }
 
-        // this is only use for verbs so that a designer action method item can 
-        // be converted to a verb. Verbs use an EventHandler to call their invoke
-        // so we need a way to translate the EventHandler Invoke into ou own Invoke
+        // this is only use for verbs so that a designer action method item can be converted to a verb.
+        // Verbs use an EventHandler to call their invoke so we need a way to translate the EventHandler Invoke into ou own Invoke
         internal void Invoke(object sender, EventArgs args)
         {
             Invoke();

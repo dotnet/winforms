@@ -6,7 +6,7 @@ namespace System.ComponentModel.Design
 {
     public sealed class DesignerActionPropertyItem : DesignerActionItem
     {
-        private string _memberName;
+        private readonly string _memberName;
         private IComponent _relatedComponent;
 
         public DesignerActionPropertyItem(string memberName, string displayName, string category, string description) : base(displayName, category, description)

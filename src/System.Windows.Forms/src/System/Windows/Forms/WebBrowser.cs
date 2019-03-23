@@ -16,7 +16,8 @@ using System.Text;
 
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
-namespace System.Windows.Forms {
+namespace System.Windows.Forms
+{
     /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser"]/*' />
     /// <devdoc>
     ///     <para>
@@ -1983,71 +1984,4 @@ namespace System.Windows.Forms {
             public void DownloadComplete() { }
         }
     }
-
-    
-    //
-    // Public enums:
-    //
-
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel"]/*' />
-    /// <devdoc>
-    ///     <para>
-    /// Specifies the EncryptionLevel of the document in the WebBrowser control.
-    /// Returned by the <see cref='System.Windows.Forms.WebBrowser.EncryptionLevel'/> property.
-    ///     </para>
-    /// </devdoc>
-    public enum WebBrowserEncryptionLevel {
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Insecure"]/*' />
-        Insecure = 0, 
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Mixed"]/*' />
-        Mixed = 1,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Unknown"]/*' />
-        Unknown = 2,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Bit40"]/*' />
-        Bit40 = 3,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Bit56"]/*' />
-        Bit56 = 4,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Fortezza"]/*' />
-        Fortezza = 5,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserEncryptionLevel.Bit128"]/*' />
-        Bit128 = 6
-    }
-
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState"]/*' />
-    /// <devdoc>
-    ///     <para>
-    /// Specifies the ReadyState of the WebBrowser control.
-    /// Returned by the <see cref='System.Windows.Forms.WebBrowser.ReadyState'/> property.
-    ///     </para>
-    /// </devdoc>
-    public enum WebBrowserReadyState {
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Uninitialized"]/*' />
-        Uninitialized = 0,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Loading"]/*' />
-        Loading = 1,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Loaded"]/*' />
-        Loaded = 2,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Interactive"]/*' />
-        Interactive = 3,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserReadyState.Complete"]/*' />
-        Complete = 4
-    }
-
-    /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption"]/*' />
-    /// <devdoc>
-    ///     <para>
-    /// Specifies the RefreshOptions in the <see cref='System.Windows.Forms.WebBrowser.Refresh'/> method.
-    ///     </para>
-    /// </devdoc>
-    public enum WebBrowserRefreshOption {
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.Normal"]/*' />
-        Normal = 0,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.IfExpired"]/*' />
-        IfExpired = 1,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.Continue"]/*' />
-        Continue = 2,
-        /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowserRefreshOption.Completely"]/*' />
-        Completely = 3
-    }
 }
-

@@ -767,21 +767,6 @@ namespace System.Windows.Forms {
         }    
     }
 
-
-    /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType"]/*' />
-    public enum SizeType {
-
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType.AutoSize"]/*' />
-        AutoSize,
-
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType.Absolute"]/*' />
-        Absolute,
-
-        /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="SizeType.Percent"]/*' />
-        Percent
-    }
-
-
     /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle"]/*' />
     public class ColumnStyle : TableLayoutStyle {
 
