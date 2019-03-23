@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Tests
             using (var graphics = form.CreateGraphics())
             {
                 // GetMargins should not throw an exception.
-                // See Issue #526 on GitHub.
+                // See https://github.com/dotnet/winforms/issues/526.
                 renderer.GetMargins(graphics, MarginProperty.SizingMargins);
             }
         }
