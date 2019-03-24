@@ -2931,6 +2931,33 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this, e);
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            bool returnedValue = base.ProcessCmdKey(ref msg, keyData);
+
+            if (DropDownStyle != ComboBoxStyle.DropDownList &&
+                (keyData == (Keys.Control | Keys.Back) || keyData == (Keys.Control | Keys.Shift | Keys.Back)))
+            {
+                if (SelectionLength != 0)
+                {
+                    SelectedText = "";
+                }
+                else if (SelectionStart != 0)
+                {
+                    int boundaryStart = ClientUtils.GetWordBoundaryStart(Text.ToCharArray(), SelectionStart);
+                    int length = SelectionStart - boundaryStart;
+                    BeginUpdateInternal();
+                    SelectionStart = boundaryStart;
+                    SelectionLength = length;
+                    EndUpdateInternal();
+                    SelectedText = "";
+                }
+                return true;
+            }
+
+            return returnedValue;
+        }
+
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.ProcessKeyEventArgs"]/*' />
         protected override bool ProcessKeyEventArgs(ref Message m) {
             if (this.AutoCompleteMode != AutoCompleteMode.None &&
