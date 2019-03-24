@@ -10,8 +10,6 @@ TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionHeaderItem' do
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventArgs' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedEventHandler' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionListsChangedType' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionMethodItem' does not exist in the implementation but it does exist in the contract.
-TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionPropertyItem' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionService' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionTextItem' does not exist in the implementation but it does exist in the contract.
 TypesMustExist : Type 'System.ComponentModel.Design.DesignerActionUIService' does not exist in the implementation but it does exist in the contract.

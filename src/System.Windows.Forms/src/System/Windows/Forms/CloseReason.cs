@@ -9,8 +9,8 @@ namespace System.Windows.Forms
     /// <devdoc>
     /// Specifies the reason for the Form Closing.
     /// </devdoc>
-    public enum CloseReason {
-
+    public enum CloseReason
+    {
         /// <devdoc>
         /// No reason for closure of the Form.
         /// </devdoc>

@@ -75,13 +75,11 @@ namespace System.Windows.Forms {
         internal class TreeNodeImageIndexer : ImageList.Indexer {
            private TreeNode owner;
            
-           /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType"]/*' />
-           public enum ImageListType {
-               /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.Default"]/*' />
+            public enum ImageListType
+            {
                Default,
-               /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.State"]/*' />
                State
-           }
+            }
            private ImageListType imageListType;
 
            /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.TreeNodeImageIndexer"]/*' />
