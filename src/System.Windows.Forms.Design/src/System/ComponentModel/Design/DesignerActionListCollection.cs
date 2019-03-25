@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace System.ComponentModel.Design
@@ -21,48 +22,63 @@ namespace System.ComponentModel.Design
 
         public DesignerActionList this[int index]
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get => (DesignerActionList)(List[index]);
+            set => List[index] = value;
         }
 
         public int Add(DesignerActionList value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return List.Add(value);
         }
 
         public void AddRange(DesignerActionList[] value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            for (int i = 0; ((i) < (value.Length)); i = ((i) + (1)))
+            {
+                Add(value[i]);
+            }
         }
 
         public void AddRange(DesignerActionListCollection value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (value == null)
+            {
+                throw new ArgumentNullException("value");
+            }
+            int currentCount = value.Count;
+            for (int i = 0; i < currentCount; i = ((i) + (1)))
+            {
+                Add(value[i]);
+            }
         }
 
         public void Insert(int index, DesignerActionList value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            List.Insert(index, value);
         }
 
         public int IndexOf(DesignerActionList value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return List.IndexOf(value);
         }
 
         public bool Contains(DesignerActionList value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            return List.Contains(value);
         }
 
         public void Remove(DesignerActionList value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            List.Remove(value);
         }
 
         public void CopyTo(DesignerActionList[] array, int index)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            List.CopyTo(array, index);
         }
 
         protected override void OnSet(int index, object oldValue, object newValue)
@@ -83,7 +99,7 @@ namespace System.ComponentModel.Design
 
         protected override void OnValidate(object value)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            Debug.Assert(value != null, "Don't add null actionlist!");
         }
     }
 }
