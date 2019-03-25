@@ -25,12 +25,15 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 
 |               | Public CI                                  :arrow_right:  | Internal CI                                    :arrow_right:  | Composition CI                         :arrow_right:  | Core Setup CI                                     :arrow_right:  | Core SDK CI                                                   |
 |-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |----------------------------------------------------------------  |-------------------------------------------------------------  |
-| Master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      | [![Build Status][master-core-setup-build]][core-setup-build]     | [![Build Status][master-core-sdk-build]][core-sdk-build]      |
-| Release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    | [![Build Status][release3-core-setup-build]][core-setup-build]   | [![Build Status][release3-core-sdk-build]][core-sdk-build]    |
+| master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      | [![Build Status][master-core-setup-build]][core-setup-build]     | [![Build Status][master-core-sdk-build]][core-sdk-build]      |
+| release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    | [![Build Status][release3-core-setup-build]][core-setup-build]   | [![Build Status][release3-core-sdk-build]][core-sdk-build]    |
 
 ### Code Coverage
 
-[![codecov](https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production)](https://codecov.io/gh/dotnet/winforms)
+|               | Production Code                                   | Test Code                                         | Combined                                          |
+|-------------  |-------------------------------------------------  |-------------------------------------------------  |-------------------------------------------------  |
+| master        | [![codecov][master-coverage-prod]][coverage]      | [![codecov][master-coverage-test]][coverage]      | [![codecov][master-coverage-all]][coverage]       |
+| release/3.0   | [![codecov][release3-coverage-prod]][coverage]    | [![codecov][release3-coverage-test]][coverage]    | [![codecov][release3-coverage-all]][coverage]     |
 
 ## Status
 
@@ -124,3 +127,13 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [master-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
 [release3-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286?branchName=release%2f3.0.1xx
 [core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
+
+[master-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production
+[release3-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=production
+
+[master-coverage-test]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test
+[release3-coverage-test]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=test
+
+[master-coverage-all]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?
+[release3-coverage-all]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?
+[coverage]: https://codecov.io/gh/dotnet/winforms
