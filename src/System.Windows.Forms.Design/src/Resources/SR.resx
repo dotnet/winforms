@@ -324,9 +324,6 @@
   <data name="DragDropSizeComponents" xml:space="preserve">
     <value>Size {0} components</value>
   </data>
-  <data name="DesignerActionPanel_CouldNotFindMethod" xml:space="preserve">
-    <value>Could not find method '{0}'</value>
-  </data>
   <data name="UndoEngineComponentAdd0" xml:space="preserve">
     <value>Add Component</value>
   </data>
