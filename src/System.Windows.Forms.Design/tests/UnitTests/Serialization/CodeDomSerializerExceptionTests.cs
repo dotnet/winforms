@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         Mock<IDesignerSerializationManager> _mockDesignerSerializationManager;
         
         [Fact]
-        public void CodeDomSerializerException_Constructor()
+        public void CodeDomSerializerException_Constructor_Message_Pragma()
         {
             var pragma = new CodeLinePragma();
             var underTest = new CodeDomSerializerException("message", pragma);
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CodeDomSerializerException_Constructor2()
+        public void CodeDomSerializerException_Constructor_Exception_Pragma()
         {
             var ex = new Exception();
             var pragma = new CodeLinePragma();
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CodeDomSerializerException_Constructor3()
+        public void CodeDomSerializerException_Constructor_SerializationManager()
         {
             _mockDesignerSerializationManager = new Mock<IDesignerSerializationManager>(MockBehavior.Strict);
             var underTest = new CodeDomSerializerException("message", _mockDesignerSerializationManager.Object);
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CodeDomSerializerException_Constructor4()
+        public void CodeDomSerializerException_Constructor_Exception_SerializationManager()
         {
             var ex = new Exception();
             _mockDesignerSerializationManager = new Mock<IDesignerSerializationManager>(MockBehavior.Strict);
