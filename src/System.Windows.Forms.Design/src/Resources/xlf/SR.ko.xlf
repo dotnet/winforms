@@ -17,6 +17,16 @@
         <target state="new">This type of serialization store is not supported.  Use a store returned by the CreateStore method.</target>
         <note />
       </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControl">
+        <source>Resize {0}</source>
+        <target state="new">Resize {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControls">
+        <source>Resize {0} Controls</source>
+        <target state="new">Resize {0} Controls</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
         <target state="new">Adding event '{0}'</target>
@@ -220,6 +230,16 @@
       <trans-unit id="DesignerOptions_UseSnapLines">
         <source>Controls whether designers should use snap lines.  If true, snap lines will be used as guides.  If false, grid lines will be used.</source>
         <target state="translated">디자이너에서 맞춤선을 사용할지 여부를 제어합니다. true이면 맞춤선이 안내선으로 사용되고 false이면 모눈선이 사용됩니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutDockInParent">
+        <source>Dock in Parent Container</source>
+        <target state="new">Dock in Parent Container</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutUndockInParent">
+        <source>Undock in Parent Container</source>
+        <target state="new">Undock in Parent Container</target>
         <note />
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
