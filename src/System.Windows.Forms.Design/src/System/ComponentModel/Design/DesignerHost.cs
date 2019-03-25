@@ -1115,7 +1115,7 @@ namespace System.ComponentModel.Design
 
             IComponent component;
             LicenseContext oldContext = LicenseManager.CurrentContext;
-            bool changingContext = false; // we don't want if there is a recursivity (creating a component create another one) to change the context again. we already have the one we want and that would create a locking problem. see bug VSWhidbey 441200
+            bool changingContext = false; // we don't want if there is a recursivity (creating a component create another one) to change the context again. we already have the one we want and that would create a locking problem.
             if (oldContext != LicenseContext)
             {
                 LicenseManager.CurrentContext = LicenseContext;
