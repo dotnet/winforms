@@ -2,54 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\StatusBarPanelAutoSize.uex' path='docs/doc[@for="StatusBarPanelAutoSize"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies how a panel on a status bar changes when the
-    ///       status bar resizes.
-    ///    </para>
+    /// Specifies how a panel on a status bar changes when the status bar resizes.
     /// </devdoc>
-    public enum StatusBarPanelAutoSize {
-
-        /// <include file='doc\StatusBarPanelAutoSize.uex' path='docs/doc[@for="StatusBarPanelAutoSize.None"]/*' />
+    public enum StatusBarPanelAutoSize
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The panel does not change
-        ///       its size when the status bar resizes.
-        ///    </para>
+        /// The panel does not change its size when the status bar resizes.
         /// </devdoc>
-        None        = 1,
+        None = 1,
 
-        /// <include file='doc\StatusBarPanelAutoSize.uex' path='docs/doc[@for="StatusBarPanelAutoSize.Spring"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The panel shares the available status bar space (the
-        ///       space not taken up by panels with the <see langword='None'/> and
-        ///    <see langword='Contents'/> settings) with other panels that have the 
-        ///    <see langword='Spring'/>
-        ///    setting.
-        /// </para>
+        /// The panel shares the available status bar space (the space not taken
+        /// up by panels with the <see langword='None'/> and <see langword='Contents'/>
+        /// settings) with other panels that have the <see langword='Spring'/> setting.
         /// </devdoc>
-        Spring      = 2,
+        Spring = 2,
 
-        /// <include file='doc\StatusBarPanelAutoSize.uex' path='docs/doc[@for="StatusBarPanelAutoSize.Contents"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The width of the panel is determined by its contents.
-        ///    </para>
+        /// The width of the panel is determined by its contents.
         /// </devdoc>
-        Contents    = 3,
-
+        Contents = 3,
     }
 }

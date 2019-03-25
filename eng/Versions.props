@@ -26,7 +26,7 @@
   </PropertyGroup>
   <!-- CoreCLR-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27515-71</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27525-71</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
