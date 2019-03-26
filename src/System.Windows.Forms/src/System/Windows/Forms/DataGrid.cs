@@ -9176,35 +9176,21 @@ namespace System.Windows.Forms {
                 }
             }
     
-            /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType"]/*' />
             /// <devdoc>
-            /// <para>Specifies the part of the <see cref='System.Windows.Forms.DataGrid'/> control the user has clicked.</para>
+            /// Specifies the part of the <see cref='System.Windows.Forms.DataGrid'/>
+            /// control the user has clicked.<
             /// </devdoc>
             [Flags]
-            public enum HitTestType {
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.None"]/*' />
-                None         = 0x00000000,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.Cell"]/*' />
-                Cell         = 0x00000001,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.ColumnHeader"]/*' />
+            public enum HitTestType
+            {
+                None = 0x00000000,
+                Cell = 0x00000001,
                 ColumnHeader = 0x00000002,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.RowHeader"]/*' />
-                RowHeader    = 0x00000004,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.ColumnResize"]/*' />
+                RowHeader = 0x00000004,
                 ColumnResize = 0x00000008,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.RowResize"]/*' />
-                RowResize    = 0x00000010,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.Caption"]/*' />
-                Caption      = 0x00000020,
-    
-                /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HitTestType.ParentRows"]/*' />
-                ParentRows   = 0x00000040
+                RowResize = 0x00000010,
+                Caption = 0x00000020,
+                ParentRows = 0x00000040
             }
     
             /// <devdoc>

@@ -127,7 +127,7 @@ jobs:
       #       coverage. This is part of the workarounds for https://github.com/tonerdo/coverlet/issues/362 and
       #       https://github.com/tonerdo/coverlet/issues/363.
       - script: eng\cibuild.cmd
-          -prepareMachine
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -build
@@ -139,7 +139,6 @@ jobs:
         # this should no longer be necessary once Helix is ready to report back code coverage
         # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
       - script: eng\cibuild.cmd
-          -prepareMachine
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
@@ -147,18 +146,27 @@ jobs:
           /p:Coverage=$(_Coverage)
           /m:1
         displayName: Run Unit Tests on Build Machine (Debug only)
-        condition: succeeded() # ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
+        condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
-      # - template: /eng/ci-helix-test.yml
-      #   parameters:
-      #     HelixSource: $(_HelixSource)
-      #     HelixType: 'tests/unit'
-      #     HelixTargetQueues: $(_UnitTestHelixAgentPool)
-      #     HelixAccessToken: $(_HelixToken)            # only defined for internal CI
-      #     Creator: $(_HelixCreator)
-      #     XUnitProjects: '..\src\**\*.Tests.csproj'
-      #     DisplayNamePrefix: 'Send Unit Tests (Windows.10) to Helix (Release only)'
-      #     condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release')) # on helix (with real signing on internal)
+      - powershell: eng\cibuild.cmd
+          -configuration $(_BuildConfig)
+          $(_OfficialBuildIdArgs) 
+          -test
+          -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
+          /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\Helix.binlog
+        displayName: Run Unit Tests on Helix Machine (Release only)
+        env:
+          HelixSource: $(_HelixSource)
+          HelixType: 'tests/unit'
+          HelixBuild: $(Build.BuildNumber)
+          HelixTargetQueues: $(_UnitTestHelixAgentPool)
+          HelixAccessToken: $(_HelixToken)              # only defined for internal CI
+          Creator: $(_HelixCreator)
+          XUnitProjects: '..\src\**\*.Tests.csproj'     # the test projects blob
+          XUnitPublishTargetFramework: netcoreapp3.0
+          XUnitRuntimeTargetFramework: netcoreapp2.0
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
       
       # Run integration tests and rename binlog
       # These are not ready to run on Helix because:
@@ -173,6 +181,7 @@ jobs:
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
+          -restore
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -pack

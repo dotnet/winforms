@@ -2,83 +2,46 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies how a <see cref='System.Windows.Forms.RichTextBox'/> control displays scroll bars.
+    /// Specifies how a <see cref='System.Windows.Forms.RichTextBox'/> control displays scroll bars.
     ///
-    ///    </para>
     /// </devdoc>
-    public enum RichTextBoxScrollBars {
-
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.None"]/*' />
+    public enum RichTextBoxScrollBars
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Never display scroll bars.
-        ///    </para>
+        /// Never display scroll bars.
         /// </devdoc>
-        None       = 0,
+        None = 0,
 
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.Horizontal"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Display only a
-        ///       horizontal scroll bar when needed.
-        ///
-        ///    </para>
+        /// Display only a horizontal scroll bar when needed.
         /// </devdoc>
         Horizontal = RichTextBoxConstants.RTB_HORIZ,
 
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.Vertical"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Display only a
-        ///       vertical scroll bar when needed.
-        ///
-        ///    </para>
+        /// Display only a vertical scroll bar when needed.
         /// </devdoc>
-        Vertical   = RichTextBoxConstants.RTB_VERT,
+        Vertical = RichTextBoxConstants.RTB_VERT,
 
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.Both"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Display both a horizontal and a vertical scroll bar when needed.
-        ///    </para>
+        /// Display both a horizontal and a vertical scroll bar when needed.
         /// </devdoc>
-        Both       = Horizontal | Vertical,
+        Both = Horizontal | Vertical,
 
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.ForcedHorizontal"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Always
-        ///       display only a horizontal scroll bar.
-        ///
-        ///    </para>
+        /// Always display only a horizontal scroll bar.
         /// </devdoc>
         ForcedHorizontal = RichTextBoxConstants.RTB_FORCE | Horizontal,
 
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.ForcedVertical"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Always display only a vertical scroll bar.
-        ///    </para>
+        /// Always display only a vertical scroll bar.
         /// </devdoc>
         ForcedVertical = RichTextBoxConstants.RTB_FORCE | Vertical,
 
-        /// <include file='doc\RichTextBoxScrollBars.uex' path='docs/doc[@for="RichTextBoxScrollBars.ForcedBoth"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Always display both a horizontal and a vertical scroll bar.
-        ///    </para>
+        /// Always display both a horizontal and a vertical scroll bar.
         /// </devdoc>
         ForcedBoth = ForcedHorizontal | ForcedVertical,
 

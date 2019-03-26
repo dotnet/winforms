@@ -2,6 +2,9 @@
 # https://github.com/codecov/support/wiki/Codecov-Yaml
 
 coverage:
+  range: 20..80                   # 20 is red, 80 is green
+  round: down                     # always round down
+  precision: 5                    # highest level of decimal precision
   status:
     project:
       default: false
@@ -11,9 +14,13 @@ coverage:
     - "eng/::/"
 
 comment:
-  layout: "diff, flags"
+  layout: "diff, flags"           # coverage difference, flags below
+  behavior: default               # updates, if exists; otherwise post new
+  require_changes: false          # post comment even if coverage does not change
+  require_head: yes               # must have these two in order to post
+  require_base: yes
 
-flags:
+flags:                            # which files to include in the reporting
   production:
     paths:
       - src/Common/src/
@@ -26,8 +33,6 @@ flags:
   test:
     paths:
       - src/Common/tests/
-      - src/System.Design/tests/
-      - src/System.Drawing/tests/
       - src/System.Drawing.Design/tests/
       - src/System.Windows.Forms/tests/
       - src/System.Windows.Forms.Design/tests/

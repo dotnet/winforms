@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnContextMenuTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.OnContextMenuMethod(0, 0));
+            Assert.Null(Record.Exception(() => controlDesigner.OnContextMenuMethod(0, 0)));
         }
 
         [Fact]
