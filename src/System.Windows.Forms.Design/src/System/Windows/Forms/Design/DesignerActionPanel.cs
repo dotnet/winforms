@@ -2880,8 +2880,6 @@ namespace System.ComponentModel.Design
                     [DllImport(ExternDllUser32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
                     [ResourceExposure(ResourceScope.Process)]
                     private static extern IntPtr IntGetDC(HandleRef hWnd);
-                    [ResourceExposure(ResourceScope.Process)]
-                    [ResourceConsumption(ResourceScope.Process)]
                     public static IntPtr GetDC(HandleRef hWnd)
                     {
                         NativeMethods.CommonHandles.s_hdcHandleCollector.Add();

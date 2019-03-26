@@ -6068,8 +6068,6 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.Process)]
         private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
-        [ResourceExposure(ResourceScope.Process)]
-        [ResourceConsumption(ResourceScope.Process)]
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
         {
             return System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), CommonHandles.GDI);
