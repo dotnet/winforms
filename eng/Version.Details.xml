@@ -39,9 +39,9 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>d6a30736858f91b297fdd3ed4e3d1dfde67bdbdb</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview4-27526-02">
+    <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview4-27526-03">
       <Uri>https://github.com/dotnet/core-setup</Uri>
-      <Sha>989e5790a0c344d3b18c94c05aa3f06605aa1339</Sha>
+      <Sha>a1246393407627742df25b82a1dd41b387c61d96</Sha>
     </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
