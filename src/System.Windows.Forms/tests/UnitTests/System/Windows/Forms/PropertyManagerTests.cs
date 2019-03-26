@@ -12,10 +12,10 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class PropertyManagerTests_Binding
+    public class PropertyManagerTests
     {
         [Fact]
-        public void Ctor_Default()
+        public void PropertyManager_Ctor_Default()
         {
             var manager = new PropertyManager();
             Assert.Equal(1, manager.Count);
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void Position_Set_Nop(int value)
+        public void PropertyManager_Position_Set_Nop(int value)
         {
             var context = new BindingContext();
             var source = new BindingSource();
@@ -36,17 +36,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void GetListName_Invoke_ReturnsEmpty()
+        public void PropertyManager_GetListName_Invoke_ReturnsEmpty()
         {
             var context = new BindingContext();
             var source = new BindingSource();
             PropertyManager manager = Assert.IsType<PropertyManager>(context[new DataSource()]);
-            Assert.Equal("System.Windows.Forms.Tests.PropertyManagerTests_Binding+DataSource.", manager.GetListName());
+            Assert.Equal("System.Windows.Forms.Tests.PropertyManagerTests+DataSource.", manager.GetListName());
             Assert.Empty(manager.GetListName(null));
         }
 
         [Fact]
-        public void GetListName_NoDataSource_ThrowsArgumentException()
+        public void PropertyManager_GetListName_NoDataSource_ThrowsArgumentException()
         {
             var manager = new PropertyManager();
             Assert.Throws<ArgumentException>(null, () => manager.GetListName());
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetItemProperties_Parameterless_TestData))]
-        public void GetItemProperties_InvokeParameterless_ReturnsExpected(PropertyManager manager, string[] expected)
+        public void PropertyManager_GetItemProperties_InvokeParameterless_ReturnsExpected(PropertyManager manager, string[] expected)
         {
             IEnumerable<PropertyDescriptor> properties = manager.GetItemProperties()?.Cast<PropertyDescriptor>();
             Assert.Equal(expected, properties?.Select(p => p.Name));
@@ -88,14 +88,14 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(GetItemProperties_DataSourcesAndListAccessors_TestData))]
-        public void GetItemProperties_InvokeWithDataSourcesAndListAccessors_ReturnsExpected(PropertyManager manager, ArrayList dataSources, ArrayList listAccessors, string[] expected)
+        public void PropertyManager_GetItemProperties_InvokeWithDataSourcesAndListAccessors_ReturnsExpected(PropertyManager manager, ArrayList dataSources, ArrayList listAccessors, string[] expected)
         {
             IEnumerable<PropertyDescriptor> properties = manager.GetItemProperties(dataSources, listAccessors)?.Cast<PropertyDescriptor>();
             Assert.Equal(expected, properties?.Select(p => p.Name));
         }*/
 
         [Fact]
-        public void CancelCurrentEdit_NullCurrent_Nop()
+        public void PropertyManager_CancelCurrentEdit_NullCurrent_Nop()
         {
             var manager = new PropertyManager();
             manager.CancelCurrentEdit();
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CancelCurrentEdit_IEditableObjectCurrent_CallsCancelEdit()
+        public void PropertyManager_CancelCurrentEdit_IEditableObjectCurrent_CallsCancelEdit()
         {
             var mockDataSource = new Mock<IEditableObject>(MockBehavior.Strict);
             mockDataSource
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void CancelCurrentEdit_NonNullCurrent_Nop()
+        public void PropertyManager_CancelCurrentEdit_NonNullCurrent_Nop()
         {
             var manager = new PropertyManager(new DataSource());
             manager.CancelCurrentEdit();
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void EndCurrentEdit_NullCurrent_Nop()
+        public void PropertyManager_EndCurrentEdit_NullCurrent_Nop()
         {
             var manager = new PropertyManager();
             manager.EndCurrentEdit();
@@ -135,7 +135,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void EndCurrentEdit_IEditableObjectCurrent_CallsEndEdit()
+        public void PropertyManager_EndCurrentEdit_IEditableObjectCurrent_CallsEndEdit()
         {
             var mockDataSource = new Mock<IEditableObject>(MockBehavior.Strict);
             mockDataSource
@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(true, 0)]
         [InlineData(false, 1)]
-        public void EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)
+        public void PropertyManager_EndCurrentEdit_IEditableObjectCurrentNotSuccess_DoesNotCallEndEdit(bool cancel, int expectedCallCount)
         {
             int callCount = 0;
             var dataSource = new EditableDataSource
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void EndCurrentEdit_NonNullCurrent_Nop()
+        public void PropertyManager_EndCurrentEdit_NonNullCurrent_Nop()
         {
             var manager = new PropertyManager(new DataSource());
             manager.EndCurrentEdit();
@@ -193,7 +193,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ResumeBinding_SuspendBinding_Success()
+        public void PropertyManager_ResumeBinding_SuspendBinding_Success()
         {
             var manager = new PropertyManager(new DataSource());
             manager.ResumeBinding();
@@ -203,7 +203,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void ResumeBinding_Invoke_CallsHandlers()
+        public void PropertyManager_ResumeBinding_Invoke_CallsHandlers()
         {
             var manager = new PropertyManager(new DataSource());
 
@@ -249,7 +249,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void SuspendBinding_Invoke_CallsHandlers()
+        public void PropertyManager_SuspendBinding_Invoke_CallsHandlers()
         {
             var mockDataSource = new Mock<IEditableObject>(MockBehavior.Strict);
             mockDataSource
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void OnCurrentChanged_Invoke_CallsHandlers()
+        public void PropertyManager_OnCurrentChanged_Invoke_CallsHandlers()
         {
             var manager = new PropertyManager(new DataSource());
 
@@ -347,7 +347,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void OnCurrentItemChanged_Invoke_CallsHandlers()
+        public void PropertyManager_OnCurrentItemChanged_Invoke_CallsHandlers()
         {
             var manager = new PropertyManager(new DataSource());
 
@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void AddNew_Invoke_ThrowsNotSupportedException()
+        public void PropertyManager_AddNew_Invoke_ThrowsNotSupportedException()
         {
             var context = new BindingContext();
             var source = new BindingSource();
@@ -403,7 +403,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void RemoveAt_Invoke_ThrowsNotSupportedException(int index)
+        public void PropertyManager_RemoveAt_Invoke_ThrowsNotSupportedException(int index)
         {
             var context = new BindingContext();
             var source = new BindingSource();
@@ -423,9 +423,11 @@ namespace System.Windows.Forms.Tests
 
         private class SubControl : Control, INotifyPropertyChanged
         {
-#pragma warning disable 0067
-            public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore 0067
+            event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+            {
+                add { }
+                remove { }
+            }
 
             public string Value { get; set; }
         }
@@ -434,17 +436,12 @@ namespace System.Windows.Forms.Tests
         {
             public int Property { get; set; }
 
-            public void BeginEdit()
-            {
-                throw new NotImplementedException();
-            }
+            public void BeginEdit() => throw new NotImplementedException();
 
-            public void CancelEdit()
-            {
-                throw new NotImplementedException();
-            }
+            public void CancelEdit() => throw new NotImplementedException();
 
             public Action EndEditHandler { get; set; }
+
             public void EndEdit() => EndEditHandler();
         }
     }
