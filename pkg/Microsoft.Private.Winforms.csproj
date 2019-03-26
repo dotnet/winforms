@@ -16,9 +16,7 @@
 
   <PropertyGroup>
 
-    <!-- Don't build this project -->
-    <!-- Todo: this doesn't seem to work, find another way to prevent build outputs -->
-    <NoBuild>true</NoBuild>
+    <!-- Don't include this project in the build output -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IncludeSymbols>false</IncludeSymbols>
 
