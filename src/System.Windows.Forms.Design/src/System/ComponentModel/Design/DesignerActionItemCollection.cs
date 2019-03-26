@@ -14,35 +14,16 @@ namespace System.ComponentModel.Design
             set => List[index] = value;
         }
 
-        public int Add(DesignerActionItem value)
-        {
-            int index = List.Add(value);
-            return index;
-        }
+        public int Add(DesignerActionItem value) => List.Add(value);
 
-        public bool Contains(DesignerActionItem value)
-        {
-            return List.Contains(value);
-        }
+        public bool Contains(DesignerActionItem value) => List.Contains(value);
 
-        public void CopyTo(DesignerActionItem[] array, int index)
-        {
-            List.CopyTo(array, index);
-        }
+        public void CopyTo(DesignerActionItem[] array, int index) => List.CopyTo(array, index);
 
-        public int IndexOf(DesignerActionItem value)
-        {
-            return List.IndexOf(value);
-        }
-
-        public void Insert(int index, DesignerActionItem value)
-        {
-            List.Insert(index, value);
-        }
-
-        public void Remove(DesignerActionItem value)
-        {
-            List.Remove(value);
-        }
+        public int IndexOf(DesignerActionItem value) => List.IndexOf(value);
+        
+        public void Insert(int index, DesignerActionItem value) => List.Insert(index, value);
+        
+        public void Remove(DesignerActionItem value) => List.Remove(value);
     }
 }

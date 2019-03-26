@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel.Design;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -15,6 +14,7 @@ namespace System.Windows.Forms.Design.Tests
         {
             DesignerActionItemCollection underTest = new DesignerActionItemCollection();
             Assert.NotNull(underTest);
+            Assert.Empty(underTest);
         }
 
         [Fact]
@@ -49,10 +49,12 @@ namespace System.Windows.Forms.Design.Tests
             Assert.Equal(2, underTest.IndexOf(item3));
 
             underTest.Insert(2, item4);
+            Assert.Equal(3, underTest.IndexOf(item3));
             Assert.Equal(2, underTest.IndexOf(item4));
 
             underTest.Remove(item4);
             Assert.False(underTest.Contains(item4));
+            Assert.Equal(2, underTest.IndexOf(item3));
             Assert.Equal(3, underTest.Count);
         }
 
