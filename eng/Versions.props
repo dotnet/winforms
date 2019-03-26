@@ -30,8 +30,8 @@
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19175.7</MicrosoftDotNetGenFacadesPackageVersion>
-    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19175.7</MicrosoftDotNetXUnitExtensionsPackageVersion>
+    <MicrosoftDotNetGenFacadesPackageVersion>1.0.0-beta.19175.9</MicrosoftDotNetGenFacadesPackageVersion>
+    <MicrosoftDotNetXUnitExtensionsPackageVersion>2.4.0-beta.19175.9</MicrosoftDotNetXUnitExtensionsPackageVersion>
   </PropertyGroup>
   <!-- XUnit-related unchanging dependencies -->
   <PropertyGroup>
