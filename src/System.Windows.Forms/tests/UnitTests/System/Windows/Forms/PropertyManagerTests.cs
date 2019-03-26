@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Tests
             {
                 currentChangedCallCount++;
                 Assert.Same(manager, sender);
-                Assert.NotNull(e);
+                Assert.Same(EventArgs.Empty, e);
             };
             manager.CurrentChanged += currentChangedHandler;
             manager.ResumeBinding();
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.Tests
             {
                 currentItemChangedCallCount++;
                 Assert.Same(manager, sender);
-                Assert.NotNull(e);
+                Assert.Same(EventArgs.Empty, e);
             };
             manager.CurrentItemChanged += currentItemChangedHandler;
             manager.ResumeBinding();
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Tests
             {
                 currentChangedCallCount++;
                 Assert.Same(manager, sender);
-                Assert.NotNull(e);
+                Assert.Same(EventArgs.Empty, e);
             };
             manager.CurrentChanged += currentChangedHandler;
             manager.ResumeBinding();
@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Tests
             {
                 currentItemChangedCallCount++;
                 Assert.Same(manager, sender);
-                Assert.NotNull(e);
+                Assert.Same(EventArgs.Empty, e);
             };
             manager.CurrentItemChanged += currentItemChangedHandler;
             manager.ResumeBinding();

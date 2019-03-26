@@ -94,7 +94,7 @@ namespace System.Windows.Forms
 
         public override void ResumeBinding()
         {
-            OnCurrentChanged(new EventArgs());
+            OnCurrentChanged(EventArgs.Empty);
             if (!_bound)
             {
                 try
