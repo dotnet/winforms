@@ -771,7 +771,7 @@ namespace System.Windows.Forms {
         public static extern int GetThemePosition(HandleRef hTheme, int iPartId, int iStateId, int iPropId, [Out] NativeMethods.POINT pPoint);
         [DllImport(ExternDll.Uxtheme, CharSet=CharSet.Auto)]
         
-        public static extern int GetThemeMargins(HandleRef hTheme, HandleRef hDC, int iPartId, int iStateId, int iPropId, ref NativeMethods.MARGINS margins);
+        public static extern int GetThemeMargins(HandleRef hTheme, HandleRef hDC, int iPartId, int iStateId, int iPropId, NativeMethods.COMRECT prc, ref NativeMethods.MARGINS margins);
         [DllImport(ExternDll.Uxtheme, CharSet=CharSet.Auto)]
         
         public static extern int GetThemeString(HandleRef hTheme, int iPartId, int iStateId, int iPropId, StringBuilder pszBuff, int cchMaxBuffChars);

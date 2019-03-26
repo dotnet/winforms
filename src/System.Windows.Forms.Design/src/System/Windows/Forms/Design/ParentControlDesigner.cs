@@ -353,7 +353,6 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///     When the control is scrolled, we want to invalidate areas previously covered by glyphs.
-        ///     VSWhidbey# 183588.
         /// </summary>
         private void OnScroll(object sender, ScrollEventArgs se)
         {
