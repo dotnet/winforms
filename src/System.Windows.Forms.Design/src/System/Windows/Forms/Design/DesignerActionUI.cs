@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
 #if DEBUG
         internal static readonly TraceSwitch s_dropDownVisibilityDebug = new TraceSwitch("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
 #else
-        internal static readonly TraceSwitch DropDownVisibilityDebug;
+        internal static readonly TraceSwitch s_dropDownVisibilityDebug;
 #endif
 
         /// <summary>
