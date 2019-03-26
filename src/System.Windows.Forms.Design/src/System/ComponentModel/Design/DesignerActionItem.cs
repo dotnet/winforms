@@ -26,7 +26,7 @@ namespace System.ComponentModel.Design
         {
             _category = category;
             _description = description;
-            _displayName = displayName == null ? null : Regex.Replace(displayName, @"\(\&.\)", ""); // VSWHIDBEY 485835
+            _displayName = displayName == null ? null : Regex.Replace(displayName, @"\(\&.\)", "");
         }
 
         internal DesignerActionItem()
