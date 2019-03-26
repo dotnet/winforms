@@ -16,7 +16,6 @@ namespace System.Windows.Forms.Design.Behavior
     {
         private BehaviorService _behaviorService; //ptr back to the BehaviorService
         private readonly GlyphCollection _glyphs; //collection of Glyphs that this particular Adorner manages
-        private bool _enabled; //enabled value - determines if Adorner gets paints & hits
 
         /// <summary>
         ///     Standard constructor.  Creates a new GlyphCollection and by default is enabled.
@@ -24,7 +23,7 @@ namespace System.Windows.Forms.Design.Behavior
         public Adorner()
         {
             _glyphs = new GlyphCollection();
-            _enabled = true;
+            EnabledInternal = true;
         }
 
         /// <summary>
@@ -54,11 +53,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
         }
 
-        internal bool EnabledInternal
-        {
-            get => _enabled;
-            set => _enabled = value;
-        }
+        internal bool EnabledInternal { get; set; }
 
         /// <summary>
         ///     Returns the stronly-typed Glyph collection.
@@ -84,10 +79,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Rectangle rectangle)
         {
-            if (_behaviorService != null)
-            {
-                _behaviorService.Invalidate(rectangle);
-            }
+            _behaviorService?.Invalidate(rectangle);
         }
 
         /// <summary>

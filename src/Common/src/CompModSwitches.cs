@@ -7,14 +7,9 @@
 
 namespace System.ComponentModel {
     using System.Diagnostics;  
-
-    /// <internalonly/>
-    // Shared between dlls
     
     internal static class CompModSwitches {
-
 #if WINDOWS_FORMS_SWITCHES
-
         private static TraceSwitch activeX;
         private static TraceSwitch flowLayout;
         private static TraceSwitch dataCursor;
@@ -44,7 +39,10 @@ namespace System.ComponentModel {
         private static TraceSwitch setBounds;
 
         private static BooleanSwitch lifetimeTracing;
-                                                                                                                                                                                                                                                                                                                
+
+        private static TraceSwitch s_handleLeak;
+        private static BooleanSwitch s_commonDesignerServices;
+
         public static TraceSwitch ActiveX {
             get {
                 if (activeX == null) {
@@ -286,8 +284,7 @@ namespace System.ComponentModel {
                 }
                 return richLayout;
             }
-        }    
-        
+        }
 
         public static TraceSwitch SetBounds {
             get {
@@ -296,12 +293,8 @@ namespace System.ComponentModel {
                 }
                 return setBounds;
             }
-        }    
-
+        }
         #endif 
-
-        private static TraceSwitch s_handleLeak;
-        private static BooleanSwitch s_commonDesignerServices;
 
         public static TraceSwitch HandleLeak {
             get {
