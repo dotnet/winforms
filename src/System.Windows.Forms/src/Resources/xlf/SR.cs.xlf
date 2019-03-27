@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionAccessibleName">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">Umístění</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionItemPropDescr">
@@ -6803,7 +6803,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
-        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <target state="translated">Parametr musí být typu ListViewGroup.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8653,7 +8653,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">Umístění</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">

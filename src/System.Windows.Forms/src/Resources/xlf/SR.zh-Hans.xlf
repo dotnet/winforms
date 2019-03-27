@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionAccessibleName">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionItemPropDescr">
@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">Private</target>
+        <target state="translated">专用</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -6803,7 +6803,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
-        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <target state="translated">参数的类型必须是 ListViewGroup。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8653,7 +8653,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
@@ -12164,7 +12164,7 @@ Are you sure you want to run this application?</source>
       </trans-unit>
       <trans-unit id="toStringDelete">
         <source>Del</source>
-        <target state="translated">Del</target>
+        <target state="translated">Delete</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringEnd">
@@ -12184,7 +12184,7 @@ Are you sure you want to run this application?</source>
       </trans-unit>
       <trans-unit id="toStringInsert">
         <source>Ins</source>
-        <target state="translated">Ins</target>
+        <target state="translated">Insert</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringNone">
@@ -12194,12 +12194,12 @@ Are you sure you want to run this application?</source>
       </trans-unit>
       <trans-unit id="toStringPageDown">
         <source>PgDn</source>
-        <target state="translated">PgDn</target>
+        <target state="translated">Page Down</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringPageUp">
         <source>PgUp</source>
-        <target state="translated">PgUp</target>
+        <target state="translated">Page Up</target>
         <note />
       </trans-unit>
       <trans-unit id="toStringShift">

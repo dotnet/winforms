@@ -19,22 +19,22 @@
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
-        <target state="new">Adding event '{0}'</target>
+        <target state="translated">Добавляется событие '{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">Необработанный VT: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">Тип double нельзя привести к типу date.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">Тип integer нельзя привести к типу float.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
@@ -224,7 +224,7 @@
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
         <source>.NET Component</source>
-        <target state="new">.NET Component</target>
+        <target state="translated">Компонент .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -239,7 +239,7 @@
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
-        <target state="new">Read-Only</target>
+        <target state="translated">Только для чтения</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -359,22 +359,22 @@
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
         <source>Argument should be a non-empty string.</source>
-        <target state="new">Argument should be a non-empty string.</target>
+        <target state="translated">Аргумент не может быть пустой строкой.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidPropertyType">
         <source>Property {0} requires an argument of type {1}.</source>
-        <target state="new">Property {0} requires an argument of type {1}.</target>
+        <target state="translated">Свойство {0} требует аргумент типа {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemLocked">
         <source>Toolbox item cannot be modified.</source>
-        <target state="new">Toolbox item cannot be modified.</target>
+        <target state="translated">Невозможно изменить элемент панели инструментов.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemValueNotSerializable">
         <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
-        <target state="new">Data type {0} is not serializable. Items added to a property dictionary must be serializable.</target>
+        <target state="translated">Тип данных {0} не является упорядочиваемым. В словарь свойств можно добавлять только упорядочиваемые элементы.</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
@@ -429,7 +429,7 @@
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
-        <target state="new">Not implemented.</target>
+        <target state="translated">Не реализовано.</target>
         <note />
       </trans-unit>
     </body>

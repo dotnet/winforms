@@ -29,12 +29,12 @@
       </trans-unit>
       <trans-unit id="btnInstall.Text">
         <source>&amp;Install</source>
-        <target state="new">&amp;Install</target>
+        <target state="translated">&amp;Yükle</target>
         <note />
       </trans-unit>
       <trans-unit id="lblFrom.AccessibleDescription">
         <source>Application Source</source>
-        <target state="new">Application Source</target>
+        <target state="translated">Uygulama Kaynağı</target>
         <note />
       </trans-unit>
       <trans-unit id="lblFrom.AccessibleName">
@@ -44,12 +44,12 @@
       </trans-unit>
       <trans-unit id="lblFrom.Text">
         <source>From (Hover over the string below to see the full domain):</source>
-        <target state="new">From (Hover over the string below to see the full domain):</target>
+        <target state="translated">Kimden (tam etki alanını görmek için aşağıdaki dizenin üzerine gelin):</target>
         <note />
       </trans-unit>
       <trans-unit id="lblName.AccessibleDescription">
         <source>Application Name</source>
-        <target state="new">Application Name</target>
+        <target state="translated">Uygulama Adı</target>
         <note />
       </trans-unit>
       <trans-unit id="lblName.AccessibleName">
@@ -59,12 +59,12 @@
       </trans-unit>
       <trans-unit id="lblName.Text">
         <source>&amp;Name:</source>
-        <target state="new">&amp;Name:</target>
+        <target state="translated">&amp;Ad:</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleDescription">
         <source>Application Publisher</source>
-        <target state="new">Application Publisher</target>
+        <target state="translated">Uygulama Yayımcısı</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleName">
@@ -74,12 +74,12 @@
       </trans-unit>
       <trans-unit id="lblPublisher.Text">
         <source>&amp;Publisher:</source>
-        <target state="new">&amp;Publisher:</target>
+        <target state="translated">&amp;Yayımcı:</target>
         <note />
       </trans-unit>
       <trans-unit id="lblQuestion.AccessibleDescription">
         <source>Trust Manager Question</source>
-        <target state="new">Trust Manager Question</target>
+        <target state="translated">Güven Yöneticisi Sorusu</target>
         <note />
       </trans-unit>
       <trans-unit id="lblQuestion.AccessibleName">

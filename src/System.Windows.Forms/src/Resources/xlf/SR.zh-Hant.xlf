@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionAccessibleName">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionItemPropDescr">
@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">Private</target>
+        <target state="translated">私人</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -6803,7 +6803,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
-        <target state="new">Parameter must be of type ListViewGroup.</target>
+        <target state="translated">參數的類型必須為 ListViewGroup。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8653,7 +8653,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">

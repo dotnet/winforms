@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="$this.AccessibleDescription">
         <source>Trust Manager More Information Dialog Box</source>
-        <target state="new">Trust Manager More Information Dialog Box</target>
+        <target state="translated">Caixa de Diálogo Mais Informações do Gerenciador de Confiança</target>
         <note />
       </trans-unit>
       <trans-unit id="$this.AccessibleName">
@@ -14,22 +14,22 @@
       </trans-unit>
       <trans-unit id="btnClose.AccessibleDescription">
         <source>Close button to discard the dialog box</source>
-        <target state="new">Close button to discard the dialog box</target>
+        <target state="translated">Botão Fechar para descartar a caixa de diálogo</target>
         <note />
       </trans-unit>
       <trans-unit id="btnClose.AccessibleName">
         <source>CloseButton</source>
-        <target state="new">CloseButton</target>
+        <target state="translated">CloseButton</target>
         <note />
       </trans-unit>
       <trans-unit id="btnClose.Text">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Fechar</target>
         <note />
       </trans-unit>
       <trans-unit id="lblInstallation.AccessibleDescription">
         <source>Installation Section</source>
-        <target state="new">Installation Section</target>
+        <target state="translated">Seção de Instalação</target>
         <note />
       </trans-unit>
       <trans-unit id="lblInstallation.AccessibleName">
@@ -39,12 +39,12 @@
       </trans-unit>
       <trans-unit id="lblInstallation.Text">
         <source>Installation</source>
-        <target state="new">Installation</target>
+        <target state="translated">Instalação</target>
         <note />
       </trans-unit>
       <trans-unit id="lblInstallationContent.AccessibleDescription">
         <source>Installation Section Body</source>
-        <target state="new">Installation Section Body</target>
+        <target state="translated">Corpo da Seção de Instalação</target>
         <note />
       </trans-unit>
       <trans-unit id="lblInstallationContent.AccessibleName">
@@ -59,7 +59,7 @@
       </trans-unit>
       <trans-unit id="lblLocation.AccessibleDescription">
         <source>Location Section</source>
-        <target state="new">Location Section</target>
+        <target state="translated">Seção Local</target>
         <note />
       </trans-unit>
       <trans-unit id="lblLocation.AccessibleName">
@@ -69,12 +69,12 @@
       </trans-unit>
       <trans-unit id="lblLocation.Text">
         <source>Location</source>
-        <target state="new">Location</target>
+        <target state="translated">Localização</target>
         <note />
       </trans-unit>
       <trans-unit id="lblLocationContent.AccessibleDescription">
         <source>Location Section Body</source>
-        <target state="new">Location Section Body</target>
+        <target state="translated">Corpo da Seção Local</target>
         <note />
       </trans-unit>
       <trans-unit id="lblLocationContent.AccessibleName">
@@ -89,7 +89,7 @@
       </trans-unit>
       <trans-unit id="lblMachineAccess.AccessibleDescription">
         <source>Machine Access Section</source>
-        <target state="new">Machine Access Section</target>
+        <target state="translated">Seção de Acesso ao Computador</target>
         <note />
       </trans-unit>
       <trans-unit id="lblMachineAccess.AccessibleName">
@@ -99,12 +99,12 @@
       </trans-unit>
       <trans-unit id="lblMachineAccess.Text">
         <source>Machine Access</source>
-        <target state="new">Machine Access</target>
+        <target state="translated">Acesso ao Computador</target>
         <note />
       </trans-unit>
       <trans-unit id="lblMachineAccessContent.AccessibleDescription">
         <source>Machine Access Section Body</source>
-        <target state="new">Machine Access Section Body</target>
+        <target state="translated">Corpo da Seção de Acesso ao Computador</target>
         <note />
       </trans-unit>
       <trans-unit id="lblMachineAccessContent.AccessibleName">
@@ -119,7 +119,7 @@
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleDescription">
         <source>Publisher Section</source>
-        <target state="new">Publisher Section</target>
+        <target state="translated">Seção de Editor</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleName">
@@ -129,12 +129,12 @@
       </trans-unit>
       <trans-unit id="lblPublisher.Text">
         <source>Publisher</source>
-        <target state="new">Publisher</target>
+        <target state="translated">Editor</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisherContent.AccessibleDescription">
         <source>Publisher Section Body</source>
-        <target state="new">Publisher Section Body</target>
+        <target state="translated">Corpo da Seção de Editor</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisherContent.AccessibleName">
