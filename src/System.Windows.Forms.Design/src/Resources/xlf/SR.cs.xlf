@@ -39,22 +39,22 @@
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
         <source>Adding event '{0}'</source>
-        <target state="new">Adding event '{0}'</target>
+        <target state="translated">Přidání události {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="new">Unhandled VT: {0}.</target>
+        <target state="translated">Nezpracovaná hodnota VT: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertDoubleToDate">
         <source>Double cannot be converted to a date.</source>
-        <target state="new">Double cannot be converted to a date.</target>
+        <target state="translated">Nelze převést typ Double na typ Date.</target>
         <note />
       </trans-unit>
       <trans-unit id="CannotConvertIntToFloat">
         <source>Integer cannot be converted to a float.</source>
-        <target state="new">Integer cannot be converted to a float.</target>
+        <target state="translated">Nelze převést typ Integer na typ Float.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -339,7 +339,7 @@
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
         <source>.NET Component</source>
-        <target state="new">.NET Component</target>
+        <target state="translated">Komponenta .NET</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropDragComponents">
@@ -369,7 +369,7 @@
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
-        <target state="new">Read-Only</target>
+        <target state="translated">Jen pro čtení</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSizeComponent">
@@ -504,22 +504,22 @@
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
         <source>Argument should be a non-empty string.</source>
-        <target state="new">Argument should be a non-empty string.</target>
+        <target state="translated">Argument musí být neprázdný řetězec.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidPropertyType">
         <source>Property {0} requires an argument of type {1}.</source>
-        <target state="new">Property {0} requires an argument of type {1}.</target>
+        <target state="translated">Vlastnost {0} vyžaduje argument typu {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemLocked">
         <source>Toolbox item cannot be modified.</source>
-        <target state="new">Toolbox item cannot be modified.</target>
+        <target state="translated">Položku sady nástrojů nelze upravit.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemValueNotSerializable">
         <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
-        <target state="new">Data type {0} is not serializable. Items added to a property dictionary must be serializable.</target>
+        <target state="translated">Typ dat {0} není serializovatelný. Položky přidané do slovníku vlastností musí být serializovatelné.</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
@@ -594,7 +594,7 @@
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
-        <target state="new">Not implemented.</target>
+        <target state="translated">Není implementováno.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsAddEvent">

@@ -29,12 +29,12 @@
       </trans-unit>
       <trans-unit id="btnInstall.Text">
         <source>&amp;Install</source>
-        <target state="new">&amp;Install</target>
+        <target state="translated">Za&amp;instaluj</target>
         <note />
       </trans-unit>
       <trans-unit id="lblFrom.AccessibleDescription">
         <source>Application Source</source>
-        <target state="new">Application Source</target>
+        <target state="translated">Źródło aplikacji</target>
         <note />
       </trans-unit>
       <trans-unit id="lblFrom.AccessibleName">
@@ -44,12 +44,12 @@
       </trans-unit>
       <trans-unit id="lblFrom.Text">
         <source>From (Hover over the string below to see the full domain):</source>
-        <target state="new">From (Hover over the string below to see the full domain):</target>
+        <target state="translated">Z (zatrzymaj wskaźnik myszy na ciągu poniżej, aby wyświetlić pełną domenę):</target>
         <note />
       </trans-unit>
       <trans-unit id="lblName.AccessibleDescription">
         <source>Application Name</source>
-        <target state="new">Application Name</target>
+        <target state="translated">Nazwa aplikacji</target>
         <note />
       </trans-unit>
       <trans-unit id="lblName.AccessibleName">
@@ -59,12 +59,12 @@
       </trans-unit>
       <trans-unit id="lblName.Text">
         <source>&amp;Name:</source>
-        <target state="new">&amp;Name:</target>
+        <target state="translated">&amp;Nazwa:</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleDescription">
         <source>Application Publisher</source>
-        <target state="new">Application Publisher</target>
+        <target state="translated">Wydawca aplikacji</target>
         <note />
       </trans-unit>
       <trans-unit id="lblPublisher.AccessibleName">
@@ -74,12 +74,12 @@
       </trans-unit>
       <trans-unit id="lblPublisher.Text">
         <source>&amp;Publisher:</source>
-        <target state="new">&amp;Publisher:</target>
+        <target state="translated">&amp;Wydawca:</target>
         <note />
       </trans-unit>
       <trans-unit id="lblQuestion.AccessibleDescription">
         <source>Trust Manager Question</source>
-        <target state="new">Trust Manager Question</target>
+        <target state="translated">Pytanie menedżera zaufania</target>
         <note />
       </trans-unit>
       <trans-unit id="lblQuestion.AccessibleName">
