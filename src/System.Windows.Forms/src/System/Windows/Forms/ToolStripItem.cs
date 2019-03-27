@@ -3478,12 +3478,20 @@ namespace System.Windows.Forms {
 
         internal void SetOwner(ToolStrip newOwner) {
             if (owner != newOwner) {
-               Font f = this.Font;
-               owner = newOwner;
+                Font f = this.Font;
 
-               // clear the parent if the owner is null...
-               //
-               if (newOwner == null) {
+                if (owner != null) {
+                    owner.rescaleConstsCallbackDelegate -= ToolStrip_RescaleConstants;
+                }
+                owner = newOwner;
+
+                if (owner != null) {
+                    owner.rescaleConstsCallbackDelegate += ToolStrip_RescaleConstants;
+                }
+
+                // clear the parent if the owner is null...
+                //
+                if (newOwner == null) {
                    this.ParentInternal = null;
                }
                if (!state[stateDisposing] &&  !IsDisposed) {
@@ -3493,7 +3501,6 @@ namespace System.Windows.Forms {
                    }
                }
            }
-
         }
 
         protected virtual void SetVisibleCore(bool visible) {
