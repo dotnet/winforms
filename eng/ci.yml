@@ -1,7 +1,8 @@
 parameters:
-  # This section is required because agent pool can't 
+  # parameters should default to values for running in the External / Public
   # be read from a user-defined variable (Azure DevOps limitation)
-  agentPool: dotnet-external-temp-vs2019 
+  agentPoolName: NetCorePublic-Int-Pool
+  agentPool: BuildPool.Windows.10.Amd64.VS2019.BT.Open 
   runAsPublic: true                      
   repoName: dotnet/winforms              
 
@@ -18,7 +19,9 @@ jobs:
 
     jobs:
     - job: Windows_NT
-      pool: ${{ parameters.agentPool }}
+      pool: 
+        name: ${{ parameters.agentPoolName }}
+        queue: ${{ parameters.agentPool }}
 
       variables:
 
