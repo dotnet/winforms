@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="translated">False</target>
+        <target state="needs-review-translation">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="translated">True</target>
+        <target state="needs-review-translation">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -8161,99 +8161,9 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Der Zoom muss 0 (null) oder größer sein. Negative Werte sind unzulässig.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Close">
-        <source>&amp;Close</source>
-        <target state="translated">S&amp;chließen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_FourPages">
-        <source>Four pages</source>
-        <target state="translated">Vier Seiten</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_OnePage">
-        <source>One page</source>
-        <target state="translated">Ganze Seite</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Page">
-        <source>&amp;Page</source>
-        <target state="translated">&amp;Seite</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Print">
-        <source>Print</source>
-        <target state="translated">Drucken</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
-        <target state="translated">Seitenansicht</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_SixPages">
-        <source>Six pages</source>
-        <target state="translated">Sechs Seiten</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ThreePages">
-        <source>Three pages</source>
-        <target state="translated">Drei Seiten</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_TwoPages">
-        <source>Two pages</source>
-        <target state="translated">Zwei Seiten</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom">
-        <source>Zoom</source>
-        <target state="translated">Zoom</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom10">
-        <source>10%</source>
-        <target state="translated">10%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom100">
-        <source>100%</source>
-        <target state="translated">100%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom150">
-        <source>150%</source>
-        <target state="translated">150%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom200">
-        <source>200%</source>
-        <target state="translated">200 %</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom25">
-        <source>25%</source>
-        <target state="translated">25%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom50">
-        <source>50%</source>
-        <target state="translated">50 %</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom500">
-        <source>500%</source>
-        <target state="translated">500%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom75">
-        <source>75%</source>
-        <target state="translated">75%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ZoomAuto">
-        <source>Auto</source>
-        <target state="translated">Automatisch</target>
+        <target state="new">Print preview</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
@@ -9291,75 +9201,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Ruft die vertikale Schiebeleiste für diese ScrollableControl ab.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SecurityAboutDialog">
-        <source>Microsoft .NET Application Information</source>
-        <target state="translated">Microsoft .NET-Anwendungsinformationen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityApplication">
-        <source>Application</source>
-        <target state="translated">Anwendung</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAsmNameColumn">
-        <source>Name</source>
-        <target state="translated">Name</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAssembliesTab">
-        <source>Assemblies</source>
-        <target state="translated">Assemblys</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportLabel">
-        <source>To submit a bug report, first save the report, and then click Submit. Attach the saved report to the online form.</source>
-        <target state="translated">Um einen Problembericht zu senden, speichern Sie ihn zuerst und klicken anschließend auf "Senden". Hängen Sie den gespeicherten Bericht an das Onlineformular an.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportTab">
-        <source>Beta Bug Report</source>
-        <target state="translated">Beta-Problembericht</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityClose">
-        <source>&amp;Close</source>
-        <target state="translated">S&amp;chließen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityCodeBaseColumn">
-        <source>CodeBase</source>
-        <target state="translated">CodeBase</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityFileVersionColumn">
-        <source>File Version</source>
-        <target state="translated">Dateiversion</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeAppInfo">
-        <source>Include &amp;Application Information</source>
-        <target state="translated">&amp;Anwendungsinformationen einbeziehen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeSysInfo">
-        <source>Include &amp;System Information</source>
-        <target state="translated">Syste&amp;minformationen einbeziehen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityInfoTab">
-        <source>Security</source>
-        <target state="translated">Sicherheit</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</source>
-        <target state="translated">Das Fenster wird im eingeschränkten Modus ausgeführt. Einige UI-Features sind möglicherweise aus Sicherheitsgründen deaktiviert. 
-
-Weitere Informationen erhalten Sie vom Systemadministrator oder vom Entwickler des Programms.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
         <source>Mixed Zone</source>
         <target state="translated">Gemischte Zone</target>
@@ -9378,46 +9219,6 @@ Weitere Informationen erhalten Sie vom Systemadministrator oder vom Entwickler d
       <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
         <source>Unknown Zone</source>
         <target state="translated">Unbekannte Zone.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveBug">
-        <source>S&amp;ave</source>
-        <target state="translated">S&amp;peichern</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveFilter">
-        <source>Xml Files (*.xml)|*.xml</source>
-        <target state="translated">Xml-Dateien (*.xml)|*.xml</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBug">
-        <source>S&amp;ubmit</source>
-        <target state="translated">S&amp;enden</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBugUrl">
-        <source>http://beta.visualstudio.net/net/sdk/feedback.asp</source>
-        <target state="translated">http://beta.visualstudio.net/net/sdk/feedback.asp</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchDescrColumn">
-        <source>Description</source>
-        <target state="translated">Beschreibung</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchLabel">
-        <source>Changing the switch value will affect only the currently running version of this application.</source>
-        <target state="translated">Das Ändern des Schalterwerts wirkt sich nur auf die aktuell ausgeführte Version dieser Anwendung aus.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchNameColumn">
-        <source>Name</source>
-        <target state="translated">Name</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchesTab">
-        <source>Switches</source>
-        <target state="translated">Schalter</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipCaption">
@@ -9442,20 +9243,6 @@ Weitere Informationen erhalten Sie vom Systemadministrator oder vom Entwickler d
         <target state="translated">{0}
 
 {1}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</source>
-        <target state="translated">Das Fenster wird im uneingeschränkten Modus ausgeführt. Obwohl das Hauptfenster uneingeschränkt ausgeführt wird, sind möglicherweise einige Features aus Sicherheitsgründen deaktiviert. 
-
-Weitere Informationen erhalten Sie vom Systemadministrator oder vom Entwickler des Programms.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityVersionColumn">
-        <source>Assembly Version</source>
-        <target state="translated">Assemblyversion</target>
         <note />
       </trans-unit>
       <trans-unit id="SelTabCountRange">
@@ -11536,265 +11323,6 @@ Weitere Informationen erhalten Sie vom Systemadministrator oder vom Entwickler d
       <trans-unit id="TreeViewVisibleCountDescr">
         <source>The number of visible nodes in the TreeView.</source>
         <target state="translated">Die Anzahl der sichtbaren Knoten in der TreeView.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerBadXml">
-        <source>XML not valid. Expecting {0} tag.</source>
-        <target state="translated">Ungültige XML-Daten. {0}-Tag erwartet.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InstallTitle">
-        <source>Application Install - More Information</source>
-        <target state="translated">Anwendungsinstallation - Weitere Informationen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InternetSource">
-        <source>the Internet</source>
-        <target state="translated">Internet</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_KnownPublisher">
-        <source>This application was published by {0}. Only run applications from publishers that you trust.</source>
-        <target state="translated">Diese Anwendung wurde herausgegeben von {0}. Führen Sie nur Anwendungen von Herausgebern aus, denen Sie vertrauen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalComputerSource">
-        <source>the Local Computer</source>
-        <target state="translated">lokalen Computer</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalNetworkSource">
-        <source>the Local Network</source>
-        <target state="translated">lokalen Netzwerk</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_Location">
-        <source>This application comes from {0}. Only run applications from locations that you trust.</source>
-        <target state="translated">Diese Anwendung kommt von {0}. Führen Sie nur Anwendungen aus, deren Herkunft Sie vertrauen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_RunTitle">
-        <source>Application Run - More Information</source>
-        <target state="translated">Anwendungsausführung - Weitere Informationen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_SafeAccess">
-        <source>This application has only limited access to your computer.</source>
-        <target state="translated">Diese Anwendung hat nur eingeschränkten Zugriff auf Ihren Computer.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_TrustedSitesSource">
-        <source>a Trusted Site</source>
-        <target state="translated">einer vertrauenswürdigen Site</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnknownPublisher">
-        <source>The publisher of this application cannot be verified. Only run applications from publishers that you trust.</source>
-        <target state="translated">Der Herausgeber dieser Anwendung kann nicht überprüft werden. Führen Sie nur Anwendungen von Herausgebern aus, denen Sie vertrauen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnsafeAccess">
-        <source>This application will gain access to additional resources on your computer, such as your file system or your network connection. This may put your computer at risk. Do not approve unless you trust the application's publisher.</source>
-        <target state="translated">Diese Anwendung erhält Zugriff auf zusätzliche Ressourcen Ihres Computers, wie z.B. das Dateisystem oder die Netzwerkverbindung. Dies birgt ein potenzielles Risiko für Ihren Computer. Stimmen Sie nur zu, wenn Sie dem Herausgeber der Anwendung vertrauen.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UntrustedSitesSource">
-        <source>an Untrusted Site</source>
-        <target state="translated">einer nicht vertrauenswürdigen Site</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithShortcut">
-        <source>This application will be installed on your computer. It will add a shortcut to your Start menu and will be added to the Add or Remove Programs list.</source>
-        <target state="translated">Diese Anwendung wird auf Ihrem Computer installiert. Sie fügt dem Menü "Start" eine Verknüpfung hinzu und wird zur Liste "Software" hinzugefügt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithoutShortcut">
-        <source>This application will be temporarily installed onto your computer. It will not be added to your Start menu or to the Add or Remove Programs list.</source>
-        <target state="translated">Diese Anwendung wird temporär auf Ihrem Computer installiert. Sie wird nicht zum Menü "Start" und zur Liste "Software" hinzugefügt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallBlocked">
-        <source>Trust Manager Dialog - Install Blocked</source>
-        <target state="translated">Dialogfeld "Trust-Manager" - Installation blockiert</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallConfirmation">
-        <source>Trust Manager Dialog - Install Confirmation</source>
-        <target state="translated">Dialogfeld "Trust-Manager" - Installationsbestätigung</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallWithElevatedPermissions">
-        <source>Trust Manager Dialog - Install with elevated permissions</source>
-        <target state="translated">Dialogfeld "Trust-Manager" - Installation mit erweiterten Berechtigungen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunBlocked">
-        <source>Trust Manager Dialog - Run Blocked</source>
-        <target state="translated">Dialogfeld "Trust-Manager" - Ausführung blockiert</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunConfirmation">
-        <source>Trust Manager Dialog - Run Confirmation</source>
-        <target state="translated">Dialogfeld "Trust-Manager" - Ausführungsbestätigung</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunWithElevatedPermissions">
-        <source>Trust Manager Dialog - Run with elevated permissions</source>
-        <target state="translated">Dialogfeld "Trust-Manager" - Ausführung mit erweiterten Berechtigungen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_BlockedApp">
-        <source>Your administrator has blocked this application because it potentially poses a security risk to your computer.</source>
-        <target state="translated">Diese Anwendung wurde vom Administrator blockiert, da sie potenziell ein Sicherheitsrisiko für Ihren Computer darstellt.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Close">
-        <source>Close</source>
-        <target state="translated">Schließen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotInstall">
-        <source>&amp;Don't Install</source>
-        <target state="translated">&amp;Nicht installieren</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotRun">
-        <source>&amp;Don't Run</source>
-        <target state="translated">&amp;Nicht ausführen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_From">
-        <source>From</source>
-        <target state="translated">Von</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_GlobeIcon">
-        <source>Globe Icon</source>
-        <target state="translated">Globussymbol</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">Anwendungen können zwar nützlich sein, stellen jedoch auch eine potenzielle Gefahr für Ihren Computer dar. Installieren Sie diese Software nicht, wenn sie nicht von einer vertrauenswürdigen Quelle stammt. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallQuestion">
-        <source>Do you want to install this application?</source>
-        <target state="translated">Möchten Sie diese Anwendung installieren?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallTitle">
-        <source>Application Install - Security Warning</source>
-        <target state="translated">Anwendungsinstallation - Sicherheitswarnung</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">Anwendungen aus dem Internet können zwar nützlich sein, stellen jedoch auch eine potenzielle Gefahr für Ihren Computer dar. Führen Sie diese Software nicht aus, wenn sie nicht von einer vertrauenswürdigen Quelle stammt. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstalledAppBlockedWarning">
-        <source>Your security settings do not allow this application to be installed on your computer.</source>
-        <target state="translated">Ihre Sicherheitseinstellungen lassen die Installation dieser Anwendung auf Ihrem Computer nicht zu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformation">
-        <source>More Information...</source>
-        <target state="translated">Weitere Informationen...</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleDescription">
-        <source>Warning text and link to get more information</source>
-        <target state="translated">Warnungstext und Link zu weiteren Informationen</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
-        <source>MoreInformationLink</source>
-        <target state="translated">MoreInformationLink</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Name">
-        <source>Name</source>
-        <target state="translated">Name</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to install this application?</source>
-        <target state="translated">Der Herausgeber kann nicht überprüft werden.
-Möchten Sie diese Anwendung wirklich installieren?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to run this application?</source>
-        <target state="translated">Der Herausgeber kann nicht überprüft werden.
-Möchten Sie diese Anwendung wirklich ausführen?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Publisher">
-        <source>Publisher</source>
-        <target state="translated">Herausgeber</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Run">
-        <source>&amp;Run</source>
-        <target state="translated">Ausfüh&amp;ren</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunAppBlockedWarning">
-        <source>Your security settings do not allow this application to be run on your computer.</source>
-        <target state="translated">Ihre Sicherheitseinstellungen lassen die Ausführung dieser Anwendung auf Ihrem Computer nicht zu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">Anwendungen können zwar nützlich sein, stellen jedoch auch eine potenzielle Gefahr für Ihren Computer dar. Führen Sie diese Software nicht aus, wenn sie nicht von einer vertrauenswürdigen Quelle stammt. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunQuestion">
-        <source>Do you want to run this application?</source>
-        <target state="translated">Möchten Sie diese Anwendung ausführen?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunTitle">
-        <source>Application Run - Security Warning</source>
-        <target state="translated">Anwendungsausführung - Sicherheitswarnung</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">Anwendungen aus dem Internet können zwar nützlich sein, stellen jedoch auch eine potenzielle Gefahr für Ihren Computer dar. Führen Sie diese Software nicht aus, wenn sie nicht von einer vertrauenswürdigen Quelle stammt. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_UnknownPublisher">
-        <source>Unknown Publisher</source>
-        <target state="translated">Unbekannter Herausgeber.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleDescription">
-        <source>Warning text</source>
-        <target state="translated">Warnungstext</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleName">
-        <source>WarningLabel</source>
-        <target state="translated">WarningLabel</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_HighRisk">
-        <source>{0} - High Risk</source>
-        <target state="translated">{0} - Hohes Risiko</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_LowRisk">
-        <source>{0} - Low Risk</source>
-        <target state="translated">{0} - Niedriges Risiko</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_MediumRisk">
-        <source>{0} - Medium Risk</source>
-        <target state="translated">{0} - Mittleres Risiko</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeLoadException">

@@ -4924,63 +4924,9 @@ Stack trace where the illegal operation occurred was:
   <data name="PrintPreviewControlZoomNegative" xml:space="preserve">
     <value>Zoom must be 0 or greater. Negative values are not permitted.</value>
   </data>
-  <data name="PrintPreviewDialog_Close" xml:space="preserve">
-    <value>&amp;Close</value>
-  </data>
-  <data name="PrintPreviewDialog_FourPages" xml:space="preserve">
-    <value>Four pages</value>
-  </data>
-  <data name="PrintPreviewDialog_OnePage" xml:space="preserve">
-    <value>One page</value>
-  </data>
-  <data name="PrintPreviewDialog_Page" xml:space="preserve">
-    <value>&amp;Page</value>
-  </data>
-  <data name="PrintPreviewDialog_Print" xml:space="preserve">
-    <value>Print</value>
-  </data>
-  <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
+   <data name="PrintPreviewDialog_PrintPreview" xml:space="preserve">
     <value>Print preview</value>
-  </data>
-  <data name="PrintPreviewDialog_SixPages" xml:space="preserve">
-    <value>Six pages</value>
-  </data>
-  <data name="PrintPreviewDialog_ThreePages" xml:space="preserve">
-    <value>Three pages</value>
-  </data>
-  <data name="PrintPreviewDialog_TwoPages" xml:space="preserve">
-    <value>Two pages</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom" xml:space="preserve">
-    <value>Zoom</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom10" xml:space="preserve">
-    <value>10%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom100" xml:space="preserve">
-    <value>100%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom150" xml:space="preserve">
-    <value>150%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom200" xml:space="preserve">
-    <value>200%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom25" xml:space="preserve">
-    <value>25%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom50" xml:space="preserve">
-    <value>50%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom500" xml:space="preserve">
-    <value>500%</value>
-  </data>
-  <data name="PrintPreviewDialog_Zoom75" xml:space="preserve">
-    <value>75%</value>
-  </data>
-  <data name="PrintPreviewDialog_ZoomAuto" xml:space="preserve">
-    <value>Auto</value>
-  </data>
+   </data>
   <data name="PrintPreviewDocumentDescr" xml:space="preserve">
     <value>PrintDocument to be previewed.</value>
   </data>
@@ -5629,47 +5575,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ScrollBarVisibleDescr" xml:space="preserve">
     <value>Gets or sets a Boolean value controlling whether the scrollbar is showing.</value>
   </data>
-  <data name="SecurityAboutDialog" xml:space="preserve">
-    <value>Microsoft .NET Application Information</value>
-  </data>
-  <data name="SecurityApplication" xml:space="preserve">
-    <value>Application</value>
-  </data>
-  <data name="SecurityAsmNameColumn" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="SecurityAssembliesTab" xml:space="preserve">
-    <value>Assemblies</value>
-  </data>
-  <data name="SecurityBugReportLabel" xml:space="preserve">
-    <value>To submit a bug report, first save the report, and then click Submit. Attach the saved report to the online form.</value>
-  </data>
-  <data name="SecurityBugReportTab" xml:space="preserve">
-    <value>Beta Bug Report</value>
-  </data>
-  <data name="SecurityClose" xml:space="preserve">
-    <value>&amp;Close</value>
-  </data>
-  <data name="SecurityCodeBaseColumn" xml:space="preserve">
-    <value>CodeBase</value>
-  </data>
-  <data name="SecurityFileVersionColumn" xml:space="preserve">
-    <value>File Version</value>
-  </data>
-  <data name="SecurityIncludeAppInfo" xml:space="preserve">
-    <value>Include &amp;Application Information</value>
-  </data>
-  <data name="SecurityIncludeSysInfo" xml:space="preserve">
-    <value>Include &amp;System Information</value>
-  </data>
-  <data name="SecurityInfoTab" xml:space="preserve">
-    <value>Security</value>
-  </data>
-  <data name="SecurityRestrictedText" xml:space="preserve">
-    <value>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</value>
-  </data>
   <data name="SecurityRestrictedWindowTextMixedZone" xml:space="preserve">
     <value>Mixed Zone</value>
   </data>
@@ -5681,30 +5586,6 @@ For more information, contact your system administrator or the application autho
   </data>
   <data name="SecurityRestrictedWindowTextUnknownZone" xml:space="preserve">
     <value>Unknown Zone</value>
-  </data>
-  <data name="SecuritySaveBug" xml:space="preserve">
-    <value>S&amp;ave</value>
-  </data>
-  <data name="SecuritySaveFilter" xml:space="preserve">
-    <value>Xml Files (*.xml)|*.xml</value>
-  </data>
-  <data name="SecuritySubmitBug" xml:space="preserve">
-    <value>S&amp;ubmit</value>
-  </data>
-  <data name="SecuritySubmitBugUrl" xml:space="preserve">
-    <value>http://beta.visualstudio.net/net/sdk/feedback.asp</value>
-  </data>
-  <data name="SecuritySwitchDescrColumn" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="SecuritySwitchesTab" xml:space="preserve">
-    <value>Switches</value>
-  </data>
-  <data name="SecuritySwitchLabel" xml:space="preserve">
-    <value>Changing the switch value will affect only the currently running version of this application.</value>
-  </data>
-  <data name="SecuritySwitchNameColumn" xml:space="preserve">
-    <value>Name</value>
   </data>
   <data name="SecurityToolTipCaption" xml:space="preserve">
     <value>Microsoft .NET Security Warning</value>
@@ -5719,14 +5600,6 @@ For more information, contact your system administrator or the application autho
     <value>{0}
 
 {1}</value>
-  </data>
-  <data name="SecurityUnrestrictedText" xml:space="preserve">
-    <value>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</value>
-  </data>
-  <data name="SecurityVersionColumn" xml:space="preserve">
-    <value>Assembly Version</value>
   </data>
   <data name="selectedIndexChangedEventDescr" xml:space="preserve">
     <value>Occurs when the value of the SelectedIndex property changes.</value>
