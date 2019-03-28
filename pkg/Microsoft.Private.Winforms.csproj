@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" InitialTargets="SetOutputItemType">
   <!-- 
-    This pkgproj is used to create a nuget package.
-    The ArcadeSDK uses vanilla 'dotnet pack', but creates one package per csproj, which is not what we want.
+    This project packages the output of the referenced projects into a single nupkg.
 
     There are two main ways to work around this: 
     
@@ -23,7 +22,6 @@
 
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <IsPackable>true</IsPackable>
-    <NoWarn>$(NoWarn);NU5125</NoWarn>
 
     <!-- Disable a VS-specific target that is failing when building this csproj -->
     <GenerateDependencyFile>false</GenerateDependencyFile>
@@ -32,11 +30,7 @@
 
   <!-- nuspec properties -->
   <PropertyGroup>
-    <PackageId>Microsoft.Private.Winforms</PackageId>
-    <Description>Private Windows Forms package, public consumption is not supported</Description>
-    <Authors>Microsoft</Authors>
-    <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
-    <PackageLicenseUrl>https://github.com/dotnet/winforms/blob/master/LICENSE.TXT</PackageLicenseUrl>
+    <PackageDescription>Private Windows Forms package, public consumption is not supported</PackageDescription>
     <PackageTags>WinForms Windows Forms</PackageTags>
   </PropertyGroup>
 
