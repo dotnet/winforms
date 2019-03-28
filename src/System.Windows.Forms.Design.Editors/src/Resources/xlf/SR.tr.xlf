@@ -74,7 +74,7 @@
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="translated">Web</target>
+        <target state="needs-review-translation">Web</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">

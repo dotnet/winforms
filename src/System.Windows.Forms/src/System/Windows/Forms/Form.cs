@@ -7429,37 +7429,6 @@ namespace System.Windows.Forms {
             }
         }
 
-#if SECURITY_DIALOG
-        private class SecurityMenuItem : ICommandExecutor {
-            Form owner;
-            Command cmd;
-
-            internal SecurityMenuItem(Form owner) {
-                this.owner = owner;
-                cmd = new Command(this);
-            }
-
-            internal int ID {
-                get {
-                    return cmd.ID;
-                }
-            }
-
-            [
-                ReflectionPermission(SecurityAction.Assert, TypeInformation=true, MemberAccess=true),
-                UIPermission(SecurityAction.Assert, Window=UIPermissionWindow.AllWindows),
-                EnvironmentPermission(SecurityAction.Assert, Unrestricted=true),
-                FileIOPermission(SecurityAction.Assert, Unrestricted=true),
-                SecurityPermission(SecurityAction.Assert, Flags=SecurityPermissionFlag.UnmanagedCode),
-            ]
-            void ICommandExecutor.Execute() {
-                /// 
-                Form information = (Form)Activator.CreateInstance(typeof(Form).Module.Assembly.GetType("System.Windows.Forms.SysInfoForm"), new object[] {owner.IsRestrictedWindow});
-                information.ShowDialog();
-            }
-        }
-#endif
-
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ControlCollection"]/*' />
         /// <devdoc>
         ///    <para>Represents a collection of controls on the form.</para>
