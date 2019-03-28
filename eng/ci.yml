@@ -175,7 +175,7 @@ jobs:
           -integrationTest
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
           /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\HelixIntegration.binlog
-        displayName: Run Unit Tests on Helix Machine (Release only)
+        displayName: Run Integration Tests on Helix Machine Windows.10.Amd64 (Release only)
         env:
           HelixSource: $(_HelixSource)
           HelixType: 'tests/integration'
