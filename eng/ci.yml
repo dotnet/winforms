@@ -43,7 +43,7 @@ jobs:
           value: ''
 
         # needed for helix jobs
-        - name: _UnitTestHelixAgentPool
+        - name: _TestHelixAgentPool
           value: 'Windows.10.Amd64.Open'
         - name: _WinformsControlsTestBinDir
           value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
@@ -92,7 +92,7 @@ jobs:
             value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
 
           # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
-          - name: _UnitTestHelixAgentPool
+          - name: _TestHelixAgentPool
             value: 'Windows.10.Amd64'
           - name: _HelixSource
             value: official/${{ parameters.repoName }}/$(Build.SourceBranch)
@@ -153,13 +153,13 @@ jobs:
           $(_OfficialBuildIdArgs) 
           -test
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
-          /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\Helix.binlog
+          /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\HelixUnit.binlog
         displayName: Run Unit Tests on Helix Machine (Release only)
         env:
           HelixSource: $(_HelixSource)
           HelixType: 'tests/unit'
           HelixBuild: $(Build.BuildNumber)
-          HelixTargetQueues: $(_UnitTestHelixAgentPool)
+          HelixTargetQueues: $(_TestHelixAgentPool)
           HelixAccessToken: $(_HelixToken)              # only defined for internal CI
           Creator: $(_HelixCreator)
           XUnitProjects: '..\src\**\*.Tests.csproj'     # the test projects blob
@@ -167,17 +167,27 @@ jobs:
           XUnitRuntimeTargetFramework: netcoreapp2.0
           SYSTEM_ACCESSTOKEN: $(System.AccessToken)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
-      
-      # Run integration tests and rename binlog
-      # These are not ready to run on Helix because:
-        # 1. Helix doesn't build projects (it only uses publish); we need .dotnet and also bin from build
-        # 2. we need an interactive pool for SendKeys to work
-      - script: eng\cibuild.cmd
+
+      # Run integration tests
+      - powershell: eng\cibuild.cmd
           -configuration $(_BuildConfig)
-          $(_OfficialBuildIdArgs)
+          $(_OfficialBuildIdArgs) 
           -integrationTest
-          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest.binlog
-        displayName: Run Integration Tests on Build Machine
+          -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
+          /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\HelixIntegration.binlog
+        displayName: Run Unit Tests on Helix Machine (Release only)
+        env:
+          HelixSource: $(_HelixSource)
+          HelixType: 'tests/integration'
+          HelixBuild: $(Build.BuildNumber)
+          HelixTargetQueues: $(_TestHelixAgentPool)
+          HelixAccessToken: $(_HelixToken)              # only defined for internal CI
+          Creator: $(_HelixCreator)
+          XUnitProjects: '..\src\**\*.IntegrationTests.csproj'     # the test projects blob
+          XUnitPublishTargetFramework: netcoreapp3.0
+          XUnitRuntimeTargetFramework: netcoreapp2.0
+          SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Release')) # on helix machine (with real signing)
 
       # Create Nuget package, sign, and publish; and rename binlog
       - script: eng\cibuild.cmd
