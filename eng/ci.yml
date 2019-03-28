@@ -145,7 +145,7 @@ jobs:
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
           /p:Coverage=$(_Coverage)
           /m:1
-        displayName: Run Unit Tests on Build Machine (Debug only)
+        displayName: Run Unit Tests on Build Machine (Debug)
         condition: and(succeeded() ,  eq(variables['_BuildConfig'], 'Debug')) # on build machine (with test signing)
 
       - powershell: eng\cibuild.cmd
@@ -154,7 +154,7 @@ jobs:
           -test
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
           /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\HelixUnit.binlog
-        displayName: Run Unit Tests on Helix Machine (Release only)
+        displayName: Run Unit Tests on Helix Machine (Release)
         env:
           HelixSource: $(_HelixSource)
           HelixType: 'tests/unit'
@@ -175,7 +175,7 @@ jobs:
           -integrationTest
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
           /bl:$(Build.SourcesDirectory)\artifacts\log\$(_BuildConfig)\HelixIntegration.binlog
-        displayName: Run Integration Tests on Helix Machine Windows.10.Amd64 (Release only)
+        displayName: Run Integration Tests on Helix Machine Windows.10.Amd64 (Release)
         env:
           HelixSource: $(_HelixSource)
           HelixType: 'tests/integration'
@@ -206,7 +206,7 @@ jobs:
           /p:Configuration=$(_BuildConfig)
           /p:CodeCovToken=$(CODECOV_TOKEN)
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
-        displayName: Upload coverage to codecov.io
+        displayName: Upload coverage to codecov.io (Debug)
         condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
       # Perform some internal-build-only tasks
