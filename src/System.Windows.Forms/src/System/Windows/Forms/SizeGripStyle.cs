@@ -2,39 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-
-    /// <include file='doc\SizeGripStyle.uex' path='docs/doc[@for="SizeGripStyle"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the style of the sizing grip on a <see cref='System.Windows.Forms.Form'/>.
-    ///    </para>
+    /// Specifies the style of the sizing grip on a <see cref='System.Windows.Forms.Form'/>.
     /// </devdoc>
-    public enum SizeGripStyle {
-        /// <include file='doc\SizeGripStyle.uex' path='docs/doc[@for="SizeGripStyle.Auto"]/*' />
+    public enum SizeGripStyle
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The size grip is automatically display when needed.
-        ///    </para>
+        /// The size grip is automatically display when needed.
         /// </devdoc>
         Auto = 0,
-        /// <include file='doc\SizeGripStyle.uex' path='docs/doc[@for="SizeGripStyle.Show"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The sizing grip is always shown on the form.
-        ///    </para>
+        /// The sizing grip is always shown on the form.
         /// </devdoc>
         Show = 1,
-        /// <include file='doc\SizeGripStyle.uex' path='docs/doc[@for="SizeGripStyle.Hide"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The sizing grip is hidden.
-        ///    </para>
+        /// The sizing grip is hidden.
         /// </devdoc>
         Hide = 2,
     }
 }
-

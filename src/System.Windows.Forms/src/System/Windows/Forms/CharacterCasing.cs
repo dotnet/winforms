@@ -2,49 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-
-    /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the case of characters in a Textbox control.
-    ///    </para>
+    /// Specifies the case of characters in a Textbox control.
     /// </devdoc>
-    public enum CharacterCasing {
-
-        /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing.Normal"]/*' />
+    public enum CharacterCasing
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The case of
-        ///       characters is left unchanged.
-        ///    </para>
+        /// The case of characters is left unchanged.
         /// </devdoc>
         Normal = 0,
 
-        /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing.Upper"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Converts all characters to uppercase.
-        ///    </para>
+        /// Converts all characters to uppercase.
         /// </devdoc>
         Upper = 1,
 
-        /// <include file='doc\CharacterCasing.uex' path='docs/doc[@for="CharacterCasing.Lower"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Converts all characters to lowercase.
-        ///    </para>
+        /// Converts all characters to lowercase.
         /// </devdoc>
         Lower = 2,
-
     }
 }

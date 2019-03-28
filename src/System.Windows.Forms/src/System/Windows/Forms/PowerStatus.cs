@@ -2,55 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="ACLineStatus"]/*' />
-    public enum PowerLineStatus
-    {
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Offline"]/*' />
-        Offline = 0,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Online"]/*' />
-        Online = 1,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerLineStatus.Unknown"]/*' />
-        Unknown = 255
-    }
-
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus"]/*' />
-    [Flags]
-    public enum BatteryChargeStatus
-    {
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.High"]/*' />
-        High = 1,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Low"]/*' />
-        Low = 2,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Critical"]/*' />
-        Critical = 4,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Charging"]/*' />
-        Charging = 8,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.NoSystemBattery"]/*' />
-        NoSystemBattery = 128,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="BatteryChargeStatus.Unknown"]/*' />
-        Unknown = 255
-    }
-
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState"]/*' />
-    public enum PowerState
-    {
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState.Suspend"]/*' />
-        Suspend = 0,
-
-        /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerState.Hibernate"]/*' />
-        Hibernate = 1
-    }
-
-    /// <include file='doc\PowerStatus.uex' path='docs/doc[@for="PowerStatus"]/*' />
+namespace System.Windows.Forms
+{
     public class PowerStatus
     {
         private NativeMethods.SYSTEM_POWER_STATUS systemPowerStatus;

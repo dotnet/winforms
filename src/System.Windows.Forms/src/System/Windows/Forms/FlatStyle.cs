@@ -2,44 +2,32 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    /// <include file='doc\FlatStyle.uex' path='docs/doc[@for="FlatStyle"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>Specifies the style of control to display.</para>
+    /// Specifies the style of control to display.
     /// </devdoc>
-    public enum FlatStyle {
-        /// <include file='doc\FlatStyle.uex' path='docs/doc[@for="FlatStyle.Flat"]/*' />
+    public enum FlatStyle
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The control appears flat.
-        ///    </para>
+        /// The control appears flat.
         /// </devdoc>
         Flat,
-        /// <include file='doc\FlatStyle.uex' path='docs/doc[@for="FlatStyle.Popup"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       A control appears flat until the mouse pointer
-        ///       moves over
-        ///       it, at which point it appears three-dimensional.
-        ///    </para>
+        /// A control appears flat until the mouse pointer moves over it, at
+        /// which point it appears three-dimensional.
         /// </devdoc>
         Popup,
-        /// <include file='doc\FlatStyle.uex' path='docs/doc[@for="FlatStyle.Standard"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The control appears three-dimensional.
-        ///    </para>
+        /// The control appears three-dimensional.
         /// </devdoc>
         Standard,
-        /// <include file='doc\FlatStyle.uex' path='docs/doc[@for="FlatStyle.System"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       The control appears three-dimensional.
-        ///    </para>
+        /// The control appears three-dimensional.
         /// </devdoc>
         System,
     }
 }
-

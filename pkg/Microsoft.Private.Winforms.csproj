@@ -68,6 +68,8 @@
     
     <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
     <ProjectReference Include="..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
+
+    <ProjectReference Include="..\src\Accessibility\src\Accessibility.ilproj" />
   </ItemGroup>
 
   <!-- Force the output item type for all project references to "TfmSpecificPackageFile", which makes them get packed -->
