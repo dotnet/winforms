@@ -37,8 +37,4 @@
   <Target Name="InstrumentModulesAfterBuild" />
   <Target Name="GenerateCoverageResult" />
 
-  <PropertyGroup>
-    <UpdateXlfOnBuild>true</UpdateXlfOnBuild>
-  </PropertyGroup>
-
 </Project>
