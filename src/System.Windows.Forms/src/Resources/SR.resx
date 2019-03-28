@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -6938,149 +6997,6 @@ For more information, contact your system administrator or the application autho
   <data name="TreeViewVisibleCountDescr" xml:space="preserve">
     <value>The number of visible nodes in the TreeView.</value>
   </data>
-  <data name="TrustManager_WarningIconAccessibleDescription_HighRisk" xml:space="preserve">
-    <value>{0} - High Risk</value>
-  </data>
-  <data name="TrustManager_WarningIconAccessibleDescription_LowRisk" xml:space="preserve">
-    <value>{0} - Low Risk</value>
-  </data>
-  <data name="TrustManager_WarningIconAccessibleDescription_MediumRisk" xml:space="preserve">
-    <value>{0} - Medium Risk</value>
-  </data>
-  <data name="TrustManagerBadXml" xml:space="preserve">
-    <value>XML not valid. Expecting {0} tag.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_InstallTitle" xml:space="preserve">
-    <value>Application Install - More Information</value>
-  </data>
-  <data name="TrustManagerMoreInfo_InternetSource" xml:space="preserve">
-    <value>the Internet</value>
-  </data>
-  <data name="TrustManagerMoreInfo_KnownPublisher" xml:space="preserve">
-    <value>This application was published by {0}. Only run applications from publishers that you trust.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_LocalComputerSource" xml:space="preserve">
-    <value>the Local Computer</value>
-  </data>
-  <data name="TrustManagerMoreInfo_LocalNetworkSource" xml:space="preserve">
-    <value>the Local Network</value>
-  </data>
-  <data name="TrustManagerMoreInfo_Location" xml:space="preserve">
-    <value>This application comes from {0}. Only run applications from locations that you trust.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_RunTitle" xml:space="preserve">
-    <value>Application Run - More Information</value>
-  </data>
-  <data name="TrustManagerMoreInfo_SafeAccess" xml:space="preserve">
-    <value>This application has only limited access to your computer.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_UnknownPublisher" xml:space="preserve">
-    <value>The publisher of this application cannot be verified. Only run applications from publishers that you trust.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_UnsafeAccess" xml:space="preserve">
-    <value>This application will gain access to additional resources on your computer, such as your file system or your network connection. This may put your computer at risk. Do not approve unless you trust the application's publisher.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_UntrustedSitesSource" xml:space="preserve">
-    <value>an Untrusted Site</value>
-  </data>
-  <data name="TrustManagerMoreInfo_TrustedSitesSource" xml:space="preserve">
-    <value>a Trusted Site</value>
-  </data>
-  <data name="TrustManagerMoreInfo_WithoutShortcut" xml:space="preserve">
-    <value>This application will be temporarily installed onto your computer. It will not be added to your Start menu or to the Add or Remove Programs list.</value>
-  </data>
-  <data name="TrustManagerMoreInfo_WithShortcut" xml:space="preserve">
-    <value>This application will be installed on your computer. It will add a shortcut to your Start menu and will be added to the Add or Remove Programs list.</value>
-  </data>
-  <data name="TrustManagerPromptUI_AccessibleDescription_InstallBlocked" xml:space="preserve">
-    <value>Trust Manager Dialog - Install Blocked</value>
-  </data>
-  <data name="TrustManagerPromptUI_AccessibleDescription_InstallConfirmation" xml:space="preserve">
-    <value>Trust Manager Dialog - Install Confirmation</value>
-  </data>
-  <data name="TrustManagerPromptUI_AccessibleDescription_InstallWithElevatedPermissions" xml:space="preserve">
-    <value>Trust Manager Dialog - Install with elevated permissions</value>
-  </data>
-  <data name="TrustManagerPromptUI_AccessibleDescription_RunBlocked" xml:space="preserve">
-    <value>Trust Manager Dialog - Run Blocked</value>
-  </data>
-  <data name="TrustManagerPromptUI_AccessibleDescription_RunConfirmation" xml:space="preserve">
-    <value>Trust Manager Dialog - Run Confirmation</value>
-  </data>
-  <data name="TrustManagerPromptUI_AccessibleDescription_RunWithElevatedPermissions" xml:space="preserve">
-    <value>Trust Manager Dialog - Run with elevated permissions</value>
-  </data>
-  <data name="TrustManagerPromptUI_BlockedApp" xml:space="preserve">
-    <value>Your administrator has blocked this application because it potentially poses a security risk to your computer.</value>
-  </data>
-  <data name="TrustManagerPromptUI_InstalledAppBlockedWarning" xml:space="preserve">
-    <value>Your security settings do not allow this application to be installed on your computer.</value>
-  </data>
-  <data name="TrustManagerPromptUI_InstallFromLocalMachineWarning" xml:space="preserve">
-    <value>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</value>
-  </data>
-  <data name="TrustManagerPromptUI_InstallQuestion" xml:space="preserve">
-    <value>Do you want to install this application?</value>
-  </data>
-  <data name="TrustManagerPromptUI_InstallTitle" xml:space="preserve">
-    <value>Application Install - Security Warning</value>
-  </data>
-  <data name="TrustManagerPromptUI_InstallWarning" xml:space="preserve">
-    <value>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</value>
-  </data>
-  <data name="TrustManagerPromptUI_MoreInformation" xml:space="preserve">
-    <value>More Information...</value>
-  </data>
-  <data name="TrustManagerPromptUI_MoreInformationAccessibleDescription" xml:space="preserve">
-    <value>Warning text and link to get more information</value>
-  </data>
-  <data name="TrustManagerPromptUI_MoreInformationAccessibleName" xml:space="preserve">
-    <value>MoreInformationLink</value>
-  </data>
-  <data name="TrustManagerPromptUI_NoPublisherInstallQuestion" xml:space="preserve">
-    <value>Publisher cannot be verified.
-Are you sure you want to install this application?</value>
-  </data>
-  <data name="TrustManagerPromptUI_NoPublisherRunQuestion" xml:space="preserve">
-    <value>Publisher cannot be verified.
-Are you sure you want to run this application?</value>
-  </data>
-  <data name="TrustManagerPromptUI_Close" xml:space="preserve">
-    <value>Close</value>
-  </data>
-  <data name="TrustManagerPromptUI_DoNotInstall" xml:space="preserve">
-    <value>&amp;Don't Install</value>
-  </data>
-  <data name="TrustManagerPromptUI_DoNotRun" xml:space="preserve">
-    <value>&amp;Don't Run</value>
-  </data>
-  <data name="TrustManagerPromptUI_Run" xml:space="preserve">
-    <value>&amp;Run</value>
-  </data>
-  <data name="TrustManagerPromptUI_RunAppBlockedWarning" xml:space="preserve">
-    <value>Your security settings do not allow this application to be run on your computer.</value>
-  </data>
-  <data name="TrustManagerPromptUI_RunFromLocalMachineWarning" xml:space="preserve">
-    <value>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</value>
-  </data>
-  <data name="TrustManagerPromptUI_RunQuestion" xml:space="preserve">
-    <value>Do you want to run this application?</value>
-  </data>
-  <data name="TrustManagerPromptUI_RunTitle" xml:space="preserve">
-    <value>Application Run - Security Warning</value>
-  </data>
-  <data name="TrustManagerPromptUI_RunWarning" xml:space="preserve">
-    <value>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</value>
-  </data>
-  <data name="TrustManagerPromptUI_UnknownPublisher" xml:space="preserve">
-    <value>Unknown Publisher</value>
-  </data>
-  <data name="TrustManagerPromptUI_WarningAccessibleDescription" xml:space="preserve">
-    <value>Warning text</value>
-  </data>
-  <data name="TrustManagerPromptUI_WarningAccessibleName" xml:space="preserve">
-    <value>WarningLabel</value>
-  </data>
   <data name="TypedControlCollectionShouldBeOfType" xml:space="preserve">
     <value>Controls added to this collection must be of type '{0}'.</value>
   </data>
@@ -7302,18 +7218,6 @@ Are you sure you want to run this application?</value>
   </data>
   <data name="CombinationOfAccessibilitySwitchesNotSupported" xml:space="preserve">
     <value>Desktop applications are required to opt in to all earlier accessibility improvements to get the later improvements. To do this, ensure that if the AppContext switch 'Switch.UseLegacyAccessibilityFeatures.N' is set to 'false', then 'Switch.UseLegacyAccessibilityFeatures' and all 'Switch.UseLegacyAccessibilityFeatures.M' switches, when M &lt; N, evaluate to false as well. Note that, if a switch for a particular set of accessibility improvements is not present, its value is determined by the target framework version. You can remedy this by adding these switches and setting their value to false.</value>
-  </data>
-  <data name="TrustManagerPromptUI_From" xml:space="preserve">
-    <value>From</value>
-  </data>
-  <data name="TrustManagerPromptUI_GlobeIcon" xml:space="preserve">
-    <value>Globe Icon</value>
-  </data>
-  <data name="TrustManagerPromptUI_Name" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="TrustManagerPromptUI_Publisher" xml:space="preserve">
-    <value>Publisher</value>
   </data>
   <data name="DateTimePickerLocalizedControlType" xml:space="preserve">
     <value>date and time picker</value>
