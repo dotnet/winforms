@@ -3,7 +3,8 @@
     "dotnet": "3.0.100-preview4-010924",
     "vs": {
       "version": "16.0"
-    }
+    },
+    "xcopy-msbuild": "16.0.0-rc1-alpha"
   },
   "sdk": {
     "version": "3.0.100-preview4-010924"
