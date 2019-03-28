@@ -37,4 +37,9 @@
   <Target Name="InstrumentModulesAfterBuild" />
   <Target Name="GenerateCoverageResult" />
 
+  <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
+  <PropertyGroup>
+    <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
+  </PropertyGroup>
+
 </Project>

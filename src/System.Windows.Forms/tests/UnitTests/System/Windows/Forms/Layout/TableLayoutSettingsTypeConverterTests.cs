@@ -6,18 +6,20 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Xml;
 using Moq;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
 {
     public class TableLayoutSettingsTypeConverterTests
     {
+        public static TheoryData<Type, bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
-        [InlineData(typeof(string), true)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(TableLayoutSettings), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), true)]
         public void TableLayoutSettingsTypeConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             var converter = new TableLayoutSettingsTypeConverter();

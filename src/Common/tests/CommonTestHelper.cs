@@ -247,6 +247,17 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Type, bool> GetConvertFromTheoryData()
+        {
+            var data = new TheoryData<Type, bool>();
+            data.Add(typeof(bool), false);
+            data.Add(typeof(System.ComponentModel.Design.Serialization.InstanceDescriptor), true);
+            data.Add(typeof(int), false);
+            data.Add(typeof(double), false);
+            data.Add(null, false);
+            return data;
+        }
+
         #endregion        
     }
 }

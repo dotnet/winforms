@@ -96,12 +96,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("1,2", position.ToString());
         }
 
+        public static TheoryData<Type, bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
-        [InlineData(typeof(string), true)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(TableLayoutSettings), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), true)]
         public void TableLayoutPanelCellPosition_ConverterCanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
