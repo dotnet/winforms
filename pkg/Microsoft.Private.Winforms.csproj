@@ -18,6 +18,7 @@
 
     <!-- Don't include this project in the build output -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PublishWindowsPdb>false</PublishWindowsPdb>
     <IncludeSymbols>false</IncludeSymbols>
 
     <TargetFramework>netcoreapp3.0</TargetFramework>
