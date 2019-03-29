@@ -9,22 +9,30 @@
     public class ToolboxItemCollectionTests	
     {
         [Fact]
-        public void ToolboxItemCollection_Creation()
+        public void ToolboxItemCollection_Creation_TypeOfBitmap()
         {
-            ToolboxItem item1 = new ToolboxItem(typeof(Bitmap));
-            ToolboxItem item2 = new ToolboxItem(typeof(string));
+            ToolboxItem item = new ToolboxItem(typeof(Bitmap));
 
-            ToolboxItem[] tools = { item1, item2 };
+            ToolboxItem[] tools = { item };
             ToolboxItemCollection underTest = new ToolboxItemCollection(tools);
 
-            Assert.True(underTest.Contains(item1));
-            Assert.Equal(item1, underTest[0]);
-            Assert.Equal(1, underTest.IndexOf(item2));
-
-            ToolboxItem[] tools2 = new ToolboxItem[2];
-            underTest.CopyTo(tools2, 0);
-            Assert.Equal(item1, tools[0]);
-            Assert.Equal(item2, tools[1]);
+            Assert.True(underTest.Contains(item));
+            Assert.Equal(item, underTest[0]);
+            Assert.Equal(0, underTest.IndexOf(item));
         }
+
+        [Fact]
+        public void ToolboxItemCollection_CopyTo()
+        {
+            ToolboxItem item = new ToolboxItem(typeof(string));
+
+            ToolboxItem[] tools = { item };
+            ToolboxItem[] tools2 = new ToolboxItem[1];
+            ToolboxItemCollection underTest = new ToolboxItemCollection(tools);
+
+            underTest.CopyTo(tools2, 0);
+            Assert.Equal(underTest[0], tools2[0]);
+        }
+
     }	
 }

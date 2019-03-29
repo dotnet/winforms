@@ -20,27 +20,5 @@
             Assert.False(underTest.Locked);
             Assert.True(underTest.GetType().IsSerializable);
         }
-
-        [Fact]
-        public void ToolBoxItem_Lock()
-        {
-            var type = typeof(Bitmap);
-            ToolboxItem underTest = new ToolboxItem(type);
-
-            underTest.Lock();
-            Assert.True(underTest.Locked);
-        }
-
-        [Fact]
-        public void ToolBoxItem_Equals()
-        {
-            var type = typeof(Bitmap);
-            ToolboxItem underTest = new ToolboxItem(type);
-            ToolboxItem underTest2 = new ToolboxItem(type);
-            ToolboxItem underTest3 = new ToolboxItem(typeof(string));
-
-            Assert.True(underTest.Equals(underTest2));
-            Assert.False(underTest.Equals(underTest3));
-        }
     }
 }
