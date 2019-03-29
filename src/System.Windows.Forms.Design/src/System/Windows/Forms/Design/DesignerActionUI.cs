@@ -740,8 +740,7 @@ namespace System.Windows.Forms.Design
             // check that the panel will have at least it's parent glyph visible on the adorner window
             if (_behaviorService != null &&
                 _behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
-            {
-                //behaviorService.AdornerWindowGraphics.IsVisible(glyph.Bounds)) {                
+            {               
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
