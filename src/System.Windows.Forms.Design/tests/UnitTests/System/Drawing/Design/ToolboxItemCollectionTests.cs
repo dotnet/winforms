@@ -21,18 +21,5 @@
             Assert.Equal(0, underTest.IndexOf(item));
         }
 
-        [Fact]
-        public void ToolboxItemCollection_CopyTo()
-        {
-            ToolboxItem item = new ToolboxItem(typeof(string));
-
-            ToolboxItem[] tools = { item };
-            ToolboxItem[] tools2 = new ToolboxItem[1];
-            ToolboxItemCollection underTest = new ToolboxItemCollection(tools);
-
-            underTest.CopyTo(tools2, 0);
-            Assert.Equal(underTest[0], tools2[0]);
-        }
-
     }	
 }
