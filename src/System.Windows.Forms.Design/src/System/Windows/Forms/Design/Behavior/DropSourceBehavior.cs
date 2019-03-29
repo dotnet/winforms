@@ -1237,7 +1237,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// information such as: the list of Controls currently being
         /// dragged and the drag 'Source'.
         /// </summary>
-        internal class BehaviorDataObject : System.Windows.Forms.DataObject
+        internal class BehaviorDataObject : DataObject
         {
             private ICollection dragComponents;
             private Control source;

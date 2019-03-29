@@ -395,7 +395,7 @@
       <trans-unit id="RTL">
         <source>RTL_False</source>
         <target state="new">RTL_False</target>
-        <note />
+        <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>

@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design.Behavior
                 _daUISvc = serviceProvider.GetService(typeof(DesignerActionUIService)) as DesignerActionUIService;
             }
         }
-        // THIS shoudl not stay here, creation of a custom command or of the real thing should be handled in the designeractionpanel itself
+        // THIS should not stay here, creation of a custom command or of the real thing should be handled in the designeractionpanel itself
         public override MenuCommand FindCommand(CommandID commandId)
         {
             if (_panel != null && _menuService != null)

@@ -6033,9 +6033,6 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
-        //[DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        //[ResourceExposure(ResourceScope.None)]
-        //public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, [In, Out] HDHITTESTINFO lParam);
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);

@@ -15,23 +15,23 @@ using Microsoft.Win32;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///     This class implements our design time document.  This is the outer window that encompases a designer.  It maintains a control hierarchy that looks like this:
-    ///         DesignerFrame
-    ///             ScrollableControl
-    ///                 Designer
-    ///             Splitter
-    ///             ScrollableControl
-    ///                 Component Tray
-    ///     The splitter and second scrollable control are created on demand when a tray is added.
+    /// This class implements our design time document.  This is the outer window that encompases a designer.  It maintains a control hierarchy that looks like this:
+    /// DesignerFrame
+    ///     ScrollableControl
+    ///         Designer
+    ///     Splitter
+    ///     ScrollableControl
+    ///         Component Tray
+    /// The splitter and second scrollable control are created on demand when a tray is added.
     /// </summary>
     internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IContainsThemedScrollbarWindows
     {
-        private ISite designerSite;
-        private OverlayControl designerRegion;
-        private Splitter splitter;
-        private Control designer;
-        private BehaviorService behaviorService;
-        private IUIService uiService;
+        private readonly ISite _designerSite;
+        private readonly OverlayControl _designerRegion;
+        private Splitter _splitter;
+        private Control _designer;
+        private BehaviorService _behaviorService;
+        private readonly IUIService _uiService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.DesignerFrame'/> class.
@@ -41,44 +41,44 @@ namespace System.Windows.Forms.Design
         {
 
             Text = "DesignerFrame";
-            designerSite = site;
-            designerRegion = new OverlayControl(site);
+            _designerSite = site;
+            _designerRegion = new OverlayControl(site);
 
-            uiService = designerSite.GetService(typeof(IUIService)) as IUIService;
-            if (uiService != null)
+            _uiService = _designerSite.GetService(typeof(IUIService)) as IUIService;
+            if (_uiService != null)
             {
-                if (uiService.Styles["ArtboardBackground"] is Color)
+                if (_uiService.Styles["ArtboardBackground"] is Color)
                 {
-                    BackColor = (Color)uiService.Styles["ArtboardBackground"];
+                    BackColor = (Color)_uiService.Styles["ArtboardBackground"];
                 }
             }
-            Controls.Add(designerRegion);
+            Controls.Add(_designerRegion);
 
             // Now we must configure our designer to be at the correct location, and setup the autoscrolling for its container.
-            designerRegion.AutoScroll = true;
-            designerRegion.Dock = DockStyle.Fill;
+            _designerRegion.AutoScroll = true;
+            _designerRegion.Dock = DockStyle.Fill;
         }
 
         /// <summary>
-        ///     Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
+        /// Returns the scroll offset for the scrollable control that manages all overlays.  This is needed by the BehaviorService so we can correctly invalidate our AdornerWindow based on scrollposition.
         /// </summary>
         internal Point AutoScrollPosition
         {
-            get => designerRegion.AutoScrollPosition;
+            get => _designerRegion.AutoScrollPosition;
         }
 
         /// <summary>
-        ///     Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
+        /// Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
         /// </summary>
         private BehaviorService BehaviorService
         {
             get
             {
-                if (behaviorService == null)
+                if (_behaviorService == null)
                 {
-                    behaviorService = designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
+                    _behaviorService = _designerSite.GetService(typeof(BehaviorService)) as BehaviorService;
                 }
-                return behaviorService;
+                return _behaviorService;
             }
         }
 
@@ -86,17 +86,17 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (designer != null)
+                if (_designer != null)
                 {
-                    Control designerHolder = this.designer;
-                    designer = null;
+                    Control designerHolder = _designer;
+                    _designer = null;
                     designerHolder.Visible = false;
                     designerHolder.Parent = null;
                     SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
                 }
-                if (splitter != null)
+                if (_splitter != null)
                 {
-                    splitter.SplitterMoved -= new SplitterEventHandler(OnSplitterMoved);
+                    _splitter.SplitterMoved -= new SplitterEventHandler(OnSplitterMoved);
                 }
             }
             base.Dispose(disposing);
@@ -104,54 +104,46 @@ namespace System.Windows.Forms.Design
 
         private void ForceDesignerRedraw(bool focus)
         {
-            if (designer != null && designer.IsHandleCreated)
+            if (_designer != null && _designer.IsHandleCreated)
             {
-                NativeMethods.SendMessage(designer.Handle, NativeMethods.WM_NCACTIVATE, focus ? 1 : 0, 0);
-                SafeNativeMethods.RedrawWindow(designer.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
+                NativeMethods.SendMessage(_designer.Handle, NativeMethods.WM_NCACTIVATE, focus ? 1 : 0, 0);
+                SafeNativeMethods.RedrawWindow(_designer.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
 
         /// <summary>
-        ///     Initializes this frame with the given designer view.
+        /// Initializes this frame with the given designer view.
         /// </summary>
         public void Initialize(Control view)
         {
-            this.designer = view;
-
-            Form form = designer as Form;
-            if (form != null)
+            _designer = view;
+            if (_designer is Form form)
             {
                 form.TopLevel = false;
             }
 
-            designerRegion.Controls.Add(designer);
+            _designerRegion.Controls.Add(_designer);
             SyncDesignerUI();
+            _designer.Visible = true;
+            _designer.Enabled = true;
 
-            designer.Visible = true;
-            designer.Enabled = true;
-
-            // VSWhidbey 481301
-            // We need to force handle creation here, since setting Visible = true won't if the control is already Visible = true.  
-            // (UserControl starts out Visible true, Form does not)
-            // This guarantees that as controls are added to the root component their handles will be created correctly, and not the first time they're queried after load.
-            IntPtr handle = designer.Handle;
-
+            // We need to force handle creation here, since setting Visible = true won't if the control is already Visible = true.   (UserControl starts out Visible true, Form does not) This guarantees that as controls are added to the root component their handles will be created correctly, and not the first time they're queried after load.
+            IntPtr handle = _designer.Handle;
             // Hook the handler here, when we know that the designer object has already been set
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
         /// <summary>
-        ///     When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
+        /// When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
             ForceDesignerRedraw(true);
 
-            ISelectionService selSvc = (ISelectionService)designerSite.GetService(typeof(ISelectionService));
+            ISelectionService selSvc = (ISelectionService)_designerSite.GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
-                Control ctrl = selSvc.PrimarySelection as Control;
-                if (ctrl != null && !ctrl.IsDisposed)
+                if (selSvc.PrimarySelection is Control ctrl && !ctrl.IsDisposed)
                 {
                     UnsafeNativeMethods.NotifyWinEvent((int)AccessibleEvents.Focus, new HandleRef(ctrl, ctrl.Handle), NativeMethods.OBJID_CLIENT, 0);
                 }
@@ -159,7 +151,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
+        /// When we get an lose focus, we need to make sure the form designer knows about it so it'll paint it's caption right.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
@@ -169,13 +161,12 @@ namespace System.Windows.Forms.Design
         void OnSplitterMoved(object sender, SplitterEventArgs e)
         {
             // Dirty the designer.
-            IComponentChangeService cs = designerSite.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-            if (cs != null)
+            if (_designerSite.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
             {
                 try
                 {
-                    cs.OnComponentChanging(designerSite.Component, null);
-                    cs.OnComponentChanged(designerSite.Component, null, null, null);
+                    cs.OnComponentChanging(_designerSite.Component, null);
+                    cs.OnComponentChanged(_designerSite.Component, null, null, null);
                 }
                 catch
                 {
@@ -185,14 +176,14 @@ namespace System.Windows.Forms.Design
 
         void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
         {
-            if (e.Category == UserPreferenceCategory.Window && designer != null)
+            if (e.Category == UserPreferenceCategory.Window && _designer != null)
             {
                 SyncDesignerUI();
             }
         }
 
         /// <summary>
-        ///     We override this to do nothing.  Otherwise, all the nice keyboard messages we want would get run through the Form's keyboard handling procedure.
+        /// We override this to do nothing.  Otherwise, all the nice keyboard messages we want would get run through the Form's keyboard handling procedure.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -203,8 +194,8 @@ namespace System.Windows.Forms.Design
         {
             Size selectionSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.Maximum);
 
-            designerRegion.AutoScrollMargin = selectionSize;
-            designer.Location = new Point(selectionSize.Width, selectionSize.Height);
+            _designerRegion.AutoScrollMargin = selectionSize;
+            _designer.Location = new Point(selectionSize.Width, selectionSize.Height);
 
             if (BehaviorService != null)
             {
@@ -213,7 +204,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Base wndProc. All messages are sent to wndProc after getting filtered through the preProcessMessage function. Inheriting controls should call base.wndProc for any messages that they don't handle.
+        /// Base wndProc. All messages are sent to wndProc after getting filtered through the preProcessMessage function. Inheriting controls should call base.wndProc for any messages that they don't handle.
         /// </summary>
         protected override void WndProc(ref Message m)
         {
@@ -222,10 +213,10 @@ namespace System.Windows.Forms.Design
                 // Provide MouseWheel access for scrolling
                 case NativeMethods.WM_MOUSEWHEEL:
                     // Send a message to ourselves to scroll
-                    if (!designerRegion.messageMouseWheelProcessed)
+                    if (!_designerRegion._messageMouseWheelProcessed)
                     {
-                        designerRegion.messageMouseWheelProcessed = true;
-                        NativeMethods.SendMessage(designerRegion.Handle, NativeMethods.WM_MOUSEWHEEL, m.WParam, m.LParam);
+                        _designerRegion._messageMouseWheelProcessed = true;
+                        NativeMethods.SendMessage(_designerRegion.Handle, NativeMethods.WM_MOUSEWHEEL, m.WParam, m.LParam);
                         return;
                     }
                     break;
@@ -275,77 +266,77 @@ namespace System.Windows.Forms.Design
                         || (msg == NativeMethods.WM_HSCROLL))
                     {
                         // Send a message to ourselves to scroll
-                        NativeMethods.SendMessage(designerRegion.Handle, msg, NativeMethods.Util.MAKELONG(wScrollNotify, 0), 0);
+                        NativeMethods.SendMessage(_designerRegion.Handle, msg, NativeMethods.Util.MAKELONG(wScrollNotify, 0), 0);
                         return;
                     }
                     break;
                 case NativeMethods.WM_CONTEXTMENU:
-                    NativeMethods.SendMessage(designer.Handle, m.Msg, m.WParam, m.LParam);
+                    NativeMethods.SendMessage(_designer.Handle, m.Msg, m.WParam, m.LParam);
                     return;
             }
             base.WndProc(ref m);
         }
 
         /// <summary>
-        ///     Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+        /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
         /// </summary>
         int IOverlayService.PushOverlay(Control control)
         {
-            return designerRegion.PushOverlay(control);
+            return _designerRegion.PushOverlay(control);
         }
 
         /// <summary>
-        ///     Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+        /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
         /// </summary>
         void IOverlayService.RemoveOverlay(Control control)
         {
-            designerRegion.RemoveOverlay(control);
+            _designerRegion.RemoveOverlay(control);
         }
 
         /// <summary>
-        ///     Inserts the overlay.
+        /// Inserts the overlay.
         /// </summary>
         void IOverlayService.InsertOverlay(Control control, int index)
         {
-            designerRegion.InsertOverlay(control, index);
+            _designerRegion.InsertOverlay(control, index);
         }
 
         /// <summary>
-        ///     Invalidate child overlays
+        /// Invalidate child overlays
         /// </summary>
         void IOverlayService.InvalidateOverlays(Rectangle screenRectangle)
         {
-            designerRegion.InvalidateOverlays(screenRectangle);
+            _designerRegion.InvalidateOverlays(screenRectangle);
         }
 
         /// <summary>
-        ///     Invalidate child overlays
+        /// Invalidate child overlays
         /// </summary>
         void IOverlayService.InvalidateOverlays(Region screenRegion)
         {
-            designerRegion.InvalidateOverlays(screenRegion);
+            _designerRegion.InvalidateOverlays(screenRegion);
         }
 
         /// <summary>
-        ///      Requests the service to add a window 'pane'.
+        /// Requests the service to add a window 'pane'.
         /// </summary>
         void ISplitWindowService.AddSplitWindow(Control window)
         {
-            if (splitter == null)
+            if (_splitter == null)
             {
-                splitter = new Splitter();
-                if (uiService != null && uiService.Styles["HorizontalResizeGrip"] is Color)
+                _splitter = new Splitter();
+                if (_uiService != null && _uiService.Styles["HorizontalResizeGrip"] is Color)
                 {
-                    splitter.BackColor = (Color)uiService.Styles["HorizontalResizeGrip"];
+                    _splitter.BackColor = (Color)_uiService.Styles["HorizontalResizeGrip"];
                 }
                 else
                 {
-                    splitter.BackColor = SystemColors.Control;
+                    _splitter.BackColor = SystemColors.Control;
                 }
-                splitter.BorderStyle = BorderStyle.Fixed3D;
-                splitter.Height = 7;
-                splitter.Dock = DockStyle.Bottom;
-                splitter.SplitterMoved += new SplitterEventHandler(this.OnSplitterMoved);
+                _splitter.BorderStyle = BorderStyle.Fixed3D;
+                _splitter.Height = 7;
+                _splitter.Dock = DockStyle.Bottom;
+                _splitter.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
             }
 
             SuspendLayout();
@@ -358,35 +349,37 @@ namespace System.Windows.Forms.Design
                 window.Height = minHeight;
             }
 
-            Controls.Add(splitter);
+            Controls.Add(_splitter);
             Controls.Add(window);
             ResumeLayout();
         }
 
         /// <summary>
-        ///      Requests the service to remove a window 'pane'.
+        /// Requests the service to remove a window 'pane'.
         /// </summary>
         void ISplitWindowService.RemoveSplitWindow(Control window)
         {
             SuspendLayout();
             Controls.Remove(window);
-            Controls.Remove(splitter);
+            Controls.Remove(_splitter);
             ResumeLayout();
         }
 
         /// <summary>
-        ///     Returns IEnumerable of all windows which need to be themed when running inside VS
-        ///     We don't know how to do theming here but we know which windows need to be themed. 
-        ///     The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS.
-        ///     As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        /// Returns IEnumerable of all windows which need to be themed when running inside VS
+        /// We don't know how to do theming here but we know which windows need to be themed. 
+        /// The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS.
+        /// As a result, we want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
             ArrayList windows = new ArrayList();
             foreach (Control c in Controls)
             {
-                ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow();
-                windowInfo.Handle = c.Handle;
+                ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow
+                {
+                    Handle = c.Handle
+                };
                 if (c is OverlayControl)
                 {
                     windowInfo.Mode = ThemedScrollbarMode.OnlyTopLevel;
@@ -403,57 +396,58 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     This is a scrollable control that supports additional floating overlay controls.
+        /// This is a scrollable control that supports additional floating overlay controls.
         /// </summary>
         private class OverlayControl : ScrollableControl
         {
-            private ArrayList overlayList;
-            private IServiceProvider provider;
-            internal bool messageMouseWheelProcessed;
-            private BehaviorService behaviorService;
+            private readonly ArrayList _overlayList;
+            private IServiceProvider _provider;
+            internal bool _messageMouseWheelProcessed;
+            private BehaviorService _behaviorService;
 
             /// <summary>
-            ///     Creates a new overlay control.
+            /// Creates a new overlay control.
             /// </summary>
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             public OverlayControl(IServiceProvider provider)
             {
                 OverlayControl overlayControl = this;
-                overlayControl.provider = provider;
-                overlayList = new ArrayList();
+                overlayControl._provider = provider;
+                _overlayList = new ArrayList();
                 AutoScroll = true;
                 Text = "OverlayControl";
             }
+
             protected override AccessibleObject CreateAccessibilityInstance()
             {
                 return new OverlayControlAccessibleObject(this);
             }
 
             /// <summary>
-            ///     Demand creates a ptr to the BehaviorService 
+            /// Demand creates a ptr to the BehaviorService 
             /// </summary>
             private BehaviorService BehaviorService
             {
                 get
                 {
-                    if (behaviorService == null)
+                    if (_behaviorService == null)
                     {
-                        behaviorService = provider.GetService(typeof(BehaviorService)) as BehaviorService;
+                        _behaviorService = _provider.GetService(typeof(BehaviorService)) as BehaviorService;
                     }
-                    return behaviorService;
+                    return _behaviorService;
                 }
             }
 
             /// <summary>
-            ///     At handle creation time we request the designer's handle and parent it.
+            /// At handle creation time we request the designer's handle and parent it.
             /// </summary>
             protected override void OnCreateControl()
             {
                 base.OnCreateControl();
                 // Loop through all of the overlays, create them, and hook them up
-                if (overlayList != null)
+                if (_overlayList != null)
                 {
-                    foreach (Control c in overlayList)
+                    foreach (Control c in _overlayList)
                     {
                         ParentOverlay(c);
                     }
@@ -467,7 +461,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     We override onLayout to provide our own custom layout functionality. This just overlaps all of the controls.
+            /// We override onLayout to provide our own custom layout functionality. This just overlaps all of the controls.
             /// </summary>
             protected override void OnLayout(LayoutEventArgs e)
             {
@@ -475,9 +469,9 @@ namespace System.Windows.Forms.Design
                 Rectangle client = DisplayRectangle;
 
                 // Loop through all of the overlays and size them.  Also make sure that they are still on top of the zorder, because a handle recreate could have changed this.
-                if (overlayList != null)
+                if (_overlayList != null)
                 {
-                    foreach (Control c in overlayList)
+                    foreach (Control c in _overlayList)
                     {
                         c.Bounds = client;
                     }
@@ -485,7 +479,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Called to parent an overlay window into our document.  This assumes that we call in reverse stack order, as it always pushes to the top of the z-order.
+            /// Called to parent an overlay window into our document.  This assumes that we call in reverse stack order, as it always pushes to the top of the z-order.
             /// </summary>
             private void ParentOverlay(Control control)
             {
@@ -494,39 +488,39 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
+            /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
             /// </summary>
             public int PushOverlay(Control control)
             {
-                Debug.Assert(overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
-                overlayList.Add(control);
-                // We cheat a bit here.  We need to have these components parented, but we don't want them to effect our layout.
+                Debug.Assert(_overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
+                _overlayList.Add(control);
+                // We need to have these components parented, but we don't want them to effect our layout.
                 if (IsHandleCreated)
                 {
                     ParentOverlay(control);
                     control.Bounds = DisplayRectangle;
                 }
-                return overlayList.IndexOf(control);
+                return _overlayList.IndexOf(control);
             }
 
             /// <summary>
-            ///     Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
+            /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
             /// </summary>
             public void RemoveOverlay(Control control)
             {
-                Debug.Assert(overlayList.IndexOf(control) != -1, "Control is not in overlay service :" + control.GetType().FullName);
-                overlayList.Remove(control);
+                Debug.Assert(_overlayList.IndexOf(control) != -1, "Control is not in overlay service :" + control.GetType().FullName);
+                _overlayList.Remove(control);
                 control.Visible = false;
                 control.Parent = null;
             }
 
             /// <summary>
-            ///     Inserts Overlay.
+            /// Inserts Overlay.
             /// </summary>
             public void InsertOverlay(Control control, int index)
             {
-                Debug.Assert(overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
-                Control c = (Control)overlayList[index];
+                Debug.Assert(_overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
+                Control c = (Control)_overlayList[index];
                 RemoveOverlay(c);
                 PushOverlay(control);
                 PushOverlay(c);
@@ -534,14 +528,14 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Invalidates overlays that intersect with the given section of the screen;
+            /// Invalidates overlays that intersect with the given section of the screen;
             /// </summary>
             public void InvalidateOverlays(Rectangle screenRectangle)
             {
                 // paint in inverse order so that things at the front paint last.
-                for (int i = overlayList.Count - 1; i >= 0; i--)
+                for (int i = _overlayList.Count - 1; i >= 0; i--)
                 {
-                    if (overlayList[i] is Control overlayControl)
+                    if (_overlayList[i] is Control overlayControl)
                     {
                         Rectangle invalidateRect = new Rectangle(overlayControl.PointToClient(screenRectangle.Location), screenRectangle.Size);
                         if (overlayControl.ClientRectangle.IntersectsWith(invalidateRect))
@@ -553,14 +547,14 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Invalidates overlays that intersect with the given section of the screen;
+            /// Invalidates overlays that intersect with the given section of the screen;
             /// </summary>
             public void InvalidateOverlays(Region screenRegion)
             {
                 // paint in inverse order so that things at the front paint last.
-                for (int i = overlayList.Count - 1; i >= 0; i--)
+                for (int i = _overlayList.Count - 1; i >= 0; i--)
                 {
-                    if (overlayList[i] is Control overlayControl)
+                    if (_overlayList[i] is Control overlayControl)
                     {
                         Rectangle overlayControlScreenBounds = overlayControl.Bounds;
                         overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
@@ -579,17 +573,17 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Need to know when child windows are created so we can properly set the Z-order
+            /// Need to know when child windows are created so we can properly set the Z-order
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
                 if (m.Msg == NativeMethods.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)NativeMethods.WM_CREATE)
                 {
-                    if (overlayList != null)
+                    if (_overlayList != null)
                     {
                         bool ourWindow = false;
-                        foreach (Control c in overlayList)
+                        foreach (Control c in _overlayList)
                         {
                             if (c.IsHandleCreated && m.LParam == c.Handle)
                             {
@@ -600,7 +594,7 @@ namespace System.Windows.Forms.Design
 
                         if (!ourWindow)
                         {
-                            foreach (Control c in overlayList)
+                            foreach (Control c in _overlayList)
                             {
                                 SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0,
                                                      NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
@@ -614,7 +608,7 @@ namespace System.Windows.Forms.Design
                 }
                 else if ((m.Msg == NativeMethods.WM_MOUSEWHEEL))
                 {
-                    messageMouseWheelProcessed = false;
+                    _messageMouseWheelProcessed = false;
                     if (BehaviorService != null)
                     {
                         BehaviorService.SyncSelection();

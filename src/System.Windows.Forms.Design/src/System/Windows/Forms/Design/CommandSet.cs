@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.IO;
@@ -268,7 +269,7 @@ namespace System.Windows.Forms.Design
         /// Disposes of this object, removing all commands from the menu service.
         /// </summary>
         // We don't need to Dispose snapLineTimer
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public virtual void Dispose()
         {
             if (_menuService != null)
@@ -1708,7 +1709,7 @@ PropertyDescriptor locProp = props["Location"];
         /// Called when the paste menu item is selected.
         /// </summary>
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
+        [SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -3266,7 +3267,7 @@ PropertyDescriptor locProp = props["Location"];
             /// <summary>
             /// Creates a new CommandSetItem.
             /// </summary>
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
+            [SuppressMessage("Microsoft.Reliability", "CA2002:DoNotLockOnObjectsWithWeakIdentity")]
             public CommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, bool optimizeStatus, IUIService uiService)
             : base(invokeHandler, id)
             {

@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Design.Behavior
             int yOffset = controlBounds.Top;
 
             // THIS IS ONLY NEEDED FOR PADDING SNAPLINES
-            // We need to adjust the bounds to the client area. This is so that we don't include borders + titlebar in the snaplines. VSWhidbey #274860 & 342105
+            // We need to adjust the bounds to the client area. This is so that we don't include borders + titlebar in the snaplines.
             // In order to add padding, we need to get the offset from the usable client area of our control and the actual origin of our control.  In other words: how big is the non-client area here?
             // Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
             Point offset = controlDesigner.GetOffsetToClientArea();
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         continue;
                     }
-                    // store off the bounds in our hashtable, so if we draw snaplines we know the length of the line we need to remember different bounds based on what type of snapline this is. VSWhidbey #342105
+                    // store off the bounds in our hashtable, so if we draw snaplines we know the length of the line we need to remember different bounds based on what type of snapline this is.
                     if ((snapLine.Filter != null) && snapLine.Filter.StartsWith(SnapLine.Padding))
                     {
                         _snapLineToBounds.Add(snapLine, controlRect);
@@ -259,7 +259,7 @@ namespace System.Windows.Forms.Design.Behavior
                 int pri = (int)((SnapLine)snapLines[i]).Priority;
 
                 // save off this delta for the overall smallest delta!
-                // Need to check the priority here as well if the distance is the same. VSWhidbey 245479 & 338279.
+                // Need to check the priority here as well if the distance is the same.
                 // E.g. smallestDistance so far is 1, for a Low snapline.
                 // We now find another distance of -1, for a Medium snapline.
                 // The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to phycially move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
@@ -294,24 +294,8 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             if (line.LineType != ((Line)tempLines[j]).LineType)
                             {
-                                // If the lines are not the same type, then we should forcefully try to remove it.
-                                // Say you have a Panel with a Button in it. By default Panel.Padding = 0, and
-                                // Button.Margin = 3. As you move the button to the left, you will first get the
-                                // combined LEFT margin+padding snap line. If you keep moving the button, you will
-                                // now snap to the Left edge, and you will get the Blue snapline. You now
-                                // move the button back to the right, and you will immediately snap to the
-                                // LEFT Padding snapline.
-
-                                // But what's gonna happen. Both the old (Left) snapline, and the LEFT Padding snapline
-                                // (remember these are the panels) have the same coordinates, since Panel.Padding
-                                // is 0. Thus Line.GetDiffs will return a non-null diffs. BUT e.g the first line
-                                // will result in an invalidRect of (x1,y1,0,0), this we end up invalidating
-                                // only a small portion of the existing Blue (left) Snapline.
-                                // That's actually not okay since VERTICAL (e.g. LEFT) padding snaplines
-                                // actually end up getting drawn HORIZONTALLY - thus we didn't really
-                                // invalidate correctly.
-
-                                // VSWhidbey 169705
+                                // If the lines are not the same type, then we should forcefully try to remove it. Say you have a Panel with a Button in it. By default Panel.Padding = 0, and Button.Margin = 3. As you move the button to the left, you will first get the combined LEFT margin+padding snap line. If you keep moving the button, you will now snap to the Left edge, and you will get the Blue snapline. You now move the button back to the right, and you will immediately snap to the LEFT Padding snapline.
+                                // But what's gonna happen. Both the old (Left) snapline, and the LEFT Padding snapline (remember these are the panels) have the same coordinates, since Panel.Padding is 0. Thus Line.GetDiffs will return a non-null diffs. BUT e.g the first line will result in an invalidRect of (x1,y1,0,0), this we end up invalidating only a small portion of the existing Blue (left) Snapline. That's actually not okay since VERTICAL (e.g. LEFT) padding snaplines actually end up getting drawn HORIZONTALLY - thus we didn't really invalidate correctly.
                                 continue;
                             }
 
@@ -398,7 +382,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     int pri = (int)((SnapLine)snapLines[i]).Priority;
                     if ((pri > highestPriority) && (pri != (int)SnapLinePriority.Always))
-                    {// Always is a special category VSWhidbey 255346
+                    {// Always is a special category
                         highestPriority = pri;
                     }
                 }
@@ -410,7 +394,7 @@ namespace System.Windows.Forms.Design.Behavior
                 if ((distances[i] == smallestDistance) &&
                   (((int)((SnapLine)snapLines[i]).Priority == highestPriority) ||
                     ((int)((SnapLine)snapLines[i]).Priority == (int)SnapLinePriority.Always)))
-                { // always render SnapLines with Priority.Always which has the same distance. VSWhidbey 255346
+                { // always render SnapLines with Priority.Always which has the same distance.
                     StoreSnapLine((SnapLine)snapLines[i], dragBounds);
                 }
             }
@@ -446,7 +430,7 @@ namespace System.Windows.Forms.Design.Behavior
         // Returns true if we should add snaplines for this control
         private bool AddControlSnaplinesWhenResizing(ControlDesigner designer, Control control, Control targetControl)
         {
-            // do not add snaplines if we are resizing the control is a container control with AutoSize set to true and the control is the parent of the targetControl -- VSWhidbey #224878
+            // do not add snaplines if we are resizing the control is a container control with AutoSize set to true and the control is the parent of the targetControl
             if (_resizing &&
                 (designer is ParentControlDesigner) &&
                 (control.AutoSize == true) &&
@@ -891,7 +875,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (IsMarginOrPaddingSnapLine(snapLine))
             {
                 line.OriginalBounds = bounds;
-                //VSWhidbey #379775 - need to know which padding line (left, right) we are storing. The original check in RenderSnapLines was wrong. It assume that the dragRect was completely within the OriginalBounds which is not necessarily true
+                //need to know which padding line (left, right) we are storing. The original check in RenderSnapLines was wrong. It assume that the dragRect was completely within the OriginalBounds which is not necessarily true
                 if (line.LineType == LineType.Padding)
                 {
                     switch (snapLine.Filter)
@@ -1070,7 +1054,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             // store this drag rect - we'll use it when we are (eventually) called back on to actually render our lines
             // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work.
-            // See VSWhidbey #340048. That is why I introduced RenderSnapLinesInternal(dragRect)
+            // That is why I introduced RenderSnapLinesInternal(dragRect)
             _cachedDragRect = tempDragRect;
             // reset the dragoffset to this last location
             _dragOffset = dragBounds.Location;
@@ -1079,7 +1063,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         // NOTE NOTE NOTE: If OnMouseMove is called during a resize operation, then cachedDragRect is not guaranteed to work.
-        // See VSWhidbey #340048. That is why I introduced RenderSnapLinesInternal(dragRect)
+        // That is why I introduced RenderSnapLinesInternal(dragRect)
         /// <summary>
         /// Called by the ResizeBehavior after it has finished drawing
         /// </summary>

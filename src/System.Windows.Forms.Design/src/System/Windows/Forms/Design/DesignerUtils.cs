@@ -491,7 +491,6 @@ namespace System.Windows.Forms.Design
 
             using (Graphics gDest = Graphics.FromImage(image))
             {
-                // VSWhidbey #378593
                 if (control.BackColor == Color.Transparent)
                 {
                     gDest.Clear(SystemColors.Control);
@@ -511,11 +510,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public static bool GenerateSnapShotWithWM_PRINT(Control control, ref Image image)
         {
-
             IntPtr hWnd = control.Handle;
             image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
-
-            // VSWhidbey #378593
             // Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
             {
@@ -963,7 +959,7 @@ namespace System.Windows.Forms.Design
         {
             if (treeView == null)
             {
-                throw new ArgumentNullException("treeView");
+                throw new ArgumentNullException(nameof(treeView));
             }
 
             treeView.HotTracking = true;
@@ -989,7 +985,7 @@ namespace System.Windows.Forms.Design
         {
             if (listView == null)
             {
-                throw new ArgumentNullException("listView");
+                throw new ArgumentNullException(nameof(listView));
             }
 
             IntPtr hwnd = listView.Handle;

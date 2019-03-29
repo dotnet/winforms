@@ -81,13 +81,6 @@ namespace System.Windows.Forms.Design
                 OnTransactionOpened(host, EventArgs.Empty);
             }
 
-            IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
-            if (cs != null)
-            {
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemove);
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            }
-
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
             SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
             SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
@@ -160,12 +153,6 @@ namespace System.Windows.Forms.Design
                     if (_host.InTransaction)
                     {
                         OnTransactionClosed(_host, new DesignerTransactionCloseEventArgs(true, true));
-                    }
-                    IComponentChangeService cs = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
-                    if (cs != null)
-                    {
-                        cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
-                        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
                 }
                 foreach (SelectionUIItem s in _selectionItems.Values)
@@ -1065,7 +1052,7 @@ namespace System.Windows.Forms.Design
             Rectangle newOffset = Rectangle.Empty;
             if (_dragHandler == null)
             {
-                throw new Exception(string.Format(SR.DesignerBeginDragNotCalled));
+                throw new Exception(SR.DesignerBeginDragNotCalled);
             }
 
             Debug.Assert(_dragComponents != null, "We should have a set of drag controls here");

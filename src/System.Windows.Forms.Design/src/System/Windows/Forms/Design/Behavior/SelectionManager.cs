@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -63,13 +64,6 @@ namespace System.Windows.Forms.Design.Behavior
             behaviorService.Adorners.Add(selectionAdorner); //adding this will cause the adorner to get setup with a ptr to the beh.svc.
 
             componentToDesigner = new Hashtable();
-            IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
-            if (cs != null)
-            {
-                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            }
             designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
             // designeraction UI
             if (designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
@@ -185,7 +179,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// Unhook all of our event notifications, clear our adorner and remove it from the Beh.Svc.
         /// </summary>
         // We don't need to Dispose rootComponent.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
             if (designerHost != null)
@@ -196,13 +190,6 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (serviceProvider != null)
             {
-                IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
-                if (cs != null)
-                {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-                }
                 if (selSvc != null)
                 {
                     selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);

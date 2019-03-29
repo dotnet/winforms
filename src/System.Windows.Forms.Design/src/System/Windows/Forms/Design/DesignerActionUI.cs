@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -119,7 +120,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Disposes all UI-related objects and unhooks services.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
             if (_marshalingControl != null)
@@ -652,10 +653,7 @@ namespace System.Windows.Forms.Design
                 System.Windows.Forms.Design.Behavior.Behavior popBehavior = _behaviorService.PopBehavior(_dapkb);
                 Debug.Assert(popBehavior is DesignerActionKeyboardBehavior, "behavior returned is of the wrong kind?");
             }
-
-
         }
-
 
         internal Point UpdateDAPLocation(IComponent component, DesignerActionGlyph glyph)
         {
@@ -775,7 +773,6 @@ namespace System.Windows.Forms.Design
 
         private void OnShowComplete(object sender, EventArgs e)
         {
-            // designerActionHost.AutoClose = true;
             _cancelClose = false;
 
             // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
@@ -977,7 +974,7 @@ namespace System.Windows.Forms.Design
 
         }
 
-        private void PanelResized(object sender, System.EventArgs e)
+        private void PanelResized(object sender, EventArgs e)
         {
             Control ctrl = sender as Control;
             if (Size.Width != ctrl.Size.Width || Size.Height != ctrl.Size.Height)
@@ -1148,13 +1145,6 @@ namespace System.Windows.Forms.Design
                 }
             }
             return base.ProcessDialogKey(keyData);
-        }
-    }
-
-    internal class NoBorderRenderer : ToolStripProfessionalRenderer
-    {
-        protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
-        {
         }
     }
 }

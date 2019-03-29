@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Design.Behavior
         internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
         {
             _serviceProvider = serviceProvider;
-//create the AdornerWindow
+            //create the AdornerWindow
             _adornerWindow = new AdornerWindow(this, windowFrame);
 
             //use the adornerWindow as an overlay
@@ -91,14 +91,9 @@ namespace System.Windows.Forms.Design.Behavior
             _trackingMouseEvent = false;
 
             //create out object that will handle all menucommands
-            IMenuCommandService menuCommandService = serviceProvider.GetService(typeof(IMenuCommandService)) as IMenuCommandService;
-            IDesignerHost host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
-
-            if (menuCommandService != null && host != null)
+            if (serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService && serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
-
                 _menuCommandHandler = new MenuCommandHandler(this, menuCommandService);
-
                 host.RemoveService(typeof(IMenuCommandService));
                 host.AddService(typeof(IMenuCommandService), _menuCommandHandler);
             }
@@ -110,11 +105,6 @@ namespace System.Windows.Forms.Design.Behavior
             //test hooks
             WM_GETALLSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETALLSNAPLINES");
             WM_GETRECENTSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
-
-            // Listen to the SystemEvents so that we can resync selection based on display settings etc.
-            SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
-            SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
         /// <summary>
         ///     Read-only property that returns the AdornerCollection that the BehaivorService manages.
@@ -225,9 +215,6 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             _adornerWindow.Dispose();
-            SystemEvents.DisplaySettingsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.InstalledFontsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
         /// <summary>
@@ -448,7 +435,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (behavior == null)
             {
-                throw new ArgumentNullException("behavior");
+                throw new ArgumentNullException(nameof(behavior));
             }
 
             // Should we catch this
@@ -471,7 +458,7 @@ namespace System.Windows.Forms.Design.Behavior
             _captureBehavior = behavior;
             _adornerWindow.Capture = true;
 
-            //VSWhidbey #373836. Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
+            // Since we are now capturing all mouse messages, we might miss some WM_MOUSEACTIVATE which would have activated the app. So if the DialogOwnerWindow (e.g. VS) is not the active window, let's activate it here.
             IUIService uiService = (IUIService)_serviceProvider.GetService(typeof(IUIService));
             if (uiService != null)
             {
@@ -987,7 +974,7 @@ namespace System.Windows.Forms.Design.Behavior
                 private IntPtr _mouseHookHandle = IntPtr.Zero;
                 private bool _processingMessage;
 
-                private bool _isHooked = false; //VSWHIDBEY # 474112
+                private bool _isHooked = false;
                 private int _lastLButtonDownTimeStamp;
 
                 public MouseHook()
@@ -1192,7 +1179,7 @@ namespace System.Windows.Forms.Design.Behavior
                     Cursor hitTestCursor = _adorners[i].Glyphs[j].GetHitTest(pt);
                     if (hitTestCursor != null)
                     {
-                        // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave. VSWhidbey #396611
+                        // InvokeMouseEnterGlyph will cause the selection to change, which might change the number of glyphs, so we need to remember the new glyph before calling InvokeMouseEnterLeave.
                         Glyph newGlyph = _adorners[i].Glyphs[j];
 
                         //with a valid hit test, fire enter/leave events
@@ -1423,7 +1410,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnDragLeave(Glyph g, EventArgs e)
         {
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "BS::DragLeave");
-            // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it. VSWhidbey #474259
+            // This is normally cleared on OnMouseUp, but we might not get an OnMouseUp to clear it.
             // So let's make sure it is really cleared when we start the drag.
             _dragEnterReplies.Clear();
 
@@ -1554,6 +1541,7 @@ namespace System.Windows.Forms.Design.Behavior
             Debug.WriteLineIf(s_dragDropSwitch.TraceVerbose, "\tForwarding to behavior");
             behavior.OnDragDrop(_hitTestedGlyph, e);
         }
+
         private void PropagatePaint(PaintEventArgs pe)
         {
             for (int i = 0; i < _adorners.Count; i++)
@@ -1573,7 +1561,7 @@ namespace System.Windows.Forms.Design.Behavior
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         private void TestHook_GetRecentSnapLines(ref Message m)
         {
-            string snapLineInfo = "";
+            string snapLineInfo = string.Empty;
             if (_testHook_RecentSnapLines != null)
             {
                 foreach (string line in _testHook_RecentSnapLines)
@@ -1606,13 +1594,13 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (Marshal.SystemDefaultCharSize == 1)
             {
-                bytes = System.Text.Encoding.Default.GetBytes(text);
-                nullBytes = System.Text.Encoding.Default.GetBytes(nullChar);
+                bytes = Text.Encoding.Default.GetBytes(text);
+                nullBytes = Text.Encoding.Default.GetBytes(nullChar);
             }
             else
             {
-                bytes = System.Text.Encoding.Unicode.GetBytes(text);
-                nullBytes = System.Text.Encoding.Unicode.GetBytes(nullChar);
+                bytes = Text.Encoding.Unicode.GetBytes(text);
+                nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
             }
 
             Marshal.Copy(bytes, 0, m.LParam, bytes.Length);

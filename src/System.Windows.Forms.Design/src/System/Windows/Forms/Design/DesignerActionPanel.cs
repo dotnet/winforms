@@ -654,7 +654,6 @@ namespace System.ComponentModel.Design
 
             protected override bool ProcessDialogKey(Keys keyData)
             {
-                // TODO: RightToLeft management for left/right arrow keys (from old DesignerActionPanel)
                 Line focusedLine = FocusedLine;
                 if (focusedLine != null)
                 {
@@ -1261,7 +1260,6 @@ namespace System.ComponentModel.Design
                     controls.Add(_titleLabel);
                     controls.Add(_subtitleLabel);
 
-                    // TODO: Need to figure out how to unhook these events. Perhaps have Initialize() and Cleanup() methods.
                     ActionPanel.FormActivated += new EventHandler(OnFormActivated);
                     ActionPanel.FormDeactivate += new EventHandler(OnFormDeactivate);
                 }
@@ -1295,14 +1293,12 @@ namespace System.ComponentModel.Design
 
                 private void OnFormActivated(object sender, EventArgs e)
                 {
-                    // TODO: Figure out better rect
                     _formActive = true;
                     ActionPanel.Invalidate();
                 }
 
                 private void OnFormDeactivate(object sender, EventArgs e)
                 {
-                    // TODO: Figure out better rect
                     _formActive = false;
                     ActionPanel.Invalidate();
                 }
