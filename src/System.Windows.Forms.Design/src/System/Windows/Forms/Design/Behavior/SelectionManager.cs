@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             using (Graphics g = behaviorService.AdornerWindowGraphics)
             {
-                //If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls. VSWhidbey #269806
+                //If all that changed was the primary selection, then the refresh region was empty, but we do need to update the 2 controls.
                 if (toRefresh.IsEmpty(g) && primarySelection != null && !primarySelection.Equals(prevPrimarySelection))
                 {
                     for (int i = 0; i < curSelectionBounds.Length; i++)

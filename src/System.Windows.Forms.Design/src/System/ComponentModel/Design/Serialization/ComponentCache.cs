@@ -59,7 +59,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (component == null)
                 {
-                    throw new ArgumentNullException("component");
+                    throw new ArgumentNullException(nameof(component));
                 }
 
                 if (_cache != null && _cache.TryGetValue(component, out Entry result))
@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                // Hmm. We were notified about an object change, but were unable to relate it back to a component we know about. In this situation, we have no option but to clear the whole cache, since we don't want serialization to miss something. See VSWhidbey #404813 for an example of what we would have missed.
+                                // Hmm. We were notified about an object change, but were unable to relate it back to a component we know about. In this situation, we have no option but to clear the whole cache, since we don't want serialization to miss something.
                                 _cache.Clear();
                             }
                         }
@@ -191,7 +191,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             else
                             {
-                                // Hmm. We were notified about an object change, but were unable to relate it back to a component we know about. In this situation, we have no option but to clear the whole cache, since we don't want serialization to miss something. See VSWhidbey #404813 for an example of what we would have missed.
+                                // Hmm. We were notified about an object change, but were unable to relate it back to a component we know about. In this situation, we have no option but to clear the whole cache, since we don't want serialization to miss something.
                                 _cache.Clear();
                             }
                         }

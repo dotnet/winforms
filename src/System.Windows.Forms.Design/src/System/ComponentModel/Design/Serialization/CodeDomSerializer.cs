@@ -250,9 +250,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMember(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null) throw new ArgumentNullException("manager");
-            if (owningObject == null) throw new ArgumentNullException("owningObject");
-            if (member == null) throw new ArgumentNullException("member");
+            if (manager == null) throw new ArgumentNullException(nameof(manager));
+            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
+            if (member == null) throw new ArgumentNullException(nameof(member));
 
             CodeStatementCollection statements = new CodeStatementCollection();
             // See if we have an existing expression for this member.  If not, fabricate one
@@ -287,9 +287,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMemberAbsolute(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager == null) throw new ArgumentNullException("manager");
-            if (owningObject == null) throw new ArgumentNullException("owningObject");
-            if (member == null) throw new ArgumentNullException("member");
+            if (manager == null) throw new ArgumentNullException(nameof(manager));
+            if (owningObject == null) throw new ArgumentNullException(nameof(owningObject));
+            if (member == null) throw new ArgumentNullException(nameof(member));
 
             CodeStatementCollection statements;
             SerializeAbsoluteContext abs = new SerializeAbsoluteContext(member);

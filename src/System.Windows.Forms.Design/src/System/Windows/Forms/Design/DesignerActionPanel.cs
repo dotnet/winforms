@@ -54,7 +54,7 @@ namespace System.ComponentModel.Design
             private const int PanelHeaderVerticalPadding = 3; // Vertical padding within the header of the panel
             private const int PanelHeaderHorizontalPadding = 5; // Horizontal padding within the header of the panel
 
-            private const int TextBoxHeightFixup = 2; // Countereffects the fix for VSWhidbey 359726 - we relied on the broken behavior before
+            private const int TextBoxHeightFixup = 2;
 
             private CommandID[] _filteredCommandIDs;
             private readonly ToolTip _toolTip;
@@ -76,9 +76,6 @@ namespace System.ComponentModel.Design
             private readonly IServiceProvider _serviceProvider;
 
             private bool _inMethodInvoke;
-#if MVWASSEMBLY
-        private bool _inPushingValue;
-#endif
             private bool _updatingTasks;
             private bool _dropDownActive;
 
@@ -244,17 +241,6 @@ namespace System.ComponentModel.Design
                     _inMethodInvoke = value;
                 }
             }
-
-#if MVWASSEMBLY
-        public bool InPushingValue {
-            get {
-                return _inPushingValue;
-            }
-            internal set {
-                _inPushingValue = value;
-            }
-        }
-#endif
 
             public Color LinkColor
             {
@@ -1156,7 +1142,7 @@ namespace System.ComponentModel.Design
                 public Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
                 {
                 _serviceProvider = serviceProvider;
-                    _actionPanel = actionPanel ?? throw new ArgumentNullException("actionPanel");
+                    _actionPanel = actionPanel ?? throw new ArgumentNullException(nameof(actionPanel));
                 }
 
                 protected DesignerActionPanel ActionPanel
@@ -1509,9 +1495,6 @@ namespace System.ComponentModel.Design
                         return;
                     }
                     _pushingValue = true;
-#if MVWASSEMBLY
-                ActionPanel.InPushingValue = true;
-#endif
                     try
                     {
                         // Only push the change if the values are different
@@ -1556,10 +1539,6 @@ namespace System.ComponentModel.Design
                     finally
                     {
                         _pushingValue = false;
-
-#if MVWASSEMBLY
-                    ActionPanel.InPushingValue = false;
-#endif
                     }
                 }
 
@@ -1572,10 +1551,6 @@ namespace System.ComponentModel.Design
                     _value = PropertyDescriptor.GetValue(actionList);
                     OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
                     _pushingValue = true;
-
-#if MVWASSEMBLY
-                ActionPanel.InPushingValue = true;
-#endif
                     try
                     {
                         OnValueChanged();
@@ -1583,9 +1558,6 @@ namespace System.ComponentModel.Design
                     finally
                     {
                         _pushingValue = false;
-#if MVWASSEMBLY
-                    ActionPanel.InPushingValue = false;
-#endif
                     }
                 }
             }
@@ -2567,11 +2539,7 @@ namespace System.ComponentModel.Design
                     {
                         while (Visible)
                         {
-#if MVWASSEMBLY
-                        System.Windows.Forms.Application.DoEvents();
-#else
                             Application.DoEvents();
-#endif
                             UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
                         }
                     }
@@ -2629,7 +2597,7 @@ namespace System.ComponentModel.Design
                         {
                             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(null, IntPtr.Zero));
 
-                            // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
+                            // sometimes activation gets messed up - if our parent control is still around, remind it to take focus.
                             if (parent != null && parent.Visible)
                             {
                                 parent.Focus();

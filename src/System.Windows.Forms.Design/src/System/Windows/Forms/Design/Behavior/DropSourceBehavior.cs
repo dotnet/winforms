@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Design.Behavior
             if (lastEffect == DragDropEffects.Copy || (srcHost != destHost && destHost != null))
             {
                 //between forms or copy
-                currentControl.Visible = true; // VSWhidbey #527814
+                currentControl.Visible = true;
                 bool visibleState = true;
                 PropertyDescriptor propLoc = TypeDescriptor.GetProperties(currentControl)["Visible"];
                 if (propLoc != null)
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 //between containers
                 dragSource.Controls.Remove(currentControl);
-                currentControl.Visible = true; // VSWhidbey #527814                
+                currentControl.Visible = true;               
                 dragTarget.Controls.Add(currentControl);
             }
         }
@@ -282,7 +282,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 propLoc.SetValue(currentControl, pt);
 
-                // In some cases the target designer wants to maintain its own ZOrder, in that case we shouldn't try and set the childindex. FlowLayoutPanelDesigner is one such case. VSWhidbey #321132.
+                // In some cases the target designer wants to maintain its own ZOrder, in that case we shouldn't try and set the childindex. FlowLayoutPanelDesigner is one such case.
                 if (allowSetChildIndexOnDrop)
                 {
                     dragTarget.Controls.SetChildIndex(currentControl, newIndex);

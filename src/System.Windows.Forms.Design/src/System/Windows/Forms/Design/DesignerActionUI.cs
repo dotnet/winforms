@@ -261,7 +261,6 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // VSWhidbey 497545.
             // If the smart tag is showing, we only move the smart tag if the changing component is the component for the currently showing smart tag.
             if (_lastPanelComponent != null && !_lastPanelComponent.Equals(ce.Component))
             {
@@ -351,8 +350,6 @@ namespace System.Windows.Forms.Design
             {
                 if (glyphWithPanelToRegen.Behavior is DesignerActionBehavior behaviorWithPanelToRegen)
                 {
-                    //DesignerActionPanel dap = behaviorWithPanelToRegen.CreateDesignerActionPanel(behaviorWithPanelToRegen.RelatedComponent);
-                    //designerActionHost.SetDesignerActionPanel(dap, glyphWithPanelToRegen);
                     Debug.Assert(behaviorWithPanelToRegen.RelatedComponent != null, "could not find related component for this refresh");
                     DesignerActionPanel dap = _designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
                     dap.UpdateTasks(behaviorWithPanelToRegen.ActionLists, new DesignerActionListCollection(), string.Format(SR.DesignerActionPanel_DefaultPanelTitle,
@@ -439,8 +436,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnInvokedDesignerActionChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
-            IComponent relatedComponent = e.RelatedObject as IComponent;
             DesignerActionGlyph g = null;
+            IComponent relatedComponent = e.RelatedObject as IComponent;
             if (e.ChangeType == DesignerActionListsChangedType.ActionListsAdded)
             {
                 if (relatedComponent == null)
@@ -554,7 +551,7 @@ namespace System.Windows.Forms.Design
                 }
                 _componentToGlyph.Remove(relatedObject);
 
-                // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
+                // we only do this when we're in a transaction. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
                 if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.InTransaction)
                 {
                     host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);

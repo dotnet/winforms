@@ -48,7 +48,7 @@ namespace System.ComponentModel.Design
             _designerActionLists = new Hashtable();
             _componentToVerbsEventHookedUp = new Hashtable();
 #if DEBUGDESIGNERTASKS
-                Debug.WriteLine("DesignerActionService - created");
+            Debug.WriteLine("DesignerActionService - created");
 #endif
         }
 
@@ -74,11 +74,11 @@ namespace System.ComponentModel.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
             if (designerActionListCollection == null)
             {
-                throw new ArgumentNullException("designerActionListCollection");
+                throw new ArgumentNullException(nameof(designerActionListCollection));
             }
 
             DesignerActionListCollection dhlc = (DesignerActionListCollection)_designerActionLists[comp];
@@ -137,7 +137,7 @@ namespace System.ComponentModel.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
             return _designerActionLists.Contains(comp);
         }
@@ -178,7 +178,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             DesignerActionListCollection result = new DesignerActionListCollection();
             switch (type)
@@ -202,12 +202,12 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (actionLists == null)
             {
-                throw new ArgumentNullException("actionLists");
+                throw new ArgumentNullException(nameof(actionLists));
             }
 
             if (component.Site is IServiceContainer sc)
@@ -309,12 +309,12 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (actionLists == null)
             {
-                throw new ArgumentNullException("actionLists");
+                throw new ArgumentNullException(nameof(actionLists));
             }
 
             DesignerActionListCollection pushCollection = (DesignerActionListCollection)_designerActionLists[component];
@@ -356,7 +356,7 @@ namespace System.ComponentModel.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
 
             if (!_designerActionLists.Contains(comp))
@@ -376,7 +376,7 @@ namespace System.ComponentModel.Design
         {
             if (actionList == null)
             {
-                throw new ArgumentNullException("actionList");
+                throw new ArgumentNullException(nameof(actionList));
             }
 
             //find the associated component
@@ -397,11 +397,11 @@ namespace System.ComponentModel.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
             if (actionList == null)
             {
-                throw new ArgumentNullException("actionList");
+                throw new ArgumentNullException(nameof(actionList));
             }
             if (!_designerActionLists.Contains(comp))
             {
@@ -461,9 +461,5 @@ namespace System.ComponentModel.Design
                 }
             }
         }
-    }
-    public enum ComponentActionsType
-    {
-        All, Component, Service
     }
 }

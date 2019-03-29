@@ -174,7 +174,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             // We should never add anything while we're unloading.
@@ -482,7 +482,7 @@ namespace System.ComponentModel.Design
             object serviceInstance = null;
             if (service == null)
             {
-                throw new ArgumentNullException("service");
+                throw new ArgumentNullException(nameof(service));
             }
 
             if (service == typeof(IMultitargetHelperService))
@@ -620,7 +620,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             ISite site = component.Site;
@@ -1110,7 +1110,7 @@ namespace System.ComponentModel.Design
         {
             if (componentType == null)
             {
-                throw new ArgumentNullException("componentType");
+                throw new ArgumentNullException(nameof(componentType));
             }
 
             IComponent component;
@@ -1191,7 +1191,7 @@ namespace System.ComponentModel.Design
             string name;
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (component.Site != null && component.Site.Name != null)
@@ -1238,7 +1238,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             return _designers[component] as IDesigner;
         }
@@ -1250,7 +1250,7 @@ namespace System.ComponentModel.Design
         {
             if (typeName == null)
             {
-                throw new ArgumentNullException("typeName");
+                throw new ArgumentNullException(nameof(typeName));
             }
 
             if (GetService(typeof(ITypeResolutionService)) is ITypeResolutionService ts)
@@ -1841,7 +1841,7 @@ namespace System.ComponentModel.Design
             {
                 if (service == null)
                 {
-                    throw new ArgumentNullException("service");
+                    throw new ArgumentNullException(nameof(service));
                 }
 
                 // We always resolve IDictionaryService to ourselves.
@@ -2023,7 +2023,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             return new NestedSite(component, _host, name, this);
         }

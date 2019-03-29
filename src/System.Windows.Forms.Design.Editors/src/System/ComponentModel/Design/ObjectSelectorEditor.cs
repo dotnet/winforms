@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design
         {
             if (treeView == null)
             {
-                throw new ArgumentNullException("treeView");
+                throw new ArgumentNullException(nameof(treeView));
             }
 
             treeView.HotTracking = true;

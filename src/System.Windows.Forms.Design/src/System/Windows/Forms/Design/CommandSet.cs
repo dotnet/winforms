@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design
         private const int SORT_VERTICAL = 1;
         private const int SORT_ZORDER = 2;
 
-        private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2"; // See VSWhidbey #172531
+        private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2";
 
         //these are used for snapping control via keyboard movement
         protected DragAssistanceManager dragManager = null; //point to the snapline engine (only valid between keydown and timer expiration)
@@ -2020,7 +2020,7 @@ PropertyDescriptor locProp = props["Location"];
                         // finally select all the components we added
                         SelectionService.SetSelectedComponents((object[])selectComps.ToArray(), SelectionTypes.Replace);
 
-                        // and bring them to the front - but only if we can mess with the Z-order. VSWhidbey 515990
+                        // and bring them to the front - but only if we can mess with the Z-order.
                         if (designer is ParentControlDesigner parentControlDesigner && parentControlDesigner.AllowSetChildIndexOnDrop)
                         {
                             MenuCommand btf = MenuService.FindCommand(MenuCommands.BringToFront);
