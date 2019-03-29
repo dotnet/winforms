@@ -125,6 +125,7 @@ jobs:
       # - powershell: eng\pre-build.ps1
       #   displayName: Pre-Build - Set VSO Variables
       - script: eng\set.cmd
+        displayName: SET
 
       # Build and rename binlog
       # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with
