@@ -125,7 +125,7 @@ jobs:
       # - powershell: eng\pre-build.ps1
       #   displayName: Pre-Build - Set VSO Variables
       - script: eng\set.cmd
-        displayName: SET
+        displayName: SET before build
 
       # Build and rename binlog
       # Note: The /p:Coverage argument is passed here since some build properties change to accommodate running with
@@ -139,6 +139,9 @@ jobs:
           /p:Coverage=$(_Coverage)
           /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
+
+      - script: eng\set.cmd
+        displayName: SET after build
 
     # Run Unit Tests
         # this should no longer be necessary once Helix is ready to report back code coverage
