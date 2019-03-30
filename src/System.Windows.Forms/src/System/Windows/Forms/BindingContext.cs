@@ -405,6 +405,11 @@ namespace System.Windows.Forms
         /// </devdoc>
         public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
         {
+            if (binding == null)
+            {
+                throw new ArgumentNullException(nameof(binding));
+            }
+
             BindingManagerBase oldManager = binding.BindingManagerBase;
             if (oldManager != null)
             {
