@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Tests
             control.FontChanged += handler;
 
             // Set different.
-            Font font1 = SystemFonts.MenuFont;
+            Font font1 = new Font("Arial", 8.25f);
             control.Font = font1;
             Assert.Same(font1, control.Font);
             Assert.Equal(1, callCount);

@@ -948,7 +948,7 @@ namespace System.Windows.Forms.Tests
                     ColumnCount = 1,
                     AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells
                 },
-                22, 0, 22
+                25, 0, 25
             };
             yield return new object[] { new DataGridView { ColumnCount = 1, VirtualMode = true }, 6, 1, 5 };
 
