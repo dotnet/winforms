@@ -753,7 +753,7 @@ namespace System.Windows.Forms {
                     displayStyle = value;
                     if (!state[stateContstructing]) {
                         InvalidateItemLayout(PropertyNames.DisplayStyle);
-                        OnDisplayStyleChanged(new EventArgs());
+                        OnDisplayStyleChanged(EventArgs.Empty);
                     }
                 }
                 

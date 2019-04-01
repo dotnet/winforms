@@ -3954,7 +3954,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         return false;
                     case Keys.Return:
                         if (DialogButton.Focused || DropDownButton.Focused) {
-                           OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), new EventArgs());
+                           OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), EventArgs.Empty);
                            return true;
                         }
                         else if (selectedGridEntry != null && selectedGridEntry.Expandable) {
