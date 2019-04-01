@@ -18,23 +18,23 @@ namespace System.Windows.Forms
     [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
-        private static Type rowType = typeof(DataGridViewRow);
-        private static readonly int PropRowErrorText = PropertyStore.CreateKey();
-        private static readonly int PropRowAccessibilityObject = PropertyStore.CreateKey();
+        private static Type s_rowType = typeof(DataGridViewRow);
+        private static readonly int s_propRowErrorText = PropertyStore.CreateKey();
+        private static readonly int s_propRowAccessibilityObject = PropertyStore.CreateKey();
 
-        private const DataGridViewAutoSizeRowCriteriaInternal invalidDataGridViewAutoSizeRowCriteriaInternalMask = ~(DataGridViewAutoSizeRowCriteriaInternal.Header | DataGridViewAutoSizeRowCriteriaInternal.AllColumns);
+        private const DataGridViewAutoSizeRowCriteriaInternal InvalidDataGridViewAutoSizeRowCriteriaInternalMask = ~(DataGridViewAutoSizeRowCriteriaInternal.Header | DataGridViewAutoSizeRowCriteriaInternal.AllColumns);
 
-        internal const int defaultMinRowThickness = 3;
+        private const int DefaultMinRowThickness = 3;
 
-        private DataGridViewCellCollection rowCells;
+        private DataGridViewCellCollection _rowCells;
 
         /// <devdoc>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
         /// </devdoc>
         public DataGridViewRow() : base()
         {
-            bandIsRow = true;
-            MinimumThickness = defaultMinRowThickness;
+            _bandIsRow = true;
+            MinimumThickness = DefaultMinRowThickness;
             Thickness = Control.DefaultFont.Height + 9;
         }
 
@@ -43,11 +43,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                AccessibleObject result = (AccessibleObject)Properties.GetObject(PropRowAccessibilityObject);
+                AccessibleObject result = (AccessibleObject)Properties.GetObject(s_propRowAccessibilityObject);
                 if (result == null)
                 {
                     result = CreateAccessibilityInstance();
-                    Properties.SetObject(PropRowAccessibilityObject, result);
+                    Properties.SetObject(s_propRowAccessibilityObject, result);
                 }
 
                 return result;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public DataGridViewCellCollection Cells
         {
-            get => rowCells ?? (rowCells = CreateCellsInstance());
+            get => _rowCells ?? (_rowCells = CreateCellsInstance());
         }
 
         [DefaultValue(null)]
@@ -159,15 +159,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                object errorText = Properties.GetObject(PropRowErrorText);
+                object errorText = Properties.GetObject(s_propRowErrorText);
                 return (string)errorText ?? string.Empty;
             }
             set
             {
                 string errorText = ErrorTextInternal;
-                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropRowErrorText))
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(s_propRowErrorText))
                 {
-                    Properties.SetObject(PropRowErrorText, value);
+                    Properties.SetObject(s_propRowErrorText, value);
                 }
                 if (DataGridView != null && !errorText.Equals(ErrorTextInternal))
                 {
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
 
         internal bool HasErrorText
         {
-            get => Properties.ContainsObject(PropRowErrorText) && Properties.GetObject(PropRowErrorText) != null;
+            get => Properties.ContainsObject(s_propRowErrorText) && Properties.GetObject(s_propRowErrorText) != null;
         }
 
         [Browsable(false)]
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms
             DataGridViewRow dataGridViewRow;
             Type thisType = GetType();
 
-            if (thisType == rowType)
+            if (thisType == s_rowType)
             {
                 // Performance improvement
                 dataGridViewRow = new DataGridViewRow();
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms
 
         public virtual int GetPreferredHeight(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
         {
-            if (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode & invalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
+            if (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode & InvalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
                 throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int)autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }

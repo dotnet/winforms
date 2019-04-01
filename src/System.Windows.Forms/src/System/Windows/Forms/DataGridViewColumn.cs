@@ -70,7 +70,7 @@ namespace System.Windows.Forms
             this.Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
             this.MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
             this.name = string.Empty;
-            this.bandIsRow = false;
+            this._bandIsRow = false;
             this.displayIndex = -1;
             this.cellTemplate = cellTemplate;
             this.autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
