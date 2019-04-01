@@ -2,23 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms.VisualStyles;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.Text;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms.VisualStyles;
-    using System.Globalization;
-
-    /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow"]/*' />
     /// <devdoc>
-    ///    <para>Identifies a row in the dataGridView.</para>
+    /// Identifies a row in the dataGridView.
     /// </devdoc>
-    [
-    TypeConverterAttribute(typeof(DataGridViewRowConverter))    
-    ]
+    [TypeConverterAttribute(typeof(DataGridViewRowConverter))]
     public class DataGridViewRow : DataGridViewBand
     {
         private static Type rowType = typeof(DataGridViewRow);
@@ -31,89 +28,60 @@ namespace System.Windows.Forms
 
         private DataGridViewCellCollection rowCells;
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DataGridViewRow"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridViewRow'/> class.
         /// </devdoc>
         public DataGridViewRow() : base()
         {
-            this.bandIsRow = true;
-            this.MinimumThickness = defaultMinRowThickness;
-            this.Thickness = Control.DefaultFont.Height + 9;
+            bandIsRow = true;
+            MinimumThickness = defaultMinRowThickness;
+            Thickness = Control.DefaultFont.Height + 9;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.AccessibilityObject"]/*' />
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public AccessibleObject AccessibilityObject
         {
             get
             {
-                AccessibleObject result = (AccessibleObject) this.Properties.GetObject(PropRowAccessibilityObject);
-
+                AccessibleObject result = (AccessibleObject)Properties.GetObject(PropRowAccessibilityObject);
                 if (result == null)
                 {
-                    result = this.CreateAccessibilityInstance();
-                    this.Properties.SetObject(PropRowAccessibilityObject, result);
+                    result = CreateAccessibilityInstance();
+                    Properties.SetObject(PropRowAccessibilityObject, result);
                 }
 
                 return result;
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Cells"]/*' />
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Content)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         public DataGridViewCellCollection Cells
         {
-            get
-            {
-                if (this.rowCells == null)
-                {
-                    this.rowCells = CreateCellsInstance();
-                }
-                return this.rowCells;
-            }
+            get => rowCells ?? (rowCells = CreateCellsInstance());
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ContextMenuStrip"]/*' />
-        [
-            DefaultValue(null),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_RowContextMenuStripDescr))
-        ]
+        [DefaultValue(null)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_RowContextMenuStripDescr))]
         public override ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return base.ContextMenuStrip;
-            }
-            set
-            {
-                base.ContextMenuStrip = value;
-            }
+            get => base.ContextMenuStrip;
+            set => base.ContextMenuStrip = value;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DataBoundItem"]/*' />
-        [
-            Browsable(false),
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public object DataBoundItem
         {
             get
             {
-                if (this.DataGridView != null &&
-                    this.DataGridView.DataConnection != null &&
-                    this.Index > -1 &&
-                    this.Index != this.DataGridView.NewRowIndex)
+                if (DataGridView != null &&
+                    DataGridView.DataConnection != null &&
+                    Index > -1 &&
+                    Index != DataGridView.NewRowIndex)
                 {
-                    return this.DataGridView.DataConnection.CurrencyManager[this.Index];
+                    return DataGridView.DataConnection.CurrencyManager[Index];
                 }
                 else
                 {
@@ -122,347 +90,283 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DefaultCellStyle"]/*' />
-        [
-            Browsable(true),
-            NotifyParentProperty(true),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleDescr))
-        ]
+        [Browsable(true)]
+        [NotifyParentProperty(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_RowDefaultCellStyleDescr))]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
+            get => base.DefaultCellStyle;
             set
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "DefaultCellStyle"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(DefaultCellStyle)));
                 }
+
                 base.DefaultCellStyle = value;
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Displayed"]/*' />
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override bool Displayed
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Displayed"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(Displayed)));
                 }
-                return GetDisplayed(this.Index);
+
+                return GetDisplayed(Index);
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DividerHeight"]/*' />
-        [
-            DefaultValue(0),
-            NotifyParentProperty(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_RowDividerHeightDescr))
-        ]
+        [DefaultValue(0)]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_RowDividerHeightDescr))]
         public int DividerHeight
         {
-            get 
+            get => DividerThickness;
+            set
             {
-                return this.DividerThickness;
-            }
-            set 
-            {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "DividerHeight"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(DividerHeight)));
                 }
-                this.DividerThickness = value;
+
+                DividerThickness = value;
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ErrorText"]/*' />
-        [
-            DefaultValue(""),
-            NotifyParentProperty(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_RowErrorTextDescr))
-        ]
+        [DefaultValue("")]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_RowErrorTextDescr))]
         public string ErrorText
         {
             get
             {
-                Debug.Assert(this.Index >= -1);
-                return GetErrorText(this.Index);
+                Debug.Assert(Index >= -1);
+                return GetErrorText(Index);
             }
-            set
-            {
-                this.ErrorTextInternal = value;
-            }
+            set => ErrorTextInternal = value;
         }
 
         private string ErrorTextInternal
         {
             get
             {
-                object errorText = this.Properties.GetObject(PropRowErrorText);
-                return (errorText == null) ? string.Empty : (string)errorText;
+                object errorText = Properties.GetObject(PropRowErrorText);
+                return (string)errorText ?? string.Empty;
             }
             set
             {
-                string errorText = this.ErrorTextInternal;
-                if (!string.IsNullOrEmpty(value) || this.Properties.ContainsObject(PropRowErrorText))
+                string errorText = ErrorTextInternal;
+                if (!string.IsNullOrEmpty(value) || Properties.ContainsObject(PropRowErrorText))
                 {
-                    this.Properties.SetObject(PropRowErrorText, value);
+                    Properties.SetObject(PropRowErrorText, value);
                 }
-                if (this.DataGridView != null && !errorText.Equals(this.ErrorTextInternal))
+                if (DataGridView != null && !errorText.Equals(ErrorTextInternal))
                 {
-                    this.DataGridView.OnRowErrorTextChanged(this);
+                    DataGridView.OnRowErrorTextChanged(this);
                 }
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Frozen"]/*' />
-        [
-            Browsable(false),
-        ]
+        [Browsable(false)]
         public override bool Frozen
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Frozen"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(Frozen)));
                 }
-                return GetFrozen(this.Index);
+
+                return GetFrozen(Index);
             }
             set
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Frozen"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(Frozen)));
                 }
+
                 base.Frozen = value;
             }
         }
 
         internal bool HasErrorText
         {
-            get
-            {
-                return this.Properties.ContainsObject(PropRowErrorText) && this.Properties.GetObject(PropRowErrorText) != null;
-            }
+            get => Properties.ContainsObject(PropRowErrorText) && Properties.GetObject(PropRowErrorText) != null;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.HeaderCell"]/*' />
-        [
-            Browsable(false), 
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DataGridViewRowHeaderCell HeaderCell
         {
-            get
-            {
-                return (DataGridViewRowHeaderCell) base.HeaderCellCore;
-            }
-            set
-            {
-                base.HeaderCellCore = value;
-            }
+            get => (DataGridViewRowHeaderCell)base.HeaderCellCore;
+            set => base.HeaderCellCore = value;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Height"]/*' />
-        [
-            DefaultValue(22),
-            NotifyParentProperty(true),
-            SRCategory(nameof(SR.CatAppearance)),
-            SRDescription(nameof(SR.DataGridView_RowHeightDescr))
-        ]
+        [DefaultValue(22)]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [SRDescription(nameof(SR.DataGridView_RowHeightDescr))]
         public int Height
         {
-            get
-            {
-                return this.Thickness;
-            }
+            get => Thickness;
             set
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Height"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(Height)));
                 }
-                this.Thickness = value;
+
+                Thickness = value;
             }
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.InheritedStyle"]/*' />
         public override DataGridViewCellStyle InheritedStyle
         {
             get
             {
-                if (this.Index == -1)
+                if (Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "InheritedStyle"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(InheritedStyle)));
                 }
 
-                DataGridViewCellStyle inheritedRowStyle = new DataGridViewCellStyle();
-                BuildInheritedRowStyle(this.Index, inheritedRowStyle);
+                var inheritedRowStyle = new DataGridViewCellStyle();
+                BuildInheritedRowStyle(Index, inheritedRowStyle);
                 return inheritedRowStyle;
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.IsNewRow"]/*' />
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool IsNewRow
         {
-            get
-            {
-                return this.DataGridView != null && this.DataGridView.NewRowIndex == this.Index;
-            }
+            get => DataGridView != null && DataGridView.NewRowIndex == Index;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.MinimumHeight"]/*' />
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int MinimumHeight
         {
-            get
-            {
-                return this.MinimumThickness;
-            }
+            get => MinimumThickness;
             set
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "MinimumHeight"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(MinimumHeight)));
                 }
-                this.MinimumThickness = value;
+
+                MinimumThickness = value;
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ReadOnly"]/*' />
-        [
-            Browsable(true),
-            DefaultValue(false),
-            NotifyParentProperty(true),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_RowReadOnlyDescr))
-        ]
+        [Browsable(true)]
+        [DefaultValue(false)]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_RowReadOnlyDescr))]
         public override bool ReadOnly
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "ReadOnly"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(ReadOnly)));
                 }
-                return GetReadOnly(this.Index);
+
+                return GetReadOnly(Index);
             }
-            set
-            {
-                base.ReadOnly = value;
-            }
+            set => base.ReadOnly = value;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Resizable"]/*' />
-        [
-            NotifyParentProperty(true),
-            SRCategory(nameof(SR.CatBehavior)),
-            SRDescription(nameof(SR.DataGridView_RowResizableDescr))
-        ]
+        [NotifyParentProperty(true)]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [SRDescription(nameof(SR.DataGridView_RowResizableDescr))]
         public override DataGridViewTriState Resizable
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Resizable"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(Resizable)));
                 }
-                return GetResizable(this.Index);
+
+                return GetResizable(Index);
             }
-            set
-            {
-                base.Resizable = value;
-            }
+            set => base.Resizable = value;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Selected"]/*' />
         public override bool Selected
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Selected"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(Selected)));
                 }
-                return GetSelected(this.Index);
+
+                return GetSelected(Index);
             }
-            set
-            {
-                base.Selected = value;
-            }
+            set => base.Selected = value;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.State"]/*' />
         public override DataGridViewElementStates State
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "State"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(State)));
                 }
-                return GetState(this.Index);
+
+                return GetState(Index);
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Visible"]/*' />
-        [
-            Browsable(false)
-        ]
+        [Browsable(false)]
         public override bool Visible
         {
             get
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, "Visible"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertyGetOnSharedRow, nameof(Visible)));
                 }
-                return GetVisible(this.Index);
+
+                return GetVisible(Index);
             }
             set
             {
-                if (this.DataGridView != null && this.Index == -1)
+                if (DataGridView != null && Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, "Visible"));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(Visible)));
                 }
+
                 base.Visible = value;
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.AdjustRowHeaderBorderStyle"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual DataGridViewAdvancedBorderStyle AdjustRowHeaderBorderStyle(DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStyleInput,
             DataGridViewAdvancedBorderStyle dataGridViewAdvancedBorderStylePlaceholder,
             bool singleVerticalBorderAdded,
             bool singleHorizontalBorderAdded,
-            bool isFirstDisplayedRow, 
+            bool isFirstDisplayedRow,
             bool isLastVisibleRow)
         {
-            if (this.DataGridView != null && this.DataGridView.ApplyVisualStylesToHeaderCells)
+            if (DataGridView != null && DataGridView.ApplyVisualStylesToHeaderCells)
             {
                 switch (dataGridViewAdvancedBorderStyleInput.All)
                 {
                     case DataGridViewAdvancedCellBorderStyle.Inset:
-                        if (isFirstDisplayedRow && !this.DataGridView.ColumnHeadersVisible)
+                        if (isFirstDisplayedRow && !DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }
@@ -476,7 +380,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.Outset:
-                        if (isFirstDisplayedRow && !this.DataGridView.ColumnHeadersVisible)
+                        if (isFirstDisplayedRow && !DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -490,7 +394,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                        if (isFirstDisplayedRow && !this.DataGridView.ColumnHeadersVisible)
+                        if (isFirstDisplayedRow && !DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
@@ -498,7 +402,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView.RightToLeftInternal)
+                        if (DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -511,7 +415,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
-                        if (isFirstDisplayedRow && !this.DataGridView.ColumnHeadersVisible)
+                        if (isFirstDisplayedRow && !DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
@@ -519,7 +423,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView.RightToLeftInternal)
+                        if (DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
@@ -532,7 +436,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.InsetDouble:
-                        if (isFirstDisplayedRow && !this.DataGridView.ColumnHeadersVisible)
+                        if (isFirstDisplayedRow && !DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         }
@@ -540,7 +444,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
-                        if (this.DataGridView.RightToLeftInternal)
+                        if (DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }
@@ -553,7 +457,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.Single:
-                        if (isFirstDisplayedRow && !this.DataGridView.ColumnHeadersVisible)
+                        if (isFirstDisplayedRow && !DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.Single;
                         }
@@ -594,7 +498,7 @@ namespace System.Windows.Forms
                         break;
 
                     case DataGridViewAdvancedCellBorderStyle.OutsetPartial:
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (DataGridView != null && DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
@@ -606,7 +510,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = this.DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
                         else
                         {
@@ -616,7 +520,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.OutsetDouble:
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (DataGridView != null && DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
@@ -628,7 +532,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = this.DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         }
                         else
                         {
@@ -638,7 +542,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.InsetDouble:
-                        if (this.DataGridView != null && this.DataGridView.RightToLeftInternal)
+                        if (DataGridView != null && DataGridView.RightToLeftInternal)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
@@ -650,7 +554,7 @@ namespace System.Windows.Forms
                         }
                         if (isFirstDisplayedRow)
                         {
-                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = this.DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
+                            dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridView.ColumnHeadersVisible ? DataGridViewAdvancedCellBorderStyle.Inset : DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         }
                         else
                         {
@@ -660,7 +564,7 @@ namespace System.Windows.Forms
                         return dataGridViewAdvancedBorderStylePlaceholder;
 
                     case DataGridViewAdvancedCellBorderStyle.Single:
-                        if (!isFirstDisplayedRow || this.DataGridView.ColumnHeadersVisible)
+                        if (!isFirstDisplayedRow || DataGridView.ColumnHeadersVisible)
                         {
                             dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.None;
@@ -673,28 +577,28 @@ namespace System.Windows.Forms
             }
             return dataGridViewAdvancedBorderStyleInput;
         }
-        
+
         private void BuildInheritedRowHeaderCellStyle(DataGridViewCellStyle inheritedCellStyle)
         {
             Debug.Assert(inheritedCellStyle != null);
-            
+
             DataGridViewCellStyle cellStyle = null;
-            if (this.HeaderCell.HasStyle)
+            if (HeaderCell.HasStyle)
             {
-                cellStyle = this.HeaderCell.Style;
+                cellStyle = HeaderCell.Style;
                 Debug.Assert(cellStyle != null);
             }
 
-            DataGridViewCellStyle rowHeadersStyle = this.DataGridView.RowHeadersDefaultCellStyle;
+            DataGridViewCellStyle rowHeadersStyle = DataGridView.RowHeadersDefaultCellStyle;
             Debug.Assert(rowHeadersStyle != null);
 
-            DataGridViewCellStyle dataGridViewStyle = this.DataGridView.DefaultCellStyle;
+            DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
             Debug.Assert(dataGridViewStyle != null);
 
             if (cellStyle != null && !cellStyle.BackColor.IsEmpty)
             {
                 inheritedCellStyle.BackColor = cellStyle.BackColor;
-            } 
+            }
             else if (!rowHeadersStyle.BackColor.IsEmpty)
             {
                 inheritedCellStyle.BackColor = rowHeadersStyle.BackColor;
@@ -707,7 +611,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && !cellStyle.ForeColor.IsEmpty)
             {
                 inheritedCellStyle.ForeColor = cellStyle.ForeColor;
-            } 
+            }
             else if (!rowHeadersStyle.ForeColor.IsEmpty)
             {
                 inheritedCellStyle.ForeColor = rowHeadersStyle.ForeColor;
@@ -720,7 +624,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && !cellStyle.SelectionBackColor.IsEmpty)
             {
                 inheritedCellStyle.SelectionBackColor = cellStyle.SelectionBackColor;
-            } 
+            }
             else if (!rowHeadersStyle.SelectionBackColor.IsEmpty)
             {
                 inheritedCellStyle.SelectionBackColor = rowHeadersStyle.SelectionBackColor;
@@ -733,7 +637,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && !cellStyle.SelectionForeColor.IsEmpty)
             {
                 inheritedCellStyle.SelectionForeColor = cellStyle.SelectionForeColor;
-            } 
+            }
             else if (!rowHeadersStyle.SelectionForeColor.IsEmpty)
             {
                 inheritedCellStyle.SelectionForeColor = rowHeadersStyle.SelectionForeColor;
@@ -746,7 +650,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.Font != null)
             {
                 inheritedCellStyle.Font = cellStyle.Font;
-            } 
+            }
             else if (rowHeadersStyle.Font != null)
             {
                 inheritedCellStyle.Font = rowHeadersStyle.Font;
@@ -785,7 +689,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.Format.Length != 0)
             {
                 inheritedCellStyle.Format = cellStyle.Format;
-            } 
+            }
             else if (rowHeadersStyle.Format.Length != 0)
             {
                 inheritedCellStyle.Format = rowHeadersStyle.Format;
@@ -811,7 +715,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyle.AlignmentInternal = cellStyle.Alignment;
-            } 
+            }
             else if (rowHeadersStyle != null && rowHeadersStyle.Alignment != DataGridViewContentAlignment.NotSet)
             {
                 inheritedCellStyle.AlignmentInternal = rowHeadersStyle.Alignment;
@@ -825,7 +729,7 @@ namespace System.Windows.Forms
             if (cellStyle != null && cellStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyle.WrapModeInternal = cellStyle.WrapMode;
-            } 
+            }
             else if (rowHeadersStyle != null && rowHeadersStyle.WrapMode != DataGridViewTriState.NotSet)
             {
                 inheritedCellStyle.WrapModeInternal = rowHeadersStyle.WrapMode;
@@ -867,22 +771,22 @@ namespace System.Windows.Forms
         {
             Debug.Assert(inheritedRowStyle != null);
             Debug.Assert(rowIndex >= 0);
-            Debug.Assert(this.DataGridView != null);
+            Debug.Assert(DataGridView != null);
 
             DataGridViewCellStyle rowStyle = null;
-            if (this.HasDefaultCellStyle)
+            if (HasDefaultCellStyle)
             {
-                rowStyle = this.DefaultCellStyle;
+                rowStyle = DefaultCellStyle;
                 Debug.Assert(rowStyle != null);
             }
 
-            DataGridViewCellStyle dataGridViewStyle = this.DataGridView.DefaultCellStyle;
+            DataGridViewCellStyle dataGridViewStyle = DataGridView.DefaultCellStyle;
             Debug.Assert(dataGridViewStyle != null);
 
-            DataGridViewCellStyle rowsDefaultCellStyle = this.DataGridView.RowsDefaultCellStyle;
+            DataGridViewCellStyle rowsDefaultCellStyle = DataGridView.RowsDefaultCellStyle;
             Debug.Assert(rowsDefaultCellStyle != null);
 
-            DataGridViewCellStyle alternatingRowsDefaultCellStyle = this.DataGridView.AlternatingRowsDefaultCellStyle;
+            DataGridViewCellStyle alternatingRowsDefaultCellStyle = DataGridView.AlternatingRowsDefaultCellStyle;
             Debug.Assert(alternatingRowsDefaultCellStyle != null);
 
             if (rowStyle != null && !rowStyle.BackColor.IsEmpty)
@@ -1112,36 +1016,35 @@ namespace System.Windows.Forms
                 inheritedRowStyle.PaddingInternal = dataGridViewStyle.Padding;
             }
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Clone"]/*' />
         public override object Clone()
         {
             DataGridViewRow dataGridViewRow;
-            Type thisType = this.GetType();
+            Type thisType = GetType();
 
-            if (thisType == rowType) //performance improvement
+            if (thisType == rowType)
             {
+                // Performance improvement
                 dataGridViewRow = new DataGridViewRow();
             }
             else
             {
-                // 
-
-                dataGridViewRow = (DataGridViewRow) System.Activator.CreateInstance(thisType);
+                dataGridViewRow = (DataGridViewRow)Activator.CreateInstance(thisType);
             }
+
             if (dataGridViewRow != null)
             {
                 base.CloneInternal(dataGridViewRow);
-                if (this.HasErrorText)
+                if (HasErrorText)
                 {
-                    dataGridViewRow.ErrorText = this.ErrorTextInternal;
+                    dataGridViewRow.ErrorText = ErrorTextInternal;
                 }
-                if (this.HasHeaderCell)
+                if (HasHeaderCell)
                 {
-                    dataGridViewRow.HeaderCell = (DataGridViewRowHeaderCell) this.HeaderCell.Clone();
+                    dataGridViewRow.HeaderCell = (DataGridViewRowHeaderCell)HeaderCell.Clone();
                 }
                 dataGridViewRow.CloneCells(this);
             }
+
             return dataGridViewRow;
         }
 
@@ -1151,46 +1054,31 @@ namespace System.Windows.Forms
             if (cellsCount > 0)
             {
                 DataGridViewCell[] cells = new DataGridViewCell[cellsCount];
-                for (int i = 0; i < cellsCount; i ++)
+                for (int i = 0; i < cellsCount; i++)
                 {
                     DataGridViewCell dataGridViewCell = rowTemplate.Cells[i];
-                    DataGridViewCell dgvcNew = (DataGridViewCell) dataGridViewCell.Clone();
+                    DataGridViewCell dgvcNew = (DataGridViewCell)dataGridViewCell.Clone();
                     cells[i] = dgvcNew;
                 }
-                this.Cells.AddRange(cells);
+                Cells.AddRange(cells);
             }
-
-            // 
-
-
-            /* object[] args = new object[1];
-            foreach (DataGridViewCell tc in bandTemplate.Cells)
-            {
-                args[0] = tc;
-   
-                DataGridViewCell dgvcNew = (DataGridViewCell) System.Activator.CreateInstance(tc.GetType(), args);
-                Cells.Add(dgvcNew);
-            } */
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateAccessibilityInstance"]/*' />
         protected virtual AccessibleObject CreateAccessibilityInstance()
         {
             return new DataGridViewRowAccessibleObject(this);
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateCells1"]/*' />
         public void CreateCells(DataGridView dataGridView)
         {
             if (dataGridView == null)
             {
                 throw new ArgumentNullException(nameof(dataGridView));
             }
-            if (this.DataGridView != null)
+            if (DataGridView != null)
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_RowAlreadyBelongsToDataGridView));
             }
-            DataGridViewCellCollection cells = this.Cells;
+
+            DataGridViewCellCollection cells = Cells;
             // Clearing up the potential existing cells. We fill up the cells collection from scratch.
             cells.Clear();
             DataGridViewColumnCollection dataGridViewColumns = dataGridView.Columns;
@@ -1198,14 +1086,13 @@ namespace System.Windows.Forms
             {
                 if (dataGridViewColumn.CellTemplate == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_AColumnHasNoCellTemplate));
+                    throw new InvalidOperationException(SR.DataGridView_AColumnHasNoCellTemplate);
                 }
+
                 DataGridViewCell dgvcNew = (DataGridViewCell)dataGridViewColumn.CellTemplate.Clone();
                 cells.Add(dgvcNew);
             }
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateCells2"]/*' />
         public void CreateCells(DataGridView dataGridView, params object[] values)
         {
             if (values == null)
@@ -1213,22 +1100,16 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(values));
             }
 
-            /* Intentionally not being strict about this. We just take what we get.
-            if (dataGridView.Columns.Count != values.Length)
-            {
-                throw new ArgumentException(string.Format(SR.DataGridView_WrongValueCount), "values");
-            }*/
-
+            // Intentionally not being strict about this. We just take what we get.
             CreateCells(dataGridView);
 
-            Debug.Assert(this.Cells.Count == dataGridView.Columns.Count);
+            Debug.Assert(Cells.Count == dataGridView.Columns.Count);
             SetValuesInternal(values);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.CreateCellsInstance"]/*' />
         /// <devdoc>
-        ///     Constructs the new instance of the Cells collection objects. Subclasses
-        ///     should not call base.CreateCellsInstance.
+        /// Constructs the new instance of the Cells collection objects. Subclasses
+        /// should not call base.CreateCellsInstance.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual DataGridViewCellCollection CreateCellsInstance()
@@ -1238,15 +1119,15 @@ namespace System.Windows.Forms
 
         internal void DetachFromDataGridView()
         {
-            if (this.DataGridView != null)
+            if (DataGridView != null)
             {
-                this.DataGridViewInternal = null;
-                this.IndexInternal = -1;
-                if (this.HasHeaderCell)
+                DataGridViewInternal = null;
+                IndexInternal = -1;
+                if (HasHeaderCell)
                 {
-                  this.HeaderCell.DataGridViewInternal = null;
+                    HeaderCell.DataGridViewInternal = null;
                 }
-                foreach (DataGridViewCell dataGridViewCell in this.Cells)
+                foreach (DataGridViewCell dataGridViewCell in Cells)
                 {
                     dataGridViewCell.DataGridViewInternal = null;
                     if (dataGridViewCell.Selected)
@@ -1254,18 +1135,18 @@ namespace System.Windows.Forms
                         dataGridViewCell.SelectedInternal = false;
                     }
                 }
-                if (this.Selected)
+                if (Selected)
                 {
-                    this.SelectedInternal = false;
+                    SelectedInternal = false;
                 }
             }
-            Debug.Assert(this.Index == -1);
-            Debug.Assert(!this.Selected);
+
+            Debug.Assert(Index == -1);
+            Debug.Assert(!Selected);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.DrawFocus"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected internal virtual void DrawFocus(Graphics graphics, 
+        protected internal virtual void DrawFocus(Graphics graphics,
             Rectangle clipBounds,
             Rectangle bounds,
             int rowIndex,
@@ -1273,9 +1154,9 @@ namespace System.Windows.Forms
             DataGridViewCellStyle cellStyle,
             bool cellsPaintSelectionBackground)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
             if (graphics == null)
             {
@@ -1285,6 +1166,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(cellStyle));
             }
+
             Color backColor;
             if (cellsPaintSelectionBackground && (rowState & DataGridViewElementStates.Selected) != 0)
             {
@@ -1297,25 +1179,26 @@ namespace System.Windows.Forms
             ControlPaint.DrawFocusRectangle(graphics, bounds, Color.Empty, backColor);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetContextMenuStrip"]/*' />
         public ContextMenuStrip GetContextMenuStrip(int rowIndex)
         {
-            ContextMenuStrip contextMenuStrip = this.ContextMenuStripInternal;
-            if (this.DataGridView != null)
+            ContextMenuStrip contextMenuStrip = ContextMenuStripInternal;
+            if (DataGridView != null)
             {
                 if (rowIndex == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedRow));
+                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedRow);
                 }
-                if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
+                if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
-                if (this.DataGridView.VirtualMode || this.DataGridView.DataSource != null)
+
+                if (DataGridView.VirtualMode || DataGridView.DataSource != null)
                 {
-                    contextMenuStrip = this.DataGridView.OnRowContextMenuStripNeeded(rowIndex, contextMenuStrip);
+                    contextMenuStrip = DataGridView.OnRowContextMenuStripNeeded(rowIndex, contextMenuStrip);
                 }
             }
+
             return contextMenuStrip;
         }
 
@@ -1323,35 +1206,36 @@ namespace System.Windows.Forms
         {
             // You would think that only attached and visible rows can be displayed.
             // Actually this assertion is wrong when the row is being deleted.
-            // Debug.Assert(!displayed || (this.DataGridView != null && this.DataGridView.Visible && GetVisible(rowIndex)));
+            // Debug.Assert(!displayed || (DataGridView != null && DataGridView.Visible && GetVisible(rowIndex)));
             return (GetState(rowIndex) & DataGridViewElementStates.Displayed) != 0;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetErrorText"]/*' />
         public string GetErrorText(int rowIndex)
         {
-            string errorText = this.ErrorTextInternal;
-            if (this.DataGridView != null)
+            string errorText = ErrorTextInternal;
+            if (DataGridView != null)
             {
                 if (rowIndex == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedRow));
+                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedRow);
                 }
-                if (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)
+                if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 if (string.IsNullOrEmpty(errorText) &&
-                    this.DataGridView.DataSource != null &&
-                    rowIndex != this.DataGridView.NewRowIndex)
+                    DataGridView.DataSource != null &&
+                    rowIndex != DataGridView.NewRowIndex)
                 {
-                    errorText = this.DataGridView.DataConnection.GetError(rowIndex);
+                    errorText = DataGridView.DataConnection.GetError(rowIndex);
                 }
-                if (this.DataGridView.DataSource != null || this.DataGridView.VirtualMode)
+                if (DataGridView.DataSource != null || DataGridView.VirtualMode)
                 {
-                    errorText = this.DataGridView.OnRowErrorTextNeeded(rowIndex, errorText);
+                    errorText = DataGridView.OnRowErrorTextNeeded(rowIndex, errorText);
                 }
             }
+
             return errorText;
         }
 
@@ -1363,61 +1247,57 @@ namespace System.Windows.Forms
         internal int GetHeight(int rowIndex)
         {
             Debug.Assert(rowIndex >= -1);
-            int height, minimumHeight;
-            GetHeightInfo(rowIndex, out height, out minimumHeight);
+            GetHeightInfo(rowIndex, out int height, out int minimumHeight);
             return height;
         }
 
         internal int GetMinimumHeight(int rowIndex)
         {
             Debug.Assert(rowIndex >= -1);
-            int height, minimumHeight;
-            GetHeightInfo(rowIndex, out height, out minimumHeight);
+            GetHeightInfo(rowIndex, out int height, out int minimumHeight);
             return minimumHeight;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetPreferredHeight"]/*' />
         public virtual int GetPreferredHeight(int rowIndex, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
         {
-            // not using IsEnumValid here because this is a flags enum, using mask instead.
-            if (((DataGridViewAutoSizeRowCriteriaInternal) autoSizeRowMode & invalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
+            if (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode & invalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
-                throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int) autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
+                throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int)autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }
-            if (!(this.DataGridView == null || (rowIndex >= 0 && rowIndex < this.DataGridView.Rows.Count)))
+            if (!(DataGridView == null || (rowIndex >= 0 && rowIndex < DataGridView.Rows.Count)))
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
                 return -1;
             }
 
             int preferredRowThickness = 0, preferredCellThickness;
             // take into account the preferred height of the header cell if displayed and cared about
-            if (this.DataGridView.RowHeadersVisible && 
-                (((DataGridViewAutoSizeRowCriteriaInternal) autoSizeRowMode) & DataGridViewAutoSizeRowCriteriaInternal.Header) != 0)
+            if (DataGridView.RowHeadersVisible &&
+                (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode) & DataGridViewAutoSizeRowCriteriaInternal.Header) != 0)
             {
                 if (fixedWidth ||
-                    this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
-                    this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
+                    DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
+                    DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
                 {
-                    preferredRowThickness = Math.Max(preferredRowThickness, this.HeaderCell.GetPreferredHeight(rowIndex, this.DataGridView.RowHeadersWidth));
+                    preferredRowThickness = Math.Max(preferredRowThickness, HeaderCell.GetPreferredHeight(rowIndex, DataGridView.RowHeadersWidth));
                 }
                 else
                 {
-                    preferredRowThickness = Math.Max(preferredRowThickness, this.HeaderCell.GetPreferredSize(rowIndex).Height);
+                    preferredRowThickness = Math.Max(preferredRowThickness, HeaderCell.GetPreferredSize(rowIndex).Height);
                 }
             }
-            if ((((DataGridViewAutoSizeRowCriteriaInternal) autoSizeRowMode) & DataGridViewAutoSizeRowCriteriaInternal.AllColumns) != 0)
+            if ((((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode) & DataGridViewAutoSizeRowCriteriaInternal.AllColumns) != 0)
             {
-                foreach (DataGridViewCell dataGridViewCell in this.Cells)
+                foreach (DataGridViewCell dataGridViewCell in Cells)
                 {
-                    DataGridViewColumn dataGridViewColumn = this.DataGridView.Columns[dataGridViewCell.ColumnIndex];
+                    DataGridViewColumn dataGridViewColumn = DataGridView.Columns[dataGridViewCell.ColumnIndex];
                     if (dataGridViewColumn.Visible)
                     {
                         if (fixedWidth ||
-                            ((((DataGridViewAutoSizeColumnCriteriaInternal) dataGridViewColumn.InheritedAutoSizeMode) & (DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows)) == 0))
+                            ((((DataGridViewAutoSizeColumnCriteriaInternal)dataGridViewColumn.InheritedAutoSizeMode) & (DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows)) == 0))
                         {
                             preferredCellThickness = dataGridViewCell.GetPreferredHeight(rowIndex, dataGridViewColumn.Width);
                         }
@@ -1432,13 +1312,14 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return preferredRowThickness;
         }
 
         internal bool GetReadOnly(int rowIndex)
         {
-            return (this.GetState(rowIndex) & DataGridViewElementStates.ReadOnly) != 0 ||
-                   (this.DataGridView != null && this.DataGridView.ReadOnly);
+            return (GetState(rowIndex) & DataGridViewElementStates.ReadOnly) != 0 ||
+                   (DataGridView != null && DataGridView.ReadOnly);
         }
 
         internal DataGridViewTriState GetResizable(int rowIndex)
@@ -1447,9 +1328,10 @@ namespace System.Windows.Forms
             {
                 return ((GetState(rowIndex) & DataGridViewElementStates.Resizable) != 0) ? DataGridViewTriState.True : DataGridViewTriState.False;
             }
-            if (this.DataGridView != null)
+
+            if (DataGridView != null)
             {
-                return this.DataGridView.AllowUserToResizeRows ? DataGridViewTriState.True : DataGridViewTriState.False;
+                return DataGridView.AllowUserToResizeRows ? DataGridViewTriState.True : DataGridViewTriState.False;
             }
             else
             {
@@ -1462,27 +1344,24 @@ namespace System.Windows.Forms
             return (GetState(rowIndex) & DataGridViewElementStates.Selected) != 0;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.GetState"]/*' />
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual DataGridViewElementStates GetState(int rowIndex)
         {
-            if (!(this.DataGridView == null || (rowIndex >= 0 && rowIndex < this.DataGridView.Rows.Count)))
+            if (!(DataGridView == null || (rowIndex >= 0 && rowIndex < DataGridView.Rows.Count)))
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
-            if (this.DataGridView == null || this.DataGridView.Rows.SharedRow(rowIndex).Index != -1)
+            if (DataGridView == null || DataGridView.Rows.SharedRow(rowIndex).Index != -1)
             {
-                if (rowIndex != this.Index)
+                if (rowIndex != Index)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex.ToString(CultureInfo.CurrentCulture)));
                 }
                 return base.State;
             }
-            else 
+            else
             {
-                return this.DataGridView.Rows.GetRowState(rowIndex);
+                return DataGridView.Rows.GetRowState(rowIndex);
             }
         }
 
@@ -1493,19 +1372,17 @@ namespace System.Windows.Forms
 
         internal void OnSharedStateChanged(int sharedRowIndex, DataGridViewElementStates elementState)
         {
-            Debug.Assert(this.DataGridView != null);
-            this.DataGridView.Rows.InvalidateCachedRowCount(elementState);
-            this.DataGridView.Rows.InvalidateCachedRowsHeight(elementState);
-            this.DataGridView.OnDataGridViewElementStateChanged(this, sharedRowIndex, elementState);
+            Debug.Assert(DataGridView != null);
+            DataGridView.Rows.InvalidateCachedRowCount(elementState);
+            DataGridView.Rows.InvalidateCachedRowsHeight(elementState);
+            DataGridView.OnDataGridViewElementStateChanged(this, sharedRowIndex, elementState);
         }
 
         internal void OnSharedStateChanging(int sharedRowIndex, DataGridViewElementStates elementState)
         {
-            Debug.Assert(this.DataGridView != null);
-            this.DataGridView.OnDataGridViewElementStateChanging(this, sharedRowIndex, elementState);
+            Debug.Assert(DataGridView != null);
+            DataGridView.OnDataGridViewElementStateChanging(this, sharedRowIndex, elementState);
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.Paint"]/*' />
         protected internal virtual void Paint(Graphics graphics,
             Rectangle clipBounds,
             Rectangle rowBounds,
@@ -1514,23 +1391,23 @@ namespace System.Windows.Forms
             bool isFirstDisplayedRow,
             bool isLastVisibleRow)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
             if (graphics == null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            DataGridView dataGridView = this.DataGridView;
+            DataGridView dataGridView = DataGridView;
             Rectangle updatedClipBounds = clipBounds;
             DataGridViewRow sharedRow = dataGridView.Rows.SharedRow(rowIndex);
             DataGridViewCellStyle inheritedRowStyle = new DataGridViewCellStyle();
             BuildInheritedRowStyle(rowIndex, inheritedRowStyle);
             DataGridViewRowPrePaintEventArgs dgvrprepe = dataGridView.RowPrePaintEventArgs;
-            dgvrprepe.SetProperties(graphics, 
-                                    clipBounds, 
+            dgvrprepe.SetProperties(graphics,
+                                    clipBounds,
                                     rowBounds,
                                     rowIndex,
                                     rowState,
@@ -1543,16 +1420,17 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             DataGridViewPaintParts paintParts = dgvrprepe.PaintParts;
             updatedClipBounds = dgvrprepe.ClipBounds;
 
             // first paint the potential row header
-            PaintHeader(graphics, 
-                        updatedClipBounds, 
-                        rowBounds, 
-                        rowIndex, 
-                        rowState, 
-                        isFirstDisplayedRow, 
+            PaintHeader(graphics,
+                        updatedClipBounds,
+                        rowBounds,
+                        rowIndex,
+                        rowState,
+                        isFirstDisplayedRow,
                         isLastVisibleRow,
                         paintParts);
 
@@ -1570,7 +1448,7 @@ namespace System.Windows.Forms
             BuildInheritedRowStyle(rowIndex, inheritedRowStyle);
             DataGridViewRowPostPaintEventArgs dgvrpostpe = dataGridView.RowPostPaintEventArgs;
             dgvrpostpe.SetProperties(graphics,
-                                     updatedClipBounds, 
+                                     updatedClipBounds,
                                      rowBounds,
                                      rowIndex,
                                      rowState,
@@ -1581,10 +1459,7 @@ namespace System.Windows.Forms
             dataGridView.OnRowPostPaint(dgvrpostpe);
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.PaintCells2"]/*' />
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void PaintCells(Graphics graphics,
             Rectangle clipBounds,
             Rectangle rowBounds,
@@ -1594,20 +1469,20 @@ namespace System.Windows.Forms
             bool isLastVisibleRow,
             DataGridViewPaintParts paintParts)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
             if (graphics == null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
-            if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
+            if (paintParts < DataGridViewPaintParts.None || paintParts > DataGridViewPaintParts.All)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, "paintParts"));
             }
 
-            DataGridView dataGridView = this.DataGridView;
+            DataGridView dataGridView = DataGridView;
             Rectangle cellBounds = rowBounds;
             int cx = (dataGridView.RowHeadersVisible ? dataGridView.RowHeadersWidth : 0);
             bool isFirstDisplayedColumn = true;
@@ -1621,7 +1496,7 @@ namespace System.Windows.Forms
             DataGridViewColumn dataGridViewColumn = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             while (dataGridViewColumn != null)
             {
-                cell = this.Cells[dataGridViewColumn.Index];
+                cell = Cells[dataGridViewColumn.Index];
                 cellBounds.Width = dataGridViewColumn.Thickness;
                 if (dataGridView.SingleVerticalBorderAdded && isFirstDisplayedColumn)
                 {
@@ -1644,7 +1519,7 @@ namespace System.Windows.Forms
                 if (clipBounds.IntersectsWith(cellBounds))
                 {
                     cellState = cell.CellStateFromColumnRowStates(rowState);
-                    if (this.Index != -1)
+                    if (Index != -1)
                     {
                         cellState |= cell.State;
                     }
@@ -1657,12 +1532,12 @@ namespace System.Windows.Forms
                         isFirstDisplayedColumn,
                         isFirstDisplayedRow);
 
-                    cell.PaintWork(graphics, 
+                    cell.PaintWork(graphics,
                                     clipBounds,
-                                    cellBounds, 
-                                    rowIndex, 
-                                    cellState, 
-                                    inheritedCellStyle, 
+                                    cellBounds,
+                                    rowIndex,
+                                    cellState,
+                                    inheritedCellStyle,
                                     dgvabsEffective,
                                     paintParts);
                 }
@@ -1708,7 +1583,7 @@ namespace System.Windows.Forms
 
                     while (dataGridViewColumn != null)
                     {
-                        cell = this.Cells[dataGridViewColumn.Index];
+                        cell = Cells[dataGridViewColumn.Index];
                         cellBounds.Width = dataGridViewColumn.Thickness;
                         if (dataGridView.SingleVerticalBorderAdded && isFirstDisplayedColumn)
                         {
@@ -1731,7 +1606,7 @@ namespace System.Windows.Forms
                         if (clipBounds.IntersectsWith(cellBounds))
                         {
                             cellState = cell.CellStateFromColumnRowStates(rowState);
-                            if (this.Index != -1)
+                            if (Index != -1)
                             {
                                 cellState |= cell.State;
                             }
@@ -1744,12 +1619,12 @@ namespace System.Windows.Forms
                                 isFirstDisplayedColumn,
                                 isFirstDisplayedRow);
 
-                            cell.PaintWork(graphics, 
+                            cell.PaintWork(graphics,
                                            clipBounds,
-                                           cellBounds, 
-                                           rowIndex, 
-                                           cellState, 
-                                           inheritedCellStyle, 
+                                           cellBounds,
+                                           rowIndex,
+                                           cellState,
+                                           inheritedCellStyle,
                                            dgvabsEffective,
                                            paintParts);
                         }
@@ -1773,11 +1648,8 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.PaintHeader"]/*' />
-        [
-            EditorBrowsable(EditorBrowsableState.Advanced)
-        ]
-        protected internal virtual void PaintHeader(Graphics graphics, 
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        protected internal virtual void PaintHeader(Graphics graphics,
             Rectangle clipBounds,
             Rectangle rowBounds,
             int rowIndex,
@@ -1786,20 +1658,20 @@ namespace System.Windows.Forms
             bool isLastVisibleRow,
             DataGridViewPaintParts paintParts)
         {
-            if (this.DataGridView == null)
+            if (DataGridView == null)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_RowDoesNotYetBelongToDataGridView));
+                throw new InvalidOperationException(SR.DataGridView_RowDoesNotYetBelongToDataGridView);
             }
             if (graphics == null)
             {
                 throw new ArgumentNullException(nameof(graphics));
             }
-            if ((int) paintParts < (int) DataGridViewPaintParts.None || (int) paintParts > (int) DataGridViewPaintParts.All)
+            if (paintParts < DataGridViewPaintParts.None || paintParts > DataGridViewPaintParts.All)
             {
                 throw new InvalidEnumArgumentException(nameof(paintParts), (int)paintParts, typeof(DataGridViewPaintParts));
             }
 
-            DataGridView dataGridView = this.DataGridView;
+            DataGridView dataGridView = DataGridView;
             if (dataGridView.RowHeadersVisible)
             {
                 Rectangle cellBounds = rowBounds;
@@ -1820,12 +1692,12 @@ namespace System.Windows.Forms
                         dataGridView.SingleHorizontalBorderAdded,
                         isFirstDisplayedRow,
                         isLastVisibleRow);
-                    this.HeaderCell.PaintWork(graphics,
+                    HeaderCell.PaintWork(graphics,
                         clipBounds,
-                        cellBounds, 
-                        rowIndex, 
-                        rowState, 
-                        inheritedCellStyle, 
+                        cellBounds,
+                        rowIndex,
+                        rowState,
+                        inheritedCellStyle,
                         dgvabsEffective,
                         paintParts);
                 }
@@ -1834,26 +1706,24 @@ namespace System.Windows.Forms
 
         internal void SetReadOnlyCellCore(DataGridViewCell dataGridViewCell, bool readOnly)
         {
-            Debug.Assert(this.Index == -1);
-            if (this.ReadOnly && !readOnly)
+            Debug.Assert(Index == -1);
+            if (ReadOnly && !readOnly)
             {
                 // All cells need to switch to ReadOnly except for dataGridViewCell which needs to be !ReadOnly,
                 // plus the row become !ReadOnly.
-                foreach (DataGridViewCell dataGridViewCellTmp in this.Cells)
+                foreach (DataGridViewCell dataGridViewCellTmp in Cells)
                 {
                     dataGridViewCellTmp.ReadOnlyInternal = true;
                 }
                 dataGridViewCell.ReadOnlyInternal = false;
-                this.ReadOnly = false;
+                ReadOnly = false;
             }
-            else if (!this.ReadOnly && readOnly)
+            else if (!ReadOnly && readOnly)
             {
                 // dataGridViewCell alone becomes ReadOnly
                 dataGridViewCell.ReadOnlyInternal = true;
             }
         }
-
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.SetValues"]/*' />
         public bool SetValues(params object[] values)
         {
             if (values == null)
@@ -1861,15 +1731,15 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(values));
             }
 
-            if (this.DataGridView != null)
+            if (DataGridView != null)
             {
-                if (this.DataGridView.VirtualMode)
+                if (DataGridView.VirtualMode)
                 {
                     throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationInVirtualMode));
                 }
-                if (this.Index == -1)
+                if (Index == -1)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedRow));
+                    throw new InvalidOperationException(SR.DataGridView_InvalidOperationOnSharedRow);
                 }
             }
 
@@ -1880,173 +1750,146 @@ namespace System.Windows.Forms
         {
             Debug.Assert(values != null);
             bool setResult = true;
-            DataGridViewCellCollection cells = this.Cells;
+            DataGridViewCellCollection cells = Cells;
             int cellCount = cells.Count;
-            for (int columnIndex=0; columnIndex < cells.Count; columnIndex++)
+            for (int columnIndex = 0; columnIndex < cells.Count; columnIndex++)
             {
                 if (columnIndex == values.Length)
                 {
                     break;
                 }
-                if (!cells[columnIndex].SetValueInternal(this.Index, values[columnIndex]))
+                if (!cells[columnIndex].SetValueInternal(Index, values[columnIndex]))
                 {
                     setResult = false;
                 }
             }
+
             return setResult && values.Length <= cellCount;
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRow.ToString"]/*' />
-        /// <devdoc>
-        ///    <para></para>
-        /// </devdoc>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(36);
+            var sb = new StringBuilder(36);
             sb.Append("DataGridViewRow { Index=");
-            sb.Append(this.Index.ToString(CultureInfo.CurrentCulture));
+            sb.Append(Index.ToString(CultureInfo.CurrentCulture));
             sb.Append(" }");
             return sb.ToString();
         }
 
-        /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject"]/*' />
-        [
-            System.Runtime.InteropServices.ComVisible(true)
-        ]
+        [ComVisible(true)]
         protected class DataGridViewRowAccessibleObject : AccessibleObject
         {
-            private int[] runtimeId; 
+            private int[] runtimeId;
             private DataGridViewRow owner;
             private DataGridViewSelectedRowCellsAccessibleObject selectedCellsAccessibilityObject = null;
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.DataGridViewRowAccessibleObject1"]/*' />
             public DataGridViewRowAccessibleObject()
             {
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.DataGridViewRowAccessibleObject2"]/*' />
             public DataGridViewRowAccessibleObject(DataGridViewRow owner)
             {
                 this.owner = owner;
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Bounds"]/*' />
             public override Rectangle Bounds
             {
-                get {
+                get
+                {
                     Rectangle rowRect;
-                    if (this.owner == null)
+                    if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    if (this.owner.Index < this.owner.DataGridView.FirstDisplayedScrollingRowIndex)
+
+                    if (owner.Index < owner.DataGridView.FirstDisplayedScrollingRowIndex)
                     {
                         // the row is scrolled off the DataGridView
                         // get the Accessible bounds for the following visible row
-                        int visibleRowIndex = this.owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, this.owner.Index);
-                        rowRect = this.ParentPrivate.GetChild(visibleRowIndex
-                                                              + 1                      // + 1 because the first acc obj in the DataGridView is the top row header
-                                                              + 1).Bounds;             // + 1 because we want to get the bounds for the next visible row
+                        int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
+                        rowRect = ParentPrivate.GetChild(visibleRowIndex
+                                                         + 1                      // + 1 because the first acc obj in the DataGridView is the top row header
+                                                         + 1).Bounds;             // + 1 because we want to get the bounds for the next visible row
 
-                        rowRect.Y -= this.owner.Height;
-                        rowRect.Height = this.owner.Height;
+                        rowRect.Y -= owner.Height;
+                        rowRect.Height = owner.Height;
 
                     }
-                    else if (this.owner.Index >= this.owner.DataGridView.FirstDisplayedScrollingRowIndex &&
-                        this.owner.Index < this.owner.DataGridView.FirstDisplayedScrollingRowIndex + this.owner.DataGridView.DisplayedRowCount(true /*includePartialRow*/))
+                    else if (owner.Index >= owner.DataGridView.FirstDisplayedScrollingRowIndex &&
+                        owner.Index < owner.DataGridView.FirstDisplayedScrollingRowIndex + owner.DataGridView.DisplayedRowCount(true /*includePartialRow*/))
                     {
-                        rowRect = this.owner.DataGridView.GetRowDisplayRectangle(this.owner.Index, false /*cutOverflow*/);
-                        rowRect = this.owner.DataGridView.RectangleToScreen(rowRect);
+                        rowRect = owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/);
+                        rowRect = owner.DataGridView.RectangleToScreen(rowRect);
                     }
                     else
                     {
                         // the row is scrolled off the DataGridView
                         // use the Accessible bounds for the previous visible row
-                        int visibleRowIndex = this.owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, this.owner.Index);
+                        int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
 
                         // This is a tricky scenario
                         // If Visible of Row 0 is false, then visibleRowIndex is not the previous visible row.
                         // It turns out to be the current row, this will cause a stack overflow.
                         // We have to prevent this.
-                        if (this.owner.DataGridView.Rows[0].Visible == false)
+                        if (!owner.DataGridView.Rows[0].Visible)
                         {
                             visibleRowIndex--;
                         }
 
-                        // we don't have to decrement the visible row index if the first acc obj in the data grid view is the top column header 
-                        if (!this.owner.DataGridView.ColumnHeadersVisible)
+                        // we don't have to decrement the visible row index if the first acc obj in the data grid view is the top column header
+                        if (!owner.DataGridView.ColumnHeadersVisible)
                         {
                             visibleRowIndex--;
                         }
 
-                        rowRect = this.ParentPrivate.GetChild(visibleRowIndex).Bounds;
+                        rowRect = ParentPrivate.GetChild(visibleRowIndex).Bounds;
                         rowRect.Y += rowRect.Height;
-                        rowRect.Height = this.owner.Height;
+                        rowRect.Height = owner.Height;
                     }
 
                     return rowRect;
                 }
             }
-
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Name"]/*' />
             public override string Name
             {
                 get
                 {
-                    if (this.owner == null)
+                    if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    return string.Format(SR.DataGridView_AccRowName, this.owner.Index.ToString(CultureInfo.CurrentCulture));
+
+                    return string.Format(SR.DataGridView_AccRowName, owner.Index.ToString(CultureInfo.CurrentCulture));
                 }
             }
-
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Owner"]/*' />
             public DataGridViewRow Owner
             {
-                get
-                {
-                    return this.owner;
-                }
+                get => owner;
                 set
                 {
-                    if (this.owner != null)
+                    if (owner != null)
                     {
                         throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerAlreadySet));
                     }
-                    this.owner = value;
-                }
-            }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Parent"]/*' />
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return this.ParentPrivate;
+                    owner = value;
                 }
             }
+            public override AccessibleObject Parent => ParentPrivate;
 
             private AccessibleObject ParentPrivate
             {
                 get
                 {
-                    if (this.owner == null)
+                    if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    return this.owner.DataGridView.AccessibilityObject;
-                }
-            }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Role"]/*' />
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.Row;
+                    return owner.DataGridView.AccessibilityObject;
                 }
             }
+            public override AccessibleRole Role => AccessibleRole.Row;
 
             internal override int[] RuntimeId
             {
@@ -2054,10 +1897,12 @@ namespace System.Windows.Forms
                 {
                     if (AccessibilityImprovements.Level3 && runtimeId == null)
                     {
-                        runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
-                        runtimeId[1] = this.Parent.GetHashCode();
-                        runtimeId[2] = this.GetHashCode();
+                        runtimeId = new int[]
+                        {
+                            RuntimeIDFirstItem, // first item is static - 0x2a,
+                            Parent.GetHashCode(),
+                            GetHashCode()
+                        };
                     }
 
                     return runtimeId;
@@ -2068,40 +1913,40 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (this.owner == null)
+                    if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    if (this.selectedCellsAccessibilityObject == null)
+
+                    if (selectedCellsAccessibilityObject == null)
                     {
-                        this.selectedCellsAccessibilityObject = new DataGridViewSelectedRowCellsAccessibleObject(this.owner);
+                        selectedCellsAccessibilityObject = new DataGridViewSelectedRowCellsAccessibleObject(owner);
                     }
-                    return this.selectedCellsAccessibilityObject;
+                    return selectedCellsAccessibilityObject;
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.State"]/*' />
             public override AccessibleStates State
             {
                 get
                 {
-                    if (this.owner == null)
+                    if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
                     AccessibleStates accState = AccessibleStates.Selectable;
 
                     bool allCellsAreSelected = true;
-                    if (this.owner.Selected)
+                    if (owner.Selected)
                     {
                         allCellsAreSelected = true;
                     }
                     else
                     {
-                        for (int i = 0; i < this.owner.Cells.Count; i ++)
+                        for (int i = 0; i < owner.Cells.Count; i++)
                         {
-                            if (!this.owner.Cells[i].Selected)
+                            if (!owner.Cells[i].Selected)
                             {
                                 allCellsAreSelected = false;
                                 break;
@@ -2114,8 +1959,8 @@ namespace System.Windows.Forms
                         accState |= AccessibleStates.Selected;
                     }
 
-                    Rectangle rowBounds = this.owner.DataGridView.GetRowDisplayRectangle(this.owner.Index, true /*cutOverflow*/);
-                    if (!rowBounds.IntersectsWith(this.owner.DataGridView.ClientRectangle))
+                    Rectangle rowBounds = owner.DataGridView.GetRowDisplayRectangle(owner.Index, true /*cutOverflow*/);
+                    if (!rowBounds.IntersectsWith(owner.DataGridView.ClientRectangle))
                     {
                         accState |= AccessibleStates.Offscreen;
                     }
@@ -2123,31 +1968,29 @@ namespace System.Windows.Forms
                     return accState;
                 }
             }
-
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Value"]/*' />
             public override string Value
             {
                 get
                 {
-                    if (this.owner == null)
+                    if (owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
-                    if (this.owner.DataGridView.AllowUserToAddRows && this.owner.Index == this.owner.DataGridView.NewRowIndex)
+                    if (owner.DataGridView.AllowUserToAddRows && owner.Index == owner.DataGridView.NewRowIndex)
                     {
-                        return string.Format(SR.DataGridView_AccRowCreateNew);
+                        return SR.DataGridView_AccRowCreateNew;
                     }
 
                     StringBuilder sb = new StringBuilder(1024);
 
-                    int childCount = this.GetChildCount();
+                    int childCount = GetChildCount();
 
                     // filter out the row header acc object even when DataGridView::RowHeadersVisible is turned on
-                    int startIndex = this.owner.DataGridView.RowHeadersVisible ? 1 : 0;
+                    int startIndex = owner.DataGridView.RowHeadersVisible ? 1 : 0;
 
                     for (int i = startIndex; i < childCount; i++)
                     {
-                        AccessibleObject cellAccObj = this.GetChild(i);
+                        AccessibleObject cellAccObj = GetChild(i);
                         if (cellAccObj != null)
                         {
                             sb.Append(cellAccObj.Value);
@@ -2163,68 +2006,63 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetChild"]/*' />
             public override AccessibleObject GetChild(int index)
             {
                 if (index < 0)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
-                if (index == 0 && this.owner.DataGridView.RowHeadersVisible)
+
+                if (index == 0 && owner.DataGridView.RowHeadersVisible)
                 {
-                    return this.owner.HeaderCell.AccessibilityObject;
+                    return owner.HeaderCell.AccessibilityObject;
                 }
                 else
                 {
                     // decrement the index because the first child is the RowHeaderCell AccessibilityObject
-                    if (this.owner.DataGridView.RowHeadersVisible)
+                    if (owner.DataGridView.RowHeadersVisible)
                     {
-                        index --;
+                        index--;
                     }
                     Debug.Assert(index >= 0);
-                    int columnIndex = this.owner.DataGridView.Columns.ActualDisplayIndexToColumnIndex(index, DataGridViewElementStates.Visible);
-                    return this.owner.Cells[columnIndex].AccessibilityObject;
+                    int columnIndex = owner.DataGridView.Columns.ActualDisplayIndexToColumnIndex(index, DataGridViewElementStates.Visible);
+                    return owner.Cells[columnIndex].AccessibilityObject;
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetChildCount"]/*' />
             public override int GetChildCount()
             {
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
-                int result = this.owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
 
-                if (this.owner.DataGridView.RowHeadersVisible)
+                int result = owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
+                if (owner.DataGridView.RowHeadersVisible)
                 {
                     // + 1 comes from the row header cell accessibility object
-                    result ++;
+                    result++;
                 }
 
                 return result;
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetSelected"]/*' />
-            public override AccessibleObject GetSelected()
-            {
-                return this.SelectedCellsAccessibilityObject;
-            }
+            public override AccessibleObject GetSelected() => SelectedCellsAccessibilityObject;
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.GetFocused"]/*' />
             public override AccessibleObject GetFocused()
             {
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
-                if (this.owner.DataGridView.Focused && this.owner.DataGridView.CurrentCell != null && this.owner.DataGridView.CurrentCell.RowIndex == this.owner.Index)
+
+                if (owner.DataGridView.Focused && owner.DataGridView.CurrentCell != null && owner.DataGridView.CurrentCell.RowIndex == owner.Index)
                 {
-                    return this.owner.DataGridView.CurrentCell.AccessibilityObject;
+                    return owner.DataGridView.CurrentCell.AccessibilityObject;
                 }
                 else
                 {
@@ -2232,28 +2070,28 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Navigate"]/*' />
             public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
             {
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
+
                 switch (navigationDirection)
                 {
                     case AccessibleNavigation.Down:
                     case AccessibleNavigation.Next:
-                        if (this.owner.Index != this.owner.DataGridView.Rows.GetLastRow(DataGridViewElementStates.Visible))
+                        if (owner.Index != owner.DataGridView.Rows.GetLastRow(DataGridViewElementStates.Visible))
                         {
-                            int nextVisibleRow = this.owner.DataGridView.Rows.GetNextRow(this.owner.Index, DataGridViewElementStates.Visible);
-                            int actualDisplayIndex = this.owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, nextVisibleRow);
-                            if (this.owner.DataGridView.ColumnHeadersVisible)
+                            int nextVisibleRow = owner.DataGridView.Rows.GetNextRow(owner.Index, DataGridViewElementStates.Visible);
+                            int actualDisplayIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, nextVisibleRow);
+                            if (owner.DataGridView.ColumnHeadersVisible)
                             {
-                                return this.owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex + 1);
+                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex + 1);
                             }
                             else
                             {
-                                return this.owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex);
+                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex);
                             }
                         }
                         else
@@ -2262,23 +2100,23 @@ namespace System.Windows.Forms
                         }
                     case AccessibleNavigation.Up:
                     case AccessibleNavigation.Previous:
-                        if (this.owner.Index != this.owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible))
+                        if (owner.Index != owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible))
                         {
-                            int previousVisibleRow = this.owner.DataGridView.Rows.GetPreviousRow(this.owner.Index, DataGridViewElementStates.Visible);
-                            int actualDisplayIndex = this.owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, previousVisibleRow);
-                            if (this.owner.DataGridView.ColumnHeadersVisible)
+                            int previousVisibleRow = owner.DataGridView.Rows.GetPreviousRow(owner.Index, DataGridViewElementStates.Visible);
+                            int actualDisplayIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, previousVisibleRow);
+                            if (owner.DataGridView.ColumnHeadersVisible)
                             {
-                                return this.owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex + 1);
+                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex + 1);
                             }
                             else
                             {
-                                return this.owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex);
+                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex);
                             }
                         }
-                        else if (this.owner.DataGridView.ColumnHeadersVisible)
+                        else if (owner.DataGridView.ColumnHeadersVisible)
                         {
                             // return the top row header acc obj
-                            return this.ParentPrivate.GetChild(0);
+                            return ParentPrivate.GetChild(0);
                         }
                         else
                         {
@@ -2286,38 +2124,37 @@ namespace System.Windows.Forms
                             return null;
                         }
                     case AccessibleNavigation.FirstChild:
-                        if (this.GetChildCount() == 0)
+                        if (GetChildCount() == 0)
                         {
                             return null;
                         }
                         else
                         {
-                            return this.GetChild(0);
+                            return GetChild(0);
                         }
                     case AccessibleNavigation.LastChild:
-                        int childCount = this.GetChildCount();
+                        int childCount = GetChildCount();
                         if (childCount == 0)
                         {
                             return null;
                         }
                         else
                         {
-                            return this.GetChild(childCount - 1);
+                            return GetChild(childCount - 1);
                         }
                     default:
                         return null;
                 }
             }
-            
-            /// <include file='doc\DataGridViewRow.uex' path='docs/doc[@for="DataGridViewRowAccessibleObject.Select"]/*' />
+
             public override void Select(AccessibleSelection flags)
             {
-                if (this.owner == null)
+                if (owner == null)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                    throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                DataGridView dataGridView = this.owner.DataGridView;
+                DataGridView dataGridView = owner.DataGridView;
                 if (dataGridView == null)
                 {
                     return;
@@ -2328,18 +2165,18 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
-                    if (this.owner.Cells.Count > 0)
+                    if (owner.Cells.Count > 0)
                     {
                         if (dataGridView.CurrentCell != null && dataGridView.CurrentCell.OwningColumn != null)
                         {
-                            dataGridView.CurrentCell = this.owner.Cells[dataGridView.CurrentCell.OwningColumn.Index]; // Do not change old selection
+                            dataGridView.CurrentCell = owner.Cells[dataGridView.CurrentCell.OwningColumn.Index]; // Do not change old selection
                         }
                         else
                         {
                             int firstVisibleCell = dataGridView.Columns.GetFirstColumn(DataGridViewElementStates.Visible).Index;
                             if (firstVisibleCell > -1)
                             {
-                                dataGridView.CurrentCell = this.owner.Cells[firstVisibleCell]; // Do not change old selection
+                                dataGridView.CurrentCell = owner.Cells[firstVisibleCell]; // Do not change old selection
                             }
                         }
                     }
@@ -2349,14 +2186,14 @@ namespace System.Windows.Forms
                 {
                     if (dataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect || dataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                     {
-                        this.owner.Selected = true;
+                        owner.Selected = true;
                     }
                 }
 
                 if ((flags & AccessibleSelection.RemoveSelection) == AccessibleSelection.RemoveSelection &&
                     (flags & (AccessibleSelection.AddSelection | AccessibleSelection.TakeSelection)) == 0)
                 {
-                    this.owner.Selected = false;
+                    owner.Selected = false;
                 }
             }
 
@@ -2365,15 +2202,15 @@ namespace System.Windows.Forms
                 {
                     if (Owner == null)
                     {
-                        throw new InvalidOperationException(string.Format(SR.DataGridViewRowAccessibleObject_OwnerNotSet));
+                        throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    var dataGridView = this.Owner.DataGridView;
+                    var dataGridView = owner.DataGridView;
 
                     switch (direction)
                     {
                         case UnsafeNativeMethods.NavigateDirection.Parent:
-                            return this.Parent;
+                            return Parent;
                         case UnsafeNativeMethods.NavigateDirection.NextSibling:
                             return Navigate(AccessibleNavigation.Next);
                         case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
@@ -2392,11 +2229,10 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return this.Owner.DataGridView.AccessibilityObject;
+                    return owner.DataGridView.AccessibilityObject;
                 }
             }
 
-            #region IRawElementProviderSimple Implementation
 
             internal override bool IsPatternSupported(int patternId)
             {
@@ -2410,11 +2246,11 @@ namespace System.Windows.Forms
                     switch (propertyId)
                     {
                         case NativeMethods.UIA_NamePropertyId:
-                            return this.Name;
+                            return Name;
                         case NativeMethods.UIA_IsEnabledPropertyId:
                             return Owner.DataGridView.Enabled;
                         case NativeMethods.UIA_HelpTextPropertyId:
-                            return this.Help ?? string.Empty;
+                            return Help ?? string.Empty;
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                         case NativeMethods.UIA_IsPasswordPropertyId:
@@ -2427,76 +2263,48 @@ namespace System.Windows.Forms
 
                 return base.GetPropertyValue(propertyId);
             }
-
-            #endregion
         }
 
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
-            DataGridViewRow owner;
+            private DataGridViewRow owner;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {
                 this.owner = owner;
             }
 
-            public override string Name
-            {
-                get
-                {
-                    return string.Format(SR.DataGridView_AccSelectedRowCellsName);
-                }
-            }
+            public override string Name => SR.DataGridView_AccSelectedRowCellsName;
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return this.owner.AccessibilityObject;
-                }
-            }
+            public override AccessibleObject Parent => owner.AccessibilityObject;
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.Grouping;
-                }
-            }
+            public override AccessibleRole Role => AccessibleRole.Grouping;
 
             public override AccessibleStates State
             {
-                get
-                {
-                    return AccessibleStates.Selected | AccessibleStates.Selectable;
-                }
+                get => AccessibleStates.Selected | AccessibleStates.Selectable;
             }
 
-            public override string Value
-            {
-                get
-                {
-                    return this.Name;
-                }
-            }
+            public override string Value => Name;
 
             public override AccessibleObject GetChild(int index)
             {
-                if (index < this.GetChildCount())
+                if (index < GetChildCount())
                 {
                     int selectedCellsCount = -1;
-                    for (int i = 1; i < this.owner.AccessibilityObject.GetChildCount(); i ++)
+                    for (int i = 1; i < owner.AccessibilityObject.GetChildCount(); i++)
                     {
-                        if ((this.owner.AccessibilityObject.GetChild(i).State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                        if ((owner.AccessibilityObject.GetChild(i).State & AccessibleStates.Selected) == AccessibleStates.Selected)
                         {
-                            selectedCellsCount ++;
+                            selectedCellsCount++;
                         }
 
                         if (selectedCellsCount == index)
                         {
-                            return this.owner.AccessibilityObject.GetChild(i);
+                            return owner.AccessibilityObject.GetChild(i);
                         }
                     }
+
                     Debug.Assert(false, "we should have found already the selected cell");
                     return null;
                 }
@@ -2511,27 +2319,24 @@ namespace System.Windows.Forms
                 int selectedCellsCount = 0;
 
                 // start the enumeration from 1, because the first acc obj in the data grid view row is the row header cell
-                for (int i = 1; i < this.owner.AccessibilityObject.GetChildCount(); i ++)
+                for (int i = 1; i < owner.AccessibilityObject.GetChildCount(); i++)
                 {
-                    if ((this.owner.AccessibilityObject.GetChild(i).State & AccessibleStates.Selected) == AccessibleStates.Selected)
+                    if ((owner.AccessibilityObject.GetChild(i).State & AccessibleStates.Selected) == AccessibleStates.Selected)
                     {
-                        selectedCellsCount ++;
+                        selectedCellsCount++;
                     }
                 }
 
                 return selectedCellsCount;
             }
 
-            public override AccessibleObject GetSelected()
-            {
-                return this;
-            }
+            public override AccessibleObject GetSelected() => this;
 
             public override AccessibleObject GetFocused()
             {
-                if (this.owner.DataGridView.CurrentCell != null && this.owner.DataGridView.CurrentCell.Selected)
+                if (owner.DataGridView.CurrentCell != null && owner.DataGridView.CurrentCell.Selected)
                 {
-                    return this.owner.DataGridView.CurrentCell.AccessibilityObject;
+                    return owner.DataGridView.CurrentCell.AccessibilityObject;
                 }
                 else
                 {
