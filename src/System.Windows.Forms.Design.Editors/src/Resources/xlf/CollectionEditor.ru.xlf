@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">Д&amp;обавить</target>
+        <target state="translated">&amp;Добавить</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="removeButton.Text">
         <source>&amp;Remove</source>
-        <target state="translated">Уда&amp;лить</target>
+        <target state="translated">&amp;Удалить</target>
         <note />
       </trans-unit>
       <trans-unit id="upButton.AccessibleName">

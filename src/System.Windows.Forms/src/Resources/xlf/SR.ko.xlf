@@ -2704,7 +2704,6 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="needs-review-translation">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2713,6 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="needs-review-translation">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -5182,7 +5180,7 @@ just-in-time (JIT) debugging instead of this dialog box.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">확인</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
@@ -8163,7 +8161,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
-        <target state="new">Print preview</target>
+        <target state="translated">인쇄 미리 보기</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
