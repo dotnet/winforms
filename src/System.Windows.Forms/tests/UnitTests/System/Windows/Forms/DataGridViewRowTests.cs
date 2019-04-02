@@ -405,7 +405,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_DefaultHeaderCellType_SetInvalidWithNullOldValue_GetReturnsExpected(Type value)
         {
             var row = new SubDataGridViewRow();
-            Assert.Throws<ArgumentException>(null, () => row.DefaultHeaderCellType = value);
+            Assert.Throws<ArgumentException>("value", () => row.DefaultHeaderCellType = value);
         }
 
         [Theory]
@@ -417,7 +417,7 @@ namespace System.Windows.Forms.Tests
             {
                 DefaultHeaderCellType = typeof(DataGridViewRowHeaderCell)
             };
-            Assert.Throws<ArgumentException>(null, () => row.DefaultHeaderCellType = value);
+            Assert.Throws<ArgumentException>("value", () => row.DefaultHeaderCellType = value);
         }
 
         public static IEnumerable<object[]> Displayed_Get_TestData()
@@ -528,7 +528,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_DividerHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentOutOfRangeException>("DividerHeight", () => row.DividerHeight = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => row.DividerHeight = value);
         }
 
         [Theory]
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_Height_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentOutOfRangeException>("Height", () => row.Height = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => row.Height = value);
         }
 
         [Theory]
@@ -1353,14 +1353,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(-1, "MinimumHeight")]
-        [InlineData(0, "MinimumHeight")]
-        [InlineData(1, "MinimumHeight")]
-        [InlineData(65537, "Height")]
-        public void DataGridViewRow_MinimumHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value, string paramName)
+        [InlineData(-1)]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(65537)]
+        public void DataGridViewRow_MinimumHeight_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentOutOfRangeException>(paramName, () => row.MinimumHeight = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => row.MinimumHeight = value);
             Assert.Equal(3, row.MinimumHeight);
             Assert.Equal(Control.DefaultFont.Height + 9, row.Height);
         }
@@ -2889,7 +2889,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewRow_GetState_NoDataGridViewInvalidRowIndex_ThrowsArgumentException(int rowIndex)
         {
             var row = new DataGridViewRow();
-            Assert.Throws<ArgumentException>(null, () => row.GetState(rowIndex));
+            Assert.Throws<ArgumentException>("rowIndex", () => row.GetState(rowIndex));
         }
 
         [Theory]
