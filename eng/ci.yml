@@ -135,7 +135,7 @@ jobs:
           $(_OfficialBuildIdArgs)
           -build
           /p:Coverage=$(_Coverage)
-          /bl:$(Artifacts.Log)\$(_BuildConfig)\Build.binlog          
+          /bl:$(Artifacts.Log)\BuildSrc.binlog          
         displayName: Build
 
     # Run Unit Tests
@@ -145,7 +145,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
-          /bl:$(Artifacts.Log)\$(_BuildConfig)\Test.binlog
+          /bl:$(Artifacts.Log)\Test.binlog
           /p:Coverage=$(_Coverage)
           /m:1
         displayName: Run Unit Tests on Build Machine (Debug)
@@ -156,7 +156,7 @@ jobs:
           $(_OfficialBuildIdArgs) 
           -test
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
-          /bl:$(Artifacts.Log)\$(_BuildConfig)\HelixUnit.binlog
+          /bl:$(Artifacts.Log)\HelixUnit.binlog
         displayName: Run Unit Tests on Helix Machine (Release)
         env:
           HelixSource: $(_HelixSource)
@@ -177,7 +177,7 @@ jobs:
           $(_OfficialBuildIdArgs) 
           -integrationTest
           -projects $(Build.SourcesDirectory)\eng\helixpublish.proj
-          /bl:$(Artifacts.Log)\$(_BuildConfig)\HelixIntegration.binlog
+          /bl:$(Artifacts.Log)\HelixIntegration.binlog
         displayName: Run Integration Tests on Helix Machine Windows.10.Amd64 (Release)
         env:
           HelixSource: $(_HelixSource)
@@ -200,7 +200,7 @@ jobs:
           -pack
           -sign $(_SignArgs)
           -publish $(_PublishArgs)
-          /bl:$(Artifacts.Log)\$(_BuildConfig)\PackSignPublish.binlog
+          /bl:$(Artifacts.Log)\PackSignPublish.binlog
         displayName: Pack, Sign, and Publish
 
       # Upload code coverage data
@@ -208,7 +208,7 @@ jobs:
           eng/CodeCoverage.proj
           /p:Configuration=$(_BuildConfig)
           /p:CodeCovToken=$(CODECOV_TOKEN)
-          /bl:$(Artifacts.Log)\$(_BuildConfig)\CodeCoverage.binlog
+          /bl:$(Artifacts.Log)\CodeCoverage.binlog
         displayName: Upload coverage to codecov.io (Debug)
         condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
