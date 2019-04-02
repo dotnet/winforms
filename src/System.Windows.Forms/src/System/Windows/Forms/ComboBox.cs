@@ -2031,8 +2031,7 @@ namespace System.Windows.Forms {
 
             // Always use the managed FindStringInternal instead of CB_FINDSTRING.
             // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, false);
+            return FindStringInternal(s, Items, startIndex, exact: false, ignoreCase: true);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact"]/*' />
@@ -2060,7 +2059,7 @@ namespace System.Windows.Forms {
         ///     string. The strings must match exactly, except for differences in
         ///     casing.
         /// </devdoc>
-        internal int FindStringExact(string s, int startIndex, bool ignorecase) {
+        internal int FindStringExact(string s, int startIndex, bool ignoreCase) {
             if (s == null) return -1;
 
             if (itemsCollection == null || itemsCollection.Count == 0) {
@@ -2074,8 +2073,7 @@ namespace System.Windows.Forms {
 
             // Always use the managed FindStringInternal instead of CB_FINDSTRINGEXACT.
             // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, true, ignorecase);
+            return FindStringInternal(s, Items, startIndex, exact: true, ignoreCase);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
