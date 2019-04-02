@@ -15,10 +15,10 @@ namespace System.Windows.Forms
     /// </devdoc>
     internal class PropertyStore
     {
-        private static int currentKey;
+        private static int s_currentKey;
 
-        private IntegerEntry[] intEntries;
-        private ObjectEntry[] objEntries;
+        private IntegerEntry[] s_intEntries;
+        private ObjectEntry[] s_objEntries;
 
         /// <devdoc>
         /// Retrieves an integer value from our property list.
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         /// initializer, and we never have the same class hierarchy
         /// initializing on multiple threads at once.
         /// </devdoc>
-        public static int CreateKey() => currentKey++;
+        public static int CreateKey() => s_currentKey++;
 
         public Color GetColor(int key) => GetColor(key, out _);
 
@@ -157,7 +157,7 @@ namespace System.Windows.Forms
 
             // We have found the relevant entry. See if
             // the bitmask indicates the value is used.
-            if (((1 << element) & intEntries[index].Mask) == 0)
+            if (((1 << element) & s_intEntries[index].Mask) == 0)
             {
                 found = false;
                 return default(int);
@@ -167,13 +167,13 @@ namespace System.Windows.Forms
             switch (element)
             {
                 case 0:
-                    return intEntries[index].Value1;
+                    return s_intEntries[index].Value1;
                 case 1:
-                    return intEntries[index].Value2;
+                    return s_intEntries[index].Value2;
                 case 2:
-                    return intEntries[index].Value3;
+                    return s_intEntries[index].Value3;
                 case 3:
-                    return intEntries[index].Value4;
+                    return s_intEntries[index].Value4;
                 default:
                     Debug.Fail("Invalid element obtained from LocateIntegerEntry");
                     return default(int);
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
 
             // We have found the relevant entry. See if
             // the bitmask indicates the value is used.
-            if (((1 << element) & objEntries[index].Mask) == 0)
+            if (((1 << element) & s_objEntries[index].Mask) == 0)
             {
                 found = false;
                 return null;
@@ -213,13 +213,13 @@ namespace System.Windows.Forms
             switch (element)
             {
                 case 0:
-                    return objEntries[index].Value1;
+                    return s_objEntries[index].Value1;
                 case 1:
-                    return objEntries[index].Value2;
+                    return s_objEntries[index].Value2;
                 case 2:
-                    return objEntries[index].Value3;
+                    return s_objEntries[index].Value3;
                 case 3:
-                    return objEntries[index].Value4;
+                    return s_objEntries[index].Value4;
                 default:
                     Debug.Fail("Invalid element obtained from LocateObjectEntry");
                     return null;
@@ -236,13 +236,13 @@ namespace System.Windows.Forms
         /// </devdoc>
         private bool LocateIntegerEntry(short entryKey, out int index)
         {
-            if (intEntries == null)
+            if (s_intEntries == null)
             {
                 index = 0;
                 return false;
             }
 
-            int length = intEntries.Length;
+            int length = s_intEntries.Length;
             if (length <= 16)
             {
                 // If the array is small enough, we unroll the binary search to be more efficient.
@@ -250,50 +250,50 @@ namespace System.Windows.Forms
                 // DON'T change this code unless you are very confident!
                 index = 0;
                 int midPoint = length / 2;
-                if (intEntries[midPoint].Key <= entryKey)
+                if (s_intEntries[midPoint].Key <= entryKey)
                 {
                     index = midPoint;
                 }
 
                 // We don't move this inside the previous if branch since this catches both
                 // the case index == 0 and index = midPoint
-                if (intEntries[index].Key == entryKey)
+                if (s_intEntries[index].Key == entryKey)
                 {
                     return true;
                 }
 
                 midPoint = (length + 1) / 4;
-                if (intEntries[index + midPoint].Key <= entryKey)
+                if (s_intEntries[index + midPoint].Key <= entryKey)
                 {
                     index += midPoint;
-                    if (intEntries[index].Key == entryKey)
+                    if (s_intEntries[index].Key == entryKey)
                     {
                         return true;
                     }
                 }
 
                 midPoint = (length + 3) / 8;
-                if (intEntries[index + midPoint].Key <= entryKey)
+                if (s_intEntries[index + midPoint].Key <= entryKey)
                 {
                     index += midPoint;
-                    if (intEntries[index].Key == entryKey)
+                    if (s_intEntries[index].Key == entryKey)
                     {
                         return true;
                     }
                 }
 
                 midPoint = (length + 7) / 16;
-                if (intEntries[index + midPoint].Key <= entryKey)
+                if (s_intEntries[index + midPoint].Key <= entryKey)
                 {
                     index += midPoint;
-                    if (intEntries[index].Key == entryKey)
+                    if (s_intEntries[index].Key == entryKey)
                     {
                         return true;
                     }
                 }
 
                 Debug.Assert(index < length);
-                if (entryKey > intEntries[index].Key)
+                if (entryKey > s_intEntries[index].Key)
                 {
                     index++;
                 }
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
                 do
                 {
                     idx = (max + min) / 2;
-                    short currentKeyIndex = intEntries[idx].Key;
+                    short currentKeyIndex = s_intEntries[idx].Key;
 
                     if (currentKeyIndex == entryKey)
                     {
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
                 // Didn't find the index. Setup our output appropriately
                 index = idx;
-                if (entryKey > intEntries[idx].Key)
+                if (entryKey > s_intEntries[idx].Key)
                 {
                     index++;
                 }
@@ -351,9 +351,9 @@ namespace System.Windows.Forms
         /// </devdoc>
         private bool LocateObjectEntry(short entryKey, out int index)
         {
-            if (objEntries != null)
+            if (s_objEntries != null)
             {
-                int length = objEntries.Length;
+                int length = s_objEntries.Length;
                 Debug.Assert(length > 0);
                 if (length <= 16)
                 {
@@ -362,50 +362,50 @@ namespace System.Windows.Forms
                     // DON'T change this code unless you are very confident!
                     index = 0;
                     int midPoint = length / 2;
-                    if (objEntries[midPoint].Key <= entryKey)
+                    if (s_objEntries[midPoint].Key <= entryKey)
                     {
                         index = midPoint;
                     }
 
                     // We don't move this inside the previous if branch since this catches
                     // both the case index == 0 and index = midPoint
-                    if (objEntries[index].Key == entryKey)
+                    if (s_objEntries[index].Key == entryKey)
                     {
                         return true;
                     }
 
                     midPoint = (length + 1) / 4;
-                    if (objEntries[index + midPoint].Key <= entryKey)
+                    if (s_objEntries[index + midPoint].Key <= entryKey)
                     {
                         index += midPoint;
-                        if (objEntries[index].Key == entryKey)
+                        if (s_objEntries[index].Key == entryKey)
                         {
                             return true;
                         }
                     }
 
                     midPoint = (length + 3) / 8;
-                    if (objEntries[index + midPoint].Key <= entryKey)
+                    if (s_objEntries[index + midPoint].Key <= entryKey)
                     {
                         index += midPoint;
-                        if (objEntries[index].Key == entryKey)
+                        if (s_objEntries[index].Key == entryKey)
                         {
                             return true;
                         }
                     }
 
                     midPoint = (length + 7) / 16;
-                    if (objEntries[index + midPoint].Key <= entryKey)
+                    if (s_objEntries[index + midPoint].Key <= entryKey)
                     {
                         index += midPoint;
-                        if (objEntries[index].Key == entryKey)
+                        if (s_objEntries[index].Key == entryKey)
                         {
                             return true;
                         }
                     }
 
                     Debug.Assert(index < length);
-                    if (entryKey > objEntries[index].Key)
+                    if (entryKey > s_objEntries[index].Key)
                     {
                         index++;
                     }
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
                     do
                     {
                         idx = (max + min) / 2;
-                        short currentKeyIndex = objEntries[idx].Key;
+                        short currentKeyIndex = s_objEntries[idx].Key;
 
                         if (currentKeyIndex == entryKey)
                         {
@@ -444,7 +444,7 @@ namespace System.Windows.Forms
 
                     // Didn't find the index. Setup our output appropriately
                     index = idx;
-                    if (entryKey > objEntries[idx].Key)
+                    if (entryKey > s_objEntries[idx].Key)
                     {
                         index++;
                     }
@@ -470,31 +470,31 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (((1 << element) & intEntries[index].Mask) == 0)
+            if (((1 << element) & s_intEntries[index].Mask) == 0)
             {
                 // this element is not being used - return right away
                 return;
             }
 
             // declare that the element is no longer used
-            intEntries[index].Mask &= (short)(~((short)(1 << element)));
+            s_intEntries[index].Mask &= (short)(~((short)(1 << element)));
 
-            if (intEntries[index].Mask == 0)
+            if (s_intEntries[index].Mask == 0)
             {
                 // This object entry is no longer in use - let's remove it all together
                 // not great for perf but very simple and we don't expect to remove much
-                IntegerEntry[] newEntries = new IntegerEntry[intEntries.Length - 1];
+                IntegerEntry[] newEntries = new IntegerEntry[s_intEntries.Length - 1];
                 if (index > 0)
                 {
-                    Array.Copy(intEntries, 0, newEntries, 0, index);
+                    Array.Copy(s_intEntries, 0, newEntries, 0, index);
                 }
                 if (index < newEntries.Length)
                 {
-                    Debug.Assert(intEntries.Length - index - 1 > 0);
-                    Array.Copy(intEntries, index + 1, newEntries, index, intEntries.Length - index - 1);
+                    Debug.Assert(s_intEntries.Length - index - 1 > 0);
+                    Array.Copy(s_intEntries, index + 1, newEntries, index, s_intEntries.Length - index - 1);
                 }
 
-                intEntries = newEntries;
+                s_intEntries = newEntries;
             }
             else
             {
@@ -502,19 +502,19 @@ namespace System.Windows.Forms
                 switch (element)
                 {
                     case 0:
-                        intEntries[index].Value1 = 0;
+                        s_intEntries[index].Value1 = 0;
                         break;
 
                     case 1:
-                        intEntries[index].Value2 = 0;
+                        s_intEntries[index].Value2 = 0;
                         break;
 
                     case 2:
-                        intEntries[index].Value3 = 0;
+                        s_intEntries[index].Value3 = 0;
                         break;
 
                     case 3:
-                        intEntries[index].Value4 = 0;
+                        s_intEntries[index].Value4 = 0;
                         break;
 
                     default:
@@ -536,37 +536,37 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (((1 << element) & objEntries[index].Mask) == 0)
+            if (((1 << element) & s_objEntries[index].Mask) == 0)
             {
                 // This element is not being used - return right away
                 return;
             }
 
             // Declare that the element is no longer used
-            objEntries[index].Mask &= (short)(~((short)(1 << element)));
+            s_objEntries[index].Mask &= (short)(~((short)(1 << element)));
 
-            if (objEntries[index].Mask == 0)
+            if (s_objEntries[index].Mask == 0)
             {
                 // This object entry is no longer in use - let's remove it all together
                 // not great for perf but very simple and we don't expect to remove much
-                if (objEntries.Length == 1)
+                if (s_objEntries.Length == 1)
                 {
                     // Instead of allocating an array of length 0, we simply reset the array to null.
-                    objEntries = null;
+                    s_objEntries = null;
                 }
                 else
                 {
-                    ObjectEntry[] newEntries = new ObjectEntry[objEntries.Length - 1];
+                    ObjectEntry[] newEntries = new ObjectEntry[s_objEntries.Length - 1];
                     if (index > 0)
                     {
-                        Array.Copy(objEntries, 0, newEntries, 0, index);
+                        Array.Copy(s_objEntries, 0, newEntries, 0, index);
                     }
                     if (index < newEntries.Length)
                     {
-                        Debug.Assert(objEntries.Length - index - 1 > 0);
-                        Array.Copy(objEntries, index + 1, newEntries, index, objEntries.Length - index - 1);
+                        Debug.Assert(s_objEntries.Length - index - 1 > 0);
+                        Array.Copy(s_objEntries, index + 1, newEntries, index, s_objEntries.Length - index - 1);
                     }
-                    objEntries = newEntries;
+                    s_objEntries = newEntries;
                 }
             }
             else
@@ -575,19 +575,19 @@ namespace System.Windows.Forms
                 switch (element)
                 {
                     case 0:
-                        objEntries[index].Value1 = null;
+                        s_objEntries[index].Value1 = null;
                         break;
 
                     case 1:
-                        objEntries[index].Value2 = null;
+                        s_objEntries[index].Value2 = null;
                         break;
 
                     case 2:
-                        objEntries[index].Value3 = null;
+                        s_objEntries[index].Value3 = null;
                         break;
 
                     case 3:
-                        objEntries[index].Value4 = null;
+                        s_objEntries[index].Value4 = null;
                         break;
 
                     default:
@@ -697,48 +697,48 @@ namespace System.Windows.Forms
             if (!LocateIntegerEntry(entryKey, out int index))
             {
                 // We must allocate a new entry.
-                if (intEntries != null)
+                if (s_intEntries != null)
                 {
-                    IntegerEntry[] newEntries = new IntegerEntry[intEntries.Length + 1];
+                    IntegerEntry[] newEntries = new IntegerEntry[s_intEntries.Length + 1];
 
                     if (index > 0)
                     {
-                        Array.Copy(intEntries, 0, newEntries, 0, index);
+                        Array.Copy(s_intEntries, 0, newEntries, 0, index);
                     }
 
-                    if (intEntries.Length - index > 0)
+                    if (s_intEntries.Length - index > 0)
                     {
-                        Array.Copy(intEntries, index, newEntries, index + 1, intEntries.Length - index);
+                        Array.Copy(s_intEntries, index, newEntries, index + 1, s_intEntries.Length - index);
                     }
 
-                    intEntries = newEntries;
+                    s_intEntries = newEntries;
                 }
                 else
                 {
-                    intEntries = new IntegerEntry[1];
+                    s_intEntries = new IntegerEntry[1];
                     Debug.Assert(index == 0, "LocateIntegerEntry should have given us a zero index.");
                 }
 
-                intEntries[index].Key = entryKey;
+                s_intEntries[index].Key = entryKey;
             }
 
             // Now determine which value to set.
             switch (element)
             {
                 case 0:
-                    intEntries[index].Value1 = value;
+                    s_intEntries[index].Value1 = value;
                     break;
 
                 case 1:
-                    intEntries[index].Value2 = value;
+                    s_intEntries[index].Value2 = value;
                     break;
 
                 case 2:
-                    intEntries[index].Value3 = value;
+                    s_intEntries[index].Value3 = value;
                     break;
 
                 case 3:
-                    intEntries[index].Value4 = value;
+                    s_intEntries[index].Value4 = value;
                     break;
 
                 default:
@@ -746,7 +746,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            intEntries[index].Mask = (short)((1 << element) | (ushort)(intEntries[index].Mask));
+            s_intEntries[index].Mask = (short)((1 << element) | (ushort)(s_intEntries[index].Mask));
         }
 
         /// <devdoc>
@@ -758,48 +758,48 @@ namespace System.Windows.Forms
             if (!LocateObjectEntry(entryKey, out int index))
             {
                 // We must allocate a new entry.
-                if (objEntries != null)
+                if (s_objEntries != null)
                 {
-                    ObjectEntry[] newEntries = new ObjectEntry[objEntries.Length + 1];
+                    ObjectEntry[] newEntries = new ObjectEntry[s_objEntries.Length + 1];
 
                     if (index > 0)
                     {
-                        Array.Copy(objEntries, 0, newEntries, 0, index);
+                        Array.Copy(s_objEntries, 0, newEntries, 0, index);
                     }
 
-                    if (objEntries.Length - index > 0)
+                    if (s_objEntries.Length - index > 0)
                     {
-                        Array.Copy(objEntries, index, newEntries, index + 1, objEntries.Length - index);
+                        Array.Copy(s_objEntries, index, newEntries, index + 1, s_objEntries.Length - index);
                     }
 
-                    objEntries = newEntries;
+                    s_objEntries = newEntries;
                 }
                 else
                 {
-                    objEntries = new ObjectEntry[1];
+                    s_objEntries = new ObjectEntry[1];
                     Debug.Assert(index == 0, "LocateObjectEntry should have given us a zero index.");
                 }
 
-                objEntries[index].Key = entryKey;
+                s_objEntries[index].Key = entryKey;
             }
 
             // Now determine which value to set.
             switch (element)
             {
                 case 0:
-                    objEntries[index].Value1 = value;
+                    s_objEntries[index].Value1 = value;
                     break;
 
                 case 1:
-                    objEntries[index].Value2 = value;
+                    s_objEntries[index].Value2 = value;
                     break;
 
                 case 2:
-                    objEntries[index].Value3 = value;
+                    s_objEntries[index].Value3 = value;
                     break;
 
                 case 3:
-                    objEntries[index].Value4 = value;
+                    s_objEntries[index].Value4 = value;
                     break;
 
                 default:
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            objEntries[index].Mask = (short)((ushort)(objEntries[index].Mask) | (1 << element));
+            s_objEntries[index].Mask = (short)((ushort)(s_objEntries[index].Mask) | (1 << element));
         }
 
         /// <devdoc>
@@ -829,7 +829,7 @@ namespace System.Windows.Forms
             do
             {
                 idx = (max + min) / 2;
-                short currentKeyIndex = intEntries[idx].Key;
+                short currentKeyIndex = s_intEntries[idx].Key;
 
                 if (currentKeyIndex == entryKey)
                 {
@@ -847,7 +847,7 @@ namespace System.Windows.Forms
             while (max >= min);
 
             // shouldn't find the index if we run this debug code
-            if (entryKey > intEntries[idx].Key)
+            if (entryKey > s_intEntries[idx].Key)
             {
                 idx++;
             }
@@ -864,7 +864,7 @@ namespace System.Windows.Forms
             do
             {
                 idx = (max + min) / 2;
-                short currentKeyIndex = objEntries[idx].Key;
+                short currentKeyIndex = s_objEntries[idx].Key;
 
                 if (currentKeyIndex == entryKey)
                 {
@@ -881,7 +881,7 @@ namespace System.Windows.Forms
             }
             while (max >= min);
 
-            if (entryKey > objEntries[idx].Key)
+            if (entryKey > s_objEntries[idx].Key)
             {
                 idx++;
             }
