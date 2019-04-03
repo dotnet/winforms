@@ -135,7 +135,7 @@ jobs:
           $(_OfficialBuildIdArgs)
           -build
           /p:Coverage=$(_Coverage)
-          /bl:$(Artifacts.Log)\BuildSrc.binlog          
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Build.binlog          
         displayName: Build
 
     # Run Unit Tests
