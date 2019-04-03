@@ -74,7 +74,7 @@ namespace System.Windows.Forms {
             this.previewControl = new PrintPreviewControl();
             this.imageList = new ImageList();
             
-            Bitmap bitmaps = new Bitmap(typeof(PrintPreviewDialog), "PrintPreviewStrip.bmp");
+            Bitmap bitmaps = new Bitmap(typeof(PrintPreviewDialog), "PrintPreviewStrip");
             bitmaps.MakeTransparent();
             imageList.Images.AddStrip(bitmaps);
 

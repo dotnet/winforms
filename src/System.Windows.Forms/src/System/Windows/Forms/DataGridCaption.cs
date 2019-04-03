@@ -394,18 +394,18 @@ namespace System.Windows.Forms {
         private Bitmap GetBackButtonBmp(bool alignRight) {
             if (alignRight) {
                 if (leftButtonBitmap_bidi == null)
-                    leftButtonBitmap_bidi = GetBitmap("DataGridCaption.backarrow_bidi.bmp");
+                    leftButtonBitmap_bidi = GetBitmap("DataGridCaption.backarrow_bidi");
                 return leftButtonBitmap_bidi;
             } else {
                 if (leftButtonBitmap == null)
-                    leftButtonBitmap = GetBitmap("DataGridCaption.backarrow.bmp");
+                    leftButtonBitmap = GetBitmap("DataGridCaption.backarrow");
                 return leftButtonBitmap;
             }
         }
 
         private Bitmap GetDetailsBmp() {
             if (magnifyingGlassBitmap == null)
-                magnifyingGlassBitmap = GetBitmap("DataGridCaption.Details.bmp");
+                magnifyingGlassBitmap = GetBitmap("DataGridCaption.Details");
             return magnifyingGlassBitmap;
         }
 

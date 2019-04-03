@@ -274,10 +274,10 @@ namespace System.Windows.Forms {
                 if (checkedState == CheckState.Indeterminate) {
                     if (indeterminateCheckedImage == null) {
                         if (DpiHelper.IsScalingRequirementMet) {
-                            indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked.ico", scaledCheckMarkBitmapSize);
+                            indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap indeterminateCheckedBmp = new Bitmap(typeof(ToolStripMenuItem), "IndeterminateChecked.bmp");
+                            Bitmap indeterminateCheckedBmp = new Bitmap(typeof(ToolStripMenuItem), "IndeterminateChecked");
                             if (indeterminateCheckedBmp != null) {
                                 // 
                                 indeterminateCheckedBmp.MakeTransparent(indeterminateCheckedBmp.GetPixel(1, 1));
@@ -293,10 +293,10 @@ namespace System.Windows.Forms {
                 else if (checkedState == CheckState.Checked) {
                     if (checkedImage == null) {
                         if (DpiHelper.IsScalingRequirementMet) {
-                            checkedImage = GetBitmapFromIcon("Checked.ico", scaledCheckMarkBitmapSize);
+                            checkedImage = GetBitmapFromIcon("Checked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap checkedBmp = new Bitmap(typeof(ToolStripMenuItem), "Checked.bmp");
+                            Bitmap checkedBmp = new Bitmap(typeof(ToolStripMenuItem), "Checked");
                             if (checkedBmp != null) {
                                 // 
                                 checkedBmp.MakeTransparent(checkedBmp.GetPixel(1, 1));

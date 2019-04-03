@@ -186,12 +186,12 @@ namespace System.Windows.Forms {
             // Set up images
             //
 
-            Bitmap moveFirstImage    = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveFirst.bmp");
-            Bitmap movePreviousImage = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MovePrevious.bmp");
-            Bitmap moveNextImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveNext.bmp");
-            Bitmap moveLastImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveLast.bmp");
-            Bitmap addNewImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.AddNew.bmp");
-            Bitmap deleteImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.Delete.bmp");
+            Bitmap moveFirstImage    = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
+            Bitmap movePreviousImage = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
+            Bitmap moveNextImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveNext");
+            Bitmap moveLastImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveLast");
+            Bitmap addNewImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.AddNew");
+            Bitmap deleteImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.Delete");
 
             moveFirstImage.MakeTransparent(System.Drawing.Color.Magenta);
             movePreviousImage.MakeTransparent(System.Drawing.Color.Magenta);

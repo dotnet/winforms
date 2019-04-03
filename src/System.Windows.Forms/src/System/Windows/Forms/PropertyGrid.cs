@@ -4403,7 +4403,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByPropertyImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBAlpha.bmp");
+                return new Bitmap(typeof(PropertyGrid), "PBAlpha");
             }
         }
 
@@ -4418,7 +4418,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByCategoryImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBCatego.bmp");
+                return new Bitmap(typeof(PropertyGrid), "PBCatego");
             }
         }
 
@@ -4433,7 +4433,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap ShowPropertyPageImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBPPage.bmp");
+                return new Bitmap(typeof(PropertyGrid), "PBPPage");
             }
         }
 

@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             {
                 if (errorBmp == null)
                 {
-                    errorBmp = new Bitmap(typeof(DataGridView), "ImageInError.bmp");
+                    errorBmp = new Bitmap(typeof(DataGridView), "ImageInError");
                 }
                 return errorBmp;
             }
@@ -117,7 +117,7 @@ namespace System.Windows.Forms
             {
                 if (errorIco == null)
                 {
-                    errorIco = new Icon(typeof(DataGridView), "IconInError.ico");
+                    errorIco = new Icon(typeof(DataGridView), "IconInError");
                 }
                 return errorIco;
             }

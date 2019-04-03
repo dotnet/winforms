@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripPanelDesigner, " + AssemblyRef.SystemDesign)]
-    [ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripPanel_standalone.bmp")]
+    [ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
     public class ToolStripPanel : ContainerControl, IArrangedElement {
 
 

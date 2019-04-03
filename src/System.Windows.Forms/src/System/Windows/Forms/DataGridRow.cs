@@ -258,7 +258,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected Bitmap GetStarBitmap() {
             if (starBmp == null)
-                starBmp = GetBitmap("DataGridRow.star.bmp");
+                starBmp = GetBitmap("DataGridRow.star");
             return starBmp;
         }
 
@@ -269,7 +269,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected Bitmap GetPencilBitmap() {
             if (pencilBmp == null)
-                pencilBmp = GetBitmap("DataGridRow.pencil.bmp");
+                pencilBmp = GetBitmap("DataGridRow.pencil");
             return pencilBmp;
         }
 
@@ -279,20 +279,20 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected Bitmap GetErrorBitmap() {
             if (errorBmp == null)
-                errorBmp = GetBitmap("DataGridRow.error.bmp");
+                errorBmp = GetBitmap("DataGridRow.error");
             errorBmp.MakeTransparent();
             return errorBmp;
         }
 
         protected Bitmap GetLeftArrowBitmap() {
             if (leftArrow == null)
-                leftArrow = GetBitmap("DataGridRow.left.bmp");
+                leftArrow = GetBitmap("DataGridRow.left");
             return leftArrow;
         }
 
         protected Bitmap GetRightArrowBitmap() {
             if (rightArrow == null)
-                rightArrow = GetBitmap("DataGridRow.right.bmp");
+                rightArrow = GetBitmap("DataGridRow.right");
             return rightArrow;
         }
 

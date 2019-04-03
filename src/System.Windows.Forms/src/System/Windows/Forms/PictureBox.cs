@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
                         {
                             defaultErrorImageForThread =
                                 new Bitmap(typeof(PictureBox),
-                                           "ImageInError.bmp");
+                                           "ImageInError");
                         }
                         defaultErrorImage = defaultErrorImageForThread;
                     }
@@ -495,7 +495,7 @@ namespace System.Windows.Forms {
                         {
                             defaultInitialImageForThread =
                                 new Bitmap(typeof(PictureBox),
-                                           "PictureBox.Loading.bmp");
+                                           "PictureBox.Loading");
                         }
                         defaultInitialImage = defaultInitialImageForThread;
                     }
