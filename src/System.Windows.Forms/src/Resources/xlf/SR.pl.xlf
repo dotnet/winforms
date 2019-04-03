@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="needs-review-translation">False</target>
+        <target state="new">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="needs-review-translation">True</target>
+        <target state="new">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -5104,7 +5104,7 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="ExDlgHelp">
         <source>&amp;Help</source>
-        <target state="translated">&amp;Pomoc</target>
+        <target state="translated">Pomo&amp;c</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgExceptionSection">
@@ -8163,7 +8163,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
-        <target state="new">Print preview</target>
+        <target state="translated">Podgląd wydruku</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
