@@ -23,8 +23,8 @@ namespace System.Windows.Forms {
         ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form {
 
-        private const string DownBitmapName = "down.bmp";
-        private const string UpBitmapName = "up.bmp";
+        private const string DownBitmapName = "down";
+        private const string UpBitmapName = "up";
 
         private const int MAXWIDTH = 440;
         private const int MAXHEIGHT = 325;

@@ -275,7 +275,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     
                     btnDropDown = new DropDownButton();
                     btnDropDown.UseComboBoxTheme = true;
-                    Bitmap bitmap = CreateResizedBitmap("Arrow.ico", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
+                    Bitmap bitmap = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
                     btnDropDown.Image = bitmap;
                     btnDropDown.BackColor = SystemColors.Control;
                     btnDropDown.ForeColor = SystemColors.ControlText;
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     btnDialog.BackColor = SystemColors.Control;
                     btnDialog.ForeColor = SystemColors.ControlText;
                     btnDialog.TabIndex = 3;
-                    btnDialog.Image = CreateResizedBitmap("dotdotdot.ico", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
+                    btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
                     btnDialog.Click += new EventHandler(this.OnBtnClick);
                     btnDialog.KeyDown += new KeyEventHandler(this.OnBtnKeyDown);
                     btnDialog.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
@@ -5123,11 +5123,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         if (btnDialog != null) {
                             DialogButton.Size = DropDownButton.Size;
                             if (isScalingRequirementMet) {
-                                btnDialog.Image = CreateResizedBitmap("dotdotdot.ico", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
+                                btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
                             }
                         }
                         if (isScalingRequirementMet) {
-                            btnDropDown.Image = CreateResizedBitmap("Arrow.ico", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
+                            btnDropDown.Image = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
                         }
                     }
 

@@ -18291,7 +18291,7 @@ example usage
                     form.SizeGripStyle = SizeGripStyle.Show;
                     form.DockPadding.Bottom = 16; // size grip size
 
-                    Bitmap bitmap = new Bitmap(grid.GetType(), "PropertyGrid.bmp");
+                    Bitmap bitmap = new Bitmap(grid.GetType(), "PropertyGrid");
                     bitmap.MakeTransparent();
                     form.Icon = Icon.FromHandle(bitmap.GetHicon());
 

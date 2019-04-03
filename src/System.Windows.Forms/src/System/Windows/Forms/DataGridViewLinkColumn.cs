@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Globalization;
 
     /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewLinkColumn), "DataGridViewLinkColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewLinkColumn), "DataGridViewLinkColumn")]
     public class DataGridViewLinkColumn : DataGridViewColumn
     {
         private static Type columnType = typeof(DataGridViewLinkColumn);

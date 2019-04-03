@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
          private static Image DownImage {
             get { 
                 if (downScrollImage == null) {
-                      downScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonDown.bmp"); 
+                      downScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonDown"); 
                       downScrollImage.MakeTransparent(Color.White);
 
                 }
@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
         private static Image UpImage {
             get { 
                 if (upScrollImage == null) {
-                      upScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonUp.bmp"); 
+                      upScrollImage = new Bitmap(typeof(ToolStripScrollButton), "ScrollButtonUp"); 
                       upScrollImage.MakeTransparent(Color.White);
 
                 }

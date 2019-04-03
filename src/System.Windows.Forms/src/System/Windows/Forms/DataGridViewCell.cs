@@ -275,7 +275,7 @@ namespace System.Windows.Forms
             {
                 if (errorBmp == null)
                 {
-                    errorBmp = GetBitmap("DataGridViewRow.error.bmp");
+                    errorBmp = GetBitmap("DataGridViewRow.error");
                 }
                 return errorBmp;
             }

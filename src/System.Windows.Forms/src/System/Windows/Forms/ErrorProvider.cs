@@ -555,7 +555,7 @@ namespace System.Windows.Forms {
                 if (defaultIcon == null) {
                     lock (typeof(ErrorProvider)) {
                         if (defaultIcon == null) {
-                            defaultIcon = new Icon(typeof(ErrorProvider), "Error.ico");
+                            defaultIcon = new Icon(typeof(ErrorProvider), "Error");
                         }
                     }
                 }
