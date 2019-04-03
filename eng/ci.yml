@@ -135,7 +135,7 @@ jobs:
           $(_OfficialBuildIdArgs)
           -build
           /p:Coverage=$(_Coverage)
-          /bl:$(Artifacts.Log)\BuildSrc.binlog          
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc.binlog          
         displayName: Build
 
     # Run Unit Tests
@@ -145,7 +145,7 @@ jobs:
           -configuration $(_BuildConfig)
           $(_OfficialBuildIdArgs)
           -test
-          /bl:$(Artifacts.Log)\Test.binlog
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test.binlog
           /p:Coverage=$(_Coverage)
           /m:1
         displayName: Run Unit Tests on Build Machine (Debug)
@@ -200,7 +200,7 @@ jobs:
           -pack
           -sign $(_SignArgs)
           -publish $(_PublishArgs)
-          /bl:$(Artifacts.Log)\PackSignPublish.binlog
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\PackSignPublish.binlog
         displayName: Pack, Sign, and Publish
 
       # Upload code coverage data
@@ -208,7 +208,7 @@ jobs:
           eng/CodeCoverage.proj
           /p:Configuration=$(_BuildConfig)
           /p:CodeCovToken=$(CODECOV_TOKEN)
-          /bl:$(Artifacts.Log)\CodeCoverage.binlog
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\CodeCoverage.binlog
         displayName: Upload coverage to codecov.io (Debug)
         condition: and(succeeded(), eq(variables._Coverage, 'true'))
 
