@@ -34,7 +34,7 @@
       </trans-unit>
       <trans-unit id="closeToolStripButton.Text">
         <source>&amp;Close</source>
-        <target state="translated">&amp;Schließen</target>
+        <target state="translated">S&amp;chließen</target>
         <note />
       </trans-unit>
       <trans-unit id="fourpagesToolStripButton.AccessibleDescription">
@@ -74,7 +74,7 @@
       </trans-unit>
       <trans-unit id="pageCounter.AccessibleName">
         <source>PageUpDown</source>
-        <target state="new">PageUpDown</target>
+        <target state="translated">PageUpDown</target>
         <note />
       </trans-unit>
       <trans-unit id="pageToolStripLabel.Text">
@@ -84,7 +84,7 @@
       </trans-unit>
       <trans-unit id="previewControl.AccessibleName">
         <source>PreviewControl</source>
-        <target state="new">PreviewControl</target>
+        <target state="translated">PreviewControl</target>
         <note />
       </trans-unit>
       <trans-unit id="printToolStripButton.AccessibleDescription">
@@ -134,7 +134,7 @@
       </trans-unit>
       <trans-unit id="toolStrip1.AccessibleName">
         <source>PrintPreviewToolStrip</source>
-        <target state="new">PrintPreviewToolStrip</target>
+        <target state="translated">PrintPreviewToolStrip</target>
         <note />
       </trans-unit>
       <trans-unit id="toolStrip1.Text">

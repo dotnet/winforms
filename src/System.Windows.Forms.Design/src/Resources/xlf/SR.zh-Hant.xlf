@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
-        <target state="new">The serialization store is closed.  New objects cannot be added to a closed store.</target>
+        <target state="translated">序列化存放區已關閉。新物件無法加入已關閉的存放區。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
         <source>Complete deserialization of {0} failed.</source>
-        <target state="new">Complete deserialization of {0} failed.</target>
+        <target state="translated">對 {0} 的完整序列化失敗。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
         <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
-        <target state="new">This type of serialization store is not supported.  Use a store returned by the CreateStore method.</target>
+        <target state="translated">不支援這種類型的序列化存放區。請使用 CreateStore 方法傳回的存放區。</target>
         <note />
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
@@ -39,97 +39,97 @@
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
         <source>The container cannot be disposed at design time.</source>
-        <target state="new">The container cannot be disposed at design time.</target>
+        <target state="translated">這個容器無法在設計階段處置。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceDesignerNotLoaded">
         <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="new">Cannot create a view for this design surface because the designer is not loaded.</target>
+        <target state="translated">因為沒有載入設計工具，所以無法建立這個設計介面的檢視。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</target>
+        <target state="translated">載入文件時發生錯誤。請修正錯誤，然後重新嘗試載入文件。錯誤訊息為:\r\n\r\n{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
         <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="new">The designer loader did not provide a root component but has not indicated why.</target>
+        <target state="translated">設計工具載入器未提供根元件，也未指明原因。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoSupportedTechnology">
         <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="new">The designer loaded, but it does not offer a view compatible with this design surface.</target>
+        <target state="translated">設計工具已載入，但是它並未提供與這個設計介面相容的檢視。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceServiceIsFixed">
         <source>The service {0} cannot be removed from the service container.</source>
-        <target state="new">The service {0} cannot be removed from the service container.</target>
+        <target state="translated">無法從服務容器移除服務 {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'</source>
-        <target state="new">Could not find method '{0}'</target>
+        <target state="translated">找不到方法 '{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
-        <target state="new">Cannot remove or destroy inherited component '{0}'.</target>
+        <target state="translated">無法移除或摧毀繼承的元件 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCyclicAdd">
         <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
-        <target state="new">Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</target>
+        <target state="translated">無法將 {0} 的執行個體加入設計工具，因為它可能會產生循環相依。請確定類型的命名空間和類型名稱與根元件 {1} 不相同。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDesignerNeedsComponent">
         <source>Failure initializing the designer.  It has no Component member.</source>
-        <target state="new">Failure initializing the designer.  It has no Component member.</target>
+        <target state="translated">無法初始化這個設計工具。它沒有元件成員。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDestroyComponentTransaction">
         <source>Deleting '{0}'.</source>
-        <target state="new">Deleting '{0}'.</target>
+        <target state="translated">正在刪除 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDuplicateName">
         <source>The name {0} is already in use by another component.</source>
-        <target state="new">The name {0} is already in use by another component.</target>
+        <target state="translated">已經有另一個元件使用這個名稱 {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostFailedComponentCreate">
         <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
-        <target state="new">Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</target>
+        <target state="translated">無法建立 {0} 類型的元件。請確認該類型會實作 IComponent 並且提供正確的公用建構函式。正確的建構函式應該不接受參數，或者只接受一個 IContainer 參數。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostGenericTransactionName">
         <source>No Description Available</source>
-        <target state="new">No Description Available</target>
+        <target state="translated">沒有可用的描述</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostLoaderSpecified">
         <source>A designer loader has already been configured for this design surface.</source>
-        <target state="new">A designer loader has already been configured for this design surface.</target>
+        <target state="translated">已經對這個設計介面設定了設計工具載入器。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNestedTransaction">
         <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
-        <target state="new">The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</target>
+        <target state="translated">設計工具異動 '{0}' 無法認可或取消，因為巢狀異動 '{1}' 仍然在作用中。請先認可或取消巢狀異動。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoBaseClass">
         <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
-        <target state="new">Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</target>
+        <target state="translated">無法開啟這個檔案的設計工具，因為它裡面的類別不會從能以視覺化方式設計的類別繼承。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoTopLevelDesigner">
         <source>There is no designer for the class {0}.</source>
-        <target state="new">There is no designer for the class {0}.</target>
+        <target state="translated">沒有類別 {0} 的設計工具。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
-        <target state="new">New components cannot be added while a designer is unloading.</target>
+        <target state="translated">無法在卸載設計工具時加入新元件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
@@ -234,7 +234,7 @@
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
-        <target state="new">The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</target>
+        <target state="translated">已經將擴充性提供者 {0} 加入做為擴充項。加入另一個會產生重複的屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -254,37 +254,37 @@
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
-        <target state="new">You cannot create a new session because this serialization manager already has an active serialization session.</target>
+        <target state="translated">無法建立新工作階段，因為這個序列化管理員已經有使用中的序列化工作階段。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerDuplicateComponentDecl">
         <source>Duplicate declaration of member '{0}'</source>
-        <target state="new">Duplicate declaration of member '{0}'</target>
+        <target state="translated">成員 '{0}' 重複宣告</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNameInUse">
         <source>The name '{0}' is already used by another object.</source>
-        <target state="new">The name '{0}' is already used by another object.</target>
+        <target state="translated">其他物件已經使用名稱 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNoMatchingCtor">
         <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
-        <target state="new">Type '{0}' does not have a constructor with parameters of types {1}.</target>
+        <target state="translated">類型 '{0}' 沒有類型 {1} 參數的建構函式。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNoSession">
         <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
-        <target state="new">This method cannot be invoked because the serialization manager does not have an active serialization session.</target>
+        <target state="translated">無法叫用這個方法，因為這個序列化管理員沒有使用中的序列化工作階段。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerObjectHasName">
         <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
-        <target state="new">Cannot name the object '{0}' because it is already named '{1}'.</target>
+        <target state="translated">無法命名物件 '{0}'，因為已經命名為 '{1}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerWithinSession">
         <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
-        <target state="new">This method cannot be invoked because the serialization manager has an active serialization session.</target>
+        <target state="translated">無法叫用這個方法，因為這個序列化管理員有使用中的序列化工作階段。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerBadElementTypes">
@@ -294,67 +294,67 @@
       </trans-unit>
       <trans-unit id="SerializerFieldTargetEvalFailed">
         <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
-        <target state="new">The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</target>
+        <target state="translated">在目標物件上找不到欄位 '{0}'。請確定欄位是定義為目標物件上的執行個體變數，並且具有正確的範圍。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerInvalidArrayRank">
         <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
-        <target state="new">Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</target>
+        <target state="translated">陣列陣序規範 '{0}' 太高。Visual Studio 只能儲存並載入陣序規範為 1 的陣列。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerLostStatements">
         <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
-        <target state="new">Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</target>
+        <target state="translated">物件 '{0}' 的程式碼陳述式在序列化過程中遺失。這種情況可能是其他物件在序列化過程中有不當行為所造成的。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerMemberTypeNotSerializable">
         <source>Members of type '{0}' cannot be serialized.</source>
-        <target state="new">Members of type '{0}' cannot be serialized.</target>
+        <target state="translated">無法序列化 '{0}' 類型的成員。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoRootExpression">
         <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
-        <target state="new">The source code contains a reference to the class definition, but the class definition cannot be found.</target>
+        <target state="translated">原始程式碼含有類別定義的參考，但是找不到這個類別定義。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSerializerForComponent">
         <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
-        <target state="new">The object '{0}' failed to serialize itself.  It may not support code generation.</target>
+        <target state="translated">物件 '{0}' 無法序列化它本身。它可能不支援程式碼產生。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchEvent">
         <source>The type '{0}' has no event named '{1}'.</source>
-        <target state="new">The type '{0}' has no event named '{1}'.</target>
+        <target state="translated">類型 '{0}' 沒有名為 '{1}' 的事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchField">
         <source>The type '{0}' has no field named '{1}'.</source>
-        <target state="new">The type '{0}' has no field named '{1}'.</target>
+        <target state="translated">類型 '{0}' 沒有名為 '{1}' 的欄位。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchProperty">
         <source>The type '{0}' has no property named '{1}'.</source>
-        <target state="new">The type '{0}' has no property named '{1}'.</target>
+        <target state="translated">類型 '{0}' 沒有名為 '{1}' 的屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
-        <target state="new">Error reading resources from the resource file for the culture {0}: {1}</target>
+        <target state="translated">從資源檔案讀取文化特性 {0} 的資源時發生錯誤: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceExceptionInvariant">
         <source>Error reading resources from the resource file for the default culture: {0}</source>
-        <target state="new">Error reading resources from the resource file for the default culture: {0}</target>
+        <target state="translated">從資源檔案讀取預設文化特性的資源時發生錯誤: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
-        <target state="new">Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</target>
+        <target state="translated">找不到類型 '{0}'。請確認已經參考包含此類型的組件。如果此類型是您開發專案的一部分，請確認此專案是否已使用您目前平台的設定或 [Any CPU] 成功建置。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerUndeclaredName">
         <source>The variable '{0}' is either undeclared or was never assigned.</source>
-        <target state="new">The variable '{0}' is either undeclared or was never assigned.</target>
+        <target state="translated">變數名稱 '{0}' 尚未宣告或沒有指派。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -379,52 +379,52 @@
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
         <source>Type '{0}' is not available in the target framework.</source>
-        <target state="new">Type '{0}' is not available in the target framework.</target>
+        <target state="translated">類型 '{0}' 不適用於此目標 Framework。</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
         <source>Add Component</source>
-        <target state="new">Add Component</target>
+        <target state="translated">加入元件</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd1">
         <source>Add {0}</source>
-        <target state="new">Add {0}</target>
+        <target state="translated">加入 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange0">
         <source>Change Component</source>
-        <target state="new">Change Component</target>
+        <target state="translated">變更元件</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange1">
         <source>Change {0}</source>
-        <target state="new">Change {0}</target>
+        <target state="translated">變更 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange2">
         <source>Change {0}.{1}</source>
-        <target state="new">Change {0}.{1}</target>
+        <target state="translated">變更 {0}.{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove0">
         <source>Remove Component</source>
-        <target state="new">Remove Component</target>
+        <target state="translated">移除元件</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove1">
         <source>Remove {0}</source>
-        <target state="new">Remove {0}</target>
+        <target state="translated">移除 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRename">
         <source>Rename {0} to {1}</source>
-        <target state="new">Rename {0} to {1}</target>
+        <target state="translated">將 {0} 重新命名為 {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">找不到必要的服務 {0}。如果您已移除這項服務，請務必提供替代的服務。</target>
         <note />
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">

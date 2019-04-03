@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
-        <target state="new">The serialization store is closed.  New objects cannot be added to a closed store.</target>
+        <target state="translated">Úložiště serializace je zavřeno. Do zavřeného úložiště nelze přidávat nové objekty.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
         <source>Complete deserialization of {0} failed.</source>
-        <target state="new">Complete deserialization of {0} failed.</target>
+        <target state="translated">Úplná rekonstrukce {0} se nezdařila.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
         <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
-        <target state="new">This type of serialization store is not supported.  Use a store returned by the CreateStore method.</target>
+        <target state="translated">Tento typ úložiště serializací není podporován. Použijte úložiště vrácené metodou CreateStore.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
@@ -39,97 +39,97 @@
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
         <source>The container cannot be disposed at design time.</source>
-        <target state="new">The container cannot be disposed at design time.</target>
+        <target state="translated">Kontejner nelze uvolnit v době návrhu.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceDesignerNotLoaded">
         <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="new">Cannot create a view for this design surface because the designer is not loaded.</target>
+        <target state="translated">Nelze vytvořit zobrazení pro tuto návrhovou plochu, protože návrhář není zaveden.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</target>
+        <target state="translated">Při načítání dokumentu došlo k chybě. Opravte chybu a pak zkuste dokument načíst znovu. Následuje chybová zpráva:\r\n\r\n{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
         <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="new">The designer loader did not provide a root component but has not indicated why.</target>
+        <target state="translated">Zaváděcí program návrháře neposkytl kořenovou součást a neurčil důvod této situace.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoSupportedTechnology">
         <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="new">The designer loaded, but it does not offer a view compatible with this design surface.</target>
+        <target state="translated">Návrhář byl zaveden, ale nenabízí zobrazení kompatibilní s touto návrhovou plochou.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceServiceIsFixed">
         <source>The service {0} cannot be removed from the service container.</source>
-        <target state="new">The service {0} cannot be removed from the service container.</target>
+        <target state="translated">Službu {0} nelze odebrat z kontejneru služeb.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'</source>
-        <target state="new">Could not find method '{0}'</target>
+        <target state="translated">Nepovedlo se najít metodu {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
-        <target state="new">Cannot remove or destroy inherited component '{0}'.</target>
+        <target state="translated">Zděděnou součást {0} nelze odebrat nebo zrušit.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCyclicAdd">
         <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
-        <target state="new">Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</target>
+        <target state="translated">Do návrháře nelze přidat instanci objektu {0}, protože by vznikla cyklická závislost. Ověřte, že typ nemá stejný obor názvů a název jako kořenová součást {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDesignerNeedsComponent">
         <source>Failure initializing the designer.  It has no Component member.</source>
-        <target state="new">Failure initializing the designer.  It has no Component member.</target>
+        <target state="translated">Inicializace návrháře se nezdařila. Návrhář neobsahuje žádný člen Component.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDestroyComponentTransaction">
         <source>Deleting '{0}'.</source>
-        <target state="new">Deleting '{0}'.</target>
+        <target state="translated">Odstraňuje se soubor {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDuplicateName">
         <source>The name {0} is already in use by another component.</source>
-        <target state="new">The name {0} is already in use by another component.</target>
+        <target state="translated">Název {0} je již použit jinou součástí.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostFailedComponentCreate">
         <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
-        <target state="new">Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</target>
+        <target state="translated">Součást typu {0} nelze vytvořit. Ověřte, že tento typ implementuje objekt IComponent a obsahuje odpovídající veřejný konstruktor. Odpovídající konstruktory nemají žádné parametry nebo mají jediný parametr typu IContainer.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostGenericTransactionName">
         <source>No Description Available</source>
-        <target state="new">No Description Available</target>
+        <target state="translated">Popis není k dispozici.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostLoaderSpecified">
         <source>A designer loader has already been configured for this design surface.</source>
-        <target state="new">A designer loader has already been configured for this design surface.</target>
+        <target state="translated">Zaváděcí program návrháře již byl pro tuto návrhovou plochu konfigurován.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNestedTransaction">
         <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
-        <target state="new">The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</target>
+        <target state="translated">Transakci návrháře {0} nelze potvrdit ani zrušit, protože vnořená transakce {1} je stále aktivní. Nejprve potvrďte nebo zrušte vnořenou transakci.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoBaseClass">
         <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
-        <target state="new">Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</target>
+        <target state="translated">Nelze otevřít návrháře pro soubor, protože třída, kterou obsahuje, nedědí ze třídy, kterou lze vizuálně upravovat.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoTopLevelDesigner">
         <source>There is no designer for the class {0}.</source>
-        <target state="new">There is no designer for the class {0}.</target>
+        <target state="translated">Pro třídu {0} neexistuje žádný návrhář.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
-        <target state="new">New components cannot be added while a designer is unloading.</target>
+        <target state="translated">Během uvolňování návrháře nelze přidávat nové součásti.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
@@ -234,7 +234,7 @@
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
-        <target state="new">The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</target>
+        <target state="translated">Zprostředkovatel rozšířeného objektu {0} již byl přidán jako rozšiřující objekt. V případě přidání dalšího by došlo k duplicitě vlastností.</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -254,37 +254,37 @@
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
-        <target state="new">You cannot create a new session because this serialization manager already has an active serialization session.</target>
+        <target state="translated">Nelze vytvořit novou relaci, protože tento správce serializace již obsahuje aktivní relaci serializace.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerDuplicateComponentDecl">
         <source>Duplicate declaration of member '{0}'</source>
-        <target state="new">Duplicate declaration of member '{0}'</target>
+        <target state="translated">Duplicitní deklarace člena {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNameInUse">
         <source>The name '{0}' is already used by another object.</source>
-        <target state="new">The name '{0}' is already used by another object.</target>
+        <target state="translated">Název {0} je již použit pro jiný objekt.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNoMatchingCtor">
         <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
-        <target state="new">Type '{0}' does not have a constructor with parameters of types {1}.</target>
+        <target state="translated">Typ {0} neobsahuje konstruktor s parametry typů {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNoSession">
         <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
-        <target state="new">This method cannot be invoked because the serialization manager does not have an active serialization session.</target>
+        <target state="translated">Tuto metodu nelze spustit, protože správce serializace neobsahuje aktivní relaci serializace.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerObjectHasName">
         <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
-        <target state="new">Cannot name the object '{0}' because it is already named '{1}'.</target>
+        <target state="translated">Nelze zadat název objektu {0}, protože tento objekt již má název {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerWithinSession">
         <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
-        <target state="new">This method cannot be invoked because the serialization manager has an active serialization session.</target>
+        <target state="translated">Tuto metodu nelze spustit, protože správce serializace obsahuje aktivní relaci serializace.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerBadElementTypes">
@@ -294,67 +294,67 @@
       </trans-unit>
       <trans-unit id="SerializerFieldTargetEvalFailed">
         <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
-        <target state="new">The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</target>
+        <target state="translated">Pole {0} nelze v cílovém objektu nalézt. Zkontrolujte, zda je pole definováno jako proměnná instance v cílovém objektu a zda má správný obor.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerInvalidArrayRank">
         <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
-        <target state="new">Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</target>
+        <target state="translated">Rozměr pole {0} je příliš velký. Aplikace Visual Studio může ukládat a načítat pouze pole o rozměru 1.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerLostStatements">
         <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
-        <target state="new">Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</target>
+        <target state="translated">Během serializace byly ztraceny příkazy kódu pro objekt {0}. Pravděpodobně se jedná o důsledek nesprávného chování jiného objektu během serializace.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerMemberTypeNotSerializable">
         <source>Members of type '{0}' cannot be serialized.</source>
-        <target state="new">Members of type '{0}' cannot be serialized.</target>
+        <target state="translated">Členy typu {0} nelze serializovat.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoRootExpression">
         <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
-        <target state="new">The source code contains a reference to the class definition, but the class definition cannot be found.</target>
+        <target state="translated">Zdrojový kód obsahuje odkaz na definici třídy, tato definice však nebyla nalezena.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSerializerForComponent">
         <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
-        <target state="new">The object '{0}' failed to serialize itself.  It may not support code generation.</target>
+        <target state="translated">Objektu {0} se nepodařilo serializovat sama sebe. Objekt pravděpodobně nepodporuje generování kódu.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchEvent">
         <source>The type '{0}' has no event named '{1}'.</source>
-        <target state="new">The type '{0}' has no event named '{1}'.</target>
+        <target state="translated">Typ {0} neobsahuje žádnou událost s názvem {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchField">
         <source>The type '{0}' has no field named '{1}'.</source>
-        <target state="new">The type '{0}' has no field named '{1}'.</target>
+        <target state="translated">Typ {0} neobsahuje žádné pole s názvem {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchProperty">
         <source>The type '{0}' has no property named '{1}'.</source>
-        <target state="new">The type '{0}' has no property named '{1}'.</target>
+        <target state="translated">Typ {0} neobsahuje žádnou vlastnost s názvem {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
-        <target state="new">Error reading resources from the resource file for the culture {0}: {1}</target>
+        <target state="translated">Při čtení prostředků ze souboru prostředků jazykové verze {0} došlo k chybě: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceExceptionInvariant">
         <source>Error reading resources from the resource file for the default culture: {0}</source>
-        <target state="new">Error reading resources from the resource file for the default culture: {0}</target>
+        <target state="translated">Při čtení prostředků ze souboru prostředků výchozí jazykové verze došlo k chybě: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
-        <target state="new">Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</target>
+        <target state="translated">Typ {0} nebyl nalezen. Zkontrolujte, zda je uveden odkaz na sestavení, které daný typ obsahuje. Je-li tento typ součástí vyvíjeného projektu, zkontrolujte, zda je projekt úspěšně sestaven pomocí nastavení pro aktuální platformu nebo libovolný procesor.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerUndeclaredName">
         <source>The variable '{0}' is either undeclared or was never assigned.</source>
-        <target state="new">The variable '{0}' is either undeclared or was never assigned.</target>
+        <target state="translated">Proměnná {0} není deklarována nebo jí dosud nebyla přiřazena hodnota.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -379,52 +379,52 @@
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
         <source>Type '{0}' is not available in the target framework.</source>
-        <target state="new">Type '{0}' is not available in the target framework.</target>
+        <target state="translated">Typ {0} není v cílové architektuře k dispozici.</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
         <source>Add Component</source>
-        <target state="new">Add Component</target>
+        <target state="translated">Přidat součást</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd1">
         <source>Add {0}</source>
-        <target state="new">Add {0}</target>
+        <target state="translated">Přidat: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange0">
         <source>Change Component</source>
-        <target state="new">Change Component</target>
+        <target state="translated">Změnit součást</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange1">
         <source>Change {0}</source>
-        <target state="new">Change {0}</target>
+        <target state="translated">Změnit: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange2">
         <source>Change {0}.{1}</source>
-        <target state="new">Change {0}.{1}</target>
+        <target state="translated">Změnit {0}.{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove0">
         <source>Remove Component</source>
-        <target state="new">Remove Component</target>
+        <target state="translated">Odebrat součást</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove1">
         <source>Remove {0}</source>
-        <target state="new">Remove {0}</target>
+        <target state="translated">Odebrat {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRename">
         <source>Rename {0} to {1}</source>
-        <target state="new">Rename {0} to {1}</target>
+        <target state="translated">Přejmenovat {0} na {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Služba {0} je požadována, ale nebyla nalezena. Pokud jste tuto službu odebrali, zajistěte její náhradu.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
