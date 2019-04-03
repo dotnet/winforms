@@ -743,14 +743,14 @@ namespace System.Windows.Forms {
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
-                rightArrow = GetBitmap("DataGridParentRows.RightArrow.bmp", Color.White);
+                rightArrow = GetBitmap("DataGridParentRows.RightArrow", Color.White);
             return rightArrow;
         }
 
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
-                leftArrow = GetBitmap("DataGridParentRows.LeftArrow.bmp", Color.White);
+                leftArrow = GetBitmap("DataGridParentRows.LeftArrow", Color.White);
             return leftArrow;
         }
 

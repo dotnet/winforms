@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design {
             
             get {
                 if (!checkedBmp && bitmap == null) {
-                    string bmpName = GetType().Name + ".bmp";
+                    string bmpName = GetType().Name + "";
                     try
                     {
                         bitmap = new Bitmap(GetType(), bmpName);
