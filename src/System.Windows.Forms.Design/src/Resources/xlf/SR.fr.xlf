@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
-        <target state="new">The serialization store is closed.  New objects cannot be added to a closed store.</target>
+        <target state="translated">Le magasin de sérialisation est fermé. Impossible d'ajouter de nouveaux objets à un magasin fermé.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
         <source>Complete deserialization of {0} failed.</source>
-        <target state="new">Complete deserialization of {0} failed.</target>
+        <target state="translated">La désérialisation de {0} a échoué.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
         <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
-        <target state="new">This type of serialization store is not supported.  Use a store returned by the CreateStore method.</target>
+        <target state="translated">Ce type de magasin de sérialisation n'est pas pris en charge. Utilisez un magasin retourné par la méthode CreateStore.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
@@ -39,97 +39,97 @@
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
         <source>The container cannot be disposed at design time.</source>
-        <target state="new">The container cannot be disposed at design time.</target>
+        <target state="translated">Le conteneur ne peut pas être supprimé au moment du design.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceDesignerNotLoaded">
         <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="new">Cannot create a view for this design surface because the designer is not loaded.</target>
+        <target state="translated">Impossible de créer une vue pour cette aire de conception, car le concepteur n'est pas chargé.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</target>
+        <target state="translated">Une erreur s'est produite durant le chargement du document. Corrigez l'erreur, puis essayez de recharger le document. Message d'erreur :\r\n\r\n{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
         <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="new">The designer loader did not provide a root component but has not indicated why.</target>
+        <target state="translated">Le chargeur du concepteur n'a fourni aucun composant racine et n'a pas indiqué pourquoi.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoSupportedTechnology">
         <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="new">The designer loaded, but it does not offer a view compatible with this design surface.</target>
+        <target state="translated">Le concepteur est chargé mais n'offre aucune vue compatible avec cette aire de conception.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceServiceIsFixed">
         <source>The service {0} cannot be removed from the service container.</source>
-        <target state="new">The service {0} cannot be removed from the service container.</target>
+        <target state="translated">Impossible de supprimer le service {0} dans le conteneur de service.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'</source>
-        <target state="new">Could not find method '{0}'</target>
+        <target state="translated">Méthode '{0}' introuvable</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
-        <target state="new">Cannot remove or destroy inherited component '{0}'.</target>
+        <target state="translated">Impossible d'enlever ou de détruire le composant hérité '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCyclicAdd">
         <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
-        <target state="new">Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</target>
+        <target state="translated">Impossible d'ajouter une instance de {0} au concepteur, car cela entraînerait la création d'une dépendance circulaire. Vérifiez que le type n'a pas le même espace de noms ni le même nom que le composant racine {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDesignerNeedsComponent">
         <source>Failure initializing the designer.  It has no Component member.</source>
-        <target state="new">Failure initializing the designer.  It has no Component member.</target>
+        <target state="translated">Échec d'initialisation du concepteur. Il ne dispose d'aucun membre de Component.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDestroyComponentTransaction">
         <source>Deleting '{0}'.</source>
-        <target state="new">Deleting '{0}'.</target>
+        <target state="translated">Suppression de '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostDuplicateName">
         <source>The name {0} is already in use by another component.</source>
-        <target state="new">The name {0} is already in use by another component.</target>
+        <target state="translated">Le nom {0} est déjà utilisé par un autre composant.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostFailedComponentCreate">
         <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
-        <target state="new">Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</target>
+        <target state="translated">Impossible de créer le composant de type {0}. Assurez-vous que le type implémente IComponent et offre un constructeur public approprié. Les constructeurs jugés appropriés n'adoptent aucun paramètre ou acceptent un paramètre IContainer unique.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostGenericTransactionName">
         <source>No Description Available</source>
-        <target state="new">No Description Available</target>
+        <target state="translated">Aucune description disponible</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostLoaderSpecified">
         <source>A designer loader has already been configured for this design surface.</source>
-        <target state="new">A designer loader has already been configured for this design surface.</target>
+        <target state="translated">Un chargeur de concepteur a déjà été configuré pour cette aire de conception.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNestedTransaction">
         <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
-        <target state="new">The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</target>
+        <target state="translated">Impossible de valider ou d'annuler la transaction '{0}' du concepteur, car une transaction imbriquée '{1}' est toujours active. Validez ou annulez d'abord la transaction imbriquée.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoBaseClass">
         <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
-        <target state="new">Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</target>
+        <target state="translated">Impossible d'ouvrir un concepteur pour le fichier, car la classe qu'il contient n'hérite pas d'une classe qui peut être conçue visuellement.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostNoTopLevelDesigner">
         <source>There is no designer for the class {0}.</source>
-        <target state="new">There is no designer for the class {0}.</target>
+        <target state="translated">Aucun concepteur n'existe pour la classe {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
-        <target state="new">New components cannot be added while a designer is unloading.</target>
+        <target state="translated">Impossible d'ajouter de nouveaux composants lors du déchargement d'un concepteur.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
@@ -234,7 +234,7 @@
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
-        <target state="new">The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</target>
+        <target state="translated">Le fournisseur d'extendeurs {0} a déjà été ajouté en tant qu'extendeur. L'ajout d'un autre créerait des propriétés en double.</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -254,37 +254,37 @@
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
-        <target state="new">You cannot create a new session because this serialization manager already has an active serialization session.</target>
+        <target state="translated">Vous ne pouvez pas créer une nouvelle session, car ce gestionnaire de sérialisation dispose déjà d'une session de sérialisation active.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerDuplicateComponentDecl">
         <source>Duplicate declaration of member '{0}'</source>
-        <target state="new">Duplicate declaration of member '{0}'</target>
+        <target state="translated">Déclaration de membre '{0}' dupliquée</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNameInUse">
         <source>The name '{0}' is already used by another object.</source>
-        <target state="new">The name '{0}' is already used by another object.</target>
+        <target state="translated">Le nom '{0}' est déjà utilisé par un autre objet.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNoMatchingCtor">
         <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
-        <target state="new">Type '{0}' does not have a constructor with parameters of types {1}.</target>
+        <target state="translated">Le type '{0}' n'a pas de constructeur avec les paramètres de types {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerNoSession">
         <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
-        <target state="new">This method cannot be invoked because the serialization manager does not have an active serialization session.</target>
+        <target state="translated">Cette méthode ne peut pas être appelée, car le gestionnaire de sérialisation ne dispose d'aucune session de sérialisation active.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerObjectHasName">
         <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
-        <target state="new">Cannot name the object '{0}' because it is already named '{1}'.</target>
+        <target state="translated">Impossible de nommer l'objet '{0}', car il est déjà nommé '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializationManagerWithinSession">
         <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
-        <target state="new">This method cannot be invoked because the serialization manager has an active serialization session.</target>
+        <target state="translated">Cette méthode ne peut pas être appelée, car le gestionnaire de sérialisation dispose d'une session de sérialisation active.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerBadElementTypes">
@@ -294,67 +294,67 @@
       </trans-unit>
       <trans-unit id="SerializerFieldTargetEvalFailed">
         <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
-        <target state="new">The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</target>
+        <target state="translated">Le champ '{0}' est introuvable dans l'objet cible. Vérifiez que le champ est défini en tant que variable d'instance dans l'objet cible et qu'il a la portée correcte.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerInvalidArrayRank">
         <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
-        <target state="new">Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</target>
+        <target state="translated">Le rang du tableau '{0}' est trop élevé. Visual Studio ne peut enregistrer et charger que des tableaux de rang 1.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerLostStatements">
         <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
-        <target state="new">Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</target>
+        <target state="translated">Les instructions de code de l'objet '{0}' ont été perdues lors de la sérialisation. Le mauvais comportement d'un autre objet lors de la sérialisation en est peut-être la cause.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerMemberTypeNotSerializable">
         <source>Members of type '{0}' cannot be serialized.</source>
-        <target state="new">Members of type '{0}' cannot be serialized.</target>
+        <target state="translated">Les membres de type '{0}' ne peuvent pas être sérialisés.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoRootExpression">
         <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
-        <target state="new">The source code contains a reference to the class definition, but the class definition cannot be found.</target>
+        <target state="translated">Le code source contient une référence à la définition de classe mais cette dernière est introuvable.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSerializerForComponent">
         <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
-        <target state="new">The object '{0}' failed to serialize itself.  It may not support code generation.</target>
+        <target state="translated">L'objet '{0}' n'est pas parvenu à se sérialiser. Il ne prend peut-être pas en charge la génération de code.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchEvent">
         <source>The type '{0}' has no event named '{1}'.</source>
-        <target state="new">The type '{0}' has no event named '{1}'.</target>
+        <target state="translated">Le type '{0}' n'a pas d'événement nommé '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchField">
         <source>The type '{0}' has no field named '{1}'.</source>
-        <target state="new">The type '{0}' has no field named '{1}'.</target>
+        <target state="translated">Le type '{0}' n'a pas de champ nommé '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerNoSuchProperty">
         <source>The type '{0}' has no property named '{1}'.</source>
-        <target state="new">The type '{0}' has no property named '{1}'.</target>
+        <target state="translated">Le type '{0}' n'a pas de propriété nommée '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
-        <target state="new">Error reading resources from the resource file for the culture {0}: {1}</target>
+        <target state="translated">Erreur lors de la lecture des ressources à partir du fichier de ressources pour la culture {0} : {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceExceptionInvariant">
         <source>Error reading resources from the resource file for the default culture: {0}</source>
-        <target state="new">Error reading resources from the resource file for the default culture: {0}</target>
+        <target state="translated">Erreur lors de la lecture des ressources à partir du fichier de ressources pour la culture par défaut : {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
-        <target state="new">Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</target>
+        <target state="translated">Type '{0}' introuvable. Vérifiez que l'assembly qui contient ce type est référencé. Si ce type est un composant de votre projet de développement, assurez-vous que le projet a été créé comme il se doit à l'aide des paramètres de votre plateforme actuelle ou Any CPU.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerUndeclaredName">
         <source>The variable '{0}' is either undeclared or was never assigned.</source>
-        <target state="new">The variable '{0}' is either undeclared or was never assigned.</target>
+        <target state="translated">La variable '{0}' n'est pas déclarée ou n'a jamais été assignée.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -379,52 +379,52 @@
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
         <source>Type '{0}' is not available in the target framework.</source>
-        <target state="new">Type '{0}' is not available in the target framework.</target>
+        <target state="translated">Le type '{0}' n'est pas disponible dans le Framework cible.</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
         <source>Add Component</source>
-        <target state="new">Add Component</target>
+        <target state="translated">Ajouter un composant</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd1">
         <source>Add {0}</source>
-        <target state="new">Add {0}</target>
+        <target state="translated">Ajouter {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange0">
         <source>Change Component</source>
-        <target state="new">Change Component</target>
+        <target state="translated">Modifier un composant</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange1">
         <source>Change {0}</source>
-        <target state="new">Change {0}</target>
+        <target state="translated">Modifier {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentChange2">
         <source>Change {0}.{1}</source>
-        <target state="new">Change {0}.{1}</target>
+        <target state="translated">Changer {0}.{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove0">
         <source>Remove Component</source>
-        <target state="new">Remove Component</target>
+        <target state="translated">Supprimer un composant</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRemove1">
         <source>Remove {0}</source>
-        <target state="new">Remove {0}</target>
+        <target state="translated">Supprimer {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentRename">
         <source>Rename {0} to {1}</source>
-        <target state="new">Rename {0} to {1}</target>
+        <target state="translated">Renommer {0} en {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
-        <target state="new">The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</target>
+        <target state="translated">Le service {0} requis est introuvable. Si vous avez supprimé ce service, assurez-vous qu'un service de remplacement est fourni.</target>
         <note />
       </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">

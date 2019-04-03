@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="needs-review-translation">False</target>
+        <target state="new">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="needs-review-translation">True</target>
+        <target state="new">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -8163,7 +8163,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
-        <target state="new">Print preview</target>
+        <target state="translated">Seitenansicht</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">

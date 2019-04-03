@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">加入(&amp;A)</target>
+        <target state="translated">新增(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">

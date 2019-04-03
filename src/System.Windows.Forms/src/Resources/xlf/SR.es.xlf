@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="needs-review-translation">False</target>
+        <target state="new">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="needs-review-translation">True</target>
+        <target state="new">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -5182,7 +5182,7 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">Aceptar</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
@@ -8163,7 +8163,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
-        <target state="new">Print preview</target>
+        <target state="translated">Vista previa de impresión</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
