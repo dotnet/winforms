@@ -40,6 +40,11 @@
 
   <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
     <Content Include="content\**\*" />
+    <Content Update="@(Content)">
+      <!-- Supress creation of content directory -->
+      <PackagePath>.\</PackagePath>
+      <SkipPackageFileCheck>true</SkipPackageFileCheck>
+    </Content>
   </ItemGroup>
 
   <Target Name="BuildPackage">
