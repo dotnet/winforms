@@ -218,9 +218,9 @@ jobs:
         # Publish the nuget package as a build artifact (only for release, ensuring package contents are real-signed)
         - task: PublishPipelineArtifact@0
           inputs:
-            artifactName: 'Package'
+            artifactName: 'Packages'
             targetPath: '$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping'
-          displayName: Publish package to build artifacts
+          displayName: Publish transport NuGet package & templates package to build artifacts
           continueOnError: true
           condition: and(succeeded(), eq(variables['_BuildConfig'], 'Release'))
 
