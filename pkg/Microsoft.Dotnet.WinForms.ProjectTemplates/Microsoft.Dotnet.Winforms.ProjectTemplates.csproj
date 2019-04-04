@@ -1,8 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk" InitialTargets="BuildPackage">
+<Project InitialTargets="BuildPackage">
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props"/>
   <PropertyGroup>
     <TargetFrameworkName>netcoreapp</TargetFrameworkName>
     <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <!-- This is a Packaging Project -->
@@ -27,17 +30,16 @@
     <Description>Project templates for .NET Core Windows Forms projects</Description>
     <Authors>Microsoft</Authors>
     <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
-    <!-- Should this be our own copy of this? https://github.com/dotnet/winforms/blob/master/LICENSE.TXT -->
-    <PackageLicenseUrl>https://github.com/dotnet/corefx/blob/master/LICENSE.TXT</PackageLicenseUrl>
     <PackageTags></PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- Supress creation of contentFiles directory -->
+    <ContentTargetFolders>.\</ContentTargetFolders>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
-    <File Include="content\**\*" />
-    <File Update="@(File)">
-      <TargetPath>%(RecursiveDir)</TargetPath>
-      <SkipPackageFileCheck>true</SkipPackageFileCheck>
-    </File>
+    <Content Include="content\**\*" />
   </ItemGroup>
 
   <Target Name="BuildPackage">
@@ -47,4 +49,26 @@
     </ItemGroup>
   </Target>
 
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets"/>
+  
+  <ItemGroup>
+    <IntermediateAssembly Remove="@(IntermediateAssembly)" />
+    <IntermediateRefAssembly Remove="@(IntermediateRefAssembly)" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!--
+      This property must be overridden to remove a few targets that compile assemblies
+    -->
+    <CoreBuildDependsOn>
+      BuildOnlySettings;
+      PrepareForBuild;
+      PreBuildEvent;
+      ResolveReferences;
+      GetTargetPath;
+      PrepareForRun;
+      IncrementalClean;
+      PostBuildEvent
+    </CoreBuildDependsOn>
+  </PropertyGroup>
 </Project>
