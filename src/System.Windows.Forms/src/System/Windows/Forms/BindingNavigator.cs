@@ -186,26 +186,20 @@ namespace System.Windows.Forms {
             // Set up images
             //
 
-            Bitmap moveFirstImage    = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
-            Bitmap movePreviousImage = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
-            Bitmap moveNextImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveNext");
-            Bitmap moveLastImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveLast");
-            Bitmap addNewImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.AddNew");
-            Bitmap deleteImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.Delete");
+            Icon moveFirstImage    = new Icon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
+            Icon movePreviousImage = new Icon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
+            Icon moveNextImage     = new Icon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
+            Icon moveLastImage     = new Icon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
+            Icon addNewImage       = new Icon(typeof(BindingNavigator), "BindingNavigator.AddNew");
+            Icon deleteImage       = new Icon(typeof(BindingNavigator), "BindingNavigator.Delete");
 
-            moveFirstImage.MakeTransparent(System.Drawing.Color.Magenta);
-            movePreviousImage.MakeTransparent(System.Drawing.Color.Magenta);
-            moveNextImage.MakeTransparent(System.Drawing.Color.Magenta);
-            moveLastImage.MakeTransparent(System.Drawing.Color.Magenta);
-            addNewImage.MakeTransparent(System.Drawing.Color.Magenta);
-            deleteImage.MakeTransparent(System.Drawing.Color.Magenta);
 
-            MoveFirstItem.Image    = moveFirstImage;
-            MovePreviousItem.Image = movePreviousImage;
-            MoveNextItem.Image     = moveNextImage;
-            MoveLastItem.Image     = moveLastImage;
-            AddNewItem.Image       = addNewImage;
-            DeleteItem.Image       = deleteImage;
+            MoveFirstItem.Image    = moveFirstImage.ToBitmap();
+            MovePreviousItem.Image = movePreviousImage.ToBitmap();
+            MoveNextItem.Image     = moveNextImage.ToBitmap();
+            MoveLastItem.Image     = moveLastImage.ToBitmap();
+            AddNewItem.Image       = addNewImage.ToBitmap();
+            DeleteItem.Image       = deleteImage.ToBitmap();
 
             MoveFirstItem.RightToLeftAutoMirrorImage = true;
             MovePreviousItem.RightToLeftAutoMirrorImage = true;
