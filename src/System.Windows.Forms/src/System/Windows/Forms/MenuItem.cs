@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
                 int oldIndex = Index;
                 if (oldIndex >= 0) {
                     if (value < 0 || value >= menu.ItemCount) {
-                        throw new ArgumentOutOfRangeException(nameof(Index), string.Format(SR.InvalidArgument, "Index", (value).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Index), value));
                     }
 
                     if (value != oldIndex) {

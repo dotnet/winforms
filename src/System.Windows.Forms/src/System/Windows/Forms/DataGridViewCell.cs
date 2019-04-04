@@ -1960,7 +1960,7 @@ namespace System.Windows.Forms
         {
             if (constraintSize.Width < 0 || constraintSize.Height < 0)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "constraintSize", constraintSize.ToString()));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(constraintSize), constraintSize));
             }
             if (constraintSize.Width == 0)
             {
@@ -1981,7 +1981,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "constraintSize", constraintSize.ToString()));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(constraintSize), constraintSize));
                 }
             }
         }
@@ -2056,7 +2056,7 @@ namespace System.Windows.Forms
                 Debug.Assert(this.RowIndex == -1);
                 if (rowIndex != -1)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
                 if (this.owningRow != null)
                 {
@@ -2081,7 +2081,7 @@ namespace System.Windows.Forms
 
             if (this.DataGridView.Rows.SharedRow(rowIndex) != this.owningRow)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
             }
 
             DataGridViewElementStates rowEffectiveState = this.DataGridView.Rows.GetRowState(rowIndex);
@@ -2841,7 +2841,7 @@ namespace System.Windows.Forms
 
             if (maxWidth <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(maxWidth), string.Format(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(maxWidth), string.Format(SR.InvalidLowBoundArgument, "maxWidth", (maxWidth).ToString(CultureInfo.CurrentCulture), 0));
             }
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
@@ -2945,7 +2945,7 @@ namespace System.Windows.Forms
         {
             if (maxHeight <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(maxHeight), string.Format(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(maxHeight), string.Format(SR.InvalidLowBoundArgument, "maxHeight", (maxHeight).ToString(CultureInfo.CurrentCulture), 0));
             }
 
             Size oneLineSize = DataGridViewCell.MeasureTextSize(graphics, text, font, flags);

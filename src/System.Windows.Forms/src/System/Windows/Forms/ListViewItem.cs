@@ -472,8 +472,9 @@ namespace System.Windows.Forms {
                 return this.ImageIndexer.Index;
             }
             set {
-                if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
             
                 ImageIndexer.Index = value;
@@ -725,7 +726,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > 14)
-                    throw new ArgumentOutOfRangeException(nameof(StateImageIndex), string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
 
                 if (listView != null && listView.IsHandleCreated) {
                     this.state[StateImageMaskSet] = (value == -1 ? 0 : 1);
@@ -1177,7 +1178,7 @@ namespace System.Windows.Forms {
                 if (entry.Name == "Text") {
                     Text = info.GetString(entry.Name);
                 }
-                else if (entry.Name == "ImageIndex") {
+                else if (entry.Name == nameof(ImageIndex)) {
                     imageIndex = info.GetInt32(entry.Name);
                 }
                 else if (entry.Name == "ImageKey") { 
@@ -1239,7 +1240,7 @@ namespace System.Windows.Forms {
         /// 
         protected virtual void Serialize(SerializationInfo info, StreamingContext context) {
             info.AddValue("Text", Text);
-            info.AddValue("ImageIndex", ImageIndexer.Index);  
+            info.AddValue(nameof(ImageIndex), ImageIndexer.Index);  
             if (!string.IsNullOrEmpty(ImageIndexer.Key)) {
                 info.AddValue("ImageKey", ImageIndexer.Key);
             }
@@ -1650,14 +1651,14 @@ namespace System.Windows.Forms {
             public ListViewSubItem this[int index] {
                 get {
                     if (index < 0 || index >= Count)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
                     return owner.subItems[index];
                 }
                 set {
                     if (index < 0 || index >= Count)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     if (value == null)
                     {

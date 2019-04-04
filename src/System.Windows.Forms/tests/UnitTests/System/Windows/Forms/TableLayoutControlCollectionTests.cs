@@ -40,12 +40,12 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutControlCollection_Add_NegativeColumn_ThrowsArgumentException()
+        public void TableLayoutControlCollection_Add_NegativeColumn_ThrowsArgumentOutOfRangeException()
         {
             var container = new TableLayoutPanel();
             var collection = new TableLayoutControlCollection(container);
             var control = new Control();
-            Assert.Throws<ArgumentException>(null, () => collection.Add(control, -2, 2));
+            Assert.Throws<ArgumentOutOfRangeException>("column", () => collection.Add(control, -2, 2));
             Assert.Equal(control, Assert.Single(collection));
             Assert.Equal(-1, container.GetColumn(control));
             Assert.Equal(-1, container.GetRow(control));

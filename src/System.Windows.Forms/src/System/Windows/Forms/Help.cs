@@ -247,7 +247,7 @@ namespace System.Windows.Forms {
                 SafeNativeMethods.HtmlHelp(handle, pathAndFileName, HH_DISPLAY_TEXT_POPUP, (NativeMethods.HH_POPUP)param);
             }
             else if (param.GetType() == typeof(int)) {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "param", "Integer"));
+                throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(param), "Integer"), nameof(param));
             }
         }
 

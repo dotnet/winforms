@@ -6891,7 +6891,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                                    DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
             }
 
             int cellCount = 0;
@@ -10908,7 +10908,7 @@ namespace System.Windows.Forms
             float weightSum = this.Columns.GetColumnsFillWeight(DataGridViewElementStates.None) + dataGridViewColumn.FillWeight;
             if (weightSum > (float)ushort.MaxValue)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
 
             // check for correctness of frozen state - throws exception if state is incorrect.
@@ -11030,7 +11030,7 @@ namespace System.Windows.Forms
                 weightSum += dataGridViewColumn.FillWeight;
                 if (weightSum > (float)ushort.MaxValue)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
                 }
             }
 
@@ -13968,7 +13968,7 @@ namespace System.Windows.Forms
             float weightSum = this.Columns.GetColumnsFillWeight(DataGridViewElementStates.None) - dataGridViewColumn.FillWeight + fillWeight;
             if (weightSum > (float)ushort.MaxValue)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
         }
 

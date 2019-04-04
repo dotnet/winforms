@@ -772,7 +772,7 @@ namespace System.Windows.Forms {
                 if (value != SplitterDistance)
                 {
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException(nameof(SplitterDistance), string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", (value).ToString(CultureInfo.CurrentCulture), "0"));
+                        throw new ArgumentOutOfRangeException(nameof(SplitterDistance), string.Format(SR.InvalidLowBoundArgument, "SplitterDistance", value, 0));
                     }
                     
 
@@ -868,7 +868,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value < 1 ) {
-                    throw new ArgumentOutOfRangeException(nameof(SplitterIncrement), string.Format(SR.InvalidLowBoundArgumentEx, "SplitterIncrement", (value).ToString(CultureInfo.CurrentCulture), "1"));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterIncrement), value, 1));
                 }
 
                 splitterInc = value;
@@ -1412,17 +1412,17 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void ApplyPanel1MinSize(int value) {
             if (value < 0) {
-                throw new ArgumentOutOfRangeException(nameof(Panel1MinSize), string.Format(SR.InvalidLowBoundArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture), "0"));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel1MinSize), value));
             }
 
             if (Orientation== Orientation.Vertical) {
                 if (DesignMode && Width != DefaultSize.Width && value + Panel2MinSize + SplitterWidth > Width) {
-                    throw new ArgumentOutOfRangeException(nameof(Panel1MinSize), string.Format(SR.InvalidArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel1MinSize), value));
                 }
             }
             else if (Orientation == Orientation.Horizontal) {
                 if (DesignMode && Height != DefaultSize.Height && value + Panel2MinSize + SplitterWidth > Height) {
-                    throw new ArgumentOutOfRangeException(nameof(Panel1MinSize), string.Format(SR.InvalidArgument, "Panel1MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel1MinSize), value));
                 }
             }
 
@@ -1437,17 +1437,17 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void ApplyPanel2MinSize(int value) {
             if (value < 0) {
-                throw new ArgumentOutOfRangeException(nameof(Panel2MinSize), string.Format(SR.InvalidLowBoundArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture), "0"));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(Panel2MinSize), value, 0));
             }
             if (Orientation == Orientation.Vertical) {
                 if (DesignMode && Width != DefaultSize.Width && value + Panel1MinSize + SplitterWidth > Width) {
-                    throw new ArgumentOutOfRangeException(nameof(Panel2MinSize), string.Format(SR.InvalidArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value.ToString()));
                 }
 
             }
             else if (Orientation == Orientation.Horizontal) {
                 if (DesignMode && Height != DefaultSize.Height && value + Panel1MinSize + SplitterWidth > Height) {
-                    throw new ArgumentOutOfRangeException(nameof(Panel2MinSize), string.Format(SR.InvalidArgument, "Panel2MinSize", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Panel2MinSize), value));
                 }
             }
             panel2MinSize = value;
@@ -1461,17 +1461,17 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private void ApplySplitterWidth(int value) {
             if (value < 1) {
-                throw new ArgumentOutOfRangeException(nameof(SplitterWidth), string.Format(SR.InvalidLowBoundArgumentEx, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture), "1"));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SplitterWidth), value, 1));
             }
             if (Orientation == Orientation.Vertical) {
                 if (DesignMode && value + Panel1MinSize + Panel2MinSize > Width) {
-                    throw new ArgumentOutOfRangeException(nameof(SplitterWidth), string.Format(SR.InvalidArgument, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SplitterWidth), value));
                 }
 
             }
             else if (Orientation == Orientation.Horizontal) {
                 if (DesignMode && value + Panel1MinSize + Panel2MinSize > Height) {
-                    throw new ArgumentOutOfRangeException(nameof(SplitterWidth), string.Format(SR.InvalidArgument, "SplitterWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SplitterWidth), value));
                 }
             }
             splitterWidth = value;

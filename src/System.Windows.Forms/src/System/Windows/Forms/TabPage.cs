@@ -185,9 +185,11 @@ namespace System.Windows.Forms {
                 return ImageIndexer.Index;
             }
             set {
-                if (value < -1) {
-                    throw new ArgumentOutOfRangeException ("ImageIndex", string.Format (SR.InvalidLowBoundArgumentEx,  "imageIndex", (value).ToString (CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
+
                 TabControl parent = ParentInternal as TabControl;
 
                 if (parent != null) {

@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms
             {
                 if (rowIndex != Index)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex.ToString(CultureInfo.CurrentCulture)), nameof(rowIndex));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex), nameof(rowIndex));
                 }
                 return base.State;
             }
