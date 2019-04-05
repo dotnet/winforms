@@ -26,11 +26,11 @@
 
   <!-- nuspec properties -->
   <PropertyGroup>
-    <PackageId>Microsoft.Dotnet.Winforms.ProjectTemplates</PackageId>
+    <PackageId>Microsoft.Dotnet.WinForms.ProjectTemplates</PackageId>
     <Description>Project templates for .NET Core Windows Forms projects</Description>
     <Authors>Microsoft</Authors>
     <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
-    <PackageTags></PackageTags>
+    <PackageTags>Windows Forms WinForms Project Templates .NET Core</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
