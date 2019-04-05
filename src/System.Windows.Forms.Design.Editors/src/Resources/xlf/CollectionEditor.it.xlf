@@ -39,7 +39,7 @@
       </trans-unit>
       <trans-unit id="removeButton.Text">
         <source>&amp;Remove</source>
-        <target state="translated">Rimu&amp;ovi</target>
+        <target state="translated">&amp;Rimuovi</target>
         <note />
       </trans-unit>
       <trans-unit id="upButton.AccessibleName">

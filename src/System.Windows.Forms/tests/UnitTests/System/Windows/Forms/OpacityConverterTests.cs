@@ -8,18 +8,19 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using Moq;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class OpacityConverterTests
     {
+        public static TheoryData<Type, bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(string), true)]
-        [InlineData(typeof(InstanceDescriptor), false)]
-        [InlineData(typeof(double), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
         public void OpacityConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             var converter = new OpacityConverter();

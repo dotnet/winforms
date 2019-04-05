@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
             }
             set { 
                 if (defaultItem != value) {
-                    OnDefaultItemChanged(new EventArgs()); 
+                    OnDefaultItemChanged(EventArgs.Empty); 
                     defaultItem = value; 
                 }
             }

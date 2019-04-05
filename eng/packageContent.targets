@@ -25,4 +25,6 @@
     </ItemGroup>
   </Target>
 
+  <!-- xml files can be added here for intellisense -->
+
 </Project>

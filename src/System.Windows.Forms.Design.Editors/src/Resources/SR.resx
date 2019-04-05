@@ -84,6 +84,7 @@
   </data>
   <data name="ColorEditorStandardTab" xml:space="preserve">
     <value>Web</value>
+    <comment>{Locked="Web"}</comment>
   </data>
   <data name="ColorEditorSystemTab" xml:space="preserve">
     <value>System</value>
