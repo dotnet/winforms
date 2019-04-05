@@ -187,11 +187,6 @@
         <target state="translated">{0} hizmeti, hizmet kapsayıcısından kaldırılamıyor.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">'{0}' metodu bulunamadı</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
         <target state="translated">Devralınan '{0}' bileşeni kaldırılamaz veya yok edilemez.</target>

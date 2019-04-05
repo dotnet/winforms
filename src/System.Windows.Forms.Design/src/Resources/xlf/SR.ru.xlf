@@ -187,11 +187,6 @@
         <target state="translated">Служба {0} не может быть удалена из контейнера служб.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">Не удалось найти метод "{0}".</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
         <target state="translated">Невозможно удалить или уничтожить унаследованный компонент '{0}'.</target>

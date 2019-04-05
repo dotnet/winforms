@@ -187,11 +187,6 @@
         <target state="translated">Der Dienst {0} kann nicht aus dem Dienstcontainer entfernt werden.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">{0}-Methode konnte nicht gefunden werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
         <target state="translated">Die vererbte Komponente {0} kann nicht gelöscht werden.</target>

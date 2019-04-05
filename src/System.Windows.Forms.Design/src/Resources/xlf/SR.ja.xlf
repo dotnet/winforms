@@ -187,11 +187,6 @@
         <target state="translated">サービス {0} をサービス コンテナーから削除できません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">メソッド '{0}' が見つかりませんでした</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
         <target state="translated">継承コンポーネント '{0}' を削除または破棄できません。</target>

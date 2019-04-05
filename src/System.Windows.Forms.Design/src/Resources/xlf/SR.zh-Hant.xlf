@@ -187,11 +187,6 @@
         <target state="translated">無法從服務容器移除服務 {0}。</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">找不到方法 '{0}'</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
         <target state="translated">無法移除或摧毀繼承的元件 '{0}'。</target>

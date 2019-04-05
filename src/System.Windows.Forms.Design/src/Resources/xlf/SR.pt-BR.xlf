@@ -187,11 +187,6 @@
         <target state="translated">O serviço {0} não pode ser removido do contêiner de serviços.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">Não foi possível encontrar o método '{0}'</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
         <source>Cannot remove or destroy inherited component '{0}'.</source>
         <target state="translated">Não é possível remover ou destruir o componente herdado '{0}'.</target>
