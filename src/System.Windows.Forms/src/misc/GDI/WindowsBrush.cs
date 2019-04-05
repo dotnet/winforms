@@ -6,7 +6,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromHdc(System.IntPtr):System.Windows.Forms.Internal.WindowsBrush")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.Windows.Forms.Internal.WindowsBrush.FromBrush(System.Drawing.Brush):System.Windows.Forms.Internal.WindowsBrush")]
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal

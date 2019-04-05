@@ -5,7 +5,7 @@
 // #define TRACK_HDC
 // #define GDI_FINALIZATION_WATCH
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
