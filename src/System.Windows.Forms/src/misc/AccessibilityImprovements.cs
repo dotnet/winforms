@@ -4,11 +4,7 @@
 
 namespace System {
     using System;
-#if DRAWINGDESIGN_NAMESPACE
-    using System.Drawing.Design;
-#elif WINFORMS_NAMESPACE
     using System.Windows.Forms;
-#endif
     using System.Runtime.CompilerServices;
 
     /// <summary>

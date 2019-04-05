@@ -11,7 +11,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-#if WINFORMS_NAMESPACE ////////////////////////////////// FxCop suppressions for System.Windows.Forms.dll //////////////////////////////////
+#if DRAWING_DESIGN_NAMESPACE ////////////////////////////////// FxCop suppressions for System.Windows.Forms.dll //////////////////////////////////
 
 //// SECURITY
 
