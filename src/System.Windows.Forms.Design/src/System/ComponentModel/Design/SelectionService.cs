@@ -272,7 +272,7 @@ namespace System.ComponentModel.Design
             {
                 if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
                 {
-                    host.TransactionOpened -= new EventHandler(this.OnTransactionOpened);
+                    host.TransactionOpened -= new EventHandler(OnTransactionOpened);
                     host.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
                     if (host.InTransaction)
                     {
@@ -358,7 +358,7 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             return (_selection != null && _selection.Contains(component));
         }
@@ -428,7 +428,7 @@ namespace System.ComponentModel.Design
                     requestedPrimary = o;
                     if (o == null)
                     {
-                        throw new ArgumentNullException("components");
+                        throw new ArgumentNullException(nameof(components));
                     }
                     break;
                 }
@@ -460,7 +460,7 @@ namespace System.ComponentModel.Design
                             foreach (object comp in components)
                             {
                                 if (comp == null)
-                                    throw new ArgumentNullException("components");
+                                    throw new ArgumentNullException(nameof(components));
                                 if (object.ReferenceEquals(comp, item))
                                 {
                                     remove = false;
@@ -481,7 +481,7 @@ namespace System.ComponentModel.Design
                 foreach (object comp in components)
                 {
                     if (comp == null)
-                        throw new ArgumentNullException("components");
+                        throw new ArgumentNullException(nameof(components));
 
                     if (_selection != null && _selection.Contains(comp))
                     {

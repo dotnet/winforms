@@ -443,11 +443,4 @@ namespace System.Windows.Forms.Design
             }
         }
     }
-
-    public enum ComponentActionsType
-    {
-        All,
-        Component,
-        Service
-    }
 }

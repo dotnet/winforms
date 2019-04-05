@@ -69,14 +69,14 @@ namespace System.ComponentModel.Design.Serialization
         private void FillLinePragmaFromContext(IDesignerSerializationManager manager)
         {
             if (manager == null)
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
         }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
             {
-                throw new ArgumentNullException("info");
+                throw new ArgumentNullException(nameof(info));
             }
             info.AddValue("linePragma", _linePragma);
             base.GetObjectData(info, context);

@@ -200,16 +200,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Ole32)]
         
         public static extern int CoGetMalloc(int dwReserved, out IMalloc pMalloc);
-        
-        /* Commenting this out until someone actually needs to use it again...
-        [DllImport(ExternDll.Ole32)]
-          public static extern int OleSetMenuDescriptor(IntPtr hOleMenu, IntPtr hWndFrame, IntPtr hWndActiveObject, IOleInPlaceFrame frame, IOleInPlaceActiveObject activeObject);
-        */
 
-        /* Commenting this out until someone actually needs to use it again...
-        [DllImport(ExternDll.Kernel32)]
-        public static extern bool IsBadReadPtr(HandleRef ptr, int size);
-        */
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.Process)]
+        public static extern int GetWindowThreadProcessId(HandleRef hWnd, out int lpdwProcessId);
 
         [DllImport(ExternDll.Comdlg32, SetLastError=true, CharSet=CharSet.Auto)]
         

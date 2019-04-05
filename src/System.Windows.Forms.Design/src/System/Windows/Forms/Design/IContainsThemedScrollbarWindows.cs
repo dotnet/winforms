@@ -6,30 +6,6 @@ using System.Collections;
 
 namespace System.Windows.Forms.Design
 {
-    public enum ThemedScrollbarMode
-    {
-        /// <summary>
-        /// The window and all of its children will have themed scrollbars
-        /// </summary>
-        All = 1,
-
-        /// <summary>
-        /// The window and all of its children will be un-themed
-        /// </summary>
-        None = 2,
-
-        /// <summary>
-        /// The window will have themed scrollbars but all of its children will be un-themed
-        /// </summary>
-        OnlyTopLevel = 3
-    };
-
-    public struct ThemedScrollbarWindow
-    {
-        public IntPtr Handle;
-        public ThemedScrollbarMode Mode;
-    };
-
     /// <summary>
     /// Returns an enumeration of windows and flags of how their scrollbars need to be themed when the designer is running inside Visual Studio.
     /// </summary>

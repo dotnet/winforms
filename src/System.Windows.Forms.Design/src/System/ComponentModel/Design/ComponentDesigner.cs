@@ -896,7 +896,7 @@ namespace System.ComponentModel.Design
                 {
                     if (propertyName == null)
                     {
-                        throw new ArgumentNullException("propertyName");
+                        throw new ArgumentNullException(nameof(propertyName));
                     }
 
                     // First, check to see if the name is in the given properties table
@@ -956,7 +956,7 @@ namespace System.ComponentModel.Design
             {
                 if (propertyName == null)
                 {
-                    throw new ArgumentNullException("propertyName");
+                    throw new ArgumentNullException(nameof(propertyName));
                 }
 
                 if (Contains(propertyName))

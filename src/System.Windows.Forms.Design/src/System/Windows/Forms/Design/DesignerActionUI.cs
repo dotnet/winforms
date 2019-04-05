@@ -1082,11 +1082,4 @@ namespace System.Windows.Forms.Design
             return base.ProcessDialogKey(keyData);
         }
     }
-
-    internal class NoBorderRenderer : ToolStripProfessionalRenderer
-    {
-        protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
-        {
-        }
-    }
 }

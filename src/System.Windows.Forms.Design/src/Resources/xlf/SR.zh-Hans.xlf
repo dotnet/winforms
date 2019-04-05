@@ -202,36 +202,6 @@
         <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignSurfaceContainerDispose">
-        <source>The container cannot be disposed at design time.</source>
-        <target state="translated">不能在设计时释放容器。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceDesignerNotLoaded">
-        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="translated">设计器未加载，因此无法创建此设计图面的视图。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="translated">加载文档时出错。请修复此错误，然后再尝试重新加载该文档。错误消息如下所示:\r\n\r\n{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceNoRootComponent">
-        <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="translated">设计器加载程序未提供根组件，但没有指出原因。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceNoSupportedTechnology">
-        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="translated">设计器已加载，但是它没有提供与此设计图面兼容的视图。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceServiceIsFixed">
-        <source>The service {0} cannot be removed from the service container.</source>
-        <target state="translated">无法将服务 {0} 从服务容器移除。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
         <source>Could not convert value '{0}' to the type '{1}'.</source>
         <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
@@ -239,7 +209,7 @@
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'.</source>
-        <target state="needs-review-translation">未能找到方法“{0}”</target>
+        <target state="new">Could not find method '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
@@ -270,6 +240,46 @@
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
         <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInherited">
+        <source>Inherited control</source>
+        <target state="new">Inherited control</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInheritedReadOnly">
+        <source>Inherited control (Private)</source>
+        <target state="new">Inherited control (Private)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceContainerDispose">
+        <source>The container cannot be disposed at design time.</source>
+        <target state="translated">不能在设计时释放容器。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceDesignerNotLoaded">
+        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
+        <target state="translated">设计器未加载，因此无法创建此设计图面的视图。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceFatalError">
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
+        <target state="translated">加载文档时出错。请修复此错误，然后再尝试重新加载该文档。错误消息如下所示:\r\n\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoRootComponent">
+        <source>The designer loader did not provide a root component but has not indicated why.</source>
+        <target state="translated">设计器加载程序未提供根组件，但没有指出原因。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoSupportedTechnology">
+        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
+        <target state="translated">设计器已加载，但是它没有提供与此设计图面兼容的视图。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceServiceIsFixed">
+        <source>The service {0} cannot be removed from the service container.</source>
+        <target state="translated">无法将服务 {0} 从服务容器移除。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
@@ -330,16 +340,6 @@
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
         <target state="translated">卸载设计器时不能添加新的组件。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignerInherited">
-        <source>Inherited control</source>
-        <target state="new">Inherited control</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignerInheritedReadOnly">
-        <source>Inherited control (Private)</source>
-        <target state="new">Inherited control (Private)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">

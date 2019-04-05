@@ -202,36 +202,6 @@
         <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}</target>
         <note />
       </trans-unit>
-      <trans-unit id="DesignSurfaceContainerDispose">
-        <source>The container cannot be disposed at design time.</source>
-        <target state="translated">デザイン時に、コンテナーを破棄することはできません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceDesignerNotLoaded">
-        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
-        <target state="translated">デザイナーが読み込まれていないため、このデザイン サーフェイスにビューを作成することはできません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="translated">ドキュメントの読み込み中にエラーが発生しました。このエラーを修正してから、もう一度ドキュメントを読み込んでください。エラー メッセージは以下のとおりです。\r\n\r\n{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceNoRootComponent">
-        <source>The designer loader did not provide a root component but has not indicated why.</source>
-        <target state="translated">デザイナー ローダーはルート コンポーネントを指定しませんでしたが、その理由を提示しませんでした。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceNoSupportedTechnology">
-        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
-        <target state="translated">デザイナーは読み込まれましたが、このデザイン サーフェイスと互換性のあるビューを提供しません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignSurfaceServiceIsFixed">
-        <source>The service {0} cannot be removed from the service container.</source>
-        <target state="translated">サービス {0} をサービス コンテナーから削除できません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
         <source>Could not convert value '{0}' to the type '{1}'.</source>
         <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
@@ -239,7 +209,7 @@
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'.</source>
-        <target state="needs-review-translation">メソッド '{0}' が見つかりませんでした</target>
+        <target state="new">Could not find method '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
@@ -270,6 +240,46 @@
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
         <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInherited">
+        <source>Inherited control</source>
+        <target state="new">Inherited control</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInheritedReadOnly">
+        <source>Inherited control (Private)</source>
+        <target state="new">Inherited control (Private)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceContainerDispose">
+        <source>The container cannot be disposed at design time.</source>
+        <target state="translated">デザイン時に、コンテナーを破棄することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceDesignerNotLoaded">
+        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
+        <target state="translated">デザイナーが読み込まれていないため、このデザイン サーフェイスにビューを作成することはできません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceFatalError">
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
+        <target state="translated">ドキュメントの読み込み中にエラーが発生しました。このエラーを修正してから、もう一度ドキュメントを読み込んでください。エラー メッセージは以下のとおりです。\r\n\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoRootComponent">
+        <source>The designer loader did not provide a root component but has not indicated why.</source>
+        <target state="translated">デザイナー ローダーはルート コンポーネントを指定しませんでしたが、その理由を提示しませんでした。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoSupportedTechnology">
+        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
+        <target state="translated">デザイナーは読み込まれましたが、このデザイン サーフェイスと互換性のあるビューを提供しません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceServiceIsFixed">
+        <source>The service {0} cannot be removed from the service container.</source>
+        <target state="translated">サービス {0} をサービス コンテナーから削除できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerHostCantDestroyInheritedComponent">
@@ -330,16 +340,6 @@
       <trans-unit id="DesignerHostUnloading">
         <source>New components cannot be added while a designer is unloading.</source>
         <target state="translated">デザイナーのアンロード中は、新しいコンポーネントを追加できません。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignerInherited">
-        <source>Inherited control</source>
-        <target state="new">Inherited control</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DesignerInheritedReadOnly">
-        <source>Inherited control (Private)</source>
-        <target state="new">Inherited control (Private)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">

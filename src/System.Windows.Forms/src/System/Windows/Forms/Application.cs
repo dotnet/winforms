@@ -709,7 +709,7 @@ namespace System.Windows.Forms {
             }
         }
 
-#if (WINFORMS_NAMESPACE || WINFORMS_DESIGN_NAMESPACE)
+#if (DRAWING_DESIGN_NAMESPACE)
         public static bool UseVisualStyles {
             get {
                 return useVisualStyles;
