@@ -92,6 +92,9 @@ namespace System.Windows.Forms {
         
         public static extern int ReadClassStg(HandleRef pStg, [In, Out] ref Guid pclsid);
 
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern int GetMessageTime();
+
         [DllImport(ExternDll.Ole32, SetLastError = true, CharSet = CharSet.Auto, ExactSpelling = true)]
         internal extern static void CoTaskMemFree(IntPtr pv);
 
@@ -998,7 +1001,11 @@ namespace System.Windows.Forms {
         
         public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
-        
+
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
         
@@ -1013,17 +1020,7 @@ namespace System.Windows.Forms {
         
         public static extern IntPtr CallWindowProc(IntPtr wndProc, IntPtr hWnd, int msg,
                                                 IntPtr wParam, IntPtr lParam);
-        
-/*                                               
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr GetProp(HandleRef hWnd, int atom);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr GetProp(HandleRef hWnd, string name);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr RemoveProp(HandleRef hWnd, short atom);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr RemoveProp(HandleRef hWnd, string propName);
-   */
+
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern short GlobalDeleteAtom(short atom);
@@ -1038,10 +1035,7 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern bool GetClassInfo(HandleRef hInst, string lpszClass, IntPtr h);
-/*
-        [DllImport(ExternDll.Shell32, CharSet=CharSet.Auto)]
-        public static extern int SHGetFolderPath(HandleRef hwndOwner, int nFolder, HandleRef hToken, int dwFlags, StringBuilder lpszPath);
-*/        
+
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int GetSystemMetrics(int nIndex);
@@ -1050,6 +1044,9 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int GetSystemMetricsForDpi(int nIndex, uint dpi);
+
+        [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
+        public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
 
         /// <summary>
         /// Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.
@@ -1140,6 +1137,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Ole32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int RevokeDragDrop(HandleRef hwnd);
+
+        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern int RevokeDragDrop(IntPtr hwnd);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern bool PeekMessage([In, Out] ref NativeMethods.MSG msg, HandleRef hwnd, int msgMin, int msgMax, int remove);
@@ -1166,6 +1167,11 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc);
+
+        [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.Process)]
+        public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, IntPtr pAcc);
+
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
@@ -1190,7 +1196,11 @@ namespace System.Windows.Forms {
         public static IntPtr BeginPaint(HandleRef hWnd, [In, Out, MarshalAs(UnmanagedType.LPStruct)] ref NativeMethods.PAINTSTRUCT lpPaint) {
             return System.Internal.HandleCollector.Add(IntBeginPaint(hWnd, ref lpPaint), NativeMethods.CommonHandles.HDC);
         }
-        
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "BeginPaint", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr BeginPaint(IntPtr hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
+
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="EndPaint", CharSet=CharSet.Auto)]
         
         private static extern bool IntEndPaint(HandleRef hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
@@ -1198,6 +1208,10 @@ namespace System.Windows.Forms {
             System.Internal.HandleCollector.Remove(lpPaint.hdc, NativeMethods.CommonHandles.HDC);
             return IntEndPaint(hWnd, ref lpPaint);
         }
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "EndPaint", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="GetDC", CharSet=CharSet.Auto)]
         

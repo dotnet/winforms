@@ -166,6 +166,11 @@ namespace System.ComponentModel.Design
             _state[s_stateTransaction] = true;
         }
 
+        internal object PrimarySelection
+        {
+            get => (_selection != null && _selection.Count > 0) ? _selection[0] : null;
+        }
+
         /// <summary>
         /// Removes the given selection from the selection list.
         /// </summary>

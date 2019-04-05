@@ -18,6 +18,17 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public sealed class SnapLine
     {
+        internal const string Margin = "Margin";
+        internal const string MarginRight = Margin + ".Right";
+        internal const string MarginLeft = Margin + ".Left";
+        internal const string MarginBottom = Margin + ".Bottom";
+        internal const string MarginTop = Margin + ".Top";
+        internal const string Padding = "Padding";
+        internal const string PaddingRight = Padding + ".Right";
+        internal const string PaddingLeft = Padding + ".Left";
+        internal const string PaddingBottom = Padding + ".Bottom";
+        internal const string PaddingTop = Padding + ".Top";
+
         /// <summary>
         ///     SnapLine constructor that takes the type and offset of SnapLine.
         /// </summary>

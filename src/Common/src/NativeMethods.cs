@@ -1962,6 +1962,7 @@ namespace System.Windows.Forms {
         WM_MBUTTONDOWN = 0x0207,
         WM_MBUTTONUP = 0x0208,
         WM_MBUTTONDBLCLK = 0x0209,
+        WM_NCMOUSEHOVER = 0x02A0,
         WM_XBUTTONDOWN                 = 0x020B,
         WM_XBUTTONUP                   = 0x020C,
         WM_XBUTTONDBLCLK               = 0x020D,

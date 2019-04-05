@@ -135,6 +135,11 @@ namespace System.Windows.Forms.Design.Behavior
             get => _adornerWindow;
         }
 
+        internal int AdornerWindowIndex
+        {
+            get => _adornerWindowIndex;
+        }
+
         internal bool HasCapture
         {
             get => _captureBehavior != null;
@@ -186,6 +191,11 @@ namespace System.Windows.Forms.Design.Behavior
                     return null;
                 }
             }
+        }
+
+        internal bool Dragging
+        {
+            get => _dragging;
         }
 
         internal bool CancelDrag
@@ -532,6 +542,12 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
             return behavior;
+        }
+
+        internal void ProcessPaintMessage(Rectangle paintRect)
+        {
+            //Note, we don't call BehSvc.Invalidate because this will just cause the messages to recurse. Instead, invalidating this adornerWindow will just cause a "propagatePaint" and draw the glyphs.
+            _adornerWindow.Invalidate(paintRect);
         }
 
         /// <summary>
@@ -1117,7 +1133,7 @@ namespace System.Windows.Forms.Design.Behavior
                         if (_thisProcessID == 0)
                         {
                             AdornerWindow adornerWindow = AdornerWindow.s_adornerWindowList[0];
-                            UnsafeNativeMethods.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
+                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(adornerWindow, adornerWindow.Handle), out _thisProcessID);
                         }
 
                         NativeMethods.HookProc hook = new NativeMethods.HookProc(MouseHookProc);
@@ -1216,7 +1232,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
                             // make sure the window is in our process
-                            UnsafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWnd), out int pid);
+                            SafeNativeMethods.GetWindowThreadProcessId(new HandleRef(null, hWnd), out int pid);
                             // if this isn't our process, bail
                             if (pid != _thisProcessID)
                             {
@@ -1233,8 +1249,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 };
                                 NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, pt, 1);
                                 Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.y, pt.x));
-
-                                // DevDiv Bugs 79616, No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
+                                // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == NativeMethods.WM_LBUTTONDOWN)
                                 {
                                     _lastLButtonDownTimeStamp = UnsafeNativeMethods.GetMessageTime();
@@ -1389,6 +1404,11 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 get => _menuService.Verbs;
             }
+        }
+
+        internal void StartDragNotification()
+        {
+            _adornerWindow.StartDragNotification();
         }
 
         private MenuCommand FindCommand(CommandID commandID, IMenuCommandService menuService)
