@@ -11,12 +11,34 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class WindowsFormsDesignerOptionService : DesignerOptionService
     {
-        public virtual DesignerOptions CompatibilityOptions => throw new NotImplementedException(SR.NotImplementedByDesign);
+        private DesignerOptions _options;
+
+        public virtual DesignerOptions CompatibilityOptions
+        {
+            get
+            {
+                if (_options == null)
+                {
+                    _options = new DesignerOptions();
+                }
+                return _options;
+            }
+        }
 
         /// <summary>
         ///     This method is called on demand the first time a user asks for child
         ///     options or properties of an options collection.
         /// </summary>
-        protected override void PopulateOptionCollection(DesignerOptionCollection options) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        protected override void PopulateOptionCollection(DesignerOptionCollection options)
+        {
+            if (options.Parent == null)
+            {
+                DesignerOptions designerOptions = CompatibilityOptions;
+                if (designerOptions != null)
+                {
+                    CreateOptionCollection(options, "DesignerOptions", designerOptions);
+                }
+            }
+        }
     }
 }

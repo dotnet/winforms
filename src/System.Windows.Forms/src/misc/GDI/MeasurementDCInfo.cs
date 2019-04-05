@@ -8,7 +8,7 @@
 #define GDI_FONT_CACHE_TRACK
 #endif
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal {
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal {

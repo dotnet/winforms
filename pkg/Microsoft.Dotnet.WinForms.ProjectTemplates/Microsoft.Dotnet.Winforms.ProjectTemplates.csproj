@@ -1,0 +1,79 @@
+<Project InitialTargets="BuildPackage">
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props"/>
+  <PropertyGroup>
+    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
+    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+    <EnableDefaultItems>false</EnableDefaultItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <!-- This is a Packaging Project -->
+  <PropertyGroup>
+      <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <PublishWindowsPdb>false</PublishWindowsPdb>
+    <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Disable a VS-specific target that is failing when building this csproj -->
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+  </PropertyGroup>
+
+  <!-- nuspec properties -->
+  <PropertyGroup>
+    <PackageId>Microsoft.Dotnet.WinForms.ProjectTemplates</PackageId>
+    <Description>Project templates for .NET Core Windows Forms projects</Description>
+    <Authors>Microsoft</Authors>
+    <RepositoryUrl>https://github.com/dotnet/winforms</RepositoryUrl>
+    <PackageTags>Windows Forms WinForms Project Templates .NET Core</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Supress creation of contentFiles directory -->
+    <ContentTargetFolders>.\</ContentTargetFolders>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
+    <Content Include="content\**\*" />
+    <Content Update="@(Content)">
+      <!-- Supress creation of content directory -->
+      <PackagePath>.\</PackagePath>
+      <SkipPackageFileCheck>true</SkipPackageFileCheck>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="BuildPackage">
+    <ItemGroup>
+      <ProjectReference>
+      </ProjectReference>
+    </ItemGroup>
+  </Target>
+
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets"/>
+  
+  <ItemGroup>
+    <IntermediateAssembly Remove="@(IntermediateAssembly)" />
+    <IntermediateRefAssembly Remove="@(IntermediateRefAssembly)" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!--
+      This property must be overridden to remove a few targets that compile assemblies
+    -->
+    <CoreBuildDependsOn>
+      BuildOnlySettings;
+      PrepareForBuild;
+      PreBuildEvent;
+      ResolveReferences;
+      GetTargetPath;
+      PrepareForRun;
+      IncrementalClean;
+      PostBuildEvent
+    </CoreBuildDependsOn>
+  </PropertyGroup>
+</Project>

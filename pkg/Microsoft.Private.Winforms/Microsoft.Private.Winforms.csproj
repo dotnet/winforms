@@ -14,18 +14,26 @@
   -->
 
   <PropertyGroup>
+    <TargetFrameworkName>netcoreapp</TargetFrameworkName>
+    <TargetFrameworkVersion>3.0</TargetFrameworkVersion>
+    <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
+  </PropertyGroup>
 
+  <!-- This is a Packaging Project -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <!-- Don't include this project in the build output -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PublishWindowsPdb>false</PublishWindowsPdb>
     <IncludeSymbols>false</IncludeSymbols>
+  </PropertyGroup>
 
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <IsPackable>true</IsPackable>
-
+  <PropertyGroup>
     <!-- Disable a VS-specific target that is failing when building this csproj -->
     <GenerateDependencyFile>false</GenerateDependencyFile>
-
   </PropertyGroup>
 
   <!-- nuspec properties -->
@@ -45,24 +53,25 @@
   <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->
   <ItemGroup>
     <!-- Facade for System.Drawing include -->
-    <ProjectReference Include="..\src\System.Drawing\src\System.Drawing.Facade.csproj" />
+    <ProjectReference Include="..\..\src\System.Drawing\src\System.Drawing.Facade.csproj" />
 
     <!-- Facade for System.Design include -->
-    <ProjectReference Include="..\src\System.Design\src\System.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\src\System.Design\src\System.Design.Facade.csproj" />
 
     <!-- Facade for System.Drawing.Design include -->
-    <ProjectReference Include="..\src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
+    <ProjectReference Include="..\..\src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
 
     <!-- Reference and Source System.Windows.Forms includes -->
-    <ProjectReference Include="..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
     <!-- Reference and Source System.Windows.Forms.Design includes -->
-    <ProjectReference Include="..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     
     <!-- Reference and Source System.Windows.Forms.Design.Editors includes -->
-    <ProjectReference Include="..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
 
-    <ProjectReference Include="..\src\Accessibility\src\Accessibility.ilproj" />
+    <ProjectReference Include="..\..\src\Accessibility\src\Accessibility.ilproj" />
+
   </ItemGroup>
 
   <!-- Force the output item type for all project references to "TfmSpecificPackageFile", which makes them get packed -->

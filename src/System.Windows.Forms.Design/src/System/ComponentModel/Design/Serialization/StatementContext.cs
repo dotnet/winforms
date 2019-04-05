@@ -91,7 +91,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (statementOwner == null)
                 {
-                    throw new ArgumentNullException("statementOwner");
+                    throw new ArgumentNullException(nameof(statementOwner));
                 }
 
                 if (_table != null)
@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (statementOwner == null)
             {
-                throw new ArgumentNullException("statementOwner");
+                throw new ArgumentNullException(nameof(statementOwner));
             }
 
             if (_table != null)
@@ -151,7 +151,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (statementOwners == null)
             {
-                throw new ArgumentNullException("statementOwners");
+                throw new ArgumentNullException(nameof(statementOwners));
             }
             foreach (object o in statementOwners)
             {
@@ -166,7 +166,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (owner == null)
             {
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
             }
             AddOwner(owner, null);
         }

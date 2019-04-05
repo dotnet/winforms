@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Tests", "src\System.Windows.Forms\tests\UnitTests\System.Windows.Forms.Tests.csproj", "{AB38E262-F206-4820-8F29-23C5F72A4A16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Private.Winforms", "pkg\Microsoft.Private.Winforms.csproj", "{F133342A-3040-4005-A2F0-7685AA7CB82D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Editors", "src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj", "{B50AC96F-2655-4687-A404-16DF51882CBC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design.Editors.Tests", "src\System.Windows.Forms.Design.Editors\tests\UnitTests\System.Windows.Forms.Design.Editors.Tests.csproj", "{27F24D0C-5F0A-472E-AE12-98B386A13D50}"
@@ -22,6 +20,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Drawing.Design.Facade", "src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj", "{A2B1148A-1747-47BD-8048-416C2C2AF14C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Design.Facade", "src\System.Design\src\System.Design.Facade.csproj", "{9BEC2806-D8E0-443B-8B58-9D344E0C2D24}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Private.Winforms", "pkg\Microsoft.Private.Winforms\Microsoft.Private.Winforms.csproj", "{F133342A-3040-4005-A2F0-7685AA7CB82D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Dotnet.Winforms.ProjectTemplates", "pkg\Microsoft.Dotnet.WinForms.ProjectTemplates\Microsoft.Dotnet.Winforms.ProjectTemplates.csproj", "{36A5139E-3E9C-42BD-95EE-818153A487DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pkg", "pkg", "{989F376E-AE19-43B0-A3E6-96A7E22B4E80}"
 EndProject
@@ -116,6 +118,10 @@ Global
 		{6103E743-057D-41C6-946C-23A751A08748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6103E743-057D-41C6-946C-23A751A08748}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6103E743-057D-41C6-946C-23A751A08748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36A5139E-3E9C-42BD-95EE-818153A487DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36A5139E-3E9C-42BD-95EE-818153A487DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36A5139E-3E9C-42BD-95EE-818153A487DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36A5139E-3E9C-42BD-95EE-818153A487DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -139,6 +145,7 @@ Global
 		{351D8601-6E21-45E8-B3B9-847C4540BD4E} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
 		{6103E743-057D-41C6-946C-23A751A08748} = {088DD24C-DF6B-45F3-A8BC-592580A4B2A9}
 		{088DD24C-DF6B-45F3-A8BC-592580A4B2A9} = {77FEDB47-F7F6-490D-AF7C-ABB4A9E0B9D7}
+		{36A5139E-3E9C-42BD-95EE-818153A487DB} = {989F376E-AE19-43B0-A3E6-96A7E22B4E80}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}
