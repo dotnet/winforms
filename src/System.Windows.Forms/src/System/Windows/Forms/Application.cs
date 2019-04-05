@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2261,8 +2261,8 @@ namespace System.Windows.Forms {
             private List<ParkingWindow> parkingWindows = new List<ParkingWindow>();
             private Control                 marshalingControl;
             private CultureInfo             culture;
-            private ArrayList               messageFilters;
-            private IMessageFilter[]        messageFilterSnapshot;
+            private List<IMessageFilter>    messageFilters;
+            private List<IMessageFilter>    messageFilterSnapshot;
             private int                     inProcessFilters = 0;
             private IntPtr                  handle;
             private int                     id;
@@ -2601,7 +2601,10 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             internal void AddMessageFilter(IMessageFilter f) {
                 if (messageFilters == null) {
-                    messageFilters = new ArrayList();
+                    messageFilters = new List<IMessageFilter>();
+                }
+                if (messageFilterSnapshot == null) {
+                    messageFilterSnapshot = new List<IMessageFilter>();
                 }
                 if (f != null) {
                     SetState(STATE_FILTERSNAPSHOTVALID, false);
@@ -3454,26 +3457,23 @@ namespace System.Windows.Forms {
                 // and user code pumps messages, we might re-enter ProcessFilter on the same stack, we
                 // should not update the snapshot until the next message.
                 if (messageFilters != null && !GetState(STATE_FILTERSNAPSHOTVALID) && (LocalAppContextSwitches.DontSupportReentrantFilterMessage || inProcessFilters == 0)) {
+                    messageFilterSnapshot.Clear();
                     if (messageFilters.Count > 0) {
-                        messageFilterSnapshot = new IMessageFilter[messageFilters.Count];
-                        messageFilters.CopyTo(messageFilterSnapshot);
-                    }
-                    else {
-                        messageFilterSnapshot = null;
+                        messageFilterSnapshot.AddRange(messageFilters);
                     }
                     SetState(STATE_FILTERSNAPSHOTVALID, true);
                 }
 
                 inProcessFilters++;
                 try {
-                    if (messageFilterSnapshot != null) {
+                    if (messageFilterSnapshot != null && messageFilterSnapshot.Count != 0) {
                         IMessageFilter f;
-                        int count = messageFilterSnapshot.Length;
+                        int count = messageFilterSnapshot.Count;
 
                         Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 
                         for (int i = 0; i < count; i++) {
-                            f = (IMessageFilter)messageFilterSnapshot[i];
+                            f = messageFilterSnapshot[i];
                             bool filterMessage = f.PreFilterMessage(ref m);
                             // make sure that we update the msg struct with the new result after the call to
                             // PreFilterMessage.
@@ -4249,4 +4249,3 @@ namespace System.Windows.Forms {
 
     }
 }
-

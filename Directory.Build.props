@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
-  <PropertyGroup>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-  </PropertyGroup>
-  
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
   <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
   <Import Project="eng\FacadeAssemblies.props" />
 
-  <PropertyGroup Condition="'$(CopyrightNetFoundation)' != ''">
+  <PropertyGroup>
     <Copyright>$(CopyrightNetFoundation)</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
   </PropertyGroup>
 
   <!-- For the purposes of generating code coverage as part of the build -->
   <PropertyGroup Condition="'$(Coverage)' == 'true'">
-      <!-- Coverlet assumes PDB files exist on disk https://github.com/tonerdo/coverlet/issues/362 -->
-      <DebugType Condition="'$(DebugType)' == 'embedded'">portable</DebugType>
-      <!-- Coverlet's PDB check cannot handle deterministic source paths https://github.com/tonerdo/coverlet/issues/363 -->
-      <DeterministicSourcePaths>false</DeterministicSourcePaths>
+    <!-- Coverlet assumes PDB files exist on disk https://github.com/tonerdo/coverlet/issues/362 -->
+    <DebugType Condition="'$(DebugType)' == 'embedded'">portable</DebugType>
+    <!-- Coverlet's PDB check cannot handle deterministic source paths https://github.com/tonerdo/coverlet/issues/363 -->
+    <DeterministicSourcePaths>false</DeterministicSourcePaths>
 
-      <!-- Note: CoverletOutput references $(TargetDir) so it is set in Directory.Build.targets -->
+    <!-- Note: CoverletOutput references $(TargetDir) so it is set in Directory.Build.targets -->
 
-      <CollectCoverage>true</CollectCoverage>
-      <SingleHit>true</SingleHit> <!--see https://github.com/dotnet/machinelearning/pull/2843/files#r262544802-->
-      <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- required due to https://github.com/tonerdo/coverlet/issues/72 -->
-      <CoverletOutputFormat>opencover</CoverletOutputFormat>
-      <Include>[System.Windows.*]*</Include>
-      <!-- Exclude only Obsolete and tagged with ExcludeFromCodeCoverage !!Avoid using this!! -->
-      <Exclude />
-      <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
-      <ExcludeByFile />
+    <CollectCoverage>true</CollectCoverage>
+    <SingleHit>true</SingleHit> <!--see https://github.com/dotnet/machinelearning/pull/2843/files#r262544802-->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- required due to https://github.com/tonerdo/coverlet/issues/72 -->
+    <CoverletOutputFormat>opencover</CoverletOutputFormat>
+    <Include>[System.Windows.*]*</Include>
+    <!-- Exclude only Obsolete and tagged with ExcludeFromCodeCoverage !!Avoid using this!! -->
+    <Exclude />
+    <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
+    <ExcludeByFile />
   </PropertyGroup>
 
   <!-- Make sure coverage targets are defined even in projects where coverlet is not installed -->
   <Target Name="InstrumentModulesAfterBuild" />
   <Target Name="GenerateCoverageResult" />
+
+  <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
+  <PropertyGroup>
+    <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
+  </PropertyGroup>
 
 </Project>

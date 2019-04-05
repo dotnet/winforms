@@ -926,7 +926,7 @@ namespace System.Windows.Forms {
             }
 
             this.OnTextChanged(e);
-            OnChanged(source, new EventArgs());
+            OnChanged(source, EventArgs.Empty);
         }
 
         /// <devdoc>

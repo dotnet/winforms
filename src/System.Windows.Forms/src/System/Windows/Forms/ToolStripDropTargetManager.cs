@@ -289,7 +289,7 @@ namespace System.Windows.Forms {
 
                 // tell the last drag target you've left
                 if (lastDropTarget != null) {
-                    OnDragLeave(new EventArgs());
+                    OnDragLeave(EventArgs.Empty);
                 }
                 lastDropTarget = newTarget;
                 if (newTarget != null) {

@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms {
                         // fire the opened event only if we actually opened the control.
                         //
                         if (!openingEventCancelled) {
-                            OnOpened(new EventArgs());
+                            OnOpened(EventArgs.Empty);
                         }
                     }
 
