@@ -11397,9 +11397,9 @@ namespace System.Windows.Forms
             DataGridViewAutoSizeColumnMode[] previousModes = e.PreviousModes;
             if (previousModes == null)
             {
-                throw new ArgumentNullException("e.PreviousModes");
+                throw new ArgumentNullException(nameof(e.PreviousModes));
             }
-            if (previousModes.Length != this.Columns.Count)
+            if (previousModes.Length != Columns.Count)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_PreviousModesHasWrongLength));
             }

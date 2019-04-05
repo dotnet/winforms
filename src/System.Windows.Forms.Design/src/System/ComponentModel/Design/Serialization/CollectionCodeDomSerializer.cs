@@ -119,7 +119,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (method == null)
             {
-                throw new ArgumentNullException("method");
+                throw new ArgumentNullException(nameof(method));
             }
 
             object[] attrs = method.GetCustomAttributes(typeof(DesignerSerializationVisibilityAttribute), true);
@@ -143,12 +143,12 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (manager == null)
             {
-                throw new ArgumentNullException("manager");
+                throw new ArgumentNullException(nameof(manager));
             }
 
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
             object result = null;
             using (TraceScope("CollectionCodeDomSerializer::Serialize"))
@@ -305,10 +305,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            if (manager == null) throw new ArgumentNullException("manager");
-            if (targetType == null) throw new ArgumentNullException("targetType");
-            if (originalCollection == null) throw new ArgumentNullException("originalCollection");
-            if (valuesToSerialize == null) throw new ArgumentNullException("valuesToSerialize");
+            if (manager == null) throw new ArgumentNullException(nameof(manager));
+            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
+            if (originalCollection == null) throw new ArgumentNullException(nameof(originalCollection));
+            if (valuesToSerialize == null) throw new ArgumentNullException(nameof(valuesToSerialize));
 
             object result = null;
             bool serialized = false;

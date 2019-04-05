@@ -7,14 +7,9 @@
 
 namespace System.ComponentModel {
     using System.Diagnostics;  
-
-    /// <internalonly/>
-    // Shared between dlls
     
     internal static class CompModSwitches {
-
 #if WINDOWS_FORMS_SWITCHES
-
         private static TraceSwitch activeX;
         private static TraceSwitch flowLayout;
         private static TraceSwitch dataCursor;
@@ -44,7 +39,10 @@ namespace System.ComponentModel {
         private static TraceSwitch setBounds;
 
         private static BooleanSwitch lifetimeTracing;
-                                                                                                                                                                                                                                                                                                                
+
+        private static TraceSwitch s_handleLeak;
+        private static BooleanSwitch s_commonDesignerServices;
+
         public static TraceSwitch ActiveX {
             get {
                 if (activeX == null) {
@@ -286,8 +284,7 @@ namespace System.ComponentModel {
                 }
                 return richLayout;
             }
-        }    
-        
+        }
 
         public static TraceSwitch SetBounds {
             get {
@@ -296,20 +293,15 @@ namespace System.ComponentModel {
                 }
                 return setBounds;
             }
-        }    
-
+        }
         #endif 
-
-
-
-        private static TraceSwitch handleLeak;
 
         public static TraceSwitch HandleLeak {
             get {
-                if (handleLeak == null) {
-                    handleLeak = new TraceSwitch("HANDLELEAK", "HandleCollector: Track Win32 Handle Leaks");
+                if (s_handleLeak == null) {
+                    s_handleLeak = new TraceSwitch("HANDLELEAK", "HandleCollector: Track Win32 Handle Leaks");
                 }
-                return handleLeak;
+                return s_handleLeak;
             }
         }
 
@@ -322,6 +314,16 @@ namespace System.ComponentModel {
                 return traceCollect;
             }
         }
-
+        internal static BooleanSwitch CommonDesignerServices
+        {
+            get
+            {
+                if (s_commonDesignerServices == null)
+                {
+                    s_commonDesignerServices = new BooleanSwitch("CommonDesignerServices", "Assert if any common designer service is not found.");
+                }
+                return s_commonDesignerServices;
+            }
+        }
     }
 }
