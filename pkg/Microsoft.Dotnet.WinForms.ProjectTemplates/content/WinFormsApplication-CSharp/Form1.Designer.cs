@@ -1,6 +1,6 @@
 ﻿namespace Company.WinFormsApplication1
 {
-partial class Form1
+    partial class Form1
     {
         /// <summary>
         /// Required designer variable.
