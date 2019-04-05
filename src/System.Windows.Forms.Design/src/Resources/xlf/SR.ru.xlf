@@ -238,8 +238,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
-        <source>Could not find method '{0}'</source>
-        <target state="translated">Не удалось найти метод "{0}".</target>
+        <source>Could not find method '{0}'.</source>
+        <target state="needs-review-translation">Не удалось найти метод "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
