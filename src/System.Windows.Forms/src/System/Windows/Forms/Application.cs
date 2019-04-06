@@ -716,20 +716,15 @@ namespace System.Windows.Forms {
             }
         }
 #endif
-        internal static string WindowsFormsVersion {
-            get {
-                // Notice   : Don't never ever change this name, since window class of Winforms control is dependent on this.
-                //            And lots of partner team are related to window class of Winforms control. Changing this will introduce breaking.
-                //            If there is some reason need to change this, should take the accountability to notify partner team.
-                return "WindowsForms10";
-            }
-        }
 
-        internal static string WindowMessagesVersion {
-            get {
-                return "WindowsForms12";
-            }
-        }
+        /// <remarks>
+        /// Don't never ever change this name, since the window class and partner teams
+        /// dependent on this. Changing this will introduce breaking changes.
+        /// If there is some reason need to change this, notify any partner teams affected.
+        /// </remarks>
+        internal static string WindowsFormsVersion => "WindowsForms10";
+
+        internal static string WindowMessagesVersion => "WindowsForms12";
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.VisualStyleState"]/*' />
         /// <devdoc>
