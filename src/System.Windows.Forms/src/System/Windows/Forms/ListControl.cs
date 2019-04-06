@@ -694,15 +694,11 @@ namespace System.Windows.Forms
 
         private void DataSourceDisposed(object sender, EventArgs e)
         {
-            Debug.Assert(sender == _dataSource, "how can we get dispose notification for anything other than our dataSource?");
             SetDataConnection(null, new BindingMemberInfo(string.Empty), true);
         }
 
         private void DataSourceInitialized(object sender, EventArgs e)
         {
-            ISupportInitializeNotification dsInit = (_dataSource as ISupportInitializeNotification);
-            Debug.Assert(dsInit != null, "ListControl: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
-            Debug.Assert(dsInit.IsInitialized, "ListControl: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
             SetDataConnection(_dataSource, _displayMember, true);
         }
 

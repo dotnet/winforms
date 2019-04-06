@@ -2094,9 +2094,6 @@ namespace System.Windows.Forms
                         ref IID_IEnumVariant,
                         ref en);
 
-            Debug.Assert(acc != null, "SystemIAccessible is null");
-            Debug.Assert(en != null, "SystemIEnumVariant is null");
-
             if (acc != null || en != null)
             {
                 systemIAccessible = (IAccessible)acc;
