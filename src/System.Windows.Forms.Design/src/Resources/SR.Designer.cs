@@ -97,6 +97,24 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resize {0}.
+        /// </summary>
+        public static string BehaviorServiceResizeControl {
+            get {
+                return ResourceManager.GetString("BehaviorServiceResizeControl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resize {0} Controls.
+        /// </summary>
+        public static string BehaviorServiceResizeControls {
+            get {
+                return ResourceManager.GetString("BehaviorServiceResizeControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Double cannot be converted to a date..
         /// </summary>
         public static string CannotConvertDoubleToDate {
@@ -111,6 +129,33 @@ namespace System.Windows.Forms.Design.Resources {
         public static string CannotConvertIntToFloat {
             get {
                 return ResourceManager.GetString("CannotConvertIntToFloat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The serialization store is closed.  New objects cannot be added to a closed store..
+        /// </summary>
+        public static string CodeDomComponentSerializationServiceClosedStore {
+            get {
+                return ResourceManager.GetString("CodeDomComponentSerializationServiceClosedStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Complete deserialization of {0} failed..
+        /// </summary>
+        public static string CodeDomComponentSerializationServiceDeserializationError {
+            get {
+                return ResourceManager.GetString("CodeDomComponentSerializationServiceDeserializationError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This type of serialization store is not supported.  Use a store returned by the CreateStore method..
+        /// </summary>
+        public static string CodeDomComponentSerializationServiceUnknownStore {
+            get {
+                return ResourceManager.GetString("CodeDomComponentSerializationServiceUnknownStore", resourceCulture);
             }
         }
         
@@ -153,37 +198,18 @@ namespace System.Windows.Forms.Design.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Delete {0} components.
         /// </summary>
-        public static string CommandSetDelete
-        {
-            get
-            {
-                return ResourceManager.GetString("CommandSetDelete", resourceCulture);
-            }
-        }
-        ///   Looks up a localized string similar to The serialization store is closed.  New objects cannot be added to a closed store..
-        /// </summary>
-        public static string CodeDomComponentSerializationServiceClosedStore {
+        public static string CommandSetDelete {
             get {
-                return ResourceManager.GetString("CodeDomComponentSerializationServiceClosedStore", resourceCulture);
+                return ResourceManager.GetString("CommandSetDelete", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to An error occurred while processing this command.\r\n{0}.
         /// </summary>
-        public static string CommandSetError
-        {
-            get
-            {
-                return ResourceManager.GetString("CommandSetError", resourceCulture);
-            }
-        }
-        ///   Looks up a localized string similar to Complete deserialization of {0} failed..
-        /// </summary>
-        public static string CodeDomComponentSerializationServiceDeserializationError {
+        public static string CommandSetError {
             get {
-                return ResourceManager.GetString("CodeDomComponentSerializationServiceDeserializationError", resourceCulture);
-
+                return ResourceManager.GetString("CommandSetError", resourceCulture);
             }
         }
         
@@ -193,13 +219,6 @@ namespace System.Windows.Forms.Design.Resources {
         public static string CommandSetFormatSpacing {
             get {
                 return ResourceManager.GetString("CommandSetFormatSpacing", resourceCulture);
-            }
-        }
-        ///   Looks up a localized string similar to This type of serialization store is not supported.  Use a store returned by the CreateStore method..
-        /// </summary>
-        public static string CodeDomComponentSerializationServiceUnknownStore {
-            get {
-                return ResourceManager.GetString("CodeDomComponentSerializationServiceUnknownStore", resourceCulture);
             }
         }
         
@@ -233,10 +252,8 @@ namespace System.Windows.Forms.Design.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Unknown spacing command.
         /// </summary>
-        public static string CommandSetUnknownSpacingCommand
-        {
-            get
-            {
+        public static string CommandSetUnknownSpacingCommand {
+            get {
                 return ResourceManager.GetString("CommandSetUnknownSpacingCommand", resourceCulture);
             }
         }
@@ -251,6 +268,159 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Align To &amp;Grid.
+        /// </summary>
+        public static string ContextMenuAlignToGrid {
+            get {
+                return ResourceManager.GetString("ContextMenuAlignToGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Bring To Front.
+        /// </summary>
+        public static string ContextMenuBringToFront {
+            get {
+                return ResourceManager.GetString("ContextMenuBringToFront", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C&amp;opy.
+        /// </summary>
+        public static string ContextMenuCopy {
+            get {
+                return ResourceManager.GetString("ContextMenuCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Cut.
+        /// </summary>
+        public static string ContextMenuCut {
+            get {
+                return ResourceManager.GetString("ContextMenuCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Delete.
+        /// </summary>
+        public static string ContextMenuDelete {
+            get {
+                return ResourceManager.GetString("ContextMenuDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Document Outline.
+        /// </summary>
+        public static string ContextMenuDocumentOutline {
+            get {
+                return ResourceManager.GetString("ContextMenuDocumentOutline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Lock Controls.
+        /// </summary>
+        public static string ContextMenuLockControls {
+            get {
+                return ResourceManager.GetString("ContextMenuLockControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Paste.
+        /// </summary>
+        public static string ContextMenuPaste {
+            get {
+                return ResourceManager.GetString("ContextMenuPaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Properties.
+        /// </summary>
+        public static string ContextMenuProperties {
+            get {
+                return ResourceManager.GetString("ContextMenuProperties", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Select.
+        /// </summary>
+        public static string ContextMenuSelect {
+            get {
+                return ResourceManager.GetString("ContextMenuSelect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Send To Back.
+        /// </summary>
+        public static string ContextMenuSendToBack {
+            get {
+                return ResourceManager.GetString("ContextMenuSendToBack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ShowCheckMargin.
+        /// </summary>
+        public static string ContextMenuStripActionList_ShowCheckMargin {
+            get {
+                return ResourceManager.GetString("ContextMenuStripActionList_ShowCheckMargin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggles the ShowCheckMargin property.
+        /// </summary>
+        public static string ContextMenuStripActionList_ShowCheckMarginDesc {
+            get {
+                return ResourceManager.GetString("ContextMenuStripActionList_ShowCheckMarginDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ShowImageMargin.
+        /// </summary>
+        public static string ContextMenuStripActionList_ShowImageMargin {
+            get {
+                return ResourceManager.GetString("ContextMenuStripActionList_ShowImageMargin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggles the ShowImageMargin property.
+        /// </summary>
+        public static string ContextMenuStripActionList_ShowImageMarginDesc {
+            get {
+                return ResourceManager.GetString("ContextMenuStripActionList_ShowImageMarginDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View &amp;Code.
+        /// </summary>
+        public static string ContextMenuViewCode {
+            get {
+                return ResourceManager.GetString("ContextMenuViewCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}.
+        /// </summary>
+        public static string ControlDesigner_WndProcException {
+            get {
+                return ResourceManager.GetString("ControlDesigner_WndProcException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not convert value &apos;{0}&apos; to the type &apos;{1}&apos;..
         /// </summary>
         public static string DesignerActionPanel_CouldNotConvertValue {
@@ -260,7 +430,7 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not find method &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Could not find method &apos;{0}&apos;..
         /// </summary>
         public static string DesignerActionPanel_CouldNotFindMethod {
             get {
@@ -611,6 +781,24 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dock in Parent Container.
+        /// </summary>
+        public static string DesignerShortcutDockInParent {
+            get {
+                return ResourceManager.GetString("DesignerShortcutDockInParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undock in Parent Container.
+        /// </summary>
+        public static string DesignerShortcutUndockInParent {
+            get {
+                return ResourceManager.GetString("DesignerShortcutUndockInParent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The container cannot be disposed at design time..
         /// </summary>
         public static string DesignSurfaceContainerDispose {
@@ -676,17 +864,54 @@ namespace System.Windows.Forms.Design.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Drag {0} components.
         /// </summary>
-        public static string DragDropDragComponents
-        {
-            get
-            {
+        public static string DragDropDragComponents {
+            get {
                 return ResourceManager.GetString("DragDropDragComponents", resourceCulture);
             }
-        }        ///   Looks up a localized string similar to This IDataObject doesn&apos;t support SetData..
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move {0}.
+        /// </summary>
+        public static string DragDropMoveComponent {
+            get {
+                return ResourceManager.GetString("DragDropMoveComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move {0} components.
+        /// </summary>
+        public static string DragDropMoveComponents {
+            get {
+                return ResourceManager.GetString("DragDropMoveComponents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This IDataObject doesn&apos;t support SetData..
         /// </summary>
         public static string DragDropSetDataError {
             get {
                 return ResourceManager.GetString("DragDropSetDataError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size {0}.
+        /// </summary>
+        public static string DragDropSizeComponent {
+            get {
+                return ResourceManager.GetString("DragDropSizeComponent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Size {0} components.
+        /// </summary>
+        public static string DragDropSizeComponents {
+            get {
+                return ResourceManager.GetString("DragDropSizeComponents", resourceCulture);
             }
         }
         
@@ -700,15 +925,7 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move {0}.
-        /// </summary>
-        public static string DragDropMoveComponent
-        {
-            get
-            {
-                return ResourceManager.GetString("DragDropMoveComponent", resourceCulture);
-            }
-        }        ///   Looks up a localized string similar to Read-Only.
+        ///   Looks up a localized string similar to Read-Only.
         /// </summary>
         public static string InheritanceServiceReadOnlyCollection {
             get {
@@ -717,15 +934,34 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move {0} components.
+        ///   Looks up a localized string similar to &apos;{1}&apos; is not a valid value for &apos;{0}&apos;..
         /// </summary>
-        public static string DragDropMoveComponents
-        {
-            get
-            {
-                return ResourceManager.GetString("DragDropMoveComponents", resourceCulture);
+        public static string InvalidArgument {
+            get {
+                return ResourceManager.GetString("InvalidArgument", resourceCulture);
             }
-        }        ///   Looks up a localized string similar to This method/object is not implemented by design..
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{1}&apos; is not a valid value for &apos;{0}&apos;. &apos;{0}&apos; should be between {2} and {3}..
+        /// </summary>
+        public static string InvalidBoundArgument {
+            get {
+                return ResourceManager.GetString("InvalidBoundArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Locked property determines if we can move or resize the control..
+        /// </summary>
+        public static string lockedDescr {
+            get {
+                return ResourceManager.GetString("lockedDescr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This method/object is not implemented by design..
         /// </summary>
         public static string NotImplementedByDesign {
             get {
@@ -733,7 +969,7 @@ namespace System.Windows.Forms.Design.Resources {
             }
         }
         
-        /// <summary>        
+        /// <summary>
         ///   Looks up a localized string similar to Winforms Designer is not supported on this platform..
         /// </summary>
         public static string PlatformNotSupported_WinformsDesigner {
@@ -743,15 +979,16 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size {0}.
+        ///   Looks up a localized string similar to RTL_False.
         /// </summary>
-        public static string DragDropSizeComponent
-        {
-            get
-            {
-                return ResourceManager.GetString("DragDropSizeComponent", resourceCulture);
+        public static string RTL {
+            get {
+                return ResourceManager.GetString("RTL", resourceCulture);
             }
-        }        ///   Looks up a localized string similar to You cannot create a new session because this serialization manager already has an active serialization session..
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot create a new session because this serialization manager already has an active serialization session..
         /// </summary>
         public static string SerializationManagerAreadyInSession {
             get {
@@ -760,15 +997,7 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Size {0} components.
-        /// </summary>
-        public static string DragDropSizeComponents
-        {
-            get
-            {
-                return ResourceManager.GetString("DragDropSizeComponents", resourceCulture);
-            }
-        }        ///   Looks up a localized string similar to Duplicate declaration of member &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Duplicate declaration of member &apos;{0}&apos;.
         /// </summary>
         public static string SerializationManagerDuplicateComponentDecl {
             get {
@@ -809,94 +1038,46 @@ namespace System.Windows.Forms.Design.Resources {
         public static string SerializationManagerObjectHasName {
             get {
                 return ResourceManager.GetString("SerializationManagerObjectHasName", resourceCulture);
-
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to RTL_False.
-        /// </summary>
-        public static string RTL
-        {
-            get
-            {
-                return ResourceManager.GetString("RTL", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to This method cannot be invoked because the serialization manager has an active serialization session..
         /// </summary>
         public static string SerializationManagerWithinSession {
             get {
                 return ResourceManager.GetString("SerializationManagerWithinSession", resourceCulture);
-
             }
         }
         
         /// <summary>
-
-        ///   Looks up a localized string similar to Argument should be a non-empty string..
-        /// </summary>
-        public static string ToolboxItemInvalidKey {
-            get {
-                return ResourceManager.GetString("ToolboxItemInvalidKey", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}..
         /// </summary>
         public static string SerializerBadElementTypes {
             get {
                 return ResourceManager.GetString("SerializerBadElementTypes", resourceCulture);
-
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property {0} requires an argument of type {1}..
-        /// </summary>
-        public static string ToolboxItemInvalidPropertyType
-        {
-            get
-            {
-                return ResourceManager.GetString("ToolboxItemInvalidPropertyType", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to The field &apos;{0}&apos; could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope..
         /// </summary>
         public static string SerializerFieldTargetEvalFailed {
             get {
                 return ResourceManager.GetString("SerializerFieldTargetEvalFailed", resourceCulture);
-
             }
         }
         
         /// <summary>
-
-        ///   Looks up a localized string similar to Toolbox item cannot be modified..
-        /// </summary>
-        public static string ToolboxItemLocked {
-            get {
-                return ResourceManager.GetString("ToolboxItemLocked", resourceCulture);
-            }
-        }
-
         ///   Looks up a localized string similar to Array rank &apos;{0}&apos; is too high.  Visual Studio can only save and load arrays with a rank of 1..
         /// </summary>
         public static string SerializerInvalidArrayRank {
             get {
                 return ResourceManager.GetString("SerializerInvalidArrayRank", resourceCulture);
-
             }
         }
         
         /// <summary>
-
-        ///   Looks up a localized string similar to Data type {0} is not serializable. Items added to a property dictionary must be serializable..
-        /// </summary>
-        public static string ToolboxItemValueNotSerializable {
-            get {
-                return ResourceManager.GetString("ToolboxItemValueNotSerializable", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to Code statements for the object &apos;{0}&apos; were lost during serialization.  This may have been a result of another object misbehaving during serialization..
         /// </summary>
         public static string SerializerLostStatements {
@@ -924,15 +1105,6 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto Arrange Tray Icons.
-        /// </summary>
-        public static string TrayAutoArrange
-        {
-            get
-            {
-                return ResourceManager.GetString("TrayAutoArrange", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to The object &apos;{0}&apos; failed to serialize itself.  It may not support code generation..
         /// </summary>
         public static string SerializerNoSerializerForComponent {
@@ -942,50 +1114,24 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-
-        ///   Looks up a localized string similar to Line Up Tray Icons.
-        /// </summary>
-        public static string TrayLineUpIcons {
-            get {
-                return ResourceManager.GetString("TrayLineUpIcons", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to The type &apos;{0}&apos; has no event named &apos;{1}&apos;..
         /// </summary>
         public static string SerializerNoSuchEvent {
             get {
                 return ResourceManager.GetString("SerializerNoSuchEvent", resourceCulture);
-
             }
         }
         
         /// <summary>
-
-        ///   Looks up a localized string similar to Show Large or Small Icons.
-        /// </summary>
-        public static string TrayShowLargeIcons {
-            get {
-                return ResourceManager.GetString("TrayShowLargeIcons", resourceCulture);
-            } 
-}
         ///   Looks up a localized string similar to The type &apos;{0}&apos; has no field named &apos;{1}&apos;..
         /// </summary>
         public static string SerializerNoSuchField {
             get {
                 return ResourceManager.GetString("SerializerNoSuchField", resourceCulture);
-
             }
         }
         
         /// <summary>
-
-        ///   Looks up a localized string similar to Error.
-        /// </summary>
-        public static string UIServiceHelper_ErrorCaption {
-            get {
-                return ResourceManager.GetString("UIServiceHelper_ErrorCaption", resourceCulture);
-            }
-        }
         ///   Looks up a localized string similar to The type &apos;{0}&apos; has no property named &apos;{1}&apos;..
         /// </summary>
         public static string SerializerNoSuchProperty {
@@ -1031,12 +1177,605 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &amp;About....
+        /// </summary>
+        public static string StandardMenuAbout {
+            get {
+                return ResourceManager.GetString("StandardMenuAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Contents.
+        /// </summary>
+        public static string StandardMenuContents {
+            get {
+                return ResourceManager.GetString("StandardMenuContents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Copy.
+        /// </summary>
+        public static string StandardMenuCopy {
+            get {
+                return ResourceManager.GetString("StandardMenuCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Standard Menu.
+        /// </summary>
+        public static string StandardMenuCreateDesc {
+            get {
+                return ResourceManager.GetString("StandardMenuCreateDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Customize.
+        /// </summary>
+        public static string StandardMenuCustomize {
+            get {
+                return ResourceManager.GetString("StandardMenuCustomize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cu&amp;t.
+        /// </summary>
+        public static string StandardMenuCut {
+            get {
+                return ResourceManager.GetString("StandardMenuCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Edit.
+        /// </summary>
+        public static string StandardMenuEdit {
+            get {
+                return ResourceManager.GetString("StandardMenuEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E&amp;xit.
+        /// </summary>
+        public static string StandardMenuExit {
+            get {
+                return ResourceManager.GetString("StandardMenuExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;File.
+        /// </summary>
+        public static string StandardMenuFile {
+            get {
+                return ResourceManager.GetString("StandardMenuFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Help.
+        /// </summary>
+        public static string StandardMenuHelp {
+            get {
+                return ResourceManager.GetString("StandardMenuHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Index.
+        /// </summary>
+        public static string StandardMenuIndex {
+            get {
+                return ResourceManager.GetString("StandardMenuIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;New.
+        /// </summary>
+        public static string StandardMenuNew {
+            get {
+                return ResourceManager.GetString("StandardMenuNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Open.
+        /// </summary>
+        public static string StandardMenuOpen {
+            get {
+                return ResourceManager.GetString("StandardMenuOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Options.
+        /// </summary>
+        public static string StandardMenuOptions {
+            get {
+                return ResourceManager.GetString("StandardMenuOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Paste.
+        /// </summary>
+        public static string StandardMenuPaste {
+            get {
+                return ResourceManager.GetString("StandardMenuPaste", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Print.
+        /// </summary>
+        public static string StandardMenuPrint {
+            get {
+                return ResourceManager.GetString("StandardMenuPrint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print Pre&amp;view.
+        /// </summary>
+        public static string StandardMenuPrintPreview {
+            get {
+                return ResourceManager.GetString("StandardMenuPrintPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Redo.
+        /// </summary>
+        public static string StandardMenuRedo {
+            get {
+                return ResourceManager.GetString("StandardMenuRedo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Save.
+        /// </summary>
+        public static string StandardMenuSave {
+            get {
+                return ResourceManager.GetString("StandardMenuSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save &amp;As.
+        /// </summary>
+        public static string StandardMenuSaveAs {
+            get {
+                return ResourceManager.GetString("StandardMenuSaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Search.
+        /// </summary>
+        public static string StandardMenuSearch {
+            get {
+                return ResourceManager.GetString("StandardMenuSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select &amp;All.
+        /// </summary>
+        public static string StandardMenuSelectAll {
+            get {
+                return ResourceManager.GetString("StandardMenuSelectAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Tools.
+        /// </summary>
+        public static string StandardMenuTools {
+            get {
+                return ResourceManager.GetString("StandardMenuTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Undo.
+        /// </summary>
+        public static string StandardMenuUndo {
+            get {
+                return ResourceManager.GetString("StandardMenuUndo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C&amp;ut.
+        /// </summary>
+        public static string StandardToolCut {
+            get {
+                return ResourceManager.GetString("StandardToolCut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to He&amp;lp.
+        /// </summary>
+        public static string StandardToolHelp {
+            get {
+                return ResourceManager.GetString("StandardToolHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Argument should be a non-empty string..
+        /// </summary>
+        public static string ToolboxItemInvalidKey {
+            get {
+                return ResourceManager.GetString("ToolboxItemInvalidKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Property {0} requires an argument of type {1}..
+        /// </summary>
+        public static string ToolboxItemInvalidPropertyType {
+            get {
+                return ResourceManager.GetString("ToolboxItemInvalidPropertyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toolbox item cannot be modified..
+        /// </summary>
+        public static string ToolboxItemLocked {
+            get {
+                return ResourceManager.GetString("ToolboxItemLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data type {0} is not serializable. Items added to a property dictionary must be serializable..
+        /// </summary>
+        public static string ToolboxItemValueNotSerializable {
+            get {
+                return ResourceManager.GetString("ToolboxItemValueNotSerializable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dock:.
+        /// </summary>
+        public static string ToolStripActionList_Dock {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_Dock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the Dock property.
+        /// </summary>
+        public static string ToolStripActionList_DockDesc {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_DockDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GripStyle:.
+        /// </summary>
+        public static string ToolStripActionList_GripStyle {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_GripStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the GripStyle property.
+        /// </summary>
+        public static string ToolStripActionList_GripStyleDesc {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_GripStyleDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layout &amp;&amp; Appearance.
+        /// </summary>
+        public static string ToolStripActionList_Layout {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_Layout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RenderMode:.
+        /// </summary>
+        public static string ToolStripActionList_RenderMode {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_RenderMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes the RenderMode property.
+        /// </summary>
+        public static string ToolStripActionList_RenderModeDesc {
+            get {
+                return ResourceManager.GetString("ToolStripActionList_RenderModeDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding {0} Item.
+        /// </summary>
+        public static string ToolStripAddingItem {
+            get {
+                return ResourceManager.GetString("ToolStripAddingItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AllowItemReorder and AllowDrop cannot both be true..
+        /// </summary>
+        public static string ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue {
+            get {
+                return ResourceManager.GetString("ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ToolStrip New Item create Transaction..
+        /// </summary>
+        public static string ToolStripCreatingNewItemTransaction {
+            get {
+                return ResourceManager.GetString("ToolStripCreatingNewItemTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Embed in ToolStripContainer.
+        /// </summary>
+        public static string ToolStripDesignerEmbedVerb {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerEmbedVerb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Embeds the current ToolStrip in ToolStripContainer.
+        /// </summary>
+        public static string ToolStripDesignerEmbedVerbDesc {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerEmbedVerbDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Insert Standard Items.
+        /// </summary>
+        public static string ToolStripDesignerStandardItemsVerb {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerStandardItemsVerb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inserts standard items in the current ToolStrip.
+        /// </summary>
+        public static string ToolStripDesignerStandardItemsVerbDesc {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerStandardItemsVerbDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Here.
+        /// </summary>
+        public static string ToolStripDesignerTemplateNodeEnterText {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTemplateNodeEnterText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type Text for ToolStripMenuItem.
+        /// </summary>
+        public static string ToolStripDesignerTemplateNodeLabelToolTip {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTemplateNodeLabelToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Menu Item.
+        /// </summary>
+        public static string ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add ToolStripStatusLabel.
+        /// </summary>
+        public static string ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add ToolStripButton.
+        /// </summary>
+        public static string ToolStripDesignerTemplateNodeSplitButtonToolTip {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTemplateNodeSplitButtonToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New item selection.
+        /// </summary>
+        public static string ToolStripDesignerToolStripAccessibleName {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerToolStripAccessibleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding Item.
+        /// </summary>
+        public static string ToolStripDesignerTransactionAddingItem {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTransactionAddingItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing Item.
+        /// </summary>
+        public static string ToolStripDesignerTransactionRemovingItem {
+            get {
+                return ResourceManager.GetString("ToolStripDesignerTransactionRemovingItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Edit DropDownItems....
+        /// </summary>
+        public static string ToolStripDropDownItemCollectionEditorVerb {
+            get {
+                return ResourceManager.GetString("ToolStripDropDownItemCollectionEditorVerb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ToolStrip MenuItem Insert in DropDown Transaction..
+        /// </summary>
+        public static string ToolStripInsertingIntoDropDownTransaction {
+            get {
+                return ResourceManager.GetString("ToolStripInsertingIntoDropDownTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Edit Items....
+        /// </summary>
+        public static string ToolStripItemCollectionEditorVerb {
+            get {
+                return ResourceManager.GetString("ToolStripItemCollectionEditorVerb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Con&amp;vert To.
+        /// </summary>
+        public static string ToolStripItemContextMenuConvertTo {
+            get {
+                return ResourceManager.GetString("ToolStripItemContextMenuConvertTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &amp;Insert.
+        /// </summary>
+        public static string ToolStripItemContextMenuInsert {
+            get {
+                return ResourceManager.GetString("ToolStripItemContextMenuInsert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set I&amp;mage....
+        /// </summary>
+        public static string ToolStripItemContextMenuSetImage {
+            get {
+                return ResourceManager.GetString("ToolStripItemContextMenuSetImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ToolStripItem Property Change Transaction..
+        /// </summary>
+        public static string ToolStripItemPropertyChangeTransaction {
+            get {
+                return ResourceManager.GetString("ToolStripItemPropertyChangeTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ToolStripItem Morphing Transaction..
+        /// </summary>
+        public static string ToolStripMorphingItemTransaction {
+            get {
+                return ResourceManager.GetString("ToolStripMorphingItemTransaction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos;.
+        /// </summary>
+        public static string ToolStripSelectMenuItem {
+            get {
+                return ResourceManager.GetString("ToolStripSelectMenuItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot add ToolStripSeparator to MenuStrip..
+        /// </summary>
+        public static string ToolStripSeparatorError {
+            get {
+                return ResourceManager.GetString("ToolStripSeparatorError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto Arrange Tray Icons.
+        /// </summary>
+        public static string TrayAutoArrange {
+            get {
+                return ResourceManager.GetString("TrayAutoArrange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Up Tray Icons.
+        /// </summary>
+        public static string TrayLineUpIcons {
+            get {
+                return ResourceManager.GetString("TrayLineUpIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Large or Small Icons.
+        /// </summary>
+        public static string TrayShowLargeIcons {
+            get {
+                return ResourceManager.GetString("TrayShowLargeIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; is not available in the target framework..
         /// </summary>
         public static string TypeNotFoundInTargetFramework {
             get {
                 return ResourceManager.GetString("TypeNotFoundInTargetFramework", resourceCulture);
-
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string UIServiceHelper_ErrorCaption {
+            get {
+                return ResourceManager.GetString("UIServiceHelper_ErrorCaption", resourceCulture);
             }
         }
         

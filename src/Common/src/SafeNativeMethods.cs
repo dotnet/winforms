@@ -902,7 +902,7 @@ namespace System.Windows.Forms {
             return (int)color.R | ((int)color.G << 8) | ((int)color.B << 16);
         }
 
-        [ComImport(), Guid("BEF6E003-A874-101A-8BBA-00AA00300CAB"), System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIDispatch)]
+        [ComImport(), Guid("BEF6E003-A874-101A-8BBA-00AA00300CAB"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIDispatch)]
         public interface IFontDisp {
 
              string Name {get; set;}

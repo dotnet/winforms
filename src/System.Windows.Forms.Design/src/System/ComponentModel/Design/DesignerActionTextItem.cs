@@ -4,7 +4,7 @@
 
 namespace System.ComponentModel.Design
 {
-    public class DesignerActionTextItem : DesignerActionItem
+    internal class DesignerActionTextItem : DesignerActionItem
     {
         public DesignerActionTextItem(string displayName, string category) : base(displayName, category, null)
         {

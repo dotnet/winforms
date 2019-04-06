@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Design.Behavior
         internal BehaviorService(IServiceProvider serviceProvider, Control windowFrame)
         {
             _serviceProvider = serviceProvider;
-//create the AdornerWindow
+            //create the AdornerWindow
             _adornerWindow = new AdornerWindow(this, windowFrame);
 
             //use the adornerWindow as an overlay
@@ -94,14 +94,9 @@ namespace System.Windows.Forms.Design.Behavior
             _trackingMouseEvent = false;
 
             //create out object that will handle all menucommands
-            IMenuCommandService menuCommandService = serviceProvider.GetService(typeof(IMenuCommandService)) as IMenuCommandService;
-            IDesignerHost host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
-
-            if (menuCommandService != null && host != null)
+            if (serviceProvider.GetService(typeof(IMenuCommandService)) is IMenuCommandService menuCommandService && serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
-
                 _menuCommandHandler = new MenuCommandHandler(this, menuCommandService);
-
                 host.RemoveService(typeof(IMenuCommandService));
                 host.AddService(typeof(IMenuCommandService), _menuCommandHandler);
             }
@@ -115,8 +110,6 @@ namespace System.Windows.Forms.Design.Behavior
             WM_GETRECENTSNAPLINES = SafeNativeMethods.RegisterWindowMessage("WM_GETRECENTSNAPLINES");
 
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
-            SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
-            SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
         /// <summary>
@@ -240,8 +233,6 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             _adornerWindow.Dispose();
-            SystemEvents.DisplaySettingsChanged -= new EventHandler(OnSystemSettingChanged);
-            SystemEvents.InstalledFontsChanged -= new EventHandler(OnSystemSettingChanged);
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
@@ -558,7 +549,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (behavior == null)
             {
-                throw new ArgumentNullException("behavior");
+                throw new ArgumentNullException(nameof(behavior));
             }
 
             // Should we catch this
@@ -657,7 +648,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     CreateParams cp = base.CreateParams;
                     cp.Style &= ~(NativeMethods.WS_CLIPCHILDREN | NativeMethods.WS_CLIPSIBLINGS);
-                    cp.ExStyle |= 0x00000020/*WS_EX_TRANSPARENT*/;
+                    cp.ExStyle |= NativeMethods.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }
@@ -1760,6 +1751,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
             TestHook_SetText(ref m, snapLineInfo);
         }
+
         private void OnDragOver(DragEventArgs e)
         {
             // cache off our validDragArgs so we can re-fabricate enter/leave drag events

@@ -23,8 +23,6 @@ namespace System.ComponentModel.Design
 {
     internal sealed class DesignerActionPanel : ContainerControl
     {
-        public const string ExternDllGdi32 = "gdi32.dll";
-        public const string ExternDllUser32 = "user32.dll";
         private static readonly object s_eventFormActivated = new object();
         private static readonly object s_eventFormDeactivate = new object();
 
@@ -67,9 +65,6 @@ namespace System.ComponentModel.Design
 
         private readonly IServiceProvider _serviceProvider;
         private bool _inMethodInvoke;
-#if MVWASSEMBLY
-        private bool _inPushingValue;
-#endif
         private bool _updatingTasks;
         private bool _dropDownActive;
 
@@ -230,17 +225,6 @@ namespace System.ComponentModel.Design
             get => _inMethodInvoke;
             internal set => _inMethodInvoke = value;
         }
-
-#if MVWASSEMBLY
-        public bool InPushingValue {
-            get {
-                return _inPushingValue;
-            }
-            internal set {
-                _inPushingValue = value;
-            }
-        }
-#endif
 
         public Color LinkColor
         {
@@ -516,8 +500,6 @@ namespace System.ComponentModel.Design
                 Form form = (Form)TopLevelControl;
                 if (form != null)
                 {
-                    form.Activated -= new EventHandler(OnFormActivated);
-                    form.Deactivate -= new EventHandler(OnFormDeactivate);
                     form.Closing -= new CancelEventHandler(OnFormClosing);
                 }
             }
@@ -533,8 +515,6 @@ namespace System.ComponentModel.Design
             base.OnHandleCreated(e);
             if (TopLevelControl is Form form)
             {
-                form.Activated += new EventHandler(OnFormActivated);
-                form.Deactivate += new EventHandler(OnFormDeactivate);
                 form.Closing += new CancelEventHandler(OnFormClosing);
             }
         }
@@ -1179,7 +1159,6 @@ namespace System.ComponentModel.Design
 
             public PanelHeaderLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
             {
-                actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
             }
 
             public sealed override string FocusId
@@ -1207,9 +1186,6 @@ namespace System.ComponentModel.Design
 
                 controls.Add(_titleLabel);
                 controls.Add(_subtitleLabel);
-                // TODO: Need to figure out how to unhook these events. Perhaps have Initialize() and Cleanup() methods.
-                ActionPanel.FormActivated += new EventHandler(OnFormActivated);
-                ActionPanel.FormDeactivate += new EventHandler(OnFormDeactivate);
             }
 
             public sealed override void Focus()
@@ -1460,10 +1436,6 @@ namespace System.ComponentModel.Design
                     return;
                 }
                 _pushingValue = true;
-
-#if MVWASSEMBLY
-                ActionPanel.InPushingValue = true;
-#endif
                 try
                 {
                     // Only push the change if the values are different
@@ -1507,9 +1479,6 @@ namespace System.ComponentModel.Design
                 finally
                 {
                     _pushingValue = false;
-#if MVWASSEMBLY
-                    ActionPanel.InPushingValue = false;
-#endif
                 }
             }
 
@@ -1522,9 +1491,6 @@ namespace System.ComponentModel.Design
                 _value = PropertyDescriptor.GetValue(actionList);
                 OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
                 _pushingValue = true;
-#if MVWASSEMBLY
-                ActionPanel.InPushingValue = true;
-#endif
                 try
                 {
                     OnValueChanged();
@@ -1532,9 +1498,6 @@ namespace System.ComponentModel.Design
                 finally
                 {
                     _pushingValue = false;
-#if MVWASSEMBLY
-                    ActionPanel.InPushingValue = false;
-#endif
                 }
             }
         }
@@ -1554,7 +1517,6 @@ namespace System.ComponentModel.Design
                     BackColor = Color.Transparent,
                     CheckAlign = Drawing.ContentAlignment.MiddleLeft
                 };
-                _checkBox.CheckedChanged += new EventHandler(OnCheckBoxCheckedChanged);
                 _checkBox.TextAlign = Drawing.ContentAlignment.MiddleLeft;
                 _checkBox.UseMnemonic = false;
                 _checkBox.ForeColor = ActionPanel.LabelForeColor;
@@ -1649,8 +1611,6 @@ namespace System.ComponentModel.Design
                     Visible = false
                 };
                 _readOnlyTextBoxLabel.MouseClick += new MouseEventHandler(OnReadOnlyTextBoxLabelClick);
-                _readOnlyTextBoxLabel.Enter += new EventHandler(OnReadOnlyTextBoxLabelEnter);
-                _readOnlyTextBoxLabel.Leave += new EventHandler(OnReadOnlyTextBoxLabelLeave);
                 _readOnlyTextBoxLabel.KeyDown += new KeyEventHandler(OnReadOnlyTextBoxLabelKeyDown);
 
                 _textBox = new TextBox
@@ -1659,9 +1619,7 @@ namespace System.ComponentModel.Design
                     TextAlign = System.Windows.Forms.HorizontalAlignment.Left,
                     Visible = false
                 };
-                _textBox.TextChanged += new EventHandler(OnTextBoxTextChanged);
                 _textBox.KeyDown += new KeyEventHandler(OnTextBoxKeyDown);
-                _textBox.LostFocus += new EventHandler(OnTextBoxLostFocus);
 
                 controls.Add(_readOnlyTextBoxLabel);
                 controls.Add(_textBox);
@@ -1984,7 +1942,6 @@ namespace System.ComponentModel.Design
                         IntegralHeight = false,
                         Font = ActionPanel.Font
                     };
-                    listBox.SelectedIndexChanged += new EventHandler(OnListBoxSelectedIndexChanged);
                     listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
                     if (standardValues != null)
@@ -2040,7 +1997,6 @@ namespace System.ComponentModel.Design
                     }
                     finally
                     {
-                        listBox.SelectedIndexChanged -= new EventHandler(OnListBoxSelectedIndexChanged);
                         listBox.KeyDown -= new KeyEventHandler(OnListBoxKeyDown);
                     }
 
@@ -2058,8 +2014,6 @@ namespace System.ComponentModel.Design
             {
                 base.AddControls(controls);
                 _button = new EditorButton();
-                _button.Click += new EventHandler(OnButtonClick);
-                _button.GotFocus += new EventHandler(OnButtonGotFocus);
                 controls.Add(_button);
             }
 
@@ -2451,11 +2405,7 @@ namespace System.ComponentModel.Design
                 {
                     while (Visible)
                     {
-#if MVWASSEMBLY
-                        System.Windows.Forms.Application.DoEvents();
-#else
                         Application.DoEvents();
-#endif
                         UnsafeNativeMethods.MsgWaitForMultipleObjectsEx(0, IntPtr.Zero, 250, NativeMethods.QS_ALLINPUT, NativeMethods.MWMO_INPUTAVAILABLE);
                     }
                 }
@@ -2660,7 +2610,7 @@ namespace System.ComponentModel.Design
 
             private static class SafeNativeMethods
             {
-                [DllImport(ExternDllGdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 private static extern bool IntDeleteObject(HandleRef hObject);
                 public static bool DeleteObject(HandleRef hObject)
                 {
@@ -2668,19 +2618,19 @@ namespace System.ComponentModel.Design
                     return IntDeleteObject(hObject);
                 }
 
-                [DllImport(ExternDllUser32, CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern bool ReleaseCapture();
 
-                [DllImport(ExternDllGdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern IntPtr SelectObject(HandleRef hDC, HandleRef hObject);
 
-                [DllImport(ExternDllGdi32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+                [DllImport(ExternDll.Gdi32, SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
                 public static extern int GetTextExtentPoint32(HandleRef hDC, string str, int len, [In, Out] NativeMethods.SIZE size);
 
-                [DllImport(ExternDllGdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
+                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Unicode)]
                 public static extern int GetTextMetricsW(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRIC lptm);
 
-                [DllImport(ExternDllGdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
+                [DllImport(ExternDll.Gdi32, SetLastError = true, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Ansi)]
                 public static extern int GetTextMetricsA(HandleRef hDC, [In, Out] ref NativeMethods.TEXTMETRICA lptm);
 
                 public static int GetTextMetrics(HandleRef hDC, ref NativeMethods.TEXTMETRIC lptm)
@@ -2722,25 +2672,25 @@ namespace System.ComponentModel.Design
 
             private static class UnsafeNativeMethods
             {
-                [DllImport(ExternDllUser32, CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
                 public static extern IntPtr GetWindowLong(HandleRef hWnd, int nIndex);
 
-                [DllImport(ExternDllUser32, CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
                 public static extern IntPtr SetWindowLong(HandleRef hWnd, int nIndex, HandleRef dwNewLong);
 
-                [DllImport(ExternDllUser32, CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds, int dwWakeMask, int dwFlags);
 
                 [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
-                [DllImport(ExternDllUser32, CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, int lParam);
 
-                [DllImport(ExternDllUser32, CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
                 public static extern IntPtr GetCapture();
 
-                [DllImport(ExternDllUser32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
                 private static extern IntPtr IntGetDC(HandleRef hWnd);
                 public static IntPtr GetDC(HandleRef hWnd)
                 {
@@ -2748,7 +2698,7 @@ namespace System.ComponentModel.Design
                     return IntGetDC(hWnd);
                 }
 
-                [DllImport(ExternDllUser32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
+                [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
                 private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
                 public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
                 {
@@ -2926,7 +2876,6 @@ namespace System.ComponentModel.Design
 
             public TextLine(IServiceProvider serviceProvider, DesignerActionPanel actionPanel) : base(serviceProvider, actionPanel)
             {
-                actionPanel.FontChanged += new EventHandler(OnParentControlFontChanged);
             }
 
             public sealed override string FocusId

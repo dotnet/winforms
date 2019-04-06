@@ -56,9 +56,6 @@ namespace System.Windows.Forms.Design.Behavior
                     hitBounds.Width += DesignerUtils.SELECTIONBORDERHITAREA - DesignerUtils.SELECTIONBORDERSIZE;
                     break;
             }
-
-
-
         }
 
         /// <summary>
@@ -68,6 +65,5 @@ namespace System.Windows.Forms.Design.Behavior
         {
             DesignerUtils.DrawSelectionBorder(pe.Graphics, bounds);
         }
-
     }
 }

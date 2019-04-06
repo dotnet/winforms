@@ -22,7 +22,6 @@ namespace System.Windows.Forms.Design.Behavior
             _relatedBehavior = (ContainerSelectorBehavior)behavior;
             _glyphBounds = new Rectangle(containerBounds.X + glyphOffset, containerBounds.Y - (int)(glyphSize * .5), glyphSize, glyphSize);
         }
-
        
         /// <summary>
         /// The bounds of this Glyph.

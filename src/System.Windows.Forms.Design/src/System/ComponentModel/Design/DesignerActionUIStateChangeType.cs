@@ -6,8 +6,6 @@ namespace System.ComponentModel.Design
 {
     public enum DesignerActionUIStateChangeType
     {
-        Show,
-        Hide,
-        Refresh
+        Show, Hide, Refresh
     }
 }

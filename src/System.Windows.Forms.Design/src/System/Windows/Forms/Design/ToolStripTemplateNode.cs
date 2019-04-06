@@ -138,36 +138,8 @@ namespace System.Windows.Forms.Design
             }
 
             SetupNewEditNode(this, text, image, component);
-            _commands = new MenuCommand[] {
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyMoveUp),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyMoveDown),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyMoveLeft),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyMoveRight),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.Delete),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.Cut),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.Copy),
-
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeUp),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeDown),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeLeft),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeRight),
-
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeySizeWidthIncrease),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeySizeHeightIncrease),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeySizeWidthDecrease),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeySizeHeightDecrease),
-
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeWidthIncrease),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeHeightIncrease),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeWidthDecrease),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.KeyNudgeHeightDecrease)
-
-            };
-
-            _addCommands = new MenuCommand[] {
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.Undo),
-                new MenuCommand(new EventHandler(OnMenuCut), MenuCommands.Redo)
-            };
+            _commands = new MenuCommand[] { };
+            _addCommands = new MenuCommand[] { };
         }
 
         /// <summary>
@@ -228,7 +200,6 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        //Active == false.. Fire Deactivated
                         OnDeactivated(new EventArgs());
                         if (KeyboardService != null)
                         {

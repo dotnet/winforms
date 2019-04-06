@@ -38,7 +38,7 @@ namespace System.Windows.Forms.Design
         private IToolboxService toolboxService; // cached for drag/drop
 
         /// <summary>
-        /// <para>Provides drag and drop functionality through OLE.</para>
+        /// Provides drag and drop functionality through OLE.
         /// </summary>
         internal OleDragDropHandler oleDragDropHandler; // handler class for ole drag drop operations.
 
@@ -172,9 +172,6 @@ namespace System.Windows.Forms.Design
             SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
             SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
-
-            // Listen to refresh events from TypeDescriptor.  If a component gets refreshed, we re-query and will hide/show the view based on the DesignerView attribute.
-            TypeDescriptor.Refreshed += new RefreshEventHandler(OnComponentRefresh);
 
             if (GetService(typeof(BehaviorService)) is BehaviorService behSvc)
             {
@@ -435,9 +432,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// <para>
         /// Gets the number of compnents contained within this tray.
-        /// </para>
         /// </summary>
         public int ComponentCount
         {
@@ -671,7 +666,7 @@ namespace System.Windows.Forms.Design
         void ISelectionUIHandler.OleDragLeave() => GetOleDragHandler().DoOleDragLeave();
 
         /// <summary>
-        /// <para>Adds a component to the tray.</para>
+        /// Adds a component to the tray.
         /// </summary>
         public virtual void AddComponent(IComponent component)
         {
@@ -836,17 +831,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// <para>
         /// Disposes of the resources (other than memory) used by the component tray object.
-        /// </para>
         /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing && controls != null)
             {
                 IExtenderProviderService es = (IExtenderProviderService)GetService(typeof(IExtenderProviderService));
-                if (CompModSwitches.CommonDesignerServices.Enabled)
-                    Debug.Assert(es != null, "IExtenderProviderService not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (es != null), "IExtenderProviderService not found");
                 if (es != null)
                 {
                     es.RemoveExtenderProvider(this);
@@ -868,7 +860,6 @@ namespace System.Windows.Forms.Design
                     componentChangeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 }
 
-                TypeDescriptor.Refreshed -= new RefreshEventHandler(OnComponentRefresh);
                 SystemEvents.DisplaySettingsChanged -= new EventHandler(OnSystemSettingChanged);
                 SystemEvents.InstalledFontsChanged -= new EventHandler(OnSystemSettingChanged);
                 SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
@@ -993,9 +984,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// <para>
         /// Gets the requsted service type.
-        /// </para>
         /// </summary>
         protected override object GetService(Type serviceType)
         {
@@ -1040,8 +1029,7 @@ namespace System.Windows.Forms.Design
             {
                 OnLostCapture();
                 IEventBindingService eps = (IEventBindingService)GetService(typeof(IEventBindingService));
-                if (CompModSwitches.CommonDesignerServices.Enabled)
-                    Debug.Assert(eps != null, "IEventBindingService not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (eps != null), "IEventBindingService not found");
                 if (eps != null)
                 {
                     eps.ShowCode();
@@ -1072,8 +1060,7 @@ namespace System.Windows.Forms.Design
             {
                 ToolboxItem tool = mouseDragTool;
                 mouseDragTool = null;
-                if (CompModSwitches.CommonDesignerServices.Enabled)
-                    Debug.Assert(GetService(typeof(IDesignerHost)) != null, "IDesignerHost not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (GetService(typeof(IDesignerHost)) != null), "IDesignerHost not found");
                 try
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
@@ -1268,8 +1255,7 @@ namespace System.Windows.Forms.Design
                     try
                     {
                         ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-                        if (CompModSwitches.CommonDesignerServices.Enabled)
-                            Debug.Assert(ss != null, "ISelectionService not found");
+                        Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ss != null), "ISelectionService not found");
                         if (ss != null)
                         {
                             ss.SetSelectedComponents(new object[] { mainDesigner.Component });
@@ -1362,8 +1348,7 @@ namespace System.Windows.Forms.Design
                 try
                 {
                     ISelectionService ss = (ISelectionService)GetService(typeof(ISelectionService));
-                    if (CompModSwitches.CommonDesignerServices.Enabled)
-                        Debug.Assert(ss != null, "ISelectionService not found");
+                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ss != null), "ISelectionService not found");
                     if (ss != null)
                     {
                         ss.SetSelectedComponents(comps);
@@ -1934,8 +1919,7 @@ namespace System.Windows.Forms.Design
                 UpdateIconInfo();
 
                 IComponentChangeService cs = (IComponentChangeService)tray.GetService(typeof(IComponentChangeService));
-                if (CompModSwitches.CommonDesignerServices.Enabled)
-                    Debug.Assert(cs != null, "IComponentChangeService not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (cs != null), "IComponentChangeService not found");
                 if (cs != null)
                 {
                     cs.ComponentRename += new ComponentRenameEventHandler(OnComponentRename);
@@ -2047,16 +2031,14 @@ namespace System.Windows.Forms.Design
                     if (site != null)
                     {
                         IComponentChangeService cs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                        if (CompModSwitches.CommonDesignerServices.Enabled)
-                            Debug.Assert(cs != null, "IComponentChangeService not found");
+                        Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (cs != null), "IComponentChangeService not found");
                         if (cs != null)
                         {
                             cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
                         }
 
                         IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
-                        if (CompModSwitches.CommonDesignerServices.Enabled)
-                            Debug.Assert(ds != null, "IDictionaryService not found");
+                        Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ds != null), "IDictionaryService not found");
                         if (ds != null)
                         {
                             ds.SetValue(typeof(TrayControl), null);
@@ -2081,8 +2063,7 @@ namespace System.Windows.Forms.Design
                 if (site != null)
                 {
                     IDictionaryService ds = (IDictionaryService)site.GetService(typeof(IDictionaryService));
-                    if (CompModSwitches.CommonDesignerServices.Enabled)
-                        Debug.Assert(ds != null, "IDictionaryService not found");
+                    Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (ds != null), "IDictionaryService not found");
                     if (ds != null)
                     {
                         c = (TrayControl)ds.GetValue(typeof(TrayControl));
@@ -2192,8 +2173,7 @@ namespace System.Windows.Forms.Design
                         {
                             ISelectionService sel = (ISelectionService)_tray.GetService(typeof(ISelectionService));
                             // Make sure the component is selected
-                            if (CompModSwitches.CommonDesignerServices.Enabled)
-                                Debug.Assert(sel != null, "ISelectionService not found");
+                            Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (sel != null), "ISelectionService not found");
                             if (sel != null)
                             {
                                 sel.SetSelectedComponents(new object[] { Component }, SelectionTypes.Primary);
@@ -2499,8 +2479,7 @@ namespace System.Windows.Forms.Design
                 PropertyDescriptor defaultPropEvent = null;
                 bool eventChanged = false;
                 IEventBindingService eps = (IEventBindingService)GetService(typeof(IEventBindingService));
-                if (CompModSwitches.CommonDesignerServices.Enabled)
-                    Debug.Assert(eps != null, "IEventBindingService not found");
+                Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || (eps != null), "IEventBindingService not found");
                 if (eps != null)
                 {
                     defaultPropEvent = eps.GetEventProperty(defaultEvent);

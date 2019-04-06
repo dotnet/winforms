@@ -1320,7 +1320,6 @@ namespace System.Windows.Forms.Design
             Control.Capture = false;
             if (!_mouseDragMoved)
             {
-                // HACK HACK HACK
                 // ParentControlDesigner.Dispose depends on cancel having this behavior.
                 if (!cancel)
                 {

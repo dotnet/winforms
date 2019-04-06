@@ -5,7 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Provides data for the <see cref='ISelectionUIService.ContainerSelectorActive'/> event.
+    /// Provides data for the <see cref='System.Windows.Forms.Design.ISelectionUIService.ContainerSelectorActive'/> event.
     /// </summary>
     internal class ContainerSelectorActiveEventArgs : EventArgs
     {
@@ -26,6 +26,6 @@ namespace System.Windows.Forms.Design
         {
             _component = component;
             _eventType = eventType;
-        }      
+        }
     }
 }

@@ -17,11 +17,11 @@ namespace System.Windows.Forms.Design
     /// <summary>
     /// This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
     /// DesignerFrame
-    ///    ScrollableControl
-    ///        Designer
-    ///    Splitter
-    ///    ScrollableControl
-    ///        Component Tray
+    ///     ScrollableControl
+    ///         Designer
+    ///     Splitter
+    ///     ScrollableControl
+    ///         Component Tray
     /// The splitter and second scrollable control are created on demand when a tray is added.
     /// </summary>
     internal class DesignerFrame : Control, IOverlayService, ISplitWindowService, IContainsThemedScrollbarWindows
@@ -65,8 +65,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Demand creates a ptr to the BehaviorService - we do this so we can
-        /// route keyboard message to it.
+        /// Demand creates a ptr to the BehaviorService - we do this so we can route keyboard message to it.
         /// </summary>
         private BehaviorService BehaviorService
         {
@@ -178,7 +177,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// We override this to do nothing.  Otherwise, all the nice keyboard m messages we want would get run through the Form's keyboard handling procedure.
+        /// We override this to do nothing.  Otherwise, all the nice keyboard messages we want would get run through the Form's keyboard handling procedure.
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
@@ -460,8 +459,7 @@ namespace System.Windows.Forms.Design
             private void ParentOverlay(Control control)
             {
                 NativeMethods.SetParent(control.Handle, Handle);
-                SafeNativeMethods.SetWindowPos(control.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                     NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                SafeNativeMethods.SetWindowPos(control.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
             }
 
             /// <summary>
@@ -471,7 +469,7 @@ namespace System.Windows.Forms.Design
             {
                 Debug.Assert(_overlayList.IndexOf(control) == -1, "Duplicate overlay in overlay service :" + control.GetType().FullName);
                 _overlayList.Add(control);
-                // We cheat a bit here.  We need to have these components parented, but we don't want them to effect our layout.
+                // We need to have these components parented, but we don't want them to effect our layout.
                 if (IsHandleCreated)
                 {
                     ParentOverlay(control);
@@ -528,8 +526,6 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void InvalidateOverlays(Region screenRegion)
             {
-
-
                 // paint in inverse order so that things at the front paint last.
                 for (int i = _overlayList.Count - 1; i >= 0; i--)
                 {
@@ -537,20 +533,16 @@ namespace System.Windows.Forms.Design
                     {
                         Rectangle overlayControlScreenBounds = overlayControl.Bounds;
                         overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
-
                         using (Region intersectionRegion = screenRegion.Clone())
                         {
                             // get the intersection of everything on the screen that's invalidating and the overlaycontrol
                             intersectionRegion.Intersect(overlayControlScreenBounds);
-
                             // translate this down to overlay control coordinates.
                             intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
                             overlayControl.Invalidate(intersectionRegion);
                         }
-
                     }
                 }
-
             }
             /// <summary>
             /// Need to know when child windows are created so we can properly set the Z-order
@@ -558,7 +550,6 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-
                 if (m.Msg == NativeMethods.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)NativeMethods.WM_CREATE)
                 {
                     if (_overlayList != null)
@@ -577,8 +568,7 @@ namespace System.Windows.Forms.Design
                         {
                             foreach (Control c in _overlayList)
                             {
-                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                                     NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
                             }
                         }
                     }
@@ -617,7 +607,6 @@ namespace System.Windows.Forms.Design
                             return cao;
                         }
                     }
-
                     return base.HitTest(x, y);
                 }
             }

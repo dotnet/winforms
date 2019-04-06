@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Design
             {
                 if (keyService.ActiveTemplateNode.IsSystemContextMenuDisplayed)
                 {
-                    // DevDiv Bugs: 144618 : skip behaviors when the context menu is displayed 
+                    // skip behaviors when the context menu is displayed 
                     return false;
                 }
             }

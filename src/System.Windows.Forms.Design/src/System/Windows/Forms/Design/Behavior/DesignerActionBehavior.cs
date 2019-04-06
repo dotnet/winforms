@@ -16,9 +16,9 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal sealed class DesignerActionBehavior : Behavior
     {
-        private readonly IComponent _relatedComponent;//The component we are bound to
-        private DesignerActionUI _parentUI;//ptr to the parenting UI, used for showing menus and setting selection
-        private DesignerActionListCollection _actionLists;//all the shortcuts!
+        private readonly IComponent _relatedComponent; //The component we are bound to
+        private readonly DesignerActionUI _parentUI; //ptr to the parenting UI, used for showing menus and setting selection
+        private DesignerActionListCollection _actionLists; //all the shortcuts!
         private readonly IServiceProvider _serviceProvider; // we need to cache the service provider here to be able to create the panel with the proper arguments
         private bool _ignoreNextMouseUp = false;
 

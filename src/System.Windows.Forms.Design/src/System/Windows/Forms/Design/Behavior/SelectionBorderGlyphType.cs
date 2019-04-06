@@ -9,10 +9,6 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal enum SelectionBorderGlyphType
     {
-        Top,
-        Bottom,
-        Left,
-        Right,
-        Body
+        Top, Bottom, Left, Right, Body
     }
 }

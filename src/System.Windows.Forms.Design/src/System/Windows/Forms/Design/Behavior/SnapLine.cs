@@ -18,6 +18,9 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public sealed class SnapLine
     {
+        // These are used in the SnapLine filter to define custom margin/padding SnapLines.	
+        // Margins will have special rules of equality, basically opposites will attract one another	
+        // (ex: margin right == margin left) and paddings will be attracted to like-margins.
         internal const string Margin = "Margin";
         internal const string MarginRight = Margin + ".Right";
         internal const string MarginLeft = Margin + ".Left";

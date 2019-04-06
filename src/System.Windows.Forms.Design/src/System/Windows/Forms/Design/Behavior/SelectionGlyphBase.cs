@@ -11,10 +11,10 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal abstract class SelectionGlyphBase : Glyph
     {
-        protected Rectangle bounds;//defines the bounds of the selection glyph
-        protected Rectangle hitBounds;//defines the bounds used for hittest - it could be different than the bounds of the glyph itself
-        protected Cursor hitTestCursor;//the cursor returned if hit test is positive
-        protected SelectionRules rules;//the selection rules - defining how the control can change
+        protected Rectangle bounds; // defines the bounds of the selection glyph
+        protected Rectangle hitBounds; // defines the bounds used for hittest - it could be different than the bounds of the glyph itself
+        protected Cursor hitTestCursor; // the cursor returned if hit test is positive
+        protected SelectionRules rules; // the selection rules - defining how the control can change
        
         /// <summary>
         /// Standard constructor.
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
             return null;
         }
-     
+
         /// <summary>
         /// Returns the HitTestCursor for this glyph.
         /// </summary>
@@ -50,11 +50,10 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => hitTestCursor;
         }
-      
+
         /// <summary>
         /// The Bounds of this glyph. 
         /// </summary>
-
         public override Rectangle Bounds
         {
             get => bounds;

@@ -78,13 +78,6 @@ namespace System.Windows.Forms.Design
                 OnTransactionOpened(host, EventArgs.Empty);
             }
 
-            IComponentChangeService cs = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
-            if (cs != null)
-            {
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemove);
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            }
-
             // Listen to the SystemEvents so that we can resync selection based on display settings etc.
             SystemEvents.DisplaySettingsChanged += new EventHandler(OnSystemSettingChanged);
             SystemEvents.InstalledFontsChanged += new EventHandler(OnSystemSettingChanged);
@@ -158,13 +151,6 @@ namespace System.Windows.Forms.Design
                     if (_host.InTransaction)
                     {
                         OnTransactionClosed(_host, new DesignerTransactionCloseEventArgs(true, true));
-                    }
-
-                    IComponentChangeService cs = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
-                    if (cs != null)
-                    {
-                        cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemove);
-                        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                     }
                 }
 
@@ -244,10 +230,7 @@ namespace System.Windows.Forms.Design
             return new HitTestInfo(SelectionUIItem.NOHIT, null);
         }
 
-        private ISelectionUIHandler GetHandler(object component)
-        {
-            return (ISelectionUIHandler)_selectionHandlers[component];
-        }
+        private ISelectionUIHandler GetHandler(object component) => (ISelectionUIHandler)_selectionHandlers[component];
 
         /// <summary>
         /// This method returns a well-formed name for a drag transaction based on the rules it is given.
@@ -433,18 +416,12 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// User setting requires that we repaint.
         /// </summary>
-        private void OnSystemSettingChanged(object sender, EventArgs e)
-        {
-            Invalidate();
-        }
+        private void OnSystemSettingChanged(object sender, EventArgs e) => Invalidate();
 
         /// <summary>
         /// User setting requires that we repaint.
         /// </summary>
-        private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
-        {
-            Invalidate();
-        }
+        private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e) => Invalidate();
 
         /// <summary>
         /// Inheriting classes should override this method to handle this event. Call super.onDragEnter to send this event to any registered event listeners.
@@ -532,13 +509,13 @@ namespace System.Windows.Forms.Design
                     int hitTest = hti.hitTest;
                     if ((hitTest & SelectionUIItem.CONTAINER_SELECTOR) != 0)
                     {
-                        _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit.component }, SelectionTypes.Auto);
+                        _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Auto);
                         // Then do a drag...
                         SelectionRules rules = SelectionRules.Moveable;
                         if (((ISelectionUIService)this).BeginDrag(rules, anchor.X, anchor.Y))
                         {
                             Visible = false;
-                            _containerDrag = hti.selectionUIHit.component;
+                            _containerDrag = hti.selectionUIHit._component;
                             BeginMouseDrag(anchor, hitTest);
                         }
                     }
@@ -549,7 +526,7 @@ namespace System.Windows.Forms.Design
                         _ctrlSelect = (Control.ModifierKeys & Keys.Control) != Keys.None;
                         if (!_ctrlSelect)
                         {
-                            _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit.component }, SelectionTypes.Primary);
+                            _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
                         }
 
                         if ((hitTest & SelectionUIItem.MOVE_MASK) != 0)
@@ -619,7 +596,7 @@ namespace System.Windows.Forms.Design
             int hitTest = hti.hitTest;
             if (hitTest != SelectionUIItem.CONTAINER_SELECTOR && hti.selectionUIHit != null)
             {
-                OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit.component));
+                OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit._component));
             }
 
             if (_lastMoveScreenCoord == screenCoord)
@@ -727,7 +704,7 @@ namespace System.Windows.Forms.Design
                 if (_ctrlSelect && !_mouseDragging && _selSvc != null)
                 {
                     HitTestInfo hti = GetHitTest(screenCoord, HITTEST_DEFAULT);
-                    _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit.component }, SelectionTypes.Primary);
+                    _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
                 }
 
                 if (_mouseDragging)
@@ -1071,8 +1048,7 @@ namespace System.Windows.Forms.Design
             }
 
             Debug.Assert(_dragComponents != null, "We should have a set of drag controls here");
-            if ((_dragRules & SelectionRules.Moveable) == SelectionRules.None
-                && (_dragRules & (SelectionRules.TopSizeable | SelectionRules.LeftSizeable)) == SelectionRules.None)
+            if ((_dragRules & SelectionRules.Moveable) == SelectionRules.None && (_dragRules & (SelectionRules.TopSizeable | SelectionRules.LeftSizeable)) == SelectionRules.None)
             {
                 newOffset = new Rectangle(0, 0, offset.Width, offset.Height);
             }
@@ -1161,7 +1137,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter thisset down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
+        /// Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter this set down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
         /// </summary>
         object[] ISelectionUIService.FilterSelection(object[] components, SelectionRules selectionRules)
         {
@@ -1185,7 +1161,6 @@ namespace System.Windows.Forms.Design
                 }
                 selection = (object[])list.ToArray();
             }
-
             return selection ?? (new object[0]);
         }
 
@@ -1214,7 +1189,7 @@ namespace System.Windows.Forms.Design
         /// Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
         /// </summary>
         bool ISelectionUIService.GetContainerSelected(object component) => (component != null && _selectionItems[component] is ContainerSelectionUIItem);
-        
+
         /// <summary>
         /// Retrieves a set of flags that define rules for the selection.  Selection rules indicate if the given component can be moved or sized, for example.
         /// </summary>
@@ -1382,32 +1357,32 @@ namespace System.Windows.Forms.Design
             public const int GRABHANDLE_WIDTH = 7;
             public const int GRABHANDLE_HEIGHT = 7;
             // tables we use to determine how things can move and size
-            internal static readonly int[] activeSizeArray = new int[] {
+            internal static readonly int[] s_activeSizeArray = new int[] {
                 SIZE_X | SIZE_Y | POS_LEFT | POS_TOP,      SIZE_Y | POS_TOP,      SIZE_X | SIZE_Y | POS_TOP | POS_RIGHT,
                 SIZE_X | POS_LEFT,                                                SIZE_X | POS_RIGHT,
                 SIZE_X | SIZE_Y | POS_LEFT | POS_BOTTOM,   SIZE_Y | POS_BOTTOM,   SIZE_X | SIZE_Y | POS_RIGHT | POS_BOTTOM
             };
 
-            internal static readonly Cursor[] activeCursorArrays = new Cursor[] {
+            internal static readonly Cursor[] s_activeCursorArrays = new Cursor[] {
                 Cursors.SizeNWSE,   Cursors.SizeNS,   Cursors.SizeNESW,
                 Cursors.SizeWE,                      Cursors.SizeWE,
                 Cursors.SizeNESW,   Cursors.SizeNS,   Cursors.SizeNWSE
             };
 
-            internal static readonly int[] inactiveSizeArray = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-            internal static readonly Cursor[] inactiveCursorArray = new Cursor[] {
+            internal static readonly int[] s_inactiveSizeArray = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+            internal static readonly Cursor[] s_inactiveCursorArray = new Cursor[] {
                 Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow,
                 Cursors.Arrow,                   Cursors.Arrow,
                 Cursors.Arrow,   Cursors.Arrow,   Cursors.Arrow
             };
 
-            internal int[] sizes; // array of sizing rules for this selection
-            internal Cursor[] cursors; // array of cursors for each grab location
-            internal SelectionUIService selUIsvc;
-            internal Rectangle innerRect = Rectangle.Empty; // inner part of selection (== control bounds)
-            internal Rectangle outerRect = Rectangle.Empty; // outer part of selection (inner + border size)
-            internal Region region; // region object that defines the shape
-            internal object component; // the component we're rendering
+            internal int[] _sizes; // array of sizing rules for this selection
+            internal Cursor[] _cursors; // array of cursors for each grab location
+            internal SelectionUIService _selUIsvc;
+            internal Rectangle _innerRect = Rectangle.Empty; // inner part of selection (== control bounds)
+            internal Rectangle _outerRect = Rectangle.Empty; // outer part of selection (inner + border size)
+            internal Region _region; // region object that defines the shape
+            internal object _component; // the component we're rendering
             private readonly Control _control;
             private SelectionStyles _selectionStyle; // how do we draw this thing?
             private SelectionRules _selectionRules;
@@ -1417,13 +1392,13 @@ namespace System.Windows.Forms.Design
             [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             public SelectionUIItem(SelectionUIService selUIsvc, object component)
             {
-                this.selUIsvc = selUIsvc;
-                this.component = component;
+                _selUIsvc = selUIsvc;
+                _component = component;
                 _selectionStyle = SelectionStyles.Selected;
                 // By default, a component isn't visible.  We must establish what it can do through it's UI handler.
                 _handler = selUIsvc.GetHandler(component);
-                sizes = inactiveSizeArray;
-                cursors = inactiveCursorArray;
+                _sizes = s_inactiveSizeArray;
+                _cursors = s_inactiveCursorArray;
                 if (component is IComponent comp)
                 {
                     if (selUIsvc._host.GetDesigner(comp) is ControlDesigner cd)
@@ -1447,10 +1422,10 @@ namespace System.Windows.Forms.Design
                     if (value != _selectionStyle)
                     {
                         _selectionStyle = value;
-                        if (region != null)
+                        if (_region != null)
                         {
-                            region.Dispose();
-                            region = null;
+                            _region.Dispose();
+                            _region = null;
                         }
                     }
                 }
@@ -1466,16 +1441,16 @@ namespace System.Windows.Forms.Design
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
                     return;
                 bool fActive = false;
-                if (selUIsvc._selSvc != null)
+                if (_selUIsvc._selSvc != null)
                 {
-                    fActive = component == selUIsvc._selSvc.PrimarySelection;
+                    fActive = _component == _selUIsvc._selSvc.PrimarySelection;
                     // Office rules:  If this is a multi-select, reverse the colors for active / inactive.
-                    fActive = (fActive == (selUIsvc._selSvc.SelectionCount <= 1));
+                    fActive = (fActive == (_selUIsvc._selSvc.SelectionCount <= 1));
                 }
 
-                Rectangle r = new Rectangle(outerRect.X, outerRect.Y, GRABHANDLE_WIDTH, GRABHANDLE_HEIGHT);
-                Rectangle inner = innerRect;
-                Rectangle outer = outerRect;
+                Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, GRABHANDLE_WIDTH, GRABHANDLE_HEIGHT);
+                Rectangle inner = _innerRect;
+                Rectangle outer = _outerRect;
                 Region oldClip = gr.Clip;
                 Color borderColor = SystemColors.Control;
                 if (_control != null && _control.Parent != null)
@@ -1493,29 +1468,29 @@ namespace System.Windows.Forms.Design
                 if (((GetRules() & SelectionRules.Locked) == SelectionRules.None) && (GetRules() & SelectionRules.AllSizeable) != SelectionRules.None)
                 {
                     // upper left
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, (sizes[0] != 0));
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, (_sizes[0] != 0));
                     // upper right
                     r.X = inner.X + inner.Width;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[2] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[2] != 0);
                     // lower right
                     r.Y = inner.Y + inner.Height;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[7] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[7] != 0);
                     // lower left
                     r.X = outer.X;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[5] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[5] != 0);
                     // lower middle
                     r.X += (outer.Width - GRABHANDLE_WIDTH) / 2;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[6] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[6] != 0);
                     // upper middle
                     r.Y = outer.Y;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[1] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[1] != 0);
                     // left middle
                     r.X = outer.X;
                     r.Y = inner.Y + (inner.Height - GRABHANDLE_HEIGHT) / 2;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[3] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[3] != 0);
                     // right middle
                     r.X = inner.X + inner.Width;
-                    ControlPaint.DrawGrabHandle(gr, r, fActive, sizes[4] != 0);
+                    ControlPaint.DrawGrabHandle(gr, r, fActive, _sizes[4] != 0);
                 }
                 else
                 {
@@ -1550,7 +1525,7 @@ namespace System.Windows.Forms.Design
                     }
                     else
                     {
-                        cursor = cursors[nOffset];
+                        cursor = _cursors[nOffset];
                     }
                 }
                 return cursor;
@@ -1570,11 +1545,11 @@ namespace System.Windows.Forms.Design
                 // Which index in the array is this?
                 int nOffset = GetHandleIndexOfPoint(pt);
                 // If no index, the user has picked on the hatch
-                if (-1 == nOffset || sizes[nOffset] == 0)
+                if (-1 == nOffset || _sizes[nOffset] == 0)
                 {
                     return ((GetRules() & SelectionRules.Moveable) == SelectionRules.None ? 0 : MOVE_X | MOVE_Y);
                 }
-                return sizes[nOffset];
+                return _sizes[nOffset];
             }
 
             /// <summary>
@@ -1582,51 +1557,51 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private int GetHandleIndexOfPoint(Point pt)
             {
-                if (pt.X >= outerRect.X && pt.X <= innerRect.X)
+                if (pt.X >= _outerRect.X && pt.X <= _innerRect.X)
                 {
                     // Something on the left side.
-                    if (pt.Y >= outerRect.Y && pt.Y <= innerRect.Y)
+                    if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
                         return 0; // top left
-                    if (pt.Y >= innerRect.Y + innerRect.Height && pt.Y <= outerRect.Y + outerRect.Height)
+                    if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
                         return 5; // bottom left
-                    if (pt.Y >= outerRect.Y + (outerRect.Height - GRABHANDLE_HEIGHT) / 2
-                        && pt.Y <= outerRect.Y + (outerRect.Height + GRABHANDLE_HEIGHT) / 2)
+                    if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
+                        && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
                         return 3; // middle left
                     return -1; // unknown hit
                 }
 
-                if (pt.Y >= outerRect.Y && pt.Y <= innerRect.Y)
+                if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
                 {
                     // something on the top
-                    Debug.Assert(!(pt.X >= outerRect.X && pt.X <= innerRect.X), "Should be handled by left top check");
-                    if (pt.X >= innerRect.X + innerRect.Width && pt.X <= outerRect.X + outerRect.Width)
+                    Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left top check");
+                    if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
                         return 2; // top right
-                    if (pt.X >= outerRect.X + (outerRect.Width - GRABHANDLE_WIDTH) / 2
-                        && pt.X <= outerRect.X + (outerRect.Width + GRABHANDLE_WIDTH) / 2)
+                    if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2
+                        && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
                         return 1; // top middle
                     return -1; // unknown hit
                 }
 
-                if (pt.X >= innerRect.X + innerRect.Width && pt.X <= outerRect.X + outerRect.Width)
+                if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
                 {
                     // something on the right side
-                    Debug.Assert(!(pt.Y >= outerRect.Y && pt.Y <= innerRect.Y), "Should be handled by top right check");
-                    if (pt.Y >= innerRect.Y + innerRect.Height && pt.Y <= outerRect.Y + outerRect.Height)
+                    Debug.Assert(!(pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y), "Should be handled by top right check");
+                    if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
                         return 7; // bottom right
-                    if (pt.Y >= outerRect.Y + (outerRect.Height - GRABHANDLE_HEIGHT) / 2
-                        && pt.Y <= outerRect.Y + (outerRect.Height + GRABHANDLE_HEIGHT) / 2)
+                    if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
+                        && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
                         return 4; // middle right
                     return -1; // unknown hit
                 }
 
-                if (pt.Y >= innerRect.Y + innerRect.Height && pt.Y <= outerRect.Y + outerRect.Height)
+                if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
                 {
                     // something on the bottom
-                    Debug.Assert(!(pt.X >= outerRect.X && pt.X <= innerRect.X), "Should be handled by left bottom check");
+                    Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left bottom check");
 
-                    Debug.Assert(!(pt.X >= innerRect.X + innerRect.Width && pt.X <= outerRect.X + outerRect.Width), "Should be handled by right bottom check");
+                    Debug.Assert(!(pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width), "Should be handled by right bottom check");
 
-                    if (pt.X >= outerRect.X + (outerRect.Width - GRABHANDLE_WIDTH) / 2 && pt.X <= outerRect.X + (outerRect.Width + GRABHANDLE_WIDTH) / 2)
+                    if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2 && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
                         return 6; // bottom middle
                     return -1; // unknown hit
                 }
@@ -1638,28 +1613,28 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public virtual Region GetRegion()
             {
-                if (region == null)
+                if (_region == null)
                 {
-                    if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !outerRect.IsEmpty)
+                    if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                     {
-                        region = new Region(outerRect);
-                        region.Exclude(innerRect);
+                        _region = new Region(_outerRect);
+                        _region.Exclude(_innerRect);
                     }
                     else
                     {
-                        region = new Region(new Rectangle(0, 0, 0, 0));
+                        _region = new Region(new Rectangle(0, 0, 0, 0));
                     }
 
                     if (_handler != null)
                     {
-                        Rectangle handlerClip = _handler.GetSelectionClipRect(component);
+                        Rectangle handlerClip = _handler.GetSelectionClipRect(_component);
                         if (!handlerClip.IsEmpty)
                         {
-                            region.Intersect(selUIsvc.RectangleToClient(handlerClip));
+                            _region.Intersect(_selUIsvc.RectangleToClient(handlerClip));
                         }
                     }
                 }
-                return region;
+                return _region;
             }
 
             /// <summary>
@@ -1669,10 +1644,10 @@ namespace System.Windows.Forms.Design
 
             public void Dispose()
             {
-                if (region != null)
+                if (_region != null)
                 {
-                    region.Dispose();
-                    region = null;
+                    _region.Dispose();
+                    _region = null;
                 }
             }
 
@@ -1681,9 +1656,9 @@ namespace System.Windows.Forms.Design
             /// </summary>
             public void Invalidate()
             {
-                if (!outerRect.IsEmpty && !selUIsvc.Disposing)
+                if (!_outerRect.IsEmpty && !_selUIsvc.Disposing)
                 {
-                    selUIsvc.Invalidate(outerRect);
+                    _selUIsvc.Invalidate(_outerRect);
                 }
             }
 
@@ -1693,22 +1668,22 @@ namespace System.Windows.Forms.Design
             protected bool PointWithinSelection(Point pt)
             {
                 // This is only supported for visible selections
-                if ((GetRules() & SelectionRules.Visible) == SelectionRules.None || outerRect.IsEmpty || innerRect.IsEmpty)
+                if ((GetRules() & SelectionRules.Visible) == SelectionRules.None || _outerRect.IsEmpty || _innerRect.IsEmpty)
                 {
                     return false;
                 }
-                if (pt.X < outerRect.X || pt.X > outerRect.X + outerRect.Width)
+                if (pt.X < _outerRect.X || pt.X > _outerRect.X + _outerRect.Width)
                 {
                     return false;
                 }
-                if (pt.Y < outerRect.Y || pt.Y > outerRect.Y + outerRect.Height)
+                if (pt.Y < _outerRect.Y || pt.Y > _outerRect.Y + _outerRect.Height)
                 {
                     return false;
                 }
-                if (pt.X > innerRect.X
-                    && pt.X < innerRect.X + innerRect.Width
-                    && pt.Y > innerRect.Y
-                    && pt.Y < innerRect.Y + innerRect.Height)
+                if (pt.X > _innerRect.X
+                    && pt.X < _innerRect.X + _innerRect.Width
+                    && pt.Y > _innerRect.Y
+                    && pt.Y < _innerRect.Y + _innerRect.Height)
                 {
                     return false;
                 }
@@ -1723,50 +1698,50 @@ namespace System.Windows.Forms.Design
                 SelectionRules rules = GetRules();
                 if ((rules & SelectionRules.AllSizeable) == SelectionRules.None)
                 {
-                    sizes = inactiveSizeArray;
-                    cursors = inactiveCursorArray;
+                    _sizes = s_inactiveSizeArray;
+                    _cursors = s_inactiveCursorArray;
                 }
                 else
                 {
-                    sizes = new int[8];
-                    cursors = new Cursor[8];
-                    Array.Copy(activeCursorArrays, cursors, cursors.Length);
-                    Array.Copy(activeSizeArray, sizes, sizes.Length);
+                    _sizes = new int[8];
+                    _cursors = new Cursor[8];
+                    Array.Copy(s_activeCursorArrays, _cursors, _cursors.Length);
+                    Array.Copy(s_activeSizeArray, _sizes, _sizes.Length);
                     if ((rules & SelectionRules.TopSizeable) != SelectionRules.TopSizeable)
                     {
-                        sizes[0] = 0;
-                        sizes[1] = 0;
-                        sizes[2] = 0;
-                        cursors[0] = Cursors.Arrow;
-                        cursors[1] = Cursors.Arrow;
-                        cursors[2] = Cursors.Arrow;
+                        _sizes[0] = 0;
+                        _sizes[1] = 0;
+                        _sizes[2] = 0;
+                        _cursors[0] = Cursors.Arrow;
+                        _cursors[1] = Cursors.Arrow;
+                        _cursors[2] = Cursors.Arrow;
                     }
                     if ((rules & SelectionRules.LeftSizeable) != SelectionRules.LeftSizeable)
                     {
-                        sizes[0] = 0;
-                        sizes[3] = 0;
-                        sizes[5] = 0;
-                        cursors[0] = Cursors.Arrow;
-                        cursors[3] = Cursors.Arrow;
-                        cursors[5] = Cursors.Arrow;
+                        _sizes[0] = 0;
+                        _sizes[3] = 0;
+                        _sizes[5] = 0;
+                        _cursors[0] = Cursors.Arrow;
+                        _cursors[3] = Cursors.Arrow;
+                        _cursors[5] = Cursors.Arrow;
                     }
                     if ((rules & SelectionRules.BottomSizeable) != SelectionRules.BottomSizeable)
                     {
-                        sizes[5] = 0;
-                        sizes[6] = 0;
-                        sizes[7] = 0;
-                        cursors[5] = Cursors.Arrow;
-                        cursors[6] = Cursors.Arrow;
-                        cursors[7] = Cursors.Arrow;
+                        _sizes[5] = 0;
+                        _sizes[6] = 0;
+                        _sizes[7] = 0;
+                        _cursors[5] = Cursors.Arrow;
+                        _cursors[6] = Cursors.Arrow;
+                        _cursors[7] = Cursors.Arrow;
                     }
                     if ((rules & SelectionRules.RightSizeable) != SelectionRules.RightSizeable)
                     {
-                        sizes[2] = 0;
-                        sizes[4] = 0;
-                        sizes[7] = 0;
-                        cursors[2] = Cursors.Arrow;
-                        cursors[4] = Cursors.Arrow;
-                        cursors[7] = Cursors.Arrow;
+                        _sizes[2] = 0;
+                        _sizes[4] = 0;
+                        _sizes[7] = 0;
+                        _cursors[2] = Cursors.Arrow;
+                        _cursors[4] = Cursors.Arrow;
+                        _cursors[7] = Cursors.Arrow;
                     }
                 }
             }
@@ -1783,7 +1758,7 @@ namespace System.Windows.Forms.Design
                 else
                 {
                     SelectionRules oldRules = _selectionRules;
-                    _selectionRules = _handler.GetComponentRules(component);
+                    _selectionRules = _handler.GetComponentRules(_component);
                     if (_selectionRules != oldRules)
                     {
                         UpdateGrabSettings();
@@ -1803,21 +1778,21 @@ namespace System.Windows.Forms.Design
                     return false;
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
                     return false;
-                innerRect = _handler.GetComponentBounds(component);
-                if (!innerRect.IsEmpty)
+                _innerRect = _handler.GetComponentBounds(_component);
+                if (!_innerRect.IsEmpty)
                 {
-                    innerRect = selUIsvc.RectangleToClient(innerRect);
-                    Rectangle rcOuterNew = new Rectangle( innerRect.X - GRABHANDLE_WIDTH, innerRect.Y - GRABHANDLE_HEIGHT, innerRect.Width + 2 * GRABHANDLE_WIDTH, innerRect.Height + 2 * GRABHANDLE_HEIGHT);
-                    if (outerRect.IsEmpty || !outerRect.Equals(rcOuterNew))
+                    _innerRect = _selUIsvc.RectangleToClient(_innerRect);
+                    Rectangle rcOuterNew = new Rectangle( _innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
+                    if (_outerRect.IsEmpty || !_outerRect.Equals(rcOuterNew))
                     {
-                        if (!outerRect.IsEmpty)
+                        if (!_outerRect.IsEmpty)
                             Invalidate();
-                        outerRect = rcOuterNew;
+                        _outerRect = rcOuterNew;
                         Invalidate();
-                        if (region != null)
+                        if (_region != null)
                         {
-                            region.Dispose();
-                            region = null;
+                            _region.Dispose();
+                            _region = null;
                         }
                         sizeChanged = true;
                     }
@@ -1825,8 +1800,8 @@ namespace System.Windows.Forms.Design
                 else
                 {
                     Rectangle rcNew = new Rectangle(0, 0, 0, 0);
-                    sizeChanged = outerRect.IsEmpty || !outerRect.Equals(rcNew);
-                    innerRect = outerRect = rcNew;
+                    sizeChanged = _outerRect.IsEmpty || !_outerRect.Equals(rcNew);
+                    _innerRect = _outerRect = rcNew;
                 }
                 return sizeChanged;
             }
@@ -1856,9 +1831,9 @@ namespace System.Windows.Forms.Design
             public override int GetHitTest(Point pt)
             {
                 int ht = NOHIT;
-                if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !outerRect.IsEmpty)
+                if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                 {
-                    Rectangle r = new Rectangle(outerRect.X, outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+                    Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
 
                     if (r.Contains(pt))
                     {
@@ -1877,25 +1852,25 @@ namespace System.Windows.Forms.Design
                 // If we're not visible, then there's nothing to do...
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
                     return;
-                Rectangle glyphBounds = new Rectangle(outerRect.X, outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+                Rectangle glyphBounds = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
                 ControlPaint.DrawContainerGrabHandle(gr, glyphBounds);
             }
 
             public override Region GetRegion()
             {
-                if (region == null)
+                if (_region == null)
                 {
-                    if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !outerRect.IsEmpty)
+                    if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                     {
-                        Rectangle r = new Rectangle(outerRect.X, outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
-                        region = new Region(r);
+                        Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+                        _region = new Region(r);
                     }
                     else
                     {
-                        region = new Region(new Rectangle(0, 0, 0, 0));
+                        _region = new Region(new Rectangle(0, 0, 0, 0));
                     }
                 }
-                return region;
+                return _region;
             }
         }
 

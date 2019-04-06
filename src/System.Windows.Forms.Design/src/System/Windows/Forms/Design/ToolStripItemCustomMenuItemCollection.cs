@@ -524,7 +524,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Insert Item into ToolStrip.
         /// </summary>
-
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private void InsertToolStripItem(Type t)

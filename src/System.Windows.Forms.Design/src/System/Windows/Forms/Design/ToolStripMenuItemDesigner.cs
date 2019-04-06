@@ -304,7 +304,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-
         /// <summary>
         /// ParentComponent in case of MenuItems on the DropDown is the OwnerItem of the DropDown and not the ToolStripDropDown (since the DropDowns are not sited)
         /// </summary>
@@ -988,16 +987,6 @@ namespace System.Windows.Forms.Design
                     toolStripAdornerWindowService = null;
                 }
 
-                // unhook notifications.
-                IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (componentChangeSvc != null)
-                {
-                    componentChangeSvc.ComponentRemoved -= new ComponentEventHandler(ComponentChangeSvc_ComponentRemoved);
-                    componentChangeSvc.ComponentRemoving -= new ComponentEventHandler(ComponentChangeSvc_ComponentRemoving);
-                    componentChangeSvc.ComponentAdding -= new ComponentEventHandler(ComponentChangeSvc_ComponentAdding);
-                    componentChangeSvc.ComponentAdded -= new ComponentEventHandler(ComponentChangeSvc_ComponentAdded);
-                }
-
                 if (typeHereTemplateNode != null)
                 {
                     typeHereTemplateNode.RollBack();
@@ -1516,16 +1505,6 @@ namespace System.Windows.Forms.Design
             //Set the DoubleClickEnabled
             MenuItem.DoubleClickEnabled = true;
 
-            // attach notifcations.
-            IComponentChangeService componentChangeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (componentChangeSvc != null)
-            {
-                componentChangeSvc.ComponentRemoved += new ComponentEventHandler(ComponentChangeSvc_ComponentRemoved);
-                componentChangeSvc.ComponentRemoving += new ComponentEventHandler(ComponentChangeSvc_ComponentRemoving);
-                componentChangeSvc.ComponentAdding += new ComponentEventHandler(ComponentChangeSvc_ComponentAdding);
-                componentChangeSvc.ComponentAdded += new ComponentEventHandler(ComponentChangeSvc_ComponentAdded);
-            }
-
             if (undoEngine == null)
             {
                 undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
@@ -1836,6 +1815,7 @@ namespace System.Windows.Forms.Design
                 }
             }
         }
+
         /// <summary>
         /// Checks if the component being added is a child ToolStripItem.
         /// </summary>

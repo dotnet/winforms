@@ -284,6 +284,7 @@
   </data>
   <data name="RTL" xml:space="preserve">
     <value>RTL_False</value>
+    <comment>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</comment>
   </data>
   <data name="TrayAutoArrange" xml:space="preserve">
     <value>Auto Arrange Tray Icons</value>

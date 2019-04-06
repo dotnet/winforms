@@ -164,119 +164,6 @@ namespace System.Windows.Forms.Design.Behavior
             return offset;
         }
 
-#if PERFORM_AUTO_MARGINS
-
-/* Leaving in in case we want to re-enable this feature.  The code as it is does presents major performance  problems. */
-        /// <summary>
-        /// Called after a successful drag/drop operation, this method will examine the position
-        /// of all the controls related (same parent) to the just-dragged control and determine 
-        /// if they were placed within the recommended UI guidelines.  If so, we'll attempt to 
-        /// automatically adjust the margin/padding of the violators.
-        /// </summary>
-        private void AutoAdjustMargins(Control dragControl) {
-            if (dragControl.Parent == null) {
-                return;
-            }
-
-            PropertyDescriptor marginProperty = TypeDescriptor.GetProperties(dragControl)["Margin"];
-            //TODO: should we always adjust margins - or just when autorelocate is on??? JeffChri and FredB will think about this
-            //PropertyDescriptor autoRelocateProperty = TypeDescriptor.GetProperties(dragControl)["AutoRelocate"];
-            if (marginProperty == null /*|| autoRelocateProperty == null*/) {
-                //can't do anything here    
-                return;
-            }
-
-            IDesignerHost designerHost = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
-            if (designerHost == null) {
-                Debug.Fail("Failed to get IDesignerHost!");
-                return;
-            }
-
-            IComponentChangeService changeService = serviceProvider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-
-            Control.ControlCollection controls = dragControl.Parent.Controls;
-            //loop through the controls attempting to identify which controls
-            //are violating others...
-            for (int i = 0; i < controls.Count - 1; i++) {
-                /* See TODO above
-                //control must have auto-relocate set to true
-                if (!(bool)autoRelocateProperty.GetValue(controls[i])) {
-                    continue;
-                }
-                */
-                for (int j = i + 1; j < controls.Count; j++)  {
-                    /* See TODO above
-                    //this control must also have auto-relocate set to true
-                    if (!(bool)autoRelocateProperty.GetValue(controls[j])) {
-                        continue;
-                    }
-                    */
-                    
-                    //check if control i and control j are violating one another...
-                    if (DoesViolateMargin(controls[i], controls[j])) {
-
-                        //determine the new margins
-                        Padding c1Margin = Padding.Empty;
-                        Padding c2Margin = Padding.Empty;
-                        SetMargins(controls[i], controls[j], ref c1Margin, ref c2Margin);
-
-                        //set the margins
-                        using (DesignerTransaction dt = designerHost.CreateTransaction(SR.GetString(SR.AutoAdjustMargins, controls[i].Site.Name, controls[j].Site.Name))) {
-                            if (changeService != null) {
-                                changeService.OnComponentChanging(controls[i], marginProperty);
-                                changeService.OnComponentChanging(controls[j], marginProperty);
-                            }
-                            marginProperty.SetValue(controls[i], c1Margin);
-                            marginProperty.SetValue(controls[j], c2Margin);
-                            
-                            if (changeService != null) {
-                                changeService.OnComponentChanged(controls[i], marginProperty, null, null);
-                                changeService.OnComponentChanged(controls[j], marginProperty, null, null);
-                            }            
-                            dt.Commit();
-                        }
-
-                    }
-                }
-            }
-
-        }
-
-        /// <summary>
-        /// This function determines where the two controls margins are overlapped and 
-        //      fills up two Padding structs with suggested non-overlapped values.
-        /// </summary>
-        private void SetMargins(Control c1, Control c2, ref Padding c1Margin, ref Padding c2Margin) {
-            //Now, perform the actual margin adjustments
-            //
-            if (c1.Bottom < c2.Top) {
-                //adjust the margins @ top of c1 and bottom of c2
-                int marginDelta = c2.Top - c1.Bottom;
-                c1Margin = new Padding(c1.Margin.Left, c1.Margin.Top, c1.Margin.Right, marginDelta / 2);
-                c2Margin = new Padding(c2.Margin.Left, marginDelta - c1Margin.Bottom, c2.Margin.Right, c2.Margin.Bottom);
-            }
-            else if (c1.Top > c2.Bottom) {
-                //adjust the margins @ bottom of c2and top of c1
-                int marginDelta = c1.Top - c2.Bottom;
-                c1Margin = new Padding(c1.Margin.Left, marginDelta / 2, c1.Margin.Right, c1.Margin.Bottom);
-                c2Margin = new Padding(c2.Margin.Left, c2.Margin.Top, c2.Margin.Right, marginDelta - c1Margin.Top);
-            }
-            else if (c1.Right < c2.Left) {
-                //adjust the margins @ left of c2and right of c1
-                int marginDelta = c2.Left - c1.Right;
-                c1Margin = new Padding(c1.Margin.Left, c1.Margin.Top, marginDelta / 2, c1.Margin.Bottom);
-                c2Margin = new Padding(marginDelta - c1Margin.Right, c2.Margin.Top, c2.Margin.Right, c2.Margin.Bottom);
-            }
-            else {
-                //adjust the margins @ right of c2 and left of c1
-                int marginDelta = c1.Left - c2.Right;
-                c1Margin = new Padding(marginDelta / 2, c1.Margin.Top, c1.Margin.Right , c1.Margin.Bottom);
-                c2Margin = new Padding(c2.Margin.Left, c2.Margin.Top, marginDelta - c1Margin.Left, c2.Margin.Bottom);
-            }
-
-        }
-#endif
-
         private Point MapPointFromSourceToTarget(Point pt)
         {
             if (srcHost != destHost && destHost != null)
@@ -330,101 +217,6 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
         }
-
-#if PERFORM_AUTO_ANCHOR
-
-/* Leaving in in case we want to re-enable this feature.  The code as it is does presents major usability problems as 
-   it changes anchors out from underneath you.
-*/
-        /// <summary>
-        /// This method is called after a drag operation has been completed.
-        /// Basically, the heuristic is: if we've just moved a control (only 1
-        /// at a time) and it is aligned with another control - then check
-        /// the anchoring properties.  If the dragged control's anchoring is
-        /// default - and the aligned control's anchoring has been altered
-        /// then set the dragged control to mimic the aligned control's 
-        /// anchor value.
-        /// </summary>
-        private void PerformAutoAnchor(object dragControl) {
-            Control dragCtrl = dragControl as Control;
-            
-            if (dragCtrl == null || dragCtrl.Parent == null) {
-                //dragged object is not a control or there is no valid panent
-                return;
-            }
-
-            PropertyDescriptor dragControlAnchorProp = TypeDescriptor.GetProperties(dragCtrl)["Anchor"];
-            if (dragControlAnchorProp == null) {
-                //couldn't get anhor prop
-                return;
-            }
-
-            DefaultValueAttribute defAttr = (DefaultValueAttribute)dragControlAnchorProp.Attributes[typeof(DefaultValueAttribute)];
-            if (defAttr != null && (AnchorStyles)defAttr.Value != (AnchorStyles)dragControlAnchorProp.GetValue(dragCtrl)) {
-                //dragged control's anchor prop was not default
-                return;
-            }
-
-            AnchorStyles dragControlAnchor = (AnchorStyles)dragControlAnchorProp.GetValue(dragCtrl);
-            Rectangle dragControlBounds = dragCtrl.Bounds;
-
-            //begin a search to find a control the dragControl is aligned with.  We'll
-            //stop looking as soon as we find a control that aligns with us and have a
-            //different anchor value
-            foreach (Control c in dragCtrl.Parent.Controls) {
-                if (c.Equals(dragCtrl)) {
-                    //skip if this is the dragged control
-                    continue;
-                }
-
-                Rectangle bounds = c.Bounds;
-                
-                //look for a friendly aligned child control
-                if (c.Left == dragControlBounds.Left || c.Right == dragControlBounds.Right ||
-                    c.Top == dragControlBounds.Top || c.Bottom == dragControlBounds.Bottom) {
-
-                    PropertyDescriptor anchorProp = TypeDescriptor.GetProperties(c)["Anchor"];
-                    if (anchorProp != null) {
-                        //cache off the anchorstyle for this aligned child control
-                        AnchorStyles style = (AnchorStyles)anchorProp.GetValue(c);
-
-                        if (style != dragControlAnchor) {
-                            
-                            //here, the aligned child control's anchor prop is
-                            //different from our dragcontrol! So we'll create a transaction
-                            //and set the dragControl to the same style.
-                            IDesignerHost host = serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                            if (host == null) {
-                                //couldn't find a designer host
-                                return;
-                            }
-                            
-                            using (DesignerTransaction dt = host.CreateTransaction(SR.GetString(SR.PerformAutoAnchor, c.Site.Name, dragCtrl.Site.Name))) {
-                                dragControlAnchorProp.SetValue(dragControl, style);           
-                                dt.Commit();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-#endif 
-
-#if PERFORM_AUTO_MARGINS
-        /// <summary>
-        /// Returns true if c1 and c2 are within each others margins 
-        /// but not overlapping.
-        /// </summary>
-        private bool DoesViolateMargin(Control c1, Control c2) {
-            //if the margin rects intersect and the and the actual
-            //control bounds do not - then there's a violation
-            //
-            return !(Rectangle.Intersect(DesignerUtils.GetMarginBounds(c1), DesignerUtils.GetMarginBounds(c2)).IsEmpty) &&
-                   (Rectangle.Intersect(c1.Bounds, c2.Bounds).IsEmpty);
-        } 
-#endif
 
         // Yeah this is recursive, but we also need to resite all
         // the children of this control, and their children, and their children...
@@ -539,9 +331,6 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-#if PERFORM_AUTO_STUFF
-            bool successfulDrag = false;
-#endif
             // We use this list when doing a Drag-Copy, so that we can correctly restore state when we are done. See Copy code below.
             ArrayList originalControls = null;
             bool performCopy = (lastEffect == DragDropEffects.Copy);
@@ -558,7 +347,7 @@ namespace System.Windows.Forms.Design.Behavior
                 dragAssistanceManager.OnMouseUp();
             }
 
-            // If we are dropping between hosts, we want to set the selection in the new host to be the components that we are dropping. VSWhidbey# 395676 ... or if we are copying
+            // If we are dropping between hosts, we want to set the selection in the new host to be the components that we are dropping. ... or if we are copying
             ISelectionService selSvc = null;
             if (performCopy || (srcHost != destHost && destHost != null))
             {
@@ -753,9 +542,6 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             transSource.Commit();
                             transSource = null;
-#if PERFORM_AUTO_STUFF
-                            successfulDrag = true;
-#endif
                         }
                         if (transTarget != null)
                         {
@@ -799,27 +585,6 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-#if PERFORM_AUTO_STUFF
-
-            if (successfulDrag) {
-
-#if PERFORM_AUTO_MARGINS
-                //auto adjust margin values of controls if they were
-                //placed within the recommended UI distances...
-                AutoAdjustMargins(dragComponents[primaryComponentIndex].dragComponent as Control);
-#endif
-
-#if PERFORM_AUTO_ANCHOR
-                
-                //if we aligned a single control with another that has
-                //non-default anchoring props, then we will apply those
-                //values to the control that we just dragged.
-                if (dragComponents.Length == 1) {
-                    PerformAutoAnchor(dragComponents[0].dragComponent);
-                }
-#endif                
-            }
-#endif
             // clear the last feedback loc
             lastFeedbackLocation = new Point(-1, -1);
         }
@@ -1033,12 +798,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     invalidDragRegion.Translate(mouseLoc.X - initialMouseLoc.X + lastSnapOffset.X, mouseLoc.Y - initialMouseLoc.Y + lastSnapOffset.Y);
                     invalidDragRegion.Complement(newImageRect);
-                    invalidDragRegion.Union(invalidRegion);
-#if DEBUGDROPSOURCE                    
-                    System.Threading.Thread.Sleep(750);
-                    graphicsTarget.FillRegion(Brushes.Red, invalidDragRegion);
-                    System.Threading.Thread.Sleep(750); 
-#endif                    
+                    invalidDragRegion.Union(invalidRegion);            
                     behaviorServiceTarget.Invalidate(invalidDragRegion);
                 }
                 invalidRegion.Dispose();

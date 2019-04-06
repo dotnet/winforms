@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.ComponentModel.Design;
-
-namespace System.Windows.Forms.Design
+namespace System.ComponentModel.Design
 {
     internal class DesignerActionVerbList : DesignerActionList
     {
-        private DesignerVerb[] _verbs;
+        private readonly DesignerVerb[] _verbs;
 
         public DesignerActionVerbList(DesignerVerb[] verbs) : base(null)
         {

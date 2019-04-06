@@ -3,11 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Windows.Forms.Design;
 
-namespace System.Windows.Forms.Design
+namespace System.ComponentModel.Design
 {
     /// <summary>
     /// The DesignerActionService manages DesignerActions. All DesignerActions are associated with an object. DesignerActions can be added or removed at any  given time. The DesignerActionService controls the expiration of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration. Designer implementing this service will need to monitor the DesignerActionsChanged event on this class. This event will fire every time a change is made to any object's DesignerActions.
@@ -23,7 +22,7 @@ namespace System.Windows.Forms.Design
         private bool _reEntrantCode = false;
 
         /// <summary>
-        /// Standard constructor.  A Service Provider is necessary for monitoring selection and component changes.
+        /// Standard constructor. A Service Provider is necessary for monitoring selection and component changes.
         /// </summary>
         public DesignerActionService(IServiceProvider serviceProvider)
         {
@@ -63,11 +62,11 @@ namespace System.Windows.Forms.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
             if (designerActionListCollection == null)
             {
-                throw new ArgumentNullException("designerActionListCollection");
+                throw new ArgumentNullException(nameof(designerActionListCollection));
             }
 
             DesignerActionListCollection dhlc = (DesignerActionListCollection)_designerActionLists[comp];
@@ -85,8 +84,8 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Adds a new DesignerActionList to be monitored
-        /// with the related comp object </summary>
+        /// Adds a new DesignerActionList to be monitored with the related comp object
+        /// </summary>
         public void Add(IComponent comp, DesignerActionList actionList)
         {
             Add(comp, new DesignerActionListCollection( new[] { actionList } ));
@@ -126,7 +125,7 @@ namespace System.Windows.Forms.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
             return _designerActionLists.Contains(comp);
         }
@@ -166,7 +165,7 @@ namespace System.Windows.Forms.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             DesignerActionListCollection result = new DesignerActionListCollection();
             switch (type)
@@ -189,12 +188,12 @@ namespace System.Windows.Forms.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (actionLists == null)
             {
-                throw new ArgumentNullException("actionLists");
+                throw new ArgumentNullException(nameof(actionLists));
             }
 
             if (component.Site is IServiceContainer sc)
@@ -293,12 +292,12 @@ namespace System.Windows.Forms.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (actionLists == null)
             {
-                throw new ArgumentNullException("actionLists");
+                throw new ArgumentNullException(nameof(actionLists));
             }
 
             DesignerActionListCollection pushCollection = (DesignerActionListCollection)_designerActionLists[component];
@@ -340,7 +339,7 @@ namespace System.Windows.Forms.Design
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
 
             if (!_designerActionLists.Contains(comp))
@@ -359,7 +358,7 @@ namespace System.Windows.Forms.Design
         {
             if (actionList == null)
             {
-                throw new ArgumentNullException("actionList");
+                throw new ArgumentNullException(nameof(actionList));
             }
 
             //find the associated component
@@ -374,17 +373,17 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This will remove the all instances of the DesignerAction from  the 'comp' object.  If an alarm was set, it will be unhooked.  This will also fire the DesignerActionChanged event.
+        /// This will remove the all instances of the DesignerAction from  the 'comp' object. If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
         /// </summary>
         public void Remove(IComponent comp, DesignerActionList actionList)
         {
             if (comp == null)
             {
-                throw new ArgumentNullException("comp");
+                throw new ArgumentNullException(nameof(comp));
             }
             if (actionList == null)
             {
-                throw new ArgumentNullException("actionList");
+                throw new ArgumentNullException(nameof(actionList));
             }
             if (!_designerActionLists.Contains(comp))
             {

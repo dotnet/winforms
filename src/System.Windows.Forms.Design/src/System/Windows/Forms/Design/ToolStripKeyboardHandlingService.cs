@@ -184,7 +184,6 @@ namespace System.Windows.Forms.Design
             set => _ownerItemAfterCut = value;
         }
 
-
         // When shift key is pressed we need to know where to start from .. this object keeps a track of that item.
         internal object ShiftPrimaryItem
         {
@@ -1835,7 +1834,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-            // ctl is NOT A CONTROL ... so its Component. Try this for WinBarItem.
+            // ctl is NOT A CONTROL ... so its Component. Try this for ToolStripItem.
             if (targetSelection == null && ctl == null)
             {
                 ToolStripItem item = selSvc.PrimarySelection as ToolStripItem;
