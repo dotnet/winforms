@@ -13,13 +13,13 @@ namespace System.Windows.Forms {
     /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator"]/*' />
     /// <devdoc>
     ///    <para>
-    ///      Called when the background of the winbar is being rendered
+    ///      Called when the background of the ToolStrip is being rendered
     ///    </para>
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     public class ToolStripSeparator : ToolStripItem {
-            private const int WINBAR_SEPARATORTHICKNESS = 6;
-            private const int WINBAR_SEPARATORHEIGHT = 23;
+            private const int ToolStrip_SEPARATORTHICKNESS = 6;
+            private const int ToolStrip_SEPARATORHEIGHT = 23;
 
             [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             public ToolStripSeparator() {
@@ -88,12 +88,12 @@ namespace System.Windows.Forms {
             /// </devdoc>
             protected override Size DefaultSize {
                 get {
-                    return new Size(WINBAR_SEPARATORTHICKNESS, WINBAR_SEPARATORTHICKNESS);
+                    return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
                 }
             }
 
 
-            /// <include file='doc\WinBarSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DefaultMargin"]/*' />
+            /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DefaultMargin"]/*' />
             protected internal override Padding DefaultMargin {
                get {
                    return Padding.Empty;
@@ -410,24 +410,24 @@ namespace System.Windows.Forms {
                     parent = Owner;
                 }
                 if (parent == null) {
-                    return new Size(WINBAR_SEPARATORTHICKNESS, WINBAR_SEPARATORTHICKNESS);
+                    return new Size(ToolStrip_SEPARATORTHICKNESS, ToolStrip_SEPARATORTHICKNESS);
                 }
                 
                 ToolStripDropDownMenu dropDownMenu = parent as ToolStripDropDownMenu;
                 if (dropDownMenu != null) {
-                    return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), WINBAR_SEPARATORTHICKNESS);
+                    return new Size(parent.Width - (parent.Padding.Horizontal - dropDownMenu.ImageMargin.Width), ToolStrip_SEPARATORTHICKNESS);
                 }
                 else {        
                     if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow) {
                         // we dont actually know what size to make it, so just keep it a stock size.
-                        constrainingSize.Width = WINBAR_SEPARATORHEIGHT;
-                        constrainingSize.Height = WINBAR_SEPARATORHEIGHT;
+                        constrainingSize.Width = ToolStrip_SEPARATORHEIGHT;
+                        constrainingSize.Height = ToolStrip_SEPARATORHEIGHT;
                     }
                     if (IsVertical) {
-                        return new Size(WINBAR_SEPARATORTHICKNESS, constrainingSize.Height);                        
+                        return new Size(ToolStrip_SEPARATORTHICKNESS, constrainingSize.Height);                        
                     }
                     else {
-                        return new Size(constrainingSize.Width, WINBAR_SEPARATORTHICKNESS);   
+                        return new Size(constrainingSize.Width, ToolStrip_SEPARATORTHICKNESS);   
                     }
                 }
                 

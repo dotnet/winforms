@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design
             base.OnOpening(e);
         }
 
-        // Please refer to VsW: 505199 for more details. We dont want the runtime behavior for this Design Time only DropDown and hence we overide the ProcessDialogKey and just close the DropDown instead of running through the runtime implementation for RIGHT/LEFT Keys which ends up setting ModalMenuFilter.
+        // We dont want the runtime behavior for this Design Time only DropDown and hence we overide the ProcessDialogKey and just close the DropDown instead of running through the runtime implementation for RIGHT/LEFT Keys which ends up setting ModalMenuFilter.
         protected override bool ProcessDialogKey(Keys keyData)
         {
             Keys keyCode = (Keys)keyData & Keys.KeyCode;

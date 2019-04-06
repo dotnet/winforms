@@ -312,7 +312,6 @@ namespace System.ComponentModel.Design
 
         private void RecreateInternal(IComponent comp)
         {
-            //Debug.WriteLine("not in a transaction, do it now!");
             DesignerActionGlyph glyph = GetDesignerActionGlyph(comp);
             if (glyph != null)
             {
@@ -701,17 +700,13 @@ namespace System.ComponentModel.Design
             designerActionHost.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
             panel.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
 
-
-            //GetDesignerActionGlyph(relatedComponent); // only here to update the ActionList collection on the behavior
             designerActionHost.SetDesignerActionPanel(panel, glyph);
             Point location = UpdateDAPLocation(relatedComponent, glyph);
 
             // check that the panel will have at least it's parent glyph visible on the adorner window
-
             if (_behaviorService != null &&
                 _behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
-            {
-                //behaviorService.AdornerWindowGraphics.IsVisible(glyph.Bounds)) {                
+            {               
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
@@ -799,7 +794,7 @@ namespace System.ComponentModel.Design
         }
 
         public void CheckFocusIsRight()
-        { // hack to get the focus to NOT stay on ContainerControl
+        { // fix to get the focus to NOT stay on ContainerControl
             Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Checking focus...");
             IntPtr focusedControl = UnsafeNativeMethods.GetFocus();
             if (focusedControl == Handle)
@@ -1022,7 +1017,7 @@ namespace System.ComponentModel.Design
              }
              return sb.ToString() + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
 #else
-            return String.Empty;
+            return string.Empty;
 #endif
 
         }

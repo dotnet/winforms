@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Fired after a component has been added.  Here, we add it to the winbar and select it.
+        /// Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)

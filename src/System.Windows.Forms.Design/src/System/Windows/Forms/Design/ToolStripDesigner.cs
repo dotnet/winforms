@@ -32,20 +32,19 @@ namespace System.Windows.Forms.Design
         private ToolStripEditorManager _editManager = null; // newly added editor manager ...
         private ToolStrip _miniToolStrip = null;// the toolStrip that hosts the "New Template Node" button
         private DesignerTransaction _insertMenuItemTransaction = null; //There Should be one and only one Pending insertTransaction.
-        private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; //Needed to Store the DRAGDROP Rect from the WinbarItemBehavior.
+        private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
         private int _indexOfItemUnderMouseToDrag = -1; //defaulted to invalid index andwill be set by the behaviour.
         private ToolStripTemplateNode _tn = null; //templateNode
         private ISelectionService _selectionSvc = null; // cached selection service.
-        private uint _editingCollection = 0; // non-zero if the collection editor is up for this winbar or a child of it.
+        private uint _editingCollection = 0; // non-zero if the collection editor is up for this ToolStrip or a child of it.
         private DesignerTransaction _pendingTransaction = null; // our transaction for adding/removing items.
-        private bool _addingItem = false; // true if we are expecting to be notified of adding a WinbarItem to the designer.
+        private bool _addingItem = false; // true if we are expecting to be notified of adding a ToolStripItem to the designer.
         private Rectangle _boundsToInvalidate = Rectangle.Empty; //Bounds to Invalidate if a DropDownItem is Deleted
         private bool _currentVisible = true; // Change Visibility
         private ToolStripActionList _actionLists; // Action List on Chrome...
         private ToolStripAdornerWindowService _toolStripAdornerWindowService = null; // Add the Adorner Service for OverFlow DropDown...
         private IDesignerHost _host = null;//get private copy of the DesignerHost
         private IComponentChangeService _componentChangeSvc;
-        private UndoEngine _undoEngine = null;
         private bool _undoingCalled = false;
         private IToolboxService _toolboxService;
         private ContextMenuStrip _toolStripContextMenu;
@@ -233,7 +232,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Set by the ToolStripItemCollectionEditor when it's launched for this winbar so we won't pick up it's items when added.  We count this so that we can deal with nestings.
+        /// Set by the ToolStripItemCollectionEditor when it's launched for this ToolStrip so we won't pick up it's items when added.  We count this so that we can deal with nestings.
         /// </summary>
         internal bool EditingCollection
         {
@@ -469,7 +468,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void AddBodyGlyphsForOverflow()
         {
-            // now walk the winbar and add glyphs for each of it's children
+            // now walk the ToolStrip and add glyphs for each of it's children
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is DesignerToolStripControlHost)
@@ -897,22 +896,11 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void Control_HandleCreated(object sender, EventArgs e)
         {
-            Control.HandleCreated -= new EventHandler(Control_HandleCreated);
             InitializeNewItemDropDown();
-            // we should HOOK this event here since getting the OverFlowButton property causes handle creation which we need to avoid hook the designer for the OverFlow Item events..
-            ToolStrip.OverflowButton.DropDown.Closing += new ToolStripDropDownClosingEventHandler(OnOverflowDropDownClosing);
-            ToolStrip.OverflowButton.DropDownOpening += new EventHandler(OnOverFlowDropDownOpening);
-            ToolStrip.OverflowButton.DropDownOpened += new EventHandler(OnOverFlowDropDownOpened);
-            ToolStrip.OverflowButton.DropDownClosed += new EventHandler(OnOverFlowDropDownClosed);
-            ToolStrip.OverflowButton.DropDown.Resize += new System.EventHandler(OnOverflowDropDownResize);
-            ToolStrip.OverflowButton.DropDown.Paint += new System.Windows.Forms.PaintEventHandler(OnOverFlowDropDownPaint);
-            ToolStrip.Move += new System.EventHandler(OnToolStripMove);
-            ToolStrip.VisibleChanged += new System.EventHandler(OnToolStripVisibleChanged);
-            ToolStrip.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
         }
 
         /// <summary>
-        /// Fired after a component has been added.  Here, we add it to the winbar and select it.
+        /// Fired after a component has been added.  Here, we add it to the ToolStrip and select it.
         /// </summary>
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private void ComponentChangeSvc_ComponentAdded(object sender, ComponentEventArgs e)
@@ -1011,7 +999,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // we'll be adding a child item if the component is a winbar item and we've currently got this winbar or one of it's items selected. we do this so things like paste and undo automagically work.
+            // we'll be adding a child item if the component is a ToolStrip item and we've currently got this ToolStrip or one of it's items selected. we do this so things like paste and undo automagically work.
             ToolStripItem addingItem = e.Component as ToolStripItem;
             if (addingItem != null && addingItem.Owner != null)
             {
@@ -1176,24 +1164,8 @@ namespace System.Windows.Forms.Design
                 {
                     _items = null;
                 }
-                if (_undoEngine != null)
-                {
-                    _undoEngine.Undoing -= new EventHandler(OnUndoing);
-                    _undoEngine.Undone -= new EventHandler(OnUndone);
-                }
-                // unhook notifications.
-                if (_componentChangeSvc != null)
-                {
-                    _componentChangeSvc.ComponentRemoved -= new ComponentEventHandler(ComponentChangeSvc_ComponentRemoved);
-                    _componentChangeSvc.ComponentRemoving -= new ComponentEventHandler(ComponentChangeSvc_ComponentRemoving);
-                    _componentChangeSvc.ComponentAdded -= new ComponentEventHandler(ComponentChangeSvc_ComponentAdded);
-                    _componentChangeSvc.ComponentAdding -= new ComponentEventHandler(ComponentChangeSvc_ComponentAdding);
-                    _componentChangeSvc.ComponentChanged -= new ComponentChangedEventHandler(ComponentChangeSvc_ComponentChanged);
-                }
                 if (_selectionSvc != null)
                 {
-                    _selectionSvc.SelectionChanged -= new EventHandler(SelSvc_SelectionChanged);
-                    _selectionSvc.SelectionChanging -= new EventHandler(SelSvc_SelectionChanging);
                     _selectionSvc = null;
                 }
 
@@ -1227,22 +1199,6 @@ namespace System.Windows.Forms.Design
                     _editorNode = null;
                 }
 
-                if (ToolStrip != null)
-                {
-                    ToolStrip.OverflowButton.DropDown.Closing -= new ToolStripDropDownClosingEventHandler(OnOverflowDropDownClosing);
-                    ToolStrip.OverflowButton.DropDownOpening -= new EventHandler(OnOverFlowDropDownOpening);
-                    ToolStrip.OverflowButton.DropDownOpened -= new EventHandler(OnOverFlowDropDownOpened);
-                    ToolStrip.OverflowButton.DropDownClosed -= new EventHandler(OnOverFlowDropDownClosed);
-                    ToolStrip.OverflowButton.DropDown.Resize -= new EventHandler(OnOverflowDropDownResize);
-                    ToolStrip.OverflowButton.DropDown.Paint -= new PaintEventHandler(OnOverFlowDropDownPaint);
-
-                    ToolStrip.Move -= new System.EventHandler(OnToolStripMove);
-                    ToolStrip.VisibleChanged -= new System.EventHandler(OnToolStripVisibleChanged);
-                    ToolStrip.ItemAdded -= new ToolStripItemEventHandler(OnItemAdded);
-                    ToolStrip.Resize -= new EventHandler(ToolStrip_Resize);
-                    ToolStrip.DockChanged -= new EventHandler(ToolStrip_Resize);
-                    ToolStrip.LayoutCompleted -= new EventHandler(ToolStrip_LayoutCompleted);
-                }
                 // tear off the ContextMenu..
                 if (_toolStripContextMenu != null)
                 {
@@ -1342,14 +1298,14 @@ namespace System.Windows.Forms.Design
                 if (menuEditorService == null || (menuEditorService != null && !menuEditorService.IsActive()))
                 {
 
-                    // now walk the winbar and add glyphs for each of it's children
+                    // now walk the ToolStrip and add glyphs for each of it's children
                     foreach (ToolStripItem item in ToolStrip.Items)
                     {
                         if (item is DesignerToolStripControlHost)
                         {
                             continue;
                         }
-                        // make sure it's on the winbar...
+                        // make sure it's on the ToolStrip...
                         if (item.Placement == ToolStripItemPlacement.Main)
                         {
                             ToolStripItemDesigner itemDesigner = (ToolStripItemDesigner)_host.GetDesigner(item);
@@ -1468,46 +1424,16 @@ namespace System.Windows.Forms.Design
                 _componentChangeSvc = (IComponentChangeService)_host.GetService(typeof(IComponentChangeService));
             }
 
-            if (_undoEngine == null)
-            {
-                _undoEngine = GetService(typeof(UndoEngine)) as UndoEngine;
-                if (_undoEngine != null)
-                {
-                    _undoEngine.Undoing += new EventHandler(OnUndoing);
-                    _undoEngine.Undone += new EventHandler(OnUndone);
-                }
-            }
-
-            // initialize new Manager For Editing winbars
+            // initialize new Manager For Editing ToolStrips
             _editManager = new ToolStripEditorManager(component);
             // setup the dropdown if our handle has been created.
             if (Control.IsHandleCreated)
             {
                 InitializeNewItemDropDown();
             }
-            else
-            {
-                Control.HandleCreated += new EventHandler(Control_HandleCreated);
-            }
-            // attach notifcations.
-            if (_componentChangeSvc != null)
-            {
-                _componentChangeSvc.ComponentRemoved += new ComponentEventHandler(ComponentChangeSvc_ComponentRemoved);
-                _componentChangeSvc.ComponentRemoving += new ComponentEventHandler(ComponentChangeSvc_ComponentRemoving);
-                _componentChangeSvc.ComponentAdded += new ComponentEventHandler(ComponentChangeSvc_ComponentAdded);
-                _componentChangeSvc.ComponentAdding += new ComponentEventHandler(ComponentChangeSvc_ComponentAdding);
-                _componentChangeSvc.ComponentChanged += new ComponentChangedEventHandler(ComponentChangeSvc_ComponentChanged);
-            }
 
             //hookup to the AdornerService..for the overflow dropdown to be parent properly.
             _toolStripAdornerWindowService = (ToolStripAdornerWindowService)GetService(typeof(ToolStripAdornerWindowService));
-            SelectionService.SelectionChanging += new EventHandler(SelSvc_SelectionChanging);
-            SelectionService.SelectionChanged += new EventHandler(SelSvc_SelectionChanged);
-
-            // sink size changes.
-            ToolStrip.Resize += new EventHandler(ToolStrip_Resize);
-            ToolStrip.DockChanged += new EventHandler(ToolStrip_Resize);
-            ToolStrip.LayoutCompleted += new EventHandler(ToolStrip_LayoutCompleted);
 
             // Make sure the overflow is not toplevel
             ToolStrip.OverflowButton.DropDown.TopLevel = false;
@@ -1683,7 +1609,7 @@ namespace System.Windows.Forms.Design
             }
             ToolStrip toolStrip = (ToolStrip)Component;
             AddNewTemplateNode(toolStrip);
-            // set up the right visibility state for the winbar.
+            // set up the right visibility state for the ToolStrip.
             SelSvc_SelectionChanged(null, EventArgs.Empty);
         }
 
@@ -2053,11 +1979,9 @@ namespace System.Windows.Forms.Design
                 if (currentIndexOfEditor == -1 || currentIndexOfEditor != ToolStrip.Items.Count - 1)
                 {
                     // if the editor is not there or not at the end, add it to the end.
-                    ToolStrip.ItemAdded -= new ToolStripItemEventHandler(OnItemAdded);
                     ToolStrip.SuspendLayout();
                     ToolStrip.Items.Add(_editorNode);
                     ToolStrip.ResumeLayout();
-                    ToolStrip.ItemAdded += new ToolStripItemEventHandler(OnItemAdded);
                 }
             }
             LayoutToolStrip();
@@ -2316,7 +2240,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void RemoveBodyGlyphsForOverflow()
         {
-            // now walk the winbar and add glyphs for each of it's children
+            // now walk the ToolStrip and add glyphs for each of it's children
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is DesignerToolStripControlHost)
@@ -2379,7 +2303,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When selection changes to the winbar, show the "AddItemsButton", when it leaves, hide it.
+        /// When selection changes to the ToolStrip, show the "AddItemsButton", when it leaves, hide it.
         /// </summary>
         private void SelSvc_SelectionChanging(object sender, EventArgs e)
         {
@@ -2418,7 +2342,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// When selection changes to the winbar, show the "AddItemsButton", when it leaves, hide it.
+        /// When selection changes to the ToolStrip, show the "AddItemsButton", when it leaves, hide it.
         /// </summary>
         private void SelSvc_SelectionChanged(object sender, EventArgs e)
         {
@@ -2462,20 +2386,12 @@ namespace System.Windows.Forms.Design
                         ToolStripPanel parent = ToolStrip.Parent as ToolStripPanel;
                         try
                         {
-                            if (parent != null)
-                            {
-                                parent.LocationChanged += new System.EventHandler(OnToolStripMove);
-                            }
                             FireSyncSelection = true;
                             _editorNode.Visible = true;
                         }
                         finally
                         {
                             FireSyncSelection = originalSyncSelection;
-                            if (parent != null)
-                            {
-                                parent.LocationChanged -= new System.EventHandler(OnToolStripMove);
-                            }
                         }
                     }
 

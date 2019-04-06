@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <devdoc>
-    /// This class represents all the information to render the winbar
+    /// This class represents all the information to render the ToolStrip
     /// </devdoc>
     public class ToolStripItemTextRenderEventArgs : ToolStripItemRenderEventArgs
     {
@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         private bool _textColorChanged = false;
 
         /// <devdoc>
-        /// This class represents all the information to render the winbar
+        /// This class represents all the information to render the ToolStrip
         /// </devdoc>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format) : base(g, item)
         {
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        /// This class represents all the information to render the winbar
+        /// This class represents all the information to render the ToolStrip
         /// </devdoc>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign) : base(g, item)
         {

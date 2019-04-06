@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Design
         private ToolStripDropDown dropDown;
         private bool selected;
         private ControlBodyGlyph dummyToolStripGlyph;
-        private uint _editingCollection = 0; // non-zero if the collection editor is up for this winbar or a child of it.
+        private uint _editingCollection = 0; // non-zero if the collection editor is up for this ToolStrip or a child of it.
         MainMenu parentMenu = null;
         FormDocumentDesigner parentFormDesigner = null;
         internal ToolStripMenuItem currentParent = null;

@@ -298,7 +298,7 @@ namespace System.Windows.Forms {
             remove {  base.ContextMenuStripChanged -= value; }
         }
         
-        /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.CreateParams"]/*' />
+        /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.CreateParams"]/*' />
         /// <internalonly/>
         /// <devdoc>
         /// <para>
@@ -964,7 +964,7 @@ namespace System.Windows.Forms {
        }
 
 
-       /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.TopLevel"]/*' />
+       /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.TopLevel"]/*' />
       [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
        public bool TopLevel {
             get {
@@ -985,7 +985,7 @@ namespace System.Windows.Forms {
 //    it's not robust enough for our needs
 // }
 
-          /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.TabIndex"]/*' />
+          /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.TabIndex"]/*' />
           /// Override base TabIndex property in order to avoid serialization
           /// (since a dropdown shouldn't participate in the taborder...)
           [
@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms {
             remove { base.Validating -= value; }
         }
 
-        /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.Visible"]/*' />
+        /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.Visible"]/*' />
         /// Override base Visible property in order to control serialization by setting default value
         [
                 SRCategory(nameof(SR.CatBehavior)),
@@ -1083,7 +1083,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.Dispose"]/*' />
+        /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.Dispose"]/*' />
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 SourceControlInternal = null;
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms {
              ToolStripDropDownClosingEventHandler handler = (ToolStripDropDownClosingEventHandler)Events[EventClosing];
              if (handler != null) handler(this, e);
         }
-        /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.OnHandleCreated"]/*' />
+        /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.OnHandleCreated"]/*' />
         /// <devdoc>
         /// When our handle is being created, suspend the deactivation
         /// portion of the WndProc, as we'll never be shown.
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarPopup.uex' path='docs/doc[@for="ToolStripDropDown.OnParentChanged"]/*' />
+        /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.OnParentChanged"]/*' />
         protected override void OnParentChanged(System.EventArgs e) {
             base.OnParentChanged(e);
             Rectangle bounds =  this.Bounds;

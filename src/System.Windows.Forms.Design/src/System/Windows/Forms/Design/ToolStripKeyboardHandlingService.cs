@@ -1818,7 +1818,7 @@ namespace System.Windows.Forms.Design
                 }
             }
             ctl = currentSelection as Control;
-            //Added New Code for WinBar Tabbing..
+            //Added New Code for ToolStrip Tabbing..
             if (targetSelection == null && ctl is ToolStrip wb)
             {
                 ToolStripItemCollection collection = wb.Items;

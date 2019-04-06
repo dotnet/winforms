@@ -533,16 +533,10 @@ namespace System.Windows.Forms.Design
                 ((ScrollableControl)Control).Scroll += new ScrollEventHandler(OnScroll);
             }
             EnableDragDrop(true);
-            // Hook load events. At the end of load, we need to do a scan through all of our child controls to see which ones are being inherited.  We connect these up.
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             if (host != null)
             {
                 componentChangeSvc = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
-                if (componentChangeSvc != null)
-                {
-                    componentChangeSvc.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-                    componentChangeSvc.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                }
             }
             // update the Status Command
             statusCommandUI = new StatusCommandUI(component.Site);

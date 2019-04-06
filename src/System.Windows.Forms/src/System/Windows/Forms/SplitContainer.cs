@@ -394,7 +394,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="SplitContainer.ControlAdded"]/*' />
+        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="SplitContainer.ControlAdded"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded {
             add {
@@ -404,7 +404,7 @@ namespace System.Windows.Forms {
                 base.ControlAdded -= value;
             }
         }
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="SplitContainer.ControlRemoved"]/*' />
+        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="SplitContainer.ControlRemoved"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved {
              add {

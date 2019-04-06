@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Design
                 {
                     CreateParams cp = base.CreateParams;
                     cp.Style &= ~(NativeMethods.WS_CLIPCHILDREN | NativeMethods.WS_CLIPSIBLINGS);
-                    cp.ExStyle |= 0x00000020/*WS_EX_TRANSPARENT*/;
+                    cp.ExStyle |= NativeMethods.WS_EX_TRANSPARENT;
                     return cp;
                 }
             }

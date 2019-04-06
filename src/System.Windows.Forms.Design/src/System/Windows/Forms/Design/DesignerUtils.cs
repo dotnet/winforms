@@ -120,11 +120,11 @@ namespace System.Windows.Forms.Design
             HANDLESIZE = DpiHelper.LogicalToDeviceUnitsX(HANDLESIZE);
             HANDLEOVERLAP = DpiHelper.LogicalToDeviceUnitsX(HANDLEOVERLAP);
             NORESIZEHANDLESIZE = DpiHelper.LogicalToDeviceUnitsX(NORESIZEHANDLESIZE);
-            LOCKHANDLEHEIGHT = DpiHelper.LogicalToDeviceUnitsY(LOCKHANDLEHEIGHT);
+            LOCKHANDLEHEIGHT = DpiHelper.LogicalToDeviceUnitsX(LOCKHANDLEHEIGHT);
             LOCKHANDLEWIDTH = DpiHelper.LogicalToDeviceUnitsX(LOCKHANDLEWIDTH);
             LOCKHANDLEOVERLAP = DpiHelper.LogicalToDeviceUnitsX(LOCKHANDLEOVERLAP);
             LOCKHANDLESIZE_UPPER = DpiHelper.LogicalToDeviceUnitsX(LOCKHANDLESIZE_UPPER);
-            LOCKHANDLEHEIGHT_LOWER = DpiHelper.LogicalToDeviceUnitsY(LOCKHANDLEHEIGHT_LOWER);
+            LOCKHANDLEHEIGHT_LOWER = DpiHelper.LogicalToDeviceUnitsX(LOCKHANDLEHEIGHT_LOWER);
             LOCKHANDLEWIDTH_LOWER = DpiHelper.LogicalToDeviceUnitsX(LOCKHANDLEWIDTH_LOWER);
             CONTAINERGRABHANDLESIZE = DpiHelper.LogicalToDeviceUnitsX(CONTAINERGRABHANDLESIZE);
             RESIZEGLYPHSIZE = DpiHelper.LogicalToDeviceUnitsX(RESIZEGLYPHSIZE);
@@ -854,7 +854,6 @@ namespace System.Windows.Forms.Design
                         }
                         else if (c == null)
                         { // this happens when we are dragging a toolstripitem
-                            // TODO: Can we remove the ToolStrip specific code?
                             if (comp is ToolStripItem item && item.GetCurrentParent() == null)
                             {
                                 newObjects.Add(comp);
@@ -929,7 +928,7 @@ namespace System.Windows.Forms.Design
         {
             if (treeView == null)
             {
-                throw new ArgumentNullException("treeView");
+                throw new ArgumentNullException(nameof(treeView));
             }
             treeView.HotTracking = true;
             treeView.ShowLines = false;
@@ -953,7 +952,7 @@ namespace System.Windows.Forms.Design
         {
             if (listView == null)
             {
-                throw new ArgumentNullException("listView");
+                throw new ArgumentNullException(nameof(listView));
             }
             IntPtr hwnd = listView.Handle;
             SafeNativeMethods.SetWindowTheme(hwnd, "Explorer", null);

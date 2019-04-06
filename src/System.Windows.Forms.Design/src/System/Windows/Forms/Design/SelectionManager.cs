@@ -12,7 +12,8 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The SelectionBehavior is pushed onto the BehaviorStack in response to apositively hit tested SelectionGlyph. The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior. </summary>
+    /// The SelectionBehavior is pushed onto the BehaviorStack in response to apositively hit tested SelectionGlyph. The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior.
+    /// </summary>
     internal sealed class SelectionManager : IDisposable
     {
         private Adorner _selectionAdorner;//used to provide all selection glyphs
@@ -47,28 +48,13 @@ namespace System.Windows.Forms.Design
                 Debug.Fail("SelectionManager - Host or SelSvc is null, can't continue");
             }
 
-            //sync the BehaviorService's begindrag event
-            behaviorService.BeginDrag += new BehaviorDragDropEventHandler(OnBeginDrag);
-            //sync the BehaviorService's Synchronize event
-            behaviorService.Synchronize += new EventHandler(OnSynchronize);
-            _selSvc.SelectionChanged += new EventHandler(OnSelectionChanged);
             _rootComponent = (Control)_designerHost.RootComponent;
-
             //create and add both of our adorners, one for selection, one for bodies
             _selectionAdorner = new Adorner();
             _bodyAdorner = new Adorner();
             behaviorService.Adorners.Add(_bodyAdorner);
             behaviorService.Adorners.Add(_selectionAdorner);//adding this will cause the adorner to get setup with a ptr to the beh.svc.
             _componentToDesigner = new Hashtable();
-            IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
-            if (cs != null)
-            {
-                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-                cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
-            }
-
-            _designerHost.TransactionClosed += new DesignerTransactionCloseEventHandler(OnTransactionClosed);
             // designeraction UI
             if (_designerHost.GetService(typeof(DesignerOptionService)) is DesignerOptionService options)
             {
@@ -188,21 +174,12 @@ namespace System.Windows.Forms.Design
         {
             if (_designerHost != null)
             {
-                _designerHost.TransactionClosed -= new DesignerTransactionCloseEventHandler(OnTransactionClosed);
                 _designerHost = null;
             }
             if (_serviceProvider != null)
             {
-                IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
-                if (cs != null)
-                {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                    cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-                }
                 if (_selSvc != null)
                 {
-                    _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                     _selSvc = null;
                 }
                 _serviceProvider = null;
@@ -211,8 +188,6 @@ namespace System.Windows.Forms.Design
             {
                 _behaviorService.Adorners.Remove(_bodyAdorner);
                 _behaviorService.Adorners.Remove(_selectionAdorner);
-                _behaviorService.BeginDrag -= new BehaviorDragDropEventHandler(OnBeginDrag);
-                _behaviorService.Synchronize -= new EventHandler(OnSynchronize);
                 _behaviorService = null;
             }
             if (_selectionAdorner != null)

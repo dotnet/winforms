@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         internal ControlBodyGlyph bodyGlyph = null;
         //bool which is set if we Add Dummy Item
         internal bool dummyItemAdded = false;
-        //Needed to Store the DRAGDROP Rect from the WinbarItemBehavior.
+        //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
         internal Rectangle dragBoxFromMouseDown = Rectangle.Empty;
         //defaulted to invalid index. this will be set by the behaviour.
         internal int indexOfItemUnderMouseToDrag = -1;

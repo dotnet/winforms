@@ -346,19 +346,6 @@ namespace System.Windows.Forms.Design
             {
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(host != null, "Must have a designer host on dispose");
-                if (host != null)
-                {
-                    host.LoadComplete -= new EventHandler(OnLoadComplete);
-                    host.Activated -= new EventHandler(OnDesignerActivate);
-                    host.Deactivated -= new EventHandler(OnDesignerDeactivate);
-                }
-
-                IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                if (cs != null)
-                {
-                    cs.ComponentAdded -= new ComponentEventHandler(OnComponentAdded);
-                    cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-                }
             }
             base.Dispose(disposing);
         }
@@ -474,25 +461,11 @@ namespace System.Windows.Forms.Design
             _initializing = false;
             AutoResizeHandles = true;
             Debug.Assert(component is Form, "FormDocumentDesigner expects its component to be a form.");
-            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            if (host != null)
-            {
-                host.LoadComplete += new EventHandler(OnLoadComplete);
-                host.Activated += new EventHandler(OnDesignerActivate);
-                host.Deactivated += new EventHandler(OnDesignerDeactivate);
-            }
 
             Form form = (Form)Control;
             form.WindowState = FormWindowState.Normal;
             ShadowProperties["AcceptButton"] = form.AcceptButton;
             ShadowProperties["CancelButton"] = form.CancelButton;
-            // Monitor component/remove add events for our tray
-            IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-            if (cs != null)
-            {
-                cs.ComponentAdded += new ComponentEventHandler(OnComponentAdded);
-                cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
-            }
         }
 
         /// <summary>

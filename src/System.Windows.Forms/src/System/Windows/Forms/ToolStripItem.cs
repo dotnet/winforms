@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Alignment"]/*' />
         /// <devdoc>
-        /// Determines if the item aligns towards the beginning or end of the winbar.
+        /// Determines if the item aligns towards the beginning or end of the ToolStrip.
         /// </devdoc>
         [
         DefaultValue(ToolStripItemAlignment.Left),
@@ -874,7 +874,7 @@ namespace System.Windows.Forms {
         ///
         /// This represents what we're actually going to drag.  If the parent has set AllowItemReorder to true,
         /// then the item should call back on the private OnQueryContinueDrag/OnGiveFeedback that is implemented
-        /// in the parent winbar.
+        /// in the parent ToolStrip.
         ///
         /// Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) - 
         /// then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarItem.uex' path='docs/doc[@for="ToolStripItem.ImageTransparentColor"]/*' />
+        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ImageTransparentColor"]/*' />
         [
         Localizable(true),
         SRCategory(nameof(SR.CatAppearance)),
@@ -1745,8 +1745,8 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// The parent of this ToolStripItem.  This can be distinct from the owner because
         /// the item can fall onto another window (overflow).  In this case the overflow 
-        /// would be the parent but the original winbar would be the Owner.  The "parent"
-        /// winbar will be firing things like paint events - where as the "owner" winbar 
+        /// would be the parent but the original ToolStrip would be the Owner.  The "parent"
+        /// ToolStrip will be firing things like paint events - where as the "owner" ToolStrip 
         /// will be containing shared data like image lists.  Typically the only one who should
         /// set the parent property is the layout manager on the ToolStrip.
         /// </devdoc>
@@ -1768,7 +1768,7 @@ namespace System.Windows.Forms {
       
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Overflow"]/*' />
         /// <devdoc>
-        /// <para>Specifies whether or not the item is glued to the winbar or overflow or
+        /// <para>Specifies whether or not the item is glued to the ToolStrip or overflow or
         /// can float between the two.</para>
         /// </devdoc>
         [
@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms {
         }            
         
         /// <devdoc>
-        /// This is explicitly a winbar, because only winbars know how to manage winbaritems
+        /// This is explicitly a ToolStrip, because only ToolStrips know how to manage ToolStripitems
         /// </devdoc>
         internal ToolStrip ParentInternal {
             get {
@@ -2445,7 +2445,7 @@ namespace System.Windows.Forms {
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Dispose"]/*' />
         /// <devdoc>
-        /// Disposes this winbar item...
+        /// Disposes this ToolStrip item...
         /// </devdoc>
         protected override void Dispose(bool disposing)
         {
@@ -4587,7 +4587,7 @@ namespace System.Windows.Forms {
         public virtual Size GetPreferredSize(Size constrainingSize) {
             Size preferredSize = Size.Empty;
             EnsureLayout();
-            // we would prefer not to be larger than the winbar itself.
+            // we would prefer not to be larger than the ToolStrip itself.
             // so we'll ask the ButtonAdapter layout guy what it thinks
             // its preferred size should be - and we'll tell it to be no 
             // bigger than the ToolStrip itself.  Note this is "Parent" not

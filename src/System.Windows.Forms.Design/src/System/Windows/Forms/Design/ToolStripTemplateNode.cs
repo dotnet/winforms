@@ -14,7 +14,7 @@ using static System.Windows.Forms.UnsafeNativeMethods;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This internal class wraps the InSitu Editor. The editor is a runtime Winbar  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
+    /// This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
     /// </summary>
     internal class ToolStripTemplateNode : IMenuStatusHandler
     {
@@ -1570,7 +1570,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Private class to Change the Winbar to a TransparentWinbar. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
+        /// Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {

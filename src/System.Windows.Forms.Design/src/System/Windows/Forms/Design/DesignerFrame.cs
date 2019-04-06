@@ -89,7 +89,6 @@ namespace System.Windows.Forms.Design
                     _designer = null;
                     designerHolder.Visible = false;
                     designerHolder.Parent = null;
-                    SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
                 }
                 if (_splitter != null)
                 {
@@ -122,10 +121,6 @@ namespace System.Windows.Forms.Design
             SyncDesignerUI();
             _designer.Visible = true;
             _designer.Enabled = true;
-            // We need to force handle creation here, since setting Visible = true won't if the control is already Visible = true. (UserControl starts out Visible true, Form does not) This guarantees that as controls are added to the root component their handles will be created correctly, and not the first time they're queried after load.
-            IntPtr handle = _designer.Handle;
-            // Hook the handler here, when we know that the designer object has already been set
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
         /// <summary>
