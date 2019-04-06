@@ -215,7 +215,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                var nameBuilder = new StringBuilder(128);
+                var nameBuilder = new StringBuilder(256);
 
                 // This can happen if windows adds a standard format that we don't know about,
                 // so we should play it safe.
