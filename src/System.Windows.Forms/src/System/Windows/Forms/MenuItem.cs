@@ -23,34 +23,34 @@ namespace System.Windows.Forms
     [DefaultProperty(nameof(Text))]
     public class MenuItem : Menu
     {
-        private const int STATE_BARBREAK = 0x00000020;
-        private const int STATE_BREAK = 0x00000040;
-        private const int STATE_CHECKED = 0x00000008;
-        private const int STATE_DEFAULT = 0x00001000;
-        private const int STATE_DISABLED = 0x00000003;
-        private const int STATE_RADIOCHECK = 0x00000200;
-        private const int STATE_HIDDEN = 0x00010000;
-        private const int STATE_MDILIST = 0x00020000;
-        private const int STATE_CLONE_MASK = 0x0003136B;
-        private const int STATE_OWNERDRAW = 0x00000100;
-        private const int STATE_INMDIPOPUP = 0x00000200;
-        private const int STATE_HILITE = 0x00000080;
+        private const int StateBarBreak = 0x00000020;
+        private const int StateBreak = 0x00000040;
+        private const int StateChecked = 0x00000008;
+        private const int StateDefault = 0x00001000;
+        private const int StateDisabled = 0x00000003;
+        private const int StateRadioCheck = 0x00000200;
+        private const int StateHidden = 0x00010000;
+        private const int StateMdiList = 0x00020000;
+        private const int StateCloneMask = 0x0003136B;
+        private const int StateOwnerDraw = 0x00000100;
+        private const int StateInMdiPopup = 0x00000200;
+        private const int StateHiLite = 0x00000080;
 
-        private Menu menu;
-        private bool hasHandle;
-        private MenuItemData data;
-        private int dataVersion;
-        private MenuItem nextLinkedItem; // Next item linked to the same MenuItemData.
+        private Menu _menu;
+        private bool _hasHandle;
+        private MenuItemData _data;
+        private int _dataVersion;
+        private MenuItem _nextLinkedItem; // Next item linked to the same MenuItemData.
 
         // We need to store a table of all created menuitems, so that other objects
         // such as ContainerControl can get a reference to a particular menuitem,
         // given a unique ID.
-        private static Hashtable allCreatedMenuItems = new Hashtable();
-        private const uint firstUniqueID = 0xC0000000;
-        private static long nextUniqueID = firstUniqueID;
-        private uint uniqueID = 0;
-        private IntPtr msaaMenuInfoPtr = IntPtr.Zero;
-        private bool menuItemIsCreated = false;
+        private static Hashtable s_allCreatedMenuItems = new Hashtable();
+        private const uint FirstUniqueID = 0xC0000000;
+        private static long s_nextUniqueID = FirstUniqueID;
+        private uint _uniqueID = 0;
+        private IntPtr _msaaMenuInfoPtr = IntPtr.Zero;
+        private bool _menuItemIsCreated = false;
 
 #if DEBUG
         private string _debugText;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
             data.AddItem(this);
 
 #if DEBUG
-            _debugText = data.caption;
+            _debugText = data._caption;
 #endif
         }
 
@@ -139,12 +139,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_BARBREAK) != 0;
+                return (_data.State & StateBarBreak) != 0;
             }
             set
             {
                 CheckIfDisposed();
-                data.SetState(STATE_BARBREAK, value);
+                _data.SetState(StateBarBreak, value);
             }
         }
 
@@ -160,12 +160,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_BREAK) != 0;
+                return (_data.State & StateBreak) != 0;
             }
             set
             {
                 CheckIfDisposed();
-                data.SetState(STATE_BREAK, value);
+                _data.SetState(StateBreak, value);
             }
         }
 
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_CHECKED) != 0;
+                return (_data.State & StateChecked) != 0;
             }
             set
             {
@@ -191,7 +191,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(SR.MenuItemInvalidCheckProperty, nameof(value));
                 }
 
-                data.SetState(STATE_CHECKED, value);
+                _data.SetState(StateChecked, value);
             }
         }
 
@@ -205,24 +205,24 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_DEFAULT) != 0;
+                return (_data.State & StateDefault) != 0;
             }
             set
             {
                 CheckIfDisposed();
-                if (menu != null)
+                if (_menu != null)
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(menu, menu.handle), MenuID, false);
+                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(_menu, _menu.handle), MenuID, false);
                     }
                     else if (DefaultItem)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(menu, menu.handle), -1, false);
+                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(_menu, _menu.handle), -1, false);
                     }
                 }
 
-                data.SetState(STATE_DEFAULT, value);
+                _data.SetState(StateDefault, value);
             }
         }
 
@@ -238,12 +238,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return ((data.State & STATE_OWNERDRAW) != 0);
+                return ((_data.State & StateOwnerDraw) != 0);
             }
             set
             {
                 CheckIfDisposed();
-                data.SetState(STATE_OWNERDRAW, value);
+                _data.SetState(StateOwnerDraw, value);
             }
         }
 
@@ -258,12 +258,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_DISABLED) == 0;
+                return (_data.State & StateDisabled) == 0;
             }
             set
             {
                 CheckIfDisposed();
-                data.SetState(STATE_DISABLED, !value);
+                _data.SetState(StateDisabled, !value);
             }
         }
 
@@ -275,11 +275,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (menu != null)
+                if (_menu != null)
                 {
-                    for (int i = 0; i < menu.ItemCount; i++)
+                    for (int i = 0; i < _menu.ItemCount; i++)
                     {
-                        if (menu.items[i] == this)
+                        if (_menu.items[i] == this)
                         {
                             return i;
                         }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
                 int oldIndex = Index;
                 if (oldIndex >= 0)
                 {
-                    if (value < 0 || value >= menu.ItemCount)
+                    if (value < 0 || value >= _menu.ItemCount)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, nameof(Index), value));
                     }
@@ -302,7 +302,7 @@ namespace System.Windows.Forms
                     {
                         // The menu reverts to null when we're removed, so hold onto it in a
                         // local variable
-                        Menu parent = menu;
+                        Menu parent = _menu;
                         parent.MenuItems.RemoveAt(oldIndex);
                         parent.MenuItems.Add(value, this);
                     }
@@ -318,11 +318,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (data != null && MdiList)
+                if (_data != null && MdiList)
                 {
                     for (int i = 0; i < ItemCount; i++)
                     {
-                        if (!(items[i].data.UserData is MdiListUserData))
+                        if (!(items[i]._data.UserData is MdiListUserData))
                         {
                             return true;
                         }
@@ -333,7 +333,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    if (menu != null && !(menu is MenuItem))
+                    if (_menu != null && !(_menu is MenuItem))
                     {
                         return true;
                     }
@@ -356,22 +356,22 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_MDILIST) != 0;
+                return (_data.State & StateMdiList) != 0;
             }
             set
             {
                 CheckIfDisposed();
-                data.MdiList = value;
+                _data.MdiList = value;
                 CleanListItems(this);
             }
         }
 
         internal Menu Menu
         {
-            get => menu;
+            get => _menu;
             set
             {
-                menu = value;
+                _menu = value;
 #if DEBUG
                 _debugParentMenu = value;
 #endif
@@ -386,7 +386,7 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.GetMenuID();
+                return _data.GetMenuID();
             }
         }
 
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (menu == null)
+                if (_menu == null)
                 {
                     return false;
                 }
@@ -405,9 +405,9 @@ namespace System.Windows.Forms
                 NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
                 info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 info.fMask = NativeMethods.MIIM_STATE;
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, info);
+                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
 
-                return (info.fState & STATE_HILITE) != 0;
+                return (info.fState & StateHiLite) != 0;
             }
         }
 
@@ -419,12 +419,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (menu == null)
+                if (_menu == null)
                 {
                     return -1;
                 }
 
-                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(menu, menu.Handle));
+                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(_menu, _menu.Handle));
                 int id = MenuID;
                 NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
                 info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
@@ -432,7 +432,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < count; i++)
                 {
-                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(menu, menu.handle), i, true, info);
+                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), i, true, info);
 
                     // For sub menus, the handle is always valid.
                     // For items, however, it is always zero.
@@ -457,7 +457,7 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.mergeType;
+                return _data._mergeType;
             }
             set
             {
@@ -467,7 +467,7 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(MenuMerge));
                 }
 
-                data.MergeType = value;
+                _data.MergeType = value;
             }
         }
 
@@ -482,12 +482,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.mergeOrder;
+                return _data._mergeOrder;
             }
             set
             {
                 CheckIfDisposed();
-                data.MergeOrder = value;
+                _data.MergeOrder = value;
             }
         }
 
@@ -503,7 +503,7 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.Mnemonic;
+                return _data.Mnemonic;
             }
         }
 
@@ -511,7 +511,7 @@ namespace System.Windows.Forms
         /// Gets the menu in which this menu item appears.
         /// </devdoc>
         [Browsable(false)]
-        public Menu Parent => menu;
+        public Menu Parent => _menu;
 
         /// <devdoc>
         /// Gets or sets a value that indicates whether the menu item, if checked,
@@ -524,12 +524,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_RADIOCHECK) != 0;
+                return (_data.State & StateRadioCheck) != 0;
             }
             set
             {
                 CheckIfDisposed();
-                data.SetState(STATE_RADIOCHECK, value);
+                _data.SetState(StateRadioCheck, value);
             }
         }
 
@@ -545,12 +545,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.caption;
+                return _data._caption;
             }
             set
             {
                 CheckIfDisposed();
-                data.SetCaption(value);
+                _data.SetCaption(value);
             }
         }
 
@@ -565,7 +565,7 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.shortcut;
+                return _data._shortcut;
             }
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Shortcut));
                 }
 
-                data.shortcut = value;
+                _data._shortcut = value;
                 UpdateMenuItem(force: true);
             }
         }
@@ -593,14 +593,14 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return data.showShortcut;
+                return _data._showShortcut;
             }
             set
             {
                 CheckIfDisposed();
-                if (value != data.showShortcut)
+                if (value != _data._showShortcut)
                 {
-                    data.showShortcut = value;
+                    _data._showShortcut = value;
                     UpdateMenuItem(force: true);
                 }
             }
@@ -618,12 +618,12 @@ namespace System.Windows.Forms
             get
             {
                 CheckIfDisposed();
-                return (data.State & STATE_HIDDEN) == 0;
+                return (_data.State & StateHidden) == 0;
             }
             set
             {
                 CheckIfDisposed();
-                data.Visible = value;
+                _data.Visible = value;
             }
         }
 
@@ -637,12 +637,12 @@ namespace System.Windows.Forms
             add
             {
                 CheckIfDisposed();
-                data.onClick += value;
+                _data._onClick += value;
             }
             remove
             {
                 CheckIfDisposed();
-                data.onClick -= value;
+                _data._onClick -= value;
             }
         }
 
@@ -656,12 +656,12 @@ namespace System.Windows.Forms
             add
             {
                 CheckIfDisposed();
-                data.onDrawItem += value;
+                _data._onDrawItem += value;
             }
             remove
             {
                 CheckIfDisposed();
-                data.onDrawItem -= value;
+                _data._onDrawItem -= value;
             }
         }
 
@@ -674,12 +674,12 @@ namespace System.Windows.Forms
             add
             {
                 CheckIfDisposed();
-                data.onMeasureItem += value;
+                _data._onMeasureItem += value;
             }
             remove
             {
                 CheckIfDisposed();
-                data.onMeasureItem -= value;
+                _data._onMeasureItem -= value;
             }
         }
 
@@ -692,12 +692,12 @@ namespace System.Windows.Forms
             add
             {
                 CheckIfDisposed();
-                data.onPopup += value;
+                _data._onPopup += value;
             }
             remove
             {
                 CheckIfDisposed();
-                data.onPopup -= value;
+                _data._onPopup -= value;
             }
         }
 
@@ -711,12 +711,12 @@ namespace System.Windows.Forms
             add
             {
                 CheckIfDisposed();
-                data.onSelect += value;
+                _data._onSelect += value;
             }
             remove
             {
                 CheckIfDisposed();
-                data.onSelect -= value;
+                _data._onSelect -= value;
             }
         }
 
@@ -726,7 +726,7 @@ namespace System.Windows.Forms
             for (int i = senderMenu.MenuItems.Count - 1; i >= 0; i--)
             {
                 MenuItem item = senderMenu.MenuItems[i];
-                if (item.data.UserData is MdiListUserData)
+                if (item._data.UserData is MdiListUserData)
                 {
                     item.Dispose();
                     continue;
@@ -752,25 +752,25 @@ namespace System.Windows.Forms
         protected void CloneMenu(MenuItem itemSrc)
         {
             base.CloneMenu(itemSrc);
-            int state = itemSrc.data.State;
+            int state = itemSrc._data.State;
             new MenuItemData(this,
                              itemSrc.MergeType, itemSrc.MergeOrder, itemSrc.Shortcut, itemSrc.ShowShortcut,
-                             itemSrc.Text, itemSrc.data.onClick, itemSrc.data.onPopup, itemSrc.data.onSelect,
-                             itemSrc.data.onDrawItem, itemSrc.data.onMeasureItem);
-            data.SetState(state & STATE_CLONE_MASK, true);
+                             itemSrc.Text, itemSrc._data._onClick, itemSrc._data._onPopup, itemSrc._data._onSelect,
+                             itemSrc._data._onDrawItem, itemSrc._data._onMeasureItem);
+            _data.SetState(state & StateCloneMask, true);
         }
 
         internal virtual void CreateMenuItem()
         {
-            if ((data.State & STATE_HIDDEN) == 0)
+            if ((_data.State & StateHidden) == 0)
             {
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
-                UnsafeNativeMethods.InsertMenuItem(new HandleRef(menu, menu.handle), -1, true, info);
+                UnsafeNativeMethods.InsertMenuItem(new HandleRef(_menu, _menu.handle), -1, true, info);
 
-                hasHandle = info.hSubMenu != IntPtr.Zero;
-                dataVersion = data.version;
+                _hasHandle = info.hSubMenu != IntPtr.Zero;
+                _dataVersion = _data._version;
 
-                menuItemIsCreated = true;
+                _menuItemIsCreated = true;
                 if (RenderIsRightToLeft)
                 {
                     Menu.UpdateRtl(true);
@@ -781,7 +781,7 @@ namespace System.Windows.Forms
                 infoVerify.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, infoVerify);
+                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, infoVerify);
 #endif
             }
         }
@@ -791,16 +791,16 @@ namespace System.Windows.Forms
             var info = new NativeMethods.MENUITEMINFO_T();
             info.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                          NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA;
-            info.fType = data.State & (STATE_BARBREAK | STATE_BREAK | STATE_RADIOCHECK | STATE_OWNERDRAW);
+            info.fType = _data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw);
 
             // Top level menu items shouldn't have barbreak or break bits set on them.
-            bool isTopLevel = menu == GetMainMenu();
+            bool isTopLevel = _menu == GetMainMenu();
 
-            if (data.caption.Equals("-"))
+            if (_data._caption.Equals("-"))
             {
                 if (isTopLevel)
                 {
-                    data.caption = " ";
+                    _data._caption = " ";
                     info.fType |= NativeMethods.MFT_MENUBREAK;
                 }
                 else
@@ -809,7 +809,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            info.fState = data.State & (STATE_CHECKED | STATE_DEFAULT | STATE_DISABLED);
+            info.fState = _data.State & (StateChecked | StateDefault | StateDisabled);
 
             info.wID = MenuID;
             if (IsParent)
@@ -825,17 +825,17 @@ namespace System.Windows.Forms
             // that when we get Win32 messages about the item later, we can delegate to the
             // original object menu item object. A static hash table is used to map IDs to
             // menu item objects.
-            if (uniqueID == 0)
+            if (_uniqueID == 0)
             {
-                lock (allCreatedMenuItems)
+                lock (s_allCreatedMenuItems)
                 {
-                    uniqueID = (uint)Interlocked.Increment(ref nextUniqueID);
-                    Debug.Assert(uniqueID >= firstUniqueID); // ...check for ID range exhaustion (unlikely!)
+                    _uniqueID = (uint)Interlocked.Increment(ref s_nextUniqueID);
+                    Debug.Assert(_uniqueID >= FirstUniqueID); // ...check for ID range exhaustion (unlikely!)
                     // We add a weak ref wrapping a MenuItem to the static hash table, as
                     // supposed to adding the item ref itself, to allow the item to be finalized
                     // in case it is not disposed and no longer referenced anywhere else, hence
                     // preventing leaks.
-                    allCreatedMenuItems.Add(uniqueID, new WeakReference(this));
+                    s_allCreatedMenuItems.Add(_uniqueID, new WeakReference(this));
                 }
             }
 
@@ -851,13 +851,13 @@ namespace System.Windows.Forms
                 // from. So that we can still get the ID from the dwItemData for an owner-draw
                 // item later on, a copy of the ID is tacked onto the end of the MSAAMENUINFO
                 // structure.
-                if (data.OwnerDraw)
+                if (_data.OwnerDraw)
                 {
                     info.dwItemData = AllocMsaaMenuInfo();
                 }
                 else
                 {
-                    info.dwItemData = (IntPtr)unchecked((int)uniqueID);
+                    info.dwItemData = (IntPtr)unchecked((int)_uniqueID);
                 }
             }
             else
@@ -868,15 +868,15 @@ namespace System.Windows.Forms
             }
 
             // We won't render the shortcut if: 1) it's not set, 2) we're a parent, 3) we're toplevel
-            if (data.showShortcut && data.shortcut != 0 && !IsParent && !isTopLevel)
+            if (_data._showShortcut && _data._shortcut != 0 && !IsParent && !isTopLevel)
             {
-                info.dwTypeData = data.caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)data.shortcut);
+                info.dwTypeData = _data._caption + "\t" + TypeDescriptor.GetConverter(typeof(Keys)).ConvertToString((Keys)(int)_data._shortcut);
             }
             else
             {
                 // Windows issue: Items with empty captions sometimes block keyboard
                 // access to other items in same menu.
-                info.dwTypeData = (data.caption.Length == 0 ? " " : data.caption);
+                info.dwTypeData = (_data._caption.Length == 0 ? " " : _data._caption);
             }
             info.cch = 0;
 
@@ -890,14 +890,14 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                menu?.MenuItems.Remove(this);
-                data?.RemoveItem(this);
-                lock (allCreatedMenuItems)
+                _menu?.MenuItems.Remove(this);
+                _data?.RemoveItem(this);
+                lock (s_allCreatedMenuItems)
                 {
-                    allCreatedMenuItems.Remove(uniqueID);
+                    s_allCreatedMenuItems.Remove(_uniqueID);
                 }
 
-                uniqueID = 0;
+                _uniqueID = 0;
 
             }
 
@@ -911,7 +911,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static MenuItem GetMenuItemFromUniqueID(uint uniqueID)
         {
-            WeakReference weakRef = (WeakReference)allCreatedMenuItems[uniqueID];
+            WeakReference weakRef = (WeakReference)s_allCreatedMenuItems[uniqueID];
             if (weakRef != null && weakRef.IsAlive)
             {
                 return (MenuItem)weakRef.Target;
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
 
             if (IntPtr.Size == 4)
             {
-                if (uniqueID < firstUniqueID)
+                if (uniqueID < FirstUniqueID)
                 {
                     MsaaMenuInfoWithId msaaMenuInfo = (MsaaMenuInfoWithId)Marshal.PtrToStructure(itemData, typeof(MsaaMenuInfoWithId));
                     uniqueID = msaaMenuInfo._uniqueID;
@@ -981,19 +981,19 @@ namespace System.Windows.Forms
         private IntPtr AllocMsaaMenuInfo()
         {
             FreeMsaaMenuInfo();
-            msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MsaaMenuInfoWithId)));
+            _msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MsaaMenuInfoWithId)));
 
             if (IntPtr.Size == 4)
             {
                 // We only check this on Win32, irrelevant on Win64 (see CreateMenuItemInfo)
                 // Check for incursion into menu item ID range (unlikely!)
-                Debug.Assert(((uint)(ulong)msaaMenuInfoPtr) < firstUniqueID);
+                Debug.Assert(((uint)(ulong)_msaaMenuInfoPtr) < FirstUniqueID);
             }
 
-            MsaaMenuInfoWithId msaaMenuInfoStruct = new MsaaMenuInfoWithId(data.caption, uniqueID);
-            Marshal.StructureToPtr(msaaMenuInfoStruct, msaaMenuInfoPtr, false);
-            Debug.Assert(msaaMenuInfoPtr != IntPtr.Zero);
-            return msaaMenuInfoPtr;
+            MsaaMenuInfoWithId msaaMenuInfoStruct = new MsaaMenuInfoWithId(_data._caption, _uniqueID);
+            Marshal.StructureToPtr(msaaMenuInfoStruct, _msaaMenuInfoPtr, false);
+            Debug.Assert(_msaaMenuInfoPtr != IntPtr.Zero);
+            return _msaaMenuInfoPtr;
         }
 
         /// <summary>
@@ -1003,11 +1003,11 @@ namespace System.Windows.Forms
         /// <summary>
         private void FreeMsaaMenuInfo()
         {
-            if (msaaMenuInfoPtr != IntPtr.Zero)
+            if (_msaaMenuInfoPtr != IntPtr.Zero)
             {
-                Marshal.DestroyStructure(msaaMenuInfoPtr, typeof(MsaaMenuInfoWithId));
-                Marshal.FreeHGlobal(msaaMenuInfoPtr);
-                msaaMenuInfoPtr = IntPtr.Zero;
+                Marshal.DestroyStructure(_msaaMenuInfoPtr, typeof(MsaaMenuInfoWithId));
+                Marshal.FreeHGlobal(_msaaMenuInfoPtr);
+                _msaaMenuInfoPtr = IntPtr.Zero;
             }
         }
 
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms
             {
                 // when the menu collection changes deal with it locally
                 Debug.Assert(!created, "base.ItemsChanged should have wiped out our handles");
-                if (menu != null && menu.created)
+                if (_menu != null && _menu.created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
@@ -1027,13 +1027,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (!hasHandle && IsParent)
+                if (!_hasHandle && IsParent)
                 {
                     UpdateMenuItem(force: true);
                 }
 
                 MainMenu main = GetMainMenu();
-                if (main != null && ((data.State & STATE_INMDIPOPUP) == 0))
+                if (main != null && ((_data.State & StateInMdiPopup) == 0))
                 {
                     main.ItemsChanged(change, this);
                 }
@@ -1043,28 +1043,28 @@ namespace System.Windows.Forms
         internal void ItemsChanged(int change, MenuItem item)
         {
             if (change == CHANGE_ITEMADDED &&
-                data != null &&
-                data.baseItem != null &&
-                data.baseItem.MenuItems.Contains(item))
+                _data != null &&
+                _data.baseItem != null &&
+                _data.baseItem.MenuItems.Contains(item))
             {
-                if (menu != null && menu.created)
+                if (_menu != null && _menu.created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
                 }
-                else if (data != null)
+                else if (_data != null)
                 {
-                    MenuItem currentMenuItem = data.firstItem;
+                    MenuItem currentMenuItem = _data.firstItem;
                     while (currentMenuItem != null)
                     {
                         if (currentMenuItem.created)
                         {
                             MenuItem newItem = item.CloneMenu();
-                            item.data.AddItem(newItem);
+                            item._data.AddItem(newItem);
                             currentMenuItem.MenuItems.Add(newItem);
                             break;
                         }
-                        currentMenuItem = currentMenuItem.nextLinkedItem;
+                        currentMenuItem = currentMenuItem._nextLinkedItem;
                     }
                 }
             }
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms
         private void PopulateMdiList()
         {
             MenuItem senderMenu = this;
-            data.SetState(STATE_INMDIPOPUP, true);
+            _data.SetState(StateInMdiPopup, true);
             try
             {
                 CleanListItems(this);
@@ -1116,7 +1116,7 @@ namespace System.Windows.Forms
                     if (senderMenu.MenuItems.Count > 0)
                     {
                         MenuItem sep = (MenuItem)Activator.CreateInstance(GetType());
-                        sep.data.UserData = new MdiListUserData();
+                        sep._data.UserData = new MdiListUserData();
                         sep.Text = "-";
                         senderMenu.MenuItems.Add(sep);
                     }
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms
                             {
                                 // there's always room for activeMdiChild
                                 MenuItem windowItem = (MenuItem)Activator.CreateInstance(GetType());
-                                windowItem.data.UserData = new MdiListFormData(this, i);
+                                windowItem._data.UserData = new MdiListFormData(this, i);
 
                                 if (forms[i].Equals(activeMdiChild))
                                 {
@@ -1167,7 +1167,7 @@ namespace System.Windows.Forms
                     if (visibleChildren > MaxMenuForms)
                     {
                         MenuItem moreWindows = (MenuItem)Activator.CreateInstance(GetType());
-                        moreWindows.data.UserData = new MdiListMoreWindowsData(this);
+                        moreWindows._data.UserData = new MdiListMoreWindowsData(this);
                         moreWindows.Text = SR.MDIMenuMoreWindows;
                         senderMenu.MenuItems.Add(moreWindows);
                     }
@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                data.SetState(STATE_INMDIPOPUP, false);
+                _data.SetState(StateInMdiPopup, false);
             }
         }
 
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms
             CheckIfDisposed();
 
             MenuItem newItem = (MenuItem)Activator.CreateInstance(GetType());
-            data.AddItem(newItem);
+            _data.AddItem(newItem);
             newItem.MergeMenu(this);
             return newItem;
         }
@@ -1200,7 +1200,7 @@ namespace System.Windows.Forms
         public void MergeMenu(MenuItem itemSrc)
         {
             base.MergeMenu(itemSrc);
-            itemSrc.data.AddItem(this);
+            itemSrc._data.AddItem(this);
         }
 
         /// <devdoc>
@@ -1210,17 +1210,17 @@ namespace System.Windows.Forms
         {
             CheckIfDisposed();
 
-            if (data.UserData is MdiListUserData)
+            if (_data.UserData is MdiListUserData)
             {
-                ((MdiListUserData)data.UserData).OnClick(e);
+                ((MdiListUserData)_data.UserData).OnClick(e);
             }
-            else if (data.baseItem != this)
+            else if (_data.baseItem != this)
             {
-                data.baseItem.OnClick(e);
+                _data.baseItem.OnClick(e);
             }
-            else if (data.onClick != null)
+            else if (_data._onClick != null)
             {
-                data.onClick(this, e);
+                _data._onClick(this, e);
             }
         }
 
@@ -1231,13 +1231,13 @@ namespace System.Windows.Forms
         {
             CheckIfDisposed();
 
-            if (data.baseItem != this)
+            if (_data.baseItem != this)
             {
-                data.baseItem.OnDrawItem(e);
+                _data.baseItem.OnDrawItem(e);
             }
-            else if (data.onDrawItem != null)
+            else if (_data._onDrawItem != null)
             {
-                data.onDrawItem(this, e);
+                _data._onDrawItem(this, e);
             }
         }
 
@@ -1248,13 +1248,13 @@ namespace System.Windows.Forms
         {
             CheckIfDisposed();
 
-            if (data.baseItem != this)
+            if (_data.baseItem != this)
             {
-                data.baseItem.OnMeasureItem(e);
+                _data.baseItem.OnMeasureItem(e);
             }
-            else if (data.onMeasureItem != null)
+            else if (_data._onMeasureItem != null)
             {
-                data.onMeasureItem(this, e);
+                _data._onMeasureItem(this, e);
             }
         }
 
@@ -1274,25 +1274,25 @@ namespace System.Windows.Forms
                     items[i].UpdateMenuItem(force: true);
                 }
             }
-            if (recreate || (hasHandle && !IsParent))
+            if (recreate || (_hasHandle && !IsParent))
             {
                 UpdateMenuItem(force: true);
             }
 
-            if (data.baseItem != this)
+            if (_data.baseItem != this)
             {
-                data.baseItem.OnPopup(e);
+                _data.baseItem.OnPopup(e);
             }
-            else if (data.onPopup != null)
+            else if (_data._onPopup != null)
             {
-                data.onPopup(this, e);
+                _data._onPopup(this, e);
             }
 
             // Update any subitem states that got changed in the event
             for (int i = 0; i < ItemCount; i++)
             {
                 MenuItem item = items[i];
-                if (item.dataVersion != item.data.version)
+                if (item._dataVersion != item._data._version)
                 {
                     item.UpdateMenuItem(force: true);
                 }
@@ -1311,13 +1311,13 @@ namespace System.Windows.Forms
         {
             CheckIfDisposed();
 
-            if (data.baseItem != this)
+            if (_data.baseItem != this)
             {
-                data.baseItem.OnSelect(e);
+                _data.baseItem.OnSelect(e);
             }
-            else if (data.onSelect != null)
+            else if (_data._onSelect != null)
             {
-                data.onSelect(this, e);
+                _data._onSelect(this, e);
             }
         }
 
@@ -1338,14 +1338,14 @@ namespace System.Windows.Forms
 
         internal virtual bool ShortcutClick()
         {
-            if (menu is MenuItem parent)
+            if (_menu is MenuItem parent)
             {
-                if (!parent.ShortcutClick() || menu != parent)
+                if (!parent.ShortcutClick() || _menu != parent)
                 {
                     return false;
                 }
             }
-            if ((data.State & STATE_DISABLED) != 0)
+            if ((_data.State & StateDisabled) != 0)
             {
                 return false;
             }
@@ -1364,13 +1364,13 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            string menuItemText = data?.caption ?? string.Empty;;
+            string menuItemText = _data?._caption ?? string.Empty;;
             return s + ", Text: " + menuItemText;
         }
 
         internal void UpdateItemRtl(bool setRightToLeftBit)
         {
-            if (!menuItemIsCreated)
+            if (!_menuItemIsCreated)
             {
                 return;
             }
@@ -1380,7 +1380,7 @@ namespace System.Windows.Forms
             info.dwTypeData = new string('\0', Text.Length + 2);
             info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
             info.cch = info.dwTypeData.Length - 1;
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, info);
+            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
             if (setRightToLeftBit)
             {
                 info.fType |= NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER;
@@ -1390,7 +1390,7 @@ namespace System.Windows.Forms
                 info.fType &= ~(NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER);
             }
 
-            UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, info);
+            UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
 
 #if DEBUG
 
@@ -1398,7 +1398,7 @@ namespace System.Windows.Forms
             info.dwTypeData     = new string('\0', 256);
             info.cbSize         = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
             info.cch            = info.dwTypeData.Length - 1;
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, info);
+            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
             Debug.Assert(((info.fType & NativeMethods.MFT_RIGHTORDER) != 0) == setRightToLeftBit, "Failed to set bit!");
 
 #endif
@@ -1406,31 +1406,31 @@ namespace System.Windows.Forms
 
         internal void UpdateMenuItem(bool force)
         {
-            if (menu == null || !menu.created)
+            if (_menu == null || !_menu.created)
             {
                 return;
             }
 
-            if (force || menu is MainMenu || menu is ContextMenu)
+            if (force || _menu is MainMenu || _menu is ContextMenu)
             {
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
-                UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, info);
+                UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
 #if DEBUG
                 var infoVerify = new NativeMethods.MENUITEMINFO_T();
                 infoVerify.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(menu, menu.handle), MenuID, false, infoVerify);
+                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, infoVerify);
 #endif
 
-                if (hasHandle && info.hSubMenu == IntPtr.Zero)
+                if (_hasHandle && info.hSubMenu == IntPtr.Zero)
                 {
                     ClearHandles();
                 }
 
-                hasHandle = info.hSubMenu != IntPtr.Zero;
-                dataVersion = data.version;
-                if (menu is MainMenu mainMenu)
+                _hasHandle = info.hSubMenu != IntPtr.Zero;
+                _dataVersion = _data._version;
+                if (_menu is MainMenu mainMenu)
                 {
                     Form f = mainMenu.GetFormUnsafe();
                     if (f != null)
@@ -1502,7 +1502,7 @@ namespace System.Windows.Forms
 
         private void CheckIfDisposed()
         {
-            if (data == null)
+            if (_data == null)
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
@@ -1513,57 +1513,57 @@ namespace System.Windows.Forms
             internal MenuItem baseItem;
             internal MenuItem firstItem;
 
-            private int state;
-            internal int version;
-            internal MenuMerge mergeType;
-            internal int mergeOrder;
-            internal string caption;
-            internal short mnemonic;
-            internal Shortcut shortcut;
-            internal bool showShortcut;
-            internal EventHandler onClick;
-            internal EventHandler onPopup;
-            internal EventHandler onSelect;
-            internal DrawItemEventHandler onDrawItem;
-            internal MeasureItemEventHandler onMeasureItem;
+            private int _state;
+            internal int _version;
+            internal MenuMerge _mergeType;
+            internal int _mergeOrder;
+            internal string _caption;
+            internal short _mnemonic;
+            internal Shortcut _shortcut;
+            internal bool _showShortcut;
+            internal EventHandler _onClick;
+            internal EventHandler _onPopup;
+            internal EventHandler _onSelect;
+            internal DrawItemEventHandler _onDrawItem;
+            internal MeasureItemEventHandler _onMeasureItem;
 
-            internal Command cmd;
+            private Command _cmd;
 
             internal MenuItemData(MenuItem baseItem, MenuMerge mergeType, int mergeOrder, Shortcut shortcut, bool showShortcut,
                                   string caption, EventHandler onClick, EventHandler onPopup, EventHandler onSelect,
                                   DrawItemEventHandler onDrawItem, MeasureItemEventHandler onMeasureItem)
             {
                 AddItem(baseItem);
-                this.mergeType = mergeType;
-                this.mergeOrder = mergeOrder;
-                this.shortcut = shortcut;
-                this.showShortcut = showShortcut;
-                this.caption = caption == null ? "" : caption;
-                this.onClick = onClick;
-                this.onPopup = onPopup;
-                this.onSelect = onSelect;
-                this.onDrawItem = onDrawItem;
-                this.onMeasureItem = onMeasureItem;
-                version = 1;
-                mnemonic = -1;
+                _mergeType = mergeType;
+                _mergeOrder = mergeOrder;
+                _shortcut = shortcut;
+                _showShortcut = showShortcut;
+                _caption = caption ?? string.Empty;
+                _onClick = onClick;
+                _onPopup = onPopup;
+                _onSelect = onSelect;
+                _onDrawItem = onDrawItem;
+                _onMeasureItem = onMeasureItem;
+                _version = 1;
+                _mnemonic = -1;
             }
 
 
             internal bool OwnerDraw
             {
-                get => ((State & STATE_OWNERDRAW) != 0);
-                set => SetState(STATE_OWNERDRAW, value);
+                get => ((State & StateOwnerDraw) != 0);
+                set => SetState(StateOwnerDraw, value);
             }
 
             internal bool MdiList
             {
-                get => ((State & STATE_MDILIST) == STATE_MDILIST);
+                get => ((State & StateMdiList) == StateMdiList);
                 set
                 {
-                    if (((state & STATE_MDILIST) != 0) != value)
+                    if (((_state & StateMdiList) != 0) != value)
                     {
-                        SetState(STATE_MDILIST, value);
-                        for (MenuItem item = firstItem; item != null; item = item.nextLinkedItem)
+                        SetState(StateMdiList, value);
+                        for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                         {
                             item.ItemsChanged(Menu.CHANGE_MDI);
                         }
@@ -1573,12 +1573,12 @@ namespace System.Windows.Forms
 
             internal MenuMerge MergeType
             {
-                get => mergeType;
+                get => _mergeType;
                 set
                 {
-                    if (mergeType != value)
+                    if (_mergeType != value)
                     {
-                        mergeType = value;
+                        _mergeType = value;
                         ItemsChanged(Menu.CHANGE_MERGE);
                     }
                 }
@@ -1586,12 +1586,12 @@ namespace System.Windows.Forms
 
             internal int MergeOrder
             {
-                get => mergeOrder;
+                get => _mergeOrder;
                 set
                 {
-                    if (mergeOrder != value)
+                    if (_mergeOrder != value)
                     {
-                        mergeOrder = value;
+                        _mergeOrder = value;
                         ItemsChanged(Menu.CHANGE_MERGE);
                     }
                 }
@@ -1601,25 +1601,25 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (mnemonic == -1)
+                    if (_mnemonic == -1)
                     {
-                        mnemonic = (short)WindowsFormsUtils.GetMnemonic(caption, true);
+                        _mnemonic = (short)WindowsFormsUtils.GetMnemonic(_caption, true);
                     }
 
-                    return (char)mnemonic;
+                    return (char)_mnemonic;
                 }
             }
 
-            internal int State => state;
+            internal int State => _state;
 
             internal bool Visible
             {
-                get => (state & MenuItem.STATE_HIDDEN) == 0;
+                get => (_state & MenuItem.StateHidden) == 0;
                 set
                 {
-                    if (((state & MenuItem.STATE_HIDDEN) == 0) != value)
+                    if (((_state & MenuItem.StateHidden) == 0) != value)
                     {
-                        state = value ? state & ~MenuItem.STATE_HIDDEN : state | MenuItem.STATE_HIDDEN;
+                        _state = value ? _state & ~MenuItem.StateHidden : _state | MenuItem.StateHidden;
                         ItemsChanged(Menu.CHANGE_VISIBLE);
                     }
                 }
@@ -1630,19 +1630,19 @@ namespace System.Windows.Forms
 
             internal void AddItem(MenuItem item)
             {
-                if (item.data != this)
+                if (item._data != this)
                 {
-                    item.data?.RemoveItem(item);
+                    item._data?.RemoveItem(item);
 
-                    item.nextLinkedItem = firstItem;
+                    item._nextLinkedItem = firstItem;
                     firstItem = item;
                     if (baseItem == null)
                     {
                         baseItem = item;
                     }
 
-                    item.data = this;
-                    item.dataVersion = 0;
+                    item._data = this;
+                    item._dataVersion = 0;
                     item.UpdateMenuItem(false);
                 }
             }
@@ -1654,43 +1654,43 @@ namespace System.Windows.Forms
 
             internal int GetMenuID()
             {
-                if (cmd == null)
+                if (_cmd == null)
                 {
-                    cmd = new Command(this);
+                    _cmd = new Command(this);
                 }
 
-                return cmd.ID;
+                return _cmd.ID;
             }
 
             internal void ItemsChanged(int change)
             {
-                for (MenuItem item = firstItem; item != null; item = item.nextLinkedItem)
+                for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                 {
-                    item.menu?.ItemsChanged(change);
+                    item._menu?.ItemsChanged(change);
                 }
             }
 
             internal void RemoveItem(MenuItem item)
             {
-                Debug.Assert(item.data == this, "bad item passed to MenuItemData.removeItem");
+                Debug.Assert(item._data == this, "bad item passed to MenuItemData.removeItem");
 
                 if (item == firstItem)
                 {
-                    firstItem = item.nextLinkedItem;
+                    firstItem = item._nextLinkedItem;
                 }
                 else
                 {
                     MenuItem itemT;
-                    for (itemT = firstItem; item != itemT.nextLinkedItem;)
+                    for (itemT = firstItem; item != itemT._nextLinkedItem;)
                     {
-                        itemT = itemT.nextLinkedItem;
+                        itemT = itemT._nextLinkedItem;
                     }
 
-                    itemT.nextLinkedItem = item.nextLinkedItem;
+                    itemT._nextLinkedItem = item._nextLinkedItem;
                 }
-                item.nextLinkedItem = null;
-                item.data = null;
-                item.dataVersion = 0;
+                item._nextLinkedItem = null;
+                item._data = null;
+                item._dataVersion = 0;
 
                 if (item == baseItem)
                 {
@@ -1701,15 +1701,15 @@ namespace System.Windows.Forms
                 {
                     // No longer needed. Toss all references and the Command object.
                     Debug.Assert(baseItem == null, "why isn't baseItem null?");
-                    onClick = null;
-                    onPopup = null;
-                    onSelect = null;
-                    onDrawItem = null;
-                    onMeasureItem = null;
-                    if (cmd != null)
+                    _onClick = null;
+                    _onPopup = null;
+                    _onSelect = null;
+                    _onDrawItem = null;
+                    _onMeasureItem = null;
+                    if (_cmd != null)
                     {
-                        cmd.Dispose();
-                        cmd = null;
+                        _cmd.Dispose();
+                        _cmd = null;
                     }
                 }
             }
@@ -1721,9 +1721,9 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (!caption.Equals(value))
+                if (!_caption.Equals(value))
                 {
-                    caption = value;
+                    _caption = value;
                     UpdateMenuItems();
                 }
 
@@ -1737,17 +1737,17 @@ namespace System.Windows.Forms
 
             internal void SetState(int flag, bool value)
             {
-                if (((state & flag) != 0) != value)
+                if (((_state & flag) != 0) != value)
                 {
-                    state = value ? state | flag : state & ~flag;
+                    _state = value ? _state | flag : _state & ~flag;
                     UpdateMenuItems();
                 }
             }
 
             internal void UpdateMenuItems()
             {
-                version++;
-                for (MenuItem item = firstItem; item != null; item = item.nextLinkedItem)
+                _version++;
+                for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                 {
                     item.UpdateMenuItem(force: true);
                 }
