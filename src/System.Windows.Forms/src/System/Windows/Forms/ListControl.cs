@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is IList || value is IListSource))
                 {
-                    throw new ArgumentException(SR.BadDataSourceForComplexBinding);
+                    throw new ArgumentException(SR.BadDataSourceForComplexBinding, nameof(value));
                 }
 
                 if (_dataSource == value)
@@ -474,7 +474,7 @@ namespace System.Windows.Forms
 
         protected object FilterItemOnProperty(object item, string field)
         {
-            if (item != null && field.Length > 0)
+            if (item != null && !string.IsNullOrEmpty(field))
             {
                 try
                 {
@@ -671,7 +671,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
-            OnSelectedValueChanged(EventArgs.Empty);
+            OnSelectedValueChanged(e);
         }
 
         protected virtual void OnValueMemberChanged(EventArgs e)
