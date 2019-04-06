@@ -2001,79 +2001,46 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the combo box that starts with the given string.
-        ///     The search is not case sensitive.
+        /// Finds the first item in the combo box that starts with the given string.
+        /// The search is not case sensitive.
         /// </devdoc>
-        public int FindString(string s) {
-            return FindString(s, -1);
+        public int FindString(string s) => FindString(s, startIndex: -1);
+
+        /// <devdoc>
+        /// Finds the first item after the given index which starts with the given string.
+        /// The search is not case sensitive.
+        /// </devdoc>
+        public int FindString(string s, int startIndex)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index which starts with the given
-        ///     string. The search is not case sensitive.
+        /// Finds the first item in the combo box that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindString(string s, int startIndex) {
-            if (s == null) {
-                return -1;
-            }
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRING.
-            // The managed version correctly handles Turkish I.
-            return FindStringInternal(s, Items, startIndex, exact: false, ignoreCase: true);
+        public int FindStringExact(string s) 
+        {
+            return FindStringExact(s, startIndex: -1, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the combo box that matches the given string.
-        ///     The strings must match exactly, except for differences in casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s) {
-            return FindStringExact(s, -1, true);
+        public int FindStringExact(string s, int startIndex)
+        {
+            return FindStringExact(s, startIndex, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s, int startIndex) {
-            return FindStringExact(s, startIndex, true);
-        }
-
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
-        /// </devdoc>
-        internal int FindStringExact(string s, int startIndex, bool ignoreCase) {
-            if (s == null) return -1;
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRINGEXACT.
-            // The managed version correctly handles Turkish I.
-            return FindStringInternal(s, Items, startIndex, exact: true, ignoreCase);
+        internal int FindStringExact(string s, int startIndex, bool ignoreCase)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose

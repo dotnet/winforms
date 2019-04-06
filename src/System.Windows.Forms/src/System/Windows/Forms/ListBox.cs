@@ -1365,71 +1365,34 @@ namespace System.Windows.Forms {
             --updateCount;
         }
 
-        /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.FindString"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the list box that starts with the given string.
-        ///     The search is not case sensitive.
+        /// Finds the first item in the list box that starts with the given string.
+        /// The search is not case sensitive.
         /// </devdoc>
-        public int FindString(string s) {
-            return FindString(s, -1);
+        public int FindString(string s) => FindString(s, startIndex: -1);
+
+        /// <devdoc>
+        /// Finds the first item after the given index which starts with the given string.
+        /// The search is not case sensitive.
+        /// </devdoc>
+        public int FindString(string s, int startIndex)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
-        /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.FindString1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index which starts with the given
-        ///     string. The search is not case sensitive.
+        /// Finds the first item in the list box that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindString(string s, int startIndex) {
-            if (s == null) return -1;
+        public int FindStringExact(string s) => FindStringExact(s, startIndex: -1);
 
-            int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
-
-            if (itemCount == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemCount) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of LB_FINDSTRING.
-            // The managed version correctly handles Turkish I.
-            return FindStringInternal(s, Items, startIndex, exact: false, ignoreCase: true);
-        }
-
-        /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.FindStringExact"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the list box that matches the given string.
-        ///     The strings must match exactly, except for differences in casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match excatly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s) {
-            return FindStringExact(s, -1);
-        }
-
-        /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.FindStringExact1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match excatly, except for differences in
-        ///     casing.
-        /// </devdoc>
-        public int FindStringExact(string s, int startIndex) {
-            if (s == null) return -1;
-
-            int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
-
-            if (itemCount == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemCount) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of LB_FINDSTRING.
-            // The managed version correctly handles Turkish I.
-            return FindStringInternal(s, Items, startIndex, exact: true, ignoreCase: true);
+        public int FindStringExact(string s, int startIndex)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase: true);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.GetItemHeight"]/*' />

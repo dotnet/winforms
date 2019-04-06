@@ -22,19 +22,30 @@ namespace System.Windows.Forms.Tests
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
             Assert.Equal(BorderStyle.Fixed3D, control.BorderStyle);
-            Assert.Equal(new Rectangle(0, 0, 120, 96), control.Bounds);
-            Assert.Equal(new Size(120, 96), control.ClientSize);
-            Assert.Equal(new Rectangle(0, 0, 120, 96), control.ClientRectangle);
+            Assert.Equal(0, control.Bounds.X);
+            Assert.Equal(0, control.Bounds.Y);
+            Assert.Equal(120, control.Bounds.Width);
+            Assert.True(control.Bounds.Height > 0);
+            Assert.True(control.ClientSize.Width > 0);
+            Assert.True(control.ClientSize.Height > 0);
+            Assert.Equal(0, control.ClientRectangle.X);
+            Assert.Equal(0, control.ClientRectangle.Y);
+            Assert.True(control.ClientRectangle.Width > 0);
+            Assert.True(control.ClientRectangle.Height > 0);
             Assert.Equal(0, control.ColumnWidth);
             Assert.Empty(control.CustomTabOffsets);
             Assert.Same(control.CustomTabOffsets, control.CustomTabOffsets);
-            Assert.Equal(new Rectangle(0, 0, 120, 96), control.DisplayRectangle);
+            Assert.Equal(0, control.DisplayRectangle.X);
+            Assert.Equal(0, control.DisplayRectangle.Y);
+            Assert.True(control.DisplayRectangle.Width > 0);
+            Assert.True(control.DisplayRectangle.Height > 0);
             Assert.Null(control.DataManager);
             Assert.Null(control.DataSource);
             Assert.Equal(Size.Empty, control.DefaultMaximumSize);
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
-            Assert.Equal(new Size(120, 96), control.DefaultSize);
+            Assert.Equal(120, control.DefaultSize.Width);
+            Assert.True(control.DefaultSize.Height > 0);
             Assert.Empty(control.DisplayMember);
             Assert.Equal(DrawMode.Normal, control.DrawMode);
             Assert.Null(control.FormatInfo);
@@ -42,7 +53,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.FormattingEnabled);
             Assert.Same(Control.DefaultFont, control.Font);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
-            Assert.Equal(96, control.Height);
+            Assert.True(control.Height > 0);
             Assert.Equal(0, control.HorizontalExtent);
             Assert.False(control.HorizontalScrollbar);
             Assert.True(control.IntegralHeight);
@@ -54,7 +65,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.False(control.MultiColumn);
             Assert.Equal(Padding.Empty, control.Padding);
-            Assert.Equal(new Size(120, 96), control.PreferredSize);
+            Assert.Equal(120, control.PreferredSize.Width);
+            Assert.True(control.PreferredSize.Height > 0);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.False(control.ScrollAlwaysVisible);
             Assert.Null(control.SelectedValue);
@@ -65,7 +77,8 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(control.SelectedItems);
             Assert.Same(control.SelectedItems, control.SelectedItems);
             Assert.Equal(SelectionMode.One, control.SelectionMode);
-            Assert.Equal(new Size(120, 96), control.Size);
+            Assert.Equal(120, control.Size.Width);
+            Assert.True(control.Size.Height > 0);
             Assert.False(control.Sorted);
             Assert.Empty(control.Text);
             Assert.Equal(0, control.TopIndex);
@@ -498,18 +511,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RightToLeft))]
-        public void RightToLeft_Set_GetReturnsExpected(RightToLeft value)
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        public void RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             var control = new ListBox
             {
                 RightToLeft = value
             };
-            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(expected, control.RightToLeft);
 
             // Set same.
             control.RightToLeft = value;
-            Assert.Equal(RightToLeft.No, control.RightToLeft);
+            Assert.Equal(expected, control.RightToLeft);
         }
 
         [Fact]
@@ -527,24 +540,24 @@ namespace System.Windows.Forms.Tests
 
             // Set different.
             control.RightToLeft = RightToLeft.Yes;
-            Assert.Equal(RightToLeft.No, control.RightToLeft);
-            Assert.Equal(0, callCount);
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(1, callCount);
 
             // Set same.
             control.RightToLeft = RightToLeft.Yes;
-            Assert.Equal(RightToLeft.No, control.RightToLeft);
-            Assert.Equal(0, callCount);
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(1, callCount);
 
             // Set different.
             control.RightToLeft = RightToLeft.Inherit;
             Assert.Equal(RightToLeft.No, control.RightToLeft);
-            Assert.Equal(0, callCount);
+            Assert.Equal(2, callCount);
 
             // Remove handler.
             control.RightToLeftChanged -= handler;
             control.RightToLeft = RightToLeft.Yes;
-            Assert.Equal(RightToLeft.No, control.RightToLeft);
-            Assert.Equal(0, callCount);
+            Assert.Equal(RightToLeft.Yes, control.RightToLeft);
+            Assert.Equal(2, callCount);
         }
 
         [Theory]

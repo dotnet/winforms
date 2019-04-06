@@ -1044,21 +1044,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Yes, cont.RightToLeft);
         }
 
-        /// <summary>
-        /// Data for the RightToLeftInvalid test
-        /// </summary>
-        public static TheoryData<RightToLeft> RightToLeftInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<RightToLeft>();
-
         [Theory]
-        [MemberData(nameof(RightToLeftInvalidData))]
-        public void Control_RightToLeftInvalid(RightToLeft expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        public void Control_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var cont = new Control();
-
-            // act & assert
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.RightToLeft = expected);
-            Assert.Equal("RightToLeft", ex.ParamName);
+            var control = new Control();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
         /// <summary>

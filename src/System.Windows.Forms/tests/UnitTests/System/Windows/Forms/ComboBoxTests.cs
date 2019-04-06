@@ -25,17 +25,28 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemColors.Window, control.BackColor);
             Assert.Null(control.BackgroundImage);
             Assert.Equal(ImageLayout.Tile, control.BackgroundImageLayout);
-            Assert.Equal(new Rectangle(0, 0, 121, 33), control.Bounds);
-            Assert.Equal(new Size(121, 33), control.ClientSize);
-            Assert.Equal(new Rectangle(0, 0, 121, 33), control.ClientRectangle);
+            Assert.Equal(0, control.Bounds.X);
+            Assert.Equal(0, control.Bounds.Y);
+            Assert.Equal(121, control.Bounds.Width);
+            Assert.True(control.Bounds.Height > 0);
+            Assert.True(control.ClientSize.Width > 0);
+            Assert.True(control.ClientSize.Height > 0);
+            Assert.Equal(0, control.ClientRectangle.X);
+            Assert.Equal(0, control.ClientRectangle.Y);
+            Assert.True(control.ClientRectangle.Width > 0);
+            Assert.True(control.ClientRectangle.Height > 0);
             Assert.Null(control.DataManager);
             Assert.Null(control.DataSource);
             Assert.Equal(Size.Empty, control.DefaultMaximumSize);
             Assert.Equal(Size.Empty, control.DefaultMinimumSize);
             Assert.Equal(Padding.Empty, control.DefaultPadding);
-            Assert.Equal(new Size(121, 33), control.DefaultSize);
+            Assert.Equal(121, control.DefaultSize.Width);
+            Assert.True(control.DefaultSize.Height > 0);
             Assert.Empty(control.DisplayMember);
-            Assert.Equal(new Rectangle(0, 0, 121, 33), control.DisplayRectangle);
+            Assert.Equal(0, control.DisplayRectangle.X);
+            Assert.Equal(0, control.DisplayRectangle.Y);
+            Assert.True(control.DisplayRectangle.Width > 0);
+            Assert.True(control.DisplayRectangle.Height > 0);
             Assert.Equal(DrawMode.Normal, control.DrawMode);
             Assert.Equal(106, control.DropDownHeight);
             Assert.Equal(ComboBoxStyle.DropDown, control.DropDownStyle);
@@ -48,7 +59,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.FormattingEnabled);
             Assert.Same(Control.DefaultFont, control.Font);
             Assert.Equal(SystemColors.WindowText, control.ForeColor);
-            Assert.Equal(33, control.Height);
+            Assert.True(control.Height > 0);
             Assert.True(control.IntegralHeight);
             Assert.Equal(Control.DefaultFont.Height + 2, control.ItemHeight);
             Assert.Empty(control.Items);
@@ -59,14 +70,16 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, control.MaxLength);
             Assert.Equal(Size.Empty, control.MinimumSize);
             Assert.Equal(Padding.Empty, control.Padding);
-            Assert.Equal(new Size(121, 33), control.PreferredSize);
+            Assert.Equal(121, control.PreferredSize.Width);
+            Assert.True(control.PreferredSize.Height > 0);
             Assert.Equal(RightToLeft.No, control.RightToLeft);
             Assert.Null(control.SelectedValue);
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Null(control.SelectedItem);
             Assert.Empty(control.SelectedText);
-            Assert.Equal(new Size(121, 33), control.Size);
-            Assert.Throws<ArgumentOutOfRangeException>("index", () => control.Text);
+            Assert.Equal(121, control.Size.Width);
+            Assert.True(control.Size.Height > 0);
+            Assert.Empty(control.Text);
             Assert.Equal(0, control.SelectionLength);
             Assert.Equal(0, control.SelectionStart);
             Assert.False(control.Sorted);
@@ -565,20 +578,20 @@ namespace System.Windows.Forms.Tests
             control.Items.Add(new DataClass { Value = "Value2" });
 
             control.SelectedIndex = value;
-            Assert.Equal(value == -1 ? -1 : 1, control.SelectedIndex);
+            Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
             
             // Set same.
             control.SelectedIndex = value;
-            Assert.Equal(value == -1 ? -1 : 1, control.SelectedIndex);
+            Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
         }
 
         [Theory]
         [InlineData(-1, "")]
-        [InlineData(0, "Value2")]
+        [InlineData(0, "Value1")]
         [InlineData(1, "Value2")]
         public void SelectedIndex_SetWithDisplayMember_GetReturnsExpected(int value, string expectedText)
         {
@@ -590,13 +603,13 @@ namespace System.Windows.Forms.Tests
             control.Items.Add(new DataClass { Value = "Value2" });
 
             control.SelectedIndex = value;
-            Assert.Equal(value == -1 ? -1 : 1, control.SelectedIndex);
+            Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
             
             // Set same.
             control.SelectedIndex = value;
-            Assert.Equal(value == -1 ? -1 : 1, control.SelectedIndex);
+            Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
         }
