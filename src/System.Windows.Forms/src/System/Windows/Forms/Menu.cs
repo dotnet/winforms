@@ -570,7 +570,7 @@ namespace System.Windows.Forms {
         internal virtual bool ProcessInitMenuPopup(IntPtr handle) {
             MenuItem item = FindMenuItemInternal(FindHandle, handle);
             if (item != null) {
-                item._OnInitMenuPopup(EventArgs.Empty);
+                item.OnInitMenuPopupInternal(EventArgs.Empty);
                 item.CreateMenuItems();
                 return true;
             }
