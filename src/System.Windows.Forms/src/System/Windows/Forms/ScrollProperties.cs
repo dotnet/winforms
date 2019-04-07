@@ -13,26 +13,26 @@ namespace System.Windows.Forms
     /// </devdoc>
     public abstract class ScrollProperties
     {
-        internal int minimum = 0;
-        internal int maximum = 100;
-        internal int smallChange = 1;
-        internal int largeChange = 10;
-        internal int value = 0;
-        internal bool maximumSetExternally;
-        internal bool smallChangeSetExternally;
-        internal bool largeChangeSetExternally;
+        internal int _minimum = 0;
+        internal int _maximum = 100;
+        internal int _smallChange = 1;
+        internal int _largeChange = 10;
+        internal int _value = 0;
+        internal bool _maximumSetExternally;
+        internal bool _smallChangeSetExternally;
+        internal bool _largeChangeSetExternally;
 
-        private ScrollableControl parent;
+        private ScrollableControl _parent;
 
-        protected ScrollableControl ParentControl => parent;
+        protected ScrollableControl ParentControl => _parent;
 
-        internal bool visible = false;
+        internal bool _visible = false;
 
-        private bool enabled = true;
+        private bool _enabled = true;
 
         protected ScrollProperties(ScrollableControl container)
         {
-            parent = container;
+            _parent = container;
         }
 
         /// <devdoc>
@@ -43,19 +43,19 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ScrollBarEnableDescr))]
         public bool Enabled
         {
-            get => enabled;
+            get => _enabled;
             set
             {
-                if (parent.AutoScroll)
+                if (_parent.AutoScroll)
                 {
                     return;
                 }
 
-                if (value != enabled)
+                if (value != _enabled)
                 {
-                    enabled = value;
+                    _enabled = value;
                     UnsafeNativeMethods.EnableScrollBar(
-                        new HandleRef(parent, parent.Handle),
+                        new HandleRef(_parent, _parent.Handle),
                         Orientation,
                         value ? NativeMethods.ESB_ENABLE_BOTH : NativeMethods.ESB_DISABLE_BOTH
                     );
@@ -79,19 +79,19 @@ namespace System.Windows.Forms
                 // get the value of this property, make sure it's within the maximum allowable value.
                 // This way we ensure that we don't depend on the order of property sets when
                 // code is generated at design-time.
-                return Math.Min(largeChange, maximum - minimum + 1);
+                return Math.Min(_largeChange, _maximum - _minimum + 1);
             }
             set
             {
-                if (largeChange != value)
+                if (_largeChange != value)
                 {
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));
                     }
 
-                    largeChange = value;
-                    largeChangeSetExternally = true;
+                    _largeChange = value;
+                    _largeChangeSetExternally = true;
                     UpdateScrollInfo();
                 }
             }
@@ -106,27 +106,27 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         public int Maximum
         {
-            get => maximum;
+            get => _maximum;
             set
             {
-                if (parent.AutoScroll)
+                if (_parent.AutoScroll)
                 {
                     return;
                 }
 
-                if (maximum != value)
+                if (_maximum != value)
                 {
-                    if (minimum > value)
+                    if (_minimum > value)
                     {
-                        minimum = value;
+                        _minimum = value;
                     }
-                    if (value < this.value)
+                    if (value < this._value)
                     {
                         Value = value;
                     }
 
-                    maximum = value;
-                    maximumSetExternally = true;
+                    _maximum = value;
+                    _maximumSetExternally = true;
                     UpdateScrollInfo();
                 }
             }
@@ -141,31 +141,31 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         public int Minimum
         {
-            get => minimum;
+            get => _minimum;
             set
             {
-                if (parent.AutoScroll)
+                if (_parent.AutoScroll)
                 {
                     return;
                 }
 
-                if (minimum != value)
+                if (_minimum != value)
                 {
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
                     }
 
-                    if (maximum < value)
+                    if (_maximum < value)
                     {
-                        maximum = value;
+                        _maximum = value;
                     }
-                    if (value > this.value)
+                    if (value > this._value)
                     {
-                        this.value = value;
+                        this._value = value;
                     }
 
-                    minimum = value;
+                    _minimum = value;
                     UpdateScrollInfo();
                 }
             }
@@ -193,19 +193,19 @@ namespace System.Windows.Forms
                 // We can't have SmallChange > LargeChange, but we shouldn't manipulate
                 // the set values for these properties, so we just return the smaller 
                 // value here. 
-                return Math.Min(smallChange, LargeChange);
+                return Math.Min(_smallChange, LargeChange);
             }
             set
             {
-                if (smallChange != value)
+                if (_smallChange != value)
                 {
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(SmallChange), value, 0));
                     }
 
-                    smallChange = value;
-                    smallChangeSetExternally = true;
+                    _smallChange = value;
+                    _smallChangeSetExternally = true;
                     UpdateScrollInfo();
                 }
             }
@@ -221,19 +221,19 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ScrollBarValueDescr))]
         public int Value
         {
-            get => value;
+            get => _value;
             set
             {
-                if (this.value != value)
+                if (this._value != value)
                 {
-                    if (value < minimum || value > maximum)
+                    if (value < _minimum || value > _maximum)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
 
-                    this.value = value;
+                    this._value = value;
                     UpdateScrollInfo();
-                    parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
             }
         }
@@ -247,37 +247,37 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ScrollBarVisibleDescr))]
         public bool Visible
         {
-            get => visible;
+            get => _visible;
             set
             {
-                if (parent.AutoScroll)
+                if (_parent.AutoScroll)
                 {
                     return;
                 }
 
-                if (value != visible)
+                if (value != _visible)
                 {
-                    visible = value;
-                    parent.UpdateStylesCore();
+                    _visible = value;
+                    _parent.UpdateStylesCore();
                     UpdateScrollInfo();
-                    parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
+                    _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
             }
         }
 
         internal void UpdateScrollInfo()
         {
-            if (parent.IsHandleCreated && visible)
+            if (_parent.IsHandleCreated && _visible)
             {
                 var si = new NativeMethods.SCROLLINFO();
                 si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
                 si.fMask = NativeMethods.SIF_ALL;
-                si.nMin = minimum;
-                si.nMax = maximum;
-                si.nPage = parent.AutoScroll ? PageSize : LargeChange;
-                si.nPos = value;
+                si.nMin = _minimum;
+                si.nMax = _maximum;
+                si.nPage = _parent.AutoScroll ? PageSize : LargeChange;
+                si.nPos = _value;
                 si.nTrackPos = 0;
-                UnsafeNativeMethods.SetScrollInfo(new HandleRef(parent, parent.Handle), Orientation, si, true);
+                UnsafeNativeMethods.SetScrollInfo(new HandleRef(_parent, _parent.Handle), Orientation, si, true);
             }
         }
     }

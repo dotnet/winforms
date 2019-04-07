@@ -635,10 +635,10 @@ namespace System.Windows.Forms {
             if (displayRect.IsEmpty) {
                 displayRect = ClientRectangle;
             }
-            if (!AutoScroll && this.HorizontalScroll.visible == true) {
+            if (!AutoScroll && this.HorizontalScroll._visible == true) {
                 displayRect = new Rectangle(displayRect.X, displayRect.Y, this.HorizontalScroll.Maximum, this.displayRect.Height); 
             }
-            if (!AutoScroll && this.VerticalScroll.visible == true) {
+            if (!AutoScroll && this.VerticalScroll._visible == true) {
                 displayRect = new Rectangle(displayRect.X, displayRect.Y, this.displayRect.Width, this.VerticalScroll.Maximum); 
             }
             return displayRect;
@@ -1019,8 +1019,8 @@ namespace System.Windows.Forms {
         private void ResetScrollProperties(ScrollProperties scrollProperties) {
             // Set only these two values as when the ScrollBars are not visible ...
             // there is no meaning of the "value" property.
-            scrollProperties.visible = false;
-            scrollProperties.value = 0;
+            scrollProperties._visible = false;
+            scrollProperties._value = 0;
         }
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.SetAutoScrollMargin"]/*' />
@@ -1089,7 +1089,7 @@ namespace System.Windows.Forms {
                 //Update the visible member of ScrollBars....
                 if (horiz)
                 {
-                    HorizontalScroll.visible = true;
+                    HorizontalScroll._visible = true;
                 }
                 else
                 {
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms {
                 }
                 if (vert)
                 {
-                    VerticalScroll.visible = true;
+                    VerticalScroll._visible = true;
                 }
                 else
                 {
@@ -1217,36 +1217,36 @@ namespace System.Windows.Forms {
                 }
                 
                 if (HScroll) {
-                    if (!HorizontalScroll.maximumSetExternally) {
-                        HorizontalScroll.maximum = displayRect.Width-1;
+                    if (!HorizontalScroll._maximumSetExternally) {
+                        HorizontalScroll._maximum = displayRect.Width-1;
                     }
-                    if (!HorizontalScroll.largeChangeSetExternally) {
-                        HorizontalScroll.largeChange = ClientRectangle.Width;
+                    if (!HorizontalScroll._largeChangeSetExternally) {
+                        HorizontalScroll._largeChange = ClientRectangle.Width;
                     }
-                    if (!HorizontalScroll.smallChangeSetExternally) {
-                        HorizontalScroll.smallChange = 5;
+                    if (!HorizontalScroll._smallChangeSetExternally) {
+                        HorizontalScroll._smallChange = 5;
                     }
                     if (resetRTLHScrollValue && !IsMirrored) {
                         resetRTLHScrollValue = false;
                         BeginInvoke(new EventHandler(this.OnSetScrollPosition));
                     }
-                    else if(-displayRect.X >= HorizontalScroll.minimum && -displayRect.X < HorizontalScroll.maximum) {
-                        HorizontalScroll.value = -displayRect.X;
+                    else if(-displayRect.X >= HorizontalScroll._minimum && -displayRect.X < HorizontalScroll._maximum) {
+                        HorizontalScroll._value = -displayRect.X;
                     }                    
                     HorizontalScroll.UpdateScrollInfo ();                    
                 }
                 if (VScroll) {
-                    if (!VerticalScroll.maximumSetExternally) {
-                        VerticalScroll.maximum = displayRect.Height-1;
+                    if (!VerticalScroll._maximumSetExternally) {
+                        VerticalScroll._maximum = displayRect.Height-1;
                     }
-                    if (!VerticalScroll.largeChangeSetExternally) {
-                        VerticalScroll.largeChange = ClientRectangle.Height;
+                    if (!VerticalScroll._largeChangeSetExternally) {
+                        VerticalScroll._largeChange = ClientRectangle.Height;
                     }
-                    if (!VerticalScroll.smallChangeSetExternally) {
-                        VerticalScroll.smallChange = 5;
+                    if (!VerticalScroll._smallChangeSetExternally) {
+                        VerticalScroll._smallChange = 5;
                     }
-                    if (-displayRect.Y >= VerticalScroll.minimum && -displayRect.Y < VerticalScroll.maximum) {
-                        VerticalScroll.value = -displayRect.Y;
+                    if (-displayRect.Y >= VerticalScroll._minimum && -displayRect.Y < VerticalScroll._maximum) {
+                        VerticalScroll._value = -displayRect.Y;
                     }
                     VerticalScroll.UpdateScrollInfo ();                    
                 }

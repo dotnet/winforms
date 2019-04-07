@@ -19,17 +19,17 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Already shipped as public API")]
     public abstract class ScrollBar : Control
     {
-        private static readonly object EVENT_SCROLL = new object();
-        private static readonly object EVENT_VALUECHANGED = new object();
+        private static readonly object s_scrollEvent = new object();
+        private static readonly object s_valueChangedEvent = new object();
 
-        private int minimum = 0;
-        private int maximum = 100;
-        private int smallChange = 1;
-        private int largeChange = 10;
-        private int value = 0;
-        private ScrollOrientation scrollOrientation;
-        private int wheelDelta = 0;
-        private bool scaleScrollBarForDpiChange = true;
+        private int _minimum = 0;
+        private int _maximum = 100;
+        private int _smallChange = 1;
+        private int _largeChange = 10;
+        private int _value = 0;
+        private ScrollOrientation _scrollOrientation;
+        private int _wheelDelta = 0;
+        private bool _scaleScrollBarForDpiChange = true;
 
         /// <devdoc>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.ScrollBar'/> class.
@@ -44,11 +44,11 @@ namespace System.Windows.Forms
 
             if ((CreateParams.Style & NativeMethods.SBS_VERT) != 0)
             {
-                scrollOrientation = ScrollOrientation.VerticalScroll;
+                _scrollOrientation = ScrollOrientation.VerticalScroll;
             }
             else
             {
-                scrollOrientation = ScrollOrientation.HorizontalScroll;
+                _scrollOrientation = ScrollOrientation.HorizontalScroll;
             }
         }
 
@@ -256,11 +256,11 @@ namespace System.Windows.Forms
                 // get the value of this property, make sure it's within the maximum allowable value.
                 // This way we ensure that we don't depend on the order of property sets when
                 // code is generated at design-time.
-                return Math.Min(largeChange, maximum - minimum + 1);
+                return Math.Min(_largeChange, _maximum - _minimum + 1);
             }
             set
             {
-                if (largeChange != value)
+                if (_largeChange != value)
                 {
 
                     if (value < 0)
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));
                     }
 
-                    largeChange = value;
+                    _largeChange = value;
                     UpdateScrollInfo();
                 }
             }
@@ -283,21 +283,21 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         public int Maximum
         {
-            get => maximum;
+            get => _maximum;
             set
             {
-                if (maximum != value)
+                if (_maximum != value)
                 {
-                    if (minimum > value)
+                    if (_minimum > value)
                     {
-                        minimum = value;
+                        _minimum = value;
                     }
-                    if (value < this.value)
+                    if (value < _value)
                     {
                         Value = value;
                     }
 
-                    maximum = value;
+                    _maximum = value;
                     UpdateScrollInfo();
                 }
             }
@@ -312,21 +312,21 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         public int Minimum
         {
-            get => minimum;
+            get => _minimum;
             set
             {
-                if (minimum != value)
+                if (_minimum != value)
                 {
-                    if (maximum < value)
+                    if (_maximum < value)
                     {
-                        maximum = value;
+                        _maximum = value;
                     }
-                    if (value > this.value)
+                    if (value > _value)
                     {
-                        this.value = value;
+                        _value = value;
                     }
 
-                    minimum = value;
+                    _minimum = value;
                     UpdateScrollInfo();
                 }
             }
@@ -346,18 +346,18 @@ namespace System.Windows.Forms
                 // We can't have SmallChange > LargeChange, but we shouldn't manipulate
                 // the set values for these properties, so we just return the smaller
                 // value here.
-                return Math.Min(smallChange, LargeChange);
+                return Math.Min(_smallChange, LargeChange);
             }
             set
             {
-                if (smallChange != value)
+                if (_smallChange != value)
                 {
                     if (value < 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(SmallChange), value, 0));
                     }
 
-                    smallChange = value;
+                    _smallChange = value;
                     UpdateScrollInfo();
                 }
             }
@@ -404,17 +404,17 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ScrollBarValueDescr))]
         public int Value
         {
-            get => value;
+            get => _value;
             set
             {
-                if (this.value != value)
+                if (_value != value)
                 {
-                    if (value < minimum || value > maximum)
+                    if (value < _minimum || value > _maximum)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", "'{nameof(Maximum)}'"));
                     }
 
-                    this.value = value;
+                    _value = value;
                     UpdateScrollInfo();
                     OnValueChanged(EventArgs.Empty);
                 }
@@ -431,8 +431,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlDpiChangeScale))]
         public bool ScaleScrollBarForDpiChange
         {
-            get => scaleScrollBarForDpiChange;
-            set => scaleScrollBarForDpiChange = value;
+            get => _scaleScrollBarForDpiChange;
+            set => _scaleScrollBarForDpiChange = value;
         }
 
         [Browsable(false)]
@@ -557,11 +557,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                Events.AddHandler(EVENT_SCROLL, value);
+                Events.AddHandler(s_scrollEvent, value);
             }
             remove
             {
-                Events.RemoveHandler(EVENT_SCROLL, value);
+                Events.RemoveHandler(s_scrollEvent, value);
             }
         }
 
@@ -576,11 +576,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                Events.AddHandler(EVENT_VALUECHANGED, value);
+                Events.AddHandler(s_valueChangedEvent, value);
             }
             remove
             {
-                Events.RemoveHandler(EVENT_VALUECHANGED, value);
+                Events.RemoveHandler(s_valueChangedEvent, value);
             }
         }
 
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
         protected override Rectangle GetScaledBounds(Rectangle bounds, SizeF factor, BoundsSpecified specified)
         {
             // Adjust Specified for vertical or horizontal scaling
-            if (scrollOrientation == ScrollOrientation.VerticalScroll)
+            if (_scrollOrientation == ScrollOrientation.VerticalScroll)
             {
                 specified &= ~BoundsSpecified.Width;
             }
@@ -633,7 +633,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
-            ScrollEventHandler handler = (ScrollEventHandler)Events[EVENT_SCROLL];
+            ScrollEventHandler handler = (ScrollEventHandler)Events[s_scrollEvent];
             handler?.Invoke(this, se);
         }
 
@@ -646,21 +646,21 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            wheelDelta += e.Delta;
+            _wheelDelta += e.Delta;
 
             bool scrolled = false;
 
-            while (Math.Abs(wheelDelta) >= NativeMethods.WHEEL_DELTA)
+            while (Math.Abs(_wheelDelta) >= NativeMethods.WHEEL_DELTA)
             {
-                if (wheelDelta > 0)
+                if (_wheelDelta > 0)
                 {
-                    wheelDelta -= NativeMethods.WHEEL_DELTA;
+                    _wheelDelta -= NativeMethods.WHEEL_DELTA;
                     DoScroll(ScrollEventType.SmallDecrement);
                     scrolled = true;
                 }
                 else
                 {
-                    wheelDelta += NativeMethods.WHEEL_DELTA;
+                    _wheelDelta += NativeMethods.WHEEL_DELTA;
                     DoScroll(ScrollEventType.SmallIncrement);
                     scrolled = true;
                 }
@@ -687,7 +687,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected virtual void OnValueChanged(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
+            EventHandler handler = (EventHandler)Events[s_valueChangedEvent];
             handler?.Invoke(this, e);
         }
 
@@ -695,7 +695,7 @@ namespace System.Windows.Forms
         {
             if (this is HScrollBar)
             {
-                return minimum + (maximum - LargeChange + 1) - position;
+                return _minimum + (_maximum - LargeChange + 1) - position;
             }
 
             return position;
@@ -714,18 +714,18 @@ namespace System.Windows.Forms
                 var si = new NativeMethods.SCROLLINFO();
                 si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
                 si.fMask = NativeMethods.SIF_ALL;
-                si.nMin = minimum;
-                si.nMax = maximum;
+                si.nMin = _minimum;
+                si.nMax = _maximum;
                 si.nPage = LargeChange;
 
                 if (RightToLeft == RightToLeft.Yes)
                 {
                     // Reflect the scrollbar position horizontally on an Rtl system
-                    si.nPos = ReflectPosition(value);
+                    si.nPos = ReflectPosition(_value);
                 }
                 else
                 {
-                    si.nPos = value;
+                    si.nPos = _value;
                 }
 
                 si.nTrackPos = 0;
@@ -773,8 +773,8 @@ namespace System.Windows.Forms
                 }
             }
 
-            int newValue = value;
-            int oldValue = value;
+            int newValue = _value;
+            int oldValue = _value;
 
             // The ScrollEventArgs constants are defined in terms of the windows
             // messages. This eliminates confusion between the VSCROLL and
@@ -782,27 +782,27 @@ namespace System.Windows.Forms
             switch (type)
             {
                 case ScrollEventType.First:
-                    newValue = minimum;
+                    newValue = _minimum;
                     break;
 
                 case ScrollEventType.Last:
-                    newValue = maximum - LargeChange + 1;
+                    newValue = _maximum - LargeChange + 1;
                     break;
 
                 case ScrollEventType.SmallDecrement:
-                    newValue = Math.Max(value - SmallChange, minimum);
+                    newValue = Math.Max(_value - SmallChange, _minimum);
                     break;
 
                 case ScrollEventType.SmallIncrement:
-                    newValue = Math.Min(value + SmallChange, maximum - LargeChange + 1);
+                    newValue = Math.Min(_value + SmallChange, _maximum - LargeChange + 1);
                     break;
 
                 case ScrollEventType.LargeDecrement:
-                    newValue = Math.Max(value - LargeChange, minimum);
+                    newValue = Math.Max(_value - LargeChange, _minimum);
                     break;
 
                 case ScrollEventType.LargeIncrement:
-                    newValue = Math.Min(value + LargeChange, maximum - LargeChange + 1);
+                    newValue = Math.Min(_value + LargeChange, _maximum - LargeChange + 1);
                     break;
 
                 case ScrollEventType.ThumbPosition:
@@ -823,7 +823,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            var se = new ScrollEventArgs(type, oldValue, newValue, scrollOrientation);
+            var se = new ScrollEventArgs(type, oldValue, newValue, _scrollOrientation);
             OnScroll(se);
             Value = se.NewValue;
         }

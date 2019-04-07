@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
         internal override int Orientation => NativeMethods.SB_HORZ;
 
-        internal override int HorizontalDisplayPosition => -value;
+        internal override int HorizontalDisplayPosition => -_value;
 
         internal override int VerticalDisplayPosition => ParentControl.DisplayRectangle.Y;
     }

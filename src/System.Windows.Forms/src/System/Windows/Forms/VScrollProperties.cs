@@ -19,6 +19,6 @@ namespace System.Windows.Forms
 
         internal override int HorizontalDisplayPosition => ParentControl.DisplayRectangle.X;
 
-        internal override int VerticalDisplayPosition => -value;
+        internal override int VerticalDisplayPosition => -_value;
     }
 }
