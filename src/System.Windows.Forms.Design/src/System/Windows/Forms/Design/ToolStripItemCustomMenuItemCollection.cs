@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Design
             {
                 if (!string.IsNullOrEmpty(imageName))
                 {
-                    item.Image = new Bitmap(BitmapSelector.GetResourceStream(typeof(ToolStripMenuItem), imageName));
+                    item.Image = new Icon(typeof(ToolStripMenuItem), imageName).ToBitmap();
                     item.ImageTransparentColor = Color.Magenta;
                 }
 
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Design
                         editItemsToolStripMenuItem = new ToolStripMenuItem();
                         editItemsToolStripMenuItem.Text = SR.ToolStripDropDownItemCollectionEditorVerb;
                         editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
-                        editItemsToolStripMenuItem.Image = new Bitmap(BitmapSelector.GetResourceStream(typeof(ToolStripMenuItem), "editdropdownlist.bmp"));
+                        editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist.bmp").ToBitmap();
                         editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
                         this.Add(editItemsToolStripMenuItem);
                     }
