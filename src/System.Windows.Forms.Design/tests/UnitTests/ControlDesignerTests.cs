@@ -20,151 +20,159 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void BehaviorServiceProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.GetBehaviorServiceProperty());
+            Assert.NotNull(controlDesigner.GetBehaviorServiceProperty());
         }
 
         [Fact]
         public void AssociatedComponentsProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.AssociatedComponents);
+            Assert.NotNull(controlDesigner.AssociatedComponents);
         }
 
         [Fact]
         public void AccessibilityObjectField()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.AccessibilityObject);
+            Assert.NotNull(controlDesigner.AccessibilityObject);
         }
 
         [Fact]
         public void ControlProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.Control);
+            Assert.NotNull(controlDesigner.Control);
         }
 
         [Fact]
         public void EnableDragRectProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.GetEnableDragRectProperty());
+            Assert.False(controlDesigner.GetEnableDragRectProperty());
         }
 
         [Fact]
         public void ParentComponentProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.GetParentComponentProperty());
+            Assert.NotNull(controlDesigner.GetParentComponentProperty());
         }
         
         [Fact]
         public void ParticipatesWithSnapLinesProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.ParticipatesWithSnapLines);
+            Assert.True(controlDesigner.ParticipatesWithSnapLines);
         }
 
         [Fact]
         public void AutoResizeHandlesProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.AutoResizeHandles = true);
-            Assert.Throws<NotImplementedException>(() => controlDesigner.AutoResizeHandles);
+            Assert.True(controlDesigner.AutoResizeHandles = true);
+            Assert.True(controlDesigner.AutoResizeHandles);
         }
 
         [Fact]
         public void SelectionRulesProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.SelectionRules);
-        }
-
-        [Fact]
-        public void SnapLinesProperty()
-        {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.SnapLines);
+            Assert.Equal(SelectionRules.Visible ,controlDesigner.SelectionRules);
         }
 
         [Fact]
         public void InheritanceAttributeProperty()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.GetInheritanceAttributeProperty());
+            Assert.NotNull(controlDesigner.GetInheritanceAttributeProperty());
         }
 
         [Fact]
         public void NumberOfInternalControlDesignersTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.NumberOfInternalControlDesigners());
+            Assert.Equal(0, controlDesigner.NumberOfInternalControlDesigners());
         }
 
         [Fact]
         public void InternalControlDesignerTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.InternalControlDesigner(1));
+            Assert.NotNull(controlDesigner.InternalControlDesigner(1));
         }
 
         [Fact]
         public void BaseWndProcTest()
         {
             Message m = default;
-            Assert.Throws<NotImplementedException>(() => controlDesigner.BaseWndProcMethod(ref m));
+            try
+            {
+                controlDesigner.BaseWndProcMethod(ref m);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void CanBeParentedToTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.CanBeParentedTo(new ParentControlDesigner()));
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
+            Assert.True(controlDesigner.CanBeParentedTo(new ParentControlDesigner()));
         }
 
         [Fact]
         public void DefWndProcTest()
         {
             Message m = default;
-            Assert.Throws<NotImplementedException>(() => controlDesigner.DefWndProcMethod(ref m));
+            try
+            {
+                controlDesigner.DefWndProcMethod(ref m);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void DisplayErrorTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.DisplayErrorMethod(new Exception()));
+            try
+            {
+                controlDesigner.DisplayErrorMethod(new Exception());
+                controlDesigner.InitializeExistingComponent(null);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
-               
-        /// <summary>
-        /// Bool data
-        /// </summary>
-        public static TheoryData BoolData => CommonTestHelper.GetBoolTheoryData();
 
-        [Theory]
-        [MemberData(nameof(BoolData))]
-        public void DisposeTest(bool val)
+        [Fact]
+        public void DisposeTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.DisposeMethod(val));
+            try
+            {
+                controlDesigner.DisposeMethod(true);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void EnableDesignModeTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.EnableDesignModeMethod(null, "fake"));
+            Assert.True(controlDesigner.EnableDesignModeMethod(null, "fake"));
         }
+
+        public static TheoryData BoolData => CommonTestHelper.GetBoolTheoryData();
 
         [Theory]
         [MemberData(nameof(BoolData))]
         public void EnableDragDropTest(bool val)
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.EnableDragDropMethod(val));
-        }
-
-        /// <summary>
-        /// Data for the GlyphSelectionType enum
-        /// </summary>
-        public static TheoryData<Behavior.GlyphSelectionType> GlyphSelectionTypeData =>
-                        CommonTestHelper.GetEnumTheoryData<Behavior.GlyphSelectionType>();
-
-        [Theory]
-        [MemberData(nameof(GlyphSelectionTypeData))]
-        public void GetControlGlyphTest(Behavior.GlyphSelectionType glyphSelectionType)
-        {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.GetControlGlyphMethod(glyphSelectionType));
-        }
-        
-        [Theory]
-        [MemberData(nameof(GlyphSelectionTypeData))]
-        public void GetGlyphsTest(Behavior.GlyphSelectionType glyphSelectionType)
-        {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.GetGlyphs(glyphSelectionType));
+            try
+            {
+                controlDesigner.EnableDragDropMethod(val);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
@@ -176,45 +184,105 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void HookChildControlsTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.HookChildControlsMethod(null));
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
+            try
+            {
+
+                controlDesigner.HookChildControlsMethod(new Control());
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void InitializeTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.Initialize(null));
+            try
+            {
+                controlDesigner.Initialize(null);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void InitializeExistingComponentTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.InitializeExistingComponent(null));
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
+            try
+            {
+                controlDesigner.InitializeExistingComponent(null);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void InitializeNewComponentTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.InitializeNewComponent(null));
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
+            try
+            {
+                controlDesigner.InitializeNewComponent(null);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void OnSetComponentDefaultsTest()
         {
 #pragma warning disable 618
-            Assert.Throws<NotImplementedException>(() => controlDesigner.OnSetComponentDefaults());
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
+            try
+            {
+                controlDesigner.OnSetComponentDefaults();
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
 #pragma warning restore 618
         }
 
         [Fact]
         public void OnContextMenuTest()
         {
-            Assert.Null(Record.Exception(() => controlDesigner.OnContextMenuMethod(0, 0)));
+            try
+            {
+                controlDesigner.OnContextMenuMethod(0, 0);
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
 
         [Fact]
         public void OnCreateHandleTest()
         {
-            Assert.Throws<NotImplementedException>(() => controlDesigner.OnCreateHandleMethod());
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
+            try
+            {
+                controlDesigner.OnCreateHandleMethod();
+            }
+            catch (Exception ex)
+            {
+                Assert.True(false, "Expected no exception, but got: " + ex.Message);
+            }
         }
     }
 }
