@@ -15,12 +15,15 @@ namespace System.Drawing.Design
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Drawing.Design.ToolboxComponentsCreatingEventArgs'/> object.
         /// </summary>
-        public ToolboxComponentsCreatingEventArgs(IDesignerHost host) => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public ToolboxComponentsCreatingEventArgs(IDesignerHost host)
+        {
+            DesignerHost = host;
+        }
         
         /// <summary>
         /// An instance of IDesignerHost that has made the creat request.
         /// This can be null if no designer host was provided to the toolbox item.
         /// </summary>
-        public IDesignerHost DesignerHost => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public IDesignerHost DesignerHost { get; }
     }
 }

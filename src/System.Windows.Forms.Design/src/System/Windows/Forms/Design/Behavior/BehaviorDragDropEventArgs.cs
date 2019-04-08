@@ -14,12 +14,12 @@ namespace System.Windows.Forms.Design.Behavior
     {
         public BehaviorDragDropEventArgs(ICollection dragComponents)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            DragComponents = dragComponents;
         }
 
         /// <summary>
         /// Returns the list of IComponents currently being dragged.
         /// </summary>
-        public ICollection DragComponents => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public ICollection DragComponents { get; }
     }
 }
