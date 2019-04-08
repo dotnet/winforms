@@ -69,10 +69,12 @@ namespace System.Windows.Forms.Tests
         public void DataFormats_GetFormat_InvokeKnownString_ReturnsExpected(string format, string expectedName, int expectedId)
         {
             DataFormats.Format result = DataFormats.GetFormat(format);
-            Assert.Same(result, DataFormats.GetFormat(format));
             Assert.Same(result, DataFormats.GetFormat(format.ToLower()));
             Assert.Equal(expectedName, result.Name);
             Assert.Equal(expectedId, result.Id);
+
+            // Call again to test caching behavior.
+            Assert.Same(result, DataFormats.GetFormat(format));
         }
 
         public static IEnumerable<object[]> GetFormat_UnknownString_TestData()
@@ -93,6 +95,10 @@ namespace System.Windows.Forms.Tests
             Assert.Same(result, DataFormats.GetFormat(format));
             Assert.Same(result, DataFormats.GetFormat(format.ToLower()));
             Assert.Equal(expectedName, result.Name);
+
+            // Internally the format is registered with RegisterClipboardFormat.
+            // According to the documentation: "Registered clipboard formats are
+            // identified by values in the range 0xC000 through 0xFFFF."
             Assert.True(result.Id >= 0xC000);
             Assert.True(result.Id < 0xFFFF);
 
