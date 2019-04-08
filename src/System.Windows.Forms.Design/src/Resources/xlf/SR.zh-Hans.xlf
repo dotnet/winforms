@@ -549,7 +549,7 @@
       </trans-unit>
       <trans-unit id="SerializerBadElementTypes">
         <source>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</source>
-        <target state="new">Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</target>
+        <target state="translated">不支持类型为 {0} 的元素。序列化程序要求元素为以下某项: {1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerFieldTargetEvalFailed">
