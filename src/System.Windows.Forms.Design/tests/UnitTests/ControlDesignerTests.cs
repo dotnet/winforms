@@ -9,59 +9,45 @@ namespace System.Windows.Forms.Design.Tests
 {
     public class ControlDesignerTests
     {
-        internal MockControlDesigner controlDesigner = new MockControlDesigner();
-
         [Fact]
         public void AccessibleObjectField()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.Null(controlDesigner.GetAccessibleObjectField());
         }
 
         [Fact]
         public void BehaviorServiceProperty()
         {
-            Assert.NotNull(controlDesigner.GetBehaviorServiceProperty());
-        }
-
-        [Fact]
-        public void AssociatedComponentsProperty()
-        {
-            Assert.NotNull(controlDesigner.AssociatedComponents);
+            MockControlDesigner controlDesigner = new MockControlDesigner();
+            Assert.Null(controlDesigner.GetBehaviorServiceProperty());
         }
 
         [Fact]
         public void AccessibilityObjectField()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.NotNull(controlDesigner.AccessibilityObject);
-        }
-
-        [Fact]
-        public void ControlProperty()
-        {
-            Assert.NotNull(controlDesigner.Control);
         }
 
         [Fact]
         public void EnableDragRectProperty()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.False(controlDesigner.GetEnableDragRectProperty());
-        }
-
-        [Fact]
-        public void ParentComponentProperty()
-        {
-            Assert.NotNull(controlDesigner.GetParentComponentProperty());
         }
         
         [Fact]
         public void ParticipatesWithSnapLinesProperty()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.True(controlDesigner.ParticipatesWithSnapLines);
         }
 
         [Fact]
         public void AutoResizeHandlesProperty()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.True(controlDesigner.AutoResizeHandles = true);
             Assert.True(controlDesigner.AutoResizeHandles);
         }
@@ -69,30 +55,30 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void SelectionRulesProperty()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.Equal(SelectionRules.Visible ,controlDesigner.SelectionRules);
         }
 
         [Fact]
         public void InheritanceAttributeProperty()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
+            Assert.NotNull(controlDesigner);
+            controlDesigner.Initialize(new Button());
             Assert.NotNull(controlDesigner.GetInheritanceAttributeProperty());
         }
 
         [Fact]
         public void NumberOfInternalControlDesignersTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.Equal(0, controlDesigner.NumberOfInternalControlDesigners());
-        }
-
-        [Fact]
-        public void InternalControlDesignerTest()
-        {
-            Assert.NotNull(controlDesigner.InternalControlDesigner(1));
         }
 
         [Fact]
         public void BaseWndProcTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Message m = default;
             try
             {
@@ -107,56 +93,10 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void CanBeParentedToTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             Assert.True(controlDesigner.CanBeParentedTo(new ParentControlDesigner()));
-        }
-
-        [Fact]
-        public void DefWndProcTest()
-        {
-            Message m = default;
-            try
-            {
-                controlDesigner.DefWndProcMethod(ref m);
-            }
-            catch (Exception ex)
-            {
-                Assert.True(false, "Expected no exception, but got: " + ex.Message);
-            }
-        }
-
-        [Fact]
-        public void DisplayErrorTest()
-        {
-            try
-            {
-                controlDesigner.DisplayErrorMethod(new Exception());
-                controlDesigner.InitializeExistingComponent(null);
-            }
-            catch (Exception ex)
-            {
-                Assert.True(false, "Expected no exception, but got: " + ex.Message);
-            }
-        }
-
-        [Fact]
-        public void DisposeTest()
-        {
-            try
-            {
-                controlDesigner.DisposeMethod(true);
-            }
-            catch (Exception ex)
-            {
-                Assert.True(false, "Expected no exception, but got: " + ex.Message);
-            }
-        }
-
-        [Fact]
-        public void EnableDesignModeTest()
-        {
-            Assert.True(controlDesigner.EnableDesignModeMethod(null, "fake"));
         }
 
         public static TheoryData BoolData => CommonTestHelper.GetBoolTheoryData();
@@ -165,6 +105,7 @@ namespace System.Windows.Forms.Design.Tests
         [MemberData(nameof(BoolData))]
         public void EnableDragDropTest(bool val)
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             try
             {
                 controlDesigner.EnableDragDropMethod(val);
@@ -178,12 +119,14 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void GetHitTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.False(controlDesigner.GetHitTestMethod(new Drawing.Point()));
         }
 
         [Fact]
         public void HookChildControlsTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             try
@@ -200,24 +143,10 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void InitializeTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             try
             {
-                controlDesigner.Initialize(null);
-            }
-            catch (Exception ex)
-            {
-                Assert.True(false, "Expected no exception, but got: " + ex.Message);
-            }
-        }
-
-        [Fact]
-        public void InitializeExistingComponentTest()
-        {
-            Assert.NotNull(controlDesigner);
-            controlDesigner.Initialize(new Button());
-            try
-            {
-                controlDesigner.InitializeExistingComponent(null);
+                controlDesigner.Initialize(new Button());
             }
             catch (Exception ex)
             {
@@ -228,6 +157,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void InitializeNewComponentTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             try
@@ -243,6 +173,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnSetComponentDefaultsTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
 #pragma warning disable 618
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
@@ -260,6 +191,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnContextMenuTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             try
             {
                 controlDesigner.OnContextMenuMethod(0, 0);
@@ -273,6 +205,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnCreateHandleTest()
         {
+            MockControlDesigner controlDesigner = new MockControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             try
