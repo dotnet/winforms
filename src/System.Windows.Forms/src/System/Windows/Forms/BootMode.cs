@@ -1,45 +1,28 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    /// <include file='doc\BootMode.uex' path='docs/doc[@for="BootMode"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the mode to start the computer
-    ///       in.
-    ///    </para>
+    /// Specifies the mode to start the computer in.
     /// </devdoc>
-    public enum BootMode {
-        /// <include file='doc\BootMode.uex' path='docs/doc[@for="BootMode.Normal"]/*' />
+    public enum BootMode
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Starts the computer in standard mode.
-        ///    </para>
+        /// Starts the computer in standard mode.
         /// </devdoc>
         Normal = 0,
-        /// <include file='doc\BootMode.uex' path='docs/doc[@for="BootMode.FailSafe"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       Starts the computer by using only the basic
-        ///       files and
-        ///       drivers.
-        ///    </para>
+        /// Starts the computer by using only the basic files and drivers.
         /// </devdoc>
         FailSafe = 1,
-        /// <include file='doc\BootMode.uex' path='docs/doc[@for="BootMode.FailSafeWithNetwork"]/*' />
+
         /// <devdoc>
-        ///    <para>
-        ///       Starts the computer by using the basic files, drivers and
-        ///       the services and drivers
-        ///       necessary to start networking.
-        ///    </para>
+        /// Starts the computer by using the basic files, drivers and the services
+        /// and drivers necessary to start networking.
         /// </devdoc>
         FailSafeWithNetwork = 2,
     }
 }
-

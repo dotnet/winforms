@@ -1,87 +1,50 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Runtime.InteropServices;
 
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-    using System.Drawing;
-
-    /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the border styles for a form.
-    ///    </para>
+    /// Specifies the border styles for a form.
     /// </devdoc>
-    [System.Runtime.InteropServices.ComVisible(true)]
-    public enum FormBorderStyle {
-
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.None"]/*' />
+    [ComVisible(true)]
+    public enum FormBorderStyle
+    {
         /// <devdoc>
-        ///    <para>
-        ///       No border.
-        ///
-        ///    </para>
+        /// No border.
         /// </devdoc>
         None = 0,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.FixedSingle"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       A fixed, single line border.
-        ///
-        ///    </para>
+        /// A fixed, single line border.
         /// </devdoc>
         FixedSingle = 1,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.Fixed3D"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       A fixed, three-dimensional border.
-        ///       
-        ///    </para>
+        /// A fixed, three-dimensional border.
         /// </devdoc>
         Fixed3D = 2,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.FixedDialog"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       A thick, fixed dialog-style border.
-        ///
-        ///    </para>
+        /// A thick, fixed dialog-style border.
         /// </devdoc>
         FixedDialog = 3,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.Sizable"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       A resizable border.
-        ///       
-        ///    </para>
+        /// A resizable border.
         /// </devdoc>
         Sizable = 4,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.FixedToolWindow"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       A tool window border
-        ///       that is not resizable.
-        ///    </para>
+        /// A tool window border that is not resizable.
         /// </devdoc>
         FixedToolWindow = 5,
 
-        /// <include file='doc\FormBorderStyle.uex' path='docs/doc[@for="FormBorderStyle.SizableToolWindow"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       A resizable tool window border.
-        ///       
-        ///    </para>
+        /// A resizable tool window border.
         /// </devdoc>
         SizableToolWindow = 6,
-
     }
 }

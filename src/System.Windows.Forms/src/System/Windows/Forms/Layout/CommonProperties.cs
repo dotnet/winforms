@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -545,7 +545,6 @@ namespace System.Windows.Forms.Layout {
 
             SetLayoutState(element, state);
 
-            Debug.Assert(xGetAnchor(element) == value, "Error detected setting Anchor.");
             Debug.Assert(GetLayoutState(element)[_dockModeSection] == (int) DockAnchorMode.Anchor,
                 "xSetAnchor did not set mode to Anchor.");
         }   

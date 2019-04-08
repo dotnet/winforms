@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,12 +13,6 @@ namespace System.Windows.Forms{
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32;
     using System.Runtime.InteropServices;
-
-    /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="IDataGridColumnStyleEditingNotificationService"]/*' />
-    public interface IDataGridColumnStyleEditingNotificationService {
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing"]/*' />
-        void ColumnStartedEditing(Control editingControl);
-    }
 
     /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle"]/*' />
     /// <devdoc>

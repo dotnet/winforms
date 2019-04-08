@@ -2,6 +2,251 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="es" original="../SR.resx">
     <body>
+      <trans-unit id="BehaviorServiceCopyControl">
+        <source>Copy and move {0}</source>
+        <target state="new">Copy and move {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceCopyControls">
+        <source>Copy and move {0} Controls</source>
+        <target state="new">Copy and move {0} Controls</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControl">
+        <source>Move {0}</source>
+        <target state="new">Move {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControls">
+        <source>Move {0} Controls</source>
+        <target state="new">Move {0} Controls</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
+        <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
+        <target state="translated">El almacén de serialización está cerrado. No se pueden agregar nuevos objetos a un almacén cerrado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
+        <source>Complete deserialization of {0} failed.</source>
+        <target state="translated">Error al completar la deserialización de {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
+        <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
+        <target state="translated">No se admite este tipo de almacén de serialización. Utilice un almacén devuelto por el método CreateStore.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComponentDesignerAddEvent">
+        <source>Adding event '{0}'</source>
+        <target state="translated">Agregando un evento '{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="COM2UnhandledVT">
+        <source>Unhandled VT: {0}.</source>
+        <target state="translated">VT no controlado: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">No se puede convertir double en date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">No se puede convertir integer en float.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignByPrimary">
+        <source>Format {0} components (alignment)</source>
+        <target state="new">Format {0} components (alignment)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignToGrid">
+        <source>Align {0} components to grid</source>
+        <target state="new">Align {0} components to grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetCutMultiple">
+        <source>Cut {0} Components</source>
+        <target state="new">Cut {0} Components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetDelete">
+        <source>Delete {0} components</source>
+        <target state="new">Delete {0} components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetError">
+        <source>An error occurred while processing this command.\r\n{0}</source>
+        <target state="new">An error occurred while processing this command.\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetFormatSpacing">
+        <source>Format {0} components (spacing)</source>
+        <target state="new">Format {0} components (spacing)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetPaste">
+        <source>Paste components</source>
+        <target state="new">Paste components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSize">
+        <source>Size {0} components</source>
+        <target state="new">Size {0} components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSizeToGrid">
+        <source>Size {0} components to grid</source>
+        <target state="new">Size {0} components to grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetUnknownSpacingCommand">
+        <source>Unknown spacing command</source>
+        <target state="new">Unknown spacing command</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
+        <source>Could not convert value '{0}' to the type '{1}'.</source>
+        <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
+        <source>Could not find method '{0}'.</source>
+        <target state="new">Could not find method '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
+        <source>Could not find property '{0}' on '{1}'.</source>
+        <target state="new">Could not find property '{0}' on '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
+        <source>{0} Tasks</source>
+        <target state="new">{0} Tasks</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
+        <source>Error using the dropdown: {0}</source>
+        <target state="new">Error using the dropdown: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
+        <source>Error invoking '{0}'.  Details: {1}</source>
+        <target state="new">Error invoking '{0}'.  Details: {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorSettingValue">
+        <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
+        <target state="new">Error setting value '{0}' to property '{1}'.  Details: {2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerBeginDragNotCalled">
+        <source>Call to BeginDrag must succeed before calling drag functions.</source>
+        <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInherited">
+        <source>Inherited control</source>
+        <target state="new">Inherited control</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInheritedReadOnly">
+        <source>Inherited control (Private)</source>
+        <target state="new">Inherited control (Private)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceContainerDispose">
+        <source>The container cannot be disposed at design time.</source>
+        <target state="translated">El contenedor no se puede desechar en tiempo de diseño.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceDesignerNotLoaded">
+        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
+        <target state="translated">No se puede crear una vista para esta superficie de diseño porque el diseñador no está cargado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceFatalError">
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
+        <target state="translated">Error al cargar el documento. Corrija el error y, a continuación, intente volver a cargar el documento. Mensaje de error:\r\n\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoRootComponent">
+        <source>The designer loader did not provide a root component but has not indicated why.</source>
+        <target state="translated">El cargador del diseñador no proporcionó un componente de raíz pero no ha indicado por qué.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoSupportedTechnology">
+        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
+        <target state="translated">El diseñador está cargado, pero no ofrece una vista compatible con esta superficie de diseño.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceServiceIsFixed">
+        <source>The service {0} cannot be removed from the service container.</source>
+        <target state="translated">No se puede eliminar el servicio {0} del contenedor de servicios.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostCantDestroyInheritedComponent">
+        <source>Cannot remove or destroy inherited component '{0}'.</source>
+        <target state="translated">No se puede quitar ni destruir un componente '{0}' heredado.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostCyclicAdd">
+        <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
+        <target state="translated">No se puede agregar una instancia de {0} al diseñador porque crearía una dependencia circular. Asegúrese de que el tipo no tiene el mismo espacio de nombres y el mismo nombre de tipo que el componente raíz {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDesignerNeedsComponent">
+        <source>Failure initializing the designer.  It has no Component member.</source>
+        <target state="translated">Error al inicializar el diseñador. No tiene ningún miembro de componente.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDestroyComponentTransaction">
+        <source>Deleting '{0}'.</source>
+        <target state="translated">Eliminando "{0}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDuplicateName">
+        <source>The name {0} is already in use by another component.</source>
+        <target state="translated">Ya hay otro componente que utiliza el nombre {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostFailedComponentCreate">
+        <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
+        <target state="translated">No se pudo crear el componente del tipo {0}. Asegúrese de que el tipo implementa a IComponent y proporciona un constructor público apropiado. Los constructores apropiados no toman ningún parámetro o toman un único parámetro IContainer.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostGenericTransactionName">
+        <source>No Description Available</source>
+        <target state="translated">No hay ninguna descripción disponible</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostLoaderSpecified">
+        <source>A designer loader has already been configured for this design surface.</source>
+        <target state="translated">Ya hay un cargador de diseñador configurado para esta superficie de diseño.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNestedTransaction">
+        <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
+        <target state="translated">La transacción del diseñador '{0}' no se puede confirmar ni cancelar porque la transacción anidada '{1}' todavía está activa. Primero, confirme o cancele la transacción anidada.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNoBaseClass">
+        <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
+        <target state="translated">No se puede abrir un diseñador para el archivo porque la clase que contiene no hereda de una clase que se pueda diseñar visualmente.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNoTopLevelDesigner">
+        <source>There is no designer for the class {0}.</source>
+        <target state="translated">No hay ningún diseñador para la clase {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostUnloading">
+        <source>New components cannot be added while a designer is unloading.</source>
+        <target state="translated">No se pueden agregar nuevos componentes mientras un diseñador está descargando.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
         <target state="translated">Generación de código optimizado</target>
@@ -92,9 +337,49 @@
         <target state="translated">Controla si los diseñadores deberían utilizar líneas de ajuste. Si es true, las líneas de ajuste se utilizarán como guías. Si es false, se utilizarán líneas de cuadrícula.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DotNET_ComponentType">
+        <source>.NET Component</source>
+        <target state="translated">Componente .NET</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropDragComponents">
+        <source>Drag {0} components</source>
+        <target state="new">Drag {0} components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponent">
+        <source>Move {0}</source>
+        <target state="new">Move {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponents">
+        <source>Move {0} components</source>
+        <target state="new">Move {0} components</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
         <target state="translated">IDataObject no es compatible con SetData.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExtenderProviderServiceDuplicateProvider">
+        <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
+        <target state="translated">El proveedor extensor {0} ya se ha agregado como extensor. Si agrega otro habría propiedades duplicadas.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InheritanceServiceReadOnlyCollection">
+        <source>Read-Only</source>
+        <target state="translated">Solo lectura</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponent">
+        <source>Size {0}</source>
+        <target state="new">Size {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponents">
+        <source>Size {0} components</source>
+        <target state="new">Size {0} components</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -105,6 +390,226 @@
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Winforms Designer no se admite en esta plataforma.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
+        <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
+      </trans-unit>
+      <trans-unit id="SerializationManagerAreadyInSession">
+        <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
+        <target state="translated">No puede crear una nueva sesión porque este administrador de serialización ya tiene una sesión de serialización activa.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerDuplicateComponentDecl">
+        <source>Duplicate declaration of member '{0}'</source>
+        <target state="translated">Declaración duplicada del miembro '{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNameInUse">
+        <source>The name '{0}' is already used by another object.</source>
+        <target state="translated">El nombre '{0}' ya está en uso por otro objeto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoMatchingCtor">
+        <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
+        <target state="translated">El tipo '{0}' no tiene un constructor con parámetros de los tipos {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoSession">
+        <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
+        <target state="translated">Este método no se puede invocar porque el administrador de serialización no tiene una sesión de serialización activa.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerObjectHasName">
+        <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
+        <target state="translated">No se puede asignar el nombre '{0}' al objeto porque ya tiene el nombre '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerWithinSession">
+        <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
+        <target state="translated">Este método no se puede invocar porque el administrador de serialización tiene una sesión de serialización activa.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerBadElementTypes">
+        <source>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</source>
+        <target state="translated">No se admiten elementos de tipo {0}. El serializador espera que el elemento sea uno de los siguientes: {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerFieldTargetEvalFailed">
+        <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
+        <target state="translated">No se pudo encontrar el campo '{0}' en el objeto de destino. Asegúrese de que el campo está definido como una variable de instancia en el objeto de destino y de que tiene el ámbito correcto.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerInvalidArrayRank">
+        <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
+        <target state="translated">El rango de matriz '{0}' es demasiado alto. Visual Studio sólo puede guardar y cargar matrices con un rango de 1.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerLostStatements">
+        <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
+        <target state="translated">Durante la serialización se perdieron las instrucciones de código del objeto '{0}'. Esto puede haber sido el resultado del comportamiento erróneo de otro objeto durante la serialización.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerMemberTypeNotSerializable">
+        <source>Members of type '{0}' cannot be serialized.</source>
+        <target state="translated">Los miembros del tipo '{0}' no se pueden serializar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoRootExpression">
+        <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
+        <target state="translated">El código de origen contiene una referencia a la definición de clase, pero no se logra encontrar la definición de clase.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSerializerForComponent">
+        <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
+        <target state="translated">El objeto '{0}' no se pudo serializar a sí mismo. Quizá no admita la generación de código.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchEvent">
+        <source>The type '{0}' has no event named '{1}'.</source>
+        <target state="translated">El tipo '{0}' no tiene ningún evento denominado '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchField">
+        <source>The type '{0}' has no field named '{1}'.</source>
+        <target state="translated">El tipo '{0}' no tiene ningún campo denominado '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchProperty">
+        <source>The type '{0}' has no property named '{1}'.</source>
+        <target state="translated">El tipo '{0}' no tiene ninguna propiedad denominada '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceException">
+        <source>Error reading resources from the resource file for the culture {0}: {1}</source>
+        <target state="translated">Error al leer los recursos del archivo de recursos para la referencia cultural {0}: {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceExceptionInvariant">
+        <source>Error reading resources from the resource file for the default culture: {0}</source>
+        <target state="translated">Error al leer los recursos del archivo de recursos para la referencia cultural predeterminada: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerTypeNotFound">
+        <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
+        <target state="translated">No se encuentra el tipo '{0}'. Asegúrese de que se hace referencia al ensamblado que contiene este tipo. Si el tipo forma parte de su proyecto de desarrollo, asegúrese de que el proyecto se haya compilado correctamente con el valor de la plataforma actual o Cualquier CPU.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerUndeclaredName">
+        <source>The variable '{0}' is either undeclared or was never assigned.</source>
+        <target state="translated">La variable '{0}' no está declarada o no se asignó nunca.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemInvalidKey">
+        <source>Argument should be a non-empty string.</source>
+        <target state="translated">El argumento no debe ser una cadena vacía.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemInvalidPropertyType">
+        <source>Property {0} requires an argument of type {1}.</source>
+        <target state="translated">La propiedad {0} requiere un argumento de tipo {1}."</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemLocked">
+        <source>Toolbox item cannot be modified.</source>
+        <target state="translated">El elemento del cuadro de herramientas no se puede modificar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemValueNotSerializable">
+        <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
+        <target state="translated">El tipo de datos {0} no se puede serializar. Los elementos agregados a un diccionario de propiedades deben ser serializables.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TypeNotFoundInTargetFramework">
+        <source>Type '{0}' is not available in the target framework.</source>
+        <target state="translated">El tipo "{0}" no está disponible en la plataforma de destino.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd0">
+        <source>Add Component</source>
+        <target state="translated">Agregar componente</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd1">
+        <source>Add {0}</source>
+        <target state="translated">Agregar {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange0">
+        <source>Change Component</source>
+        <target state="translated">Cambiar componente</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange1">
+        <source>Change {0}</source>
+        <target state="translated">Cambiar {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange2">
+        <source>Change {0}.{1}</source>
+        <target state="translated">Cambiar {0}.{1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove0">
+        <source>Remove Component</source>
+        <target state="translated">Quitar componente</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove1">
+        <source>Remove {0}</source>
+        <target state="translated">Quitar {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRename">
+        <source>Rename {0} to {1}</source>
+        <target state="translated">Cambiar nombre de {0} a {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="translated">El servicio {0} es obligatorio pero no se pudo encontrar. Si ha quitado este servicio, asegúrese de proporcionar un reemplazo.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayAutoArrange">
+        <source>Auto Arrange Tray Icons</source>
+        <target state="new">Auto Arrange Tray Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayLineUpIcons">
+        <source>Line Up Tray Icons</source>
+        <target state="new">Line Up Tray Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayShowLargeIcons">
+        <source>Show Large or Small Icons</source>
+        <target state="new">Show Large or Small Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UIServiceHelper_ErrorCaption">
+        <source>Error</source>
+        <target state="new">Error</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UnsafeNativeMethodsNotImplemented">
+        <source>Not implemented.</source>
+        <target state="translated">Sin implementar.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsAddEvent">
+        <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
+        <target state="new">&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterX">
+        <source>Horizontal center of {0} component(s)</source>
+        <target state="new">Horizontal center of {0} component(s)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterY">
+        <source>Vertical center of {0} component(s)</source>
+        <target state="new">Vertical center of {0} component(s)</target>
         <note />
       </trans-unit>
     </body>

@@ -1,48 +1,29 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies whether any characters in the
-    ///       current selection have the style or attribute.
+    /// Specifies whether any characters in the
+    /// current selection have the style or attribute.
     ///
-    ///    </para>
     /// </devdoc>
-    public enum RichTextBoxSelectionAttribute {
-        /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute.Mixed"]/*' />
+    public enum RichTextBoxSelectionAttribute
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Some but not all characters.
-        ///    </para>
+        /// Some but not all characters.
         /// </devdoc>
-        Mixed     = -1,
+        Mixed = -1,
 
-        /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute.None"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       No characters.
-        ///    </para>
+        /// No characters.
         /// </devdoc>
-        None      = 0,
+        None = 0,
 
-        /// <include file='doc\RichTextBoxSelectionAttribute.uex' path='docs/doc[@for="RichTextBoxSelectionAttribute.All"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       All characters.
-        ///    </para>
+        /// All characters.
         /// </devdoc>
-        All       = 1,
-
+        All = 1,
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
 
                 if (colorDepth != value) {
                     colorDepth = value;
-                    PerformRecreateHandle("ColorDepth");
+                    PerformRecreateHandle(nameof(ColorDepth));
                 }
             }
         }
@@ -250,7 +250,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value.IsEmpty) {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "ImageSize", "Size.Empty"));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(ImageSize), "Size.Empty"), nameof(value));
                 }
 
                 // ImageList appears to consume an exponential amount of memory
@@ -258,16 +258,16 @@ namespace System.Windows.Forms {
                 // to keep people's systems from crashing.
                 //
                 if (value.Width <= 0 || value.Width > maxImageWidth) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageSize), string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, "ImageSize.Width", value.Width.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageWidth.ToString()));
                 }
 
                 if (value.Height <= 0 || value.Height > maxImageHeight) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageSize), string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, "ImageSize.Height", value.Height.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), maxImageHeight.ToString()));
                 }
 
                 if (imageSize.Width != value.Width || imageSize.Height != value.Height) {
                     imageSize = new Size(value.Width, value.Height);
-                    PerformRecreateHandle("ImageSize");
+                    PerformRecreateHandle(nameof(ImageSize));
                 }
             }
         }
@@ -336,7 +336,7 @@ namespace System.Windows.Forms {
 
                         Images.ResetKeys();
                         if (recreatingHandle) {
-                            OnRecreateHandle(new EventArgs());
+                            OnRecreateHandle(EventArgs.Empty);
                         }
                     }
                 }
@@ -859,7 +859,7 @@ namespace System.Windows.Forms {
 
             DestroyHandle();
             CreateHandle();
-            OnRecreateHandle(new EventArgs());
+            OnRecreateHandle(EventArgs.Empty);
         }
 
         private void ResetImageSize() {
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (!owner.inAddRange)
-                    owner.OnChangeHandle(new EventArgs());
+                    owner.OnChangeHandle(EventArgs.Empty);
 
                 return index;
             }
@@ -1335,7 +1335,7 @@ namespace System.Windows.Forms {
                     Add(image);
                 }
                 owner.inAddRange = false;
-                owner.OnChangeHandle(new EventArgs());
+                owner.OnChangeHandle(EventArgs.Empty);
              }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.AddStrip"]/*' />
@@ -1377,7 +1377,7 @@ namespace System.Windows.Forms {
                 if (owner.HandleCreated)
                     SafeNativeMethods.ImageList_Remove(new HandleRef(owner, owner.Handle), -1);
 
-                owner.OnChangeHandle(new EventArgs());
+                owner.OnChangeHandle(EventArgs.Empty);
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageList.ImageCollection.Contains"]/*' />
@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms {
             void IList.Remove(object image) {
                 if (image is Image) {
                     Remove((Image)image);
-                    owner.OnChangeHandle(new EventArgs());
+                    owner.OnChangeHandle(EventArgs.Empty);
                 }
             }
 
@@ -1522,7 +1522,7 @@ namespace System.Windows.Forms {
                 } else {
                     if ((imageInfoCollection != null) && (index >= 0  && index < imageInfoCollection.Count)) {
                          imageInfoCollection.RemoveAt(index);
-                         owner.OnChangeHandle(new EventArgs());
+                         owner.OnChangeHandle(EventArgs.Empty);
                     }
                 }
              }

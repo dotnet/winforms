@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2639,12 +2639,13 @@ namespace System.Windows.Forms {
         private class TipInfo {
 
            [Flags]
-           public enum Type { 
+           public enum Type
+           { 
                None = 0x0000,
                Auto = 0x0001,
                Absolute = 0x0002,
                SemiAbsolute = 0x0004
-           };
+           }
            
            public  Type     TipType = Type.Auto;
            private string   caption;

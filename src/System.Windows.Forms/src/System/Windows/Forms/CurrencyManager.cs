@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -672,7 +672,7 @@ namespace System.Windows.Forms {
                             // The position inside the currency manager is at the end of the list and the list still fired an ItemAdded event.
                             // This could be the second ItemAdded event that the DataView fires to signal that the AddNew operation was commited.
                             // We need to fire CurrentItemChanged event so that relatedCurrencyManagers update their lists.
-                            OnCurrentItemChanged(System.EventArgs.Empty);
+                            OnCurrentItemChanged(EventArgs.Empty);
                         }
 
                         if (listposition == -1) {

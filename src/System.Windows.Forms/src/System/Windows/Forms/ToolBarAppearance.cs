@@ -1,44 +1,23 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\ToolBarAppearance.uex' path='docs/doc[@for="ToolBarAppearance"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the type of toolbar to display.
-    ///    </para>
+    /// Specifies the type of toolbar to display.
     /// </devdoc>
-    public enum ToolBarAppearance {
-
-        /// <include file='doc\ToolBarAppearance.uex' path='docs/doc[@for="ToolBarAppearance.Normal"]/*' />
+    public enum ToolBarAppearance
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The
-        ///       toolbar and buttons appear as standard three dimensional controls.
-        ///    </para>
+        /// The toolbar and buttons appear as standard three dimensional controls.
         /// </devdoc>
-        Normal      = 0,
+        Normal = 0,
 
-        /// <include file='doc\ToolBarAppearance.uex' path='docs/doc[@for="ToolBarAppearance.Flat"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The toolbar and buttons appear flat, but the buttons change to three
-        ///       dimensional as the mouse pointer moves over them.
-        ///    </para>
+        /// The toolbar and buttons appear flat, but the buttons change to three
+        /// dimensional as the mouse pointer moves over them.
         /// </devdoc>
-        Flat        = 1,
-
-
+        Flat = 1,
     }
 }

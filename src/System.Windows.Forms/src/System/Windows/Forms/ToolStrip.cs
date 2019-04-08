@@ -3481,7 +3481,7 @@ namespace System.Windows.Forms {
 
                     if (lastMouseActiveItem != null) {
                         Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "Firing MouseEnter on: {0}",  (lastMouseActiveItem == null) ? "null" : lastMouseActiveItem.ToString()));
-                        item.FireEvent(new System.EventArgs(), ToolStripItemEventType.MouseEnter);
+                        item.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseEnter);
                     }
                     // 
 

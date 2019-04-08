@@ -3,12 +3,17 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>WinformsControlsTest</AssemblyName>
+    <RootNamespace>WinformsControlsTest</RootNamespace>
+    <LangVersion>7.3</LangVersion>
     <ApplicationIcon />
     <OutputType>WinExe</OutputType>
     <StartupObject />
+    <ApplicationManifest>app1.manifest</ApplicationManifest>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
   </ItemGroup>
 

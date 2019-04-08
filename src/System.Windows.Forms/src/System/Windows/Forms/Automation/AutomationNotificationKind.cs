@@ -2,12 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Automation {
-    
+namespace System.Windows.Forms.Automation
+{
     /// <summary>
     /// Indicates the type of notification when raising the UIA Notification event.
     /// </summary>
-    public enum AutomationNotificationKind {
+    public enum AutomationNotificationKind
+    {
 
         /// <summary>
         /// The current element container has had something added to it that should be presented to the user.

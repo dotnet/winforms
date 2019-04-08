@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="it" original="../CollectionEditor.resx">
+    <body>
+      <trans-unit id="$this.Text">
+        <source>{0} Collection Editor</source>
+        <target state="translated">Editor della raccolta {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="addButton.Text">
+        <source>&amp;Add</source>
+        <target state="translated">&amp;Aggiungi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="cancelButton.Text">
+        <source>Cancel</source>
+        <target state="translated">Annulla</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="downButton.AccessibleName">
+        <source>Move Down</source>
+        <target state="translated">Sposta giù</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="membersLabel.Text">
+        <source>&amp;Members:</source>
+        <target state="translated">&amp;Membri:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="okButton.Text">
+        <source>OK</source>
+        <target state="translated">OK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="propertiesLabel.Text">
+        <source>&amp;Properties:</source>
+        <target state="translated">&amp;Proprietà:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="removeButton.Text">
+        <source>&amp;Remove</source>
+        <target state="translated">&amp;Rimuovi</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="upButton.AccessibleName">
+        <source>Move Up</source>
+        <target state="translated">Sposta su</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,10 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
+using System.ComponentModel.Design.Serialization;
 using System.Drawing.Design;
 using System.Windows.Forms.Design.Behavior;
 
@@ -21,6 +22,8 @@ namespace System.Windows.Forms.Design
     ]
     public class DocumentDesigner : ScrollableControlDesigner, IRootDesigner, IToolboxUser, IOleDragClient
     {
+        static internal IDesignerSerializationManager manager;
+
         //our menu editor service
         protected IMenuEditorService menuEditorService = null;
 

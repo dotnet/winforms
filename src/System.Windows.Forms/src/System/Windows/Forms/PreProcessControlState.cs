@@ -1,33 +1,29 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Diagnostics.CodeAnalysis;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-
-    /// <include file='doc\PreProcessControlState.uex' path='docs/doc[@for="PreProcessControlState"]/*' />
-    /// <internalonly />
+namespace System.Windows.Forms
+{
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
     [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]
-    public enum PreProcessControlState {
-        /// <include file='doc\PreProcessControlState.uex' path='docs/doc[@for="PreProcessControlState.Normal"]/*' />
+    public enum PreProcessControlState
+    {
         /// <devdoc>
-        ///    <para>Indicates the message has been processed, and no further processing is necessary</para>
+        /// Indicates the message has been processed, and no further processing
+        /// is necessary
         /// </devdoc>
-        MessageProcessed =  0x00,
-        /// <include file='doc\PreProcessControlState.uex' path='docs/doc[@for="PreProcessControlState.Hover"]/*' />
+        MessageProcessed = 0x00,
+
         /// <devdoc>
-        ///    <para>Indicates the control wants the message and processing should continue</para>
+        /// Indicates the control wants the message and processing should continue
         /// </devdoc>
-        MessageNeeded    =  0x01,
-        /// <include file='doc\PreProcessControlState.uex' path='docs/doc[@for="PreProcessControlState.Active"]/*' />
+        MessageNeeded = 0x01,
+
         /// <devdoc>
-        ///    <para>Indicates the control doesn't care about the message</para>
+        /// Indicates the control doesn't care about the message
         /// </devdoc>
-        MessageNotNeeded  =  0x02
+        MessageNotNeeded = 0x02
     }
 }
-

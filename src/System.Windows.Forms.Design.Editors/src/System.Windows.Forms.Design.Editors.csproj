@@ -3,13 +3,20 @@
   <PropertyGroup>
     <AssemblyName>System.Windows.Forms.Design.Editors</AssemblyName>
     <TargetFramework>netcoreapp3.0</TargetFramework>    
-    <CLSCompliant>false</CLSCompliant>
+    <CLSCompliant>true</CLSCompliant>
+    <Deterministic>true</Deterministic>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>
-      <Namespace>System.Windows.Forms.Design.Editors.Resources</Namespace>
+      <Namespace>System</Namespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\CollectionEditor.resx">
+      <!-- Unncessary because CollectionEditor.resx only contains properties; not string constants -->
+      <!--GenerateSource>true</GenerateSource-->
+      <Namespace>System.ComponentModel.Design</Namespace>
     </EmbeddedResource>
   </ItemGroup>
 
@@ -19,6 +26,9 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+    <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
+    <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
+    <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
   </ItemGroup>
 
 </Project>

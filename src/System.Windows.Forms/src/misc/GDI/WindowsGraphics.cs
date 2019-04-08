@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -7,7 +7,7 @@
 // THIS PARTIAL CLASS CONTAINS THE BASE METHODS FOR CREATING AND DISPOSING A WINDOWSGRAPHICS AS WELL
 // GETTING, DISPOSING AND WORKING WITH A DC.
 
-#if WINFORMS_NAMESPACE
+#if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
 namespace System.Drawing.Internal
@@ -244,7 +244,7 @@ namespace System.Experimental.Gdi
 
         /// <include file='doc\WindowsGraphics.uex' path='docs/doc[@for="WindowsGraphics.Dispose"]/*' />
         // Okay to suppress.
-        //"WindowsGraphics object does not own the Graphics object.  For instance in a control�s Paint event we pass the 
+        //"WindowsGraphics object does not own the Graphics object.  For instance in a control’s Paint event we pass the 
         //GraphicsContainer object to TextRenderer, which uses WindowsGraphics; 
         //if the Graphics object is disposed then further painting will be broken."
         [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]

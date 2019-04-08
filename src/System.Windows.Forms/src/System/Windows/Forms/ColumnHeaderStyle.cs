@@ -1,46 +1,28 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-    /// <include file='doc\ColumnHeaderStyle.uex' path='docs/doc[@for="ColumnHeaderStyle"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies how <see cref='System.Windows.Forms.ListView'/> column headers behave.
-    ///    </para>
+    /// Specifies how <see cref='System.Windows.Forms.ListView'/> column headers
+    /// behave.
     /// </devdoc>
-    public enum ColumnHeaderStyle {
-
-        /// <include file='doc\ColumnHeaderStyle.uex' path='docs/doc[@for="ColumnHeaderStyle.None"]/*' />
+    public enum ColumnHeaderStyle
+    {
         /// <devdoc>
-        ///    <para>
-        ///       No visible column header.
-        ///    </para>
+        /// No visible column header.
         /// </devdoc>
-        None         = 0,
-        /// <include file='doc\ColumnHeaderStyle.uex' path='docs/doc[@for="ColumnHeaderStyle.Nonclickable"]/*' />
+        None = 0,
+
         /// <devdoc>
-        ///    <para>
-        ///       Visible column header that does not respond to clicking.
-        ///    </para>
+        /// Visible column header that does not respond to clicking.
         /// </devdoc>
         Nonclickable = 1,
-        /// <include file='doc\ColumnHeaderStyle.uex' path='docs/doc[@for="ColumnHeaderStyle.Clickable"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Visible column header that responds to clicking.
-        ///    </para>
-        /// </devdoc>
-        Clickable    = 2,
 
+        /// <devdoc>
+        /// Visible column header that responds to clicking.
+        /// </devdoc>
+        Clickable = 2,
     }
 }

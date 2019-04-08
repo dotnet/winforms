@@ -3954,7 +3954,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         return false;
                     case Keys.Return:
                         if (DialogButton.Focused || DropDownButton.Focused) {
-                           OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), new EventArgs());
+                           OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), EventArgs.Empty);
                            return true;
                         }
                         else if (selectedGridEntry != null && selectedGridEntry.Expandable) {
@@ -6953,8 +6953,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        internal interface IMouseHookClient {
-        
+        internal interface IMouseHookClient
+        {
             // return true if the click is handled, false
             // to pass it on
             bool OnClickHooked();        

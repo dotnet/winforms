@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -477,7 +477,7 @@ namespace System.Windows.Forms {
         private void CheckBinding() {
             this.bindToObject.CheckBinding();
 
-            if (control != null && propertyName.Length > 0) {
+            if (control != null && !string.IsNullOrEmpty(propertyName)) {
                 control.DataBindings.CheckDuplicates(this);
                 
                 Type controlClass = control.GetType();
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms {
 
         internal bool IsBindable {
             get {
-                return (control != null && propertyName.Length > 0 &&
+                return (control != null && !string.IsNullOrEmpty(propertyName) &&
                                 bindToObject.DataSource != null && bindingManagerBase != null);
             }
         }

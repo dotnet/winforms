@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="AnchorEditorBottomAccName">
         <source>Bottom</source>
-        <target state="translated">Bottom</target>
+        <target state="translated">아래쪽</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorLeftAccName">
@@ -24,7 +24,42 @@
       </trans-unit>
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
-        <target state="translated">Top</target>
+        <target state="translated">위쪽</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="translated">'{0}' 항목을 제거할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="translated">{0} 컬렉션 편집기</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="translated">읽기 전용 구성 요소가 선택되었습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="translated">{0} 속성(&amp;P):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="translated">다중 선택 속성(&amp;P):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="translated">속성(&amp;P):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="translated">{0}개 개체 추가 또는 제거</target>
         <note />
       </trans-unit>
       <trans-unit id="ColorEditorAccName">
@@ -39,8 +74,8 @@
       </trans-unit>
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
-        <target state="translated">웹</target>
-        <note />
+        <target state="new">Web</target>
+        <note>{Locked="Web"}</note>
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
@@ -54,7 +89,7 @@
       </trans-unit>
       <trans-unit id="DockEditorBottomAccName">
         <source>Bottom</source>
-        <target state="translated">Bottom</target>
+        <target state="translated">아래쪽</target>
         <note />
       </trans-unit>
       <trans-unit id="DockEditorFillAccName">
@@ -79,7 +114,7 @@
       </trans-unit>
       <trans-unit id="DockEditorTopAccName">
         <source>Top</source>
-        <target state="translated">Top</target>
+        <target state="translated">위쪽</target>
         <note />
       </trans-unit>
       <trans-unit id="GenericFileFilter">
@@ -95,6 +130,11 @@
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Winforms 디자이너는 이 플랫폼에서 지원되지 않습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="translated">RTL_False</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">

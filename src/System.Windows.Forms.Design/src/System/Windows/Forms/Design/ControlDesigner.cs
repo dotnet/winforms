@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -82,6 +82,30 @@ namespace System.Windows.Forms.Design
         ///     provides rules for a component, the component will not get any UI services.
         /// </summary>
         public virtual SelectionRules SelectionRules => throw new NotImplementedException(SR.NotImplementedByDesign);
+
+        // This boolean indicates whether the Control will allow SnapLines to be shown when any other targetControl is dragged on the design surface.
+        // This is true by default.
+        internal virtual bool ControlSupportsSnaplines
+        {
+            get => true;
+        }
+
+        /// Used when adding snaplines
+        /// In order to add padding, we need to get the offset from the usable client area of our control and the actual origin of our control.  In other words: how big is the non-client area here?
+        /// Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
+        internal Point GetOffsetToClientArea()
+        {
+            NativeMethods.POINT nativeOffset = new NativeMethods.POINT(0, 0);
+            NativeMethods.MapWindowPoints(Control.Handle, Control.Parent.Handle, nativeOffset, 1);
+
+            Point offset = Control.Location;
+            // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
+            if (Control.IsMirrored != Control.Parent.IsMirrored)
+            {
+                offset.Offset(Control.Width, 0);
+            }
+            return (new Point(Math.Abs(nativeOffset.x - offset.X), nativeOffset.y - offset.Y));
+        }
 
         /// <summary>
         ///     Returns a list of SnapLine objects representing interesting
@@ -202,6 +226,11 @@ namespace System.Windows.Forms.Design
         protected virtual ControlBodyGlyph GetControlGlyph(GlyphSelectionType selectionType)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
+        }
+
+        internal ControlBodyGlyph GetControlGlyphInternal(GlyphSelectionType selectionType)
+        {
+            return GetControlGlyph(selectionType);
         }
 
         /// <summary>
