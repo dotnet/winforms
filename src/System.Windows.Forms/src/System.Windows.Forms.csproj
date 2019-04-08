@@ -14,10 +14,6 @@
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <RuntimeFrameworkVersion>$(MicrosoftNetCoreAppPackageVersion)</RuntimeFrameworkVersion>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
   </ItemGroup>

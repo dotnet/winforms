@@ -39,4 +39,8 @@
     <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RuntimeFrameworkVersion>$(MicrosoftNetCoreAppPackageVersion)</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
 </Project>
