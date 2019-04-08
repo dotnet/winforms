@@ -13,6 +13,10 @@
     <DefineConstants>$(DefineConstants);DRAWING_DESIGN_NAMESPACE;WINDOWS_FORMS_SWITCHES;</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RuntimeFrameworkVersion>$(MicrosoftNetCoreAppPackageVersion)</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
   <ItemGroup>
     <EmbeddedResource Update="Resources\SR.resx">
       <GenerateSource>true</GenerateSource>

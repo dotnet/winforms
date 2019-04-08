@@ -5,6 +5,10 @@
     <AssemblyName>System.Windows.Forms.Design.Editors.Tests</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <RuntimeFrameworkVersion>$(MicrosoftNetCoreAppPackageVersion)</RuntimeFrameworkVersion>
+  </PropertyGroup>
+
   <ItemGroup>    
     <PackageReference Include="Moq" Version="$(MoqPackageVersion)" />
     <PackageReference Include="xunit.stafact" Version="$(XUnitStaFactPackageVersion)" />
