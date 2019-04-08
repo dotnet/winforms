@@ -36,7 +36,6 @@ namespace System.Windows.Forms
         private const int StateInMdiPopup = 0x00000200;
         private const int StateHiLite = 0x00000080;
 
-        private Menu _menu;
         private bool _hasHandle;
         private MenuItemData _data;
         private int _dataVersion;
@@ -55,7 +54,6 @@ namespace System.Windows.Forms
 #if DEBUG
         private string _debugText;
         private int _creationNumber;
-        private Menu _debugParentMenu;
         private static int CreateCount;
 #endif
 
@@ -210,15 +208,15 @@ namespace System.Windows.Forms
             set
             {
                 CheckIfDisposed();
-                if (_menu != null)
+                if (Parent != null)
                 {
                     if (value)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(_menu, _menu.handle), MenuID, false);
+                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), MenuID, false);
                     }
                     else if (DefaultItem)
                     {
-                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(_menu, _menu.handle), -1, false);
+                        UnsafeNativeMethods.SetMenuDefaultItem(new HandleRef(Parent, Parent.handle), -1, false);
                     }
                 }
 
@@ -275,11 +273,11 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_menu != null)
+                if (Parent != null)
                 {
-                    for (int i = 0; i < _menu.ItemCount; i++)
+                    for (int i = 0; i < Parent.ItemCount; i++)
                     {
-                        if (_menu.items[i] == this)
+                        if (Parent.items[i] == this)
                         {
                             return i;
                         }
@@ -293,7 +291,7 @@ namespace System.Windows.Forms
                 int oldIndex = Index;
                 if (oldIndex >= 0)
                 {
-                    if (value < 0 || value >= _menu.ItemCount)
+                    if (value < 0 || value >= Parent.ItemCount)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, nameof(Index), value));
                     }
@@ -302,7 +300,7 @@ namespace System.Windows.Forms
                     {
                         // The menu reverts to null when we're removed, so hold onto it in a
                         // local variable
-                        Menu parent = _menu;
+                        Menu parent = Parent;
                         parent.MenuItems.RemoveAt(oldIndex);
                         parent.MenuItems.Add(value, this);
                     }
@@ -333,7 +331,7 @@ namespace System.Windows.Forms
                         return true;
                     }
 
-                    if (_menu != null && !(_menu is MenuItem))
+                    if (Parent != null && !(Parent is MenuItem))
                     {
                         return true;
                     }
@@ -366,18 +364,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal Menu Menu
-        {
-            get => _menu;
-            set
-            {
-                _menu = value;
-#if DEBUG
-                _debugParentMenu = value;
-#endif
-            }
-        }
-
         /// <devdoc>
         /// Gets the Windows identifier for this menu item.
         /// </devdoc>
@@ -397,15 +383,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_menu == null)
+                if (Parent == null)
                 {
                     return false;
                 }
 
-                NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
+                var info = new NativeMethods.MENUITEMINFO_T();
                 info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 info.fMask = NativeMethods.MIIM_STATE;
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
+                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 
                 return (info.fState & StateHiLite) != 0;
             }
@@ -419,12 +405,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_menu == null)
+                if (Parent == null)
                 {
                     return -1;
                 }
 
-                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(_menu, _menu.Handle));
+                int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
                 int id = MenuID;
                 NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
                 info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
@@ -432,7 +418,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < count; i++)
                 {
-                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), i, true, info);
+                    UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), i, true, info);
 
                     // For sub menus, the handle is always valid.
                     // For items, however, it is always zero.
@@ -511,7 +497,7 @@ namespace System.Windows.Forms
         /// Gets the menu in which this menu item appears.
         /// </devdoc>
         [Browsable(false)]
-        public Menu Parent => _menu;
+        public Menu Parent { get; internal set; }
 
         /// <devdoc>
         /// Gets or sets a value that indicates whether the menu item, if checked,
@@ -765,7 +751,7 @@ namespace System.Windows.Forms
             if ((_data.State & StateHidden) == 0)
             {
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
-                UnsafeNativeMethods.InsertMenuItem(new HandleRef(_menu, _menu.handle), -1, true, info);
+                UnsafeNativeMethods.InsertMenuItem(new HandleRef(Parent, Parent.handle), -1, true, info);
 
                 _hasHandle = info.hSubMenu != IntPtr.Zero;
                 _dataVersion = _data._version;
@@ -773,7 +759,7 @@ namespace System.Windows.Forms
                 _menuItemIsCreated = true;
                 if (RenderIsRightToLeft)
                 {
-                    Menu.UpdateRtl(true);
+                    Parent.UpdateRtl(true);
                 }
 
 #if DEBUG
@@ -781,7 +767,7 @@ namespace System.Windows.Forms
                 infoVerify.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, infoVerify);
+                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
 #endif
             }
         }
@@ -794,7 +780,7 @@ namespace System.Windows.Forms
             info.fType = _data.State & (StateBarBreak | StateBreak | StateRadioCheck | StateOwnerDraw);
 
             // Top level menu items shouldn't have barbreak or break bits set on them.
-            bool isTopLevel = _menu == GetMainMenu();
+            bool isTopLevel = Parent == GetMainMenu();
 
             if (_data._caption.Equals("-"))
             {
@@ -890,7 +876,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                _menu?.MenuItems.Remove(this);
+                Parent?.MenuItems.Remove(this);
                 _data?.RemoveItem(this);
                 lock (s_allCreatedMenuItems)
                 {
@@ -1019,7 +1005,7 @@ namespace System.Windows.Forms
             {
                 // when the menu collection changes deal with it locally
                 Debug.Assert(!created, "base.ItemsChanged should have wiped out our handles");
-                if (_menu != null && _menu.created)
+                if (Parent != null && Parent.created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
@@ -1047,7 +1033,7 @@ namespace System.Windows.Forms
                 _data.baseItem != null &&
                 _data.baseItem.MenuItems.Contains(item))
             {
-                if (_menu != null && _menu.created)
+                if (Parent != null && Parent.created)
                 {
                     UpdateMenuItem(force: true);
                     CreateMenuItems();
@@ -1321,9 +1307,7 @@ namespace System.Windows.Forms
             }
         }
 
-        protected virtual void OnInitMenuPopup(EventArgs e) => OnPopup(e);
-
-        internal void OnInitMenuPopupInternal(EventArgs e) => OnInitMenuPopup(e);
+        protected internal virtual void OnInitMenuPopup(EventArgs e) => OnPopup(e);
 
         /// <devdoc>
         /// Generates a <see cref='System.Windows.Forms.Control.Click'/> event for the MenuItem,
@@ -1338,9 +1322,9 @@ namespace System.Windows.Forms
 
         internal virtual bool ShortcutClick()
         {
-            if (_menu is MenuItem parent)
+            if (Parent is MenuItem parent)
             {
-                if (!parent.ShortcutClick() || _menu != parent)
+                if (!parent.ShortcutClick() || Parent != parent)
                 {
                     return false;
                 }
@@ -1380,7 +1364,7 @@ namespace System.Windows.Forms
             info.dwTypeData = new string('\0', Text.Length + 2);
             info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
             info.cch = info.dwTypeData.Length - 1;
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
+            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             if (setRightToLeftBit)
             {
                 info.fType |= NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER;
@@ -1390,7 +1374,7 @@ namespace System.Windows.Forms
                 info.fType &= ~(NativeMethods.MFT_RIGHTJUSTIFY | NativeMethods.MFT_RIGHTORDER);
             }
 
-            UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
+            UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 
 #if DEBUG
 
@@ -1398,7 +1382,7 @@ namespace System.Windows.Forms
             info.dwTypeData     = new string('\0', 256);
             info.cbSize         = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
             info.cch            = info.dwTypeData.Length - 1;
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
+            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             Debug.Assert(((info.fType & NativeMethods.MFT_RIGHTORDER) != 0) == setRightToLeftBit, "Failed to set bit!");
 
 #endif
@@ -1406,21 +1390,21 @@ namespace System.Windows.Forms
 
         internal void UpdateMenuItem(bool force)
         {
-            if (_menu == null || !_menu.created)
+            if (Parent == null || !Parent.created)
             {
                 return;
             }
 
-            if (force || _menu is MainMenu || _menu is ContextMenu)
+            if (force || Parent is MainMenu || Parent is ContextMenu)
             {
                 NativeMethods.MENUITEMINFO_T info = CreateMenuItemInfo();
-                UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, info);
+                UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 #if DEBUG
                 var infoVerify = new NativeMethods.MENUITEMINFO_T();
                 infoVerify.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
-                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(_menu, _menu.handle), MenuID, false, infoVerify);
+                UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
 #endif
 
                 if (_hasHandle && info.hSubMenu == IntPtr.Zero)
@@ -1430,7 +1414,7 @@ namespace System.Windows.Forms
 
                 _hasHandle = info.hSubMenu != IntPtr.Zero;
                 _dataVersion = _data._version;
-                if (_menu is MainMenu mainMenu)
+                if (Parent is MainMenu mainMenu)
                 {
                     Form f = mainMenu.GetFormUnsafe();
                     if (f != null)
@@ -1666,7 +1650,7 @@ namespace System.Windows.Forms
             {
                 for (MenuItem item = firstItem; item != null; item = item._nextLinkedItem)
                 {
-                    item._menu?.ItemsChanged(change);
+                    item.Parent?.ItemsChanged(change);
                 }
             }
 

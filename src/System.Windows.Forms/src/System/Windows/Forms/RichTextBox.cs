@@ -3851,7 +3851,7 @@ namespace System.Windows.Forms {
                             if (menu == cm)
                                 break;
                             else
-                                menu = ((MenuItem) menu).Menu;
+                                menu = ((MenuItem)menu).Parent;
                         }
                     }
 
