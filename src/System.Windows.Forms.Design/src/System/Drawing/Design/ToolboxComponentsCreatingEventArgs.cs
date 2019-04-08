@@ -18,8 +18,8 @@ namespace System.Drawing.Design
         public ToolboxComponentsCreatingEventArgs(IDesignerHost host) => throw new NotImplementedException(SR.NotImplementedByDesign);
         
         /// <summary>
-        /// An instance of IDesignerHost that has made the creat request.  This can be null if no designer host
-        /// was provided to the toolbox item.
+        /// An instance of IDesignerHost that has made the creat request.
+        /// This can be null if no designer host was provided to the toolbox item.
         /// </summary>
         public IDesignerHost DesignerHost => throw new NotImplementedException(SR.NotImplementedByDesign);
     }

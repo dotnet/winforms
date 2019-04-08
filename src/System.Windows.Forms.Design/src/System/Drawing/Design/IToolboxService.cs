@@ -11,7 +11,9 @@ namespace System.Drawing.Design
     /// <summary>
     /// Provides access to the toolbox in the development environment.
     /// </summary>
-    [ComImport(), Guid("4BACD258-DE64-4048-BC4E-FEDBEF9ACB76"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    [ComImport]
+    [Guid("4BACD258-DE64-4048-BC4E-FEDBEF9ACB76")]
+    [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IToolboxService
     {
         /// <summary>
@@ -167,4 +169,3 @@ namespace System.Drawing.Design
         void SetSelectedToolboxItem(ToolboxItem toolboxItem);
     }
 }
-

@@ -9,34 +9,29 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignerActionListsChangedEventArgs : EventArgs
     {
-
-        private readonly object _relatedObject;
-        private readonly DesignerActionListCollection _actionLists;
-        private readonly DesignerActionListsChangedType _changeType;
-
         /// <summary>
         /// Constructor that requires the object in question, the type of change and the remaining actionlists left for the object. on the related object.
-        /// </summary> 
+        /// </summary>
         public DesignerActionListsChangedEventArgs(object relatedObject, DesignerActionListsChangedType changeType, DesignerActionListCollection actionLists)
         {
-            _relatedObject = relatedObject;
-            _changeType = changeType;
-            _actionLists = actionLists;
+            RelatedObject = relatedObject;
+            ChangeType = changeType;
+            ActionLists = actionLists;
         }
 
         /// <summary>
-        /// The type of changed that caused the related event to be thrown.
-        /// </summary> 
-        public DesignerActionListsChangedType ChangeType => _changeType;
+        /// The object this change is related to.
+        /// </summary>
+        public object RelatedObject { get; }
 
         /// <summary>
-        /// The object this change is related to.
-        /// </summary> 
-        public object RelatedObject => _relatedObject;
+        /// The type of changed that caused the related event to be thrown.
+        /// </summary>
+        public DesignerActionListsChangedType ChangeType { get; }
 
         /// <summary>
         /// The remaining actionlists left for the related object.
-        /// </summary> 
-        public DesignerActionListCollection ActionLists => _actionLists;
+        /// </summary>
+        public DesignerActionListCollection ActionLists { get; }
     }
 }
