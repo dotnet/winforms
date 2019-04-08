@@ -1,44 +1,22 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\StatusBarPanelStyle.uex' path='docs/doc[@for="StatusBarPanelStyle"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies whether a panel on
-    ///       a status bar is owner drawn or system drawn.
-    ///    </para>
+    /// Specifies whether a panel on a status bar is owner drawn or system drawn.
     /// </devdoc>
-    public enum StatusBarPanelStyle {
-
-        /// <include file='doc\StatusBarPanelStyle.uex' path='docs/doc[@for="StatusBarPanelStyle.Text"]/*' />
+    public enum StatusBarPanelStyle
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The panel is
-        ///       drawn by the system.
-        ///    </para>
+        /// The panel is drawn by the system.
         /// </devdoc>
-        Text        = 1,
+        Text = 1,
 
-        /// <include file='doc\StatusBarPanelStyle.uex' path='docs/doc[@for="StatusBarPanelStyle.OwnerDraw"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The panel is
-        ///       drawn by the owner.
-        ///    </para>
+        /// The panel is drawn by the owner.
         /// </devdoc>
-        OwnerDraw   = 2,
-
+        OwnerDraw = 2,
     }
 }

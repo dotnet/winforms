@@ -168,7 +168,7 @@ namespace System.Windows.Forms {
             }
             set { 
                 if (defaultItem != value) {
-                    OnDefaultItemChanged(new EventArgs()); 
+                    OnDefaultItemChanged(EventArgs.Empty); 
                     defaultItem = value; 
                 }
             }
@@ -562,12 +562,12 @@ namespace System.Windows.Forms {
                     }
                 }
                 if (shouldFireDoubleClick) {
-                    OnButtonDoubleClick(new System.EventArgs());
+                    OnButtonDoubleClick(EventArgs.Empty);
                     // If we actually fired DoubleClick - reset the lastClickTime.
                     lastClickTime = 0;
                 } 
                 else {
-                    OnButtonClick(new System.EventArgs());
+                    OnButtonClick(EventArgs.Empty);
                 }           
             }
 

@@ -2,16 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <LangVersion>7.3</LangVersion>
     <AssemblyName>System.Windows.Forms</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CLSCompliant>false</CLSCompliant>
+    <CLSCompliant>true</CLSCompliant>
+    <!--the obsolete usage in public surface can't be removed-->
     <NoWarn>$(NoWarn);618</NoWarn>
-    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;DRAWING_DESIGN_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
+    <Deterministic>true</Deterministic>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Accessibility" Version="$(AccessibilityPackageVersion)" />
+    <ProjectReference Include="..\..\Accessibility\src\Accessibility.ilproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
@@ -22,6 +29,19 @@
 
   <ItemGroup>
     <Compile Include="..\..\Common\src\ApiHelper.cs" Link="Common\ApiHelper.cs" />
+    <Compile Include="..\..\Common\src\ClientUtils.cs" Link="Common\ClientUtils.cs" />
+    <Compile Include="..\..\Common\src\CommonUnsafeNativeMethods.cs" Link="misc\CommonUnsafeNativeMethods.cs" />
+    <Compile Include="..\..\Common\src\CompModSwitches.cs" Link="misc\CompModSwitches.cs" />
+    <Compile Include="..\..\Common\src\DebugHandleTracker.cs" Link="misc\DebugHandleTracker.cs" />
+    <Compile Include="..\..\Common\src\DpiHelper.cs" Link="misc\DpiHelper.cs" />
+    <Compile Include="..\..\Common\src\DpiHelper.DpiAwarenessContext.cs" Link="Common\DpiHelper.DpiAwarenessContext.cs" />
+    <Compile Include="..\..\Common\src\ExternDll.cs" Link="misc\ExternDll.cs" />
+    <Compile Include="..\..\Common\src\FileDialog_Vista_Interop.cs" Link="System\Windows\Forms\FileDialog_Vista_Interop.cs" />
+    <Compile Include="..\..\Common\src\HandleCollector.cs" Link="misc\HandleCollector.cs" />
+    <Compile Include="..\..\Common\src\NativeMethods.cs" Link="System\Windows\Forms\NativeMethods.cs" />
+    <Compile Include="..\..\Common\src\RTLAwareMessageBox.cs" Link="Common\RTLAwareMessageBox.cs" />
+    <Compile Include="..\..\Common\src\SafeNativeMethods.cs" Link="System\Windows\Forms\SafeNativeMethods.cs" />
+    <Compile Include="..\..\Common\src\UnsafeNativeMethods.cs" Link="System\Windows\Forms\UnsafeNativeMethods.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,13 +49,7 @@
       <GenerateSource>true</GenerateSource>
       <Namespace>System</Namespace>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\System\Windows\Forms\TrustManagerPromptUI.resx">
-      <LogicalName>System.Security.Policy.TrustManagerPromptUI.resources</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\System\Windows\Forms\TrustManagerMoreInformation.resx">
-      <LogicalName>System.Security.Policy.TrustManagerMoreInformation.resources</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\System\Windows\Forms\mdiwindowdialog.resx">
+     <EmbeddedResource Update="Resources\System\Windows\Forms\mdiwindowdialog.resx">
       <LogicalName>System.Windows.Forms.MdiWindowDialog.resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\System\Windows\Forms\PrintPreviewDialog.resx">
@@ -397,39 +411,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\TreeView.bmp">
       <LogicalName>System.Windows.Forms.TreeView.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerGlobe.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerGlobe.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerGlobe.ico">
-      <LogicalName>System.Windows.Forms.TrustManagerGlobe.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerOK.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerOK.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerOK.ico">
-      <LogicalName>System.Windows.Forms.TrustManagerOK.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerOKSm.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerOKSm.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerHighRisk.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerHighRisk.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerHighRisk.ico">
-      <LogicalName>System.Windows.Forms.TrustManagerHighRisk.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerHighRiskSm.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerHighRiskSm.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerWarning.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerWarning.bmp</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerWarning.ico">
-      <LogicalName>System.Windows.Forms.TrustManagerWarning.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\TrustManagerWarningSm.bmp">
-      <LogicalName>System.Windows.Forms.TrustManagerWarningSm.bmp</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\UserControl.bmp">
       <LogicalName>System.Windows.Forms.UserControl.bmp</LogicalName>

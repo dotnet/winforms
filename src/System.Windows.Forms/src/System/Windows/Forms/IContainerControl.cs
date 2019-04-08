@@ -1,29 +1,21 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-    using System.ComponentModel;
-
-    using System.Diagnostics;
-
-    using System;
-
-    /// <include file='doc\IContainerControl.uex' path='docs/doc[@for="IContainerControl"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para> Provides functionality for a control 
-    ///       to parent other controls.</para>
+    /// Provides functionality for a control to parent other controls.
     /// </devdoc>
-    public interface IContainerControl {
-        /// <include file='doc\IContainerControl.uex' path='docs/doc[@for="IContainerControl.ActiveControl"]/*' />
+    public interface IContainerControl
+    {
         /// <devdoc>
-        ///    <para>Indicates the control that is currently active on the container control.</para>
+        /// Indicates the control that is currently active on the container control.
         /// </devdoc>
         Control ActiveControl { get; set; }
-        /// <include file='doc\IContainerControl.uex' path='docs/doc[@for="IContainerControl.ActivateControl"]/*' />
+
         /// <devdoc>
-        ///    <para>Activates the specified control.</para>
+        /// Activates the specified control.
         /// </devdoc>
         bool ActivateControl(Control active);
     }

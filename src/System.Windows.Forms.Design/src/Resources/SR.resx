@@ -1,5 +1,64 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -102,7 +161,7 @@
   </data>
   <data name="DesignerOptions_EnableInSituEditingCat" xml:space="preserve">
     <value>InSitu Editing</value>
-  </data>  
+  </data>
   <data name="DesignerOptions_ShowGridDesc" xml:space="preserve">
     <value>Controls whether designers should display a sizing grid when LayoutMode = SnapToGrid.</value>
   </data>
@@ -114,11 +173,315 @@
   </data>
   <data name="NotImplementedByDesign" xml:space="preserve">
     <value>This method/object is not implemented by design.</value>
-  </data>  
+  </data>
   <data name="DesignerOptions_EnableInSituEditingDesc" xml:space="preserve">
     <value>Controls whether InSitu editing is enabled.</value>
   </data>
   <data name="DragDropSetDataError" xml:space="preserve">
     <value>This IDataObject doesn't support SetData.</value>
+  </data>
+  <data name="ComponentDesignerAddEvent" xml:space="preserve">
+    <value>Adding event '{0}'</value>
+  </data>
+  <data name="InheritanceServiceReadOnlyCollection" xml:space="preserve">
+    <value>Read-Only</value>
+  </data>
+  <data name="CannotConvertDoubleToDate" xml:space="preserve">
+    <value>Double cannot be converted to a date.</value>
+  </data>
+  <data name="CannotConvertIntToFloat" xml:space="preserve">
+    <value>Integer cannot be converted to a float.</value>
+  </data>
+  <data name="COM2UnhandledVT" xml:space="preserve">
+    <value>Unhandled VT: {0}.</value>
+  </data>
+  <data name="DotNET_ComponentType" xml:space="preserve">
+    <value>.NET Component</value>
+  </data>
+  <data name="ToolboxItemInvalidKey" xml:space="preserve">
+    <value>Argument should be a non-empty string.</value>
+  </data>
+  <data name="ToolboxItemInvalidPropertyType" xml:space="preserve">
+    <value>Property {0} requires an argument of type {1}.</value>
+  </data>
+  <data name="ToolboxItemLocked" xml:space="preserve">
+    <value>Toolbox item cannot be modified.</value>
+  </data>
+  <data name="ToolboxItemValueNotSerializable" xml:space="preserve">
+    <value>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</value>
+  </data>
+  <data name="UnsafeNativeMethodsNotImplemented" xml:space="preserve">
+    <value>Not implemented.</value>
+  </data>
+  <data name="DesignerActionPanel_CouldNotFindMethod" xml:space="preserve">
+    <value>Could not find method '{0}'.</value>
+  </data>
+  <data name="CommandSetAlignByPrimary" xml:space="preserve">
+    <value>Format {0} components (alignment)</value>
+  </data>
+  <data name="CommandSetAlignToGrid" xml:space="preserve">
+    <value>Align {0} components to grid</value>
+  </data>
+  <data name="CommandSetCutMultiple" xml:space="preserve">
+    <value>Cut {0} Components</value>
+  </data>
+  <data name="CommandSetDelete" xml:space="preserve">
+    <value>Delete {0} components</value>
+  </data>
+  <data name="CommandSetError" xml:space="preserve">
+    <value>An error occurred while processing this command.\r\n{0}</value>
+  </data>
+  <data name="CommandSetFormatSpacing" xml:space="preserve">
+    <value>Format {0} components (spacing)</value>
+  </data>
+  <data name="CommandSetPaste" xml:space="preserve">
+    <value>Paste components</value>
+  </data>
+  <data name="CommandSetSize" xml:space="preserve">
+    <value>Size {0} components</value>
+  </data>
+  <data name="CommandSetSizeToGrid" xml:space="preserve">
+    <value>Size {0} components to grid</value>
+  </data>
+  <data name="CommandSetUnknownSpacingCommand" xml:space="preserve">
+    <value>Unknown spacing command</value>
+  </data>
+  <data name="DragDropMoveComponent" xml:space="preserve">
+    <value>Move {0}</value>
+  </data>
+  <data name="DragDropMoveComponents" xml:space="preserve">
+    <value>Move {0} components</value>
+  </data>
+  <data name="WindowsFormsCommandCenterX" xml:space="preserve">
+    <value>Horizontal center of {0} component(s)</value>
+  </data>
+  <data name="WindowsFormsCommandCenterY" xml:space="preserve">
+    <value>Vertical center of {0} component(s)</value>
+  </data>
+  <data name="DesignerActionPanel_CouldNotConvertValue" xml:space="preserve">
+    <value>Could not convert value '{0}' to the type '{1}'.</value>
+  </data>
+  <data name="DesignerActionPanel_CouldNotFindProperty" xml:space="preserve">
+    <value>Could not find property '{0}' on '{1}'.</value>
+  </data>
+  <data name="DesignerActionPanel_DefaultPanelTitle" xml:space="preserve">
+    <value>{0} Tasks</value>
+  </data>
+  <data name="DesignerActionPanel_ErrorActivatingDropDown" xml:space="preserve">
+    <value>Error using the dropdown: {0}</value>
+  </data>
+  <data name="DesignerActionPanel_ErrorInvokingAction" xml:space="preserve">
+    <value>Error invoking '{0}'.  Details: {1}</value>
+  </data>
+  <data name="DesignerActionPanel_ErrorSettingValue" xml:space="preserve">
+    <value>Error setting value '{0}' to property '{1}'.  Details: {2}</value>
+  </data>
+  <data name="DesignerInherited" xml:space="preserve">
+    <value>Inherited control</value>
+  </data>
+  <data name="DesignerInheritedReadOnly" xml:space="preserve">
+    <value>Inherited control (Private)</value>
+  </data>
+  <data name="RTL" xml:space="preserve">
+    <value>RTL_False</value>
+    <comment>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</comment>
+  </data>
+  <data name="TrayAutoArrange" xml:space="preserve">
+    <value>Auto Arrange Tray Icons</value>
+  </data>
+  <data name="TrayLineUpIcons" xml:space="preserve">
+    <value>Line Up Tray Icons</value>
+  </data>
+  <data name="TrayShowLargeIcons" xml:space="preserve">
+    <value>Show Large or Small Icons</value>
+  </data>
+  <data name="UIServiceHelper_ErrorCaption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="WindowsFormsAddEvent" xml:space="preserve">
+    <value>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</value>
+  </data>
+  <data name="BehaviorServiceCopyControl" xml:space="preserve">
+    <value>Copy and move {0}</value>
+  </data>
+  <data name="BehaviorServiceCopyControls" xml:space="preserve">
+    <value>Copy and move {0} Controls</value>
+  </data>
+  <data name="BehaviorServiceMoveControl" xml:space="preserve">
+    <value>Move {0}</value>
+  </data>
+  <data name="BehaviorServiceMoveControls" xml:space="preserve">
+    <value>Move {0} Controls</value>
+  </data>
+  <data name="DesignerBeginDragNotCalled" xml:space="preserve">
+    <value>Call to BeginDrag must succeed before calling drag functions.</value>
+  </data>
+  <data name="DragDropDragComponents" xml:space="preserve">
+    <value>Drag {0} components</value>
+  </data>
+  <data name="DragDropSizeComponent" xml:space="preserve">
+    <value>Size {0}</value>
+  </data>
+  <data name="DragDropSizeComponents" xml:space="preserve">
+    <value>Size {0} components</value>
+  </data>
+  <data name="UndoEngineComponentAdd0" xml:space="preserve">
+    <value>Add Component</value>
+  </data>
+  <data name="UndoEngineComponentAdd1" xml:space="preserve">
+    <value>Add {0}</value>
+  </data>
+  <data name="UndoEngineComponentChange0" xml:space="preserve">
+    <value>Change Component</value>
+  </data>
+  <data name="UndoEngineComponentChange1" xml:space="preserve">
+    <value>Change {0}</value>
+  </data>
+  <data name="UndoEngineComponentChange2" xml:space="preserve">
+    <value>Change {0}.{1}</value>
+  </data>
+  <data name="UndoEngineComponentRemove0" xml:space="preserve">
+    <value>Remove Component</value>
+  </data>
+  <data name="UndoEngineComponentRemove1" xml:space="preserve">
+    <value>Remove {0}</value>
+  </data>
+  <data name="UndoEngineComponentRename" xml:space="preserve">
+    <value>Rename {0} to {1}</value>
+  </data>
+  <data name="UndoEngineMissingService" xml:space="preserve">
+    <value>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</value>
+  </data>
+  <data name="DesignerHostCantDestroyInheritedComponent" xml:space="preserve">
+    <value>Cannot remove or destroy inherited component '{0}'.</value>
+  </data>
+  <data name="DesignerHostCyclicAdd" xml:space="preserve">
+    <value>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</value>
+  </data>
+  <data name="DesignerHostDesignerNeedsComponent" xml:space="preserve">
+    <value>Failure initializing the designer.  It has no Component member.</value>
+  </data>
+  <data name="DesignerHostDestroyComponentTransaction" xml:space="preserve">
+    <value>Deleting '{0}'.</value>
+  </data>
+  <data name="DesignerHostDuplicateName" xml:space="preserve">
+    <value>The name {0} is already in use by another component.</value>
+  </data>
+  <data name="DesignerHostFailedComponentCreate" xml:space="preserve">
+    <value>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</value>
+  </data>
+  <data name="DesignerHostGenericTransactionName" xml:space="preserve">
+    <value>No Description Available</value>
+  </data>
+  <data name="DesignerHostLoaderSpecified" xml:space="preserve">
+    <value>A designer loader has already been configured for this design surface.</value>
+  </data>
+  <data name="DesignerHostNestedTransaction" xml:space="preserve">
+    <value>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</value>
+  </data>
+  <data name="DesignerHostNoBaseClass" xml:space="preserve">
+    <value>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</value>
+  </data>
+  <data name="DesignerHostNoTopLevelDesigner" xml:space="preserve">
+    <value>There is no designer for the class {0}.</value>
+  </data>
+  <data name="DesignerHostUnloading" xml:space="preserve">
+    <value>New components cannot be added while a designer is unloading.</value>
+  </data>
+  <data name="DesignSurfaceContainerDispose" xml:space="preserve">
+    <value>The container cannot be disposed at design time.</value>
+  </data>
+  <data name="DesignSurfaceDesignerNotLoaded" xml:space="preserve">
+    <value>Cannot create a view for this design surface because the designer is not loaded.</value>
+  </data>
+  <data name="DesignSurfaceFatalError" xml:space="preserve">
+    <value>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</value>
+  </data>
+  <data name="DesignSurfaceNoRootComponent" xml:space="preserve">
+    <value>The designer loader did not provide a root component but has not indicated why.</value>
+  </data>
+  <data name="DesignSurfaceNoSupportedTechnology" xml:space="preserve">
+    <value>The designer loaded, but it does not offer a view compatible with this design surface.</value>
+  </data>
+  <data name="DesignSurfaceServiceIsFixed" xml:space="preserve">
+    <value>The service {0} cannot be removed from the service container.</value>
+  </data>
+  <data name="ExtenderProviderServiceDuplicateProvider" xml:space="preserve">
+    <value>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</value>
+  </data>
+  <data name="SerializerBadElementTypes" xml:space="preserve">
+    <value>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</value>
+  </data>
+  <data name="SerializerFieldTargetEvalFailed" xml:space="preserve">
+    <value>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</value>
+  </data>
+  <data name="SerializerNoRootExpression" xml:space="preserve">
+    <value>The source code contains a reference to the class definition, but the class definition cannot be found.</value>
+  </data>
+  <data name="SerializerNoSuchEvent" xml:space="preserve">
+    <value>The type '{0}' has no event named '{1}'.</value>
+  </data>
+  <data name="SerializerNoSuchField" xml:space="preserve">
+    <value>The type '{0}' has no field named '{1}'.</value>
+  </data>
+  <data name="SerializerNoSuchProperty" xml:space="preserve">
+    <value>The type '{0}' has no property named '{1}'.</value>
+  </data>
+  <data name="SerializerResourceException" xml:space="preserve">
+    <value>Error reading resources from the resource file for the culture {0}: {1}</value>
+  </data>
+  <data name="SerializerResourceExceptionInvariant" xml:space="preserve">
+    <value>Error reading resources from the resource file for the default culture: {0}</value>
+  </data>
+  <data name="SerializerTypeNotFound" xml:space="preserve">
+    <value>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</value>
+  </data>
+  <data name="SerializerUndeclaredName" xml:space="preserve">
+    <value>The variable '{0}' is either undeclared or was never assigned.</value>
+  </data>
+  <data name="TypeNotFoundInTargetFramework" xml:space="preserve">
+    <value>Type '{0}' is not available in the target framework.</value>
+  </data>
+  <data name="SerializationManagerAreadyInSession" xml:space="preserve">
+    <value>You cannot create a new session because this serialization manager already has an active serialization session.</value>
+  </data>
+  <data name="SerializationManagerDuplicateComponentDecl" xml:space="preserve">
+    <value>Duplicate declaration of member '{0}'</value>
+  </data>
+  <data name="SerializationManagerNameInUse" xml:space="preserve">
+    <value>The name '{0}' is already used by another object.</value>
+  </data>
+  <data name="SerializationManagerNoMatchingCtor" xml:space="preserve">
+    <value>Type '{0}' does not have a constructor with parameters of types {1}.</value>
+  </data>
+  <data name="SerializationManagerNoSession" xml:space="preserve">
+    <value>This method cannot be invoked because the serialization manager does not have an active serialization session.</value>
+  </data>
+  <data name="SerializationManagerObjectHasName" xml:space="preserve">
+    <value>Cannot name the object '{0}' because it is already named '{1}'.</value>
+  </data>
+  <data name="SerializationManagerWithinSession" xml:space="preserve">
+    <value>This method cannot be invoked because the serialization manager has an active serialization session.</value>
+  </data>
+  <data name="SerializerLostStatements" xml:space="preserve">
+    <value>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</value>
+  </data>
+  <data name="SerializerNoSerializerForComponent" xml:space="preserve">
+    <value>The object '{0}' failed to serialize itself.  It may not support code generation.</value>
+  </data>
+  <data name="SerializerInvalidArrayRank" xml:space="preserve">
+    <value>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</value>
+  </data>
+  <data name="SerializerMemberTypeNotSerializable" xml:space="preserve">
+    <value>Members of type '{0}' cannot be serialized.</value>
+  </data>
+  <data name="CodeDomComponentSerializationServiceDeserializationError" xml:space="preserve">
+    <value>Complete deserialization of {0} failed.</value>
+  </data>
+  <data name="CodeDomComponentSerializationServiceUnknownStore" xml:space="preserve">
+    <value>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</value>
+  </data>
+  <data name="CodeDomComponentSerializationServiceClosedStore" xml:space="preserve">
+    <value>The serialization store is closed.  New objects cannot be added to a closed store.</value>
   </data>
 </root>

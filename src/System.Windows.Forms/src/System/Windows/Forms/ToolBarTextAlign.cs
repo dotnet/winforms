@@ -1,44 +1,22 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-
-    /// <include file='doc\ToolBarTextAlign.uex' path='docs/doc[@for="ToolBarTextAlign"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies
-    ///       the alignment of text on the toolbar button control.
-    ///    </para>
+    /// Specifies the alignment of text on the toolbar button control.
     /// </devdoc>
-    public enum ToolBarTextAlign {
-
-        /// <include file='doc\ToolBarTextAlign.uex' path='docs/doc[@for="ToolBarTextAlign.Underneath"]/*' />
+    public enum ToolBarTextAlign
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The text
-        ///       is aligned underneath the toolbar button image.
-        ///    </para>
+        /// The text is aligned underneath the toolbar button image.
         /// </devdoc>
         Underneath = 0,
 
-        /// <include file='doc\ToolBarTextAlign.uex' path='docs/doc[@for="ToolBarTextAlign.Right"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The text
-        ///       is aligned to the right of the toolbar button image.
-        ///    </para>
+        /// The text is aligned to the right of the toolbar button image.
         /// </devdoc>
         Right = 1,
-
     }
 }

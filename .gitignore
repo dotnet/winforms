@@ -14,6 +14,8 @@
 
 # Tools pulled down during build
 .tools/
+.dotnet/
+.packages/
 
 # Build results
 [Dd]ebug/

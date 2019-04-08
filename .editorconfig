@@ -154,12 +154,18 @@ indent_size = 2
 indent_size = 2
 
 # Xml files
-[*.{xml,stylecop,resx,ruleset}]
+[*.{xml,stylecop,ruleset}]
 indent_size = 2
 
 # Xml config files
 [*.{props,targets,config,nuspec}]
 indent_size = 2
+
+# resx Files
+[*.{resx,xlf}]
+indent_size = 2
+charset = utf-8-bom
+insert_final_newline = true
 
 # Shell scripts
 [*.sh]

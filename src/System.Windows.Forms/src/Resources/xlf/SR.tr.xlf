@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionAccessibleName">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">Konum</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionItemPropDescr">
@@ -769,7 +769,7 @@
       </trans-unit>
       <trans-unit id="CatFocus">
         <source>Focus</source>
-        <target state="translated">Odak</target>
+        <target state="translated">Odaklama</target>
         <note />
       </trans-unit>
       <trans-unit id="CatFolderBrowsing">
@@ -789,7 +789,7 @@
       </trans-unit>
       <trans-unit id="CatLayout">
         <source>Layout</source>
-        <target state="translated">Düzen</target>
+        <target state="translated">Yerleşim</target>
         <note />
       </trans-unit>
       <trans-unit id="CatMouse">
@@ -799,7 +799,7 @@
       </trans-unit>
       <trans-unit id="CatPrivate">
         <source>Private</source>
-        <target state="translated">Private</target>
+        <target state="translated">Özel</target>
         <note />
       </trans-unit>
       <trans-unit id="CatPropertyChanged">
@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="translated">Yanlış</target>
+        <target state="new">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="translated">Doğru</target>
+        <target state="new">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">DataGridView'da özel durum oluştu.\r\n\r\nBu varsayılan iletişim kutusunu değiştirmek için DataError olayını işleyin.</target>
+        <target state="translated">DataGridView'da özel durum oluştu.
+
+Bu iletişim kutusunu değiştirmek için, DataError olayını işleyin.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">DataGridView'da aşağıdaki özel durum oluştu:\r\n\r\n{0}\r\n\r\nBu varsayılan iletişim kutusunu değiştirmek için lütfen DataError olayını işleyin.</target>
+        <target state="translated">DataGridView'da aşağıdaki özel durum oluştu:
+
+{0}
+
+Bu varsayılan iletişim kutusunu değiştirmek için, lütfen DataError olayını işleyin.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">Uygulamanızdaki bir bileşende işlenmemiş özel durum oluştu. Devam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır.\r\n\r\n{0}.</target>
+        <target state="translated">Uygulamanızdaki bir bileşende işlenmemiş özel durum oluştu. Devam'ı tıklatırsanız, uygulama bu hatayı yok sayar ve devam etmeyi dener.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">Uygulamanızda işlenmemiş özel durum oluştu. Devam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'a tıklarsanız uygulama hemen kapatılır.\r\n\r\n{0}.</target>
+        <target state="translated">Uygulamanızda işlenmemiş özel durum oluştu. Devam'ı tıklatırsanız, uygulama bu hatayı yok sayar ve devam etmeyi dener. Çıkış'ı tıklatırsanız, uygulama hemen kapatılır.
+
+{0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,28 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">Uygulama Windows Forms tam zamanında (JIT) hata ayıklamayı\r\ndesteklemiyor. Daha fazla bilgi için uygulama\r\ngeliştiricisine başvurun.\r\n</target>
+        <target state="translated">Uygulama Windows Forms JIT hata ayıklamayı desteklemiyor.
+Daha fazla bilgi için uygulama geliştiricisine
+başvurun.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">Uygulama tam zamanında (JIT) hata ayıklamayı\r\ndesteklemiyor. Ayrıntılı bilgi için bu iletinin sonuna bakın.\r\n</target>
+        <target state="translated">Uygulama JIT hata ayıklamayı desteklemiyor.
+Ayrıntılı bilgi için bu iletinin sonuna bakın.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">Bu iletişim kutusu yerine tam zamanında (JIT) hata \r\nayıklamayı çağırma hakkında detaylı bilgi için bu iletinin sonuna bakın.\r\n</target>
+        <target state="translated">Bu iletişim kutusu yerine JIT hata ayıklamayı çağırma
+hakkında detaylı bilgi için bu iletinin sonuna bakın.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5152,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    Bütünleştirilmiş Kod Sürümü: {1}\r\n    Win32 Sürümü: {2}\r\n    CodeBase: {3}\r\n</target>
+        <target state="translated">{0}
+    Bütünleştirilmiş Kod Sürümü: {1}
+    Win32 Sürümü: {2}
+    CodeBase: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,18 +5168,21 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">Tamam</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
@@ -5172,7 +5196,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.\r\n\r\nDevam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır.\r\n\r\n{1}.</target>
+        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.
+
+Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5209,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.\r\n\r\nDevam'a tıklarsanız uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'a tıklarsanız uygulama hemen kapatılır.\r\n\r\n{1}.</target>
+        <target state="translated">Uygulama, güvenlik ilkesi tarafından izin verilmeyen bir işlem gerçekleştirmeye çalıştı. Bu uygulamaya gereken izni vermek için, sistem yöneticinize başvurun veya Microsoft .NET Framework Yapılandırma aracını kullanın.
+
+Devam'ı tıklatırsanız, uygulama bu hatayı yoksayar ve devam etmeye çalışır. Çıkış'ı tıklatırsanız, uygulama hemen kapatılır.
+
+{1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5329,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">{0} dosyası yok.\r\nOluşturmak istiyor musunuz?</target>
+        <target state="translated">{0} dosyası yok.
+Oluşturmak istiyor musunuz?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">{0} dosyası yok.\r\nDoğru dosya adının verildiğinden emin olun.</target>
+        <target state="translated">{0} dosyası yok.
+Doğru dosya adının verildiğinden emin olun.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5358,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">{0} dosyası zaten var.\r\nBunu değiştirmek istiyor musunuz?</target>
+        <target state="translated">{0} dosyası zaten var.
+Bunu değiştirmek istiyor musunuz?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5921,7 +5956,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">İş parçacıkları arası işlem geçerli değil: '{0}' denetimine, oluşturulduğu iş parçacığı dışında başka bir iş parçacığından erişildi.\r\nGeçersiz işlemin gerçekleştiği yığın izi:\r\n{1}"</target>
+        <target state="translated">Çapraz iş parçacığı işlemi geçerli değil: '{0}' denetimine oluşturulduğu iş parçacığı dışında başka bir iş parçacığından erişildi.
+Geçersiz işlemin gerçekleştiği yığın izi:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -6762,6 +6799,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGridLinesDescr">
         <source>Displays grid lines around items and SubItems. Only shown when in Details view.</source>
         <target state="translated">Öğelerin ve SubItem'ların etrafında kılavuz çizgileri görüntüler. Yalnızca Ayrıntı görünümünde gösterilir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="translated">Parametre ListViewGroup türünde olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8119,99 +8161,9 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Yakınlaştırma 0 veya daha büyük olmalıdır. Negatif değerlere izin verilmez.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Close">
-        <source>&amp;Close</source>
-        <target state="translated">&amp;Kapat</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_FourPages">
-        <source>Four pages</source>
-        <target state="translated">Dört sayfa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_OnePage">
-        <source>One page</source>
-        <target state="translated">Bir sayfa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Page">
-        <source>&amp;Page</source>
-        <target state="translated">&amp;Sayfa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Print">
-        <source>Print</source>
-        <target state="translated">Yazdır</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
         <target state="translated">Baskı önizleme</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_SixPages">
-        <source>Six pages</source>
-        <target state="translated">Altı sayfa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ThreePages">
-        <source>Three pages</source>
-        <target state="translated">Üç sayfa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_TwoPages">
-        <source>Two pages</source>
-        <target state="translated">İki sayfa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom">
-        <source>Zoom</source>
-        <target state="translated">Yakınlaştır</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom10">
-        <source>10%</source>
-        <target state="translated">%10</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom100">
-        <source>100%</source>
-        <target state="translated">100%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom150">
-        <source>150%</source>
-        <target state="translated">%150</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom200">
-        <source>200%</source>
-        <target state="translated">%200</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom25">
-        <source>25%</source>
-        <target state="translated">%25</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom50">
-        <source>50%</source>
-        <target state="translated">%50</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom500">
-        <source>500%</source>
-        <target state="translated">%500</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom75">
-        <source>75%</source>
-        <target state="translated">%75</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ZoomAuto">
-        <source>Auto</source>
-        <target state="translated">Otomatik</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
@@ -8606,12 +8558,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryMisc">
         <source>Misc</source>
-        <target state="translated">Çeşitli</target>
+        <target state="translated">Diğer</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">Konum</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
@@ -8791,7 +8743,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridRemotedObject">
         <source>Object {0} is being remoted by a proxy that does not support interface discovery.  This type of remoted object is not supported.</source>
-        <target state="translated">{0} nesnesi arabirim keşfini desteklemeyen bir proxy tarafından uzaktan çalıştırılıyor. Bu tür uzak nesne haline getirilmiş nesneler desteklenmez.</target>
+        <target state="translated">{0} nesnesi arabirim keşfini desteklemeyen bir ara sunucu tarafından uzaktan çalıştırılıyor. Bu tür uzak nesne haline getirilmiş nesneler desteklenmez.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridRemoveStaticTabs">
@@ -9249,73 +9201,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Bu ScrollableControl için dikey kaydırma çubuğunu alır.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SecurityAboutDialog">
-        <source>Microsoft .NET Application Information</source>
-        <target state="translated">Microsoft .NET Uygulama Bilgileri</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityApplication">
-        <source>Application</source>
-        <target state="translated">Uygulama</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAsmNameColumn">
-        <source>Name</source>
-        <target state="translated">Ad</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAssembliesTab">
-        <source>Assemblies</source>
-        <target state="translated">Derlemeler</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportLabel">
-        <source>To submit a bug report, first save the report, and then click Submit. Attach the saved report to the online form.</source>
-        <target state="translated">Hata raporu göndermek için, raporu kaydedin ve sonra Gönder'i tıklatın. Kaydedilen raporu çevrimiçi forma iliştirin.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportTab">
-        <source>Beta Bug Report</source>
-        <target state="translated">Beta Hata Raporu</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityClose">
-        <source>&amp;Close</source>
-        <target state="translated">&amp;Kapat</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityCodeBaseColumn">
-        <source>CodeBase</source>
-        <target state="translated">CodeBase</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityFileVersionColumn">
-        <source>File Version</source>
-        <target state="translated">Dosya Sürümü</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeAppInfo">
-        <source>Include &amp;Application Information</source>
-        <target state="translated">Uygul&amp;ama Bilgilerini Ekle</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeSysInfo">
-        <source>Include &amp;System Information</source>
-        <target state="translated">&amp;Sistem Bilgilerini Ekle</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityInfoTab">
-        <source>Security</source>
-        <target state="translated">Güvenlik</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Pencere kısıtlanmış modda çalışıyor. Bazı kullanıcı arabirimi özellikleri güvenlik nedeniyle devre dışı olabilir. \r\n\r\nDaha fazla bilgi için sistem yöneticinize veya uygulama yazarına başvurun.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
         <source>Mixed Zone</source>
         <target state="translated">Karışık Bölge</target>
@@ -9334,46 +9219,6 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
         <source>Unknown Zone</source>
         <target state="translated">Bilinmeyen Bölge</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveBug">
-        <source>S&amp;ave</source>
-        <target state="translated">K&amp;aydet</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveFilter">
-        <source>Xml Files (*.xml)|*.xml</source>
-        <target state="translated">XML Dosyaları (*.xml)|*.xml</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBug">
-        <source>S&amp;ubmit</source>
-        <target state="translated">&amp;Gönder</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBugUrl">
-        <source>http://beta.visualstudio.net/net/sdk/feedback.asp</source>
-        <target state="translated">http://msdn.microsoft.com/tr-tr/vstudio/default(en-us).aspx</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchDescrColumn">
-        <source>Description</source>
-        <target state="translated">Açıklama</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchLabel">
-        <source>Changing the switch value will affect only the currently running version of this application.</source>
-        <target state="translated">Anahtar değerini değiştirmek bu uygulamanın yalnızca çalışmakta olan sürümünü etkileyecektir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchNameColumn">
-        <source>Name</source>
-        <target state="translated">Ad</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchesTab">
-        <source>Switches</source>
-        <target state="translated">Anahtarlar</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipCaption">
@@ -9395,19 +9240,9 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+        <target state="translated">{0}
 
-For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">Pencere kısıtlanmamış modda çalışıyor. Ana pencerenin kısıtlanmamış bir şekilde çalışmasına rağmen bazı özellikler güvenlik nedeniyle devre dışı olabilir. \r\n\r\nDaha fazla bilgi için sistem yöneticinize veya uygulama yazarına başvurun.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityVersionColumn">
-        <source>Assembly Version</source>
-        <target state="translated">Derleme Sürümü</target>
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SelTabCountRange">
@@ -10022,7 +9857,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">TextBox denetiminin PlaceholderText'ini belirtir. PlaceholderText, Text özelliği null değerli veya boş olduğunda gösterilir ve kullanıcıyı denetimin beklediği girişin ne olduğuna ilişkin yönlendirmek için kullanılabilir. </target>
+        <target state="translated">TextBox denetiminin PlaceholderText özelliğini belirtir. PlaceholderText, Text özelliği null veya boş olduğunda gösterilir ve kullanıcıyı denetimin beklediği girişin ne olduğuna ilişkin yönlendirmek için kullanılabilir. </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11210,6 +11045,11 @@ For more information, contact your system administrator or the application autho
         <target state="translated">Ağaç düğümünün işaretli durumda olup olmadığını gösterir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="translated">Döngüsel başvuru yapıldı. Bir TreeNode kendi alt öğesi olarak eklenemez.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">Parametrenin TreeNode türünde olması gerekir.</target>
@@ -11483,263 +11323,6 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TreeViewVisibleCountDescr">
         <source>The number of visible nodes in the TreeView.</source>
         <target state="translated">TreeView içindeki görünür düğüm sayısı.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerBadXml">
-        <source>XML not valid. Expecting {0} tag.</source>
-        <target state="translated">XML geçerli değil. {0} etiketi bekleniyor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InstallTitle">
-        <source>Application Install - More Information</source>
-        <target state="translated">Uygulama Yükleme - Ek Bilgi</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InternetSource">
-        <source>the Internet</source>
-        <target state="translated">Internet</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_KnownPublisher">
-        <source>This application was published by {0}. Only run applications from publishers that you trust.</source>
-        <target state="translated">Bu uygulama {0} tarafından yayınlanmıştır. Yalnızca güvendiğiniz yayımcıların uygulamalarını çalıştırın.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalComputerSource">
-        <source>the Local Computer</source>
-        <target state="translated">Yerel Bilgisayar</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalNetworkSource">
-        <source>the Local Network</source>
-        <target state="translated">Yerel Ağ</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_Location">
-        <source>This application comes from {0}. Only run applications from locations that you trust.</source>
-        <target state="translated">Bu uygulama {0} öğesinden geliyor. Yalnızca güvendiğiniz konumlardan gelen uygulamaları çalıştırın.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_RunTitle">
-        <source>Application Run - More Information</source>
-        <target state="translated">Uygulama Çalıştırma - Ek Bilgi</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_SafeAccess">
-        <source>This application has only limited access to your computer.</source>
-        <target state="translated">Uygulamanın bilgisayarınıza yalnızca sınırlı erişimi var.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_TrustedSitesSource">
-        <source>a Trusted Site</source>
-        <target state="translated">Güvenilen Site</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnknownPublisher">
-        <source>The publisher of this application cannot be verified. Only run applications from publishers that you trust.</source>
-        <target state="translated">Bu uygulamanın yayımcısı doğrulanamıyor. Yalnızca güvendiğiniz yayımcıların uygulamalarını çalıştırın.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnsafeAccess">
-        <source>This application will gain access to additional resources on your computer, such as your file system or your network connection. This may put your computer at risk. Do not approve unless you trust the application's publisher.</source>
-        <target state="translated">Bu uygulama dosya sisteminiz veya ağ bağlantınız gibi bilgisayarınızdaki ek kaynaklara erişim elde eder. Bu bilgisayarınızı riske atabilir. Uygulamanın yayımcısına güvenmiyorsanız onaylamayın.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UntrustedSitesSource">
-        <source>an Untrusted Site</source>
-        <target state="translated">Güvenilmeyen Site</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithShortcut">
-        <source>This application will be installed on your computer. It will add a shortcut to your Start menu and will be added to the Add or Remove Programs list.</source>
-        <target state="translated">Bu uygulama bilgisayarınıza yüklenecek. Başlat menünüze kısayol ekler ve Program Ekle veya Kaldır listesine eklenir.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithoutShortcut">
-        <source>This application will be temporarily installed onto your computer. It will not be added to your Start menu or to the Add or Remove Programs list.</source>
-        <target state="translated">Bu uygulama bilgisayarınıza geçici olarak yüklenecek. Başlat menünüze veya Program Ekle veya Kaldır listesine eklenmez.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallBlocked">
-        <source>Trust Manager Dialog - Install Blocked</source>
-        <target state="translated">Güven Yöneticisi İletişim Kutusu - Yükleme Engellendi</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallConfirmation">
-        <source>Trust Manager Dialog - Install Confirmation</source>
-        <target state="translated">Güven Yöneticisi İletişim Kutusu - Yükleme Onayı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallWithElevatedPermissions">
-        <source>Trust Manager Dialog - Install with elevated permissions</source>
-        <target state="translated">Güven Yöneticisi İletişim Kutusu - Yükseltilmiş izinlerle yükleme</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunBlocked">
-        <source>Trust Manager Dialog - Run Blocked</source>
-        <target state="translated">Güven Yöneticisi İletişim Kutusu - Çalıştırma Engellendi</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunConfirmation">
-        <source>Trust Manager Dialog - Run Confirmation</source>
-        <target state="translated">Güven Yöneticisi İletişim Kutusu - Çalıştırma Onayı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunWithElevatedPermissions">
-        <source>Trust Manager Dialog - Run with elevated permissions</source>
-        <target state="translated">Güven Yöneticisi İletişim Kutusu - Yükseltilmiş izinlerle çalıştırma</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_BlockedApp">
-        <source>Your administrator has blocked this application because it potentially poses a security risk to your computer.</source>
-        <target state="translated">Bilgisayarınız için olası güvenlik riski oluşturduğundan yöneticiniz bu uygulamayı engelledi.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Close">
-        <source>Close</source>
-        <target state="translated">Kapat</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotInstall">
-        <source>&amp;Don't Install</source>
-        <target state="translated">Yükle&amp;me</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotRun">
-        <source>&amp;Don't Run</source>
-        <target state="translated">&amp;Çalıştırma</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_From">
-        <source>From</source>
-        <target state="translated">Kaynak:</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_GlobeIcon">
-        <source>Globe Icon</source>
-        <target state="translated">Dünya Simgesi</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">Uygulamalar kullanışlı olabildiği gibi bilgisayarınıza zarar da verebilir. Kaynağa güvenmiyorsanız, yazılımı yüklemeyin. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallQuestion">
-        <source>Do you want to install this application?</source>
-        <target state="translated">Bu uygulamayı yüklemek istiyor musunuz?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallTitle">
-        <source>Application Install - Security Warning</source>
-        <target state="translated">Uygulama Yükleme - Güvenlik Uyarısı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">Internet uygulamalar kullanışlı olabildiği gibi bilgisayarınıza zarar da verebilir. Kaynağa güvenmiyorsanız, yazılımı yüklemeyin. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstalledAppBlockedWarning">
-        <source>Your security settings do not allow this application to be installed on your computer.</source>
-        <target state="translated">Güvenlik ayarlarınız bu uygulamanın bilgisayarınıza yüklenmesine izin vermiyor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformation">
-        <source>More Information...</source>
-        <target state="translated">Daha Fazla Bilgi...</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleDescription">
-        <source>Warning text and link to get more information</source>
-        <target state="translated">Uyarı metni ve ek bilgi edinme bağlantısı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
-        <source>MoreInformationLink</source>
-        <target state="translated">MoreInformationLink</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Name">
-        <source>Name</source>
-        <target state="translated">Ad</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">Yayımcı doğrulanamıyor.\r\nBu uygulamayı yüklemek istediğinizden emin misiniz?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">Yayımcı doğrulanamıyor.\r\nBu uygulamayı çalıştırmak istediğinizden emin misiniz?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Publisher">
-        <source>Publisher</source>
-        <target state="translated">Yayımcı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Run">
-        <source>&amp;Run</source>
-        <target state="translated">&amp;Çalıştır</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunAppBlockedWarning">
-        <source>Your security settings do not allow this application to be run on your computer.</source>
-        <target state="translated">Güvenlik ayarlarınız bu uygulamanın bilgisayarınızda çalıştırılmasına izin vermiyor.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">Uygulamalar kullanışlı olabildiği gibi bilgisayarınıza zarar da verebilir. Kaynağa güvenmiyorsanız, yazılımı çalıştırmayın. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunQuestion">
-        <source>Do you want to run this application?</source>
-        <target state="translated">Bu uygulamayı çalıştırmak istiyor musunuz?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunTitle">
-        <source>Application Run - Security Warning</source>
-        <target state="translated">Uygulama Çalıştırma - Güvenlik Uyarısı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">Internet uygulamalar kullanışlı olabildiği gibi bilgisayarınıza zarar da verebilir. Kaynağa güvenmiyorsanız, yazılımı çalıştırmayın. {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_UnknownPublisher">
-        <source>Unknown Publisher</source>
-        <target state="translated">Bilinmeyen Yayımcı</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleDescription">
-        <source>Warning text</source>
-        <target state="translated">Uyarı metni</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleName">
-        <source>WarningLabel</source>
-        <target state="translated">WarningLabel</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_HighRisk">
-        <source>{0} - High Risk</source>
-        <target state="translated">{0} - Yüksek Risk</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_LowRisk">
-        <source>{0} - Low Risk</source>
-        <target state="translated">{0} - Düşük Risk</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_MediumRisk">
-        <source>{0} - Medium Risk</source>
-        <target state="translated">{0} - Orta Risk</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeLoadException">

@@ -27,6 +27,41 @@
         <target state="translated">Alto</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="translated">Impossibile rimuovere l'elemento '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="translated">Editor della raccolta {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="translated">Componenti in sola lettura selezionati.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="translated">&amp;Proprietà {0}:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="translated">&amp;Proprietà a selezione multipla:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="translated">&amp;Proprietà:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="translated">Aggiungi o rimuovi {0} oggetti</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
         <target state="translated">Selezione colori</target>
@@ -40,7 +75,7 @@
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
         <target state="translated">Web</target>
-        <note />
+        <note>{Locked="Web"}</note>
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
@@ -95,6 +130,11 @@
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Winforms Designer non è supportato in questa piattaforma.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="translated">RTL_False</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">

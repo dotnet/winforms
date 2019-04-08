@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -378,6 +378,117 @@ namespace System.Windows.Forms.Tests
             ICloneable original = owner.DockPadding;
             ScrollableControl.DockPaddingEdges padding = (ScrollableControl.DockPaddingEdges)original.Clone();
             Assert.Equal("{Left=1,Top=2,Right=3,Bottom=4}", padding.ToString());
+        }
+
+        [Fact]
+        public void DockPaddingEdges_AllPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var owner = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            ScrollableControl.DockPaddingEdges padding = owner.DockPadding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(ScrollableControl.DockPaddingEdges.All)];
+            Assert.True(property.CanResetValue(padding));
+            Assert.True(property.ShouldSerializeValue(padding));
+            property.ResetValue(padding);
+
+            Assert.Equal(0, padding.All);
+            Assert.Equal(0, padding.Left);
+            Assert.Equal(0, padding.Top);
+            Assert.Equal(0, padding.Right);
+            Assert.Equal(0, padding.Bottom);
+        }
+
+        [Fact]
+        public void DockPaddingEdges_LeftPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var owner = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            ScrollableControl.DockPaddingEdges padding = owner.DockPadding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(ScrollableControl.DockPaddingEdges.Left)];
+            Assert.True(property.CanResetValue(padding));
+            Assert.True(property.ShouldSerializeValue(padding));
+            property.ResetValue(padding);
+
+            Assert.Equal(0, padding.All);
+            Assert.Equal(0, padding.Left);
+            Assert.Equal(2, padding.Top);
+            Assert.Equal(3, padding.Right);
+            Assert.Equal(4, padding.Bottom);
+        }
+
+        [Fact]
+        public void DockPaddingEdges_TopPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var owner = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            ScrollableControl.DockPaddingEdges padding = owner.DockPadding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(ScrollableControl.DockPaddingEdges.Top)];
+            Assert.True(property.CanResetValue(padding));
+            Assert.True(property.ShouldSerializeValue(padding));
+            property.ResetValue(padding);
+
+            Assert.Equal(0, padding.All);
+            Assert.Equal(1, padding.Left);
+            Assert.Equal(0, padding.Top);
+            Assert.Equal(3, padding.Right);
+            Assert.Equal(4, padding.Bottom);
+        }
+
+        [Fact]
+        public void DockPaddingEdges_RightPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var owner = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            ScrollableControl.DockPaddingEdges padding = owner.DockPadding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(ScrollableControl.DockPaddingEdges.Right)];
+            Assert.True(property.CanResetValue(padding));
+            Assert.True(property.ShouldSerializeValue(padding));
+            property.ResetValue(padding);
+
+            Assert.Equal(0, padding.All);
+            Assert.Equal(1, padding.Left);
+            Assert.Equal(2, padding.Top);
+            Assert.Equal(0, padding.Right);
+            Assert.Equal(4, padding.Bottom);
+        }
+
+        [Fact]
+        public void DockPaddingEdges_BottomPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var owner = new ScrollableControl
+            {
+                Padding = new Padding(1, 2, 3, 4)
+            };
+            ScrollableControl.DockPaddingEdges padding = owner.DockPadding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(ScrollableControl.DockPaddingEdges.Bottom)];
+            Assert.True(property.CanResetValue(padding));
+            Assert.True(property.ShouldSerializeValue(padding));
+            property.ResetValue(padding);
+
+            Assert.Equal(0, padding.All);
+            Assert.Equal(1, padding.Left);
+            Assert.Equal(2, padding.Top);
+            Assert.Equal(3, padding.Right);
+            Assert.Equal(0, padding.Bottom);
+        }
+
+        [Fact]
+        public void DockPaddingEdges_GetTypeConverter_ReturnsDockPaddingEdgesConverter()
+        {
+            Assert.IsType<ScrollableControl.DockPaddingEdgesConverter>(TypeDescriptor.GetConverter(typeof(ScrollableControl.DockPaddingEdges)));
         }
     }
 }

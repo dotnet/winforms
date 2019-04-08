@@ -1,14 +1,17 @@
 {
   "tools": {
-    "dotnet": "3.0.100-preview-010024",
+    "dotnet": "3.0.100-preview4-010924",
     "vs": {
       "version": "16.0"
-    }
+    },
+    "xcopy-msbuild": "16.0.0-rc1-alpha"
   },
   "sdk": {
-    "version": "3.0.100-preview-010024"
+    "version": "3.0.100-preview4-010924"
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19157.4"
+    "Microsoft.DotNet.Arcade.Sdk": "1.0.0-beta.19207.1",
+    "Microsoft.DotNet.Helix.Sdk": "2.0.0-beta.19207.1",
+    "Microsoft.NET.Sdk.IL": "3.0.0-preview4-27525-72"
   }
 }

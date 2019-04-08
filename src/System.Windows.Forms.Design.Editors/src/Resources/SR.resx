@@ -84,6 +84,7 @@
   </data>
   <data name="ColorEditorStandardTab" xml:space="preserve">
     <value>Web</value>
+    <comment>{Locked="Web"}</comment>
   </data>
   <data name="ColorEditorSystemTab" xml:space="preserve">
     <value>System</value>
@@ -126,5 +127,29 @@
   </data>
   <data name="ShortcutKeys_InvalidKey" xml:space="preserve">
     <value>(Unknown)</value>
+  </data>
+  <data name="CollectionEditorCantRemoveItem" xml:space="preserve">
+    <value>The item '{0}' cannot be removed.</value>
+  </data>
+  <data name="CollectionEditorCaption" xml:space="preserve">
+    <value>{0} Collection Editor</value>
+  </data>
+  <data name="CollectionEditorInheritedReadOnlySelection" xml:space="preserve">
+    <value>Read-only component(s) selected.</value>
+  </data>
+  <data name="CollectionEditorProperties" xml:space="preserve">
+    <value>{0} &amp;properties:</value>
+  </data>
+  <data name="CollectionEditorPropertiesMultiSelect" xml:space="preserve">
+    <value>Multi-Select &amp;Properties:</value>
+  </data>
+  <data name="CollectionEditorPropertiesNone" xml:space="preserve">
+    <value>&amp;Properties:</value>
+  </data>
+  <data name="CollectionEditorUndoBatchDesc" xml:space="preserve">
+    <value>Add or remove {0} objects</value>
+  </data>
+  <data name="RTL" xml:space="preserve">
+    <value>RTL_False</value>
   </data>
 </root>

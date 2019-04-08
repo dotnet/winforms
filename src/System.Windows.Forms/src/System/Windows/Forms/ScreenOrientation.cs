@@ -1,55 +1,32 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using Microsoft.Win32;
-
-
-    /// <include file='doc\ScreenOrientation.uex' path='docs/doc[@for="ScreenOrientation"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the angle of screen orientation
-    ///    </para>
+    /// Specifies the angle of screen orientation
     /// </devdoc>
-    public enum ScreenOrientation {
-        /// <include file='doc\ScreenOrientation.uex' path='docs/doc[@for="Day.Angle0"]/*' />
+    public enum ScreenOrientation
+    {
         /// <devdoc>
-        ///    <para>
-        ///       The screen is oriented at 0 degrees
-        ///    </para>
+        /// The screen is oriented at 0 degrees
         /// </devdoc>
         Angle0 = 0,
 
-        /// <include file='doc\ScreenOrientation.uex' path='docs/doc[@for="Day.Angle90"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The screen is oriented at 90 degrees
-        ///    </para>
+        /// The screen is oriented at 90 degrees
         /// </devdoc>
         Angle90 = 1,
 
-        /// <include file='doc\ScreenOrientation.uex' path='docs/doc[@for="Day.Angle180"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The screen is oriented at 180 degrees.
-        ///    </para>
+        /// The screen is oriented at 180 degrees.
         /// </devdoc>
         Angle180 = 2,
 
-        /// <include file='doc\ScreenOrientation.uex' path='docs/doc[@for="Day.Angle270"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The screen is oriented at 270 degrees.
-        ///    </para>
+        /// The screen is oriented at 270 degrees.
         /// </devdoc>
         Angle270 = 3,
     }
 }
-

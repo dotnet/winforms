@@ -1,0 +1,34 @@
+parameters:
+  # All parameters are required for our purposes (except HelixType); see send-to-helix.yml for details
+  HelixSource: ''
+  HelixType: 'tests/default'            
+  HelixTargetQueues: ''    
+  HelixAccessToken: ''
+  Creator: ''  
+  XUnitProjects: ''        
+  DisplayNamePrefix: ''
+  condition: succeeded()        
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: custom
+    projects: eng/helixpublish.proj
+    custom: msbuild
+    arguments: '/bl:$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/SendToHelix.binlog'
+  displayName: ${{ parameters.DisplayNamePrefix }}
+  env:
+    HelixSource: ${{ parameters.HelixSource }}
+    HelixType: ${{ parameters.HelixType }}
+    HelixBuild: $(Build.BuildNumber)
+    HelixTargetQueues: ${{ parameters.HelixTargetQueues }}
+    HelixAccessToken: ${{ parameters.HelixAccessToken }}
+    Creator: ${{ parameters.Creator }}
+    WorkItemCommand: ${{ parameters.WorkItemCommand }}
+    CorrelationPayloadDirectory: ${{ parameters.CorrelationPayloadDirectory }}
+    XUnitProjects: ${{ parameters.XUnitProjects }}
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken) #required to report test results back to AzDO
+    XUnitPublishTargetFramework: netcoreapp3.0
+    XUnitRuntimeTargetFramework: netcoreapp2.0
+  condition: ${{ parameters.condition }}
+  continueOnError: false

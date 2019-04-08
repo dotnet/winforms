@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -96,12 +96,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("1,2", position.ToString());
         }
 
+        public static TheoryData<Type, bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
-        [InlineData(typeof(string), true)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(TableLayoutSettings), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), true)]
         public void TableLayoutPanelCellPosition_ConverterCanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
@@ -215,10 +216,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutPanelCellPosition_ConverterCreateInstance_NullPropertyValue_ThrowsNullReferenceException()
+        public void TableLayoutPanelCellPosition_ConverterCreateInstance_NullPropertyValues_ThrowsArgumentNullException()
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-            Assert.Throws<NullReferenceException>(() => converter.CreateInstance(null, null));
+            Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(null, null));
         }
 
         [Fact]

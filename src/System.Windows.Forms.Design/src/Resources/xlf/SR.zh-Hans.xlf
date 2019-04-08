@@ -2,6 +2,251 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="zh-HANS" original="../SR.resx">
     <body>
+      <trans-unit id="BehaviorServiceCopyControl">
+        <source>Copy and move {0}</source>
+        <target state="new">Copy and move {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceCopyControls">
+        <source>Copy and move {0} Controls</source>
+        <target state="new">Copy and move {0} Controls</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControl">
+        <source>Move {0}</source>
+        <target state="new">Move {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceMoveControls">
+        <source>Move {0} Controls</source>
+        <target state="new">Move {0} Controls</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
+        <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
+        <target state="translated">序列化存储区已关闭。新对象无法添加到已关闭的存储区中。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceDeserializationError">
+        <source>Complete deserialization of {0} failed.</source>
+        <target state="translated">未能完成对 {0} 的反序列化。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
+        <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
+        <target state="translated">不支持这种类型的序列化存储区。请使用 CreateStore 方法返回的存储区。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComponentDesignerAddEvent">
+        <source>Adding event '{0}'</source>
+        <target state="translated">添加事件“{0}”</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="COM2UnhandledVT">
+        <source>Unhandled VT: {0}.</source>
+        <target state="translated">未处理的 VT: {0}。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">无法将 double 转换为 date。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">无法将 integer 转换为 float。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignByPrimary">
+        <source>Format {0} components (alignment)</source>
+        <target state="new">Format {0} components (alignment)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetAlignToGrid">
+        <source>Align {0} components to grid</source>
+        <target state="new">Align {0} components to grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetCutMultiple">
+        <source>Cut {0} Components</source>
+        <target state="new">Cut {0} Components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetDelete">
+        <source>Delete {0} components</source>
+        <target state="new">Delete {0} components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetError">
+        <source>An error occurred while processing this command.\r\n{0}</source>
+        <target state="new">An error occurred while processing this command.\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetFormatSpacing">
+        <source>Format {0} components (spacing)</source>
+        <target state="new">Format {0} components (spacing)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetPaste">
+        <source>Paste components</source>
+        <target state="new">Paste components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSize">
+        <source>Size {0} components</source>
+        <target state="new">Size {0} components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSizeToGrid">
+        <source>Size {0} components to grid</source>
+        <target state="new">Size {0} components to grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetUnknownSpacingCommand">
+        <source>Unknown spacing command</source>
+        <target state="new">Unknown spacing command</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
+        <source>Could not convert value '{0}' to the type '{1}'.</source>
+        <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
+        <source>Could not find method '{0}'.</source>
+        <target state="new">Could not find method '{0}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
+        <source>Could not find property '{0}' on '{1}'.</source>
+        <target state="new">Could not find property '{0}' on '{1}'.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
+        <source>{0} Tasks</source>
+        <target state="new">{0} Tasks</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
+        <source>Error using the dropdown: {0}</source>
+        <target state="new">Error using the dropdown: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
+        <source>Error invoking '{0}'.  Details: {1}</source>
+        <target state="new">Error invoking '{0}'.  Details: {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerActionPanel_ErrorSettingValue">
+        <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
+        <target state="new">Error setting value '{0}' to property '{1}'.  Details: {2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerBeginDragNotCalled">
+        <source>Call to BeginDrag must succeed before calling drag functions.</source>
+        <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInherited">
+        <source>Inherited control</source>
+        <target state="new">Inherited control</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerInheritedReadOnly">
+        <source>Inherited control (Private)</source>
+        <target state="new">Inherited control (Private)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceContainerDispose">
+        <source>The container cannot be disposed at design time.</source>
+        <target state="translated">不能在设计时释放容器。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceDesignerNotLoaded">
+        <source>Cannot create a view for this design surface because the designer is not loaded.</source>
+        <target state="translated">设计器未加载，因此无法创建此设计图面的视图。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceFatalError">
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
+        <target state="translated">加载文档时出错。请修复此错误，然后再尝试重新加载该文档。错误消息如下所示:\r\n\r\n{0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoRootComponent">
+        <source>The designer loader did not provide a root component but has not indicated why.</source>
+        <target state="translated">设计器加载程序未提供根组件，但没有指出原因。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceNoSupportedTechnology">
+        <source>The designer loaded, but it does not offer a view compatible with this design surface.</source>
+        <target state="translated">设计器已加载，但是它没有提供与此设计图面兼容的视图。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignSurfaceServiceIsFixed">
+        <source>The service {0} cannot be removed from the service container.</source>
+        <target state="translated">无法将服务 {0} 从服务容器移除。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostCantDestroyInheritedComponent">
+        <source>Cannot remove or destroy inherited component '{0}'.</source>
+        <target state="translated">无法移除或损坏继承的组件“{0}”。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostCyclicAdd">
+        <source>Cannot add an instance of {0} to the designer because it would create a circular dependency.  Make sure that the type does not have the same namespace and type name as the root component {1}.</source>
+        <target state="translated">不能向设计器中添加 {0} 的实例，因为这会创建一个循环依赖项。请确保该类型的命名空间和类型名称与根组件 {1} 不同。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDesignerNeedsComponent">
+        <source>Failure initializing the designer.  It has no Component member.</source>
+        <target state="translated">初始化设计器失败。它没有 Component 成员。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDestroyComponentTransaction">
+        <source>Deleting '{0}'.</source>
+        <target state="translated">正在删除“{0}”。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostDuplicateName">
+        <source>The name {0} is already in use by another component.</source>
+        <target state="translated">名称 {0} 已被其他组件使用。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostFailedComponentCreate">
+        <source>Component of type {0} could not be created.  Make sure the type implements IComponent and provides an appropriate public constructor.  Appropriate constructors either take no parameters or take a single IContainer parameter.</source>
+        <target state="translated">未能创建 {0} 类型的组件。请确保该类型实现 IComponent 并提供正确的公共构造函数。正确的构造函数没有参数或只有一个 IContainer 参数。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostGenericTransactionName">
+        <source>No Description Available</source>
+        <target state="translated">没有可用的说明</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostLoaderSpecified">
+        <source>A designer loader has already been configured for this design surface.</source>
+        <target state="translated">已为此设计图面配置了设计器加载程序。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNestedTransaction">
+        <source>The designer transaction '{0}' cannot be committed or canceled because nested transaction '{1}' is still active.  Commit or cancel the nested transaction first.</source>
+        <target state="translated">嵌套事务“{1}”仍处于活动状态，因此无法提交或取消设计器事务“{0}”。请先提交或取消嵌套事务。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNoBaseClass">
+        <source>Cannot open a designer for the file because the class within it does not inherit from a class that can be visually designed.</source>
+        <target state="translated">该文件内的类不是从可进行可视化设计的类继承，因此无法为该文件打开设计器。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostNoTopLevelDesigner">
+        <source>There is no designer for the class {0}.</source>
+        <target state="translated">没有用于 {0} 类的设计器。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerHostUnloading">
+        <source>New components cannot be added while a designer is unloading.</source>
+        <target state="translated">卸载设计器时不能添加新的组件。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerOptions_CodeGenDisplay">
         <source>Optimized Code Generation</source>
         <target state="translated">优化代码生成</target>
@@ -92,9 +337,49 @@
         <target state="translated">控制设计器是否应使用对齐线。如果设置为 True，则使用对齐线作为参考线。如果设置为 False，则使用网格线。</target>
         <note />
       </trans-unit>
+      <trans-unit id="DotNET_ComponentType">
+        <source>.NET Component</source>
+        <target state="translated">.NET 组件</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropDragComponents">
+        <source>Drag {0} components</source>
+        <target state="new">Drag {0} components</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponent">
+        <source>Move {0}</source>
+        <target state="new">Move {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropMoveComponents">
+        <source>Move {0} components</source>
+        <target state="new">Move {0} components</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DragDropSetDataError">
         <source>This IDataObject doesn't support SetData.</source>
         <target state="translated">此 IDataObject 不支持 SetData。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ExtenderProviderServiceDuplicateProvider">
+        <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
+        <target state="translated">扩展程序提供程序 {0} 已添加为扩展程序。添加其他扩展程序提供程序将导致重复的属性。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InheritanceServiceReadOnlyCollection">
+        <source>Read-Only</source>
+        <target state="translated">只读</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponent">
+        <source>Size {0}</source>
+        <target state="new">Size {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponents">
+        <source>Size {0} components</source>
+        <target state="new">Size {0} components</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -105,6 +390,226 @@
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">此平台上不支持 Winforms Designer。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="new">RTL_False</target>
+        <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
+      </trans-unit>
+      <trans-unit id="SerializationManagerAreadyInSession">
+        <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
+        <target state="translated">此序列化管理器已有活动的序列化会话，因此不能创建新的会话。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerDuplicateComponentDecl">
+        <source>Duplicate declaration of member '{0}'</source>
+        <target state="translated">成员“{0}”的重复声明</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNameInUse">
+        <source>The name '{0}' is already used by another object.</source>
+        <target state="translated">名称“{0}”已由另一个对象使用。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoMatchingCtor">
+        <source>Type '{0}' does not have a constructor with parameters of types {1}.</source>
+        <target state="translated">类型“{0}”不具有带有 {1} 类型参数的构造函数。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerNoSession">
+        <source>This method cannot be invoked because the serialization manager does not have an active serialization session.</source>
+        <target state="translated">此序列化管理器没有活动的序列化会话，因此无法调用此方法。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerObjectHasName">
+        <source>Cannot name the object '{0}' because it is already named '{1}'.</source>
+        <target state="translated">对象“{0}”已命名为“{1}”，因此无法命名该对象。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializationManagerWithinSession">
+        <source>This method cannot be invoked because the serialization manager has an active serialization session.</source>
+        <target state="translated">此序列化管理器有活动的序列化会话，因此无法调用此方法。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerBadElementTypes">
+        <source>Elements of type {0} are not supported.  The serializer expects the element to be one of the following: {1}.</source>
+        <target state="translated">不支持类型为 {0} 的元素。序列化程序要求元素为以下某项: {1}。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerFieldTargetEvalFailed">
+        <source>The field '{0}' could not be found on the target object.  Make sure that the field is defined as an instance variable on the target object and has the correct scope.</source>
+        <target state="translated">未能在目标对象上找到字段“{0}”。请确保该字段定义为目标对象上的实例变量并具有正确的范围。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerInvalidArrayRank">
+        <source>Array rank '{0}' is too high.  Visual Studio can only save and load arrays with a rank of 1.</source>
+        <target state="translated">数组秩“{0}”过高。Visual Studio 只能保存和加载秩为 1 的数组。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerLostStatements">
+        <source>Code statements for the object '{0}' were lost during serialization.  This may have been a result of another object misbehaving during serialization.</source>
+        <target state="translated">对象“{0}”的代码语句在序列化过程中丢失。这可能是由于在序列化过程中另一个对象的错误行为造成的。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerMemberTypeNotSerializable">
+        <source>Members of type '{0}' cannot be serialized.</source>
+        <target state="translated">无法序列化类型“{0}”的成员。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoRootExpression">
+        <source>The source code contains a reference to the class definition, but the class definition cannot be found.</source>
+        <target state="translated">源代码包含对类定义的引用，但无法找到该类定义。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSerializerForComponent">
+        <source>The object '{0}' failed to serialize itself.  It may not support code generation.</source>
+        <target state="translated">对象“{0}”未能序列化其自身。它可能不支持代码生成。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchEvent">
+        <source>The type '{0}' has no event named '{1}'.</source>
+        <target state="translated">类型“{0}”没有名为“{1}”的事件。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchField">
+        <source>The type '{0}' has no field named '{1}'.</source>
+        <target state="translated">类型“{0}”没有名为“{1}”的字段。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerNoSuchProperty">
+        <source>The type '{0}' has no property named '{1}'.</source>
+        <target state="translated">类型“{0}”没有名为“{1}”的属性。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceException">
+        <source>Error reading resources from the resource file for the culture {0}: {1}</source>
+        <target state="translated">从区域性 {0} 的资源文件中读取资源时出错: {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerResourceExceptionInvariant">
+        <source>Error reading resources from the resource file for the default culture: {0}</source>
+        <target state="translated">从默认区域性的资源文件中读取资源时出错: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerTypeNotFound">
+        <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
+        <target state="translated">未能找到类型“{0}”。请确保已引用包含此类型的程序集。如果此类型为开发项目的一部分，请确保已使用针对当前平台或任意 CPU 的设置成功生成该项目。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerUndeclaredName">
+        <source>The variable '{0}' is either undeclared or was never assigned.</source>
+        <target state="translated">变量“{0}”未声明或从未赋值。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemInvalidKey">
+        <source>Argument should be a non-empty string.</source>
+        <target state="translated">参数应为非空的字符串。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemInvalidPropertyType">
+        <source>Property {0} requires an argument of type {1}.</source>
+        <target state="translated">属性 {0} 需要 {1} 类型的参数。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemLocked">
+        <source>Toolbox item cannot be modified.</source>
+        <target state="translated">无法修改工具箱项。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolboxItemValueNotSerializable">
+        <source>Data type {0} is not serializable. Items added to a property dictionary must be serializable.</source>
+        <target state="translated">数据类型 {0} 无法序列化。添加到属性字典中的项必须能序列化。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TypeNotFoundInTargetFramework">
+        <source>Type '{0}' is not available in the target framework.</source>
+        <target state="translated">类型“{0}”在目标框架中不可用。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd0">
+        <source>Add Component</source>
+        <target state="translated">添加组件</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentAdd1">
+        <source>Add {0}</source>
+        <target state="translated">添加 {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange0">
+        <source>Change Component</source>
+        <target state="translated">更改组件</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange1">
+        <source>Change {0}</source>
+        <target state="translated">更改 {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentChange2">
+        <source>Change {0}.{1}</source>
+        <target state="translated">更改 {0}.{1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove0">
+        <source>Remove Component</source>
+        <target state="translated">移除组件</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRemove1">
+        <source>Remove {0}</source>
+        <target state="translated">移除 {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineComponentRename">
+        <source>Rename {0} to {1}</source>
+        <target state="translated">将 {0} 重命名为 {1}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UndoEngineMissingService">
+        <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
+        <target state="translated">未能找到所需服务 {0}。如果您移除了此服务，请确保提供替代服务。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayAutoArrange">
+        <source>Auto Arrange Tray Icons</source>
+        <target state="new">Auto Arrange Tray Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayLineUpIcons">
+        <source>Line Up Tray Icons</source>
+        <target state="new">Line Up Tray Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayShowLargeIcons">
+        <source>Show Large or Small Icons</source>
+        <target state="new">Show Large or Small Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UIServiceHelper_ErrorCaption">
+        <source>Error</source>
+        <target state="new">Error</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UnsafeNativeMethodsNotImplemented">
+        <source>Not implemented.</source>
+        <target state="translated">未实现。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsAddEvent">
+        <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
+        <target state="new">&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterX">
+        <source>Horizontal center of {0} component(s)</source>
+        <target state="new">Horizontal center of {0} component(s)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsCommandCenterY">
+        <source>Vertical center of {0} component(s)</source>
+        <target state="new">Vertical center of {0} component(s)</target>
         <note />
       </trans-unit>
     </body>

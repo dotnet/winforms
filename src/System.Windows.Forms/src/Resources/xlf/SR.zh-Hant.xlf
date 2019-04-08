@@ -139,7 +139,7 @@
       </trans-unit>
       <trans-unit id="AccDGCollapse">
         <source>Collapse</source>
-        <target state="translated">Collapse</target>
+        <target state="translated">摺疊</target>
         <note />
       </trans-unit>
       <trans-unit id="AccDGEdit">
@@ -149,7 +149,7 @@
       </trans-unit>
       <trans-unit id="AccDGExpand">
         <source>Expand</source>
-        <target state="translated">Expand</target>
+        <target state="translated">展開</target>
         <note />
       </trans-unit>
       <trans-unit id="AccDGNavigate">
@@ -189,12 +189,12 @@
       </trans-unit>
       <trans-unit id="AccessibleActionCollapse">
         <source>Collapse</source>
-        <target state="translated">Collapse</target>
+        <target state="translated">摺疊</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionExpand">
         <source>Expand</source>
-        <target state="translated">Expand</target>
+        <target state="translated">展開</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionPress">
@@ -349,7 +349,7 @@
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionAccessibleName">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingNavigatorPositionItemPropDescr">
@@ -789,7 +789,7 @@
       </trans-unit>
       <trans-unit id="CatLayout">
         <source>Layout</source>
-        <target state="translated">版面配置</target>
+        <target state="translated">配置</target>
         <note />
       </trans-unit>
       <trans-unit id="CatMouse">
@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardFalse">
         <source>False</source>
-        <target state="translated">False</target>
+        <target state="new">False</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardIndeterminate">
@@ -2714,7 +2714,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardTrue">
         <source>True</source>
-        <target state="translated">True</target>
+        <target state="new">True</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewCheckBoxCell_ClipboardUnchecked">
@@ -3971,7 +3971,9 @@
         <source>Exception occurred in the DataGridView.
 
 To replace this default dialog box, handle the DataError event.</source>
-        <target state="needs-review-translation">在 DataGridView 中發生例外狀況。\r\n\r\n若要取代此預設對話方塊，請處理 DataError 事件。</target>
+        <target state="translated">在 DataGridView 中發生例外狀況。
+
+若要取代此預設對話方塊，請處理 DataError 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_ErrorMessageText_WithException">
@@ -3980,7 +3982,11 @@ To replace this default dialog box, handle the DataError event.</source>
 {0}
 
 To replace this default dialog please handle the DataError event.</source>
-        <target state="needs-review-translation">在 DataGridView 中發生下列例外狀況:\r\n\r\n{0}\r\n\r\n若要取代此預設對話方塊，請處理 DataError 事件。</target>
+        <target state="translated">在 DataGridView 中發生下列例外狀況:
+
+{0}
+
+若要取代此預設對話方塊，請處理 DataError 事件。</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_FirstDisplayedCellCannotBeAHeaderOrSharedCell">
@@ -5077,7 +5083,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in a component in your application. If you click Continue, the application will ignore this error and attempt to continue.
 
 {0}.</source>
-        <target state="needs-review-translation">應用程式中的元件發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略此錯誤並嘗試繼續。\r\n\r\n{0}。</target>
+        <target state="translated">您的應用程式中的元件發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略此錯誤並嘗試繼續。
+
+{0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgDetailsText">
@@ -5089,7 +5097,9 @@ To replace this default dialog please handle the DataError event.</source>
         <source>Unhandled exception has occurred in your application. If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {0}.</source>
-        <target state="needs-review-translation">應用程式發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略錯誤並嘗試繼續。如果您按一下 [結束]，則會立即關閉應用程式。\r\n\r\n{0}。</target>
+        <target state="translated">您的應用程式發生未處理的例外狀況。如果您按一下 [繼續]，應用程式會忽略錯誤並嘗試繼續。如果您按一下 [結束]，則會立即關閉應用程式。
+
+{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgHelp">
@@ -5107,21 +5117,28 @@ To replace this default dialog please handle the DataError event.</source>
 debugging. Contact the application author for more
 information.
 </source>
-        <target state="needs-review-translation">應用程式不支援 Windows Forms Just-In-Time (JIT)\r\n偵錯。如需詳細\r\n資訊，請連絡應用程式的作者。\r\n</target>
+        <target state="translated">應用程式不支援 Windows Form JIT (Just-In-Time) 
+偵錯功能。如需詳細資訊，請洽詢該應用程式
+的作者。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderNonSwitchable">
         <source>Application does not support just-in-time (JIT)
 debugging. See the end of this message for details.
 </source>
-        <target state="needs-review-translation">應用程式不支援 Just-In-Time (JIT)\r\n偵錯。如需詳細資料，請參閱本訊息的結尾處。\r\n</target>
+        <target state="translated">應用程式不支援 Just-In-Time (JIT) 偵錯功能。
+如需詳細資料，請參閱本訊息結尾處。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgHeaderSwitchable">
         <source>See the end of this message for details on invoking 
 just-in-time (JIT) debugging instead of this dialog box.
 </source>
-        <target state="needs-review-translation">如需叫用 \r\nJust-In-Time (JIT) 偵錯的詳細資料，請參閱本訊息結尾處 (而非這個對話方塊)。\r\n</target>
+        <target state="translated">如需叫用 Just-In-Time (JIT) 偵錯的詳細資料，
+請參閱本訊息結尾處 (而非這個對話方塊) 的資訊。
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgJITDebuggingSection">
@@ -5135,7 +5152,11 @@ just-in-time (JIT) debugging instead of this dialog box.
     Win32 Version: {2}
     CodeBase: {3}
 </source>
-        <target state="needs-review-translation">{0}\r\n    組件版本: {1}\r\n    Win32 版本: {2}\r\n    CodeBase: {3}\r\n</target>
+        <target state="translated">{0}
+    組件版本: {1}
+    Win32 版本: {2}
+    程式碼庫: {3}
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgLoadedAssembliesSection">
@@ -5147,18 +5168,21 @@ just-in-time (JIT) debugging instead of this dialog box.
         <source>
 ************** {0} **************
 </source>
-        <target state="needs-review-translation">\r\n************** {0} **************\r\n</target>
+        <target state="translated">
+************** {0} **************
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgMsgSeperator">
         <source>----------------------------------------
 </source>
-        <target state="needs-review-translation">----------------------------------------\r\n</target>
+        <target state="translated">----------------------------------------
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgOk">
         <source>OK</source>
-        <target state="translated">確定</target>
+        <target state="translated">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgQuit">
@@ -5172,7 +5196,11 @@ just-in-time (JIT) debugging instead of this dialog box.
 If you click Continue, the application will ignore this error and attempt to continue.
 
 {1}.</source>
-        <target state="needs-review-translation">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請連絡您的系統管理員，或使用 Microsoft .NET Framework 組態工具。\r\n\r\n如果您按一下 [繼續]，應用程式將會略過此錯誤，然後嘗試繼續執行。\r\n\r\n{1}。</target>
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET Framework 組態工具進行相關的設定。
+
+如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。
+
+{1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgSecurityErrorText">
@@ -5181,7 +5209,11 @@ If you click Continue, the application will ignore this error and attempt to con
 If you click Continue, the application will ignore this error and attempt to continue. If you click Quit, the application will close immediately.
 
 {1}.</source>
-        <target state="needs-review-translation">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請連絡您的系統管理員，或使用 Microsoft .NET Framework 組態工具。\r\n\r\n如果您按一下 [繼續]，應用程式將會略過此錯誤，然後嘗試繼續執行。如果您按一下 [結束]，應用程式就會立即關閉。\r\n\r\n{1}。</target>
+        <target state="translated">應用程式嘗試執行安全性原則不允許的作業。若要將必要權限授與此應用程式，請洽詢您的系統管理員，或使用 Microsoft .NET Framework 組態工具進行相關的設定。
+
+如果您按一下 [繼續]，應用程式將會略過此錯誤，然後試著繼續執行。如果您按下 [結束]，應用程式將立即關閉。
+
+{1}。</target>
         <note />
       </trans-unit>
       <trans-unit id="ExDlgShowDetails">
@@ -5297,13 +5329,15 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FileDialogCreatePrompt">
         <source>File {0} does not exist.
 Do you want to create it?</source>
-        <target state="needs-review-translation">檔案 {0} 不存在。\r\n要予以建立嗎?</target>
+        <target state="translated">檔案 {0} 不存在。
+要建立嗎?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogFileNotFound">
         <source>File {0} does not exist.
 Verify that the correct file name was given.</source>
-        <target state="needs-review-translation">檔案 {0} 不存在。\r\n請驗證已提供正確的檔案名稱。</target>
+        <target state="translated">檔案 {0} 不存在。
+請確定已經提供正確的檔名。</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogInvalidFileName">
@@ -5324,7 +5358,8 @@ Verify that the correct file name was given.</source>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
-        <target state="needs-review-translation">檔案 {0} 已經存在。\r\n要予以取代嗎?</target>
+        <target state="translated">檔案 {0} 已經存在。
+您要取代它嗎?</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5921,7 +5956,9 @@ Do you want to replace it?</source>
         <source>Cross-thread operation not valid: Control '{0}' accessed from a thread other than the thread it was created on.
 Stack trace where the illegal operation occurred was:
 {1}"</source>
-        <target state="needs-review-translation">跨執行緒作業無效: 存取控制項 '{0}' 時所使用的執行緒與建立控制項的執行緒不同。\r\n發生不合法作業的堆疊追蹤為:\r\n{1}"</target>
+        <target state="translated">跨執行緒作業無效: 存取控制項 '{0}' 時所使用的執行緒與建立控制項的執行緒不同。
+發生不合法作業的堆疊追蹤為:
+{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="IllegalState">
@@ -6762,6 +6799,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGridLinesDescr">
         <source>Displays grid lines around items and SubItems. Only shown when in Details view.</source>
         <target state="translated">顯示項目與子項目周圍的格線。只有在詳細資料檢視中才顯示。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupCollectionBadListViewGroup">
+        <source>Parameter must be of type ListViewGroup.</source>
+        <target state="translated">參數的類型必須為 ListViewGroup。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupDefaultGroup">
@@ -8119,99 +8161,9 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">縮放必須大於或等於 0，且不允許使用負值。</target>
         <note />
       </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Close">
-        <source>&amp;Close</source>
-        <target state="translated">關閉(&amp;C)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_FourPages">
-        <source>Four pages</source>
-        <target state="translated">四頁</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_OnePage">
-        <source>One page</source>
-        <target state="translated">一頁</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Page">
-        <source>&amp;Page</source>
-        <target state="translated">頁面(&amp;P)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Print">
-        <source>Print</source>
-        <target state="translated">列印</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PrintPreviewDialog_PrintPreview">
         <source>Print preview</source>
         <target state="translated">預覽列印</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_SixPages">
-        <source>Six pages</source>
-        <target state="translated">六頁</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ThreePages">
-        <source>Three pages</source>
-        <target state="translated">三頁</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_TwoPages">
-        <source>Two pages</source>
-        <target state="translated">兩頁</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom">
-        <source>Zoom</source>
-        <target state="translated">縮放</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom10">
-        <source>10%</source>
-        <target state="translated">10%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom100">
-        <source>100%</source>
-        <target state="translated">100%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom150">
-        <source>150%</source>
-        <target state="translated">150%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom200">
-        <source>200%</source>
-        <target state="translated">200%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom25">
-        <source>25%</source>
-        <target state="translated">25%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom50">
-        <source>50%</source>
-        <target state="translated">50%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom500">
-        <source>500%</source>
-        <target state="translated">500%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_Zoom75">
-        <source>75%</source>
-        <target state="translated">75%</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PrintPreviewDialog_ZoomAuto">
-        <source>Auto</source>
-        <target state="translated">自動</target>
         <note />
       </trans-unit>
       <trans-unit id="PrintPreviewDocumentDescr">
@@ -8611,7 +8563,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyCategoryPosition">
         <source>Position</source>
-        <target state="translated">Position</target>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyCategoryScale">
@@ -9249,73 +9201,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">取得此 ScrollableControl 的垂直捲軸。</target>
         <note />
       </trans-unit>
-      <trans-unit id="SecurityAboutDialog">
-        <source>Microsoft .NET Application Information</source>
-        <target state="translated">Microsoft .NET 應用程式資訊</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityApplication">
-        <source>Application</source>
-        <target state="translated">應用程式</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAsmNameColumn">
-        <source>Name</source>
-        <target state="translated">名稱</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityAssembliesTab">
-        <source>Assemblies</source>
-        <target state="translated">組件</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportLabel">
-        <source>To submit a bug report, first save the report, and then click Submit. Attach the saved report to the online form.</source>
-        <target state="translated">若要提出錯誤報告，請先儲存報告，然後按 [送出]。將儲存的報告附加至線上表單。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityBugReportTab">
-        <source>Beta Bug Report</source>
-        <target state="translated">搶鮮版 (Beta) 錯誤報告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityClose">
-        <source>&amp;Close</source>
-        <target state="translated">關閉(&amp;C)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityCodeBaseColumn">
-        <source>CodeBase</source>
-        <target state="translated">CodeBase</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityFileVersionColumn">
-        <source>File Version</source>
-        <target state="translated">檔案版本</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeAppInfo">
-        <source>Include &amp;Application Information</source>
-        <target state="translated">包含應用程式資訊(&amp;A)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityIncludeSysInfo">
-        <source>Include &amp;System Information</source>
-        <target state="translated">包含系統資訊(&amp;S)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityInfoTab">
-        <source>Security</source>
-        <target state="translated">安全性</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedText">
-        <source>Window is running in a restricted mode. Some UI features may be disabled for security reasons. 
-
-For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">視窗是在受限制模式中執行。基於安全性原因，可能會停用一些 UI 功能。\r\n\r\n如需詳細資訊，請連絡您的系統管理員或應用程式作者。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SecurityRestrictedWindowTextMixedZone">
         <source>Mixed Zone</source>
         <target state="translated">混合區域</target>
@@ -9334,46 +9219,6 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
         <source>Unknown Zone</source>
         <target state="translated">不明區域</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveBug">
-        <source>S&amp;ave</source>
-        <target state="translated">儲存(&amp;A)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySaveFilter">
-        <source>Xml Files (*.xml)|*.xml</source>
-        <target state="translated">Xml 檔案 (*.xml)|*.xml</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBug">
-        <source>S&amp;ubmit</source>
-        <target state="translated">送出(&amp;U)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySubmitBugUrl">
-        <source>http://beta.visualstudio.net/net/sdk/feedback.asp</source>
-        <target state="translated">http://www.microsoft.com/taiwan/vstudio/aa973782.aspx</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchDescrColumn">
-        <source>Description</source>
-        <target state="translated">描述</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchLabel">
-        <source>Changing the switch value will affect only the currently running version of this application.</source>
-        <target state="translated">變更參數值將只影響此應用程式目前正在執行的版本。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchNameColumn">
-        <source>Name</source>
-        <target state="translated">名稱</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecuritySwitchesTab">
-        <source>Switches</source>
-        <target state="translated">參數</target>
         <note />
       </trans-unit>
       <trans-unit id="SecurityToolTipCaption">
@@ -9395,19 +9240,9 @@ For more information, contact your system administrator or the application autho
         <source>{0}
 
 {1}</source>
-        <target state="needs-review-translation">{0}\r\n\r\n{1}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityUnrestrictedText">
-        <source>Window is running in an unrestricted mode. Although the main window is running unrestricted, some features may be disabled for security reasons. 
+        <target state="translated">{0}
 
-For more information, contact your system administrator or the application author.</source>
-        <target state="needs-review-translation">視窗是在不受限制模式中執行。雖然主要視窗為不受限制執行，但基於安全性原因可能會停用一些功能。\r\n\r\n如需詳細資訊，請連絡您的系統管理員或應用程式作者。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityVersionColumn">
-        <source>Assembly Version</source>
-        <target state="translated">組件版本</target>
+{1}</target>
         <note />
       </trans-unit>
       <trans-unit id="SelTabCountRange">
@@ -10022,7 +9857,7 @@ For more information, contact your system administrator or the application autho
       </trans-unit>
       <trans-unit id="TextBoxPlaceholderTextDescr">
         <source>Specifies the PlaceholderText of the TextBox control. The PlaceholderText is displayed in the control when the Text property is null or empty and can be used to guide the user what input is expected by the control. </source>
-        <target state="translated">指定 TextBox 控制項的 PlaceholderText。當 Text 屬性為 null 或空白時，PlaceholderText 會顯示在控制項中，可用來引導使用者提供控制器預期的輸入。 </target>
+        <target state="translated">指定 TextBox 控制項的 PlaceholderText。當 Text 屬性為 Null 或空白時，PlaceholderText 會顯示在控制項中，可用來引導使用者提供控制器預期的輸入。 </target>
         <note />
       </trans-unit>
       <trans-unit id="TextBoxPreferredHeightDescr">
@@ -11210,6 +11045,11 @@ For more information, contact your system administrator or the application autho
         <target state="translated">表示樹狀節點是否為選取狀態。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TreeNodeCircularReference">
+        <source>A circular reference has been made. A TreeNode cannot be added as a descendant of itself.</source>
+        <target state="translated">已經建立循環參考。TreeNode 無法作為自身的子系新增。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TreeNodeCollectionBadTreeNode">
         <source>Parameter must be of type TreeNode.</source>
         <target state="translated">參數必須屬於 TreeNode 類型。</target>
@@ -11483,263 +11323,6 @@ For more information, contact your system administrator or the application autho
       <trans-unit id="TreeViewVisibleCountDescr">
         <source>The number of visible nodes in the TreeView.</source>
         <target state="translated">樹狀檢視中可見節點的數目。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerBadXml">
-        <source>XML not valid. Expecting {0} tag.</source>
-        <target state="translated">XML 無效。必須有 {0} 標記。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InstallTitle">
-        <source>Application Install - More Information</source>
-        <target state="translated">應用程式安裝 - 詳細資訊</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_InternetSource">
-        <source>the Internet</source>
-        <target state="translated">網際網路</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_KnownPublisher">
-        <source>This application was published by {0}. Only run applications from publishers that you trust.</source>
-        <target state="translated">這個應用程式是由 {0} 發行。請只執行您信任的發行者所提供的應用程式。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalComputerSource">
-        <source>the Local Computer</source>
-        <target state="translated">本機電腦</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_LocalNetworkSource">
-        <source>the Local Network</source>
-        <target state="translated">區域網路</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_Location">
-        <source>This application comes from {0}. Only run applications from locations that you trust.</source>
-        <target state="translated">這個應用程式來自{0}。請只執行來自您所信任位置的應用程式。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_RunTitle">
-        <source>Application Run - More Information</source>
-        <target state="translated">應用程式執行 - 詳細資訊</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_SafeAccess">
-        <source>This application has only limited access to your computer.</source>
-        <target state="translated">這個應用程式只能以限制的方式存取您的電腦。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_TrustedSitesSource">
-        <source>a Trusted Site</source>
-        <target state="translated">信任的網站</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnknownPublisher">
-        <source>The publisher of this application cannot be verified. Only run applications from publishers that you trust.</source>
-        <target state="translated">無法驗證這個應用程式的發行者。請只執行您信任的發行者所提供的應用程式。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UnsafeAccess">
-        <source>This application will gain access to additional resources on your computer, such as your file system or your network connection. This may put your computer at risk. Do not approve unless you trust the application's publisher.</source>
-        <target state="translated">此應用程式將取得您電腦上其他資源的存取權，例如檔案系統或網路連接。這可能會讓電腦暴露於風險中。除非您信任應用程式的發行者，否則請勿核許。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_UntrustedSitesSource">
-        <source>an Untrusted Site</source>
-        <target state="translated">未受信任的網站</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithShortcut">
-        <source>This application will be installed on your computer. It will add a shortcut to your Start menu and will be added to the Add or Remove Programs list.</source>
-        <target state="translated">這個應用程式將安裝在您的電腦上。它會在 [開始] 功能表中加入捷徑，也會將應用程式加入 [新增或移除程式] 清單中。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerMoreInfo_WithoutShortcut">
-        <source>This application will be temporarily installed onto your computer. It will not be added to your Start menu or to the Add or Remove Programs list.</source>
-        <target state="translated">這個應用程式將暫時安裝在您的電腦上，但不會將它加入 [開始] 功能表或 [新增或移除程式] 清單中。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallBlocked">
-        <source>Trust Manager Dialog - Install Blocked</source>
-        <target state="translated">信任管理員對話方塊 - 已封鎖安裝</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallConfirmation">
-        <source>Trust Manager Dialog - Install Confirmation</source>
-        <target state="translated">信任管理員對話方塊 - 安裝確認</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_InstallWithElevatedPermissions">
-        <source>Trust Manager Dialog - Install with elevated permissions</source>
-        <target state="translated">信任管理員對話方塊 - 以更高的權限安裝</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunBlocked">
-        <source>Trust Manager Dialog - Run Blocked</source>
-        <target state="translated">信任管理員對話方塊 - 已封鎖執行</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunConfirmation">
-        <source>Trust Manager Dialog - Run Confirmation</source>
-        <target state="translated">信任管理員對話方塊 - 執行確認</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_AccessibleDescription_RunWithElevatedPermissions">
-        <source>Trust Manager Dialog - Run with elevated permissions</source>
-        <target state="translated">信任管理員對話方塊 - 以更高的權限執行</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_BlockedApp">
-        <source>Your administrator has blocked this application because it potentially poses a security risk to your computer.</source>
-        <target state="translated">由於這個應用程式可能會對您的電腦造成安全性風險，因此系統管理員已將它封鎖。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Close">
-        <source>Close</source>
-        <target state="translated">關閉</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotInstall">
-        <source>&amp;Don't Install</source>
-        <target state="translated">不要安裝(&amp;D)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_DoNotRun">
-        <source>&amp;Don't Run</source>
-        <target state="translated">不要執行(&amp;D)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_From">
-        <source>From</source>
-        <target state="translated">從</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_GlobeIcon">
-        <source>Globe Icon</source>
-        <target state="translated">地球圖示</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">雖然這些應用程式可能很有用，但是它們也可能對您的系統造成傷害。如果您不信任其來源，則請勿安裝此軟體。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallQuestion">
-        <source>Do you want to install this application?</source>
-        <target state="translated">您要安裝此應用程式嗎?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallTitle">
-        <source>Application Install - Security Warning</source>
-        <target state="translated">應用程式安裝 - 安全性警告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstallWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not install this software. {0}</source>
-        <target state="translated">雖然這些來自網際網路的應用程式可能很有用，但是它們也可能對您的系統造成傷害。如果您不信任其來源，則請勿安裝此軟體。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_InstalledAppBlockedWarning">
-        <source>Your security settings do not allow this application to be installed on your computer.</source>
-        <target state="translated">您的安全性設定不允許這個應用程式安裝在您的電腦上。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformation">
-        <source>More Information...</source>
-        <target state="translated">詳細資訊...</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleDescription">
-        <source>Warning text and link to get more information</source>
-        <target state="translated">警告文字和可取得詳細資訊的連結</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_MoreInformationAccessibleName">
-        <source>MoreInformationLink</source>
-        <target state="translated">MoreInformationLink</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Name">
-        <source>Name</source>
-        <target state="translated">名稱</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherInstallQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to install this application?</source>
-        <target state="needs-review-translation">無法驗證發行者。\r\n確定要安裝這個應用程式嗎?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_NoPublisherRunQuestion">
-        <source>Publisher cannot be verified.
-Are you sure you want to run this application?</source>
-        <target state="needs-review-translation">無法驗證發行者。\r\n確定要執行這個應用程式嗎?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Publisher">
-        <source>Publisher</source>
-        <target state="translated">發行者</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_Run">
-        <source>&amp;Run</source>
-        <target state="translated">執行(&amp;R)</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunAppBlockedWarning">
-        <source>Your security settings do not allow this application to be run on your computer.</source>
-        <target state="translated">您的安全性設定不允許這個應用程式在您的電腦上執行。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunFromLocalMachineWarning">
-        <source>While applications can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">雖然這些應用程式可能很有用，但是它們也可能對您的系統造成傷害。如果您不信任其來源，則請勿執行此軟體。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunQuestion">
-        <source>Do you want to run this application?</source>
-        <target state="translated">您要執行此應用程式嗎?</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunTitle">
-        <source>Application Run - Security Warning</source>
-        <target state="translated">應用程式執行 - 安全性警告</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_RunWarning">
-        <source>While applications from the Internet can be useful, they can potentially harm your computer. If you do not trust the source, do not run this software. {0}</source>
-        <target state="translated">雖然這些來自網際網路的應用程式可能很有用，但是它們也可能對您的系統造成傷害。如果您不信任其來源，則請勿執行此軟體。{0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_UnknownPublisher">
-        <source>Unknown Publisher</source>
-        <target state="translated">未知的發行者</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleDescription">
-        <source>Warning text</source>
-        <target state="translated">警告文字</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManagerPromptUI_WarningAccessibleName">
-        <source>WarningLabel</source>
-        <target state="translated">WarningLabel</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_HighRisk">
-        <source>{0} - High Risk</source>
-        <target state="translated">{0} - 高風險</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_LowRisk">
-        <source>{0} - Low Risk</source>
-        <target state="translated">{0} - 低風險</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrustManager_WarningIconAccessibleDescription_MediumRisk">
-        <source>{0} - Medium Risk</source>
-        <target state="translated">{0} - 中風險</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeLoadException">

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,20 +6,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Globalization;
 using Moq;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class PaddingConverterTests
     {
+
+        public static TheoryData<Type,bool> CanConvertFromData =>
+            CommonTestHelper.GetConvertFromTheoryData();
+
         [Theory]
-        [InlineData(typeof(string), true)]
-        [InlineData(typeof(InstanceDescriptor), false)]
+        [MemberData(nameof(CanConvertFromData))]
         [InlineData(typeof(Padding), false)]
-        [InlineData(typeof(int), false)]
-        [InlineData(null, false)]
+        [InlineData(typeof(string), true)]
         public void PaddingConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)
         {
             var converter = new PaddingConverter();
@@ -163,7 +165,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_CreateInstance_NullPropertyValue_ThrowsArgumentNullException()
+        public void PaddingConverter_CreateInstance_NullPropertyValues_ThrowsArgumentNullException()
         {
             var converter = new PaddingConverter();
             Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(new Mock<ITypeDescriptorContext>(MockBehavior.Strict).Object, null));
@@ -173,7 +175,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[]
             {
-                new Dictionary<string, Object>
+                new Dictionary<string, object>
                 {
                     {nameof(Padding.All), new object()},
                     {nameof(Padding.Left), 2},
@@ -184,7 +186,29 @@ namespace System.Windows.Forms.Tests
             };
             yield return new object[]
             {
-                new Dictionary<string, Object>
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), null},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+
+            yield return new object[]
+            {
+                new Dictionary<string, object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), new object()},
@@ -195,7 +219,29 @@ namespace System.Windows.Forms.Tests
             };
             yield return new object[]
             {
-                new Dictionary<string, Object>
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), null},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+
+            yield return new object[]
+            {
+                new Dictionary<string, object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
@@ -206,7 +252,29 @@ namespace System.Windows.Forms.Tests
             };
             yield return new object[]
             {
-                new Dictionary<string, Object>
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), null},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+
+            yield return new object[]
+            {
+                new Dictionary<string, object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
@@ -217,7 +285,29 @@ namespace System.Windows.Forms.Tests
             };
             yield return new object[]
             {
-                new Dictionary<string, Object>
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), null},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Bottom), 4}
+                }
+            };
+    
+            yield return new object[]
+            {
+                new Dictionary<string, object>
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
@@ -226,11 +316,32 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Bottom), new object()}
                 }
             };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), 3},
+                    {nameof(Padding.Bottom), null}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(Padding.All), 1},
+                    {nameof(Padding.Left), 2},
+                    {nameof(Padding.Top), 2},
+                    {nameof(Padding.Right), 3}
+                }
+            };
         }
 
         [Theory]
         [MemberData(nameof(CreateInstance_InvalidPropertyValueType_TestData))]
-        public void PaddingConverter_CreateInstance_InvalidPropertyValueType_ThrowsInvalidCastException(IDictionary propertyValues)
+        public void PaddingConverter_CreateInstance_InvalidPropertyValueType_ThrowsArgumentException(IDictionary propertyValues)
         {
             var converter = new PaddingConverter();
             var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
@@ -241,18 +352,41 @@ namespace System.Windows.Forms.Tests
                 .Setup(c => c.PropertyDescriptor)
                 .Returns(TypeDescriptor.GetProperties(typeof(ClassWithPadding))[0]);
 
+            Assert.Throws<ArgumentException>("propertyValues", () => converter.CreateInstance(mockContext.Object, propertyValues));
+        }
+
+        [Fact]
+        public void PaddingConverter_CreateInstance_InvalidInstanceType_ThrowsInvalidCastException()
+        {
+            var converter = new PaddingConverter();
+            var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
+            mockContext
+                .Setup(c => c.Instance)
+                .Returns("abc");
+            mockContext
+                .Setup(c => c.PropertyDescriptor)
+                .Returns(TypeDescriptor.GetProperties(typeof(string))[0]);
+
+            var propertyValues = new Dictionary<string, object>
+            {
+                {nameof(Padding.All), 1},
+                {nameof(Padding.Left), 2},
+                {nameof(Padding.Top), 2},
+                {nameof(Padding.Right), 3},
+                {nameof(Padding.Bottom), 4},
+            };
             Assert.Throws<InvalidCastException>(() => converter.CreateInstance(mockContext.Object, propertyValues));
         }
 
         [Fact]
-        public void PaddingConverter_ConverterGetCreateInstanceSupported_Invoke_ReturnsTrue()
+        public void PaddingConverter_GetCreateInstanceSupported_Invoke_ReturnsTrue()
         {
             var converter = new PaddingConverter();
             Assert.True(converter.GetCreateInstanceSupported());
         }
 
         [Fact]
-        public void PaddingConverter_ConverterGetProperties_Invoke_ReturnsExpected()
+        public void PaddingConverter_GetProperties_Invoke_ReturnsExpected()
         {
             var converter = new PaddingConverter();
             PropertyDescriptorCollection properties = converter.GetProperties(null);
@@ -265,7 +399,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void PaddingConverter_ConverterGetPropertiesSupported_Invoke_ReturnsTrue()
+        public void PaddingConverter_GetPropertiesSupported_Invoke_ReturnsTrue()
         {
             var converter = new PaddingConverter();
             Assert.True(converter.GetPropertiesSupported());

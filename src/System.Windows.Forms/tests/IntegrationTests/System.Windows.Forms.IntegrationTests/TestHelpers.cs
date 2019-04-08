@@ -34,15 +34,15 @@ namespace System.Windows.Forms.Func.Tests
                 throw new ArgumentException(nameof(byPathFromBinToExe) + " must end in a .exe");
             }
 
-            var dotnetPath = DotNetPath();
-            if (!Directory.Exists(dotnetPath))
-            {
-                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");
+            var dotnetPath = DotNetPath();	
+            if (!Directory.Exists(dotnetPath))	
+            {	
+                throw new DirectoryNotFoundException(dotnetPath + " directory cannot be found.");	
             }
 
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.FileName = Path.Combine(BinPath(), byPathFromBinToExe.Trim('\\'));
-            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;
+            startInfo.EnvironmentVariables["DOTNET_ROOT"] = dotnetPath;	// required
             // ...
 
             return StartProcess(startInfo);
@@ -170,6 +170,50 @@ namespace System.Windows.Forms.Func.Tests
         public static bool PressTabOnProcess(Process process)
         {
             return PressOnProcess(process, "{TAB}");
+        }
+
+        /// <summary>
+        /// Presses Right on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Right key to</param>
+        /// <returns>Whether or not the Right key was pressed on the process</returns>
+        /// <seealso cref="PressOnProcess(Process, string)"/>
+        public static bool PressRightOnProcess(Process process)
+        {
+            return PressOnProcess(process, "{RIGHT}");
+        }
+
+        /// <summary>
+        /// Presses Down on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Down key to</param>
+        /// <returns>Whether or not the Down key was pressed on the process</returns>
+        /// <seealso cref="PressOnProcess(Process, string)"/>
+        public static bool PressDownOnProcess(Process process)
+        {
+            return PressOnProcess(process, "{DOWN}");
+        }
+
+        /// <summary>
+        /// Presses Left on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Left key to</param>
+        /// <returns>Whether or not the Left key was pressed on the process</returns>
+        /// <seealso cref="PressOnProcess(Process, string)"/>
+        public static bool PressLeftOnProcess(Process process)
+        {
+            return PressOnProcess(process, "{LEFT}");
+        }
+
+        /// <summary>
+        /// Presses Up on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Up key to</param>
+        /// <returns>Whether or not the Up key was pressed on the process</returns>
+        /// <seealso cref="PressOnProcess(Process, string)"/>
+        public static bool PressUpOnProcess(Process process)
+        {
+            return PressOnProcess(process, "{UP}");
         }
 
         /// <summary>

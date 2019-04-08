@@ -27,6 +27,41 @@
         <target state="translated">顶部</target>
         <note />
       </trans-unit>
+      <trans-unit id="CollectionEditorCantRemoveItem">
+        <source>The item '{0}' cannot be removed.</source>
+        <target state="translated">无法移除项“{0}”。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorCaption">
+        <source>{0} Collection Editor</source>
+        <target state="translated">{0} 集合编辑器</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorInheritedReadOnlySelection">
+        <source>Read-only component(s) selected.</source>
+        <target state="translated">选定只读组件。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorProperties">
+        <source>{0} &amp;properties:</source>
+        <target state="translated">{0} 属性(&amp;P):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesMultiSelect">
+        <source>Multi-Select &amp;Properties:</source>
+        <target state="translated">多选属性(&amp;P):</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorPropertiesNone">
+        <source>&amp;Properties:</source>
+        <target state="translated">属性(&amp;P): </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CollectionEditorUndoBatchDesc">
+        <source>Add or remove {0} objects</source>
+        <target state="translated">添加或移除 {0} 个对象</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ColorEditorAccName">
         <source>Color Picker</source>
         <target state="translated">颜色选取器</target>
@@ -40,7 +75,7 @@
       <trans-unit id="ColorEditorStandardTab">
         <source>Web</source>
         <target state="translated">Web</target>
-        <note />
+        <note>{Locked="Web"}</note>
       </trans-unit>
       <trans-unit id="ColorEditorSystemTab">
         <source>System</source>
@@ -95,6 +130,11 @@
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">此平台上不支持 Winforms Designer。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RTL">
+        <source>RTL_False</source>
+        <target state="translated">RTL_False</target>
         <note />
       </trans-unit>
       <trans-unit id="ShortcutKeys_InvalidKey">

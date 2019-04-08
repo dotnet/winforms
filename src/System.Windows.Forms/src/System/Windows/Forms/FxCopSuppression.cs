@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -1404,11 +1404,6 @@ using System.Diagnostics.CodeAnalysis;
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.StatusStrip.#get_ShowSizingGrip()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.StatusStrip.#WndProc(System.Windows.Forms.Message&)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.StringSource.#.ctor(System.String[])")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SysInfoForm.#GetSwitchesFromLoadedAssemblies()")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SysInfoForm.#InitializeComponent()")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SysInfoForm.#PopulateAssemblyInfo()")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SysInfoForm.#SaveBugReport(System.Object,System.EventArgs)")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SysInfoForm.#WriteBugReport(System.IO.TextWriter)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SystemInformation.#get_MouseWheelPresent()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SystemInformation.#get_MouseWheelScrollLines()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.SystemInformation.#get_UserInteractive()")]

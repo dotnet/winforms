@@ -47,13 +47,13 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutStyleCollection_Add_Null_ThrowsNullReferenceException()
+        public void TableLayoutStyleCollection_Add_Null_ThrowsArgumentNullException()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
-            Assert.Throws<NullReferenceException>(() => collection.Add(null));
-            Assert.Throws<NullReferenceException>(() => ((IList)collection).Add(null));
+            Assert.Throws<ArgumentNullException>("style", () => collection.Add(null));
+            Assert.Throws<ArgumentNullException>("style", () => ((IList)collection).Add(null));
         }
 
         [Fact]
@@ -89,13 +89,15 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, Assert.Single(collection));
         }
 
-        [Fact]
-        public void TableLayoutStyleCollection_Insert_Null_ThrowsNullReferenceException()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void TableLayoutStyleCollection_Insert_Null_ThrowsArgumentNullException(int index)
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
-            Assert.Throws<NullReferenceException>(() => ((IList)collection).Insert(0, null));
+            Assert.Throws<ArgumentNullException>("style", () => ((IList)collection).Insert(index, null));
         }
 
         [Fact]
@@ -146,15 +148,17 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(style, collection[0]);
         }
 
-        [Fact]
-        public void TableLayoutStyleCollection_Item_SetNull_ThrowsNullReferenceException()
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void TableLayoutStyleCollection_Item_SetNull_ThrowsArgumentNullException(int index)
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             TableLayoutStyleCollection collection = settings.RowStyles;
             collection.Add(new RowStyle());
-            Assert.Throws<NullReferenceException>(() => collection[0] = null);
-            Assert.Throws<NullReferenceException>(() => ((IList)collection)[0] = null);
+            Assert.Throws<ArgumentNullException>("value", () => collection[index] = null);
+            Assert.Throws<ArgumentNullException>("value", () => ((IList)collection)[index] = null);
         }
 
         [Fact]
@@ -195,13 +199,15 @@ namespace System.Windows.Forms.Tests
         }
         
         [Fact]
-        public void TableLayoutStyleCollection_Remove_Null_ThrowsNullReferenceException()
+        public void TableLayoutStyleCollection_Remove_Null_Nop()
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
             IList collection = settings.RowStyles;
-            collection.Add(new RowStyle());
-            Assert.Throws<NullReferenceException>(() => collection.Remove(null));
+            var style = new RowStyle();
+            collection.Add(style);
+            collection.Remove(null);
+            Assert.Same(style, Assert.Single(collection));
         }
 
         [Fact]

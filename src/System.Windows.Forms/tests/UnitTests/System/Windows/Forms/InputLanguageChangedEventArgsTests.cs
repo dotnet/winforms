@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -51,15 +51,15 @@ namespace System.Windows.Forms.Tests
 #endif
 
         [Fact]
-        public void Ctor_NullCultureInfo_ThrowsNullReferenceException()
+        public void Ctor_NullCultureInfo_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => new InputLanguageChangedEventArgs((CultureInfo)null, 0));
+            Assert.Throws<ArgumentNullException>("culture", () => new InputLanguageChangedEventArgs((CultureInfo)null, 0));
         }
 
         [Fact]
         public void Ctor_NullInputLanguage_ThrowsNullReferenceException()
         {
-            Assert.Throws<NullReferenceException>(() => new InputLanguageChangedEventArgs((InputLanguage)null, 0));
+            Assert.Throws<ArgumentNullException>("inputLanguage", () => new InputLanguageChangedEventArgs((InputLanguage)null, 0));
         }
     }
 }

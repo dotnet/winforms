@@ -226,7 +226,6 @@ namespace System.Windows.Forms {
                     Properties.SetObject(PropAccessibility, accessibleObject);
                 }
                 
-                Debug.Assert(accessibleObject != null, "Failed to create accessibility object");
                 return accessibleObject;
             }
         }
@@ -754,7 +753,7 @@ namespace System.Windows.Forms {
                     displayStyle = value;
                     if (!state[stateContstructing]) {
                         InvalidateItemLayout(PropertyNames.DisplayStyle);
-                        OnDisplayStyleChanged(new EventArgs());
+                        OnDisplayStyleChanged(EventArgs.Empty);
                     }
                 }
                 
@@ -1271,7 +1270,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
                 }
                 
               
@@ -1982,7 +1981,7 @@ namespace System.Windows.Forms {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit))
                 {
-                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }
                 
                 RightToLeft oldValue = RightToLeft;
@@ -2528,7 +2527,7 @@ namespace System.Windows.Forms {
         }
   
         internal void FireEvent(ToolStripItemEventType met) {
-            FireEvent(new System.EventArgs(), met);
+            FireEvent(EventArgs.Empty, met);
         }
         internal void FireEvent(EventArgs e, ToolStripItemEventType met) {
 
@@ -2720,7 +2719,6 @@ namespace System.Windows.Forms {
         //
 
         private void HandleClick(System.EventArgs e) {  
-            Debug.Assert(Enabled, "Who called me when I am disabled?");
             Debug.WriteLineIf(MouseDebugging.TraceVerbose, "[" + this.Text + "] HandleClick");      
 
             try {
@@ -2887,12 +2885,12 @@ namespace System.Windows.Forms {
                         }
                     }
                     if (shouldFireDoubleClick) {
-                        HandleDoubleClick(new System.EventArgs());
+                        HandleDoubleClick(EventArgs.Empty);
                         // If we actually fired DoubleClick - reset the lastClickTime.
                         lastClickTime = 0;
                     } 
                     else {
-                        HandleClick(new System.EventArgs());
+                        HandleClick(EventArgs.Empty);
                     }
                 }
 
@@ -3929,8 +3927,6 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItemAccessibleObject.ToolStripItemAccessibleObject"]/*' />
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem) {
-
-                Debug.Assert(ownerItem != null, "Cannot construct a ToolStripItemAccessibleObject with a null ownerItem");
                 if (ownerItem == null) {
                     throw new ArgumentNullException(nameof(ownerItem));
                 }

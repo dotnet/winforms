@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -2412,100 +2412,95 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea"]/*' />
         /// <devdoc>
-        /// This enumeration has specific areas of the MonthCalendar control as its enumerated values.
-        /// The hitArea member of System.Windows.Forms.Win32.HitTestInfo will be one of these enumerated values, and
-        /// indicates which portion of a month calendar is under a specific point.
+        /// This enumeration has specific areas of the MonthCalendar control as
+        /// its enumerated values. The hitArea member of System.Windows.Forms.Win32.HitTestInfo
+        /// will be one of these enumerated values, and indicates which portion of
+        /// a month calendar is under a specific point.
         /// </devdoc>
-        public enum HitArea {
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.Nowhere"]/*' />
+        public enum HitArea
+        {
             /// <devdoc>
-            /// The given point was not on the month calendar control, or it was in an inactive portion of the control.
+            /// The given point was not on the month calendar control, or it was
+            /// in an inactive portion of the control.
             /// </devdoc>
             Nowhere = 0,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleBackground"]/*' />
             /// <devdoc>
             /// The given point was over the background of a month's title
             /// </devdoc>
             TitleBackground = 1,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleMonth"]/*' />
             /// <devdoc>
             /// The given point was in a month's title bar, over a month name
             /// </devdoc>
             TitleMonth = 2,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleYear"]/*' />
             /// <devdoc>
             /// The given point was in a month's title bar, over the year value
             /// </devdoc>
             TitleYear = 3,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.NextMonthButton"]/*' />
             /// <devdoc>
-            /// The given point was over the button at the top right corner of the control.
-            /// If the user clicks here, the month calendar will scroll its display to the next
-            /// month or set of months
+            /// The given point was over the button at the top right corner of
+            /// the control. If the user clicks here, the month calendar will
+            /// scroll its display to the next month or set of months
             /// </devdoc>
             NextMonthButton = 4,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.PrevMonthButton"]/*' />
             /// <devdoc>
-            /// The given point was over the button at the top left corner of the control. If the
-            /// user clicks here, the month calendar will scroll its display to the previous month
-            /// or set of months
+            /// The given point was over the button at the top left corner of
+            /// the control. If the user clicks here, the month calendar will
+            /// scroll its display to the previous month or set of months
             /// </devdoc>
             PrevMonthButton = 5,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.CalendarBackground"]/*' />
             /// <devdoc>
             /// The given point was in the calendar's background
             /// </devdoc>
             CalendarBackground = 6,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.Date"]/*' />
             /// <devdoc>
-            /// The given point was on a particular date within the calendar, and the time member of
-            /// HitTestInfo will be set to the date at the given point.
+            /// The given point was on a particular date within the calendar,
+            /// and the time member of HitTestInfo will be set to the date at
+            /// the given point.
             /// </devdoc>
             Date = 7,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.NextMonthDate"]/*' />
             /// <devdoc>
-            /// The given point was over a date from the next month (partially displayed at the end of
-            /// the currently displayed month). If the user clicks here, the month calendar will scroll
-            /// its display to the next month or set of months.
+            /// The given point was over a date from the next month (partially
+            /// displayed at the end of the currently displayed month). If the
+            /// user clicks here, the month calendar will scroll its display to
+            /// the next month or set of months.
             /// </devdoc>
             NextMonthDate = 8,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.PrevMonthDate"]/*' />
             /// <devdoc>
-            /// The given point was over a date from the previous month (partially displayed at the end
-            /// of the currently displayed month). If the user clicks here, the month calendar will scroll
-            /// its display to the previous month or set of months.
+            /// The given point was over a date from the previous month (partially
+            /// displayed at the end of the currently displayed month). If the
+            /// user clicks here, the month calendar will scroll its display to
+            /// the previous month or set of months.
             /// </devdoc>
             PrevMonthDate = 9,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.DayOfWeek"]/*' />
             /// <devdoc>
-            /// The given point was over a day abbreviation ("Fri", for example). The time member
-            /// of HitTestInfo will be set to the corresponding date on the top row.
+            /// The given point was over a day abbreviation ("Fri", for example).
+            /// The time member of HitTestInfo will be set to the corresponding
+            /// date on the top row.
             /// </devdoc>
             DayOfWeek = 10,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.WeekNumbers"]/*' />
             /// <devdoc>
-            /// The given point was over a week number.  This will only occur if the showWeekNumbers
-            /// property of MonthCalendar is enabled.  The time member of HitTestInfo will be set to
-            /// the corresponding date in the leftmost column.
+            /// The given point was over a week number.  This will only occur if
+            /// the showWeekNumbers property of MonthCalendar is enabled. The
+            /// time member of HitTestInfo will be set to the corresponding date
+            /// in the leftmost column.
             /// </devdoc>
             WeekNumbers = 11,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TodayLink"]/*' />
             /// <devdoc>
-            /// The given point was on the "today" link at the bottom of the month calendar control
+            /// The given point was on the "today" link at the bottom of the
+            /// month calendar control
             /// </devdoc>
             TodayLink = 12,
         }

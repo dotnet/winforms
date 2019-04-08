@@ -1,6 +1,5 @@
 # Windows Forms
 
-[![Build Status](https://dnceng.visualstudio.com/public/_apis/build/status/dotnet/winforms/dotnet-winforms%20CI)](https://dnceng.visualstudio.com/public/_build/latest?definitionId=267&branch=master) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/dotnet/winforms/blob/master/LICENSE.TXT)
 
 Windows Forms (WinForms) is a UI framework for building Windows desktop applications. It is a .NET wrapper over Windows user interface libraries, such as User32 and GDI+. It also offers controls and other functionality that is unique to Windows Forms.
@@ -21,6 +20,20 @@ This repository contains WinForms for .NET Core. It does not contain the .NET Fr
 * [Getting started instructions][getting-started]
 * [Contributing guide][contributing]
 * [Porting guide][porting-guidelines]
+
+## Build Status & Dependency Flow
+
+|               | Public CI                                  :arrow_right:  | Internal CI                                    :arrow_right:  | Composition CI                         :arrow_right:  | Core Setup CI                                     :arrow_right:  | Core SDK CI                                                   |
+|-------------  |---------------------------------------------------------  |-------------------------------------------------------------  |-----------------------------------------------------  |----------------------------------------------------------------  |-------------------------------------------------------------  |
+| master        | [![Build Status][master-public-build]][public-build]      | [![Build Status][master-internal-build]][internal-build]      | [![Build Status][master-comp-build]][comp-build]      | [![Build Status][master-core-setup-build]][core-setup-build]     | [![Build Status][master-core-sdk-build]][core-sdk-build]      |
+| release/3.0   | [![Build Status][release3-public-build]][public-build]    | [![Build Status][release3-internal-build]][internal-build]    | [![Build Status][release3-comp-build]][comp-build]    | [![Build Status][release3-core-setup-build]][core-setup-build]   | [![Build Status][release3-core-sdk-build]][core-sdk-build]    |
+
+### Code Coverage
+
+|               | Production Code                                   | Test Code                                         | Combined                                          |
+|-------------  |-------------------------------------------------  |-------------------------------------------------  |-------------------------------------------------  |
+| master        | [![codecov][master-coverage-prod]][coverage]      | [![codecov][master-coverage-test]][coverage]      | [![codecov][master-coverage-all]][coverage]       |
+| release/3.0   | [![codecov][release3-coverage-prod]][coverage]    | [![codecov][release3-coverage-test]][coverage]    | [![codecov][release3-coverage-all]][coverage]     |
 
 ## Status
 
@@ -55,9 +68,7 @@ Issues with .NET Framework, including WinForms, should be filed on [VS developer
 
 ### Reporting security issues
 
-Security issues and bugs should be reported privately via email to the Microsoft Security Response Center 
-
-MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter][faqs-report-an-issue]. Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program][bounty-dot-net-core].
+Security issues and bugs should be reported privately via email to the Microsoft Security Response Center (MSRC) <secure@microsoft.com>. You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message. Further information, including the MSRC PGP key, can be found in the [Security TechCenter][faqs-report-an-issue]. Also see info about related [Microsoft .NET Core and ASP.NET Core Bug Bounty Program][bounty-dot-net-core].
 
 ## Relationship to .NET Framework
 
@@ -96,3 +107,33 @@ See the [.NET home repository][dotnet-home] to find other .NET-related projects
 [dotnet-code-of-conduct]: https://dotnetfoundation.org/code-of-conduct
 [.net-foundation]: https://www.dotnetfoundation.org/projects
 [dotnet-home]: https://github.com/Microsoft/dotnet
+
+[master-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=master
+[release3-public-build]: https://dev.azure.com/dnceng/public/_apis/build/status/267?branchName=release%2f3.0
+[public-build]: https://dnceng.visualstudio.com/public/_build?definitionId=267
+
+[master-internal-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/164?branchName=master
+[release3-internal-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/164?branchName=release%2f3.0
+[internal-build]: https://dnceng.visualstudio.com/internal/_build?definitionId=164
+
+[master-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=master
+[release3-comp-build]: https://dev.azure.com/devdiv/DevDiv/_apis/build/status/9756?branchName=release%2f3.0
+[comp-build]: https://devdiv.visualstudio.com/DevDiv/_build?definitionId=9756
+
+[master-core-setup-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/288
+[release3-core-setup-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/288?branchName=release%2f3.0
+[core-setup-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/288
+
+[master-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
+[release3-core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286?branchName=release%2f3.0.1xx
+[core-sdk-build]: https://dev.azure.com/dnceng/internal/_apis/build/status/286
+
+[master-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=production
+[release3-coverage-prod]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=production
+
+[master-coverage-test]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?flag=test
+[release3-coverage-test]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?flag=test
+
+[master-coverage-all]: https://codecov.io/gh/dotnet/winforms/branch/master/graph/badge.svg?
+[release3-coverage-all]: https://codecov.io/gh/dotnet/winforms/branch/release%2F3.0/graph/badge.svg?
+[coverage]: https://codecov.io/gh/dotnet/winforms
