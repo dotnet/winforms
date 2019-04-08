@@ -19,10 +19,6 @@
     <TargetFramework>$(TargetFrameworkName)$(TargetFrameworkVersion)</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <RuntimeFrameworkVersion>$(MicrosoftNetCoreAppPackageVersion)</RuntimeFrameworkVersion>
-  </PropertyGroup>
-
   <!-- This is a Packaging Project -->
   <PropertyGroup>
     <IsPackable>true</IsPackable>
