@@ -1137,12 +1137,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override object GetPropertyValue(int propertyID)

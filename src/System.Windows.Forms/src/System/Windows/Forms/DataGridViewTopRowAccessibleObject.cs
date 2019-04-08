@@ -103,7 +103,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (AccessibilityImprovements.Level3 && runtimeId == null)
+                    if (runtimeId == null)
                     {
                         runtimeId = new int[3];
                         runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
@@ -260,7 +260,7 @@ namespace System.Windows.Forms
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (AccessibilityImprovements.Level3 && patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId))
+                if (patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId))
                 {
                     return true;
                 }
@@ -270,29 +270,26 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyId)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyId)
                 {
-                    switch (propertyId)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return string.Format(SR.DataGridView_AccTopRow);
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return owner.Enabled;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsContentElementPropertyId:
-                            return true;
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return string.Empty;
-                        case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
-                            return true;
-                    }
+                    case NativeMethods.UIA_NamePropertyId:
+                        return string.Format(SR.DataGridView_AccTopRow);
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return owner.Enabled;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsContentElementPropertyId:
+                        return true;
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return string.Empty;
+                    case NativeMethods.UIA_IsLegacyIAccessiblePatternAvailablePropertyId:
+                        return true;
                 }
 
                 return base.GetPropertyValue(propertyId);

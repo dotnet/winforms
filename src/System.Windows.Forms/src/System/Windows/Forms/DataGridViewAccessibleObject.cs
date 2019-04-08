@@ -262,73 +262,58 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override object GetPropertyValue(int propertyID)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyID)
                 {
-                    switch (propertyID)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return this.Name;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return owner.CanFocus;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return owner.Enabled;
-                        case NativeMethods.UIA_IsControlElementPropertyId:
-                            return true;
-                        case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
-                        case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
-                            return true;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_TableControlTypeId;
-                        case NativeMethods.UIA_ItemStatusPropertyId:
-                            // Whether the owner DataGridView can be sorted by some column.
-                            // If so, provide not-sorted/sorted-by item status.
-                            bool canSort = false;
-                            for (int i = 0; i < owner.Columns.Count; i++)
+                    case NativeMethods.UIA_NamePropertyId:
+                        return this.Name;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return owner.CanFocus;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return owner.Enabled;
+                    case NativeMethods.UIA_IsControlElementPropertyId:
+                        return true;
+                    case NativeMethods.UIA_IsTablePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_TablePatternId);
+                    case NativeMethods.UIA_IsGridPatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_GridPatternId);
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_TableControlTypeId;
+                    case NativeMethods.UIA_ItemStatusPropertyId:
+                        // Whether the owner DataGridView can be sorted by some column.
+                        // If so, provide not-sorted/sorted-by item status.
+                        bool canSort = false;
+                        for (int i = 0; i < owner.Columns.Count; i++)
+                        {
+                            if (owner.CanSort(owner.Columns[i]))
                             {
-                                if (owner.CanSort(owner.Columns[i]))
-                                {
-                                    canSort = true;
-                                    break;
-                                }
+                                canSort = true;
+                                break;
                             }
+                        }
 
-                            if (canSort)
+                        if (canSort)
+                        {
+                            switch (owner.SortOrder)
                             {
-                                switch (owner.SortOrder)
-                                {
-                                    case SortOrder.None:
-                                        return SR.NotSortedAccessibleStatus;
-                                    case SortOrder.Ascending:
-                                        return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
-                                    case SortOrder.Descending:
-                                        return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
-                                }
+                                case SortOrder.None:
+                                    return SR.NotSortedAccessibleStatus;
+                                case SortOrder.Ascending:
+                                    return string.Format(SR.DataGridViewSortedAscendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
+                                case SortOrder.Descending:
+                                    return string.Format(SR.DataGridViewSortedDescendingAccessibleStatusFormat, owner.SortedColumn?.HeaderText);
                             }
+                        }
 
-                            break;
-                    }
+                        break;
                 }
-
-                if (propertyID == NativeMethods.UIA_IsTablePatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(NativeMethods.UIA_TablePatternId);
-                }
-                else if (propertyID == NativeMethods.UIA_IsGridPatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(NativeMethods.UIA_GridPatternId);
-                }
+                
 
                 return base.GetPropertyValue(propertyID);
             }

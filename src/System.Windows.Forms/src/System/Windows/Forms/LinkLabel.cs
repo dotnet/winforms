@@ -2551,11 +2551,7 @@ namespace System.Windows.Forms {
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject.GetChild"]/*' />
@@ -2660,22 +2656,13 @@ namespace System.Windows.Forms {
                 get {          
                     string text = link.Owner.Text;
                     string name;
-                    if (AccessibilityImprovements.Level3) {
-                        // return the full name of the link label for AI.Level3 
-                        // as sometimes the link name in isolation is unusable
-                        // to a customer using a screen reader
-                        name = text;
-                        if (link.Owner.UseMnemonic) {
-                            name = WindowsFormsUtils.TextWithoutMnemonics(name);
-                        }
-                    } else {
-                        int charStart = LinkLabel.ConvertToCharIndex(link.Start, text);
-                        int charEnd = LinkLabel.ConvertToCharIndex(link.Start + link.Length, text);
-                        name = text.Substring(charStart, charEnd - charStart);
-                        if (AccessibilityImprovements.Level1 && link.Owner.UseMnemonic) {
-                            // return the same value as the tooltip shows.
-                            name = WindowsFormsUtils.TextWithoutMnemonics(name);
-                        }
+
+                    // return the full name of the link label for AI.Level3 
+                    // as sometimes the link name in isolation is unusable
+                    // to a customer using a screen reader
+                    name = text;
+                    if (link.Owner.UseMnemonic) {
+                        name = WindowsFormsUtils.TextWithoutMnemonics(name);
                     }
 
                     return name;
@@ -2714,12 +2701,9 @@ namespace System.Windows.Forms {
 
             public override string Value {
                 get {
-                    if (AccessibilityImprovements.Level1) {
-                        // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
-                        // Value is optional for this role (Link).
-                        return string.Empty;
-                    } 
-                    return Name;
+                    // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
+                    // Value is optional for this role (Link).
+                    return string.Empty;
                 }
             }
 
@@ -2728,11 +2712,7 @@ namespace System.Windows.Forms {
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override object GetPropertyValue(int propertyID) {

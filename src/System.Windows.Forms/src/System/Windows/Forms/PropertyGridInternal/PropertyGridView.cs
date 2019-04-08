@@ -711,7 +711,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
         
@@ -2312,11 +2312,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         private void OnDropDownButtonGotFocus(object sender, EventArgs e) {
-            if (AccessibilityImprovements.Level3) {
-                DropDownButton dropDownButton = sender as DropDownButton;
-                if (dropDownButton != null) {
-                    dropDownButton.AccessibilityObject.SetFocus();
-                }
+            DropDownButton dropDownButton = sender as DropDownButton;
+            if (dropDownButton != null) {
+                dropDownButton.AccessibilityObject.SetFocus();
             }
         }
 
@@ -2345,7 +2343,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             // For empty GridView, draw a focus-indicator rectangle, just inside GridView borders
-            if ((totalProps <= 0) && AccessibilityImprovements.Level1) {
+            if (totalProps <= 0) {
                 int doubleOffset = 2 * offset_2Units;
 
                 if ((Size.Width > doubleOffset) && (Size.Height > doubleOffset)) {
@@ -2507,7 +2505,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             base.OnLostFocus(e);
 
             // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
-            if (totalProps <= 0 && AccessibilityImprovements.Level1) {
+            if (totalProps <= 0) {
                 using (Graphics g = CreateGraphicsInternal()) {
                     Rectangle clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Filling empty gridview rect=" + clearRect.ToString());
@@ -2560,9 +2558,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 InvalidateRow(selectedRow);
                 (Edit.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
 
-                if (AccessibilityImprovements.Level3) {
-                    Edit.AccessibilityObject.SetFocus();
-                }
+                Edit.AccessibilityObject.SetFocus();
             }
             else {
                 SelectRow(0);
@@ -3048,7 +3044,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
             */
 
-            if (AccessibilityImprovements.Level3 && selectedGridEntry.Enumerable &&
+            if (selectedGridEntry.Enumerable &&
                 dropDownHolder != null && dropDownHolder.Visible &&
                 (keyCode == Keys.Up || keyCode == Keys.Down))
             {
@@ -6059,7 +6055,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             internal override bool SupportsUiaProviders {
                 get {
-                    return AccessibilityImprovements.Level3;
+                    return true;
                 }
             }
 
@@ -6068,11 +6064,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             /// <returns>The accessibility object instance.</returns>
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new GridViewListBoxAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new GridViewListBoxAccessibleObject(this);
             }
 
             public virtual bool InSetSelectedIndex() {
@@ -6453,7 +6445,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             internal override bool SupportsUiaProviders {
                 get {
-                    return AccessibilityImprovements.Level3;
+                    return true;
                 }
             }
             
@@ -6514,11 +6506,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// AccessibleObject for this GridViewEdit instance.
             /// </returns>
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level2) {
-                    return new GridViewEditAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new GridViewEditAccessibleObject(this);
             }
 
             protected override void DestroyHandle() {
@@ -6852,16 +6840,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
                 internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                    if (AccessibilityImprovements.Level3) {
-                        if (direction == UnsafeNativeMethods.NavigateDirection.Parent) {
-                            return propertyGridView.SelectedGridEntry.AccessibilityObject;
-                        }
-                        else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling) {
-                            if (propertyGridView.DropDownButton.Visible) {
-                                return propertyGridView.DropDownButton.AccessibilityObject;
-                            } else if (propertyGridView.DialogButton.Visible) {
-                                return propertyGridView.DialogButton.AccessibilityObject;
-                            }
+                    if (direction == UnsafeNativeMethods.NavigateDirection.Parent) {
+                        return propertyGridView.SelectedGridEntry.AccessibilityObject;
+                    }
+                    else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling) {
+                        if (propertyGridView.DropDownButton.Visible) {
+                            return propertyGridView.DropDownButton.AccessibilityObject;
+                        } else if (propertyGridView.DialogButton.Visible) {
+                            return propertyGridView.DialogButton.AccessibilityObject;
                         }
                     }
 
@@ -6873,11 +6859,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 /// </summary>
                 internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
                     get {
-                        if (AccessibilityImprovements.Level3) {
-                            return propertyGridView.AccessibilityObject;
-                        }
-
-                        return base.FragmentRoot;
+                        return propertyGridView.AccessibilityObject;
                     }
                 }
 
@@ -6888,14 +6870,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
                         return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
                     }
-
-                    if (AccessibilityImprovements.Level3) {
-                        if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                            return NativeMethods.UIA_EditControlTypeId;
-                        }
-                        else if (propertyID == NativeMethods.UIA_NamePropertyId) {
-                            return Name;
-                        }
+                    else if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                        return NativeMethods.UIA_EditControlTypeId;
+                    }
+                    else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                        return Name;
                     }
 
                     return base.GetPropertyValue(propertyID);
@@ -6911,16 +6890,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                 public override string Name {
                     get {
-                        if (AccessibilityImprovements.Level3) {
-                            string name = Owner.AccessibleName;
-                            if (name != null) {
-                                return name;
-                            }
-                            else {
-                                var selectedGridEntry = propertyGridView.SelectedGridEntry;
-                                if (selectedGridEntry != null) {
-                                    return selectedGridEntry.AccessibilityObject.Name;
-                                }
+                        string name = Owner.AccessibleName;
+                        if (name != null) {
+                            return name;
+                        }
+                        else {
+                            var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                            if (selectedGridEntry != null) {
+                                return selectedGridEntry.AccessibilityObject.Name;
                             }
                         }
 
@@ -6944,9 +6921,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 #endregion
 
                 internal override void SetFocus() {
-                    if (AccessibilityImprovements.Level3) {
-                        RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                    }
+                    RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
 
                     base.SetFocus();
                 }
@@ -7230,11 +7205,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// otherwise return null.
             /// </returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) {
-                if (AccessibilityImprovements.Level3) {
-                    return HitTest((int)x, (int)y);
-                }
-
-                return base.ElementProviderFromPoint(x, y);
+                return HitTest((int)x, (int)y);
             }
 
             /// <summary>
@@ -7243,35 +7214,33 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
-                    if (propertyGridAccessibleObject != null) {
-                        var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                        if (navigationTarget != null) {
-                            return navigationTarget;
-                        }
+                var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
+                if (propertyGridAccessibleObject != null) {
+                    var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    if (navigationTarget != null) {
+                        return navigationTarget;
                     }
+                }
 
-                    if (_owningPropertyGridView.OwnerGrid.SortedByCategories) {
-                        switch (direction) {
-                            case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                                return GetFirstCategory();
-                            case UnsafeNativeMethods.NavigateDirection.LastChild:
-                                return GetLastCategory();
-                        }
+                if (_owningPropertyGridView.OwnerGrid.SortedByCategories) {
+                    switch (direction) {
+                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                            return GetFirstCategory();
+                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                            return GetLastCategory();
                     }
-                    else {
-                        switch (direction) {
-                            case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                                return GetChild(0);
-                            case UnsafeNativeMethods.NavigateDirection.LastChild:
-                                int childCount = GetChildCount();
-                                if (childCount > 0) {
-                                    return GetChild(childCount - 1);
-                                }
+                }
+                else {
+                    switch (direction) {
+                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                            return GetChild(0);
+                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                            int childCount = GetChildCount();
+                            if (childCount > 0) {
+                                return GetChild(childCount - 1);
+                            }
 
-                                return null;
-                        }
+                            return null;
                     }
                 }
 
@@ -7283,11 +7252,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        return _owningPropertyGridView.OwnerGrid.AccessibilityObject;
-                    }
-
-                    return base.FragmentRoot;
+                    return _owningPropertyGridView.OwnerGrid.AccessibilityObject;
                 }
             }
 
@@ -7296,11 +7261,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             /// <returns>The accessible object for the currently focused grid entry.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus() {
-                if (AccessibilityImprovements.Level3) {
-                    return GetFocused();
-                }
-
-                return base.FragmentRoot;
+                return GetFocused();
             }
 
             /// <summary>
@@ -7309,12 +7270,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_TableControlTypeId;
-                    } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
-                        return Name;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_TableControlTypeId;
+                } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                    return Name;
                 }
 
                 return base.GetPropertyValue(propertyID);

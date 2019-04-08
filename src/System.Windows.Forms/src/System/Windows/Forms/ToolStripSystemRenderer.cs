@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
                     state = ToolBarState.Disabled;
                 }
                 if (item is ToolStripButton && ((ToolStripButton)item).Checked) {
-                    if (((ToolStripButton)item).Selected && AccessibilityImprovements.Level1) {
+                    if (((ToolStripButton)item).Selected) {
                         state = ToolBarState.Hot; // we'd prefer HotChecked here, but Color Theme uses the same color as Checked
                     }
                     else {
@@ -398,18 +398,16 @@ namespace System.Windows.Forms {
                         // Legacy behavior is to always paint the menu item background.
                         // The correct behavior is to only paint the background if the menu item is
                         // enabled.
-                        if (!AccessibilityImprovements.Level1 || item.Enabled) {
+                        if (item.Enabled) {
                             g.FillRectangle(SystemBrushes.Highlight, fillRect);
                         }
 
-                        if (AccessibilityImprovements.Level1) {
-                            Color borderColor = ToolStripManager.VisualStylesEnabled ?
-                                SystemColors.Highlight : ProfessionalColors.MenuItemBorder;
+                        Color borderColor = ToolStripManager.VisualStylesEnabled ?
+                            SystemColors.Highlight : ProfessionalColors.MenuItemBorder;
 
-                            // draw selection border - always drawn regardless of Enabled.
-                            using (Pen p = new Pen(borderColor)) {
-                                g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                            }
+                        // draw selection border - always drawn regardless of Enabled.
+                        using (Pen p = new Pen(borderColor)) {
+                            g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                         }
                     }
                     else {

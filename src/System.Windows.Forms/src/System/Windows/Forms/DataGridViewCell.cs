@@ -1325,23 +1325,20 @@ namespace System.Windows.Forms
                 dgv.EditingPanel.Controls.Remove(dgv.EditingControl);
                 Debug.Assert(dgv.EditingControl.ParentInternal == null);
 
-                if (AccessibilityImprovements.Level3)
+                if (dgv.EditingControl is DataGridViewTextBoxEditingControl)
                 {
-                    if (dgv.EditingControl is DataGridViewTextBoxEditingControl)
-                    {
-                        dgv.TextBoxControlWasDetached = true;
-                    }
-
-                    if (dgv.EditingControl is DataGridViewComboBoxEditingControl)
-                    {
-                        dgv.ComboBoxControlWasDetached = true;
-                    }
-
-                    dgv.EditingControlAccessibleObject.SetParent(null);
-                    AccessibilityObject.SetDetachableChild(null);
-
-                    AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
+                    dgv.TextBoxControlWasDetached = true;
                 }
+
+                if (dgv.EditingControl is DataGridViewComboBoxEditingControl)
+                {
+                    dgv.ComboBoxControlWasDetached = true;
+                }
+
+                dgv.EditingControlAccessibleObject.SetParent(null);
+                AccessibilityObject.SetDetachableChild(null);
+
+                AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildRemoved, dgv.EditingControlAccessibleObject.RuntimeId);
             }
             if (dgv.EditingPanel.ParentInternal != null)
             {
@@ -2730,23 +2727,20 @@ namespace System.Windows.Forms
             Debug.Assert(dgv.EditingControl.ParentInternal == dgv.EditingPanel);
             Debug.Assert(dgv.EditingPanel.ParentInternal == dgv);
 
-            if (AccessibilityImprovements.Level3)
+            if ((dgv.ComboBoxControlWasDetached && dgv.EditingControl is DataGridViewComboBoxEditingControl) ||
+                (dgv.TextBoxControlWasDetached && dgv.EditingControl is DataGridViewTextBoxEditingControl))
             {
-                if ((dgv.ComboBoxControlWasDetached && dgv.EditingControl is DataGridViewComboBoxEditingControl) ||
-                    (dgv.TextBoxControlWasDetached && dgv.EditingControl is DataGridViewTextBoxEditingControl))
-                {
-                    // Recreate control handle is necessary for cases when the same control was detached and then
-                    // reattached to clear accessible hierarchy cache and not announce previous editing cell.
-                    dgv.EditingControl.RecreateHandleCore();
+                // Recreate control handle is necessary for cases when the same control was detached and then
+                // reattached to clear accessible hierarchy cache and not announce previous editing cell.
+                dgv.EditingControl.RecreateHandleCore();
 
-                    dgv.ComboBoxControlWasDetached = false;
-                    dgv.TextBoxControlWasDetached = false;
-                }
-
-                dgv.EditingControlAccessibleObject.SetParent(AccessibilityObject);
-                AccessibilityObject.SetDetachableChild(dgv.EditingControl.AccessibilityObject);
-                AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, dgv.EditingControlAccessibleObject.RuntimeId);
+                dgv.ComboBoxControlWasDetached = false;
+                dgv.TextBoxControlWasDetached = false;
             }
+
+            dgv.EditingControlAccessibleObject.SetParent(AccessibilityObject);
+            AccessibilityObject.SetDetachableChild(dgv.EditingControl.AccessibilityObject);
+            AccessibilityObject.RaiseStructureChangedEvent(UnsafeNativeMethods.StructureChangeType.ChildAdded, dgv.EditingControlAccessibleObject.RuntimeId);
         }
 
         /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCell.KeyDownUnsharesRow"]/*' />
@@ -4770,20 +4764,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Help"]/*' />
-            public override string Help
-            {
-                get
-                {
-                    if (AccessibilityImprovements.Level2)
-                    {
-                        return null;
-                    }
-
-                    return this.owner.GetType().Name + "(" + owner.GetType().BaseType.Name + ")";
-                }
-            }
-
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Name"]/*' />
             public override string Name
             {
@@ -4797,7 +4777,7 @@ namespace System.Windows.Forms
                     {
                         string name = string.Format(SR.DataGridView_AccDataGridViewCellName, this.owner.OwningColumn.HeaderText, this.owner.OwningRow.Index);
 
-                        if (AccessibilityImprovements.Level3 && owner.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
+                        if (owner.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                         {
                             DataGridViewCell dataGridViewCell = this.Owner;
                             DataGridView dataGridView = dataGridViewCell.DataGridView;
@@ -4899,7 +4879,7 @@ namespace System.Windows.Forms
                         state |= AccessibleStates.Selected;
                     }
 
-                    if (AccessibilityImprovements.Level1 && this.owner.ReadOnly)
+                    if (this.owner.ReadOnly)
                     {
                         state |= AccessibleStates.ReadOnly;
                     }
@@ -5438,12 +5418,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             #region IRawElementProviderFragment Implementation
@@ -5506,8 +5481,6 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyID)
             {
-                if (AccessibilityImprovements.Level3)
-                {
                     switch (propertyID)
                     {
                         case NativeMethods.UIA_NamePropertyId:
@@ -5530,35 +5503,24 @@ namespace System.Windows.Forms
                             return string.Empty;
                         case NativeMethods.UIA_GridItemContainingGridPropertyId:
                             return Owner.DataGridView.AccessibilityObject;
+                        case NativeMethods.UIA_IsTableItemPatternAvailablePropertyId:
+                            return IsPatternSupported(NativeMethods.UIA_TableItemPatternId);
+                        case NativeMethods.UIA_IsGridItemPatternAvailablePropertyId:
+                            return IsPatternSupported(NativeMethods.UIA_GridItemPatternId);
                     }
-                }
-
-                if (propertyID == NativeMethods.UIA_IsTableItemPatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(NativeMethods.UIA_TableItemPatternId);
-                }
-                else if (propertyID == NativeMethods.UIA_IsGridItemPatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(NativeMethods.UIA_GridItemPatternId);
-                }
 
                 return base.GetPropertyValue(propertyID);
             }
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (AccessibilityImprovements.Level3 &&
-                    (patternId.Equals(NativeMethods.UIA_LegacyIAccessiblePatternId) ||
-                    patternId.Equals(NativeMethods.UIA_InvokePatternId) ||
-                    patternId.Equals(NativeMethods.UIA_ValuePatternId)))
-                {
-                    return true;
-                }
-
-                if ((patternId == NativeMethods.UIA_TableItemPatternId ||
+                if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId ||
+                    patternId == NativeMethods.UIA_InvokePatternId ||
+                    patternId == NativeMethods.UIA_ValuePatternId ||
+                    ((patternId == NativeMethods.UIA_TableItemPatternId ||
                     patternId == NativeMethods.UIA_GridItemPatternId) && 
                     // We don't want to implement patterns for header cells
-                    this.owner.ColumnIndex != -1 && this.owner.RowIndex != -1)
+                    this.owner.ColumnIndex != -1 && this.owner.RowIndex != -1))
                 {
                     return true;
                 }

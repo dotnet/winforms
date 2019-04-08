@@ -917,7 +917,7 @@ namespace System.Windows.Forms {
                         // clear all the other states.
                         state[stateSelected | statePressed] = false;
 
-                        if (wasSelected && !AccessibilityImprovements.UseLegacyToolTipDisplay) {
+                        if (wasSelected) {
                             KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                         }
 
@@ -2786,9 +2786,7 @@ namespace System.Windows.Forms {
                }               
             }
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
 
             if (Enabled) {
                 OnMouseEnter(e);
@@ -2824,9 +2822,7 @@ namespace System.Windows.Forms {
             if (state[stateMouseDownAndNoDrag] || state[statePressed] || state[stateSelected]) {
                 state[stateMouseDownAndNoDrag | statePressed | stateSelected] = false;
 
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
                 Invalidate();
             }         
@@ -3329,7 +3325,7 @@ namespace System.Windows.Forms {
             // 
             if (keyData == Keys.Enter || (state[stateSupportsSpaceKey] && keyData == Keys.Space)) {
                 FireEvent(ToolStripItemEventType.Click);
-                if (ParentInternal != null && !ParentInternal.IsDropDown && !(AccessibilityImprovements.Level2 && !Enabled)) {
+                if (ParentInternal != null && !ParentInternal.IsDropDown && Enabled) {
                     ParentInternal.RestoreFocusInternal();
                 }
                 return true;
@@ -3432,11 +3428,9 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
 
-                if (AccessibilityImprovements.Level3 && AccessibilityObject is ToolStripItemAccessibleObject) {
+                if (AccessibilityObject is ToolStripItemAccessibleObject) {
                     ((ToolStripItemAccessibleObject)AccessibilityObject).RaiseFocusChanged();
                 }
 
@@ -3802,9 +3796,7 @@ namespace System.Windows.Forms {
                         ParentInternal.NotifySelectionChange(this);
                     }
 
-                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                    }
+                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 #if SELECTEDCHANGED                
                     OnSelectedChanged(EventArgs.Empty);
 #endif
@@ -3992,23 +3984,18 @@ namespace System.Windows.Forms {
             
             internal override int[] RuntimeId {
                 get {
-                    if (AccessibilityImprovements.Level1) {
-                        if (runtimeId == null) {
-                            // we need to provide a unique ID
-                            // others are implementing this in the same manner
-                            // first item is static - 0x2a
-                            // [AccessibilityImprovements.Level3] first item should be UiaAppendRuntimeId since this is not a top-level element of the fragment.
-                            // second item can be anything, but here it is a hash. For toolstrip hash is unique even with child controls. Hwnd  is not.
+                    if (runtimeId == null) {
+                        // we need to provide a unique ID
+                        // others are implementing this in the same manner
+                        // first item should be UiaAppendRuntimeId since this is not a top-level element of the fragment.
+                        // second item can be anything, but here it is a hash. For toolstrip hash is unique even with child controls. Hwnd  is not.
 
-                            runtimeId = new int[2];
-                            runtimeId[0] = AccessibilityImprovements.Level3 ? NativeMethods.UiaAppendRuntimeId : 0x2a;
-                            runtimeId[1] = ownerItem.GetHashCode();
-                        }
-                        return runtimeId;
+                        runtimeId = new int[2];
+                        runtimeId[0] = NativeMethods.UiaAppendRuntimeId;
+                        runtimeId[1] = ownerItem.GetHashCode();
                     }
-                    else {
-                        return base.RuntimeId;
-                    }
+
+                    return runtimeId;
                 }
             }
 
@@ -4018,33 +4005,25 @@ namespace System.Windows.Forms {
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
             internal override object GetPropertyValue(int propertyID) {
-
-                if (AccessibilityImprovements.Level1) {
-                    if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                switch (propertyID) {
+                    case NativeMethods.UIA_NamePropertyId:
                         return Name;
-                    }
-                    else if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId) {
+                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
                         return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    }
-                }
-
-                if (AccessibilityImprovements.Level3) {
-                    switch (propertyID) {
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return ownerItem.Enabled;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return ownerItem.Placement != ToolStripItemPlacement.Main;
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return ownerItem.CanSelect;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return ownerItem.Selected;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                            return KeyboardShortcut;
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return Help ?? string.Empty;
-                    }
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return ownerItem.Enabled;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return ownerItem.Placement != ToolStripItemPlacement.Main;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return ownerItem.CanSelect;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return ownerItem.Selected;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return KeyboardShortcut;
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return Help ?? string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -4100,19 +4079,14 @@ namespace System.Windows.Forms {
                     
                     
                     if (!ownerItem.Enabled) {
-
-                        if (AccessibilityImprovements.Level2) {
-                            if (ownerItem.Selected && ownerItem is ToolStripMenuItem) {
-                                return AccessibleStates.Unavailable | additionalState | AccessibleStates.Focused;
-                            }
+                        if (ownerItem.Selected && ownerItem is ToolStripMenuItem) {
+                            return AccessibleStates.Unavailable | additionalState | AccessibleStates.Focused;
                         }
 
                         // Disabled menu items that are selected must have focus
                         // state so that Narrator can announce them.
-                        if (AccessibilityImprovements.Level1) {
-                            if (ownerItem.Selected && ownerItem is ToolStripMenuItem) {
-                                return AccessibleStates.Focused;
-                            }
+                        if (ownerItem.Selected && ownerItem is ToolStripMenuItem) {
+                            return AccessibleStates.Focused;
                         }
 
                         return AccessibleStates.Unavailable | additionalState;
@@ -4296,19 +4270,10 @@ namespace System.Windows.Forms {
                         int increment = direction == UnsafeNativeMethods.NavigateDirection.NextSibling ? 1 : -1;
                         AccessibleObject sibling = null;
 
-                        if (AccessibilityImprovements.Level3) {
-                            index += increment;
-                            int itemsCount = GetChildFragmentCount();
-                            if (index >= 0 && index < itemsCount) {
-                                sibling = GetChildFragment(index);
-                            }
-                        }
-                        else {
-                            // Skipping contol host items, as they are provided by system
-                            do {
-                                index += increment;
-                                sibling = index >= 0 && index < Parent.GetChildCount() ? Parent.GetChild(index) : null;
-                            } while (sibling != null && sibling is Control.ControlAccessibleObject);
+                        index += increment;
+                        int itemsCount = GetChildFragmentCount();
+                        if (index >= 0 && index < itemsCount) {
+                            sibling = GetChildFragment(index);
                         }
 
                         return sibling;

@@ -80,12 +80,7 @@ namespace System.Windows.Forms
 
         internal override bool IsIAccessibleExSupported()
         {
-            if (AccessibilityImprovements.Level3)
-            {
-                return true;
-            }
-
-            return base.IsIAccessibleExSupported();
+            return true;
         }
 
         public override AccessibleObject Parent
@@ -98,7 +93,7 @@ namespace System.Windows.Forms
 
         internal override bool IsPatternSupported(int patternId)
         {
-            if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+            if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
             {
                 ComboBox ownerComboBoxControl = Owner as ComboBox;
                 if (ownerComboBoxControl != null)
@@ -112,7 +107,7 @@ namespace System.Windows.Forms
 
         internal override object GetPropertyValue(int propertyID)
         {
-            if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId)
+            if (propertyID == NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId)
             {
                 return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
             }

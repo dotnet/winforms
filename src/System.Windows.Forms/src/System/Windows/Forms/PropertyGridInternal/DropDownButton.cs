@@ -44,7 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 
@@ -52,9 +52,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             set {
                 if (useComboBoxTheme != value) {
                     useComboBoxTheme = value;
-                    if (AccessibilityImprovements.Level1) {
-                        SetAccessibleName();
-                    }
+                    SetAccessibleName();
+
                     Invalidate();
                 }
             }
@@ -103,14 +102,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     ComboBoxRenderer.DrawDropDownButtonForHandle(pevent.Graphics, dropDownButtonRect, cbState, this.HandleInternal);
                 }
 
-                if (AccessibilityImprovements.Level1) {
-                    // Redraw focus cues
-                    // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that always show visual cues when focused,
-                    // we need to do the same for this custom button, painted as ComboBox control part (drop-down).
-                    if (Focused) {
-                        dropDownButtonRect.Inflate(-1, -1);
-                        ControlPaint.DrawFocusRectangle(pevent.Graphics, dropDownButtonRect, ForeColor, BackColor);
-                    }
+                // Redraw focus cues
+                // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that always show visual cues when focused,
+                // we need to do the same for this custom button, painted as ComboBox control part (drop-down).
+                if (Focused) {
+                    dropDownButtonRect.Inflate(-1, -1);
+                    ControlPaint.DrawFocusRectangle(pevent.Graphics, dropDownButtonRect, ForeColor, BackColor);
                 }
             }
         }
@@ -122,7 +119,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         private void SetAccessibleName() {
-            if (AccessibilityImprovements.Level1 && useComboBoxTheme) {
+            if (useComboBoxTheme) {
                 this.AccessibleName = SR.PropertyGridDropDownButtonComboBoxAccessibleName;
             }
             else {
@@ -135,11 +132,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new DropDownButtonAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new DropDownButtonAccessibleObject(this);
         }
 
         internal override ButtonBaseAdapter CreateStandardAdapter() {

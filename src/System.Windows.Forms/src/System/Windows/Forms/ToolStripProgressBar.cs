@@ -260,15 +260,11 @@ namespace System.Windows.Forms {
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripProgressBarAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripProgressBarAccessibleObject(this);
         }
 
         private static Control CreateControlInstance() {
-            ProgressBar progressBar = AccessibilityImprovements.Level3 ? new ToolStripProgressBarControl() : new ProgressBar();
+            ProgressBar progressBar = new ToolStripProgressBarControl();
             progressBar.Size = new Size(100,15);
             return progressBar;
         }
@@ -526,16 +522,12 @@ namespace System.Windows.Forms {
 
             internal override bool SupportsUiaProviders {
                 get {
-                    return AccessibilityImprovements.Level3;
+                    return true;
                 }
             }
 
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new ToolStripProgressBarControlAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new ToolStripProgressBarControlAccessibleObject(this);
             }
         }
 

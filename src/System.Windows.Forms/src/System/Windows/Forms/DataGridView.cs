@@ -2832,7 +2832,7 @@ namespace System.Windows.Forms
             {
                 if (this.editingPanel == null)
                 {
-                    this.editingPanel = AccessibilityImprovements.Level3 ? new DataGridViewEditingPanel(this) : new Panel();
+                    this.editingPanel = new DataGridViewEditingPanel(this);
                     this.editingPanel.AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName);
                 }
                 return this.editingPanel;
@@ -5012,7 +5012,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 
@@ -7043,18 +7043,13 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return AccessibilityImprovements.Level3;
+                    return true;
                 }
             }
 
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                if (AccessibilityImprovements.Level3)
-                {
-                    return new DataGridViewEditingPanelAccessibleObject(owningDataGridView, this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new DataGridViewEditingPanelAccessibleObject(owningDataGridView, this);
             }
         }
     }

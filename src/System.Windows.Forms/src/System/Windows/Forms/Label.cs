@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms {
                 Invalidate();
             }
 
-            if (AccessibilityImprovements.Level3 && LiveSetting != AutomationLiveSetting.Off) {
+            if (LiveSetting != AutomationLiveSetting.Off) {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
         }
@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms {
             }
 
             Color color;
-            if (AccessibilityImprovements.Level3 && Enabled && SystemInformation.HighContrast) {
+            if (Enabled && SystemInformation.HighContrast) {
                 color = SystemColors.WindowText;
             }
             else {
@@ -1660,7 +1660,7 @@ namespace System.Windows.Forms {
 
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 
@@ -1716,11 +1716,7 @@ namespace System.Windows.Forms {
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override object GetPropertyValue(int propertyID) {

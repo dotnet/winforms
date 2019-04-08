@@ -843,7 +843,7 @@ namespace System.Windows.Forms {
 
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 
@@ -889,11 +889,7 @@ namespace System.Windows.Forms {
         /// AccessibleObject for this ProgressBar instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ProgressBarAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ProgressBarAccessibleObject(this);
         }
 
         [ComVisible(true)]
@@ -911,11 +907,7 @@ namespace System.Windows.Forms {
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override bool IsPatternSupported(int patternId) {

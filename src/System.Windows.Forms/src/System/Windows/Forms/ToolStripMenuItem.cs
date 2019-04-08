@@ -831,9 +831,9 @@ namespace System.Windows.Forms {
         internal void HandleAutoExpansion() {
             if (Enabled && ParentInternal != null && ParentInternal.MenuAutoExpand && HasDropDownItems) {
                 ShowDropDown();
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                }
+
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
                 DropDown.SelectNextToolStripItem(null, /*forward=*/true);
             }
         }
@@ -1141,9 +1141,7 @@ namespace System.Windows.Forms {
 				 Select();
                  ShowDropDown();
 
-                 if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                 }
+                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
                  DropDown.SelectNextToolStripItem(null, /*forward=*/true);
                  return true;
@@ -1240,7 +1238,7 @@ namespace System.Windows.Forms {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuItemControlTypeId;
                 }
-                else if (AccessibilityImprovements.Level2 && propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
+                else if (propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
                     return ownerItem.GetShortcutText();
                 }
                 else {

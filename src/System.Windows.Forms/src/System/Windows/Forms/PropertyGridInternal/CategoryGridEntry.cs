@@ -108,11 +108,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <returns></returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject() {
-            if (AccessibilityImprovements.Level3) {
-                return new CategoryGridEntryAccessibleObject(this);
-            }
-
-            return base.GetAccessibilityObject();
+            return new CategoryGridEntryAccessibleObject(this);
         }
 
         protected override Brush GetBackgroundBrush(Graphics g) {
@@ -210,7 +206,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                 int indent = PropertyLabelIndent-2;
                 Rectangle focusRect = new Rectangle(indent, rect.Y, labelWidth+3, rect.Height-1);
-                if (SystemInformation.HighContrast && !OwnerGrid.developerOverride && AccessibilityImprovements.Level1) {
+                if (SystemInformation.HighContrast && !OwnerGrid.developerOverride) {
                     // we changed line color to SystemColors.ControlDarkDark in high contrast mode
                     ControlPaint.DrawFocusRectangle(g, focusRect, SystemColors.ControlText, OwnerGrid.LineColor);
                 }

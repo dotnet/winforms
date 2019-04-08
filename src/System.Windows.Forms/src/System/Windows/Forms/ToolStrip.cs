@@ -1619,7 +1619,7 @@ namespace System.Windows.Forms {
 
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 
@@ -1755,16 +1755,14 @@ namespace System.Windows.Forms {
                         UpdateToolTip(null);
                     }
 
-                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        ToolTip internalToolTip = this.ToolTip;
-                        foreach (ToolStripItem item in this.Items) {
-                            if (showItemToolTips) {
-                                KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
-                            }
-                            else {
-                                KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
-                            }
-                        } 
+                    ToolTip internalToolTip = this.ToolTip;
+                    foreach (ToolStripItem item in this.Items) {
+                        if (showItemToolTips) {
+                            KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
+                        }
+                        else {
+                            KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
+                        }
                     }
 
                     // If the overflow button has not been created, don't check its properties
@@ -2218,11 +2216,10 @@ namespace System.Windows.Forms {
 
             if (start == null)  {
                 // The navigation should be consisstent when navigating in forward and
-                // backward direction entering the toolstrip, it means that for AI.Level3
-                // the first toolstrip item should be selected irrespectively TAB or SHIFT+TAB
+                // backward direction entering the toolstrip, it means that the first
+                // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
                 // is pressed.
-                start = (forward) ? DisplayedItems[DisplayedItems.Count -1] :
-                    (AccessibilityImprovements.Level3 ? DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0] : DisplayedItems[0]);
+                start = (forward) ? DisplayedItems[DisplayedItems.Count -1] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
             }
 
             int current = DisplayedItems.IndexOf(start);
@@ -4485,10 +4482,6 @@ namespace System.Windows.Forms {
 
                     ToolTip.Hide(this);
 
-                    if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        ToolTip.Active = false;
-                    }
-
                     currentlyActiveTooltipItem = item;
 
 
@@ -4496,10 +4489,6 @@ namespace System.Windows.Forms {
                         Cursor currentCursor = Cursor.CurrentInternal;
 
                         if (currentCursor != null) {
-                            if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                                ToolTip.Active = true;
-                            }
-
                             Point cursorLocation = Cursor.Position;
                             cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
 
@@ -4678,17 +4667,13 @@ namespace System.Windows.Forms {
 
 
         internal void OnItemAddedInternal(ToolStripItem item) {
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                if (this.ShowItemToolTips) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
-                }
+            if (this.ShowItemToolTips) {
+                KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
             }
         }
 
         internal void OnItemRemovedInternal(ToolStripItem item) {
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
-            }
+            KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
         }
 
         internal override bool AllowsChildrenToShowToolTips() {
@@ -4961,31 +4946,27 @@ namespace System.Windows.Forms {
             }
 
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (direction) {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            int childCount = GetChildFragmentCount();
-                            if (childCount > 0) {
-                                return this.GetChildFragment(0);
-                            }
-                            break;
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            childCount = GetChildFragmentCount();
-                            if (childCount > 0) {
-                                return this.GetChildFragment(childCount - 1);
-                            }
-                            break;
-                    }
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        int childCount = GetChildFragmentCount();
+                        if (childCount > 0) {
+                            return this.GetChildFragment(0);
+                        }
+                        break;
+                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        childCount = GetChildFragmentCount();
+                        if (childCount > 0) {
+                            return this.GetChildFragment(childCount - 1);
+                        }
+                        break;
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_ToolBarControlTypeId;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_ToolBarControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

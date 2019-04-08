@@ -616,7 +616,7 @@ namespace System.Windows.Forms {
 
                 int boxTop = FontHeight / 2;
 
-                if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+                if (SystemInformation.HighContrast) {
                     Color boxColor;
                     if (Enabled) {
                         boxColor = ForeColor;
@@ -729,7 +729,7 @@ namespace System.Windows.Forms {
 
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 
@@ -814,11 +814,7 @@ namespace System.Windows.Forms {
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override object GetPropertyValue(int propertyID) {

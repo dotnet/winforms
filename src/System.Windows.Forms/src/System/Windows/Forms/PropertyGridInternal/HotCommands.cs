@@ -52,11 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new HotCommandsAccessibleObject(this, ownerGrid);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new HotCommandsAccessibleObject(this, ownerGrid);
         }
 
         public override Rectangle DisplayRectangle {
@@ -110,7 +106,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 

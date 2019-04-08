@@ -1895,7 +1895,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (AccessibilityImprovements.Level3 && runtimeId == null)
+                    if (runtimeId == null)
                     {
                         runtimeId = new int[]
                         {
@@ -2241,24 +2241,21 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyId)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyId)
                 {
-                    switch (propertyId)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return Name;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return Owner.DataGridView.Enabled;
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return Help ?? string.Empty;
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return false;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                            return string.Empty;
-                    }
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return Owner.DataGridView.Enabled;
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return Help ?? string.Empty;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return false;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyId);

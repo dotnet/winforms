@@ -274,13 +274,11 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (propertyID) {
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return false;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_ThumbControlTypeId;
-                    }
+                switch (propertyID) {
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return false;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_ThumbControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);

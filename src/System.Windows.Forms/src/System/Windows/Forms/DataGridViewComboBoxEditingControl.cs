@@ -31,16 +31,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            if (AccessibilityImprovements.Level3)
-            {
-                return new DataGridViewComboBoxEditingControlAccessibleObject(this);
-            }
-            else if (AccessibilityImprovements.Level2)
-            {
-                return new DataGridViewEditingControlAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new DataGridViewComboBoxEditingControlAccessibleObject(this);
         }
 
         // IDataGridViewEditingControl interface implementation
@@ -188,9 +179,6 @@ namespace System.Windows.Forms
     /// <summary>
     /// Defines the DataGridView ComboBox EditingControl accessible object.
     /// </summary>
-    /// <remarks>
-    /// This accessible object is only available in AccessibilityImprovements of Level 3.
-    /// </remarks>
     internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxUiaProvider
     {
         private DataGridViewComboBoxEditingControl ownerControl;

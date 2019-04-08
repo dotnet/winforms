@@ -81,8 +81,7 @@ namespace System.Windows.Forms {
         private object[]   currentObjects;
         
         private int                                 paintFrozen;
-        private Color                               lineColor = SystemInformation.HighContrast ? (AccessibilityImprovements.Level1 ? SystemColors.ControlDarkDark : SystemColors.ControlDark )
-                                                                : SystemColors.InactiveBorder;
+        private Color                               lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
         internal bool                               developerOverride = false;
         internal Brush                              lineBrush = null;
         private Color                               categoryForeColor = SystemColors.ControlText;
@@ -202,7 +201,7 @@ namespace System.Windows.Forms {
                 separator1 = CreateSeparatorButton();
                 separator2 = CreateSeparatorButton();
 
-                toolStrip = AccessibilityImprovements.Level3 ? new PropertyGridToolStrip(this) : new ToolStrip();
+                toolStrip = new PropertyGridToolStrip(this);
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
                 toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
@@ -699,7 +698,7 @@ namespace System.Windows.Forms {
                     SetToolStripRenderer();
                 }
 
-                SetHotCommandColors(value && !AccessibilityImprovements.Level2);
+                SetHotCommandColors(false);
             }
         }
 
@@ -1920,11 +1919,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new PropertyGridAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new PropertyGridAccessibleObject(this);
         }
 
         private /*protected virtual*/ PropertyGridView CreateGridView(IServiceProvider sp) {
@@ -2029,10 +2024,8 @@ namespace System.Windows.Forms {
             button.Click += eventHandler;
             button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 
-            if (AccessibilityImprovements.Level1) {
-                if (useCheckButtonRole) {
-                    button.AccessibleRole = AccessibleRole.CheckButton;
-                }
+            if (useCheckButtonRole) {
+                button.AccessibleRole = AccessibleRole.CheckButton;
             }
 
             return button;
@@ -3236,27 +3229,25 @@ namespace System.Windows.Forms {
         internal void OnPropertyValueSet(GridItem changedItem, object oldValue) {
             OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
 
-            // In Level 3 announce the property value change like standalone combobox control do: "[something] selected".
-            if (AccessibilityImprovements.Level3) {
-                bool dropDown = false;
-                Type propertyType = changedItem.PropertyDescriptor.PropertyType;
-                UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-                if (editor != null) {
-                    dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
+            // Announce the property value change like standalone combobox control do: "[something] selected".
+            bool dropDown = false;
+            Type propertyType = changedItem.PropertyDescriptor.PropertyType;
+            UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
+            if (editor != null) {
+                dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
+            }
+            else {
+                var gridEntry = changedItem as GridEntry;
+                if (gridEntry != null && gridEntry.Enumerable) {
+                    dropDown = true;
                 }
-                else {
-                    var gridEntry = changedItem as GridEntry;
-                    if (gridEntry != null && gridEntry.Enumerable) {
-                        dropDown = true;
-                    }
-                }
+            }
 
-                if (dropDown && !gridView.DropDownVisible) {
-                    this.AccessibilityObject.RaiseAutomationNotification(
-                        Automation.AutomationNotificationKind.ActionCompleted,
-                        Automation.AutomationNotificationProcessing.All,
-                        string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
-                }
+            if (dropDown && !gridView.DropDownVisible) {
+                this.AccessibilityObject.RaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionCompleted,
+                    Automation.AutomationNotificationProcessing.All,
+                    string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
             }
         }
         
@@ -3618,11 +3609,10 @@ namespace System.Windows.Forms {
                         else if (gridView.FocusInside) {
                             if (toolStrip.Visible) {
                                 toolStrip.FocusInternal();
-                                if (AccessibilityImprovements.Level1) {
-                                    // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
-                                    if (toolStrip.Items.Count > 0) {
-                                        toolStrip.SelectNextToolStripItem(null, /*forward =*/ true);
-                                    }
+
+                                // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
+                                if (toolStrip.Items.Count > 0) {
+                                    toolStrip.SelectNextToolStripItem(null, /*forward =*/ true);
                                 }
                             }
                             else {
@@ -4199,7 +4189,7 @@ namespace System.Windows.Forms {
         }
 
         private void SetToolStripRenderer() {
-            if (DrawFlatToolbar || (SystemInformation.HighContrast && AccessibilityImprovements.Level1)) {
+            if (DrawFlatToolbar || SystemInformation.HighContrast) {
                 // use an office look and feel with system colors 
                 ProfessionalColorTable colorTable = new ProfessionalColorTable();
                 colorTable.UseSystemColors = true;
@@ -4622,7 +4612,7 @@ namespace System.Windows.Forms {
         /// </summary>
         internal override bool SupportsUiaProviders {
             get {
-                return AccessibilityImprovements.Level3;
+                return true;
             }
         }
 

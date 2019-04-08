@@ -141,9 +141,7 @@ namespace System.Windows.Forms {
             //
             format = DateTimePickerFormat.Long;
 
-            if (AccessibilityImprovements.Level3) {
-                SetStyle(ControlStyles.UseTextForAccessibility, false);
-            }
+            SetStyle(ControlStyles.UseTextForAccessibility, false);
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColor"]/*' />
@@ -1775,16 +1773,13 @@ namespace System.Windows.Forms {
                     if (role != AccessibleRole.Default) {
                         return role;
                     }
-                    return AccessibilityImprovements.Level3 ? AccessibleRole.ComboBox : AccessibleRole.DropList;
+
+                    return AccessibleRole.ComboBox;
                 }
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
+                return true;
             }
 
             internal override object GetPropertyValue(int propertyID) {

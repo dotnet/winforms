@@ -393,16 +393,8 @@ namespace System.Windows.Forms {
         }
 
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripSplitButtonUiaProvider(this);
-            }
-            else if (AccessibilityImprovements.Level1) {
-                return new ToolStripSplitButtonExAccessibleObject(this);
-            }
-            else {
-                return new ToolStripSplitButtonAccessibleObject(this);
-            }
-       }
+            return new ToolStripSplitButtonUiaProvider(this);
+        }
 
         protected override ToolStripDropDown CreateDefaultDropDown() {
              // AutoGenerate a Winbar DropDown - set the property so we hook events
@@ -859,7 +851,7 @@ namespace System.Windows.Forms {
                     // Do not expose child items when the drop-down is collapsed to prevent Narrator from announcing
                     // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
                     // in scan mode (CAPSLOCK + Space)
-                    if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+                    if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
                         return 0;
                     }
 

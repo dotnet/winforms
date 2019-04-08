@@ -1457,9 +1457,7 @@ namespace System.Windows.Forms {
             if (itemOnPreviousMenuToSelect != null) {
                 itemOnPreviousMenuToSelect.Select();
 
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(itemOnPreviousMenuToSelect);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(itemOnPreviousMenuToSelect);
 
                 if (OwnerToolStrip != null) {
                     // make sure we send keyboard handling where we've just
