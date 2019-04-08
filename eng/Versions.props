@@ -14,19 +14,19 @@
   </PropertyGroup>
   <!-- Corefx-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview4.19181.2</MicrosoftWin32RegistryPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview4.19181.2</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview4.19181.2</SystemDrawingCommonPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview4.19181.2</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview4.19181.2</SystemSecurityCryptographyCngPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview4.19181.2</SystemCodeDomPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19181.2</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19181.2</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19181.2</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview4.19208.4</MicrosoftWin32RegistryPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview4.19208.4</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview4.19208.4</SystemDrawingCommonPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview4.19208.4</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview4.19208.4</SystemSecurityCryptographyCngPackageVersion>
+    <SystemCodeDomPackageVersion>4.6.0-preview4.19208.4</SystemCodeDomPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview4.19208.4</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>4.6.0-preview4.19208.4</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview4.19208.4</MicrosoftNETCorePlatformsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27525-72</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview4-27604-73</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
