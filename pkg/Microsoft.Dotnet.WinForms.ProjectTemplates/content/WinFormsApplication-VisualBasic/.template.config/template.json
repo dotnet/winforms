@@ -7,7 +7,7 @@
   "description": "A project for creating a .NET Core Windows Forms (WinForms) Application",
   "groupIdentity": "Microsoft.Common.WinForms",
   "precedence": "3000",
-  "identity": "Microsoft.Common.WinForms",
+  "identity": "Microsoft.Common.WinForms.VisualBasic.3.0",
   "shortName": "winforms",
   "tags": {
     "language": "VB",
