@@ -5142,29 +5142,32 @@ namespace System.Windows.Forms
                 var cellRight = columnRect.Left + columnRect.Width;
                 var cellLeft = columnRect.Left;
 
-                int rowHeadersWidth = 0;
+                int rightToLeftRowHeadersWidth = 0;
+                int leftToRightRowHeadersWidth = 0;
                 if (this.owner.DataGridView.RowHeadersVisible)
                 {
-                    rowHeadersWidth = this.owner.DataGridView.RowHeadersWidth;
+                    if (this.owner.DataGridView.RightToLeft == RightToLeft.Yes)
+                    {
+                        rightToLeftRowHeadersWidth = this.owner.DataGridView.RowHeadersWidth;
+                    }
+                    else
+                    {
+                        leftToRightRowHeadersWidth = this.owner.DataGridView.RowHeadersWidth;
+                    }
                 }
 
-                if (cellLeft < rowRect.Left + rowHeadersWidth)
+                if (cellLeft < rowRect.Left + leftToRightRowHeadersWidth)
                 {
-                    cellRect.X = rowRect.Left + rowHeadersWidth;
+                    cellLeft = rowRect.Left + leftToRightRowHeadersWidth;
                 }
-                else
-                {
-                    cellRect.X = cellLeft;
-                }
+                cellRect.X = cellLeft;
 
-                if (cellRight > rowRect.Right)
+
+                if (cellRight > rowRect.Right - rightToLeftRowHeadersWidth)
                 {
-                    cellRect.Width = rowRect.Right - cellRect.X;
+                    cellRight = rowRect.Right - rightToLeftRowHeadersWidth;
                 }
-                else
-                {
-                    cellRect.Width = cellRight - cellRect.X;
-                }
+                cellRect.Width = cellRight - cellLeft;
 
                 return cellRect;
             }

@@ -8,11 +8,14 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class DataGridViewCellsAccessibleObjectTests
     {
-        [Fact]
-        public void DataGridViewCellsAccessibleObject_Ctor_Default()
+        [Theory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void DataGridViewCellsAccessibleObject_Ctor_Default(RightToLeft rightToLeft)
         {
             DataGridView dataGridView = new DataGridView();
-            
+
+            dataGridView.RightToLeft = rightToLeft;
             dataGridView.ColumnCount = 4;
             dataGridView.Width = 130;
 
@@ -28,7 +31,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             }
             var accRowWidth = dataGridView.Rows[0].AccessibilityObject.BoundingRectangle.Width;
 
-            Assert.True(accCellWidthSum <= accRowWidth);
+            Assert.True(accCellWidthSum == accRowWidth - dataGridView.RowHeadersWidth);
         }
     }
 }
