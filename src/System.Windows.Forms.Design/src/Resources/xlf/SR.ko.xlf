@@ -68,8 +68,10 @@
         <note />
       </trans-unit>
       <trans-unit id="CommandSetError">
-        <source>An error occurred while processing this command.\r\n{0}</source>
-        <target state="new">An error occurred while processing this command.\r\n{0}</target>
+        <source>An error occurred while processing this command.
+      {0}</source>
+        <target state="new">An error occurred while processing this command.
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetFormatSpacing">
@@ -198,8 +200,18 @@
         <note />
       </trans-unit>
       <trans-unit id="ControlDesigner_WndProcException">
-        <source>The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}</source>
-        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}</target>
+        <source>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</source>
+        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -263,8 +275,10 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="translated">문서를 로드하는 동안 오류가 발생했습니다. 오류를 수정한 다음 문서를 다시 로드해 보세요. 다음 오류 메시지가 나타납니다.\r\n\r\n{0}</target>
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</source>
+        <target state="needs-review-translation">문서를 로드하는 동안 오류가 발생했습니다. 오류를 수정한 다음 문서를 다시 로드해 보세요. 다음 오류 메시지가 나타납니다.\r\n\r\n{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">

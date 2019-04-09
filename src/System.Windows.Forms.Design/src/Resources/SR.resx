@@ -229,7 +229,8 @@
     <value>Delete {0} components</value>
   </data>
   <data name="CommandSetError" xml:space="preserve">
-    <value>An error occurred while processing this command.\r\n{0}</value>
+    <value>An error occurred while processing this command.
+      {0}</value>
   </data>
   <data name="CommandSetFormatSpacing" xml:space="preserve">
     <value>Format {0} components (spacing)</value>
@@ -395,7 +396,9 @@
     <value>Cannot create a view for this design surface because the designer is not loaded.</value>
   </data>
   <data name="DesignSurfaceFatalError" xml:space="preserve">
-    <value>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</value>
+    <value>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</value>
   </data>
   <data name="DesignSurfaceNoRootComponent" xml:space="preserve">
     <value>The designer loader did not provide a root component but has not indicated why.</value>
@@ -422,7 +425,12 @@
     <value>Undock in Parent Container</value>
   </data>
   <data name="ControlDesigner_WndProcException" xml:space="preserve">
-    <value>The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}</value>
+    <value>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</value>
   </data>
   <data name="lockedDescr" xml:space="preserve">
     <value>The Locked property determines if we can move or resize the control.</value>

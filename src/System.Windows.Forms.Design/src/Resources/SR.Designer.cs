@@ -205,7 +205,8 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred while processing this command.\r\n{0}.
+        ///   Looks up a localized string similar to An error occurred while processing this command.
+        ///      {0}.
         /// </summary>
         public static string CommandSetError {
             get {
@@ -412,7 +413,12 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The control {0} has thrown an unhandled exception in the designer and has been disabled.  \r\n\r\nException:\r\n{1}\r\n\r\nStack trace:{2}.
+        ///   Looks up a localized string similar to The control {0} has thrown an unhandled exception in the designer and has been disabled.
+        ///
+        ///      Exception:
+        ///      {1}
+        ///
+        ///      Stack trace:{2}.
         /// </summary>
         public static string ControlDesigner_WndProcException {
             get {
@@ -817,7 +823,9 @@ namespace System.Windows.Forms.Design.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}.
+        ///   Looks up a localized string similar to An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+        ///
+        ///      {0}.
         /// </summary>
         public static string DesignSurfaceFatalError {
             get {
