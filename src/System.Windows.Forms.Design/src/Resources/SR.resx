@@ -214,7 +214,116 @@
     <value>Not implemented.</value>
   </data>
   <data name="DesignerActionPanel_CouldNotFindMethod" xml:space="preserve">
-    <value>Could not find method '{0}'</value>
+    <value>Could not find method '{0}'.</value>
+  </data>
+  <data name="CommandSetAlignByPrimary" xml:space="preserve">
+    <value>Format {0} components (alignment)</value>
+  </data>
+  <data name="CommandSetAlignToGrid" xml:space="preserve">
+    <value>Align {0} components to grid</value>
+  </data>
+  <data name="CommandSetCutMultiple" xml:space="preserve">
+    <value>Cut {0} Components</value>
+  </data>
+  <data name="CommandSetDelete" xml:space="preserve">
+    <value>Delete {0} components</value>
+  </data>
+  <data name="CommandSetError" xml:space="preserve">
+    <value>An error occurred while processing this command.\r\n{0}</value>
+  </data>
+  <data name="CommandSetFormatSpacing" xml:space="preserve">
+    <value>Format {0} components (spacing)</value>
+  </data>
+  <data name="CommandSetPaste" xml:space="preserve">
+    <value>Paste components</value>
+  </data>
+  <data name="CommandSetSize" xml:space="preserve">
+    <value>Size {0} components</value>
+  </data>
+  <data name="CommandSetSizeToGrid" xml:space="preserve">
+    <value>Size {0} components to grid</value>
+  </data>
+  <data name="CommandSetUnknownSpacingCommand" xml:space="preserve">
+    <value>Unknown spacing command</value>
+  </data>
+  <data name="DragDropMoveComponent" xml:space="preserve">
+    <value>Move {0}</value>
+  </data>
+  <data name="DragDropMoveComponents" xml:space="preserve">
+    <value>Move {0} components</value>
+  </data>
+  <data name="WindowsFormsCommandCenterX" xml:space="preserve">
+    <value>Horizontal center of {0} component(s)</value>
+  </data>
+  <data name="WindowsFormsCommandCenterY" xml:space="preserve">
+    <value>Vertical center of {0} component(s)</value>
+  </data>
+  <data name="DesignerActionPanel_CouldNotConvertValue" xml:space="preserve">
+    <value>Could not convert value '{0}' to the type '{1}'.</value>
+  </data>
+  <data name="DesignerActionPanel_CouldNotFindProperty" xml:space="preserve">
+    <value>Could not find property '{0}' on '{1}'.</value>
+  </data>
+  <data name="DesignerActionPanel_DefaultPanelTitle" xml:space="preserve">
+    <value>{0} Tasks</value>
+  </data>
+  <data name="DesignerActionPanel_ErrorActivatingDropDown" xml:space="preserve">
+    <value>Error using the dropdown: {0}</value>
+  </data>
+  <data name="DesignerActionPanel_ErrorInvokingAction" xml:space="preserve">
+    <value>Error invoking '{0}'.  Details: {1}</value>
+  </data>
+  <data name="DesignerActionPanel_ErrorSettingValue" xml:space="preserve">
+    <value>Error setting value '{0}' to property '{1}'.  Details: {2}</value>
+  </data>
+  <data name="DesignerInherited" xml:space="preserve">
+    <value>Inherited control</value>
+  </data>
+  <data name="DesignerInheritedReadOnly" xml:space="preserve">
+    <value>Inherited control (Private)</value>
+  </data>
+  <data name="RTL" xml:space="preserve">
+    <value>RTL_False</value>
+    <comment>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</comment>
+  </data>
+  <data name="TrayAutoArrange" xml:space="preserve">
+    <value>Auto Arrange Tray Icons</value>
+  </data>
+  <data name="TrayLineUpIcons" xml:space="preserve">
+    <value>Line Up Tray Icons</value>
+  </data>
+  <data name="TrayShowLargeIcons" xml:space="preserve">
+    <value>Show Large or Small Icons</value>
+  </data>
+  <data name="UIServiceHelper_ErrorCaption" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="WindowsFormsAddEvent" xml:space="preserve">
+    <value>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</value>
+  </data>
+  <data name="BehaviorServiceCopyControl" xml:space="preserve">
+    <value>Copy and move {0}</value>
+  </data>
+  <data name="BehaviorServiceCopyControls" xml:space="preserve">
+    <value>Copy and move {0} Controls</value>
+  </data>
+  <data name="BehaviorServiceMoveControl" xml:space="preserve">
+    <value>Move {0}</value>
+  </data>
+  <data name="BehaviorServiceMoveControls" xml:space="preserve">
+    <value>Move {0} Controls</value>
+  </data>
+  <data name="DesignerBeginDragNotCalled" xml:space="preserve">
+    <value>Call to BeginDrag must succeed before calling drag functions.</value>
+  </data>
+  <data name="DragDropDragComponents" xml:space="preserve">
+    <value>Drag {0} components</value>
+  </data>
+  <data name="DragDropSizeComponent" xml:space="preserve">
+    <value>Size {0}</value>
+  </data>
+  <data name="DragDropSizeComponents" xml:space="preserve">
+    <value>Size {0} components</value>
   </data>
   <data name="UndoEngineComponentAdd0" xml:space="preserve">
     <value>Add Component</value>

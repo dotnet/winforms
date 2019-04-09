@@ -41,7 +41,7 @@ namespace System.ComponentModel.Design
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
 
             if (_providers == null)
@@ -64,7 +64,7 @@ namespace System.ComponentModel.Design
         {
             if (provider == null)
             {
-                throw new ArgumentNullException("provider");
+                throw new ArgumentNullException(nameof(provider));
             }
 
             if (_providers != null)

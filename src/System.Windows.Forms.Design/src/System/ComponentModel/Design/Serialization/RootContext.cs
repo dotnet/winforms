@@ -18,8 +18,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public RootContext(CodeExpression expression, object value)
         {
-            _expression = expression ?? throw new ArgumentNullException("expression");
-            _value = value ?? throw new ArgumentNullException("value");
+            _expression = expression ?? throw new ArgumentNullException(nameof(expression));
+            _value = value ?? throw new ArgumentNullException(nameof(value));
         }
 
         /// <summary>
