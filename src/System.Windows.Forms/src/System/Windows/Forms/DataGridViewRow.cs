@@ -1797,6 +1797,7 @@ namespace System.Windows.Forms
                 get
                 {
                     Rectangle rowRect;
+
                     if (owner == null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
@@ -1807,10 +1808,14 @@ namespace System.Windows.Forms
                         // the row is scrolled off the DataGridView
                         // get the Accessible bounds for the following visible row
                         int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
-                        rowRect = ParentPrivate.GetChild(visibleRowIndex
-                                                         + 1                      // + 1 because the first acc obj in the DataGridView is the top row header
-                                                         + 1).Bounds;             // + 1 because we want to get the bounds for the next visible row
 
+                        int additionalRows = 1; // + 1 because we want to get the bounds for the next visible row
+                        if (this.owner.DataGridView.ColumnHeadersVisible)
+                        {
+                            additionalRows += 1; // + 1 because the first acc obj in the DataGridView is the top row header
+                        }
+
+                        rowRect = ParentPrivate.GetChild(visibleRowIndex + additionalRows).Bounds;
                         rowRect.Y -= owner.Height;
                         rowRect.Height = owner.Height;
 
@@ -1845,6 +1850,35 @@ namespace System.Windows.Forms
                         rowRect = ParentPrivate.GetChild(visibleRowIndex).Bounds;
                         rowRect.Y += rowRect.Height;
                         rowRect.Height = owner.Height;
+                    }
+
+                    int horizontalScrollBarHeight = 0;
+                    if (this.owner.DataGridView.HorizontalScrollBarVisible)
+                    {
+                        horizontalScrollBarHeight = this.owner.DataGridView.HorizontalScrollBarHeight;
+                    }
+
+                    Rectangle dataGridViewRect = ParentPrivate.Bounds;
+
+                    int rowRectBottom = rowRect.Bottom;
+                    if ((dataGridViewRect.Bottom - horizontalScrollBarHeight) < rowRectBottom)
+                    {
+                        rowRectBottom = dataGridViewRect.Bottom - horizontalScrollBarHeight;
+                    }
+
+                    int columnHeadersHeight = 0;
+                    if (this.owner.DataGridView.ColumnHeadersVisible)
+                    {
+                        columnHeadersHeight = this.owner.DataGridView.ColumnHeadersHeight;
+                    }
+
+                    if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
+                    {
+                        rowRect.Height = 0;
+                    }
+                    else
+                    {
+                        rowRect.Height = rowRectBottom - rowRect.Top;
                     }
 
                     return rowRect;
@@ -2254,8 +2288,9 @@ namespace System.Windows.Forms
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                         case NativeMethods.UIA_IsPasswordPropertyId:
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
                             return false;
+                        case NativeMethods.UIA_IsOffscreenPropertyId:
+                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                         case NativeMethods.UIA_AccessKeyPropertyId:
                             return string.Empty;
                     }

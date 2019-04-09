@@ -3476,6 +3476,22 @@ namespace System.Windows.Forms
             }
         }
 
+        internal int HorizontalScrollBarHeight
+        {
+            get
+            {
+                return this.horizScrollBar.Height;
+            }
+        }
+
+        internal bool HorizontalScrollBarVisible
+        {
+            get
+            {
+                return this.horizScrollBar.Visible;
+            }
+        }
+
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.HorizontalScrollingOffset"]/*' />
         [
             Browsable(false),
