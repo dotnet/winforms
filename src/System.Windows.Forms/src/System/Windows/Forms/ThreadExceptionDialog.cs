@@ -281,9 +281,7 @@ namespace System.Windows.Forms {
                 b = detailsButton;
 
                 expandImage = new Bitmap(GetType(), DownBitmapName);
-                expandImage.MakeTransparent();
                 collapseImage = new Bitmap(GetType(), UpBitmapName);
-                collapseImage.MakeTransparent();
 
                 if (DpiHelper.IsScalingRequirementMet)
                 {
@@ -328,13 +326,11 @@ namespace System.Windows.Forms {
                 expandImage.Dispose();
             }
             expandImage = new Bitmap(GetType(), DownBitmapName);
-            expandImage.MakeTransparent();
 
             if (collapseImage != null) {
                 collapseImage.Dispose();
             }
             collapseImage = new Bitmap(GetType(), UpBitmapName);
-            collapseImage.MakeTransparent();
 
             ScaleBitmapLogicalToDevice(ref expandImage);
             ScaleBitmapLogicalToDevice(ref collapseImage);

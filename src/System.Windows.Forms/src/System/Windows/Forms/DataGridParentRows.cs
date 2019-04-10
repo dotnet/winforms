@@ -728,29 +728,29 @@ namespace System.Windows.Forms {
             }
         }
 
-        private Bitmap GetBitmap(string bitmapName, Color transparentColor) {
-            Bitmap b = null;
+        private Bitmap GetBitmap(string bitmapName) {
+            Icon b = null;
             try {
-                b = new Bitmap(typeof(DataGridParentRows), bitmapName);
-                b.MakeTransparent(transparentColor);
+                b = new Icon(typeof(DataGridParentRows), bitmapName);
+                return b.ToBitmap();
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());
+                return null;
             }
-            return b;
         }
 
         private Bitmap GetRightArrowBitmap()
         {
             if (rightArrow == null)
-                rightArrow = GetBitmap("DataGridParentRows.RightArrow", Color.White);
+                rightArrow = GetBitmap("DataGridParentRows.RightArrow");
             return rightArrow;
         }
 
         private Bitmap GetLeftArrowBitmap()
         {
             if (leftArrow == null)
-                leftArrow = GetBitmap("DataGridParentRows.LeftArrow", Color.White);
+                leftArrow = GetBitmap("DataGridParentRows.LeftArrow");
             return leftArrow;
         }
 
