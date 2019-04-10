@@ -47,13 +47,7 @@ jobs:
 
         # needed for helix jobs
         - name: _TestHelixAgentPool
-          value: 'Windows.10.Amd64.Open'
-        - name: _WinformsControlsTestBinDir
-          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\WinformsControlsTest\$(_BuildConfig)\netcoreapp3.0
-        - name: _WinformsFuncTestBinDir
-          value: $(BUILD.SOURCESDIRECTORY)\artifacts\bin\System.Windows.Forms.Func.Tests\$(_BuildConfig)\netcoreapp3.0
-        - name: _HelixStagingDir
-          value: $(BUILD.STAGINGDIRECTORY)\helix\functests
+          value: 'Windows.10.Amd64.ClientRS5.Open'
         - name: _HelixSource
           value: ${{ parameters.repoName }}/$(Build.SourceBranch)
         - name: _HelixToken
@@ -96,7 +90,7 @@ jobs:
 
           # Windows.81.Amd64 will fail on Debug.Assert in TryGetSystemMetricsForDpi in UnsafeNativeMethods
           - name: _TestHelixAgentPool
-            value: 'Windows.10.Amd64'
+            value: 'Windows.10.Amd64.ClientRS5'
           - name: _HelixSource
             value: official/${{ parameters.repoName }}/$(Build.SourceBranch)
           - name: _HelixToken
