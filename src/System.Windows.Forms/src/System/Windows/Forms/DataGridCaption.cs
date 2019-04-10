@@ -380,15 +380,15 @@ namespace System.Windows.Forms {
         }
 
         private Bitmap GetBitmap(string bitmapName) {
-            Bitmap b = null;
+            Icon b = null;
             try {
-                b = new Bitmap(typeof(DataGridCaption), bitmapName);
-                b.MakeTransparent();
+                b = new Icon (typeof(DataGridCaption), bitmapName);
+                return b.ToBitmap();
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());
+                return null;
             }
-            return b;
         }
 
         private Bitmap GetBackButtonBmp(bool alignRight) {
