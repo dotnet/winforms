@@ -8,8 +8,6 @@ namespace System.ComponentModel.Design
 {
     public class DesignerActionMethodItem : DesignerActionItem
     {
-        private readonly string _memberName;
-        private readonly bool _includeAsDesignerVerb;
         private readonly DesignerActionList _actionList;
         private MethodInfo _methodInfo;
 
@@ -17,8 +15,8 @@ namespace System.ComponentModel.Design
             : base(displayName, category, description)
         {
             _actionList = actionList;
-            _memberName = memberName;
-            _includeAsDesignerVerb = includeAsDesignerVerb;
+            MemberName = memberName;
+            IncludeAsDesignerVerb = includeAsDesignerVerb;
         }
 
         public DesignerActionMethodItem(DesignerActionList actionList, string memberName, string displayName) : this(actionList, memberName, displayName, null, null, false)
@@ -41,45 +39,25 @@ namespace System.ComponentModel.Design
         {
         }
 
-        internal DesignerActionMethodItem()
-        {
-        }
-
-        public virtual string MemberName
-        {
-            get => _memberName;
-        }
+        public virtual string MemberName { get; }
 
         public IComponent RelatedComponent { get; set; }
 
-        public virtual bool IncludeAsDesignerVerb
-        {
-            get => _includeAsDesignerVerb;
-        }
-
-        // this is only use for verbs so that a designer action method item can be converted to a verb.
-        // Verbs use an EventHandler to call their invoke so we need a way to translate the EventHandler Invoke into ou own Invoke
-        internal void Invoke(object sender, EventArgs args)
-        {
-            Invoke();
-        }
+        public virtual bool IncludeAsDesignerVerb { get; }
 
         public virtual void Invoke()
         {
             if (_methodInfo == null)
             {
-                // we look public AND private or protected methods
-                _methodInfo = _actionList.GetType().GetMethod(_memberName, BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                _methodInfo = _actionList.GetType().GetMethod(MemberName, BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             }
 
-            if (_methodInfo != null)
-            {
-                _methodInfo.Invoke(_actionList, null);
-            }
-            else
+            if (_methodInfo == null)
             {
                 throw new InvalidOperationException(string.Format(SR.DesignerActionPanel_CouldNotFindMethod, MemberName));
             }
+
+            _methodInfo.Invoke(_actionList, null);
         }
     }
 }

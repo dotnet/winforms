@@ -14,53 +14,23 @@ namespace System.ComponentModel.Design
     /// </summary>
     public class DesignerActionList
     {
-        private bool _autoShow = false;
-        private readonly IComponent _component;
-
-        /// <summary>
-        /// takes the related component as a parameter
-        /// </summary>
         public DesignerActionList(IComponent component)
         {
-            _component = component;
+            Component = component;
         }
 
-        public virtual bool AutoShow
-        {
-            get => _autoShow;
-            set
-            {
-                if (_autoShow != value)
-                {
-                    _autoShow = value;
-                }
-            }
-        }
+        public virtual bool AutoShow { get; set; }
 
-        /// <summary>
-        /// this will be null for list created from upgraded verbs collection...
-        /// </summary>
-        public IComponent Component
-        {
-            get => _component;
-        }
+        public IComponent Component { get; }
 
         public object GetService(Type serviceType)
         {
-            if (_component != null && _component.Site != null)
-            {
-                return _component.Site.GetService(serviceType);
-            }
-            else
-            {
-                return null;
-            }
+            return Component?.Site?.GetService(serviceType);
         }
 
         public virtual DesignerActionItemCollection GetSortedActionItems()
         {
-            string dispName, desc, cat;
-            SortedList<string, DesignerActionItem> items = new SortedList<string, DesignerActionItem>();
+            var items = new SortedList<string, DesignerActionItem>();
 
             // we want to ignore the public methods and properties for THIS class (only take the inherited ones)
             IList<MethodInfo> originalMethods = Array.AsReadOnly(typeof(DesignerActionList).GetMethods(BindingFlags.InvokeMethod | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public));
@@ -71,11 +41,14 @@ namespace System.ComponentModel.Design
             foreach (MethodInfo info in methods)
             {
                 if (originalMethods.Contains(info))
+                {
                     continue;
+                }
+
                 // Make sure there are only methods that take no parameters
                 if (info.GetParameters().Length == 0 && !info.IsSpecialName)
                 {
-                    GetMemberDisplayProperties(info, out dispName, out desc, out cat);
+                    GetMemberDisplayProperties(info, out string dispName, out string desc, out string cat);
                     items.Add(info.Name, new DesignerActionMethodItem(this, info.Name, dispName, cat, desc));
                 }
             }
@@ -85,43 +58,46 @@ namespace System.ComponentModel.Design
             foreach (PropertyInfo info in properties)
             {
                 if (originalProperties.Contains(info))
+                {
                     continue;
-                GetMemberDisplayProperties(info, out dispName, out desc, out cat);
+                }
+
+                GetMemberDisplayProperties(info, out string dispName, out string desc, out string cat);
                 items.Add(dispName, new DesignerActionPropertyItem(info.Name, dispName, cat, desc));
             }
 
-            DesignerActionItemCollection returnValue = new DesignerActionItemCollection();
+            var returnValue = new DesignerActionItemCollection();
             foreach (DesignerActionItem dai in items.Values)
             {
                 returnValue.Add(dai);
             }
+
             return returnValue;
         }
+
         private object GetCustomAttribute(MemberInfo info, Type attributeType)
         {
             object[] attributes = info.GetCustomAttributes(attributeType, true);
-            if (attributes.Length > 0)
-            {
-                return attributes[0];
-            }
-            else
-            {
-                return null;
-            }
+            return attributes.Length > 0 ? attributes[0] : null;
         }
 
         private void GetMemberDisplayProperties(MemberInfo info, out string displayName, out string description, out string category)
         {
-            displayName = description = category = "";
+            displayName = string.Empty;
+            description = string.Empty;
+            category = string.Empty;
+
             if (GetCustomAttribute(info, typeof(DescriptionAttribute)) is DescriptionAttribute descAttr)
             {
                 description = descAttr.Description;
             }
+
             DisplayNameAttribute dispNameAttr = GetCustomAttribute(info, typeof(DisplayNameAttribute)) as DisplayNameAttribute;
             if (dispNameAttr != null)
             {
                 displayName = dispNameAttr.DisplayName;
             }
+
             CategoryAttribute catAttr = GetCustomAttribute(info, typeof(CategoryAttribute)) as CategoryAttribute;
             if (dispNameAttr != null)
             {
