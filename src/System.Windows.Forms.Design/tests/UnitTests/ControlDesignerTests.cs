@@ -12,42 +12,42 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void AccessibleObjectField()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.Null(controlDesigner.GetAccessibleObjectField());
         }
 
         [Fact]
         public void BehaviorServiceProperty()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.Null(controlDesigner.GetBehaviorServiceProperty());
         }
 
         [Fact]
         public void AccessibilityObjectField()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner.AccessibilityObject);
         }
 
         [Fact]
         public void EnableDragRectProperty()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.False(controlDesigner.GetEnableDragRectProperty());
         }
         
         [Fact]
         public void ParticipatesWithSnapLinesProperty()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.True(controlDesigner.ParticipatesWithSnapLines);
         }
 
         [Fact]
         public void AutoResizeHandlesProperty()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.True(controlDesigner.AutoResizeHandles = true);
             Assert.True(controlDesigner.AutoResizeHandles);
         }
@@ -55,14 +55,14 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void SelectionRulesProperty()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.Equal(SelectionRules.Visible ,controlDesigner.SelectionRules);
         }
 
         [Fact]
         public void InheritanceAttributeProperty()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             Assert.NotNull(controlDesigner.GetInheritanceAttributeProperty());
@@ -71,14 +71,14 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void NumberOfInternalControlDesignersTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.Equal(0, controlDesigner.NumberOfInternalControlDesigners());
         }
 
         [Fact]
         public void BaseWndProcTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Message m = default;
             try
             {
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void CanBeParentedToTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             Assert.True(controlDesigner.CanBeParentedTo(new ParentControlDesigner()));
@@ -105,7 +105,7 @@ namespace System.Windows.Forms.Design.Tests
         [MemberData(nameof(BoolData))]
         public void EnableDragDropTest(bool val)
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             try
             {
                 controlDesigner.EnableDragDropMethod(val);
@@ -119,14 +119,14 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void GetHitTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.False(controlDesigner.GetHitTestMethod(new Drawing.Point()));
         }
 
         [Fact]
         public void HookChildControlsTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             try
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void InitializeTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             try
             {
                 controlDesigner.Initialize(new Button());
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void InitializeNewComponentTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             try
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnSetComponentDefaultsTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
 #pragma warning disable 618
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
@@ -191,7 +191,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnContextMenuTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             try
             {
                 controlDesigner.OnContextMenuMethod(0, 0);
@@ -205,7 +205,7 @@ namespace System.Windows.Forms.Design.Tests
         [Fact]
         public void OnCreateHandleTest()
         {
-            MockControlDesigner controlDesigner = new MockControlDesigner();
+            TestControlDesigner controlDesigner = new TestControlDesigner();
             Assert.NotNull(controlDesigner);
             controlDesigner.Initialize(new Button());
             try
