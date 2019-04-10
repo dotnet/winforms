@@ -1613,7 +1613,7 @@
     <value>Editing Panel</value>
   </data>
   <data name="DataGridView_AccHorizontalScrollBarAccName" xml:space="preserve">
-    <value>Horizontal Scroll Bar</value>
+    <value>Horizontal</value>
   </data>
   <data name="DataGridView_AccLinkCellDefaultAction" xml:space="preserve">
     <value>Click</value>
@@ -1646,7 +1646,7 @@
     <value>Top Row</value>
   </data>
   <data name="DataGridView_AccVerticalScrollBarAccName" xml:space="preserve">
-    <value>Vertical Scroll Bar</value>
+    <value>Vertical</value>
   </data>
   <data name="DataGridView_AColumnHasNoCellTemplate" xml:space="preserve">
     <value>At least one of the DataGridView control's columns has no cell template.</value>

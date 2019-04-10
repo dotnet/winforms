@@ -3133,8 +3133,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
-        <source>Horizontal Scroll Bar</source>
-        <target state="translated">Barra di scorrimento orizzontale</target>
+        <source>Horizontal</source>
+        <target state="needs-review-translation">Barra di scorrimento orizzontale</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3188,8 +3188,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
-        <source>Vertical Scroll Bar</source>
-        <target state="translated">Barra di scorrimento verticale</target>
+        <source>Vertical</source>
+        <target state="needs-review-translation">Barra di scorrimento verticale</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">

@@ -3133,8 +3133,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
-        <source>Horizontal Scroll Bar</source>
-        <target state="translated">Poziomy pasek przewijania</target>
+        <source>Horizontal</source>
+        <target state="needs-review-translation">Poziomy pasek przewijania</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3188,8 +3188,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
-        <source>Vertical Scroll Bar</source>
-        <target state="translated">Pionowy pasek przewijania</target>
+        <source>Vertical</source>
+        <target state="needs-review-translation">Pionowy pasek przewijania</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
