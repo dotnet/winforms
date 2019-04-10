@@ -590,7 +590,6 @@ namespace System.ComponentModel.Design
             {
                 if (name == null)
                 {
-                    Debug.Fail("Null name passed to new undo unit");
                     name = string.Empty;
                 }
     
@@ -777,7 +776,7 @@ namespace System.ComponentModel.Design
                 }
 
                 // The site check here is done because the data team is calling us for components that are not yet sited.  We end up writing them out as Guid-named locals.  That's fine, except that we cannot capture after state for these types of things so we assert.  
-                if (UndoEngine != null && UndoEngine.GetName(e.Component, false) != null)
+                if (UndoEngine.GetName(e.Component, false) != null)
                 {
                     // The caller provided us with a component.  This is the common case.  We will add a new change event provided there is not already one open for this component.
                     bool hasChange = false;

@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design
 
         public DesignerActionVerbItem(DesignerVerb verb) : base(null, null, null)
         {
-            _targetVerb = verb ?? throw new ArgumentNullException();
+            _targetVerb = verb ?? throw new ArgumentNullException(nameof(verb));
         }
 
         public override string Category => "Verbs";

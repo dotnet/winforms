@@ -18,8 +18,6 @@ namespace System.ComponentModel.Design.Serialization
     {
         public ExpressionContext(CodeExpression expression, Type expressionType, object owner, object presetValue)
         {
-            // To make this public, we cannot have random special cases for what the args mean.
-            Debug.Assert(expression != null && expressionType != null && owner != null, "Obsolete use of expression context.");
             Expression = expression ?? throw new ArgumentNullException(nameof(expression));
             ExpressionType = expressionType ?? throw new ArgumentNullException(nameof(expressionType));
             Owner = owner ?? throw new ArgumentNullException(nameof(owner));

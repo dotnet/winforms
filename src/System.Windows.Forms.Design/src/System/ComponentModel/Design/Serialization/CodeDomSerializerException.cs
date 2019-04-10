@@ -20,7 +20,7 @@ namespace System.ComponentModel.Design.Serialization
             LinePragma = linePragma;
         }
 
-        public CodeDomSerializerException(Exception ex, CodeLinePragma linePragma) : base(ex.Message, ex)
+        public CodeDomSerializerException(Exception ex, CodeLinePragma linePragma) : base(ex?.Message, ex)
         {
             LinePragma = linePragma;
         }
@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Serialization
             }
         }
 
-        public CodeDomSerializerException(Exception ex, IDesignerSerializationManager manager) : base(ex.Message, ex)
+        public CodeDomSerializerException(Exception ex, IDesignerSerializationManager manager) : base(ex?.Message, ex)
         {
             if (manager == null)
             {
