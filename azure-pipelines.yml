@@ -5,6 +5,10 @@
 # so they can be used to control yaml flow.
 
 variables:
+  - name: _PublishUsingPipelines
+    value: true
+  - name: _DotNetArtifactsCategory
+    value: WINDOWSDESKTOP
 
   # clean the local repo on the build agents
   Build.Repository.Clean: true
