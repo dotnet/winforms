@@ -279,8 +279,6 @@ namespace System.Windows.Forms {
                         else {
                             Bitmap indeterminateCheckedBmp = new Bitmap(typeof(ToolStripMenuItem), "IndeterminateChecked");
                             if (indeterminateCheckedBmp != null) {
-                                // 
-                                indeterminateCheckedBmp.MakeTransparent(indeterminateCheckedBmp.GetPixel(1, 1));
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp);
                                 }
@@ -298,8 +296,6 @@ namespace System.Windows.Forms {
                         else {
                             Bitmap checkedBmp = new Bitmap(typeof(ToolStripMenuItem), "Checked");
                             if (checkedBmp != null) {
-                                // 
-                                checkedBmp.MakeTransparent(checkedBmp.GetPixel(1, 1));
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp);
                                 }
@@ -330,7 +326,6 @@ namespace System.Windows.Forms {
 
                         if (b != null)
                         {
-                            b.MakeTransparent(b.GetPixel(1, 1));
                             if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
                             {
                                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);

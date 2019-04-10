@@ -12,6 +12,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Drawing.Design;
+    using System.Drawing.Imaging;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -1589,8 +1590,7 @@ namespace System.Windows.Forms {
         }
 
         private int AddImage(Bitmap image) {
-            
-            image.MakeTransparent();
+
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
             if (DpiHelper.IsScalingRequired && (image.Size.Width != normalButtonSize.Width || image.Size.Height != normalButtonSize.Height)) {
                 image = DpiHelper.CreateResizedBitmap(image, normalButtonSize);
@@ -2393,7 +2393,6 @@ namespace System.Windows.Forms {
             Bitmap largeBitmap = null;
             try {
                 Bitmap transparentBitmap = new Bitmap(originalBitmap);
-                transparentBitmap.MakeTransparent();
                 largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, largeButtonSize);
                 transparentBitmap.Dispose();
 

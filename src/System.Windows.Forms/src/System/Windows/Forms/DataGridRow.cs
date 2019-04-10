@@ -207,16 +207,15 @@ namespace System.Windows.Forms {
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
         protected Bitmap GetBitmap(string bitmapName) {
-            Bitmap b = null;
+            Icon b = null;
             try {
-                b = new Bitmap(typeof(DataGridCaption), bitmapName);
-                b.MakeTransparent();
+                b = new Icon(typeof(DataGridCaption), bitmapName);
+                return b.ToBitmap();
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());
                 throw e;
             }
-            return b;
         }
 
         /// <include file='doc\DataGridRow.uex' path='docs/doc[@for="DataGridRow.GetCellBounds"]/*' />
@@ -280,7 +279,6 @@ namespace System.Windows.Forms {
         protected Bitmap GetErrorBitmap() {
             if (errorBmp == null)
                 errorBmp = GetBitmap("DataGridRow.error");
-            errorBmp.MakeTransparent();
             return errorBmp;
         }
 

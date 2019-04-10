@@ -18260,7 +18260,7 @@ example usage
             }
         }
 
-        #if ACTIVEX_SOURCING
+#if ACTIVEX_SOURCING
 
         //
         // This has been cut from the product.
@@ -18290,10 +18290,7 @@ example usage
                     form.ControlBox = true;
                     form.SizeGripStyle = SizeGripStyle.Show;
                     form.DockPadding.Bottom = 16; // size grip size
-
-                    Bitmap bitmap = new Bitmap(grid.GetType(), "PropertyGrid");
-                    bitmap.MakeTransparent();
-                    form.Icon = Icon.FromHandle(bitmap.GetHicon());
+                    form.Icon = new Icon(grid.GetType(), "PropertyGrid");
 
                     grid.Dock = DockStyle.Fill;
 
@@ -18312,7 +18309,7 @@ example usage
             }
         }
 
-        #endif
+#endif
 
         /// <devdoc>
         ///      Contains a single ambient property, including DISPID, name and value.

@@ -1527,8 +1527,8 @@ namespace System.Windows.Forms
 
         private static Bitmap GetBitmap(string bitmapName)
         {
-            Bitmap b = new Bitmap(typeof(DataGridViewCell), bitmapName);
-            b.MakeTransparent();
+            Icon icon = new Icon(typeof(DataGridViewCell), bitmapName);
+            var b = icon.ToBitmap();
             if (DpiHelper.IsScalingRequired) {
                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, new Size(iconsWidth, iconsHeight));
                 if (scaledBitmap != null) {
