@@ -5077,67 +5077,9 @@ namespace System.Windows.Forms
                     return Rectangle.Empty;
                 }
 
-                // use the accessibility bounds from the parent row acc obj
                 Rectangle rowRect = parentAccObject.Bounds;
                 Rectangle cellRect = rowRect;
-                Rectangle columnRect;
-
-                int firstVisibleColumnIndex = this.owner.DataGridView.Columns.ColumnIndexToActualDisplayIndex(this.owner.DataGridView.FirstDisplayedScrollingColumnIndex, DataGridViewElementStates.Visible);
-                int visibleColumnIndex = this.owner.DataGridView.Columns.ColumnIndexToActualDisplayIndex(this.owner.ColumnIndex, DataGridViewElementStates.Visible);
-
-                bool rowHeadersVisible = this.owner.DataGridView.RowHeadersVisible;
-                if (visibleColumnIndex < firstVisibleColumnIndex)
-                {
-                    // Get the bounds for the cell to the RIGHT
-                    columnRect = parentAccObject.GetChild(visibleColumnIndex
-                                                          + 1                                       // + 1 for the next cell to the RIGHT
-                                                          + (rowHeadersVisible ? 1 : 0)).Bounds;    // + 1 but only if the row headers are visible
-
-                    // From the bounds of the cell to the RIGHT decrement the width of the owning column
-                    if (this.Owner.DataGridView.RightToLeft == RightToLeft.No)
-                    {
-                        columnRect.X -= this.owner.OwningColumn.Width;
-                    }
-                    else
-                    {
-                        columnRect.X = columnRect.Right;
-                    }
-                    columnRect.Width = this.owner.OwningColumn.Width;
-                }
-                else if (visibleColumnIndex == firstVisibleColumnIndex)
-                {
-                    columnRect = this.owner.DataGridView.GetColumnDisplayRectangle(this.owner.ColumnIndex, false /*cutOverflow*/);
-                    int negOffset = this.owner.DataGridView.FirstDisplayedScrollingColumnHiddenWidth;
-
-                    if (negOffset != 0)
-                    {
-                        if (this.owner.DataGridView.RightToLeft == RightToLeft.No)
-                        {
-                            columnRect.X -= negOffset;
-                        }
-                        columnRect.Width += negOffset;
-                    }
-                    columnRect = this.owner.DataGridView.RectangleToScreen(columnRect);
-                }
-                else
-                {
-                    // Get the bounds for the cell to the LEFT
-                    columnRect = parentAccObject.GetChild(visibleColumnIndex
-                                                          - 1                                       // - 1 because we want the previous cell to the LEFT
-                                                          + (rowHeadersVisible ? 1 : 0)).Bounds;    // + 1 but only if the row headers are visible
-
-                    // From the bounds of the cell to the LEFT increment the width of the owning column
-                    if (this.owner.DataGridView.RightToLeft == RightToLeft.No)
-                    {
-                        columnRect.X = columnRect.Right;
-                    }
-                    else
-                    {
-                        columnRect.X -= this.owner.OwningColumn.Width;
-                    }
-
-                    columnRect.Width = this.owner.OwningColumn.Width;
-                }
+                Rectangle columnRect = this.owner.DataGridView.RectangleToScreen(this.owner.DataGridView.GetColumnDisplayRectangle(this.owner.ColumnIndex, false /*cutOverflow*/));
 
                 var cellRight = columnRect.Left + columnRect.Width;
                 var cellLeft = columnRect.Left;

@@ -1796,62 +1796,13 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle rowRect;
-
                     if (owner == null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    if (owner.Index < owner.DataGridView.FirstDisplayedScrollingRowIndex)
-                    {
-                        // the row is scrolled off the DataGridView
-                        // get the Accessible bounds for the following visible row
-                        int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
-
-                        int additionalRows = 1; // + 1 because we want to get the bounds for the next visible row
-                        if (this.owner.DataGridView.ColumnHeadersVisible)
-                        {
-                            additionalRows += 1; // + 1 because the first acc obj in the DataGridView is the top row header
-                        }
-
-                        rowRect = ParentPrivate.GetChild(visibleRowIndex + additionalRows).Bounds;
-                        rowRect.Y -= owner.Height;
-                        rowRect.Height = owner.Height;
-
-                    }
-                    else if (owner.Index >= owner.DataGridView.FirstDisplayedScrollingRowIndex &&
-                        owner.Index < owner.DataGridView.FirstDisplayedScrollingRowIndex + owner.DataGridView.DisplayedRowCount(true /*includePartialRow*/))
-                    {
-                        rowRect = owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/);
-                        rowRect = owner.DataGridView.RectangleToScreen(rowRect);
-                    }
-                    else
-                    {
-                        // the row is scrolled off the DataGridView
-                        // use the Accessible bounds for the previous visible row
-                        int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
-
-                        // This is a tricky scenario
-                        // If Visible of Row 0 is false, then visibleRowIndex is not the previous visible row.
-                        // It turns out to be the current row, this will cause a stack overflow.
-                        // We have to prevent this.
-                        if (!owner.DataGridView.Rows[0].Visible)
-                        {
-                            visibleRowIndex--;
-                        }
-
-                        // we don't have to decrement the visible row index if the first acc obj in the data grid view is the top column header
-                        if (!owner.DataGridView.ColumnHeadersVisible)
-                        {
-                            visibleRowIndex--;
-                        }
-
-                        rowRect = ParentPrivate.GetChild(visibleRowIndex).Bounds;
-                        rowRect.Y += rowRect.Height;
-                        rowRect.Height = owner.Height;
-                    }
-
+                    Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
+                    
                     int horizontalScrollBarHeight = 0;
                     if (this.owner.DataGridView.HorizontalScrollBarVisible)
                     {
