@@ -215,6 +215,9 @@ namespace System.Windows.Forms
                     }
                 }
 
+                // The max length of the name of clipboard formats is equal to the max length
+                // of a Win32 Atom of 255 chars. An additional null terminator character is added,
+                // giving a required capacity of 256 chars.
                 var nameBuilder = new StringBuilder(256);
 
                 // This can happen if windows adds a standard format that we don't know about,
