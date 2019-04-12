@@ -729,6 +729,9 @@
   <data name="SerializerMemberTypeNotSerializable" xml:space="preserve">
     <value>Members of type '{0}' cannot be serialized.</value>
   </data>
+  <data name="SerializerTypeAbstract" xml:space="preserve">
+    <value>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</value>
+  </data>
   <data name="StandardToolHelp" xml:space="preserve">
     <value>He&amp;lp</value>
   </data>
