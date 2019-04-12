@@ -784,7 +784,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// Returns the drop target manager that all the hwndless
-        /// items and this winbar share.  this is necessary as
+        /// items and this ToolStrip share.  this is necessary as
         /// RegisterDragDrop requires an HWND.
         /// </devdoc>
         internal ToolStripDropTargetManager DropTargetManager {
@@ -852,7 +852,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ForeColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
-        /// Forecolor really has no meaning for winbars - so lets hide it
+        /// Forecolor really has no meaning for ToolStrips - so lets hide it
         /// </devdoc>
         [Browsable(false)]
         public new Color ForeColor {
@@ -949,7 +949,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripMargin"]/*' />
         /// <devdoc>
-        /// The external spacing between the grip and the padding of the winbar and the first item in the collection
+        /// The external spacing between the grip and the padding of the ToolStrip and the first item in the collection
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -966,7 +966,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripRectangle"]/*' />
         /// <devdoc>
-        /// The boundaries of the grip on the winbar.  If it is invisible - returns Rectangle.Empty.
+        /// The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
         /// </devdoc>
         [
         Browsable(false)
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
         /// The items that belong to this ToolStrip.
         /// Note - depending on space and layout preferences, not all items
         /// in this collection will be displayed.  They may not even be displayed
-        /// on this winbar (say in the case where we're overflowing the item).
+        /// on this ToolStrip (say in the case where we're overflowing the item).
         /// The collection of _Displayed_ items is the DisplayedItems collection.
         /// The displayed items collection also includes things like the OverflowButton
         /// and the Grip.
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms {
               Events.RemoveHandler(EventItemRemoved, value);
           }
         }
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="ToolStrip.IsDropDown"]/*' />
+        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IsDropDown"]/*' />
         /// <devdoc> handy check for painting and sizing </devdoc>
         [Browsable(false)]
         public bool IsDropDown {
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// The OnDrag[blah] methods that will be called if AllowItemReorder is true.
         ///
-        /// This allows us to have methods that handle drag/drop of the winbar items
+        /// This allows us to have methods that handle drag/drop of the ToolStrip items
         /// without calling back on the user's code
         /// </devdoc>
         internal IDropTarget ItemReorderDropTarget {
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms {
         /// The OnQueryContinueDrag and OnGiveFeedback methods that will be called if
         /// AllowItemReorder is true.
         ///
-        /// This allows us to have methods that handle drag/drop of the winbar items
+        /// This allows us to have methods that handle drag/drop of the ToolStrip items
         /// without calling back on the user's code
         /// </devdoc>
         internal ISupportOleDropSource ItemReorderDropSource {
@@ -1625,7 +1625,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>
-        /// The renderer is used to paint the hwndless winbar items.  If someone wanted to
+        /// The renderer is used to paint the hwndless ToolStrip items.  If someone wanted to
         /// change the "Hot" look of all of their buttons to be a green triangle, they should
         /// create a class that derives from ToolStripRenderer, assign it to this property and call
         /// invalidate.
@@ -2650,7 +2650,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        //initialize winbar
+        //initialize ToolStrip
         private void InitializeRenderer(ToolStripRenderer renderer) {
             // wrap this in a LayoutTransaction so that if they change sizes
             // in this method we've suspended layout.
@@ -2664,7 +2664,7 @@ namespace System.Windows.Forms {
         }
 
 
-        // sometimes you only want to force a layout if the winbar is visible.
+        // sometimes you only want to force a layout if the ToolStrip is visible.
         private void InvalidateLayout() {
             if (IsHandleCreated) {
                 LayoutTransaction.DoLayout(this, this, null);
@@ -3322,7 +3322,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.OnItemClicked"]/*' />
         /// <devdoc>
-        /// Called when an item has been clicked on the winbar.
+        /// Called when an item has been clicked on the ToolStrip.
         /// </devdoc>
         protected virtual void OnItemClicked(ToolStripItemClickedEventArgs e) {
             ToolStripItemClickedEventHandler handler = (ToolStripItemClickedEventHandler)Events[EventItemClicked];
@@ -3418,7 +3418,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseDown"]/*' />
         /// <devdoc>
-        /// Delegate mouse down to the winbar and its affected items
+        /// Delegate mouse down to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs mea) {
 
@@ -3453,7 +3453,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseMove"]/*' />
         /// <devdoc>
-        /// Delegate mouse moves to the winbar and its affected items
+        /// Delegate mouse moves to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs mea) {
             Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose,"OnMouseMove called");
@@ -3516,7 +3516,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseLeave"]/*' />
         /// <devdoc>
-        /// Delegate mouse leave to the winbar and its affected items
+        /// Delegate mouse leave to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseLeave(System.EventArgs e) {
             HandleMouseLeave();
@@ -3539,7 +3539,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseUp"]/*' />
         /// <devdoc>
-        /// Delegate mouse up to the winbar and its affected items
+        /// Delegate mouse up to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs mea) {
      
@@ -4024,7 +4024,7 @@ namespace System.Windows.Forms {
             RenderMode = ToolStripRenderMode.ManagerRenderMode;
         }
 
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="ToolStrip.ResetMinimumSize"]/*' />
+        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ResetMinimumSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetMinimumSize() {
             CommonProperties.SetMinimumSize(this, new Size(-1,-1));

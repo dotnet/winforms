@@ -1962,6 +1962,7 @@ namespace System.Windows.Forms {
         WM_MBUTTONDOWN = 0x0207,
         WM_MBUTTONUP = 0x0208,
         WM_MBUTTONDBLCLK = 0x0209,
+        WM_NCMOUSEHOVER = 0x02A0,
         WM_XBUTTONDOWN                 = 0x020B,
         WM_XBUTTONUP                   = 0x020C,
         WM_XBUTTONDBLCLK               = 0x020D,
@@ -5701,6 +5702,8 @@ namespace System.Windows.Forms {
         public const int PS_GEOMETRIC = 0x00010000;
         public const int PS_ENDCAP_SQUARE = 0x00000100;
 
+        public const int WS_EX_TRANSPARENT = 0x00000020;
+
         public const int NULL_BRUSH = 5;
         public const int MM_HIMETRIC = 3;
 
@@ -6042,6 +6045,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern short GetKeyState(int keyCode);
@@ -6065,6 +6072,8 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.Process)]
         private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
+        [ResourceExposure(ResourceScope.Process)]
+        [ResourceConsumption(ResourceScope.Process)]
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
         {
             return System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), CommonHandles.GDI);

@@ -9,9 +9,9 @@ namespace System.ComponentModel.Design
         public DesignerActionHeaderItem(string displayName) : base(displayName, displayName)
         {
         }
+
         public DesignerActionHeaderItem(string displayName, string category) : base(displayName, category)
         {
         }
-
     }
 }

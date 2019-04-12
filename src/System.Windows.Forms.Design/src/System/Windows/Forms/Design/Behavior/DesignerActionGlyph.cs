@@ -3,51 +3,45 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This Glyph represents the UI appended to a control when DesignerActions are available. Each image that represents these states are demand created.
-    /// This is done because it is entirely possible that a DesignerActionGlyph will only ever be in one of these states during its lifetime... kind of sad really.
+    /// This Glyph represents the UI appended to a control when DesignerActions are available. Each image that represents these states are demand created.  This is done because it is entirely possible that a DesignerActionGlyph will only ever be in one of these states during its lifetime... kind of sad really.
     /// </summary>
     internal sealed class DesignerActionGlyph : Glyph
     {
+        internal const int CONTROLOVERLAP_X = 5; // number of pixels the anchor should be offset to the left of the control's upper-right         
+        internal const int CONTROLOVERLAP_Y = 2; // number of pixels the anchor overlaps the control in the y-direction
 
-        internal const int CONTROLOVERLAP_X = 5; //number of pixels the anchor should be offset to the left of the control's upper-right         
-        internal const int CONTROLOVERLAP_Y = 2; //number of pixels the anchor overlaps the control in the y-direction
-
-        private Rectangle bounds; //the bounds of our glyph 
-        private Adorner adorner; //A ptr back to our adorner - so when we decide to change state, we can invalidate
-        private bool mouseOver; //on mouse over, we shade our image differently, this is used to track that state
-        private Rectangle alternativeBounds = Rectangle.Empty; //if !empty, this represents the bounds of the tray control this gyph is related to
-        private Control alternativeParent; //if this is valid - then the glyph will invalidate itself here instead of on the adorner
-        private bool insidePaint;
-
-        private DockStyle dockStyle;
-        private Bitmap glyphImageClosed;
-        private Bitmap glyphImageOpened;
+        private Rectangle _bounds; // the bounds of our glyph 
+        private readonly Adorner _adorner; // A ptr back to our adorner - so when we decide to change state, we can invalidate
+        private bool _mouseOver; // on mouse over, we shade our image differently, this is used to track that state
+        private Rectangle _alternativeBounds = Rectangle.Empty; // if !empty, this represents the bounds of the tray control this gyph is related to
+        private readonly Control _alternativeParent; // if this is valid - then the glyph will invalidate itself here instead of on the adorner
+        private bool _insidePaint;
+        private DockStyle _dockStyle;
+        private Bitmap _glyphImageClosed;
+        private Bitmap _glyphImageOpened;
 
         /// <summary>
-        /// Constructor that passes empty alternative bounds and parents.
-        /// Typically this is done for control on the designer's surface since component tray glyphs will have these alternative values.
+        /// Constructor that passes empty alternative bounds and parents. Typically this is done for control on the designer's surface since component tray glyphs will have these alternative values.
         /// </summary>
-        public DesignerActionGlyph(DesignerActionBehavior behavior, Adorner adorner) :
-                              this(behavior, adorner, Rectangle.Empty, null)
+        public DesignerActionGlyph(DesignerActionBehavior behavior, Adorner adorner) : this(behavior, adorner, Rectangle.Empty, null)
         { }
-        public DesignerActionGlyph(DesignerActionBehavior behavior, Rectangle alternativeBounds, Control alternativeParent) :
-                              this(behavior, null, alternativeBounds, alternativeParent)
+        public DesignerActionGlyph(DesignerActionBehavior behavior, Rectangle alternativeBounds, Control alternativeParent) : this(behavior, null, alternativeBounds, alternativeParent)
         { }
 
         /// <summary>
         /// Constructor that sets the dropdownbox size, creates a our hottrack brush and invalidates the glyph (to configure location).
         /// </summary>
-        private DesignerActionGlyph(DesignerActionBehavior behavior, Adorner adorner, Rectangle alternativeBounds, Control alternativeParent) :
-                              base(behavior)
+        private DesignerActionGlyph(DesignerActionBehavior behavior, Adorner adorner, Rectangle alternativeBounds, Control alternativeParent) : base(behavior)
         {
-            this.adorner = adorner;
-            this.alternativeBounds = alternativeBounds;
-            this.alternativeParent = alternativeParent;
+            _adorner = adorner;
+            _alternativeBounds = alternativeBounds;
+            _alternativeParent = alternativeParent;
             Invalidate();
         }
 
@@ -56,33 +50,25 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public override Rectangle Bounds
         {
-            get
-            {
-                return bounds;
-            }
+            get => _bounds;
         }
+
 
         public DockStyle DockEdge
         {
-            get
-            {
-                return dockStyle;
-            }
+            get => _dockStyle;
             set
             {
-                if (dockStyle != value)
+                if (_dockStyle != value)
                 {
-                    dockStyle = value;
+                    _dockStyle = value;
                 }
             }
         }
 
         public bool IsInComponentTray
         {
-            get
-            {
-                return (adorner == null); // adorner and alternative bounds are exclusive
-            }
+            get => (_adorner == null); // adorner and alternative bounds are exclusive
         }
 
         /// <summary>
@@ -90,12 +76,11 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public override Cursor GetHitTest(Point p)
         {
-            if (bounds.Contains(p))
+            if (_bounds.Contains(p))
             {
                 MouseOver = true;
                 return Cursors.Default;
             }
-
             MouseOver = false;
             return null;
         }
@@ -107,17 +92,16 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (glyphImageClosed == null)
+                if (_glyphImageClosed == null)
                 {
-                    glyphImageClosed = new Bitmap(typeof(DesignerActionGlyph), "Close_left.bmp");
-                    glyphImageClosed.MakeTransparent(Color.Magenta);
+                    _glyphImageClosed = new Bitmap(typeof(DesignerActionGlyph), "Close_left.bmp");
+                    _glyphImageClosed.MakeTransparent(Color.Magenta);
                     if (DpiHelper.IsScalingRequired)
                     {
-                        DpiHelper.ScaleBitmapLogicalToDevice(ref glyphImageClosed);
+                        DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageClosed);
                     }
                 }
-
-                return glyphImageClosed;
+                return _glyphImageClosed;
             }
         }
 
@@ -125,86 +109,76 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get
             {
-                if (glyphImageOpened == null)
+                if (_glyphImageOpened == null)
                 {
-                    glyphImageOpened = new Bitmap(typeof(DesignerActionGlyph), "Open_left.bmp");
-                    glyphImageOpened.MakeTransparent(Color.Magenta);
+                    _glyphImageOpened = new Bitmap(typeof(DesignerActionGlyph), "Open_left.bmp");
+                    _glyphImageOpened.MakeTransparent(Color.Magenta);
                     if (DpiHelper.IsScalingRequired)
                     {
-                        DpiHelper.ScaleBitmapLogicalToDevice(ref glyphImageOpened);
+                        DpiHelper.ScaleBitmapLogicalToDevice(ref _glyphImageOpened);
                     }
                 }
-
-                return glyphImageOpened;
+                return _glyphImageOpened;
             }
         }
+
         internal void InvalidateOwnerLocation()
         {
-            if (alternativeParent != null)
+            if (_alternativeParent != null)
             { // alternative parent and adoner are exclusive...
-                alternativeParent.Invalidate(bounds);
+                _alternativeParent.Invalidate(_bounds);
             }
             else
             {
-                adorner.Invalidate(bounds);
+                _adorner.Invalidate(_bounds);
             }
         }
 
         /// <summary>
-        /// Called when the state for this DesignerActionGlyph changes. Or when the related component's size or location change.  Here, we re-calculate the Glyph's bounds and change our image.
+        /// Called when the state for this DesignerActionGlyph changes.  Or when the related component's size or location change.  Here, we re-calculate the Glyph's bounds and change our image.
         /// </summary>
         internal void Invalidate()
         {
             IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
-
             Point topRight = Point.Empty;
-
             //handle the case that our comp is a control
-            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && adorner != null)
+            if (relatedComponent is Control relatedControl && !(relatedComponent is ToolStripDropDown) && _adorner != null)
             {
-                topRight = adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
+                topRight = _adorner.BehaviorService.ControlToAdornerWindow(relatedControl);
                 topRight.X += relatedControl.Width;
             }
-            //ISSUE: we can't have this special cased here - we should find a more
-            //generic approach to solving this problem
-            //special logic here for our comp being a toolstrip item
+            // ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem special logic here for our comp being a toolstrip item
             else
             {
                 // update alternative bounds if possible...
-                if (alternativeParent is ComponentTray compTray)
+                if (_alternativeParent is ComponentTray compTray)
                 {
                     ComponentTray.TrayControl trayControl = compTray.GetTrayControlFromComponent(relatedComponent);
                     if (trayControl != null)
                     {
-                        alternativeBounds = trayControl.Bounds;
+                        _alternativeBounds = trayControl.Bounds;
                     }
                 }
-                Rectangle newRect = DesignerUtils.GetBoundsForNoResizeSelectionType(alternativeBounds, SelectionBorderGlyphType.Top);
+                Rectangle newRect = DesignerUtils.GetBoundsForNoResizeSelectionType(_alternativeBounds, SelectionBorderGlyphType.Top);
                 topRight.X = newRect.Right;
                 topRight.Y = newRect.Top;
             }
-
             topRight.X -= (GlyphImageOpened.Width + CONTROLOVERLAP_X);
             topRight.Y -= (GlyphImageOpened.Height - CONTROLOVERLAP_Y);
-            bounds = (new Rectangle(topRight.X, topRight.Y, GlyphImageOpened.Width, GlyphImageOpened.Height));
-
-
+            _bounds = (new Rectangle(topRight.X, topRight.Y, GlyphImageOpened.Width, GlyphImageOpened.Height));
         }
 
         /// <summary>
-        /// Used to manage the mouse-pointer-is-over-glyph state.  If this is true, then we will shade our BoxImage in the Paint logic.
+        /// Used to manage the mouse-pointer-is-over-glyph state.  If this is true,  then we will shade our BoxImage in the Paint logic.
         /// </summary>
         private bool MouseOver
         {
-            get
-            {
-                return mouseOver;
-            }
+            get => _mouseOver;
             set
             {
-                if (mouseOver != value)
+                if (_mouseOver != value)
                 {
-                    mouseOver = value;
+                    _mouseOver = value;
 
                     InvalidateOwnerLocation();
                 }
@@ -212,21 +186,19 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        /// Responds to a paint event. This Glyph will paint its current image and, if MouseHover is true, we'll paint over the image with the 'hoverBrush'.
+        /// Responds to a paint event.  This Glyph will paint its current image and, if  MouseHover is true, we'll paint over the image with the 'hoverBrush'.
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {
             Image image;
             if (Behavior is DesignerActionBehavior)
             {
-                if (insidePaint)
+                if (_insidePaint)
                 {
                     return;
                 }
-
                 IComponent panelComponent = ((DesignerActionUI)((DesignerActionBehavior)Behavior).ParentUI).LastPanelComponent;
                 IComponent relatedComponent = ((DesignerActionBehavior)Behavior).RelatedComponent;
-
                 if (panelComponent != null && panelComponent == relatedComponent)
                 {
                     image = GlyphImageOpened;
@@ -237,16 +209,16 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 try
                 {
-                    insidePaint = true;
-                    pe.Graphics.DrawImage(image, bounds.Left, bounds.Top);
+                    _insidePaint = true;
+                    pe.Graphics.DrawImage(image, _bounds.Left, _bounds.Top);
                     if (MouseOver || (panelComponent != null && panelComponent == relatedComponent))
                     {
-                        pe.Graphics.FillRectangle(DesignerUtils.HoverBrush, Rectangle.Inflate(bounds, -1, -1));
+                        pe.Graphics.FillRectangle(DesignerUtils.HoverBrush, Rectangle.Inflate(_bounds, -1, -1));
                     }
                 }
                 finally
                 {
-                    insidePaint = false;
+                    _insidePaint = false;
                 }
             }
         }
@@ -256,7 +228,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         internal void UpdateAlternativeBounds(Rectangle newBounds)
         {
-            alternativeBounds = newBounds;
+            _alternativeBounds = newBounds;
             Invalidate();
         }
     }

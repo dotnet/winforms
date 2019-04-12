@@ -476,6 +476,11 @@ namespace System.Windows.Forms {
         
         public static extern bool ValidateRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
 
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
+
         //
         // WARNING: Don't uncomment this code unless you absolutelly need it.  Use instead Marshal.GetLastWin32Error
         // and mark your PInvoke [DllImport(..., SetLastError=true)]
@@ -573,11 +578,12 @@ namespace System.Windows.Forms {
         public static extern bool ShowWindow(HandleRef hWnd, int nCmdShow);
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
-        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+        public static extern bool SetWindowPos(HandleRef hWnd, HandleRef hWndInsertAfter,
+                                               int x, int y, int cx, int cy, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, int flags);
+        public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter,
+                                       int x, int y, int cx, int cy, int flags);
 
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
@@ -598,8 +604,8 @@ namespace System.Windows.Forms {
         public static extern bool RedrawWindow(HandleRef hwnd, NativeMethods.COMRECT rcUpdate, HandleRef hrgnUpdate, int flags);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool RedrawWindow(IntPtr hwnd, NativeMethods.COMRECT rcUpdate, IntPtr hrgnUpdate, int flags);
+
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern bool InvalidateRect(HandleRef hWnd, ref NativeMethods.RECT rect, bool erase);
@@ -699,7 +705,6 @@ namespace System.Windows.Forms {
                                          HandleRef hSrcDC, int xSrc, int ySrc, int dwRop);
 
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool BitBlt(IntPtr hDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, int dwRop);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -864,6 +869,12 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Kernel32, SetLastError = true)]
         public static extern IntPtr OpenProcess(uint dwDesiredAccess, [MarshalAs(UnmanagedType.Bool)] bool bInheritHandle, int dwProcessId);
 
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern bool RoundRect(HandleRef hDC, int left, int top, int right, int bottom, int width, int height);
+
+        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
+        public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
+
         internal const int PROCESS_QUERY_INFORMATION = 0x0400;
         internal const int PROCESS_VM_READ = 0x0010;
 
@@ -910,18 +921,6 @@ namespace System.Windows.Forms {
 
              short Charset {get;set;}
         }
-
-        [DllImport(ExternDll.Gdi32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern bool RoundRect(HandleRef hDC, int left, int top, int right, int bottom, int width, int height);
-
-        [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
-
-        [ResourceExposure(ResourceScope.None)]
-        [DllImport(ExternDll.Uxtheme, CharSet = CharSet.Auto)]
-        public extern static int SetWindowTheme(IntPtr hWnd, string subAppName, string subIdList);
     }
 }
 

@@ -33,8 +33,8 @@ namespace System.Windows.Forms {
         /// <devdoc> 
         /// this is the property to look at when there is no ImageList property
         /// on the current object.  For example, in ToolBarButton - the ImageList is 
-        /// on the ToolBarButton.Parent property.  In WinBarItem, the ImageList is on 
-        /// the WinBarItem.Owner property.
+        /// on the ToolBarButton.Parent property.  In ToolStripItem, the ImageList is on 
+        /// the ToolStripItem.Owner property.
         /// </devdoc>
         internal string ParentImageListProperty {
             get {

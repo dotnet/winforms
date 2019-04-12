@@ -35,10 +35,6 @@ namespace System.ComponentModel.Design
             get => false;
         }
 
-        public override void Invoke()
-        {
-            _targetVerb.Invoke();
-        }
-
+        public override void Invoke() => _targetVerb.Invoke();
     }
 }

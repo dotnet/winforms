@@ -212,7 +212,7 @@ namespace System.Windows.Forms {
                 }
             }
             
-            /// <include file='doc\WinBarDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowImageMargin"]/*' />
+            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowImageMargin"]/*' />
             [
             DefaultValue(true),
             SRDescription(nameof(SR.ToolStripDropDownMenuShowImageMarginDescr)),
@@ -230,7 +230,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            /// <include file='doc\WinBarDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowCheckMargin"]/*' />
+            /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu.ShowCheckMargin"]/*' />
             [
             DefaultValue(false),
             SRDescription(nameof(SR.ToolStripDropDownMenuShowCheckMarginDescr)),

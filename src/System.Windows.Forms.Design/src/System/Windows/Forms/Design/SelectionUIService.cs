@@ -13,9 +13,7 @@ using Microsoft.Win32;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// The selection manager handles selection within a form.  There is one selection manager for each form or top level designer.
-    /// A selection consists of an array of components.  One component is designated the "primary" selection and is displayed with different grab handles.
-    /// An individual selection may or may not have UI associated with it.  If the selection manager can find a suitable designer that is representing the selection, it will highlight the designer's border.  If the merged property set has a location property, the selection's rules will allow movement.  Also, if the property set has a size property, the selection's rules will allow for sizing.  Grab handles may be drawn around the designer and user interactions involving the selection frame and grab handles are initiated here, but the actual movement of the objects is done in a designer object that implements the ISelectionHandler interface.
+    /// The selection manager handles selection within a form.  There is one selection manager for each form or top level designer. A selection consists of an array of components.  One component is designated the "primary" selection and is displayed with different grab handles. An individual selection may or may not have UI associated with it.  If the selection manager can find a suitable designer that is representing the selection, it will highlight the designer's border.  If the merged property set has a location property, the selection's rules will allow movement.  Also, if the property set has a size property, the selection's rules will allow for sizing.  Grab handles may be drawn around the designer and user interactions involving the selection frame and grab handles are initiated here, but the actual movement of the objects is done in a designer object that implements the ISelectionHandler interface.
     /// </summary>
     internal sealed class SelectionUIService : Control, ISelectionUIService
     {
@@ -23,13 +21,13 @@ namespace System.Windows.Forms.Design
         private const int HITTEST_CONTAINER_SELECTOR = 0x0001;
         private const int HITTEST_NORMAL_SELECTION = 0x0002;
         private const int HITTEST_DEFAULT = HITTEST_CONTAINER_SELECTOR | HITTEST_NORMAL_SELECTION;
+
         // These are used during a drag operation, either through our own handle drag or through ISelectionUIService
         private ISelectionUIHandler _dragHandler; // the current drag handler
         private object[] _dragComponents; // the controls being dragged
         private SelectionRules _dragRules; // movement constraints for the drag
         private bool _dragMoved = false;
         private object _containerDrag; // object being dragged during a container drag
-
         // These are used during a drag of a selection grab handle
         private bool _ignoreCaptureChanged = false;
         private int _mouseDragHitTest; // where the hit occurred that caused the drag
@@ -38,7 +36,6 @@ namespace System.Windows.Forms.Design
         private Point _lastMoveScreenCoord = Point.Empty;
         private bool _ctrlSelect = false; // was the CTRL key down when the drag began
         private bool _mouseDragging = false; // Are we actually doing a drag?
-
         private ContainerSelectorActiveEventHandler _containerSelectorActive; // the event we fire when user interacts with container selector
         private Hashtable _selectionItems;
         private readonly Hashtable _selectionHandlers; // Component UI handlers
@@ -64,9 +61,9 @@ namespace System.Windows.Forms.Design
             _selectionItems = new Hashtable();
             _selectionHandlers = new Hashtable();
             AllowDrop = true;
-
             // Not really any reason for this, except that it can be handy when using Spy++
             Text = "SelectionUIOverlay";
+
             _selSvc = (ISelectionService)host.GetService(typeof(ISelectionService));
             if (_selSvc != null)
             {
@@ -146,6 +143,7 @@ namespace System.Windows.Forms.Design
                 {
                     _selSvc.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 }
+
                 if (_host != null)
                 {
                     _host.TransactionOpened -= new EventHandler(OnTransactionOpened);
@@ -155,6 +153,7 @@ namespace System.Windows.Forms.Design
                         OnTransactionClosed(_host, new DesignerTransactionCloseEventArgs(true, true));
                     }
                 }
+
                 foreach (SelectionUIItem s in _selectionItems.Values)
                 {
                     s.Dispose();
@@ -179,7 +178,6 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
-
             _ignoreCaptureChanged = true;
             Capture = false;
             _mouseDragAnchor = s_invalidPoint;
@@ -291,7 +289,6 @@ namespace System.Windows.Forms.Design
             {
                 transactionName = string.Format(SR.DragDropDragComponents, objects.Length);
             }
-
             return transactionName;
         }
 
@@ -317,7 +314,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the designer host when it is entering or leaving a batch operation.  Here we queue up selection notification and we turn offour UI.
+        /// Called by the designer host when it is entering or leaving a batch operation. Here we queue up selection notification and we turn off our UI.
         /// </summary>
         private void OnTransactionOpened(object sender, EventArgs e)
         {
@@ -554,6 +551,7 @@ namespace System.Windows.Forms.Design
                             {
                                 rules |= SelectionRules.BottomSizeable;
                             }
+
                             if (((ISelectionUIService)this).BeginDrag(rules, anchor.X, anchor.Y))
                             {
                                 BeginMouseDrag(anchor, hitTest);
@@ -600,11 +598,11 @@ namespace System.Windows.Forms.Design
             {
                 OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(hti.selectionUIHit._component));
             }
+
             if (_lastMoveScreenCoord == screenCoord)
             {
                 return;
             }
-
             // If we're not dragging then set the cursor correctly.
             if (!_mouseDragging)
             {
@@ -679,12 +677,10 @@ namespace System.Windows.Forms.Design
                     delta.Y -= old.Y;
                     delta.Width -= old.Width;
                     delta.Height -= old.Height;
-
                     if (delta.X != 0 || delta.Y != 0 || delta.Width != 0 || delta.Height != 0)
                     {
                         // Go to default cursor for moves...
-                        if ((_mouseDragHitTest & SelectionUIItem.MOVE_X) != 0
-                            || (_mouseDragHitTest & SelectionUIItem.MOVE_Y) != 0)
+                        if ((_mouseDragHitTest & SelectionUIItem.MOVE_X) != 0 || (_mouseDragHitTest & SelectionUIItem.MOVE_Y) != 0)
                         {
                             Cursor = Cursors.Default;
                         }
@@ -710,6 +706,7 @@ namespace System.Windows.Forms.Design
                     HitTestInfo hti = GetHitTest(screenCoord, HITTEST_DEFAULT);
                     _selSvc.SetSelectedComponents(new object[] { hti.selectionUIHit._component }, SelectionTypes.Primary);
                 }
+
                 if (_mouseDragging)
                 {
                     object oldContainerDrag = _containerDrag;
@@ -719,6 +716,7 @@ namespace System.Windows.Forms.Design
                     {
                         ((ISelectionUIService)this).EndDrag(false);
                     }
+
                     if (me.Button == MouseButtons.Right && oldContainerDrag != null && !oldDragMoved)
                     {
                         OnContainerSelectorActive(new ContainerSelectorActiveEventArgs(oldContainerDrag, ContainerSelectorActiveEventArgsType.Contextmenu));
@@ -832,6 +830,7 @@ namespace System.Windows.Forms.Design
             {
                 region.Union(item.GetRegion());
             }
+
             Region = region;
         }
 
@@ -849,7 +848,6 @@ namespace System.Windows.Forms.Design
                         _ignoreCaptureChanged = true;
                     }
                     break;
-
                 case NativeMethods.WM_CAPTURECHANGED:
                     if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                     {
@@ -887,26 +885,19 @@ namespace System.Windows.Forms.Design
         /// </summary>
         event ContainerSelectorActiveEventHandler ISelectionUIService.ContainerSelectorActive
         {
-            add
-            {
-                _containerSelectorActive += value;
-            }
-            remove
-            {
-                _containerSelectorActive -= value;
-            }
+            add => _containerSelectorActive += value;
+            remove =>  _containerSelectorActive -= value;
         }
 
         /// <summary>
-        /// Assigns a selection UI handler to a given component.  The handler will be called when the UI service needs information about the component.  A single selection UI handler can be assigned to multiple components.
-        /// When multiple components are dragged, only a single handler may control the drag.  Because of this, only components that are assigned the same handler as the primary selection are included in drag operations. A selection UI handler is automatically unassigned when the component is removed from the container or disposed.
+        /// Assigns a selection UI handler to a given component.  The handler will be called when the UI service needs information about the component.  A single selection UI handler can be assigned to multiple components. When multiple components are dragged, only a single handler may control the drag.  Because of this, only components that are assigned the same handler as the primary selection are included in drag operations. A selection UI handler is automatically unassigned when the component is removed from the container or disposed.
         /// </summary>
         void ISelectionUIService.AssignSelectionUIHandler(object component, ISelectionUIHandler handler)
         {
             ISelectionUIHandler oldHandler = (ISelectionUIHandler)_selectionHandlers[component];
             if (oldHandler != null)
             {
-                // ASURT #44582: The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
+                // The collection editors do not dispose objects from the collection before setting a new collection. This causes items that are common to the old and new collections to come through this code path  again, causing the exception to fire. So, we check to see if the SelectionUIHandler is same, and bail out in that case.
                 if (handler == oldHandler)
                 {
                     return;
@@ -1005,7 +996,6 @@ namespace System.Windows.Forms.Design
             _dragComponents = objects;
             _dragRules = rules;
             _dragHandler = primaryHandler;
-
             string transactionName = GetTransactionName(rules, objects);
             _dragTransaction = _host.CreateTransaction(transactionName);
             try
@@ -1028,11 +1018,13 @@ namespace System.Windows.Forms.Design
             }
             finally
             {
+
                 if (!dragging)
                 {
                     _dragComponents = null;
                     _dragRules = 0;
                     _dragHandler = null;
+
                     // Always commit this -- BeginDrag returns false for our drags because it is a complete operation.
                     if (_dragTransaction != null)
                     {
@@ -1093,7 +1085,6 @@ namespace System.Windows.Forms.Design
             _containerDrag = null;
             ISelectionUIHandler handler = _dragHandler;
             object[] components = _dragComponents;
-
             // Clean these out so that even if we throw an exception we don't die.
             _dragHandler = null;
             _dragComponents = null;
@@ -1107,7 +1098,6 @@ namespace System.Windows.Forms.Design
             DesignerTransaction trans = null;
             try
             {
-
                 IComponent comp = components[0] as IComponent;
                 if (components.Length > 1 || (components.Length == 1 && comp != null && comp.Site == null))
                 {
@@ -1120,7 +1110,6 @@ namespace System.Windows.Forms.Design
                         trans = _host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
                     }
                 }
-
                 try
                 {
                     handler.EndDrag(components, cancel);
@@ -1155,7 +1144,6 @@ namespace System.Windows.Forms.Design
             object[] selection = null;
             if (components == null)
                 return new object[0];
-
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
@@ -1195,14 +1183,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Tests to determine if the given screen coordinate is over an adornment for the specified component. This will only return true if the adornment, and selection UI, is visible.
         /// </summary>
-        bool ISelectionUIService.GetAdornmentHitTest(object component, Point value)
-        {
-            if (GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT)
-            {
-                return true;
-            }
-            return false;
-        }
+        bool ISelectionUIService.GetAdornmentHitTest(object component, Point value) => GetHitTest(value, HITTEST_DEFAULT).hitTest != SelectionUIItem.NOHIT;
 
         /// <summary>
         /// Determines if the component is currently "container" selected. Container selection is a visual aid for selecting containers. It doesn't affect the normal "component" selection.
@@ -1252,9 +1233,7 @@ namespace System.Windows.Forms.Design
                     }
                     SelectionUIItem item = new ContainerSelectionUIItem(this, component);
                     _selectionItems[component] = item;
-
                     // Now update our region and invalidate
-                    //
                     UpdateWindowRegion();
                     if (existingItem != null)
                     {
@@ -1318,7 +1297,6 @@ namespace System.Windows.Forms.Design
                         updateRegion |= item.UpdateSize();
                         item.UpdateRules();
                     }
-
                     if (updateRegion)
                     {
                         UpdateWindowRegion();
@@ -1459,9 +1437,9 @@ namespace System.Windows.Forms.Design
             public virtual void DoPaint(Graphics gr)
             {
                 // If we're not visible, then there's nothing to do...
+                //
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
                     return;
-
                 bool fActive = false;
                 if (_selUIsvc._selSvc != null)
                 {
@@ -1566,7 +1544,6 @@ namespace System.Windows.Forms.Design
 
                 // Which index in the array is this?
                 int nOffset = GetHandleIndexOfPoint(pt);
-
                 // If no index, the user has picked on the hatch
                 if (-1 == nOffset || _sizes[nOffset] == 0)
                 {
@@ -1574,7 +1551,6 @@ namespace System.Windows.Forms.Design
                 }
                 return _sizes[nOffset];
             }
-
 
             /// <summary>
             /// gets the array offset of the handle at the given point
@@ -1585,13 +1561,13 @@ namespace System.Windows.Forms.Design
                 {
                     // Something on the left side.
                     if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
-                        return 0;   // top left
+                        return 0; // top left
                     if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
-                        return 5;   // bottom left
+                        return 5; // bottom left
                     if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
                         && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
-                        return 3;   // middle left
-                    return -1;    // unknown hit
+                        return 3; // middle left
+                    return -1; // unknown hit
                 }
 
                 if (pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y)
@@ -1599,11 +1575,11 @@ namespace System.Windows.Forms.Design
                     // something on the top
                     Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left top check");
                     if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
-                        return 2;   // top right
+                        return 2; // top right
                     if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2
                         && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
-                        return 1;   // top middle
-                    return -1;    // unknown hit
+                        return 1; // top middle
+                    return -1; // unknown hit
                 }
 
                 if (pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width)
@@ -1611,21 +1587,23 @@ namespace System.Windows.Forms.Design
                     // something on the right side
                     Debug.Assert(!(pt.Y >= _outerRect.Y && pt.Y <= _innerRect.Y), "Should be handled by top right check");
                     if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
-                        return 7;   // bottom right
+                        return 7; // bottom right
                     if (pt.Y >= _outerRect.Y + (_outerRect.Height - GRABHANDLE_HEIGHT) / 2
                         && pt.Y <= _outerRect.Y + (_outerRect.Height + GRABHANDLE_HEIGHT) / 2)
-                        return 4;   // middle right
-                    return -1;    // unknown hit
+                        return 4; // middle right
+                    return -1; // unknown hit
                 }
 
                 if (pt.Y >= _innerRect.Y + _innerRect.Height && pt.Y <= _outerRect.Y + _outerRect.Height)
                 {
                     // something on the bottom
                     Debug.Assert(!(pt.X >= _outerRect.X && pt.X <= _innerRect.X), "Should be handled by left bottom check");
+
                     Debug.Assert(!(pt.X >= _innerRect.X + _innerRect.Width && pt.X <= _outerRect.X + _outerRect.Width), "Should be handled by right bottom check");
+
                     if (pt.X >= _outerRect.X + (_outerRect.Width - GRABHANDLE_WIDTH) / 2 && pt.X <= _outerRect.X + (_outerRect.Width + GRABHANDLE_WIDTH) / 2)
-                        return 6;   // bottom middle
-                    return -1;    // unknown hit
+                        return 6; // bottom middle
+                    return -1; // unknown hit
                 }
                 return -1; // unknown hit
             }
@@ -1694,17 +1672,14 @@ namespace System.Windows.Forms.Design
                 {
                     return false;
                 }
-
                 if (pt.X < _outerRect.X || pt.X > _outerRect.X + _outerRect.Width)
                 {
                     return false;
                 }
-
                 if (pt.Y < _outerRect.Y || pt.Y > _outerRect.Y + _outerRect.Height)
                 {
                     return false;
                 }
-
                 if (pt.X > _innerRect.X
                     && pt.X < _innerRect.X + _innerRect.Width
                     && pt.Y > _innerRect.Y
@@ -1803,16 +1778,11 @@ namespace System.Windows.Forms.Design
                     return false;
                 if ((GetRules() & SelectionRules.Visible) == SelectionRules.None)
                     return false;
-
                 _innerRect = _handler.GetComponentBounds(_component);
                 if (!_innerRect.IsEmpty)
                 {
                     _innerRect = _selUIsvc.RectangleToClient(_innerRect);
-                    Rectangle rcOuterNew = new Rectangle(
-                                                        _innerRect.X - GRABHANDLE_WIDTH,
-                                                        _innerRect.Y - GRABHANDLE_HEIGHT,
-                                                        _innerRect.Width + 2 * GRABHANDLE_WIDTH,
-                                                        _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
+                    Rectangle rcOuterNew = new Rectangle( _innerRect.X - GRABHANDLE_WIDTH, _innerRect.Y - GRABHANDLE_HEIGHT, _innerRect.Width + 2 * GRABHANDLE_WIDTH, _innerRect.Height + 2 * GRABHANDLE_HEIGHT);
                     if (_outerRect.IsEmpty || !_outerRect.Equals(rcOuterNew))
                     {
                         if (!_outerRect.IsEmpty)
@@ -1864,6 +1834,7 @@ namespace System.Windows.Forms.Design
                 if ((GetRules() & SelectionRules.Visible) != SelectionRules.None && !_outerRect.IsEmpty)
                 {
                     Rectangle r = new Rectangle(_outerRect.X, _outerRect.Y, CONTAINER_WIDTH, CONTAINER_HEIGHT);
+
                     if (r.Contains(pt))
                     {
                         ht = CONTAINER_SELECTOR;
@@ -1945,9 +1916,7 @@ namespace System.Windows.Forms.Design
 
             public static bool operator ==(HitTestInfo left, HitTestInfo right)
             {
-                return (left.hitTest == right.hitTest
-                        && left.selectionUIHit == right.selectionUIHit
-                        && left.containerSelector == right.containerSelector);
+                return (left.hitTest == right.hitTest && left.selectionUIHit == right.selectionUIHit && left.containerSelector == right.containerSelector);
             }
 
             public static bool operator !=(HitTestInfo left, HitTestInfo right) => !(left == right);

@@ -15,7 +15,7 @@ using Microsoft.Win32;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class implements our design time document.  This is the outer window that encompases a designer.  It maintains a control hierarchy that looks like this:
+    /// This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
     /// DesignerFrame
     ///     ScrollableControl
     ///         Designer
@@ -39,11 +39,9 @@ namespace System.Windows.Forms.Design
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         public DesignerFrame(ISite site)
         {
-
             Text = "DesignerFrame";
             _designerSite = site;
             _designerRegion = new OverlayControl(site);
-
             _uiService = _designerSite.GetService(typeof(IUIService)) as IUIService;
             if (_uiService != null)
             {
@@ -53,7 +51,6 @@ namespace System.Windows.Forms.Design
                 }
             }
             Controls.Add(_designerRegion);
-
             // Now we must configure our designer to be at the correct location, and setup the autoscrolling for its container.
             _designerRegion.AutoScroll = true;
             _designerRegion.Dock = DockStyle.Fill;
@@ -92,7 +89,6 @@ namespace System.Windows.Forms.Design
                     _designer = null;
                     designerHolder.Visible = false;
                     designerHolder.Parent = null;
-                    SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
                 }
                 if (_splitter != null)
                 {
@@ -121,16 +117,10 @@ namespace System.Windows.Forms.Design
             {
                 form.TopLevel = false;
             }
-
             _designerRegion.Controls.Add(_designer);
             SyncDesignerUI();
             _designer.Visible = true;
             _designer.Enabled = true;
-
-            // We need to force handle creation here, since setting Visible = true won't if the control is already Visible = true.   (UserControl starts out Visible true, Form does not) This guarantees that as controls are added to the root component their handles will be created correctly, and not the first time they're queried after load.
-            IntPtr handle = _designer.Handle;
-            // Hook the handler here, when we know that the designer object has already been set
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
         /// <summary>
@@ -139,7 +129,6 @@ namespace System.Windows.Forms.Design
         protected override void OnGotFocus(EventArgs e)
         {
             ForceDesignerRedraw(true);
-
             ISelectionService selSvc = (ISelectionService)_designerSite.GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
@@ -193,10 +182,8 @@ namespace System.Windows.Forms.Design
         void SyncDesignerUI()
         {
             Size selectionSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.Maximum);
-
             _designerRegion.AutoScrollMargin = selectionSize;
             _designer.Location = new Point(selectionSize.Width, selectionSize.Height);
-
             if (BehaviorService != null)
             {
                 BehaviorService.SyncSelection();
@@ -220,12 +207,10 @@ namespace System.Windows.Forms.Design
                         return;
                     }
                     break;
-
                 // Provide keyboard access for scrolling
                 case NativeMethods.WM_KEYDOWN:
                     int wScrollNotify = 0;
                     int msg = 0;
-
                     int keycode = unchecked((int)(long)m.WParam) & 0xFFFF;
                     switch ((Keys)keycode)
                     {
@@ -280,11 +265,8 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
         /// </summary>
-        int IOverlayService.PushOverlay(Control control)
-        {
-            return _designerRegion.PushOverlay(control);
-        }
-
+        int IOverlayService.PushOverlay(Control control) => _designerRegion.PushOverlay(control);
+        
         /// <summary>
         /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
         /// </summary>
@@ -338,17 +320,14 @@ namespace System.Windows.Forms.Design
                 _splitter.Dock = DockStyle.Bottom;
                 _splitter.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
             }
-
             SuspendLayout();
             window.Dock = DockStyle.Bottom;
-
             // Compute a minimum height for this window.
             int minHeight = 80;
             if (window.Height < minHeight)
             {
                 window.Height = minHeight;
             }
-
             Controls.Add(_splitter);
             Controls.Add(window);
             ResumeLayout();
@@ -366,20 +345,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns IEnumerable of all windows which need to be themed when running inside VS
-        /// We don't know how to do theming here but we know which windows need to be themed. 
-        /// The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS.
-        /// As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        /// Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
             ArrayList windows = new ArrayList();
             foreach (Control c in Controls)
             {
-                ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow
-                {
-                    Handle = c.Handle
-                };
+                ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow { Handle = c.Handle };
                 if (c is OverlayControl)
                 {
                     windowInfo.Mode = ThemedScrollbarMode.OnlyTopLevel;
@@ -388,10 +361,8 @@ namespace System.Windows.Forms.Design
                 {
                     windowInfo.Mode = ThemedScrollbarMode.All;
                 }
-
                 windows.Add(windowInfo);
             }
-
             return windows;
         }
 
@@ -401,7 +372,7 @@ namespace System.Windows.Forms.Design
         private class OverlayControl : ScrollableControl
         {
             private readonly ArrayList _overlayList;
-            private IServiceProvider _provider;
+            private readonly IServiceProvider _provider;
             internal bool _messageMouseWheelProcessed;
             private BehaviorService _behaviorService;
 
@@ -411,8 +382,7 @@ namespace System.Windows.Forms.Design
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             public OverlayControl(IServiceProvider provider)
             {
-                OverlayControl overlayControl = this;
-                overlayControl._provider = provider;
+                _provider = provider;
                 _overlayList = new ArrayList();
                 AutoScroll = true;
                 Text = "OverlayControl";
@@ -560,10 +530,8 @@ namespace System.Windows.Forms.Design
                         overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
                         using (Region intersectionRegion = screenRegion.Clone())
                         {
-                            // get the intersection of everything on the screen that's invalidating
-                            // and the overlaycontrol
+                            // get the intersection of everything on the screen that's invalidating and the overlaycontrol
                             intersectionRegion.Intersect(overlayControlScreenBounds);
-
                             // translate this down to overlay control coordinates.
                             intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
                             overlayControl.Invalidate(intersectionRegion);
@@ -571,7 +539,6 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
             /// <summary>
             /// Need to know when child windows are created so we can properly set the Z-order
             /// </summary>
@@ -596,8 +563,7 @@ namespace System.Windows.Forms.Design
                         {
                             foreach (Control c in _overlayList)
                             {
-                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                                     NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
                             }
                         }
                     }
@@ -624,7 +590,10 @@ namespace System.Windows.Forms.Design
 
                 public override AccessibleObject HitTest(int x, int y)
                 {
-                    // Since the SelectionUIOverlay in first in the z-order, it normally gets returned from accHitTest. But we'd rather expose the form that is being designed.
+                    // Since the SelectionUIOverlay in first in the z-order, it normally gets
+                    // returned from accHitTest. But we'd rather expose the form that is being
+                    // designed.
+                    //
                     foreach (Control c in Owner.Controls)
                     {
                         AccessibleObject cao = c.AccessibilityObject;

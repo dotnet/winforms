@@ -13,12 +13,10 @@ namespace System.Windows.Forms.Design
         /// Specifies the type as grab handle adornments.
         /// </summary>
         GrabHandle = 1,
-
         /// <summary>
         /// Specifies the type as container selector adornments.
         /// </summary>
         ContainerSelector = 2,
-
         /// <summary>
         /// Specifies the type as the maximum size of any adornment.
         /// </summary>
