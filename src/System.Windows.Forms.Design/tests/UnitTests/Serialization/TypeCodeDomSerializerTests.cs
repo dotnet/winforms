@@ -34,21 +34,6 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void TypeCodeDomSerializer_Serialize()
-        {
-            var manager = new Mock<IDesignerSerializationManager>(MockBehavior.Loose);
-            manager.Setup(m => m.GetName(typeof(object))).Returns("string");
-            manager.Setup(m => m.Context).Returns(new ContextStack());
-            var root = new object();
-            var underTest = new TypeCodeDomSerializer();
-#if DEBUG
-            Assert.NotNull(underTest.Serialize(manager.Object, root, null));
-#else
-            Assert.Throws<InvalidOperationException>(() => underTest.Deserialize(manager.Object, declaration.Object));
-#endif
-        }
-
-        [Fact]
         public void TypeCodeDomSerializer_Deserialize_Manager_Null()
         {
             var underTest = new TypeCodeDomSerializer();
@@ -61,24 +46,6 @@ namespace System.ComponentModel.Design.Serialization.Tests
             var mockSerializationManager = new Mock<DesignerSerializationManager>(MockBehavior.Strict);
             var underTest = new TypeCodeDomSerializer();
             Assert.Throws<ArgumentNullException>(() => underTest.Deserialize(mockSerializationManager.Object, null));
-        }
-
-        [Fact]
-        public void TypeCodeDomSerializer_Deserialize_SerializeEx()
-        {
-            var manager = new Mock<IDesignerSerializationManager>(MockBehavior.Strict);
-            manager.Setup(m => m.GetName(typeof(object))).Returns("string");
-            manager.Setup(m => m.Context).Returns(new ContextStack());
-            var codeDomProvider = new Mock<CodeDomProvider>(MockBehavior.Strict);
-            codeDomProvider.Setup(cdp => cdp.LanguageOptions).Returns(new LanguageOptions());
-            manager.Setup(m => m.GetService(typeof(CodeDomProvider))).Returns(codeDomProvider.Object);
-            var declaration = new Mock<CodeTypeDeclaration>(MockBehavior.Strict);
-            var underTest = new TypeCodeDomSerializer();
-#if DEBUG
-            Assert.Throws<CodeDomSerializerException>(() => underTest.Deserialize(manager.Object, declaration.Object));
-#else
-            Assert.Throws<InvalidOperationException>(() => underTest.Deserialize(manager.Object, declaration.Object));
-#endif
         }
     }
 }
