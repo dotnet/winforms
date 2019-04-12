@@ -2657,9 +2657,9 @@ namespace System.Windows.Forms {
                     string text = link.Owner.Text;
                     string name;
 
-                    // return the full name of the link label for AI.Level3 
-                    // as sometimes the link name in isolation is unusable
-                    // to a customer using a screen reader
+                    // return the full name of the link label
+                    // assometimes the link name in isolation
+                    // is unusable when using a screen reader
                     name = text;
                     if (link.Owner.UseMnemonic) {
                         name = WindowsFormsUtils.TextWithoutMnemonics(name);
