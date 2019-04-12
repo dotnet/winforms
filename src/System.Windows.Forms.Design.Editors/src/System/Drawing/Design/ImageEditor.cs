@@ -46,9 +46,10 @@ namespace System.Drawing.Design
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Shipped as public API")]
         protected static string CreateFilterEntry(ImageEditor e)
         {
+            string[] extenders = e.GetExtensions();
             string desc = e.GetFileDialogDescription();
-            string exts = CreateExtensionsString(e.GetExtensions(), ",");
-            string extsSemis = CreateExtensionsString(e.GetExtensions(), ";");
+            string exts = CreateExtensionsString(extenders, ",");
+            string extsSemis = CreateExtensionsString(extenders, ";");
             return desc + "(" + exts + ")|" + extsSemis;
         }
 
@@ -70,12 +71,11 @@ namespace System.Drawing.Design
                     {
                         _fileDialog = new OpenFileDialog();
                         string filter = CreateFilterEntry(this);
-                        for (int i = 0; i < GetImageExtenders().Length; i++)
+                        foreach (Type extender in GetImageExtenders())
                         {
-                            ImageEditor e = (ImageEditor)Activator.CreateInstance(GetImageExtenders()[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null); //.CreateInstance();
+                            ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                             Type myClass = GetType();
-                            Type editorClass = e.GetType();
-                            if (!myClass.Equals(editorClass) && e != null && myClass.IsInstanceOfType(e))
+                            if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
                             {
                                 filter += "|" + CreateFilterEntry(e);
                             }
@@ -89,8 +89,10 @@ namespace System.Drawing.Design
                     {
                         if (_fileDialog.ShowDialog() == DialogResult.OK)
                         {
-                            FileStream file = new FileStream(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                            value = LoadFromStream(file);
+                            using (var file = new FileStream(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                            {
+                                value = LoadFromStream(file);
+                            }
                         }
                     }
                     finally
@@ -120,12 +122,12 @@ namespace System.Drawing.Design
         protected virtual string[] GetExtensions()
         {
             ArrayList list = new ArrayList();
-            for (int i = 0; i < GetImageExtenders().Length; i++)
+            foreach (Type extender in GetImageExtenders())
             {
-                ImageEditor e = (ImageEditor)Activator.CreateInstance(GetImageExtenders()[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
+                ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                 if (e.GetType() != typeof(ImageEditor))
                 {
-                    list.AddRange(new ArrayList(e.GetExtensions()));
+                    list.AddRange(e.GetExtensions());
                 }
             }
 
@@ -140,13 +142,12 @@ namespace System.Drawing.Design
 
         protected virtual Image LoadFromStream(Stream stream)
         {
-            // Copy the original stream to a buffer, then wrap a memory stream around it.
-            // This way we can avoid locking the file
-            byte[] buffer = new byte[stream.Length];
-            stream.Read(buffer, 0, (int)stream.Length);
-            MemoryStream ms = new MemoryStream(buffer);
-
-            return Image.FromStream(ms);
+            // Copy the original stream to a new memory stream to avoid locking the file.
+            using (var memoryStream = new MemoryStream())
+            {
+                stream.CopyTo(memoryStream);
+                return Image.FromStream(memoryStream);
+            }
         }
 
         /// <summary>
