@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private int BorderWidth 
+        internal int BorderWidth 
         {
             get 
             {

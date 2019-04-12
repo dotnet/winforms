@@ -5109,8 +5109,12 @@ namespace System.Windows.Forms
                 {
                     cellRight = rowRect.Right - rightToLeftRowHeadersWidth;
                 }
-                cellRect.Width = cellRight - cellLeft;
-
+                
+                if ((cellRight - cellLeft) >= 0)
+                    cellRect.Width = cellRight - cellLeft;
+                else
+                    cellRect.Width = 0;
+                
                 return cellRect;
             }
 

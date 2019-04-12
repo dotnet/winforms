@@ -1811,17 +1811,19 @@ namespace System.Windows.Forms
 
                     Rectangle dataGridViewRect = ParentPrivate.Bounds;
 
-                    int rowRectBottom = rowRect.Bottom;
-                    if ((dataGridViewRect.Bottom - horizontalScrollBarHeight) < rowRectBottom)
-                    {
-                        rowRectBottom = dataGridViewRect.Bottom - horizontalScrollBarHeight;
-                    }
-
                     int columnHeadersHeight = 0;
                     if (this.owner.DataGridView.ColumnHeadersVisible)
                     {
                         columnHeadersHeight = this.owner.DataGridView.ColumnHeadersHeight;
                     }
+
+                    int rowRectBottom = rowRect.Bottom;
+                    if ((dataGridViewRect.Bottom - horizontalScrollBarHeight) < rowRectBottom)
+                    {
+                        rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
+                    }
+
+                    
 
                     if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
                     {
