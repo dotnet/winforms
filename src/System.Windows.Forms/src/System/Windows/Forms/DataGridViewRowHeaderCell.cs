@@ -190,7 +190,7 @@ namespace System.Windows.Forms
         private static Bitmap GetBitmapFromIcon(string iconName)
         {
             Size desiredSize = new Size(iconsWidth, iconsHeight);
-            Icon icon = new Icon(BitmapSelector.GetResourceStream(typeof(DataGridViewRowHeaderCell), iconName), desiredSize);
+            Icon icon = new Icon(new Icon(typeof(DataGridViewHeaderCell), iconName), desiredSize);
             Bitmap b = icon.ToBitmap();
             icon.Dispose();
 

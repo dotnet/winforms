@@ -7,7 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    /// This is the base class for all the selection Glyphs: GrabHandle,  Hidden, Locked, Selection, and Tray Glyphs.  This class includes all like-operations for the Selection glyphs.
+    /// This is the base class for all the selection Glyphs: GrabHandle, Hidden, Locked, Selection, and Tray Glyphs.  This class includes all like-operations for the Selection glyphs.
     /// </summary>
     internal abstract class SelectionGlyphBase : Glyph
     {
@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => rules;
         }
-       
+     
         /// <summary>
         /// Simple hit test rule: if the point is contained within the bounds - then it is a positive hit test.
         /// </summary>
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
             return null;
         }
-    
+
         /// <summary>
         /// Returns the HitTestCursor for this glyph.
         /// </summary>
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => hitTestCursor;
         }
-    
+
         /// <summary>
         /// The Bounds of this glyph. 
         /// </summary>
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             get => bounds;
         }
-      
+    
         /// <summary>
         /// There's no paint logic on this base class.
         /// </summary>

@@ -21,5 +21,4 @@ namespace System.Windows.Forms.Design
         /// </summary>
         bool OverrideStatus(MenuCommand cmd);
     }
-
 }

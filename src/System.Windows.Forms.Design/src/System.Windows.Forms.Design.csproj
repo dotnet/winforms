@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\System.Windows.Forms\src\System.Windows.Forms.csproj" />
+    <ProjectReference Include="..\..\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.csproj" />
   </ItemGroup>
 
   <ItemGroup>

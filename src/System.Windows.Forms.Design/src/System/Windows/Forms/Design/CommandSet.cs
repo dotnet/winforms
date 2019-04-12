@@ -17,7 +17,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class implements the standard set of menu commands for the form designer. This set of command is shared between the form designer (and other UI-based form packages), and composition designer, which doesn't manipulate controls. Therefore, this set of command should only contain commands that are common to both functions.
+    /// This class implements the standard set of menu commands for the form designer.  This set of command is shared between the form designer (and other UI-based form packages), and composition designer, which doesn't manipulate controls. Therefore, this set of command should only contain commands that are common to both functions.
     /// </summary>
     internal class CommandSet : IDisposable
     {
@@ -25,7 +25,6 @@ namespace System.Windows.Forms.Design
         private readonly CommandSetItem[] _commandSet;
         private IMenuCommandService _menuService;
         private IEventHandlerService _eventService;
-
         // Selection service fields. We keep some state about the currently selected components so we can determine proper command enabling quickly.
         private ISelectionService _selectionService;
         protected int selCount; // the current selection count
@@ -33,18 +32,15 @@ namespace System.Windows.Forms.Design
         private bool _selectionInherited; // the selection contains inherited components
         protected bool controlsOnlySelection; // is the selection containing only controls or are there components in it?
         private int _selectionVersion = 1; // the counter of selection changes.
-
         // Selection sort constants
         private const int SORT_HORIZONTAL = 0;
         private const int SORT_VERTICAL = 1;
         private const int SORT_ZORDER = 2;
-
         private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2";
-
         //these are used for snapping control via keyboard movement
-        protected DragAssistanceManager dragManager = null; //point to the snapline engine (only valid between keydown and timer expiration)
-        private Timer _snapLineTimer; //used to track the time from when a snapline is rendered until it should expire
-        private BehaviorService _behaviorService; //demand created pointer to the behaviorservice
+        protected DragAssistanceManager dragManager = null;//point to the snapline engine (only valid between keydown and timer expiration)
+        private Timer _snapLineTimer;//used to track the time from when a snapline is rendered until it should expire
+        private BehaviorService _behaviorService;//demand created pointer to the behaviorservice
         private StatusCommandUI _statusCommandUI; //Used to update the statusBar Information.
 
         /// <summary>
@@ -53,52 +49,47 @@ namespace System.Windows.Forms.Design
         public CommandSet(ISite site)
         {
             this.site = site;
-
             _eventService = (IEventHandlerService)site.GetService(typeof(IEventHandlerService));
             Debug.Assert(_eventService != null, "Command set must have the event service.  Is command set being initialized too early?");
-            _eventService.EventHandlerChanged += new EventHandler(this.OnEventHandlerChanged);
+            _eventService.EventHandlerChanged += new EventHandler(OnEventHandlerChanged);
             IDesignerHost host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
             if (host != null)
             {
-                host.Activated += new EventHandler(this.UpdateClipboardItems);
+                host.Activated += new EventHandler(UpdateClipboardItems);
             }
-
             _statusCommandUI = new StatusCommandUI(site);
             IUIService uiService = site.GetService(typeof(IUIService)) as IUIService;
-
             // Establish our set of commands
-            _commandSet = new CommandSetItem[] {
-
+            _commandSet = new CommandSetItem[]
+            {
                 // Editing commands
-                new CommandSetItem(this, new EventHandler(OnStatusDelete), new EventHandler(OnMenuDelete), MenuCommands.Delete, uiService),
-                new CommandSetItem( this, new EventHandler(OnStatusCopy), new EventHandler(OnMenuCopy), MenuCommands.Copy, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusCut), new EventHandler(OnMenuCut), MenuCommands.Cut, uiService),
-                new ImmediateCommandSetItem(this, new EventHandler(OnStatusPaste), new EventHandler(OnMenuPaste), MenuCommands.Paste, uiService),
-
+                new CommandSetItem( this, new EventHandler(OnStatusDelete), new EventHandler(OnMenuDelete), MenuCommands.Delete, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusCopy), new EventHandler(OnMenuCopy), MenuCommands.Copy,  uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusCut), new EventHandler(OnMenuCut), MenuCommands.Cut, uiService),
+                new ImmediateCommandSetItem( this, new EventHandler(OnStatusPaste), new EventHandler(OnMenuPaste), MenuCommands.Paste, uiService),
                 // Miscellaneous commands
-                new CommandSetItem(this, new EventHandler(OnStatusSelectAll), new EventHandler(OnMenuSelectAll), MenuCommands.SelectAll, true,uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAlways), new EventHandler(OnMenuDesignerProperties), MenuCommands.DesignerProperties, uiService),
-
+                new CommandSetItem( this, new EventHandler(OnStatusSelectAll), new EventHandler(OnMenuSelectAll), MenuCommands.SelectAll, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAlways), new EventHandler(OnMenuDesignerProperties), MenuCommands.DesignerProperties, uiService),
                 // Keyboard commands
-                new CommandSetItem(this, new EventHandler(OnStatusAlways), new EventHandler(OnKeyCancel), MenuCommands.KeyCancel, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAlways), new EventHandler(OnKeyCancel), MenuCommands.KeyReverseCancel, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusPrimarySelection), new EventHandler(OnKeyDefault), MenuCommands.KeyDefaultAction, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveUp, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveDown, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveLeft, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveRight, true),
+                new CommandSetItem( this, new EventHandler(OnStatusAlways), new EventHandler(OnKeyCancel), MenuCommands.KeyCancel, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAlways), new EventHandler(OnKeyCancel), MenuCommands.KeyReverseCancel, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusPrimarySelection), new EventHandler(OnKeyDefault), MenuCommands.KeyDefaultAction, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveUp, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveDown, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveLeft, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyMoveRight, true),
                 new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeUp, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeDown, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeLeft, true, uiService),
-                new CommandSetItem(this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeRight, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeDown, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeLeft, true, uiService),
+                new CommandSetItem( this, new EventHandler(OnStatusAnySelection), new EventHandler(OnKeyMove), MenuCommands.KeyNudgeRight, true, uiService),
             };
 
             _selectionService = (ISelectionService)site.GetService(typeof(ISelectionService));
             Debug.Assert(_selectionService != null, "CommandSet relies on the selection service, which is unavailable.");
             if (_selectionService != null)
             {
-                _selectionService.SelectionChanged += new EventHandler(this.OnSelectionChanged);
+                _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
 
             _menuService = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
@@ -110,8 +101,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // Now setup the default command GUID for this designer.  This GUID is also used in our toolbar definition file to identify toolbars we own.
-            // We store the GUID in a command ID here in the dictionary of the root component.  Our host may pull this GUID out and use it.
+            // Now setup the default command GUID for this designer.  This GUID is also used in our toolbar definition file to identify toolbars we own.  We store the GUID in a command ID here in the dictionary of the root component.  Our host may pull this GUID out and use it.
             IDictionaryService ds = site.GetService(typeof(IDictionaryService)) as IDictionaryService;
             Debug.Assert(ds != null, "No dictionary service");
             if (ds != null)
@@ -146,7 +136,6 @@ namespace System.Windows.Forms.Design
                 {
                     _menuService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
                 }
-
                 return _menuService;
             }
         }
@@ -178,7 +167,7 @@ namespace System.Windows.Forms.Design
                     {
                         Interval = DesignerUtils.SNAPELINEDELAY
                     };
-                    _snapLineTimer.Tick += new EventHandler(this.OnSnapLineTimerExpire);
+                    _snapLineTimer.Tick += new EventHandler(OnSnapLineTimerExpire);
                 }
                 return _snapLineTimer;
             }
@@ -197,7 +186,6 @@ namespace System.Windows.Forms.Design
                     {
                         return true;
                     }
-
                     ComponentEditor editor = (ComponentEditor)TypeDescriptor.GetEditor(obj, typeof(ComponentEditor));
                     if (editor == null)
                     {
@@ -206,7 +194,6 @@ namespace System.Windows.Forms.Design
 
                     bool success = false;
                     IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-
                     if (changeService != null)
                     {
                         try
@@ -228,18 +215,15 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    WindowsFormsComponentEditor winEditor = editor as WindowsFormsComponentEditor;
-                    if (winEditor != null)
+                    if (editor is WindowsFormsComponentEditor winEditor)
                     {
                         IWin32Window parent = null;
-                        //REVIEW: This smells wrong
                         if (obj is IWin32Window)
                         {
 #pragma warning disable 1717 // assignment to self
                             parent = (IWin32Window)parent;
 #pragma warning restore 1717
                         }
-
                         success = winEditor.EditComponent(obj, parent);
                     }
                     else
@@ -269,7 +253,7 @@ namespace System.Windows.Forms.Design
         /// Disposes of this object, removing all commands from the menu service.
         /// </summary>
         // We don't need to Dispose snapLineTimer
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public virtual void Dispose()
         {
             if (_menuService != null)
@@ -284,13 +268,13 @@ namespace System.Windows.Forms.Design
 
             if (_selectionService != null)
             {
-                _selectionService.SelectionChanged -= new EventHandler(this.OnSelectionChanged);
+                _selectionService.SelectionChanged -= new EventHandler(OnSelectionChanged);
                 _selectionService = null;
             }
 
             if (_eventService != null)
             {
-                _eventService.EventHandlerChanged -= new EventHandler(this.OnEventHandlerChanged);
+                _eventService.EventHandlerChanged -= new EventHandler(OnEventHandlerChanged);
                 _eventService = null;
             }
 
@@ -298,13 +282,13 @@ namespace System.Windows.Forms.Design
             Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
             if (host != null)
             {
-                host.Activated -= new EventHandler(this.UpdateClipboardItems);
+                host.Activated -= new EventHandler(UpdateClipboardItems);
             }
 
             if (_snapLineTimer != null)
             {
                 _snapLineTimer.Stop();
-                _snapLineTimer.Tick -= new EventHandler(this.OnSnapLineTimerExpire);
+                _snapLineTimer.Tick -= new EventHandler(OnSnapLineTimerExpire);
                 _snapLineTimer = null;
             }
 
@@ -324,7 +308,6 @@ namespace System.Windows.Forms.Design
                 {
                     _snapLineTimer.Stop();
                 }
-
                 dragManager.EraseSnapLines();
                 dragManager.OnMouseUp();
                 dragManager = null;
@@ -332,14 +315,13 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Filters the set of selected components. The selection service will retrieve all components that are currently selected. This method allows you to filter this set down to components that match your criteria. The selectionRules parameter must contain one or more flags from the SelectionRules class. These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
+        /// Filters the set of selected components.  The selection service will retrieve all components that are currently selected.  This method allows you to filter this set down to components that match your criteria.  The selectionRules parameter must contain one or more flags from the SelectionRules class.  These flags allow you to constrain the set of selected objects to visible, movable, sizeable or all objects.
         /// </summary>
         private object[] FilterSelection(object[] components, SelectionRules selectionRules)
         {
             object[] selection = null;
             if (components == null)
                 return new object[0];
-
             // Mask off any selection object that doesn't adhere to the given ruleset. We can ignore this if the ruleset is zero, as all components would be accepted.
             if (selectionRules != SelectionRules.None)
             {
@@ -361,7 +343,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Used to retrieve the selection for a copy. The default implementation retrieves the current selection.
+        /// Used to retrieve the selection for a copy.  The default implementation retrieves the current selection.
         /// </summary>
         protected virtual ICollection GetCopySelection()
         {
@@ -376,7 +358,6 @@ namespace System.Windows.Forms.Design
                     sort = true;
                     break;
                 }
-
             }
             if (sort)
             {
@@ -403,7 +384,6 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
-
             foreach (IComponent childComp in designer.AssociatedComponents)
             {
                 if (childComp.Site != null)
@@ -477,9 +457,9 @@ namespace System.Windows.Forms.Design
         protected virtual void GetSnapInformation(IDesignerHost host, IComponent component, out Size snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty)
         {
             // This implementation is shared by all.  It just looks for snap properties on the base component.
-            IComponent currentSnapComponent = null;
-            PropertyDescriptor gridSizeProp = null;
-            PropertyDescriptor currentSnapProp = null;
+            IComponent currentSnapComponent;
+            PropertyDescriptor gridSizeProp;
+            PropertyDescriptor currentSnapProp;
             PropertyDescriptorCollection props;
 
             currentSnapComponent = host.RootComponent;
@@ -489,13 +469,11 @@ namespace System.Windows.Forms.Design
             {
                 currentSnapProp = null;
             }
-
             gridSizeProp = props["GridSize"];
             if (gridSizeProp != null && gridSizeProp.PropertyType != typeof(Size))
             {
                 gridSizeProp = null;
             }
-
             // Finally, now that we've got the various properties and components, dole out the values.
             snapComponent = currentSnapComponent;
             snapProperty = currentSnapProp;
@@ -514,7 +492,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected bool CanCheckout(IComponent comp)
         {
+            // look if it's ok to change
             IComponentChangeService changeSvc = (IComponentChangeService)GetService(typeof(IComponentChangeService));
+            // is it ok to change?
             if (changeSvc != null)
             {
                 try
@@ -532,7 +512,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called by the event handler service when the current event handler has changed. Here we invalidate all of our menu items so that they can pick up the new event handler.
+        /// Called by the event handler service when the current event handler has changed.  Here we invalidate all of our menu items so that they can pick up the new event handler.
         /// </summary>
         private void OnEventHandlerChanged(object sender, EventArgs e)
         {
@@ -679,7 +659,6 @@ namespace System.Windows.Forms.Design
                             {
                                 trans = host.CreateTransaction(string.Format(SR.DragDropMoveComponent, comp.Site.Name));
                             }
-
                             try
                             {
                                 //if we can find the behaviorservice, then we can use it and the SnapLineEngine to help us move these controls...
@@ -693,8 +672,7 @@ namespace System.Windows.Forms.Design
                                         EndDragManager();
                                     }
 
-                                    //If we CTRL+Arrow and we're using SnapLines - snap to the next location
-                                    //Don't snap if we are moving a component in the ComponentTray
+                                    //If we CTRL+Arrow and we're using SnapLines - snap to the next location. Don't snap if we are moving a component in the ComponentTray
                                     if (invertSnap && useSnapLines && primaryControl != null)
                                     {
                                         ArrayList selComps = new ArrayList(selSvc.GetSelectedComponents());
@@ -702,15 +680,11 @@ namespace System.Windows.Forms.Design
                                         dragManager = new DragAssistanceManager(comp.Site, selComps);
                                         //ask our snapline engine to find the nearest snap position with the given direction
                                         Point snappedOffset = dragManager.OffsetToNearestSnapLocation(primaryControl, new Point(moveOffsetX, moveOffsetY));
-
                                         //update the offset according to the snapline engine
                                         // This is the offset assuming origin is in the upper-left.
                                         moveOffsetX = snappedOffset.X;
                                         moveOffsetY = snappedOffset.Y;
-
-                                        // If the parent is mirrored then we need to negate moveOffsetX. This is because moveOffsetX assumes that the origin is upper left. That is, when moveOffsetX is positive, we are moving right, negative when moving left.
-                                        // The parent container's origin depends on its mirroring property. Thus when we call propLoc.setValue below, we need to make sure that our moveOffset.X correctly reflects the placement of the parent container's origin.
-                                        // We need to do this AFTER we calculate the snappedOffset. This is because the dragManager calculations are all based on an origin in the upper-left.
+                                        // If the parent is mirrored then we need to negate moveOffsetX. This is because moveOffsetX assumes that the origin is upper left. That is, when moveOffsetX is positive, we are moving right, negative when moving left. The parent container's origin depends on its mirroring property. Thus when we call propLoc.setValue below, we need to make sure that our moveOffset.X correctly reflects the placement of the parent container's origin. We need to do this AFTER we calculate the snappedOffset. This is because the dragManager calculations are all based on an origin in the upper-left.
                                         if (primaryControl.Parent.IsMirrored)
                                         {
                                             moveOffsetX *= -1;
@@ -721,13 +695,11 @@ namespace System.Windows.Forms.Design
                                     {
                                         bool snapOn = false;
                                         Size snapSize = Size.Empty;
-
                                         GetSnapInformation(host, comp, out snapSize, out IComponent snapComponent, out PropertyDescriptor snapProperty);
                                         if (snapProperty != null)
                                         {
                                             snapOn = (bool)snapProperty.GetValue(snapComponent);
                                         }
-
                                         if (snapOn && !snapSize.IsEmpty)
                                         {
                                             moveOffsetX *= snapSize.Width;
@@ -738,17 +710,13 @@ namespace System.Windows.Forms.Design
                                                 if (host.GetDesigner(primaryControl.Parent) is ParentControlDesigner parentDesigner)
                                                 {
                                                     Point loc = primaryControl.Location;
-                                                    // If the parent is mirrored then we need to negate moveOffsetX. This is because moveOffsetX assumes that the origin is upper left. That is, when moveOffsetX is positive, we are moving right, negative when moving left.
-                                                    // The parent container's origin depends on its mirroring property. Thus when we call propLoc.setValue below, we need to make sure that our moveOffset.X correctly reflects the placement of the parent container's origin.
-                                                    // Should do this BEFORE we get the snapped point.
+                                                    // If the parent is mirrored then we need to negate moveOffsetX. This is because moveOffsetX assumes that the origin is upper left. That is, when moveOffsetX is positive, we are moving right, negative when moving left. The parent container's origin depends on its mirroring property. Thus when we call propLoc.setValue below, we need to make sure that our moveOffset.X correctly reflects the placement of the parent container's origin. Should do this BEFORE we get the snapped point.
                                                     if (primaryControl.Parent.IsMirrored)
                                                     {
                                                         moveOffsetX *= -1;
                                                     }
                                                     loc.Offset(moveOffsetX, moveOffsetY);
-
                                                     loc = parentDesigner.GetSnappedPoint(loc);
-
                                                     //reset our offsets now that we've snapped correctly
                                                     if (moveOffsetX != 0)
                                                     {
@@ -759,7 +727,6 @@ namespace System.Windows.Forms.Design
                                                         moveOffsetY = loc.Y - primaryControl.Location.Y;
                                                     }
                                                 }
-
                                             }
                                         }
                                         else
@@ -787,7 +754,6 @@ namespace System.Windows.Forms.Design
                                             //the control must match the rules, if not, then we don't move it
                                             continue;
                                         }
-
                                         // Components are always moveable and visible
                                         PropertyDescriptor propLoc = TypeDescriptor.GetProperties(component)["Location"];
                                         if (propLoc != null)
@@ -796,7 +762,6 @@ namespace System.Windows.Forms.Design
                                             loc.Offset(moveOffsetX, moveOffsetY);
                                             propLoc.SetValue(component, loc);
                                         }
-
                                         //change the Status information ....
                                         if (component == selSvc.PrimarySelection && _statusCommandUI != null)
                                         {
@@ -868,7 +833,6 @@ namespace System.Windows.Forms.Design
                         {
                             continue;
                         }
-
                         IComponent comp = obj as IComponent;
                         if (comp != null && host != null)
                         {
@@ -877,12 +841,12 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
                         }
-
                         PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
-PropertyDescriptor locProp = props["Location"];
+                        PropertyDescriptor locProp = props["Location"];
                         PropertyDescriptor sizeProp = props["Size"];
                         PropertyDescriptor lockProp = props["Locked"];
                         // Skip all components that are locked
+                        //
                         if (lockProp != null)
                         {
                             if ((bool)lockProp.GetValue(comp))
@@ -890,6 +854,7 @@ PropertyDescriptor locProp = props["Location"];
                         }
 
                         // Skip all components that don't have a location property
+                        //
                         if (locProp == null || locProp.IsReadOnly)
                         {
                             continue;
@@ -957,8 +922,6 @@ PropertyDescriptor locProp = props["Location"];
                             return;
                         }
                         firstTry = false;
-
-
                         locProp.SetValue(comp, loc);
                     }
                 }
@@ -982,11 +945,6 @@ PropertyDescriptor locProp = props["Location"];
         protected void OnMenuAlignToGrid(object sender, EventArgs e)
         {
             Size gridSize = Size.Empty;
-            PropertyDescriptor locProp = null;
-            PropertyDescriptor lockedProp = null;
-            Point loc = Point.Empty;
-            int delta;
-
             if (SelectionService == null)
             {
                 return;
@@ -1000,7 +958,6 @@ PropertyDescriptor locProp = props["Location"];
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
                 DesignerTransaction trans = null;
-
                 try
                 {
                     if (host != null)
@@ -1026,12 +983,11 @@ PropertyDescriptor locProp = props["Location"];
                     foreach (object comp in selectedComponents)
                     {
                         // first check to see if the component is locked, if so - don't move it...
-                        lockedProp = GetProperty(comp, "Locked");
+                        PropertyDescriptor lockedProp = GetProperty(comp, "Locked");
                         if (lockedProp != null && ((bool)lockedProp.GetValue(comp)) == true)
                         {
                             continue;
                         }
-
                         // if the designer for this component isn't a ControlDesigner (maybe it's something in the component tray) then don't try to align it to grid.
                         IComponent component = comp as IComponent;
                         if (component != null && host != null)
@@ -1043,16 +999,17 @@ PropertyDescriptor locProp = props["Location"];
                         }
 
                         // get the location property
-                        locProp = GetProperty(comp, "Location");
+                        PropertyDescriptor locProp = GetProperty(comp, "Location");
+
                         // get the current value
                         if (locProp == null || locProp.IsReadOnly)
                         {
                             continue;
                         }
-                        loc = (Point)locProp.GetValue(comp);
+                        Point loc = (Point)locProp.GetValue(comp);
 
                         // round the x to the snap size
-                        delta = loc.X % gridSize.Width;
+                        int delta = loc.X % gridSize.Width;
                         if (delta < (gridSize.Width / 2))
                         {
                             loc.X -= delta;
@@ -1105,7 +1062,6 @@ PropertyDescriptor locProp = props["Location"];
         {
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
-
             if (SelectionService == null)
             {
                 return;
@@ -1128,6 +1084,7 @@ PropertyDescriptor locProp = props["Location"];
                     if (host != null)
                     {
                         string batchString;
+
                         if (cmdID == MenuCommands.CenterHorizontally)
                         {
                             batchString = string.Format(SR.WindowsFormsCommandCenterX, selectedComponents.Count);
@@ -1138,12 +1095,11 @@ PropertyDescriptor locProp = props["Location"];
                         }
                         trans = host.CreateTransaction(batchString);
                     }
-
-                    //subhag calculate the union REctangle : ASURT 67753
-                    int top = Int32.MaxValue;
-                    int left = Int32.MaxValue;
-                    int right = Int32.MinValue;
-                    int bottom = Int32.MinValue;
+                    //subhag calculate the union REctangle
+                    int top = int.MaxValue;
+                    int left = int.MaxValue;
+                    int right = int.MinValue;
+                    int bottom = int.MinValue;
 
                     foreach (object obj in selectedComponents)
                     {
@@ -1168,6 +1124,7 @@ PropertyDescriptor locProp = props["Location"];
 
                             size = (Size)sizeProp.GetValue(comp);
                             loc = (Point)locProp.GetValue(comp);
+
                             //cache the first parent we see - if there's a mix of different parents - we'll just center based on the first one
                             if (viewParent == null)
                             {
@@ -1193,16 +1150,12 @@ PropertyDescriptor locProp = props["Location"];
 
                     int centerOfUnionRectX = (left + right) / 2;
                     int centerOfUnionRectY = (top + bottom) / 2;
-
                     int centerOfParentX = (viewParent.ClientSize.Width) / 2;
                     int centerOfParentY = (viewParent.ClientSize.Height) / 2;
-
                     int deltaX = 0;
                     int deltaY = 0;
-
                     bool shiftRight = false;
                     bool shiftBottom = false;
-
                     if (centerOfParentX >= centerOfUnionRectX)
                     {
                         deltaX = centerOfParentX - centerOfUnionRectX;
@@ -1289,7 +1242,6 @@ PropertyDescriptor locProp = props["Location"];
                 Cursor.Current = Cursors.WaitCursor;
                 ICollection selectedComponents = GetCopySelection();
                 selectedComponents = PrependComponentNames(selectedComponents);
-
                 IDesignerSerializationService ds = (IDesignerSerializationService)GetService(typeof(IDesignerSerializationService));
                 Debug.Assert(ds != null, "No designer serialization service -- we cannot copy to clipboard");
                 if (ds != null)
@@ -1320,7 +1272,6 @@ PropertyDescriptor locProp = props["Location"];
             {
                 return;
             }
-
             Cursor oldCursor = Cursor.Current;
             try
             {
@@ -1340,10 +1291,8 @@ PropertyDescriptor locProp = props["Location"];
                     byte[] bytes = stream.GetBuffer();
                     IDataObject dataObj = new DataObject(CF_DESIGNER, bytes);
                     Clipboard.SetDataObject(dataObj);
-
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     Control commonParent = null;
-
                     if (host != null)
                     {
                         IComponentChangeService changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
@@ -1357,16 +1306,16 @@ PropertyDescriptor locProp = props["Location"];
                             SelectionService.SetSelectedComponents(new object[0], SelectionTypes.Replace);
                             object[] selComps = new object[selectedComponents.Count];
                             selectedComponents.CopyTo(selComps, 0);
-
                             for (int i = 0; i < selComps.Length; i++)
                             {
                                 object obj = selComps[i];
                                 // We should never delete the base component.
+                                //
                                 if (obj == host.RootComponent || !(obj is IComponent component))
                                 {
                                     continue;
                                 }
-                                //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo see bug 488115
+                                //Perf: We suspend Component Changing Events on parent for bulk changes to avoid unnecessary serialization\deserialization for undo
                                 if (obj is Control c)
                                 {
                                     Control parent = c.Parent;
@@ -1402,6 +1351,7 @@ PropertyDescriptor locProp = props["Location"];
                                 else if (commonParent != null && c != null)
                                 {
                                     Control selectedControl = c;
+
                                     if (selectedControl.Parent != commonParent && !commonParent.Contains(selectedControl))
                                     {
                                         // look for internal parenting
@@ -1415,8 +1365,6 @@ PropertyDescriptor locProp = props["Location"];
                                         }
                                     }
                                 }
-
-
                                 if (component != null)
                                 {
                                     ArrayList al = new ArrayList();
@@ -1425,6 +1373,7 @@ PropertyDescriptor locProp = props["Location"];
                                     {
                                         changeService.OnComponentChanging(comp, null);
                                     }
+
                                     host.DestroyComponent(component);
                                 }
                             }
@@ -1440,9 +1389,7 @@ PropertyDescriptor locProp = props["Location"];
                                     des.ResumeChangingEvents();
                                 }
                             }
-
                         }
-
                         if (commonParent != null)
                         {
                             SelectionService.SetSelectedComponents(new object[] { commonParent }, SelectionTypes.Replace);
@@ -1473,7 +1420,6 @@ PropertyDescriptor locProp = props["Location"];
                 {
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
-
                     if (SelectionService == null)
                     {
                         return;
@@ -1520,13 +1466,11 @@ PropertyDescriptor locProp = props["Location"];
                                 {
                                     continue;
                                 }
-
                                 // We should never delete the base component.
                                 if (obj == host.RootComponent)
                                 {
                                     continue;
                                 }
-
                                 Control control = obj as Control;
                                 if (!commonParentSet)
                                 {
@@ -1587,9 +1531,7 @@ PropertyDescriptor locProp = props["Location"];
                                                 designerChain.Add(designer);
                                             }
 
-                                            for (commonParentDesigner = commonParentDesigner.Parent as ITreeDesigner;
-                                                 commonParentDesigner != null;
-                                                 commonParentDesigner = commonParentDesigner.Parent as ITreeDesigner)
+                                            for (commonParentDesigner = commonParentDesigner.Parent as ITreeDesigner; commonParentDesigner != null; commonParentDesigner = commonParentDesigner.Parent as ITreeDesigner)
                                             {
                                                 parentDesignerChain.Add(commonParentDesigner);
                                             }
@@ -1613,6 +1555,7 @@ PropertyDescriptor locProp = props["Location"];
                                                     longIndex--;
                                                 }
                                             }
+                                            // alright, what have we got?
                                             if (commonParentDesigner != null)
                                             {
                                                 commonParent = commonParentDesigner.Component;
@@ -1623,9 +1566,7 @@ PropertyDescriptor locProp = props["Location"];
                                             }
                                         }
                                     }
-
                                 }
-
                                 ArrayList al = new ArrayList();
                                 GetAssociatedComponents((IComponent)obj, host, al);
                                 foreach (IComponent comp in al)
@@ -1650,7 +1591,6 @@ PropertyDescriptor locProp = props["Location"];
                                 }
                             }
                         }
-
 
                         if (commonParent != null && SelectionService.PrimarySelection == null)
                         {
@@ -1709,7 +1649,7 @@ PropertyDescriptor locProp = props["Location"];
         /// Called when the paste menu item is selected.
         /// </summary>
 
-        [SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1809:AvoidExcessiveLocals")]
         protected void OnMenuPaste(object sender, EventArgs e)
         {
             Cursor oldCursor = Cursor.Current;
@@ -1717,13 +1657,12 @@ PropertyDescriptor locProp = props["Location"];
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
-                // If a control fails to get pasted; then we should remember its associatedComponents so that they are not pasted.
+                // If a control fails to get pasted; then we should remember its associatedComponents  so that they are not pasted.
                 ICollection associatedCompsOfFailedContol = null;
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
                 if (host == null)
-                    return;
-
+                    return; // nothing we can do here!
                 IDataObject dataObj = Clipboard.GetDataObject();
                 ICollection components = null;
                 bool createdItems = false;
@@ -1732,7 +1671,6 @@ PropertyDescriptor locProp = props["Location"];
                 // Get the current number of controls in the Component Tray in the target
                 tray = GetService(typeof(ComponentTray)) as ComponentTray;
                 numberOfOriginalTrayControls = tray != null ? tray.Controls.Count : 0;
-
                 // We understand two things:  CF_DESIGNER, and toolbox items.
                 object data = dataObj.GetData(CF_DESIGNER);
                 using (DesignerTransaction trans = host.CreateTransaction(SR.CommandSetPaste))
@@ -1773,16 +1711,13 @@ PropertyDescriptor locProp = props["Location"];
                     {
                         IComponent curComp;
                         string name;
-
                         //Make copy of Items in Array..
                         object[] allComponents = new object[components.Count];
                         components.CopyTo(allComponents, 0);
-
                         ArrayList selectComps = new ArrayList();
                         ArrayList controls = new ArrayList();
                         string[] componentNames = null;
                         int idx = 0;
-
                         // if the selected item is a frame designer, add to that, otherwise add to the form
                         IComponent selectedComponent = null;
                         IDesigner designer = null;
@@ -1790,7 +1725,6 @@ PropertyDescriptor locProp = props["Location"];
 
                         IComponent baseComponent = host.RootComponent;
                         selectedComponent = (IComponent)SelectionService.PrimarySelection;
-
                         if (selectedComponent == null)
                         {
                             selectedComponent = baseComponent;
@@ -1798,7 +1732,6 @@ PropertyDescriptor locProp = props["Location"];
 
                         dragClient = false;
                         ITreeDesigner tree = host.GetDesigner(selectedComponent) as ITreeDesigner;
-
                         while (!dragClient && tree != null)
                         {
                             if (tree is IOleDragClient)
@@ -1816,10 +1749,10 @@ PropertyDescriptor locProp = props["Location"];
 
                         foreach (object obj in components)
                         {
+
                             name = null;
                             curComp = obj as IComponent;
-
-                            // see if we can fish out the original name.  When we serialized, we serialized an array of names at the head of the list. This array matches the components that were created.
+                            // see if we can fish out the original name. When we serialized, we serialized an array of names at the head of the list.  This array matches the components that were created.
                             if (obj is IComponent)
                             {
                                 if (componentNames != null && idx < componentNames.Length)
@@ -1847,6 +1780,7 @@ PropertyDescriptor locProp = props["Location"];
                                     {
                                         continue;
                                     }
+
                                     if (pd.GetValue(curComp) is string handler)
                                     {
                                         pd.SetValue(curComp, null);
@@ -1877,6 +1811,7 @@ PropertyDescriptor locProp = props["Location"];
                                 }
 
                                 ICollection designerComps = null;
+                                // DGV has columns which are sited IComponents that don't have designers.  in this case, ignore them.
                                 if (!(host.GetDesigner(curComp) is ComponentDesigner cDesigner))
                                 {
                                     continue;
@@ -1932,16 +1867,13 @@ PropertyDescriptor locProp = props["Location"];
                                     {
                                         selectComps.Add(curComp);
                                     }
-
                                 }
                                 // if Parent is not selected... select the curcomp.
                                 else if (associatedComps.Contains(curComp) && Array.IndexOf(allComponents, parentComp) == -1)
                                 {
                                     selectComps.Add(curComp);
                                 }
-
                                 bool changeName = false;
-
                                 if (curComp is Control c)
                                 {
                                     // if the text is the same as the name, remember it. After we add the control, we'll update the text with the new name.
@@ -1950,7 +1882,6 @@ PropertyDescriptor locProp = props["Location"];
                                         changeName = true;
                                     }
                                 }
-
                                 if (changeName)
                                 {
                                     PropertyDescriptorCollection props = TypeDescriptor.GetProperties(curComp);
@@ -1970,8 +1901,6 @@ PropertyDescriptor locProp = props["Location"];
                                 }
                             }
                         }
-
-
                         // Find those controls that have ControlDesigners and center them on the designer surface
                         ArrayList compsWithControlDesigners = new ArrayList();
                         foreach (Control c in controls)
@@ -1985,7 +1914,7 @@ PropertyDescriptor locProp = props["Location"];
 
                         if (compsWithControlDesigners.Count > 0)
                         {
-                            // Update the control positions. We want to keep the entire block of controls relative to each other, but relocate them within the container.
+                            // Update the control positions.  We want to keep the entire block of controls relative to each other, but relocate them within the container.
                             UpdatePastePositions(compsWithControlDesigners);
                         }
 
@@ -1995,7 +1924,6 @@ PropertyDescriptor locProp = props["Location"];
                             // the paste target did not have a tray already, so let's go get it - if there is one
                             tray = GetService(typeof(ComponentTray)) as ComponentTray;
                         }
-
                         if (tray != null)
                         {
                             int numberOfTrayControlsAdded = tray.Controls.Count - numberOfOriginalTrayControls;
@@ -2010,7 +1938,7 @@ PropertyDescriptor locProp = props["Location"];
                             }
                         }
 
-                        // Update the tab indices of all the components. We must first sort the components by their existing tab indices or else we will not preserve their original intent.
+                        // Update the tab indices of all the components.  We must first sort the components by their existing tab indices or else we will not preserve their original intent.
                         controls.Sort(new TabIndexCompare());
                         foreach (Control c in controls)
                         {
@@ -2019,7 +1947,6 @@ PropertyDescriptor locProp = props["Location"];
 
                         // finally select all the components we added
                         SelectionService.SetSelectedComponents((object[])selectComps.ToArray(), SelectionTypes.Replace);
-
                         // and bring them to the front - but only if we can mess with the Z-order.
                         if (designer is ParentControlDesigner parentControlDesigner && parentControlDesigner.AllowSetChildIndexOnDrop)
                         {
@@ -2108,6 +2035,7 @@ PropertyDescriptor locProp = props["Location"];
                 if (host != null)
                 {
                     DesignerTransaction trans = null;
+
                     try
                     {
                         trans = host.CreateTransaction();
@@ -2139,7 +2067,6 @@ PropertyDescriptor locProp = props["Location"];
         {
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
-
             if (SelectionService == null)
             {
                 return;
@@ -2154,7 +2081,6 @@ PropertyDescriptor locProp = props["Location"];
                 sel.CopyTo(selectedObjects, 0);
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
                 object selPrimary = SelectionService.PrimarySelection;
-
                 Size primarySize = Size.Empty;
                 Size itemSize = Size.Empty;
                 PropertyDescriptor sizeProp;
@@ -2167,7 +2093,6 @@ PropertyDescriptor locProp = props["Location"];
                         return;
                     }
                     primarySize = (Size)sizeProp.GetValue(component);
-
                 }
                 if (selPrimary == null)
                 {
@@ -2190,22 +2115,21 @@ PropertyDescriptor locProp = props["Location"];
                         if (obj.Equals(selPrimary))
                             continue;
                         if (!(obj is IComponent comp))
+                        {
                             continue;
-
+                        }
                         //if the component is locked, no sizing is allowed...
                         PropertyDescriptor lockedDesc = GetProperty(obj, "Locked");
                         if (lockedDesc != null && (bool)lockedDesc.GetValue(obj))
                         {
                             continue;
                         }
-
                         sizeProp = GetProperty(comp, "Size");
                         // Skip all components that don't have a size property
                         if (sizeProp == null || sizeProp.IsReadOnly)
                         {
                             continue;
                         }
-
                         itemSize = (Size)sizeProp.GetValue(comp);
                         if (cmdID == MenuCommands.SizeToControlHeight || cmdID == MenuCommands.SizeToControl)
                         {
@@ -2256,7 +2180,6 @@ PropertyDescriptor locProp = props["Location"];
                 selectedObjects = FilterSelection(selectedObjects, SelectionRules.Visible);
                 Size size = Size.Empty;
                 Point loc = Point.Empty;
-
                 Debug.Assert(null != selectedObjects, "queryStatus should have disabled this");
                 Size grid = Size.Empty;
                 PropertyDescriptor sizeProp = null;
@@ -2289,7 +2212,6 @@ PropertyDescriptor locProp = props["Location"];
                         locProp = GetProperty(comp, "Location");
                         Debug.Assert(sizeProp != null, "No size property on component");
                         Debug.Assert(locProp != null, "No location property on component");
-
                         if (sizeProp == null || locProp == null || sizeProp.IsReadOnly || locProp.IsReadOnly)
                         {
                             continue;
@@ -2297,12 +2219,10 @@ PropertyDescriptor locProp = props["Location"];
 
                         size = (Size)sizeProp.GetValue(comp);
                         loc = (Point)locProp.GetValue(comp);
-
                         size.Width = ((size.Width + (grid.Width / 2)) / grid.Width) * grid.Width;
                         size.Height = ((size.Height + (grid.Height / 2)) / grid.Height) * grid.Height;
                         loc.X = (loc.X / grid.Width) * grid.Width;
                         loc.Y = (loc.Y / grid.Height) * grid.Height;
-
                         sizeProp.SetValue(comp, size);
                         locProp.SetValue(comp, loc);
                     }
@@ -2325,7 +2245,6 @@ PropertyDescriptor locProp = props["Location"];
         {
             // first, look if the currently selected object has a component editor...
             object obj = SelectionService.PrimarySelection;
-
             if (CheckComponentEditor(obj, true))
             {
                 return;
@@ -2353,7 +2272,6 @@ PropertyDescriptor locProp = props["Location"];
                 if (host != null)
                 {
                     DesignerTransaction trans = null;
-
                     try
                     {
                         trans = host.CreateTransaction(string.Format(SR.CommandSetPaste, 0));
@@ -2376,6 +2294,7 @@ PropertyDescriptor locProp = props["Location"];
                     }
                 }
             }
+
         }
 
         /// <summary>
@@ -2386,7 +2305,6 @@ PropertyDescriptor locProp = props["Location"];
             MenuCommand cmd = (MenuCommand)sender;
             CommandID cmdID = cmd.CommandID;
             DesignerTransaction trans = null;
-
             if (SelectionService == null)
             {
                 return;
@@ -2427,19 +2345,12 @@ PropertyDescriptor locProp = props["Location"];
                 Point primaryLoc = Point.Empty;
                 IComponent curComp = null, lastComp = null;
                 int sort = -1;
-
                 // Must sort differently if we're horizontal or vertical...
-                if (cmdID == MenuCommands.HorizSpaceConcatenate ||
-                    cmdID == MenuCommands.HorizSpaceDecrease ||
-                    cmdID == MenuCommands.HorizSpaceIncrease ||
-                    cmdID == MenuCommands.HorizSpaceMakeEqual)
+                if (cmdID == MenuCommands.HorizSpaceConcatenate || cmdID == MenuCommands.HorizSpaceDecrease || cmdID == MenuCommands.HorizSpaceIncrease || cmdID == MenuCommands.HorizSpaceMakeEqual)
                 {
                     sort = SORT_HORIZONTAL;
                 }
-                else if (cmdID == MenuCommands.VertSpaceConcatenate ||
-                         cmdID == MenuCommands.VertSpaceDecrease ||
-                         cmdID == MenuCommands.VertSpaceIncrease ||
-                         cmdID == MenuCommands.VertSpaceMakeEqual)
+                else if (cmdID == MenuCommands.VertSpaceConcatenate || cmdID == MenuCommands.VertSpaceDecrease || cmdID == MenuCommands.VertSpaceIncrease || cmdID == MenuCommands.VertSpaceMakeEqual)
                 {
                     sort = SORT_VERTICAL;
                 }
@@ -2449,7 +2360,6 @@ PropertyDescriptor locProp = props["Location"];
                 }
 
                 SortSelection(selectedObjects, sort);
-
                 //now that we're sorted, lets get our primary selection and it's index
                 object primary = SelectionService.PrimarySelection;
                 int primaryIndex = 0;
@@ -2457,10 +2367,10 @@ PropertyDescriptor locProp = props["Location"];
                     primaryIndex = Array.IndexOf(selectedObjects, primary);
 
                 // And compute delta values for Make Equal
-                if (cmdID == MenuCommands.HorizSpaceMakeEqual || cmdID == MenuCommands.VertSpaceMakeEqual)
+                if (cmdID == MenuCommands.HorizSpaceMakeEqual ||
+                    cmdID == MenuCommands.VertSpaceMakeEqual)
                 {
                     int total, n;
-
                     total = 0;
                     for (n = 0; n < selectedObjects.Length; n++)
                     {
@@ -2579,7 +2489,6 @@ PropertyDescriptor locProp = props["Location"];
                     }
                 }
                 curComp = lastComp = null;
-
                 if (primary != null)
                 {
                     PropertyDescriptor primaryLocDesc = GetProperty(primary, "Location");
@@ -2753,11 +2662,10 @@ PropertyDescriptor locProp = props["Location"];
         /// </summary>
         protected void OnSelectionChanged(object sender, EventArgs e)
         {
-            if (SelectionService == null/*: UNDONE: BehaviorWork  || SelectionUIService == null*/)
+            if (SelectionService == null)
             {
                 return;
             }
-
             _selectionVersion++;
             // Update our cached selection counts.
             selCount = SelectionService.SelectionCount;
@@ -2797,7 +2705,7 @@ PropertyDescriptor locProp = props["Location"];
         }
 
         /// <summary>
-        /// When this timer expires, this tells us that we need to erase any snaplines we have drawn. First, we need to marshal this back to the correct thread.
+        /// When this timer expires, this tells us that we need to erase any snaplines we have drawn.  First, we need to marshal this back to the correct thread.
         /// </summary>
         private void OnSnapLineTimerExpire(object sender, EventArgs e)
         {
@@ -2809,8 +2717,7 @@ PropertyDescriptor locProp = props["Location"];
         }
 
         /// <summary>
-        /// Called when our snapline timer expires - this method has been call
-        /// has been properly marshalled back to the correct thread.
+        /// Called when our snapline timer expires - this method has been call has been properly marshalled back to the correct thread.
         /// </summary>
         private void OnSnapLineTimerExpireMarshalled(object sender, EventArgs e)
         {
@@ -2871,7 +2778,7 @@ PropertyDescriptor locProp = props["Location"];
         }
 
         /// <summary>
-        /// Status for the cut command. This is enabled when there is something juicy selected and that something does not contain any inherited components.
+        /// Status for the cut command.  This is enabled when there is something juicy selected and that something does not contain any inherited components.
         /// </summary>
         protected void OnStatusCut(object sender, EventArgs e)
         {
@@ -2903,7 +2810,7 @@ PropertyDescriptor locProp = props["Location"];
                         ICollection selectedComponents = selSvc.GetSelectedComponents();
                         foreach (object obj in selectedComponents)
                         {
-                            // if the object is not sited to the same thing as the host container then don't allow delete.
+                            // if the object is not sited to the same thing as the host container then don't allow delete. VSWhidbey# 275790
                             if (obj is IComponent comp && (comp.Site == null || (comp.Site != null && comp.Site.Container != host.Container)))
                             {
                                 cmd.Enabled = false;
@@ -2923,7 +2830,7 @@ PropertyDescriptor locProp = props["Location"];
         {
             MenuCommand cmd = (MenuCommand)sender;
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
-            // Before we even look at the data format, check to see if the thing we're going to paste into is privately inherited. If it is, then we definitely cannot paste.
+            // Before we even look at the data format, check to see if the thing we're going to paste into is privately inherited.  If it is, then we definitely cannot paste.
             if (primarySelection != null)
             {
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
@@ -2940,7 +2847,7 @@ PropertyDescriptor locProp = props["Location"];
                 }
             }
 
-            // Not being inherited. Now look at the contents of the data
+            // Not being inherited.  Now look at the contents of the data
             IDataObject dataObj = Clipboard.GetDataObject();
             bool enable = false;
             if (dataObj != null)
@@ -2976,7 +2883,7 @@ PropertyDescriptor locProp = props["Location"];
         }
 
         /// <summary>
-        /// This is called when the selection has changed. Anyone using CommandSetItems that need to update their status based on selection changes should override this and update their own commands at this time. The base implementaion runs through all base commands and calls UpdateStatus on them.
+        /// This is called when the selection has changed.  Anyone using CommandSetItems that need to update their status based on selection changes should override this and update their own commands at this time.  The base implementaion runs through all base commands and calls UpdateStatus on them.
         /// </summary>
         protected virtual void OnUpdateCommandStatus()
         {
@@ -3008,7 +2915,6 @@ PropertyDescriptor locProp = props["Location"];
                 }
                 newObjects[idx++] = o;
             }
-
             string[] nameArray = new string[names.Count];
             names.CopyTo(nameArray, 0);
             newObjects[0] = nameArray;
@@ -3020,7 +2926,7 @@ PropertyDescriptor locProp = props["Location"];
         /// </summary>
         private void SortSelection(object[] selectedObjects, int nSortBy)
         {
-            IComparer comp = null;
+            IComparer comp;
             switch (nSortBy)
             {
                 case SORT_HORIZONTAL:
@@ -3090,10 +2996,9 @@ PropertyDescriptor locProp = props["Location"];
                     max.Y = loc.Y + size.Height;
                 }
             }
-
             // We have the bounding rect for the controls.  Next, offset this rect so that we center it in the parent. If we have no parent, the offset will position the control at 0, 0, to whatever parent we eventually get.
             Point offset = new Point(-min.X, -min.Y);
-            // Look to ensure that we're not going to paste this control over the top of another control. We only do this for the first control because preserving the relationship between controls is more important than obscuring a control.
+            // Look to ensure that we're not going to paste this control over the top of another control.  We only do this for the first control because preserving the relationship between controls is more important than obscuring a control.
             if (parentControl != null)
             {
                 bool bumpIt;
@@ -3103,11 +3008,10 @@ PropertyDescriptor locProp = props["Location"];
                 Point parentOffset = new Point(parentSize.Width / 2, parentSize.Height / 2);
                 parentOffset.X -= (max.X - min.X) / 2;
                 parentOffset.Y -= (max.Y - min.Y) / 2;
-
                 do
                 {
                     bumpIt = false;
-                    // Cycle through the controls on the parent. We're interested in controls that (a) are not in our set of controls and (b) have a location == to our current bumpOffset OR (c) are the same size as our parent. If we find such a control, we increment the bump offset by one grid size.
+                    // Cycle through the controls on the parent.  We're interested in controls that (a) are not in our set of controls and (b) have a location == to our current bumpOffset OR (c) are the same size as our parent.  If we find such a control, we increment the bump offset by one grid size.
                     foreach (Control child in parentControl.Controls)
                     {
                         Rectangle childBounds = child.Bounds;
@@ -3118,6 +3022,7 @@ PropertyDescriptor locProp = props["Location"];
                             {
                                 continue;
                             }
+
                             // We're dealing with our own pasted control, so offset its bounds. We don't use parent offset here because, well, we're comparing against the parent!
                             childBounds.Offset(offset);
                         }
@@ -3168,7 +3073,6 @@ PropertyDescriptor locProp = props["Location"];
                             {
                                 parentOffset.X = 0;
                                 parentOffset.Y = 0;
-
                                 if (wrapped)
                                 {
                                     bumpIt = false;
@@ -3206,7 +3110,6 @@ PropertyDescriptor locProp = props["Location"];
                     parentControl.ResumeLayout();
                 }
             }
-
         }
 
         private void UpdatePasteTabIndex(Control componentControl, object parentComponent)
@@ -3215,7 +3118,6 @@ PropertyDescriptor locProp = props["Location"];
             {
                 return;
             }
-
             bool tabIndexCollision = false;
             int tabIndexOriginal = componentControl.TabIndex;
             // Find the next highest tab index
@@ -3241,13 +3143,13 @@ PropertyDescriptor locProp = props["Location"];
         }
 
         /// <summary>
-        /// We extend MenuCommand for our command set items. A command set item is a menu command with an added delegate that is used to determine the flags for the menu item. We have different classes of delegates here. For example, many menu items may be enabled when there is at least one object selected, while others are only enabled if there is more than one object or if there is a primary selection.
+        /// We extend MenuCommand for our command set items.  A command set item is a menu command with an added delegate that is used to determine the flags for the menu item.  We have different classes of delegates here. For example, many  menu items may be enabled when there is at least one object selected, while others are only enabled if there is more than one object or if there is a primary selection.
         /// </summary>
         protected class CommandSetItem : MenuCommand
         {
-            private EventHandler _statusHandler;
+            private readonly EventHandler _statusHandler;
             private readonly IEventHandlerService _eventService;
-            private IUIService _uiService;
+            private readonly IUIService _uiService;
             private readonly CommandSet _commandSet;
             private static Hashtable s_commandStatusHash; // list of the command statuses we are tracking.
             private bool _updatingCommand = false; // flag we set when we're updating the command so we don't call back on the status handler.
@@ -3274,8 +3176,7 @@ PropertyDescriptor locProp = props["Location"];
                 _uiService = uiService;
                 _eventService = commandSet._eventService;
                 _statusHandler = statusHandler;
-
-                // when we optimize, it's because status is fully based on selection. so what we do is only call the status handler once per selection change to prevent doing the same work over and over again. we do this by hashing up the command statuses and then filling in the results we get, so we can easily retrieve them when the selection hasn't changed.
+                // when we optimize, it's because status is fully based on selection. so what we do is only call the status handler once per selection change to prevent doing the same work over and over again.  we do this by hashing up the command statuses and then filling in the results we get, so we can easily retrieve them when the selection hasn't changed.
                 if (optimizeStatus && statusHandler != null)
                 {
                     // we use this as our sentinel of when we're doing this.
@@ -3289,14 +3190,14 @@ PropertyDescriptor locProp = props["Location"];
                         }
                     }
 
-                    // UNDONE:CommandSetItem is put in a static hashtable, and CommandSetItem  references CommandSet, CommandSet reference FormDesigner.
-                    // If we don't remove the CommandSetItem from the static hashtable, FormDesigner is leaked. This demonstrates a bad design. We should not keep a static hashtable for all the items, instead, we should keep a hashtable per Designer. When designer is disposed, all command items got disposed automatically. However, at this time, we would pick a simple way with low risks to fix this. if this handler isn't already in there, add it.
+                    // UNDONE:CommandSetItem is put in a static hashtable, and CommandSetItem  references CommandSet, CommandSet reference FormDesigner. If we don't  remove the CommandSetItem from the static hashtable, FormDesigner is  leaked. This demonstrates a bad design. We should not keep a static  hashtable for all the items, instead, we should keep a hashtable per  Designer. When designer is disposed, all command items got disposed  automatically. However, at this time, we would pick a simple way with  low risks to fix this.
+                    // if this handler isn't already in there, add it.
                     if (!(s_commandStatusHash[statusHandler] is StatusState state))
                     {
                         state = new StatusState();
                         s_commandStatusHash.Add(statusHandler, state);
                     }
-                    state._refCount++;
+                    state.refCount++;
                 }
             }
 
@@ -3330,7 +3231,6 @@ PropertyDescriptor locProp = props["Location"];
                     {
                         // set our our updating flag so it doesn't call the status handler again.
                         _updatingCommand = true;
-
                         // and push the state into this command.
                         StatusState state = s_commandStatusHash[_statusHandler] as StatusState;
                         state.ApplyState(this);
@@ -3358,7 +3258,6 @@ PropertyDescriptor locProp = props["Location"];
                             return;
                         }
                     }
-
                     base.Invoke();
                 }
                 catch (Exception e)
@@ -3372,7 +3271,6 @@ PropertyDescriptor locProp = props["Location"];
                         throw;
                     }
                 }
-
             }
 
             ///<summary>
@@ -3403,7 +3301,6 @@ PropertyDescriptor locProp = props["Location"];
                     {
                         state = new StatusState();
                     }
-
                     // and save the enabled, visible, checked, and supported state.
                     state.SaveState(this, _commandSet.SelectionVersion);
                 }
@@ -3423,7 +3320,6 @@ PropertyDescriptor locProp = props["Location"];
                         return;
                     }
                 }
-
                 if (_statusHandler != null)
                 {
                     // if we need to update our status, call the status handler.  otherwise, get the cached status and push it into this command.
@@ -3452,8 +3348,8 @@ PropertyDescriptor locProp = props["Location"];
             {
                 if (s_commandStatusHash[_statusHandler] is StatusState state)
                 {
-                    state._refCount--;
-                    if (state._refCount == 0)
+                    state.refCount--;
+                    if (state.refCount == 0)
                     {
                         s_commandStatusHash.Remove(_statusHandler);
                     }
@@ -3465,6 +3361,7 @@ PropertyDescriptor locProp = props["Location"];
             /// </summary>
             private class StatusState
             {
+                // these are the command's possible values.
                 private const int Enabled = 0x01;
                 private const int Visible = 0x02;
                 private const int Checked = 0x04;
@@ -3472,11 +3369,12 @@ PropertyDescriptor locProp = props["Location"];
                 private const int NeedsUpdate = 0x10;
                 private int _selectionVersion = 0; // the version of the selection that this was initialized with.
                 private int _statusFlags = NeedsUpdate; // our flags.
+                // Multiple CommandSetItem instances can share a same status handler within a designer host. We use a simple ref count to make sure the CommandSetItem can be properly removed.
+                internal int refCount = 0;
 
-                // Multiple CommandSetItem instances can share a same status handler within a designer host.
-                // We use a simple ref count to make sure the CommandSetItem can be properly removed.
-                internal int _refCount = 0;
-
+                /// <summary>
+                /// Just what it says...
+                /// </summary>
                 public int SelectionVersion
                 {
                     get => _selectionVersion;
@@ -3522,16 +3420,14 @@ PropertyDescriptor locProp = props["Location"];
         }
 
         /// <summary>
-        /// The immediate command set item is used for commands that cannot be cached.
-        /// Commands such as Paste that get outside stimulus cannot be cached by our menu system, so they get an ImmediateCommandSetItem instead of a CommandSetItem.
+        /// The immediate command set item is used for commands that cannot be cached.  Commands such as Paste that get outside stimulus cannot be cached by our menu system, so they get an ImmediateCommandSetItem instead of a CommandSetItem.
         /// </summary>
         protected class ImmediateCommandSetItem : CommandSetItem
         {
             /// <summary>
             /// Creates a new ImmediateCommandSetItem.
             /// </summary>
-            public ImmediateCommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService)
-            : base(commandSet, statusHandler, invokeHandler, id, uiService)
+            public ImmediateCommandSetItem(CommandSet commandSet, EventHandler statusHandler, EventHandler invokeHandler, CommandID id, IUIService uiService) : base(commandSet, statusHandler, invokeHandler, id, uiService)
             {
             }
 
@@ -3559,13 +3455,11 @@ PropertyDescriptor locProp = props["Location"];
                 PropertyDescriptor qProp = TypeDescriptor.GetProperties(q)["Location"];
                 Point pLoc = (Point)pProp.GetValue(p);
                 Point qLoc = (Point)qProp.GetValue(q);
-
                 //if our lefts are equal, then compare tops
                 if (pLoc.X == qLoc.X)
                 {
                     return pLoc.Y - qLoc.Y;
                 }
-
                 return pLoc.X - qLoc.X;
             }
         }
@@ -3581,20 +3475,17 @@ PropertyDescriptor locProp = props["Location"];
                 PropertyDescriptor qProp = TypeDescriptor.GetProperties(q)["Location"];
                 Point pLoc = (Point)pProp.GetValue(p);
                 Point qLoc = (Point)qProp.GetValue(q);
-
                 //if our tops are equal, then compare lefts
                 if (pLoc.Y == qLoc.Y)
                 {
                     return pLoc.X - qLoc.X;
                 }
-
                 return pLoc.Y - qLoc.Y;
             }
         }
 
         private class ControlZOrderCompare : IComparer
         {
-
             public int Compare(object p, object q)
             {
                 if (p == null)
@@ -3609,7 +3500,6 @@ PropertyDescriptor locProp = props["Location"];
                 {
                     return 0;
                 }
-
                 if (!(p is Control c1) || !(q is Control c2))
                 {
                     return 1;

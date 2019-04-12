@@ -63,15 +63,13 @@ namespace System.Windows.Forms.Design.Behavior
             get => _glyphs;
         }
 
+        /// ///
         /// <summary>
         ///     Forces the BehaviorService to refresh its AdornerWindow.
         /// </summary>
         public void Invalidate()
         {
-            if (_behaviorService != null)
-            {
-                _behaviorService.Invalidate();
-            }
+            _behaviorService?.Invalidate();
         }
 
         /// <summary>
@@ -79,7 +77,10 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Rectangle rectangle)
         {
-            _behaviorService?.Invalidate(rectangle);
+            if (_behaviorService != null)
+            {
+                _behaviorService.Invalidate(rectangle);
+            }
         }
 
         /// <summary>
