@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -20,30 +19,31 @@ namespace System.Drawing.Design
     [CLSCompliant(false)]
     public class ImageEditor : UITypeEditor
     {
-        internal static Type[] imageExtenders = new Type[] { typeof(BitmapEditor), /*gpr typeof(Icon),*/ typeof(MetafileEditor) };
-        internal FileDialog fileDialog;
+        private static Type[] _imageExtenders = new Type[] { typeof(BitmapEditor), typeof(MetafileEditor) };
+        private FileDialog _fileDialog;
 
         // Accessor needed into the static field so that derived classes
         // can implement a different list of supported image types.
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        protected virtual Type[] GetImageExtenders()
-        {
-            return imageExtenders;
-        }
+        protected virtual Type[] GetImageExtenders() => _imageExtenders;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
+        [SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
         protected static string CreateExtensionsString(string[] extensions, string sep)
         {
             if (extensions == null || extensions.Length == 0)
+            {
                 return null;
+            }
+
             string text = null;
             for (int i = 0; i < extensions.Length - 1; i++)
+            {
                 text = text + "*." + extensions[i] + sep;
-            text = text + "*." + extensions[extensions.Length - 1];
-            return text;
+            }
+
+            return text + "*." + extensions[extensions.Length - 1];
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")] // previously shipped this way. Would be a breaking change.
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Shipped as public API")]
         protected static string CreateFilterEntry(ImageEditor e)
         {
             string desc = e.GetFileDialogDescription();
@@ -53,12 +53,11 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///      Edits the given object value using the editor style provided by
-        ///      GetEditorStyle.  A service provider is provided so that any
-        ///      required editing services can be obtained.
+        /// Edits the given object value using the editor style provided by
+        /// GetEditorStyle.static A service provider is provided so that any
+        /// required editing services can be obtained.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)
@@ -67,27 +66,30 @@ namespace System.Drawing.Design
 
                 if (edSvc != null)
                 {
-                    if (fileDialog == null)
+                    if (_fileDialog == null)
                     {
-                        fileDialog = new OpenFileDialog();
+                        _fileDialog = new OpenFileDialog();
                         string filter = CreateFilterEntry(this);
                         for (int i = 0; i < GetImageExtenders().Length; i++)
                         {
                             ImageEditor e = (ImageEditor)Activator.CreateInstance(GetImageExtenders()[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null); //.CreateInstance();
-                            Type myClass = this.GetType();
+                            Type myClass = GetType();
                             Type editorClass = e.GetType();
                             if (!myClass.Equals(editorClass) && e != null && myClass.IsInstanceOfType(e))
+                            {
                                 filter += "|" + CreateFilterEntry(e);
+                            }
                         }
-                        fileDialog.Filter = filter;
+
+                        _fileDialog.Filter = filter;
                     }
 
                     IntPtr hwndFocus = UnsafeNativeMethods.GetFocus();
                     try
                     {
-                        if (fileDialog.ShowDialog() == DialogResult.OK)
+                        if (_fileDialog.ShowDialog() == DialogResult.OK)
                         {
-                            FileStream file = new FileStream(fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                            FileStream file = new FileStream(_fileDialog.FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                             value = LoadFromStream(file);
                         }
                     }
@@ -100,54 +102,46 @@ namespace System.Drawing.Design
                     }
                 }
             }
+
             return value;
         }
 
         /// <summary>
-        ///      Retrieves the editing style of the Edit method.  If the method
-        ///      is not supported, this will return None.
+        /// Retrieves the editing style of the Edit method.static If the method
+        /// is not supported, this will return None.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
         }
 
-        protected virtual string GetFileDialogDescription()
-        {
-            return SR.imageFileDescription;
-        }
+        protected virtual string GetFileDialogDescription() => SR.imageFileDescription;
 
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         protected virtual string[] GetExtensions()
         {
-            // We should probably smash them together...
             ArrayList list = new ArrayList();
             for (int i = 0; i < GetImageExtenders().Length; i++)
             {
-                ImageEditor e = (ImageEditor)Activator.CreateInstance(GetImageExtenders()[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);   //.CreateInstance();
+                ImageEditor e = (ImageEditor)Activator.CreateInstance(GetImageExtenders()[i], BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                 if (e.GetType() != typeof(ImageEditor))
+                {
                     list.AddRange(new ArrayList(e.GetExtensions()));
+                }
             }
+
             return (string[])list.ToArray(typeof(string));
         }
 
         /// <summary>
-        ///      Determines if this editor supports the painting of a representation
-        ///      of an object's value.
+        /// Determines if this editor supports the painting of a representation
+        /// of an object's value.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
-        public override bool GetPaintValueSupported(ITypeDescriptorContext context)
-        {
-            return true;
-        }
+        public override bool GetPaintValueSupported(ITypeDescriptorContext context) => true;
 
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         protected virtual Image LoadFromStream(Stream stream)
         {
-            //Copy the original stream to a buffer, then wrap a
-            //memory stream around it.  This way we can avoid
-            //locking the file
+            // Copy the original stream to a buffer, then wrap a memory stream around it.
+            // This way we can avoid locking the file
             byte[] buffer = new byte[stream.Length];
             stream.Read(buffer, 0, (int)stream.Length);
             MemoryStream ms = new MemoryStream(buffer);
@@ -156,16 +150,14 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///       Paints a representative value of the given object to the provided
-        ///       canvas. Painting should be done within the boundaries of the
-        ///       provided rectangle.
+        /// Paints a representative value of the given object to the provided
+        /// canvas. Painting should be done within the boundaries of the
+        /// provided rectangle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")] //Benign code
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
+        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign Code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
-            Image image = e.Value as Image;
-            if (image != null)
+            if (e.Value is Image image)
             {
                 Rectangle r = e.Bounds;
                 r.Width--;
@@ -176,4 +168,3 @@ namespace System.Drawing.Design
         }
     }
 }
-
