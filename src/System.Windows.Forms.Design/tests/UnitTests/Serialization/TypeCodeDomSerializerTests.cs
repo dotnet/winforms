@@ -4,11 +4,10 @@
 
 using System.CodeDom;
 using System.CodeDom.Compiler;
-using System.ComponentModel.Design.Serialization;
 using Moq;
 using Xunit;
 
-namespace System.Windows.Forms.Design.Serialization.Tests
+namespace System.ComponentModel.Design.Serialization.Tests
 {
     public class TypeCodeDomSerializerTests
     {
@@ -42,7 +41,11 @@ namespace System.Windows.Forms.Design.Serialization.Tests
             manager.Setup(m => m.Context).Returns(new ContextStack());
             var root = new object();
             var underTest = new TypeCodeDomSerializer();
+#if DEBUG
             Assert.NotNull(underTest.Serialize(manager.Object, root, null));
+#else
+            Assert.Throws<InvalidOperationException>(() => underTest.Deserialize(manager.Object, declaration.Object));
+#endif
         }
 
         [Fact]
@@ -71,7 +74,11 @@ namespace System.Windows.Forms.Design.Serialization.Tests
             manager.Setup(m => m.GetService(typeof(CodeDomProvider))).Returns(codeDomProvider.Object);
             var declaration = new Mock<CodeTypeDeclaration>(MockBehavior.Strict);
             var underTest = new TypeCodeDomSerializer();
+#if DEBUG
             Assert.Throws<CodeDomSerializerException>(() => underTest.Deserialize(manager.Object, declaration.Object));
+#else
+            Assert.Throws<InvalidOperationException>(() => underTest.Deserialize(manager.Object, declaration.Object));
+#endif
         }
     }
 }

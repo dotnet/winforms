@@ -8,10 +8,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
-namespace System.Windows.Forms.Design.Serialization
+namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
     /// This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Design.Serialization
         /// <summary>
         /// This takes the given name and deserializes it from our name table.  Before blindly deserializing it checks the contents of the name table to see if the object already exists within it. We do this because deserializing one object may call back into us through OnResolveName and deserialize another.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
+        [SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private object DeserializeName(IDesignerSerializationManager manager, string name, CodeStatementCollection statements)
         {
             object value = null;
