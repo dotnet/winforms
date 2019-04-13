@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 
@@ -23,12 +22,9 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            Debug.Assert(provider != null, "No service provider; we cannot edit the value");
             if (provider != null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-                Debug.Assert(edSvc != null, "No editor service; we cannot edit the value");
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
                     if (_openFileDialog == null)
                     {
@@ -67,6 +63,11 @@ namespace System.Windows.Forms.Design
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {
+            if (openFileDialog == null)
+            {
+                throw new ArgumentNullException(nameof(openFileDialog));
+            }
+
             openFileDialog.Filter = SR.GenericFileFilter;
             openFileDialog.Title = SR.GenericOpenFile;
         }
