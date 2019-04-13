@@ -50,8 +50,6 @@ namespace System.Windows.Forms.Design
 
         protected sealed class FolderBrowser : Component
         {
-            private static readonly int MAX_PATH = 260;
-
             // Description text to show.
             private string _descriptionText = string.Empty;
 
@@ -84,18 +82,6 @@ namespace System.Windows.Forms.Design
             {
                 get => _descriptionText;
                 set => _descriptionText = value ?? string.Empty;
-            }
-
-            /// <summary>
-            /// Helper function that returns the IMalloc interface used by the shell.
-            /// </summary>
-            private static UnsafeNativeMethods.IMalloc GetSHMalloc()
-            {
-                UnsafeNativeMethods.IMalloc[] malloc = new UnsafeNativeMethods.IMalloc[1];
-
-                UnsafeNativeMethods.Shell32.SHGetMalloc(malloc);
-
-                return malloc[0];
             }
 
             /// <summary>
@@ -136,16 +122,20 @@ namespace System.Windows.Forms.Design
                 }
 
                 IntPtr pidlRet = IntPtr.Zero;
+                IntPtr pszDisplayName = IntPtr.Zero;
+                IntPtr pszSelectedPath = IntPtr.Zero;
 
                 try
                 {
+                    // Construct a BROWSEINFO
                     UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
 
-                    IntPtr buffer = Marshal.AllocHGlobal(MAX_PATH);
+                    pszDisplayName = Marshal.AllocHGlobal(NativeMethods.MAX_PATH * sizeof(char));
+                    pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * sizeof(char));
 
                     bi.pidlRoot = pidlRoot;
                     bi.hwndOwner = hWndOwner;
-                    bi.pszDisplayName = buffer;
+                    bi.pszDisplayName = pszDisplayName;
                     bi.lpszTitle = _descriptionText;
                     bi.ulFlags = mergedOptions;
                     bi.lpfn = IntPtr.Zero;
@@ -160,22 +150,27 @@ namespace System.Windows.Forms.Design
                     }
 
                     // Then retrieve the path from the IDList
-                    UnsafeNativeMethods.Shell32.SHGetPathFromIDList(pidlRet, buffer);
+                    UnsafeNativeMethods.Shell32.SHGetPathFromIDList(pidlRet, ref pszSelectedPath);
 
                     // Convert to a string
-                    DirectoryPath = Marshal.PtrToStringAuto(buffer);
-
-                    // Then free all the stuff we've allocated or the SH API gave us
-                    Marshal.FreeHGlobal(buffer);
+                    DirectoryPath = Marshal.PtrToStringAuto(pszSelectedPath);
                 }
                 finally
                 {
-                    UnsafeNativeMethods.IMalloc malloc = GetSHMalloc();
-                    malloc.Free(pidlRoot);
-
+                    UnsafeNativeMethods.CoTaskMemFree(pidlRoot);
                     if (pidlRet != IntPtr.Zero)
                     {
-                        malloc.Free(pidlRet);
+                        UnsafeNativeMethods.CoTaskMemFree(pidlRet);
+                    }
+
+                    // Then free all the stuff we've allocated or the SH API gave us
+                    if (pszSelectedPath != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(pszSelectedPath);
+                    }
+                    if (pszDisplayName != IntPtr.Zero)
+                    {
+                        Marshal.FreeHGlobal(pszDisplayName);
                     }
                 }
 

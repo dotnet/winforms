@@ -216,16 +216,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///     Helper function that returns the IMalloc interface used by the shell.
-        /// </devdoc>
-        private static UnsafeNativeMethods.IMalloc GetSHMalloc()
-        {
-            UnsafeNativeMethods.IMalloc[] malloc = new UnsafeNativeMethods.IMalloc[1];
-            UnsafeNativeMethods.Shell32.SHGetMalloc(malloc);
-            return malloc[0];
-        }
-    
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
@@ -400,6 +390,7 @@ namespace System.Windows.Forms
 
                 this.callback = null;
             }
+
             return returnValue;
         }
 

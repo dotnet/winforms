@@ -158,6 +158,9 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.Ole32, PreserveSig = false)]
         public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
 
+        [DllImport(ExternDll.Ole32, PreserveSig = false)]
+        public extern static void CoTaskMemFree(IntPtr pv);
+
         [Flags]
         public enum BrowseInfos
         {
@@ -216,18 +219,12 @@ namespace System.Windows.Forms.Design
             //SHSTDAPI SHGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl);
 
             [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            public static extern bool SHGetPathFromIDList(IntPtr pidl, IntPtr pszPath);
+            public static extern bool SHGetPathFromIDList(IntPtr pidl, ref IntPtr pszPath);
             //SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST pidl, LPWSTR pszPath);
 
             [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
             public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);
             //SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
-
-            [DllImport(ExternDll.Shell32)]
-            public static extern int SHGetMalloc([Out] [MarshalAs(UnmanagedType.LPArray)]
-                IMalloc[] ppMalloc);
-
-            //SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
         }
 
         [ComImport]

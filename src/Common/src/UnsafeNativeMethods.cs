@@ -7474,11 +7474,6 @@ namespace System.Windows.Forms {
             
             public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);        
             //SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
-              
-            [DllImport(ExternDll.Shell32)]
-            
-            public static extern int SHGetMalloc([Out, MarshalAs(UnmanagedType.LPArray)] UnsafeNativeMethods.IMalloc[] ppMalloc);
-            //SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
 
             [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
             [DllImport(ExternDll.Shell32, PreserveSig = true)]

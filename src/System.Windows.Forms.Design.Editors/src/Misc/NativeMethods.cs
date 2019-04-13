@@ -4567,5 +4567,7 @@ namespace System.Windows.Forms.Design
         //SendMessage(IntPtr, int, bool, IntPtr), SendMessage(IntPtr, int, IntPtr, ListViewCompareCallback),
         //SendMessageW, SendMessageA, ValidateRect(IntPtr, ref RECT), ValidateRgn(IntPtr, IntPtr)
         //COMRECT.FromXYWH, RECT.FromXYWH
+
+        public const int MAX_PATH = 260;
     }
 }
