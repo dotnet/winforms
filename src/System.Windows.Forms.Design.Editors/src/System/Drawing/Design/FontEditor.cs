@@ -24,13 +24,9 @@ namespace System.Drawing.Design
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            Debug.Assert(provider != null, "No service provider; we cannot edit the value");
             if (provider != null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                Debug.Assert(edSvc != null, "No editor service; we cannot edit the value");
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
                     if (_fontDialog == null)
                     {
