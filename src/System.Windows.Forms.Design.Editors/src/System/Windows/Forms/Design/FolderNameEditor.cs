@@ -10,43 +10,39 @@ using System.Runtime.InteropServices;
 namespace System.Windows.Forms.Design
 {
     /// <summary>>
-    ///         Provides an editor
-    ///         for choosing a folder from the filesystem.
+    /// Provides an editor for choosing a folder from the filesystem.
     /// </summary>
     [CLSCompliant(false)]
     public class FolderNameEditor : UITypeEditor
     {
-        private FolderBrowser folderBrowser;
+        private FolderBrowser _folderBrowser;
 
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (folderBrowser == null)
+            if (_folderBrowser == null)
             {
-                folderBrowser = new FolderBrowser();
-                InitializeDialog(folderBrowser);
+                _folderBrowser = new FolderBrowser();
+                InitializeDialog(_folderBrowser);
             }
 
-            if (folderBrowser.ShowDialog() != DialogResult.OK) return value;
+            if (_folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                return _folderBrowser.DirectoryPath;
+            }
 
-            return folderBrowser.DirectoryPath;
+            return value;
         }
 
         /// <summary>
-        ///     Retrieves the editing style of the Edit method.  If the method
-        ///     is not supported, this will return None.
-        /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // everything in this assembly is full trust.
+        /// Retrieves the editing style of the Edit method.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.Modal;
         }
 
         /// <summary>
-        ///     Initializes the folder browser dialog when it is created.  This gives you
-        ///     an opportunity to configure the dialog as you please.  The default
-        ///     implementation provides a generic folder browser.
+        /// Initializes the folder browser dialog when it is created. This gives you an opportunity
+        /// to configure the dialog as you please. The default implementation provides a generic folder browser.
         /// </summary>
         protected virtual void InitializeDialog(FolderBrowser folderBrowser)
         {
@@ -57,41 +53,41 @@ namespace System.Windows.Forms.Design
             private static readonly int MAX_PATH = 260;
 
             // Description text to show.
-            private string descriptionText = string.Empty;
+            private string _descriptionText = string.Empty;
 
             // Folder picked by the user.
-            private readonly UnsafeNativeMethods.BrowseInfos privateOptions =
+            private readonly UnsafeNativeMethods.BrowseInfos _privateOptions =
                 UnsafeNativeMethods.BrowseInfos.NewDialogStyle;
 
             /// <summary>
-            ///     The styles the folder browser will use when browsing
-            ///     folders.  This should be a combination of flags from
-            ///     the FolderBrowserStyles enum.
+            /// The styles the folder browser will use when browsing
+            /// folders. This should be a combination of flags from
+            /// the FolderBrowserStyles enum.
             /// </summary>
             public FolderBrowserStyles Style { get; set; } = FolderBrowserStyles.RestrictToFilesystem;
 
             /// <summary>
-            ///     Gets the directory path of the folder the user picked.
+            /// Gets the directory path of the folder the user picked.
             /// </summary>
             public string DirectoryPath { get; private set; } = string.Empty;
 
             /// <summary>
-            ///     Gets/sets the start location of the root node.
+            /// Gets/sets the start location of the root node.
             /// </summary>
             public FolderBrowserFolder StartLocation { get; set; } = FolderBrowserFolder.Desktop;
 
             /// <summary>>
-            ///         Gets or sets a description to show above the folders. Here you can provide instructions for
-            ///         selecting a folder.
+            /// Gets or sets a description to show above the folders. Here you can provide instructions for
+            /// selecting a folder.
             /// </summary>
             public string Description
             {
-                get => descriptionText;
-                set => descriptionText = value == null ? string.Empty : value;
+                get => _descriptionText;
+                set => _descriptionText = value ?? string.Empty;
             }
 
             /// <summary>
-            ///     Helper function that returns the IMalloc interface used by the shell.
+            /// Helper function that returns the IMalloc interface used by the shell.
             /// </summary>
             private static UnsafeNativeMethods.IMalloc GetSHMalloc()
             {
@@ -103,15 +99,12 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///     Shows the folder browser dialog.
+            /// Shows the folder browser dialog.
             /// </summary>
-            public DialogResult ShowDialog()
-            {
-                return ShowDialog(null);
-            }
+            public DialogResult ShowDialog() => ShowDialog(null);
 
             /// <summary>
-            ///     Shows the folder browser dialog with the specified owner.
+            /// Shows the folder browser dialog with the specified owner.
             /// </summary>
             public DialogResult ShowDialog(IWin32Window owner)
             {
@@ -121,25 +114,31 @@ namespace System.Windows.Forms.Design
                 IntPtr hWndOwner;
 
                 if (owner != null)
+                {
                     hWndOwner = owner.Handle;
+                }
                 else
+                {
                     hWndOwner = UnsafeNativeMethods.GetActiveWindow();
+                }
 
                 // Get the IDL for the specific startLocation
                 UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, ref pidlRoot);
+                if (pidlRoot == IntPtr.Zero)
+                {
+                    return DialogResult.Cancel;
+                }
 
-                if (pidlRoot == IntPtr.Zero) return DialogResult.Cancel;
-
-                int mergedOptions = (int)Style | (int)privateOptions;
-
+                int mergedOptions = (int)Style | (int)_privateOptions;
                 if ((mergedOptions & (int)UnsafeNativeMethods.BrowseInfos.NewDialogStyle) != 0)
+                {
                     Application.OleRequired();
+                }
 
                 IntPtr pidlRet = IntPtr.Zero;
 
                 try
                 {
-                    // Construct a BROWSEINFO
                     UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
 
                     IntPtr buffer = Marshal.AllocHGlobal(MAX_PATH);
@@ -147,7 +146,7 @@ namespace System.Windows.Forms.Design
                     bi.pidlRoot = pidlRoot;
                     bi.hwndOwner = hWndOwner;
                     bi.pszDisplayName = buffer;
-                    bi.lpszTitle = descriptionText;
+                    bi.lpszTitle = _descriptionText;
                     bi.ulFlags = mergedOptions;
                     bi.lpfn = IntPtr.Zero;
                     bi.lParam = IntPtr.Zero;
@@ -155,8 +154,10 @@ namespace System.Windows.Forms.Design
 
                     // And show the dialog
                     pidlRet = UnsafeNativeMethods.Shell32.SHBrowseForFolder(bi);
-
-                    if (pidlRet == IntPtr.Zero) return DialogResult.Cancel;
+                    if (pidlRet == IntPtr.Zero)
+                    {
+                        return DialogResult.Cancel;
+                    }
 
                     // Then retrieve the path from the IDList
                     UnsafeNativeMethods.Shell32.SHGetPathFromIDList(pidlRet, buffer);
@@ -172,7 +173,10 @@ namespace System.Windows.Forms.Design
                     UnsafeNativeMethods.IMalloc malloc = GetSHMalloc();
                     malloc.Free(pidlRoot);
 
-                    if (pidlRet != IntPtr.Zero) malloc.Free(pidlRet);
+                    if (pidlRet != IntPtr.Zero)
+                    {
+                        malloc.Free(pidlRet);
+                    }
                 }
 
                 return DialogResult.OK;
