@@ -2180,37 +2180,32 @@ namespace System.Windows.Forms {
             return GetNextItem(start, direction);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GetNextItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets the next item from the given start item in the direction specified.
         ///   - This function wraps if at the end
         ///   - This function will only surf the items in the current container
         ///   - Overriding this function will change the tab ordering and accessible child ordering.
-        /// </devdoc>
+        /// </summary>
         public virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction)
         {
-            if (!WindowsFormsUtils.EnumValidator.IsValidArrowDirection(direction)) {
-                throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
-            }
-
-            switch (direction) {
+            switch (direction)
+            {
                 case ArrowDirection.Right:
-                    return GetNextItemHorizontal(start, /*forward = */true);
+                    return GetNextItemHorizontal(start, forward: true);
                 case ArrowDirection.Left:
-                    return GetNextItemHorizontal(start, /*forward = */false);
+                    return GetNextItemHorizontal(start, forward: false);
                 case ArrowDirection.Down:
-                    return GetNextItemVertical(start, /*forward = */true);
+                    return GetNextItemVertical(start, down: true);
                 case ArrowDirection.Up:
-                    return GetNextItemVertical(start, /*forward = */false);
+                    return GetNextItemVertical(start, down: false);
+                default:
+                    throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
             }
-
-            return null;
        }
 
-
-        // <devdoc>
-        //  Helper function for GetNextItem - do not directly call this.
-        // </devdoc>
+        /// <remarks>
+        /// Helper function for GetNextItem - do not directly call this.
+        /// </remarks>
         private ToolStripItem GetNextItemHorizontal(ToolStripItem start, bool forward) {
 
             if (DisplayedItems.Count <= 0)
@@ -2261,12 +2256,9 @@ namespace System.Windows.Forms {
             return null;
         }
 
-
-
-
-       // <devdoc>
-       //  Helper function for GetNextItem - do not directly call this.
-       // </devdoc>       
+       /// <remarks>
+       ///  Helper function for GetNextItem - do not directly call this.
+       /// </remarks>       
        [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
        private ToolStripItem GetNextItemVertical(ToolStripItem selectedItem, bool down) {
      

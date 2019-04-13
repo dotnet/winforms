@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -41,6 +43,28 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(ts.Items);
             Assert.Single(ts.Items);
             Assert.Equal(button, ts.Items[0]);
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ArrowDirection))]
+        public void ToolStrip_GetNextItem_NoItems_ReturnsNull(ArrowDirection direction)
+        {
+            var toolStrip = new ToolStrip();
+            Assert.Null(toolStrip.GetNextItem(new SubToolStripItem(), direction));
+            Assert.Null(toolStrip.GetNextItem(null, direction));
+        }
+
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ArrowDirection))]
+        public void ToolStrip_GetNextItem_InvalidDirection_ThrowsInvalidEnumArgumentException(ArrowDirection direction)
+        {
+            var toolStrip = new ToolStrip();
+            Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(new SubToolStripItem(), direction));
+            Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(null, direction));
+        }
+
+        private class SubToolStripItem : ToolStripItem
+        {
         }
     }
 }

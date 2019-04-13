@@ -2278,20 +2278,22 @@ namespace System.Windows.Forms {
              }
         }
 
-        /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextImageRelation"]/*' />
-        [DefaultValue(TextImageRelation.ImageBeforeText),
-        Localizable(true),
-        SRDescription(nameof(SR.ToolStripItemTextImageRelationDescr)),
-        SRCategory(nameof(SR.CatAppearance))]
-        public TextImageRelation TextImageRelation {
-            get {
-                return textImageRelation;
-            }
-            set {
-                if (!WindowsFormsUtils.EnumValidator.IsValidTextImageRelation(value)) {
+        [DefaultValue(TextImageRelation.ImageBeforeText)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ToolStripItemTextImageRelationDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public TextImageRelation TextImageRelation
+        {
+            get => textImageRelation;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage, 1))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
                 }
-                if(value != TextImageRelation) {
+
+                if(value != TextImageRelation)
+                {
                     textImageRelation = value;
                     InvalidateItemLayout(PropertyNames.TextImageRelation);
                 }                
