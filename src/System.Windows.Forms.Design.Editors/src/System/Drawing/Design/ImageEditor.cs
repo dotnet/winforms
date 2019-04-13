@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 
@@ -34,18 +35,34 @@ namespace System.Drawing.Design
                 return null;
             }
 
-            string text = null;
-            for (int i = 0; i < extensions.Length - 1; i++)
+            var text = new StringBuilder();
+            for (int i = 0; i < extensions.Length; i++)
             {
-                text = text + "*." + extensions[i] + sep;
+                // Skip empty extensions.
+                if (string.IsNullOrEmpty(extensions[i]))
+                {
+                    continue;
+                }
+
+                text.Append("*.");
+                text.Append(extensions[i]);
+                if (i != extensions.Length - 1)
+                {
+                    text.Append(sep);
+                }
             }
 
-            return text + "*." + extensions[extensions.Length - 1];
+            return text.ToString();
         }
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Shipped as public API")]
         protected static string CreateFilterEntry(ImageEditor e)
         {
+            if (e == null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
             string[] extenders = e.GetExtensions();
             string desc = e.GetFileDialogDescription();
             string exts = CreateExtensionsString(extenders, ",");
@@ -63,9 +80,7 @@ namespace System.Drawing.Design
         {
             if (provider != null)
             {
-                IWindowsFormsEditorService edSvc = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
-
-                if (edSvc != null)
+                if (provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc)
                 {
                     if (_fileDialog == null)
                     {
@@ -73,6 +88,12 @@ namespace System.Drawing.Design
                         string filter = CreateFilterEntry(this);
                         foreach (Type extender in GetImageExtenders())
                         {
+                            // Skip invalid extenders.
+                            if (extender == null || !typeof(ImageEditor).IsAssignableFrom(extender))
+                            {
+                                continue;
+                            }
+
                             ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                             Type myClass = GetType();
                             if (!myClass.Equals(e.GetType()) && e != null && myClass.IsInstanceOfType(e))
@@ -124,10 +145,20 @@ namespace System.Drawing.Design
             ArrayList list = new ArrayList();
             foreach (Type extender in GetImageExtenders())
             {
+                // Skip invalid extenders.
+                if (extender == null || !typeof(ImageEditor).IsAssignableFrom(extender))
+                {
+                    continue;
+                }
+
                 ImageEditor e = (ImageEditor)Activator.CreateInstance(extender, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance, null, null, null);
                 if (e.GetType() != typeof(ImageEditor))
                 {
-                    list.AddRange(e.GetExtensions());
+                    string[] extensions = e.GetExtensions();
+                    if (extensions != null)
+                    {
+                        list.AddRange(extensions);
+                    }
                 }
             }
 
@@ -142,6 +173,11 @@ namespace System.Drawing.Design
 
         protected virtual Image LoadFromStream(Stream stream)
         {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             // Copy the original stream to a new memory stream to avoid locking the file.
             using (var memoryStream = new MemoryStream())
             {
@@ -158,7 +194,7 @@ namespace System.Drawing.Design
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign Code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
-            if (e.Value is Image image)
+            if (e?.Value is Image image)
             {
                 Rectangle r = e.Bounds;
                 r.Width--;
