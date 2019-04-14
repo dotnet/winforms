@@ -158,9 +158,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.Ole32, PreserveSig = false)]
         public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
 
-        [DllImport(ExternDll.Ole32, PreserveSig = false)]
-        public extern static void CoTaskMemFree(IntPtr pv);
-
         [Flags]
         public enum BrowseInfos
         {
@@ -187,68 +184,6 @@ namespace System.Windows.Forms.Design
             BrowseForPrinter = 0x2000, // Browsing for Printers
             BrowseForEverything = 0x4000, // Browsing for Everything
             ShowShares = 0x8000 // sharable resources displayed (remote shares, requires USENEWUI)
-        }
-
-        [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
-        [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class BROWSEINFO
-        {
-            public IntPtr hwndOwner; //HWND        hwndOwner;    // HWND of the owner for the dialog
-
-            public int
-                iImage; //int          iImage;                      // output var: where to return the Image index.
-
-            public IntPtr
-                lParam; //LPARAM       lParam;                      // extra info that's passed back in callbacks
-
-            public IntPtr lpfn; //BFFCALLBACK  lpfn;            // Call back pointer
-
-            public string lpszTitle; //LPCWSTR      lpszTitle;           // text to go in the banner over the tree.
-            public IntPtr pidlRoot; //LPCITEMIDLIST pidlRoot;   // Root ITEMIDLIST
-
-            // For interop purposes, send over a buffer of MAX_PATH size. 
-            public IntPtr pszDisplayName; //LPWSTR       pszDisplayName;      // Return display name of item selected.
-            public int ulFlags; //UINT         ulFlags;                     // Flags that control the return stuff
-        }
-
-        public class Shell32
-        {
-            [DllImport(ExternDll.Shell32)]
-            public static extern int SHGetSpecialFolderLocation(IntPtr hwnd, int csidl, ref IntPtr ppidl);
-            //SHSTDAPI SHGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl);
-
-            [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            public static extern bool SHGetPathFromIDList(IntPtr pidl, ref IntPtr pszPath);
-            //SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST pidl, LPWSTR pszPath);
-
-            [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);
-            //SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
-        }
-
-        [ComImport]
-        [Guid("00000002-0000-0000-c000-000000000046")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IMalloc
-        {
-            [PreserveSig]
-            IntPtr Alloc(int cb);
-
-            [PreserveSig]
-            IntPtr Realloc(IntPtr pv, int cb);
-
-            [PreserveSig]
-            void Free(IntPtr pv);
-
-            [PreserveSig]
-            int GetSize(IntPtr pv);
-
-            [PreserveSig]
-            int DidAlloc(IntPtr pv);
-
-            [PreserveSig]
-            void HeapMinimize();
         }
 
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]

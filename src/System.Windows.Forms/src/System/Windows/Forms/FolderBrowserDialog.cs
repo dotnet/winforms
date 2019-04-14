@@ -44,9 +44,6 @@ namespace System.Windows.Forms
         // Show the 'New Folder' button?
         private bool showNewFolderButton;
 
-        // Callback function for the folder browser dialog
-        private UnsafeNativeMethods.BrowseCallbackProc callback;
-
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.FolderBrowserDialog"]/*' />
         /// <devdoc>
         ///    <para>
@@ -309,10 +306,10 @@ namespace System.Windows.Forms
             IntPtr pidlRoot = IntPtr.Zero;
             bool returnValue = false;
 
-            UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, ref pidlRoot);
+            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, ref pidlRoot);
             if (pidlRoot == IntPtr.Zero)
             {
-                UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, NativeMethods.CSIDL_DESKTOP, ref pidlRoot);
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, NativeMethods.CSIDL_DESKTOP, ref pidlRoot);
                 if (pidlRoot == IntPtr.Zero)
                 {
                     throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);
@@ -340,29 +337,26 @@ namespace System.Windows.Forms
 
             try
             {
-                // Construct a BROWSEINFO
-                UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
+                pszDisplayName = Marshal.AllocHGlobal(Interop.Kernel32.MAX_PATH * sizeof(char));
+                pszSelectedPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
 
-                pszDisplayName = Marshal.AllocHGlobal(NativeMethods.MAX_PATH * sizeof(char));
-                pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * sizeof(char));
-                this.callback = new UnsafeNativeMethods.BrowseCallbackProc(this.FolderBrowserDialog_BrowseCallbackProc);
-
+                var bi = new Interop.Shell32.BROWSEINFO();
                 bi.pidlRoot = pidlRoot;
                 bi.hwndOwner = hWndOwner;
                 bi.pszDisplayName = pszDisplayName;
                 bi.lpszTitle = descriptionText;
                 bi.ulFlags = mergedOptions;
-                bi.lpfn = callback;
+                bi.lpfn = new Interop.Shell32.BrowseCallbackProc(this.FolderBrowserDialog_BrowseCallbackProc);
                 bi.lParam = IntPtr.Zero;
                 bi.iImage = 0;
 
                 // And show the dialog
-                pidlRet = UnsafeNativeMethods.Shell32.SHBrowseForFolder(bi);
+                pidlRet = Interop.Shell32.SHBrowseForFolder(bi);
 
                 if (pidlRet != IntPtr.Zero)
                 {
                     // Then retrieve the path from the IDList
-                    UnsafeNativeMethods.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
+                    Interop.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
 
                     // Convert to a string
                     selectedPath = Marshal.PtrToStringAuto(pszSelectedPath);
@@ -372,23 +366,12 @@ namespace System.Windows.Forms
             }
             finally
             {
-                UnsafeNativeMethods.CoTaskMemFree(pidlRoot);
-                if (pidlRet != IntPtr.Zero)
-                {
-                    UnsafeNativeMethods.CoTaskMemFree(pidlRet);
-                }
+                Marshal.FreeCoTaskMem(pidlRoot);
+                Marshal.FreeCoTaskMem(pidlRet);
 
                 // Then free all the stuff we've allocated or the SH API gave us
-                if (pszSelectedPath != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(pszSelectedPath);
-                }
-                if (pszDisplayName != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(pszDisplayName);
-                }
-
-                this.callback = null;
+                Marshal.FreeHGlobal(pszSelectedPath);
+                Marshal.FreeHGlobal(pszDisplayName);
             }
 
             return returnValue;
@@ -418,9 +401,9 @@ namespace System.Windows.Forms
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {
-                        IntPtr pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * sizeof(char));
+                        IntPtr pszSelectedPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = UnsafeNativeMethods.Shell32.SHGetPathFromIDListLongPath(selectedPidl, ref pszSelectedPath);
+                        bool isFileSystemFolder = Interop.Shell32.SHGetPathFromIDListLongPath(selectedPidl, ref pszSelectedPath);
                         Marshal.FreeHGlobal(pszSelectedPath);
                         UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int) NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
                     }

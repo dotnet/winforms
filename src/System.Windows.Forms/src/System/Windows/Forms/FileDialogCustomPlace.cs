@@ -102,19 +102,15 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            StringBuilder path = new StringBuilder();
-
-            int result = UnsafeNativeMethods.Shell32.SHGetFolderPathEx(ref folderGuid, 0, IntPtr.Zero, path);
-            if (NativeMethods.S_OK == result) 
+            var path = new StringBuilder();
+            int result = Interop.Shell32.SHGetFolderPathEx(ref folderGuid, 0, IntPtr.Zero, path);
+            if (result == Interop.HRESULT.S_OK) 
             {
-                string ret = path.ToString();
-                return ret;
+                return path.ToString();
             }
-            else
-            {
-                // 0x80070002 is an explicit FileNotFound error.
-                return null;
-            }
+            
+            // 0x80070002 is an explicit FileNotFound error.
+            return null;
         }
     }
 }

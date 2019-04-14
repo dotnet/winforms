@@ -1007,8 +1007,6 @@ namespace System.Windows.Forms {
 
 
         public const int MEMBERID_NIL = (-1),
-        MAX_PATH = 260,
-        MAX_UNICODESTRING_LEN =  short.MaxValue, // maximum unicode string length 
         ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
         MA_ACTIVATE = 0x0001,
         MA_ACTIVATEANDEAT = 0x0002,
@@ -3270,9 +3268,9 @@ namespace System.Windows.Forms {
             public int      nMaxCustFilter = 0;
             public int      nFilterIndex;
             public IntPtr   lpstrFile;
-            public int      nMaxFile = NativeMethods.MAX_PATH;
+            public int      nMaxFile = Interop.Kernel32.MAX_PATH;
             public IntPtr   lpstrFileTitle = IntPtr.Zero;
-            public int      nMaxFileTitle = NativeMethods.MAX_PATH;
+            public int      nMaxFileTitle = Interop.Kernel32.MAX_PATH;
             public string   lpstrInitialDir;
             public string   lpstrTitle;
             public int      Flags;

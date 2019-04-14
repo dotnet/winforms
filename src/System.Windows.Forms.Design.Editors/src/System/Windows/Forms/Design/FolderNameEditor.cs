@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 // Get the IDL for the specific startLocation
-                UnsafeNativeMethods.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, ref pidlRoot);
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, ref pidlRoot);
                 if (pidlRoot == IntPtr.Zero)
                 {
                     return DialogResult.Cancel;
@@ -127,51 +127,40 @@ namespace System.Windows.Forms.Design
 
                 try
                 {
-                    // Construct a BROWSEINFO
-                    UnsafeNativeMethods.BROWSEINFO bi = new UnsafeNativeMethods.BROWSEINFO();
+                    pszDisplayName = Marshal.AllocHGlobal(Interop.Kernel32.MAX_PATH * sizeof(char));
+                    pszSelectedPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
 
-                    pszDisplayName = Marshal.AllocHGlobal(NativeMethods.MAX_PATH * sizeof(char));
-                    pszSelectedPath = Marshal.AllocHGlobal((NativeMethods.MAX_PATH + 1) * sizeof(char));
-
+                    var bi = new Interop.Shell32.BROWSEINFO();
                     bi.pidlRoot = pidlRoot;
                     bi.hwndOwner = hWndOwner;
                     bi.pszDisplayName = pszDisplayName;
                     bi.lpszTitle = _descriptionText;
                     bi.ulFlags = mergedOptions;
-                    bi.lpfn = IntPtr.Zero;
+                    bi.lpfn = null;
                     bi.lParam = IntPtr.Zero;
                     bi.iImage = 0;
 
                     // And show the dialog
-                    pidlRet = UnsafeNativeMethods.Shell32.SHBrowseForFolder(bi);
+                    pidlRet = Interop.Shell32.SHBrowseForFolder(bi);
                     if (pidlRet == IntPtr.Zero)
                     {
                         return DialogResult.Cancel;
                     }
 
                     // Then retrieve the path from the IDList
-                    UnsafeNativeMethods.Shell32.SHGetPathFromIDList(pidlRet, ref pszSelectedPath);
+                    Interop.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
 
                     // Convert to a string
                     DirectoryPath = Marshal.PtrToStringAuto(pszSelectedPath);
                 }
                 finally
                 {
-                    UnsafeNativeMethods.CoTaskMemFree(pidlRoot);
-                    if (pidlRet != IntPtr.Zero)
-                    {
-                        UnsafeNativeMethods.CoTaskMemFree(pidlRet);
-                    }
+                    Marshal.FreeCoTaskMem(pidlRoot);
+                    Marshal.FreeCoTaskMem(pidlRet);
 
                     // Then free all the stuff we've allocated or the SH API gave us
-                    if (pszSelectedPath != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(pszSelectedPath);
-                    }
-                    if (pszDisplayName != IntPtr.Zero)
-                    {
-                        Marshal.FreeHGlobal(pszDisplayName);
-                    }
+                    Marshal.FreeHGlobal(pszSelectedPath);
+                    Marshal.FreeHGlobal(pszDisplayName);
                 }
 
                 return DialogResult.OK;

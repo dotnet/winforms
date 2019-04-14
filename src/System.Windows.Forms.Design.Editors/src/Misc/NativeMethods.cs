@@ -766,19 +766,6 @@ namespace System.Windows.Forms.Design
 
         [ComVisible(true)]
         [ComImport]
-        [Guid("B722BCC7-4E68-101B-A2BC-00AA00404770")]
-        [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IOleDocumentSite
-        {
-            [return: MarshalAs(UnmanagedType.I4)]
-            [PreserveSig]
-            int ActivateMe(
-                [In] [MarshalAs(UnmanagedType.Interface)]
-                IOleDocumentView pViewToActivate);
-        }
-
-        [ComVisible(true)]
-        [ComImport]
         [Guid("B722BCC6-4E68-101B-A2BC-00AA00404770")]
         [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
         public interface IOleDocumentView
