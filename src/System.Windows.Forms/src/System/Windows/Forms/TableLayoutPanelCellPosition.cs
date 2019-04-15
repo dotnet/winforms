@@ -147,10 +147,21 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(propertyValues));
             }
 
-            return new TableLayoutPanelCellPosition(
-                (int)propertyValues["Column"],
-                (int)propertyValues["Row"]
-            );
+            try
+            {
+                return new TableLayoutPanelCellPosition(
+                    (int)propertyValues["Column"],
+                    (int)propertyValues["Row"]
+                );
+            }
+            catch (InvalidCastException invalidCast)
+            {
+                throw new ArgumentException(SR.PropertyValueInvalidEntry, nameof(propertyValues), invalidCast);
+            }
+            catch (NullReferenceException nullRef)
+            {
+                throw new ArgumentException(SR.PropertyValueInvalidEntry, nameof(propertyValues), nullRef);
+            }
         }
         
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext context) {
