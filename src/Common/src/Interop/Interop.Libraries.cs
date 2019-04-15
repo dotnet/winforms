@@ -4,7 +4,7 @@
 
 internal static partial class Interop
 {
-    internal static partial class Libraries
+    public static partial class Libraries
     {
         internal const string Kernel32 = "kernel32.dll";
         internal const string Gdi32 = "gdi32.dll";

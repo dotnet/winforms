@@ -4,7 +4,7 @@
 
 internal static partial class Interop
 {
-    internal static class HRESULT
+    public static class HRESULT
     {
         public const int S_OK = 0;
     }

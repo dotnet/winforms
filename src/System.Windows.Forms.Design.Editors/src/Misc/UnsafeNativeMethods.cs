@@ -158,34 +158,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.Ole32, PreserveSig = false)]
         public static extern IStorage StgCreateDocfileOnILockBytes(ILockBytes iLockBytes, int grfMode, int reserved);
 
-        [Flags]
-        public enum BrowseInfos
-        {
-            // Browsing for directory.
-            ReturnOnlyFSDirs = 0x0001, // For finding a folder to start document searching
-            DontGoBelowDomain = 0x0002, // For starting the Find Computer
-            StatusText = 0x0004, // Top of the dialog has 2 lines of text for BROWSEINFO.lpszTitle and one line if
-
-            // this flag is set.  Passing the message BFFM_SETSTATUSTEXTA to the hwnd can set the
-            // rest of the text.  This is not used with USENEWUI and BROWSEINFO.lpszTitle gets
-            // all three lines of text.
-            ReturnFSAncestors = 0x0008,
-            EditBox = 0x0010, // Add an editbox to the dialog
-            Validate = 0x0020, // insist on valid result (or CANCEL)
-
-            NewDialogStyle = 0x0040, // Use the new dialog layout with the ability to resize
-            // Caller needs to call OleInitialize() before using this API
-
-            UseNewUI = NewDialogStyle | EditBox,
-
-            AllowUrls = 0x0080, // Allow URLs to be displayed or entered. (Requires USENEWUI)
-
-            BrowseForComputer = 0x1000, // Browsing for Computers.
-            BrowseForPrinter = 0x2000, // Browsing for Printers
-            BrowseForEverything = 0x4000, // Browsing for Everything
-            ShowShares = 0x8000 // sharable resources displayed (remote shares, requires USENEWUI)
-        }
-
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
         public struct PAINTSTRUCT

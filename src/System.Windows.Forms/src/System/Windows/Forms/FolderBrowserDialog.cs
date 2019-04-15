@@ -8,6 +8,7 @@ namespace System.Windows.Forms
 {
     using System;
     using System.IO;
+    using System.Buffers;
     using System.Collections;
     using System.ComponentModel;
     using System.Drawing;
@@ -16,7 +17,8 @@ namespace System.Windows.Forms
     using System.Runtime.InteropServices;
     using System.Security.Permissions;
     using System.Diagnostics.CodeAnalysis;
-    
+    using Microsoft.Win32.SafeHandles;
+
     /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog"]/*' />
     /// <devdoc>
     ///    <para>
@@ -301,80 +303,73 @@ namespace System.Windows.Forms
             item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out selectedPath);
         }
 
-        private bool RunDialogOld(IntPtr hWndOwner)
+        private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
-            IntPtr pidlRoot = IntPtr.Zero;
-            bool returnValue = false;
+            CoTaskMemSafeHandle listHandle;
 
-            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, ref pidlRoot);
-            if (pidlRoot == IntPtr.Zero)
+            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, out listHandle);
+            if (listHandle.IsInvalid)
             {
-                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, NativeMethods.CSIDL_DESKTOP, ref pidlRoot);
-                if (pidlRoot == IntPtr.Zero)
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
+                if (listHandle.IsInvalid)
                 {
                     throw new InvalidOperationException(SR.FolderBrowserDialogNoRootFolder);
                 }
             }
 
-            int mergedOptions = unchecked((int)(long)UnsafeNativeMethods.BrowseInfos.NewDialogStyle);
-            if (!showNewFolderButton)
+            using (listHandle)
             {
-                mergedOptions += unchecked((int)(long)UnsafeNativeMethods.BrowseInfos.HideNewFolderButton);
-            }
-
-            // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
-            // threading model if the BIF_NEWDIALOGSTYLE flag has been requested (which we always do in mergedOptions
-            // above). So make sure OLE is initialized, and throw an exception if caller attempts to invoke dialog
-            // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
-            if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
-            {
-                throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
-            }
-
-            IntPtr pidlRet = IntPtr.Zero;
-            IntPtr pszDisplayName = IntPtr.Zero;
-            IntPtr pszSelectedPath = IntPtr.Zero;
-
-            try
-            {
-                pszDisplayName = Marshal.AllocHGlobal(Interop.Kernel32.MAX_PATH * sizeof(char));
-                pszSelectedPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
-
-                var bi = new Interop.Shell32.BROWSEINFO();
-                bi.pidlRoot = pidlRoot;
-                bi.hwndOwner = hWndOwner;
-                bi.pszDisplayName = pszDisplayName;
-                bi.lpszTitle = descriptionText;
-                bi.ulFlags = mergedOptions;
-                bi.lpfn = new Interop.Shell32.BrowseCallbackProc(this.FolderBrowserDialog_BrowseCallbackProc);
-                bi.lParam = IntPtr.Zero;
-                bi.iImage = 0;
-
-                // And show the dialog
-                pidlRet = Interop.Shell32.SHBrowseForFolder(bi);
-
-                if (pidlRet != IntPtr.Zero)
+                uint mergedOptions = Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+                if (!showNewFolderButton)
                 {
-                    // Then retrieve the path from the IDList
-                    Interop.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
+                    mergedOptions |= Interop.Shell32.BrowseInfoFlags.BIF_NONEWFOLDERBUTTON;
+                }
 
-                    // Convert to a string
-                    selectedPath = Marshal.PtrToStringAuto(pszSelectedPath);
+                // The SHBrowserForFolder dialog is OLE/COM based, and documented as only being safe to use under the STA
+                // threading model if the BIF_NEWDIALOGSTYLE flag has been requested (which we always do in mergedOptions
+                // above). So make sure OLE is initialized, and throw an exception if caller attempts to invoke dialog
+                // under the MTA threading model (...dialog does appear under MTA, but is totally non-functional).
+                if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
+                {
+                    throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                }
 
-                    returnValue = true;
+                var callback = new Interop.Shell32.BrowseCallbackProc(FolderBrowserDialog_BrowseCallbackProc);
+                char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
+                try
+                {
+                    fixed (char *pDisplayName = displayName)
+                    {
+                        var bi = new Interop.Shell32.BROWSEINFO();
+                        bi.pidlRoot = listHandle;
+                        bi.hwndOwner = hWndOwner;
+                        bi.pszDisplayName = pDisplayName;
+                        bi.lpszTitle = descriptionText;
+                        bi.ulFlags = mergedOptions;
+                        bi.lpfn = callback;
+                        bi.lParam = IntPtr.Zero;
+                        bi.iImage = 0;
+
+                        // Show the dialog
+                        using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))
+                        {
+                            if (browseHandle.IsInvalid)
+                            {
+                                return false;
+                            }
+                
+                            // Retrieve the path from the IDList.
+                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out selectedPath);
+                            GC.KeepAlive(callback);
+                            return true;
+                        }
+                    }
+                }
+                finally
+                {
+                    ArrayPool<char>.Shared.Return(displayName);
                 }
             }
-            finally
-            {
-                Marshal.FreeCoTaskMem(pidlRoot);
-                Marshal.FreeCoTaskMem(pidlRet);
-
-                // Then free all the stuff we've allocated or the SH API gave us
-                Marshal.FreeHGlobal(pszSelectedPath);
-                Marshal.FreeHGlobal(pszDisplayName);
-            }
-
-            return returnValue;
         }
 
         /// <devdoc>
@@ -401,10 +396,8 @@ namespace System.Windows.Forms
                     IntPtr selectedPidl = lParam;
                     if (selectedPidl != IntPtr.Zero)
                     {
-                        IntPtr pszSelectedPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
                         // Try to retrieve the path from the IDList
-                        bool isFileSystemFolder = Interop.Shell32.SHGetPathFromIDListLongPath(selectedPidl, ref pszSelectedPath);
-                        Marshal.FreeHGlobal(pszSelectedPath);
+                        bool isFileSystemFolder = Interop.Shell32.SHGetPathFromIDListLongPath(selectedPidl, out _);
                         UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int) NativeMethods.BFFM_ENABLEOK, 0, isFileSystemFolder ? 1 : 0);
                     }
                     break;

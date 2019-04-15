@@ -2,10 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace System.Windows.Forms.Design
 {
@@ -53,10 +55,6 @@ namespace System.Windows.Forms.Design
             // Description text to show.
             private string _descriptionText = string.Empty;
 
-            // Folder picked by the user.
-            private readonly UnsafeNativeMethods.BrowseInfos _privateOptions =
-                UnsafeNativeMethods.BrowseInfos.NewDialogStyle;
-
             /// <summary>
             /// The styles the folder browser will use when browsing
             /// folders. This should be a combination of flags from
@@ -92,78 +90,62 @@ namespace System.Windows.Forms.Design
             /// <summary>
             /// Shows the folder browser dialog with the specified owner.
             /// </summary>
-            public DialogResult ShowDialog(IWin32Window owner)
+            public unsafe DialogResult ShowDialog(IWin32Window owner)
             {
-                IntPtr pidlRoot = IntPtr.Zero;
-
                 // Get/find an owner HWND for this dialog
-                IntPtr hWndOwner;
-
-                if (owner != null)
-                {
-                    hWndOwner = owner.Handle;
-                }
-                else
-                {
-                    hWndOwner = UnsafeNativeMethods.GetActiveWindow();
-                }
+                IntPtr hWndOwner = owner == null ? owner.Handle : UnsafeNativeMethods.GetActiveWindow();
 
                 // Get the IDL for the specific startLocation
-                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, ref pidlRoot);
-                if (pidlRoot == IntPtr.Zero)
+                CoTaskMemSafeHandle listHandle;
+                Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)StartLocation, out listHandle);
+                if (listHandle.IsInvalid)
                 {
                     return DialogResult.Cancel;
                 }
 
-                int mergedOptions = (int)Style | (int)_privateOptions;
-                if ((mergedOptions & (int)UnsafeNativeMethods.BrowseInfos.NewDialogStyle) != 0)
+                using (listHandle)
                 {
-                    Application.OleRequired();
-                }
-
-                IntPtr pidlRet = IntPtr.Zero;
-                IntPtr pszDisplayName = IntPtr.Zero;
-                IntPtr pszSelectedPath = IntPtr.Zero;
-
-                try
-                {
-                    pszDisplayName = Marshal.AllocHGlobal(Interop.Kernel32.MAX_PATH * sizeof(char));
-                    pszSelectedPath = Marshal.AllocHGlobal((Interop.Kernel32.MAX_PATH + 1) * sizeof(char));
-
-                    var bi = new Interop.Shell32.BROWSEINFO();
-                    bi.pidlRoot = pidlRoot;
-                    bi.hwndOwner = hWndOwner;
-                    bi.pszDisplayName = pszDisplayName;
-                    bi.lpszTitle = _descriptionText;
-                    bi.ulFlags = mergedOptions;
-                    bi.lpfn = null;
-                    bi.lParam = IntPtr.Zero;
-                    bi.iImage = 0;
-
-                    // And show the dialog
-                    pidlRet = Interop.Shell32.SHBrowseForFolder(bi);
-                    if (pidlRet == IntPtr.Zero)
+                    uint mergedOptions = (uint)Style | Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE;
+                    if ((mergedOptions & (int)Interop.Shell32.BrowseInfoFlags.BIF_NEWDIALOGSTYLE) != 0)
                     {
-                        return DialogResult.Cancel;
+                        Application.OleRequired();
                     }
 
-                    // Then retrieve the path from the IDList
-                    Interop.Shell32.SHGetPathFromIDListLongPath(pidlRet, ref pszSelectedPath);
+                    char[] displayName = ArrayPool<char>.Shared.Rent(Interop.Kernel32.MAX_PATH + 1);
+                    try
+                    {
+                        fixed (char *pDisplayName = displayName)
+                        {
+                            var bi = new Interop.Shell32.BROWSEINFO();
+                            bi.pidlRoot = listHandle;
+                            bi.hwndOwner = hWndOwner;
+                            bi.pszDisplayName = pDisplayName;
+                            bi.lpszTitle = _descriptionText;
+                            bi.ulFlags = mergedOptions;
+                            bi.lpfn = null;
+                            bi.lParam = IntPtr.Zero;
+                            bi.iImage = 0;
 
-                    // Convert to a string
-                    DirectoryPath = Marshal.PtrToStringAuto(pszSelectedPath);
+                            // Show the dialog.
+                            using (CoTaskMemSafeHandle browseHandle = Interop.Shell32.SHBrowseForFolderW(ref bi))
+                            {
+                                if (browseHandle.IsInvalid)
+                                {
+                                    return DialogResult.Cancel;
+                                }
+
+                                // Retrieve the path from the IDList.
+                                Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out string selectedPath);
+                                DirectoryPath = selectedPath;
+                                return DialogResult.OK;
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        ArrayPool<char>.Shared.Return(displayName);
+                    }
                 }
-                finally
-                {
-                    Marshal.FreeCoTaskMem(pidlRoot);
-                    Marshal.FreeCoTaskMem(pidlRet);
-
-                    // Then free all the stuff we've allocated or the SH API gave us
-                    Marshal.FreeHGlobal(pszSelectedPath);
-                    Marshal.FreeHGlobal(pszDisplayName);
-                }
-
-                return DialogResult.OK;
             }
         }
 
@@ -197,19 +179,19 @@ namespace System.Windows.Forms.Design
         [Flags]
         protected enum FolderBrowserStyles
         {
-            BrowseForComputer = UnsafeNativeMethods.BrowseInfos.BrowseForComputer,
+            BrowseForComputer = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_BROWSEFORCOMPUTER),
 
-            BrowseForEverything = UnsafeNativeMethods.BrowseInfos.BrowseForEverything,
+            BrowseForEverything = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_BROWSEFOREVERYTHING),
 
-            BrowseForPrinter = UnsafeNativeMethods.BrowseInfos.BrowseForPrinter,
+            BrowseForPrinter = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_BROWSEFORPRINTER),
 
-            RestrictToDomain = UnsafeNativeMethods.BrowseInfos.DontGoBelowDomain,
+            RestrictToDomain = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_DONTGOBELOWDOMAIN),
 
-            RestrictToFilesystem = UnsafeNativeMethods.BrowseInfos.ReturnOnlyFSDirs,
+            RestrictToFilesystem = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_RETURNONLYFSDIRS),
 
-            RestrictToSubfolders = UnsafeNativeMethods.BrowseInfos.ReturnFSAncestors,
+            RestrictToSubfolders = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_RETURNFSANCESTORS),
 
-            ShowTextBox = UnsafeNativeMethods.BrowseInfos.EditBox
+            ShowTextBox = unchecked((int)Interop.Shell32.BrowseInfoFlags.BIF_EDITBOX)
         }
     }
 }

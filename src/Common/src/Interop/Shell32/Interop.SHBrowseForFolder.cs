@@ -5,35 +5,46 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 internal static partial class Interop
 {
-    internal static partial class Shell32
+    public static partial class Shell32
     {
-        [DllImport(Libraries.Shell32, EntryPoint = "SHBrowseForFolderW", ExactSpelling = true)]
-        public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);
+        [DllImport(Libraries.Shell32)]
+        public static extern CoTaskMemSafeHandle SHBrowseForFolderW(ref BROWSEINFO lpbi);
 
-        public delegate int BrowseCallbackProc(IntPtr hwnd, int msg,  IntPtr lParam,  IntPtr lpData);
+        public delegate int BrowseCallbackProc(IntPtr hwnd, int msg, IntPtr lParam, IntPtr lpData);
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public class BROWSEINFO 
+        public static class BrowseInfoFlags
         {
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
+            public const uint BIF_RETURNONLYFSDIRS = 0x00000001;
+            public const uint BIF_DONTGOBELOWDOMAIN = 0x00000002;
+            public const uint BIF_RETURNFSANCESTORS = 0x00000008;
+            public const uint BIF_EDITBOX = 0x00000010;
+            public const uint BIF_NEWDIALOGSTYLE = 0x00000040;
+            public const uint BIF_NONEWFOLDERBUTTON = 0x00000200;
+            
+            public const uint BIF_BROWSEFORCOMPUTER = 0x00001000;
+            public const uint BIF_BROWSEFORPRINTER = 0x00002000;
+            public const uint BIF_BROWSEFOREVERYTHING = 0x00004000;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        public unsafe struct BROWSEINFO
+        {
             public IntPtr hwndOwner;
 
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr pidlRoot;
-    
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr pszDisplayName;
-    
+            public CoTaskMemSafeHandle pidlRoot;
+
+            public char *pszDisplayName;
+
             public string lpszTitle;
 
-            public int ulFlags;
+            public uint ulFlags;
 
             public BrowseCallbackProc lpfn;
 
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
             public IntPtr lParam;
 
             public int iImage;

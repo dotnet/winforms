@@ -7390,13 +7390,6 @@ namespace System.Windows.Forms {
             Marshal.ThrowExceptionForHR(errorCode);
         }
 
-        [Flags]    
-        public enum BrowseInfos
-        {
-            NewDialogStyle      = 0x0040,   // Use the new dialog layout with the ability to resize
-            HideNewFolderButton = 0x0200    // Don't display the 'New Folder' button
-        }
-
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class Shell32 
         {

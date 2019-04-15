@@ -4,13 +4,12 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
 
 internal static partial class Interop
 {
     public static partial class Shell32
     {
-        [DllImport(Libraries.Shell32, EntryPoint = "SHGetSpecialFolderLocation", ExactSpelling = true)]
-        public static extern int SHGetSpecialFolderLocation(IntPtr hwnd, int csidl, out CoTaskMemSafeHandle ppidl);
+        [DllImport(Libraries.Shell32, CharSet = CharSet.Unicode, SetLastError = false, BestFitMapping = false, ExactSpelling = true)]
+        public static extern int SHGetKnownFolderPath(ref Guid rfid, uint dwFlags, IntPtr hToken, out string pszPath);
     }
 }
