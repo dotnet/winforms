@@ -1796,55 +1796,42 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Rectangle rowRect;
                     if (owner == null)
                     {
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    if (owner.Index < owner.DataGridView.FirstDisplayedScrollingRowIndex)
+                    Rectangle rowRect = owner.DataGridView.RectangleToScreen(owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/));
+                    
+                    int horizontalScrollBarHeight = 0;
+                    if (this.owner.DataGridView.HorizontalScrollBarVisible)
                     {
-                        // the row is scrolled off the DataGridView
-                        // get the Accessible bounds for the following visible row
-                        int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
-                        rowRect = ParentPrivate.GetChild(visibleRowIndex
-                                                         + 1                      // + 1 because the first acc obj in the DataGridView is the top row header
-                                                         + 1).Bounds;             // + 1 because we want to get the bounds for the next visible row
-
-                        rowRect.Y -= owner.Height;
-                        rowRect.Height = owner.Height;
-
+                        horizontalScrollBarHeight = this.owner.DataGridView.HorizontalScrollBarHeight;
                     }
-                    else if (owner.Index >= owner.DataGridView.FirstDisplayedScrollingRowIndex &&
-                        owner.Index < owner.DataGridView.FirstDisplayedScrollingRowIndex + owner.DataGridView.DisplayedRowCount(true /*includePartialRow*/))
+
+                    Rectangle dataGridViewRect = ParentPrivate.Bounds;
+
+                    int columnHeadersHeight = 0;
+                    if (this.owner.DataGridView.ColumnHeadersVisible)
                     {
-                        rowRect = owner.DataGridView.GetRowDisplayRectangle(owner.Index, false /*cutOverflow*/);
-                        rowRect = owner.DataGridView.RectangleToScreen(rowRect);
+                        columnHeadersHeight = this.owner.DataGridView.ColumnHeadersHeight;
+                    }
+
+                    int rowRectBottom = rowRect.Bottom;
+                    if ((dataGridViewRect.Bottom - horizontalScrollBarHeight) < rowRectBottom)
+                    {
+                        rowRectBottom = dataGridViewRect.Bottom - owner.DataGridView.BorderWidth - horizontalScrollBarHeight;
+                    }
+
+                    
+
+                    if ((dataGridViewRect.Top + columnHeadersHeight) > rowRect.Top)
+                    {
+                        rowRect.Height = 0;
                     }
                     else
                     {
-                        // the row is scrolled off the DataGridView
-                        // use the Accessible bounds for the previous visible row
-                        int visibleRowIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, owner.Index);
-
-                        // This is a tricky scenario
-                        // If Visible of Row 0 is false, then visibleRowIndex is not the previous visible row.
-                        // It turns out to be the current row, this will cause a stack overflow.
-                        // We have to prevent this.
-                        if (!owner.DataGridView.Rows[0].Visible)
-                        {
-                            visibleRowIndex--;
-                        }
-
-                        // we don't have to decrement the visible row index if the first acc obj in the data grid view is the top column header
-                        if (!owner.DataGridView.ColumnHeadersVisible)
-                        {
-                            visibleRowIndex--;
-                        }
-
-                        rowRect = ParentPrivate.GetChild(visibleRowIndex).Bounds;
-                        rowRect.Y += rowRect.Height;
-                        rowRect.Height = owner.Height;
+                        rowRect.Height = rowRectBottom - rowRect.Top;
                     }
 
                     return rowRect;
@@ -2254,8 +2241,9 @@ namespace System.Windows.Forms
                         case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
                         case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                         case NativeMethods.UIA_IsPasswordPropertyId:
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
                             return false;
+                        case NativeMethods.UIA_IsOffscreenPropertyId:
+                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                         case NativeMethods.UIA_AccessKeyPropertyId:
                             return string.Empty;
                     }

@@ -3133,8 +3133,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
-        <source>Horizontal Scroll Bar</source>
-        <target state="translated">Vodorovný posuvník</target>
+        <source>Horizontal</source>
+        <target state="needs-review-translation">Vodorovný posuvník</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3188,8 +3188,8 @@
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
-        <source>Vertical Scroll Bar</source>
-        <target state="translated">Svislý posuvník</target>
+        <source>Vertical</source>
+        <target state="needs-review-translation">Svislý posuvník</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">

@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private int BorderWidth 
+        internal int BorderWidth 
         {
             get 
             {
@@ -3473,6 +3473,22 @@ namespace System.Windows.Forms
             get
             {
                 return this.horizScrollBar;
+            }
+        }
+
+        internal int HorizontalScrollBarHeight
+        {
+            get
+            {
+                return this.horizScrollBar.Height;
+            }
+        }
+
+        internal bool HorizontalScrollBarVisible
+        {
+            get
+            {
+                return this.horizScrollBar.Visible;
             }
         }
 
