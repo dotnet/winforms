@@ -122,10 +122,11 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: Mouse down w/ helpstring");
                 Help.ShowPopup(ctl, helpString, hevent.MousePos);
                 hevent.Handled = true;
+                return;
             }
 
             // If we have a help file, and help keyword we try F1 help next
-            if (!hevent.Handled && HelpNamespace != null)
+            if (HelpNamespace != null)
             {
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: F1 help");
                 if (!string.IsNullOrEmpty(keyword))
@@ -138,23 +139,17 @@ namespace System.Windows.Forms
                 }
 
                 hevent.Handled = true;
+                return;
             }
 
             // So at this point we don't have a help keyword, so try to display
             // the whats this help
-            if (!hevent.Handled && !string.IsNullOrEmpty(helpString))
+            if (!string.IsNullOrEmpty(helpString))
             {
                 Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: back to helpstring");
                 Help.ShowPopup(ctl, helpString, hevent.MousePos);
                 hevent.Handled = true;
-            }
-
-            // As a last resort, just popup the contents page of the help file...
-            if (!hevent.Handled && HelpNamespace != null)
-            {
-                Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "HelpProvider:: contents");
-                Help.ShowHelp(ctl, HelpNamespace);
-                hevent.Handled = true;
+                return;
             }
         }
 
