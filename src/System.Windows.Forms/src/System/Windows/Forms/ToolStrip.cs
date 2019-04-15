@@ -2180,37 +2180,32 @@ namespace System.Windows.Forms {
             return GetNextItem(start, direction);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GetNextItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets the next item from the given start item in the direction specified.
         ///   - This function wraps if at the end
         ///   - This function will only surf the items in the current container
         ///   - Overriding this function will change the tab ordering and accessible child ordering.
-        /// </devdoc>
+        /// </summary>
         public virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction)
         {
-            if (!WindowsFormsUtils.EnumValidator.IsValidArrowDirection(direction)) {
-                throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
-            }
-
-            switch (direction) {
+            switch (direction)
+            {
                 case ArrowDirection.Right:
-                    return GetNextItemHorizontal(start, /*forward = */true);
+                    return GetNextItemHorizontal(start, forward: true);
                 case ArrowDirection.Left:
-                    return GetNextItemHorizontal(start, /*forward = */false);
+                    return GetNextItemHorizontal(start, forward: false);
                 case ArrowDirection.Down:
-                    return GetNextItemVertical(start, /*forward = */true);
+                    return GetNextItemVertical(start, down: true);
                 case ArrowDirection.Up:
-                    return GetNextItemVertical(start, /*forward = */false);
+                    return GetNextItemVertical(start, down: false);
+                default:
+                    throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
             }
-
-            return null;
        }
 
-
-        // <devdoc>
-        //  Helper function for GetNextItem - do not directly call this.
-        // </devdoc>
+        /// <remarks>
+        /// Helper function for GetNextItem - do not directly call this.
+        /// </remarks>
         private ToolStripItem GetNextItemHorizontal(ToolStripItem start, bool forward) {
 
             if (DisplayedItems.Count <= 0)
@@ -2261,12 +2256,9 @@ namespace System.Windows.Forms {
             return null;
         }
 
-
-
-
-       // <devdoc>
-       //  Helper function for GetNextItem - do not directly call this.
-       // </devdoc>       
+       /// <remarks>
+       ///  Helper function for GetNextItem - do not directly call this.
+       /// </remarks>       
        [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
        private ToolStripItem GetNextItemVertical(ToolStripItem selectedItem, bool down) {
      
@@ -4231,94 +4223,103 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.SetDisplayedItems"]/*' />
         /// <devdoc>
         /// Afer we've performed a layout we need to reset the DisplayedItems and the OverflowItems collection.
         /// OverflowItems are not supported in layouts other than ToolStripSplitStack
         /// </devdoc>
-        protected virtual void SetDisplayedItems() {
-            this.DisplayedItems.Clear();
-            this.OverflowItems.Clear();
+        protected virtual void SetDisplayedItems()
+        {
+            DisplayedItems.Clear();
+            OverflowItems.Clear();
             HasVisibleItems = false;
-            
-            Size biggestItemSize  = Size.Empty; // used in determining OnPaint caching.
 
+            Size biggestItemSize = Size.Empty; // used in determining OnPaint caching.
 
-            if (this.LayoutEngine is ToolStripSplitStackLayout) {
-                if (ToolStripGripStyle.Visible == GripStyle) {
-                    this.DisplayedItems.Add(Grip);
+            if (LayoutEngine is ToolStripSplitStackLayout)
+            {
+                if (ToolStripGripStyle.Visible == GripStyle)
+                {
+                    DisplayedItems.Add(Grip);
                     SetupGrip();
-                }               
+                }
 
-                // for splitstack layout we re-arrange the items in the displayed items
+                // For splitstack layout we re-arrange the items in the displayed items
                 // collection so that we can easily tab through them in natural order
-                Rectangle displayRect = this.DisplayRectangle;
+                Rectangle displayRect = DisplayRectangle;
                 int lastRightAlignedItem = -1;
 
-                for (int pass=0; pass < 2; pass++) {
+                for (int pass = 0; pass < 2; pass++)
+                {
                     int j = 0;
-                    
-                    if (pass == 1 /*add right aligned items*/) {
-                        j = lastRightAlignedItem;      
+
+                    if (pass == 1 /*add right aligned items*/)
+                    {
+                        j = lastRightAlignedItem;
                     }
 
                     // add items to the DisplayedItem collection.
                     // in pass 0, we go forward adding the head (left) aligned items
                     // in pass 1, we go backward starting from the last (right) aligned item we found
-                    
-                    for (; j >= 0 && j < Items.Count; j = (pass == 0) ? j+1 : j-1){
-                        
+                    for (; j >= 0 && j < Items.Count; j = (pass == 0) ? j + 1 : j - 1)
+                    {
+
                         ToolStripItem item = Items[j];
                         ToolStripItemPlacement placement = item.Placement;
-                        if (((IArrangedElement)item).ParticipatesInLayout) {
-                            if (placement == ToolStripItemPlacement.Main) {
-                               bool addItem = false;
-                               if (pass == 0) { // Align.Left items
-                                    addItem = (item.Alignment ==  ToolStripItemAlignment.Left);                                
-                                    if (!addItem) {
+                        if (((IArrangedElement)item).ParticipatesInLayout)
+                        {
+                            if (placement == ToolStripItemPlacement.Main)
+                            {
+                                bool addItem = false;
+                                if (pass == 0)
+                                { // Align.Left items
+                                    addItem = (item.Alignment == ToolStripItemAlignment.Left);
+                                    if (!addItem)
+                                    {
                                         // stash away this index so we dont have to iterate through the whole list again.
                                         lastRightAlignedItem = j;
-                                    }                                  
-                               }
-                               else if (pass == 1) { // Align.Right items
-                                   addItem =  (item.Alignment ==  ToolStripItemAlignment.Right);                                   
-                               }
-                               if (addItem) {
-                                   HasVisibleItems = true;
-                                   biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
-                                   this.DisplayedItems.Add(item);
-                               }
+                                    }
+                                }
+                                else if (pass == 1)
+                                {
+                                    // Align.Right items
+                                    addItem = (item.Alignment == ToolStripItemAlignment.Right);
+                                }
+                                if (addItem)
+                                {
+                                    HasVisibleItems = true;
+                                    biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
+                                    this.DisplayedItems.Add(item);
+                                }
                             }
-                            else if (placement == ToolStripItemPlacement.Overflow && !(item is ToolStripSeparator)) {
-                                if (item is ToolStripControlHost && this.OverflowButton.DropDown.IsRestrictedWindow) {
-                                   // Control hosts cannot be added to the overflow in the Internet
-                                   // just set the placement to None.
-                                   item.SetPlacement(ToolStripItemPlacement.None);
-                                }
-                                else {
-                                    this.OverflowItems.Add(item);
-                                }
+                            else if (placement == ToolStripItemPlacement.Overflow && !(item is ToolStripSeparator))
+                            {
+                                this.OverflowItems.Add(item);
                             }
                         }
-                        else {
+                        else
+                        {
                             item.SetPlacement(ToolStripItemPlacement.None);
                         }
                     }
-                
+
                 }
                 ToolStripOverflow overflow = GetOverflow();
-                if (overflow != null) {
+                if (overflow != null)
+                {
                     overflow.LayoutRequired = true;
                 }
-                if (OverflowItems.Count ==0) {
+                if (OverflowItems.Count == 0)
+                {
                     this.OverflowButton.Visible = false;
                 }
-                else if (CanOverflow){
+                else if (CanOverflow)
+                {
                     this.DisplayedItems.Add(OverflowButton);
                 }
-        
+
             }
-            else {
+            else
+            {
                 // NOT a SplitStack layout.  We dont change the order of the displayed items collection
                 // for custom keyboard handling override GetNextItem.
                 Debug.WriteLineIf(LayoutDebugSwitch.TraceVerbose, "Setting Displayed Items: Current bounds: " + this.Bounds.ToString());
@@ -4326,30 +4327,34 @@ namespace System.Windows.Forms {
 
                 // for all other layout managers, we ignore overflow placement
                 bool allContained = true;
-                for (int j = 0; j < Items.Count; j++) {
+                for (int j = 0; j < Items.Count; j++)
+                {
                     ToolStripItem item = Items[j];
                     if (((IArrangedElement)item).ParticipatesInLayout)
-					{
+                    {
                         item.ParentInternal = this;
 
                         bool boundsCheck = !IsDropDown;
                         bool intersects = item.Bounds.IntersectsWith(clientBounds);
 
                         bool verticallyContained = clientBounds.Contains(clientBounds.X, item.Bounds.Top) &&
-                        						clientBounds.Contains(clientBounds.X, item.Bounds.Bottom);
-                        if (!verticallyContained) {
-                        	allContained = false;
+                                                clientBounds.Contains(clientBounds.X, item.Bounds.Bottom);
+                        if (!verticallyContained)
+                        {
+                            allContained = false;
                         }
 
-                        if (!boundsCheck || intersects) {
-                        	HasVisibleItems = true;
-                        	biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
-                        	this.DisplayedItems.Add(item);
-                        	item.SetPlacement(ToolStripItemPlacement.Main);
+                        if (!boundsCheck || intersects)
+                        {
+                            HasVisibleItems = true;
+                            biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
+                            this.DisplayedItems.Add(item);
+                            item.SetPlacement(ToolStripItemPlacement.Main);
                         }
                     }
-                    else {
-                         item.SetPlacement(ToolStripItemPlacement.None);
+                    else
+                    {
+                        item.SetPlacement(ToolStripItemPlacement.None);
                     }
 
                     Debug.WriteLineIf(LayoutDebugSwitch.TraceVerbose, item.ToString() + Items[j].Bounds);
@@ -4362,7 +4367,6 @@ namespace System.Windows.Forms {
 
             SetLargestItemSize(biggestItemSize);
         }
-
      
         /// <devdoc>
         ///     Sets the current value of the specified bit in the control's state.

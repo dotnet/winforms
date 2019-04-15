@@ -288,10 +288,11 @@ namespace System.Windows.Forms {
             }
 
             set {
-                if (value < 0) {
-                    throw new ArgumentException(string.Format(SR.InvalidLowBoundArgumentEx, "value",
-                                                             (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(value), value, 0));
                 }
+
                 if (columnWidth != value) {
                     columnWidth = value;
                     // if it's zero, we need to reset, and only way to do
@@ -610,7 +611,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1 || value > 255) {
-                    throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidExBoundArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "256"));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
                 }
                 if (itemHeight != value) {
                     itemHeight = value;
@@ -868,11 +869,11 @@ namespace System.Windows.Forms {
                 int itemCount = (itemsCollection == null) ? 0 : itemsCollection.Count;
 
                 if (value < -1 || value >= itemCount) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                 }
 
                 if (selectionMode == SelectionMode.None) {
-                    throw new ArgumentException(SR.ListBoxInvalidSelectionMode, "SelectedIndex");
+                    throw new ArgumentException(SR.ListBoxInvalidSelectionMode, nameof(value));
                 }
 
                 if (selectionMode == SelectionMode.One && value != -1) {
@@ -1394,7 +1395,7 @@ namespace System.Windows.Forms {
 
             // Always use the managed FindStringInternal instead of LB_FINDSTRING.
             // The managed version correctly handles Turkish I.
-            return FindStringInternal(s, Items, startIndex, false);
+            return FindStringInternal(s, Items, startIndex, exact: false, ignoreCase: true);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.FindStringExact"]/*' />
@@ -1428,8 +1429,7 @@ namespace System.Windows.Forms {
 
             // Always use the managed FindStringInternal instead of LB_FINDSTRING.
             // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, true);
+            return FindStringInternal(s, Items, startIndex, exact: true, ignoreCase: true);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.GetItemHeight"]/*' />
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms {
             // no items.
             //
             if (index < 0 || (index > 0 && index >= itemCount))
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
             if (drawMode != DrawMode.OwnerDrawVariable) index = 0;
 
@@ -2080,7 +2080,7 @@ namespace System.Windows.Forms {
         public void SetSelected(int index, bool value) {
             int itemCount = (itemsCollection == null) ? 0: itemsCollection.Count;
             if (index < 0 || index >= itemCount)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
             if (selectionMode == SelectionMode.None)
                 throw new InvalidOperationException(SR.ListBoxInvalidSelectionMode);
@@ -3089,7 +3089,7 @@ namespace System.Windows.Forms {
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerArray.GetCount(0)) {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
                     return InnerArray.GetItem(index, 0);
@@ -3197,7 +3197,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index > InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 if (item == null) {
@@ -3253,7 +3253,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
@@ -3275,7 +3275,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= InnerArray.GetCount(0)) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 owner.UpdateMaxItemWidth(InnerArray.GetItem(index, 0), true);
@@ -3569,7 +3569,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public void RemoveAt(int index) {
                 if (index < 0 || index >= count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 count--;
@@ -3597,7 +3597,7 @@ namespace System.Windows.Forms {
                 set {
 
                     if (index < 0 || index >= count) {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     innerArray[index] = (int)value;
                     owner.UpdateCustomTabOffsets();

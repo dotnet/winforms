@@ -621,6 +621,11 @@
         <target state="translated">既定カルチャのリソース ファイルからリソースを読み取り中にエラーが発生しました:{0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">型 '{0}' が見つかりませんでした。  この型を含むアセンブリが参照されていることを確認してください。  この型が開発プロジェクトの一部である場合は、現在のプラットフォームまたは Any CPU の設定を使用して、プロジェクトが正常にビルドされていることを確認してください。</target>

@@ -2238,6 +2238,10 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
+        [InlineData((TextImageRelation)3)]
+        [InlineData((TextImageRelation)5)]
+        [InlineData((TextImageRelation)6)]
+        [InlineData((TextImageRelation)7)]
         public void ToolStripItem_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
         {
             var item = new SubToolStripItem();

@@ -111,11 +111,11 @@ namespace System.Windows.Forms {
             }
 
             if (retryTimes < 0) {
-                throw new ArgumentOutOfRangeException(nameof(retryTimes), string.Format(SR.InvalidLowBoundArgumentEx, "retryTimes", retryTimes.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(retryTimes), retryTimes, string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryTimes), retryTimes, 0));
             }
 
             if (retryDelay < 0) {
-                throw new ArgumentOutOfRangeException(nameof(retryDelay), string.Format(SR.InvalidLowBoundArgumentEx, "retryDelay", retryDelay.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(retryDelay), retryDelay, string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryDelay), retryDelay, 0));
             }
 
             

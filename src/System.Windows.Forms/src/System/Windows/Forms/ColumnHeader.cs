@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
 
                 if (imageIndexer.Index != value) {
@@ -497,10 +497,7 @@ namespace System.Windows.Forms {
 
             public override ImageList ImageList {
                 get {
-                    if (owner != null && owner.ListView != null) {
-                        return owner.ListView.SmallImageList;
-                    }
-                    return null;
+                    return owner.ListView?.SmallImageList;
                 }
                 set {
                     Debug.Assert(false, "We should never set the image list");

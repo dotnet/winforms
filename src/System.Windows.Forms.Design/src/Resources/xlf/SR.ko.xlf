@@ -621,6 +621,11 @@
         <target state="translated">기본 문화권에 대한 리소스 파일에서 리소스를 읽는 동안 오류가 발생했습니다. {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">'{0}' 형식을 찾을 수 없습니다. 이 형식을 포함하는 어셈블리가 참조되는지 확인하십시오. 이 형식이 개발 프로젝트의 일부인 경우 해당 프로젝트가 현재 플랫폼 또는 모든 CPU에 대한 설정을 사용하여 올바르게 빌드되었는지 확인하십시오.</target>

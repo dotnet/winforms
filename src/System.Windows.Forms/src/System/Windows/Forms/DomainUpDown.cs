@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < -1 || value >= Items.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                 }
                 
                 if (value != SelectedIndex) {    
@@ -645,7 +645,7 @@ namespace System.Windows.Forms {
                 int index = IndexOf(item);
                 
                 if (index == -1) {
-                    throw new ArgumentOutOfRangeException(nameof(item), string.Format(SR.InvalidArgument, "item", item.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(item), item, string.Format(SR.InvalidArgument, nameof(item), item));
                 }
                 else {
                     RemoveAt(index);    

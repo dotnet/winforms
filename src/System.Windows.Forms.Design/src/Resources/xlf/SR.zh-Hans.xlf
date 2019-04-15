@@ -621,6 +621,11 @@
         <target state="translated">从默认区域性的资源文件中读取资源时出错: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">未能找到类型“{0}”。请确保已引用包含此类型的程序集。如果此类型为开发项目的一部分，请确保已使用针对当前平台或任意 CPU 的设置成功生成该项目。</target>
