@@ -2,98 +2,61 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Diagnostics.CodeAnalysis;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Globalization;
-    
-    /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell"]/*' />
-    /// <devdoc>
-    ///    <para>Identifies a cell in the grid.</para>
-    /// </devdoc>    
+namespace System.Windows.Forms
+{
+    /// <summary>
+    /// Identifies a cell in the grid.
+    /// </summary>    
     [SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes")]
-    public struct DataGridCell {
-        private int rowNumber;
-        private int columnNumber;
+    public struct DataGridCell
+    {
+        /// <summary>
+        /// Gets or sets the number of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.
+        /// </summary>
+        public int ColumnNumber { get; set; }
 
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.ColumnNumber"]/*' />
-        /// <devdoc>
-        /// <para>Gets or sets the number of a column in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
-        /// </devdoc>
-        public int ColumnNumber {
-            get {
-                return columnNumber;
-            }
-            set {
-                columnNumber = value;
-            }
+        /// <summary>
+        /// Gets or sets the number of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.
+        /// </summary>
+        public int RowNumber { get; set; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridCell'/> class.
+        /// </summary>
+        public DataGridCell(int r, int c)
+        {
+            RowNumber = r;
+            ColumnNumber = c;
         }
-        
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.RowNumber"]/*' />
-        /// <devdoc>
-        /// <para>Gets or sets the number of a row in the <see cref='System.Windows.Forms.DataGrid'/> control.</para>
-        /// </devdoc>
-        public int RowNumber {
-            get {
-                return rowNumber;
-            }
-            set {
-                rowNumber = value;
-            }
-        }                
-        
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.DataGridCell"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.DataGridCell'/> class.
-        ///    </para>
-        /// </devdoc>
-        public DataGridCell(int r, int c) {
-            this.rowNumber = r;
-            this.columnNumber = c;
-        }
-        
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.Equals"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the <see cref='System.Windows.Forms.DataGridCell'/> is identical to a second
-        ///    <see cref='System.Windows.Forms.DataGridCell'/>.
-        ///    </para>
-        /// </devdoc>        
+
+        /// <summary>
+        /// Gets a value indicating whether the <see cref='System.Windows.Forms.DataGridCell'/> is
+        /// identical to a second <see cref='System.Windows.Forms.DataGridCell'/>.
+        /// </summary>        
         [SuppressMessage("Microsoft.Usage", "CA2231:OverrideOperatorEqualsOnOverridingValueTypeEquals")]
-        public override bool Equals(object o) {
-            if (o is DataGridCell) {
-                DataGridCell rhs = (DataGridCell)o;
-                return (rhs.RowNumber == RowNumber && rhs.ColumnNumber == ColumnNumber);
-            }
-            else
+        public override bool Equals(object o)
+        {
+            if (!(o is DataGridCell rhs))
+            {
                 return false;
-        }
-        
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.GetHashCode"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       a hash value that uniquely identifies the cell.
-        ///    </para>
-        /// </devdoc>
-        public override int GetHashCode() {
-            return ((~rowNumber * (columnNumber+1)) & 0x00ffff00) >> 8;
-       }
+            }
 
-        /// <include file='doc\DataGridCell.uex' path='docs/doc[@for="DataGridCell.ToString"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the row number and column number of the cell.
-        ///    </para>
-        /// </devdoc>
-        public override string ToString() {
-            return "DataGridCell {RowNumber = " + RowNumber.ToString(CultureInfo.CurrentCulture) + 
-                   ", ColumnNumber = " + ColumnNumber.ToString(CultureInfo.CurrentCulture) + "}";
+            return rhs.RowNumber == RowNumber && rhs.ColumnNumber == ColumnNumber;
         }
-        
+
+        /// <summary>
+        /// Gets a hash value that uniquely identifies the cell.
+        /// </summary>
+        public override int GetHashCode() => HashCode.Combine(RowNumber, ColumnNumber);
+
+        /// <summary>
+        /// Gets the row number and column number of the cell.
+        /// </summary>
+        public override string ToString()
+        {
+            return "DataGridCell {RowNumber = " + RowNumber + ", ColumnNumber = " + ColumnNumber + "}";
+        }
     }
-                                                                                        
 }
