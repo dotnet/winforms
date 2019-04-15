@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Basic Properties for Scrollbars.
-    /// </devdoc>
+    /// </summary>
     public abstract class ScrollProperties
     {
         internal int _minimum = 0;
@@ -35,9 +35,9 @@ namespace System.Windows.Forms
             _parent = container;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a bool value controlling whether the scrollbar is enabled.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.ScrollBarEnableDescr))]
@@ -63,10 +63,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollProperties.LargeChange'/>
         /// property when the scroll box is moved a large distance.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(10)]
         [SRDescription(nameof(SR.ScrollBarLargeChangeDescr))]
@@ -97,9 +97,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the upper limit of values of the scrollable range.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(100)]
         [SRDescription(nameof(SR.ScrollBarMaximumDescr))]
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
                     {
                         _minimum = value;
                     }
-                    if (value < this._value)
+                    if (value < _value)
                     {
                         Value = value;
                     }
@@ -132,9 +132,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the lower limit of values of the scrollable range.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(0)]
         [SRDescription(nameof(SR.ScrollBarMinimumDescr))]
@@ -160,9 +160,9 @@ namespace System.Windows.Forms
                     {
                         _maximum = value;
                     }
-                    if (value > this._value)
+                    if (value > _value)
                     {
-                        this._value = value;
+                        _value = value;
                     }
 
                     _minimum = value;
@@ -179,10 +179,10 @@ namespace System.Windows.Forms
 
         internal abstract int VerticalDisplayPosition { get; }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets the value to be added or subtracted to the <see cref='System.Windows.Forms.ScrollBar.Value'/>
         /// property when the scroll box is moved a small distance.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(1)]
         [SRDescription(nameof(SR.ScrollBarSmallChangeDescr))]
@@ -211,10 +211,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a numeric value that represents the current position of the scroll box
         /// on the scroll bar control.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(0)]
         [Bindable(true)]
@@ -224,14 +224,14 @@ namespace System.Windows.Forms
             get => _value;
             set
             {
-                if (this._value != value)
+                if (_value != value)
                 {
                     if (value < _minimum || value > _maximum)
                     {
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
 
-                    this._value = value;
+                    _value = value;
                     UpdateScrollInfo();
                     _parent.SetDisplayFromScrollProps(HorizontalDisplayPosition, VerticalDisplayPosition);
                 }
@@ -239,9 +239,9 @@ namespace System.Windows.Forms
         }
 
 
-        /// <devdoc>
+        /// <summary>
         /// Gets or sets a bool value controlling whether the scrollbar is showing.
-        /// </devdoc>
+        /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
         [SRDescription(nameof(SR.ScrollBarVisibleDescr))]

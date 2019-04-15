@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Represents a standard Windows horizontal scroll bar.
-    /// </devdoc>
+    /// </summary>
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [SRDescription(nameof(SR.DescriptionHScrollBar))]
