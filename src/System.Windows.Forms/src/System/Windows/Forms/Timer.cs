@@ -209,13 +209,12 @@ namespace System.Windows.Forms {
             set {
                 lock(syncObj) {
                     if (value < 1)
-                        throw new ArgumentOutOfRangeException(nameof(Interval), string.Format(SR.TimerInvalidInterval, value, 0));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.TimerInvalidInterval, value, 0));
 
                     if (interval != value) {
                         interval = value;
                         if (Enabled) {
 
-                            Debug.Assert(DesignMode || timerWindow != null, "Why don't we have a timer HWND?");
                             // just change the timer value, don't tear down the timer
                             // itself.
                             //
