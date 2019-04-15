@@ -25,6 +25,7 @@ namespace System.Windows.Forms
         internal const int MinBandThickness = 2;
         internal const int MaxBandThickness = 65536;
 
+        // Contains all properties that are not always set.
         private PropertyStore _propertyStore;
         private int _thickness;
         private int _minimumThickness;
@@ -112,9 +113,10 @@ namespace System.Windows.Forms
                     value?.AddScope(DataGridView, _bandIsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                     Properties.SetObject(s_propDefaultCellStyle, value);
                 }
-                if (((style != null && value == null) ||
-                    (style == null && value != null) ||
-                    (style != null && value != null && !style.Equals(DefaultCellStyle))) && DataGridView != null)
+
+                if (DataGridView != null &&
+                   (style != null ^ value != null) ||
+                   (style != null && value != null && !style.Equals(DefaultCellStyle)))
                 {
                     DataGridView.OnBandDefaultCellStyleChanged(this);
                 }
