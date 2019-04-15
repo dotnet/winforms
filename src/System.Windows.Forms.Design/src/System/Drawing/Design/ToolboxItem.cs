@@ -101,7 +101,7 @@ namespace System.Drawing.Design
             }
             set
             {
-                Properties["DependentAssemblies"] = value.Clone();
+                Properties["DependentAssemblies"] = value?.Clone();
             }
         }
 
@@ -277,22 +277,14 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Gets the version for this toolboxitem.  It defaults to AssemblyName.Version unless
-        /// overridden in a derived toolboxitem.  This can be overridden to return an empty string
-        /// to suppress its display in the toolbox tooltip.
+        /// Gets the version for this toolboxitem. It defaults to AssemblyName.Version unless
+        /// overridden in a derived toolboxitem. This can be overridden to
+        /// return an empty string to suppress its display in the toolbox tooltip.
         /// </summary>
         public virtual string Version
         {
-            get
-            {
-                if (AssemblyName != null)
-                {
-                    return AssemblyName.Version.ToString();
-                }
-                return string.Empty;
-            }
+            get => AssemblyName?.Version?.ToString() ?? string.Empty;
         }
-
 
         /// <summary>
         /// Occurs when components are created.
@@ -408,7 +400,7 @@ namespace System.Drawing.Design
         {
             IComponent[] components = CreateComponentsCore(host);
 
-            if (host != null)
+            if (host != null && components != null)
             {
                 for (int i = 0; i < components.Length; i++)
                 {
@@ -527,10 +519,9 @@ namespace System.Drawing.Design
 
         public override int GetHashCode()
         {
-            string typeName = TypeName;
-            int hash = (typeName != null) ? typeName.GetHashCode() : 0;
-
-            return unchecked(hash ^ DisplayName.GetHashCode());
+            int typeHash = TypeName?.GetHashCode() ?? 0;
+            int displayHash = DisplayName?.GetHashCode() ?? 0;
+            return unchecked(typeHash ^ displayHash);
         }
 
         /// <summary>
@@ -542,8 +533,8 @@ namespace System.Drawing.Design
             switch (propertyName)
             {
                 case "AssemblyName":
-                    if (value != null)
-                        value = ((AssemblyName)value).Clone();
+                    if (value is AssemblyName valueName)
+                        value = valueName.Clone();
 
                     break;
 
@@ -598,7 +589,7 @@ namespace System.Drawing.Design
 
             if (host != null)
             {
-                ts = (ITypeResolutionService)host.GetService(typeof(ITypeResolutionService));
+                ts = host.GetService(typeof(ITypeResolutionService)) as ITypeResolutionService;
             }
 
             if (ts != null)
@@ -664,7 +655,7 @@ namespace System.Drawing.Design
                         {
                         }
 
-                        if (a == null && assemblyName.CodeBase != null && assemblyName.CodeBase.Length > 0)
+                        if (a == null && !string.IsNullOrEmpty(assemblyName.CodeBase))
                         {
                             try
                             {
@@ -804,7 +795,8 @@ namespace System.Drawing.Design
 
         private AssemblyName GetNonRetargetedAssemblyName(Type type, AssemblyName policiedAssemblyName)
         {
-            if (type == null || policiedAssemblyName == null)
+            Debug.Assert(type != null);
+            if (policiedAssemblyName == null)
                 return null;
 
             //if looking for myself, just return it. (not a reference)	
@@ -833,17 +825,17 @@ namespace System.Drawing.Design
             // in assemblyname.	
             foreach (AssemblyName name in type.Assembly.GetReferencedAssemblies())
             {
-                Assembly a = null;
-
                 try
                 {
-                    a = Assembly.Load(name);
-                    if (a != null && a.FullName == policiedAssemblyName.FullName)
+                    Assembly a = Assembly.Load(name);
+                    if (a.FullName == policiedAssemblyName.FullName)
+                    {
                         return name;
+                    }
                 }
                 catch
                 {
-                    //ignore all exceptions and just fall through if it fails (it shouldn't, but who knows).	
+                    // Ignore all exceptions and just fall through if it fails (it shouldn't, but who knows).	
                 }
             }
 
@@ -900,10 +892,7 @@ namespace System.Drawing.Design
             _componentsCreatingEvent?.Invoke(this, args);
         }
 
-        public override string ToString()
-        {
-            return DisplayName;
-        }
+        public override string ToString() => DisplayName ?? string.Empty;
 
         /// <summary>
         /// Called as a helper to ValidatePropertyValue to validate that an object
@@ -992,6 +981,10 @@ namespace System.Drawing.Design
                     value = filter;
                     break;
 
+                case "DependentAssemblies":
+                    ValidatePropertyType(propertyName, value, typeof(AssemblyName[]), true);
+                    break;
+
                 case "IsTransient":
                     ValidatePropertyType(propertyName, value, typeof(bool), false);
                     break;
@@ -1002,7 +995,6 @@ namespace System.Drawing.Design
         [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            //IntSecurity.UnmanagedCode.Demand();
             Serialize(info, context);
         }
 
