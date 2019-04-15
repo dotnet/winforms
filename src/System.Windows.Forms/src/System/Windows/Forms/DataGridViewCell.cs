@@ -2,10 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-// Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
-// Don't entity encode high chars (160 to 256)
-#define ENTITY_ENCODE_HIGH_ASCII_CHARS
-
 namespace System.Windows.Forms
 {
     using System;
@@ -1510,8 +1506,9 @@ namespace System.Windows.Forms
                         break;
                     // 
                     default:
-#if ENTITY_ENCODE_HIGH_ASCII_CHARS
                         // The seemingly arbitrary 160 comes from RFC
+                        // Code taken from ASP.NET file xsp\System\Web\httpserverutility.cs
+                        // Don't entity encode high chars (160 to 256)
                         if (ch >= 160 && ch < 256)
                         {
                             output.Write("&#");
@@ -1519,7 +1516,6 @@ namespace System.Windows.Forms
                             output.Write(';');
                             break;
                         }
-#endif // ENTITY_ENCODE_HIGH_ASCII_CHARS
                         output.Write(ch);
                         break;
                 }
