@@ -621,6 +621,11 @@
         <target state="translated">Při čtení prostředků ze souboru prostředků výchozí jazykové verze došlo k chybě: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">Typ {0} nebyl nalezen. Zkontrolujte, zda je uveden odkaz na sestavení, které daný typ obsahuje. Je-li tento typ součástí vyvíjeného projektu, zkontrolujte, zda je projekt úspěšně sestaven pomocí nastavení pro aktuální platformu nebo libovolný procesor.</target>

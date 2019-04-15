@@ -621,6 +621,11 @@
         <target state="translated">Errore durante la lettura delle risorse dal file di risorse per le impostazioni cultura predefinite: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">Il tipo '{0}' non è stato trovato. Verificare la presenza di un riferimento all'assembly che lo contiene. Se il tipo fa parte del progetto di sviluppo, assicurarsi che quest'ultimo sia stato compilato correttamente usando le impostazioni per la piattaforma corrente o Any CPU.</target>
