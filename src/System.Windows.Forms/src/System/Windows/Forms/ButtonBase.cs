@@ -666,22 +666,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.TextImageRelation"]/*' />
-        [
-            DefaultValue(TextImageRelation.Overlay),
-            Localizable(true),
-            SRDescription(nameof(SR.ButtonTextImageRelationDescr)),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
-        public TextImageRelation TextImageRelation {
-            get {
-                return textImageRelation;
-            }
-            set {
-                if (!WindowsFormsUtils.EnumValidator.IsValidTextImageRelation(value)) {
+        [DefaultValue(TextImageRelation.Overlay)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonTextImageRelationDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public TextImageRelation TextImageRelation
+        {
+            get => textImageRelation;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage,1))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
                 }
-                if(value != TextImageRelation) {
+
+                if(value != TextImageRelation)
+                {
                     textImageRelation = value;
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextImageRelation);
                     Invalidate();
