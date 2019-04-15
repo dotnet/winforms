@@ -1493,7 +1493,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected Rectangle MaximizedBounds {
             get {
-                return Properties.GetRectangle(PropMaximizedBounds);            
+                return Properties.GetRectangle(PropMaximizedBounds, out _);            
             }
             set {
                 if (!value.Equals( MaximizedBounds )) {
