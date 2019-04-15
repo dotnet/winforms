@@ -255,7 +255,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(MinWidth), string.Format(SR.InvalidLowBoundArgumentEx, "MinWidth", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinWidth), value, 0));
                 }
 
                 if (value != this.minWidth) {

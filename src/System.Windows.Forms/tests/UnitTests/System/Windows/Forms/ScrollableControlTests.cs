@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
         public void ScrollableControl_AutoScrollMargin_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
             var control = new ScrollableControl();
-            Assert.Throws<ArgumentOutOfRangeException>("AutoScrollMargin", () => control.AutoScrollMargin = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => control.AutoScrollMargin = value);
         }
 
         public static IEnumerable<object[]> SetAutoScrollMargin_TestData()

@@ -667,7 +667,7 @@ namespace System.Windows.Forms {
         public void ShowBalloonTip(int timeout, string tipTitle, string tipText, ToolTipIcon tipIcon) {
 
             if (timeout < 0) {
-               throw new ArgumentOutOfRangeException(nameof(timeout), string.Format(SR.InvalidArgument, "timeout", (timeout).ToString(CultureInfo.CurrentCulture)));
+               throw new ArgumentOutOfRangeException(nameof(timeout), timeout, string.Format(SR.InvalidArgument, nameof(timeout), timeout));
             }
 
             if (string.IsNullOrEmpty(tipText))

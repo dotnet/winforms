@@ -35,12 +35,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DomainUpDown_SelectedIndex_ArgumentOutOfRangeException()
         {
-            var underTest = GetNewDomainUpDown();
-            var index = 3100;
-            var paramName = "SelectedIndex";
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => underTest.SelectedIndex = index);
-            Assert.Equal(paramName, ex.ParamName);
-            Assert.Contains($"Value of '{index}' is not valid for '{paramName}'.{Environment.NewLine}Parameter name: {paramName}", ex.Message);
+            var upDown = GetNewDomainUpDown();
+            Assert.Throws<ArgumentOutOfRangeException>(() => upDown.SelectedIndex = 3100);
         }
 
         [Fact]

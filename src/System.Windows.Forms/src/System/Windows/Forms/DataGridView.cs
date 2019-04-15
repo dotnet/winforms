@@ -1765,7 +1765,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(ColumnCount), string.Format(SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
                 }
                 if (this.DataSource != null)
                 {
@@ -1989,11 +1989,11 @@ namespace System.Windows.Forms
             {
                 if (value < minimumColumnHeadersHeight)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(ColumnHeadersHeight), string.Format(SR.InvalidLowBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (minimumColumnHeadersHeight).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnHeadersHeight), value, minimumColumnHeadersHeight));
                 }
                 if (value > maxHeadersThickness)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(ColumnHeadersHeight), string.Format(SR.InvalidHighBoundArgumentEx, "ColumnHeadersHeight", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidHighBoundArgumentEx, nameof(ColumnHeadersHeight), value, maxHeadersThickness));
                 }
                 if (this.ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                 {
@@ -3492,7 +3492,7 @@ namespace System.Windows.Forms
                 // int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(HorizontalScrollingOffset), string.Format(SR.InvalidLowBoundArgumentEx, "HorizontalScrollingOffset", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(HorizontalScrollingOffset), value, 0));
                 }
                 // Intentionally ignoring the out of range situation. 
                 // else if (value > widthNotVisible && widthNotVisible > 0)
@@ -4021,14 +4021,14 @@ namespace System.Windows.Forms
                 {
                     if (value < 1)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(RowCount), string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 1));
                     }
                 }
                 else
                 {
                     if (value < 0)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(RowCount), string.Format(SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
                     }
                 }
                 if (this.DataSource != null)
@@ -4279,12 +4279,13 @@ namespace System.Windows.Forms
             {
                 if (value < minimumRowHeadersWidth)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(RowHeadersWidth), string.Format(SR.InvalidLowBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (minimumRowHeadersWidth).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowHeadersWidth), value, minimumRowHeadersWidth));
                 }
                 if (value > maxHeadersThickness)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(RowHeadersWidth), string.Format(SR.InvalidHighBoundArgumentEx, "RowHeadersWidth", (value).ToString(CultureInfo.CurrentCulture), (maxHeadersThickness).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(RowHeadersWidth), value, maxHeadersThickness));
                 }
+
                 if (this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
                     this.RowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing)
                 {
