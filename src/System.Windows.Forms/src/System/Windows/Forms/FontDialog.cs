@@ -598,7 +598,7 @@ namespace System.Windows.Forms {
 
 
                 NativeMethods.LOGFONT lfReturned = null;
-                lfReturned = (NativeMethods.LOGFONT)UnsafeNativeMethods.PtrToStructure(logFontPtr, typeof(NativeMethods.LOGFONT));
+                lfReturned = (NativeMethods.LOGFONT)Marshal.PtrToStructure(logFontPtr, typeof(NativeMethods.LOGFONT));
 
                 if (lfReturned.lfFaceName != null && lfReturned.lfFaceName.Length > 0) {
                     lf = lfReturned;

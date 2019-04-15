@@ -550,7 +550,7 @@ namespace System.Windows.Forms {
         ///     Processes the CDN_FILEOK notification.
         /// </devdoc>
         private bool DoFileOk(IntPtr lpOFN) {
-            NativeMethods.OPENFILENAME_I ofn = (NativeMethods.OPENFILENAME_I)UnsafeNativeMethods.PtrToStructure(lpOFN, typeof(NativeMethods.OPENFILENAME_I));
+            NativeMethods.OPENFILENAME_I ofn = (NativeMethods.OPENFILENAME_I)Marshal.PtrToStructure(lpOFN, typeof(NativeMethods.OPENFILENAME_I));
             int saveOptions = options;
             int saveFilterIndex = filterIndex;
             string[] saveFileNames = fileNames;
@@ -666,14 +666,14 @@ namespace System.Windows.Forms {
             if (msg == NativeMethods.WM_NOTIFY) {
                 dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
                 try {
-                    UnsafeNativeMethods.OFNOTIFY notify = (UnsafeNativeMethods.OFNOTIFY)UnsafeNativeMethods.PtrToStructure(lparam, typeof(UnsafeNativeMethods.OFNOTIFY));
+                    UnsafeNativeMethods.OFNOTIFY notify = (UnsafeNativeMethods.OFNOTIFY)Marshal.PtrToStructure(lparam, typeof(UnsafeNativeMethods.OFNOTIFY));
 
                     switch (notify.hdr_code) {
                         case -601: /* CDN_INITDONE */
                             MoveToScreenCenter(dialogHWnd);
                             break;
                         case -602: /* CDN_SELCHANGE */
-                            NativeMethods.OPENFILENAME_I ofn = (NativeMethods.OPENFILENAME_I)UnsafeNativeMethods.PtrToStructure(notify.lpOFN, typeof(NativeMethods.OPENFILENAME_I));
+                            NativeMethods.OPENFILENAME_I ofn = (NativeMethods.OPENFILENAME_I)Marshal.PtrToStructure(notify.lpOFN, typeof(NativeMethods.OPENFILENAME_I));
                             // Get the buffer size required to store the selected file names.
                             int sizeNeeded = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, dialogHWnd), 1124 /*CDM_GETSPEC*/, System.IntPtr.Zero, System.IntPtr.Zero);
                             if (sizeNeeded > ofn.nMaxFile) {

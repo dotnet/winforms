@@ -7290,104 +7290,57 @@ namespace System.Windows.Forms {
         string DefaultAction { get; }
     }
 
-    [ComImport(), Guid("0000000A-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface ILockBytes {
-
-        
-         void ReadAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-                [Out] 
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbRead);
-
-        
-         void WriteAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbWritten);
-
-        
-         void Flush();
-
-        
-         void SetSize(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb);
-
-        
-         void LockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void UnlockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void Stat(
-                [Out] 
-                  NativeMethods.STATSTG pstatstg,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int grfStatFlag);
-
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public class OFNOTIFY
-    {
-        // hdr was a by-value NMHDR structure
-        public IntPtr hdr_hwndFrom = IntPtr.Zero;
-        public IntPtr hdr_idFrom = IntPtr.Zero;
-        public int  hdr_code = 0;
-    
-        public IntPtr lpOFN = IntPtr.Zero;
-        public IntPtr pszFile = IntPtr.Zero;
-    }
-
-    internal static bool IsComObject(object o)
-    {
-        return Marshal.IsComObject(o);
-    }
-
-    internal static int ReleaseComObject(object objToRelease)
-    {
-        return Marshal.ReleaseComObject(objToRelease);
-    }
-            
-    public static object PtrToStructure(IntPtr lparam, Type cls) {
-        return Marshal.PtrToStructure(lparam, cls);
-    }
-    
-    public static void PtrToStructure(IntPtr lparam, object data) {
-        Marshal.PtrToStructure(lparam, data);
-    }
-
-        internal static int SizeOf(Type t)
+        [ComImport]
+        [Guid("0000000A-0000-0000-C000-000000000046")]
+        [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ILockBytes
         {
-            return Marshal.SizeOf(t);
+            void ReadAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                [Out] IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbRead
+            );
+
+            void WriteAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbWritten
+            );
+
+            void Flush();
+
+            void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
+
+            void LockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void UnlockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void Stat(
+                [Out] NativeMethods.STATSTG pstatstg,
+                [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag
+            );
         }
 
-        internal static void ThrowExceptionForHR(int errorCode)
+        [StructLayout(LayoutKind.Sequential)]
+        public class OFNOTIFY
         {
-            Marshal.ThrowExceptionForHR(errorCode);
+            // hdr was a by-value NMHDR structure
+            public IntPtr hdr_hwndFrom = IntPtr.Zero;
+            public IntPtr hdr_idFrom = IntPtr.Zero;
+            public int hdr_code = 0;
+
+            public IntPtr lpOFN = IntPtr.Zero;
+            public IntPtr pszFile = IntPtr.Zero;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]

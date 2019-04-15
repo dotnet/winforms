@@ -4656,7 +4656,7 @@ namespace System.Windows.Forms {
         private int    dwMsg;
 
         private void GetDataFromCopyData(IntPtr lparam) {
-            NativeMethods.COPYDATASTRUCT cds = (NativeMethods.COPYDATASTRUCT)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.COPYDATASTRUCT));
+            NativeMethods.COPYDATASTRUCT cds = (NativeMethods.COPYDATASTRUCT)Marshal.PtrToStructure(lparam, typeof(NativeMethods.COPYDATASTRUCT));
 
             if (cds != null && cds.lpData != IntPtr.Zero) {
                 propName = Marshal.PtrToStringAuto(cds.lpData);

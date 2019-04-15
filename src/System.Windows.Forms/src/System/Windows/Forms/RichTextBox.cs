@@ -3341,7 +3341,7 @@ namespace System.Windows.Forms {
                                 case RichTextBoxConstants.EM_SETCHARFORMAT:
                                     // Allow change of protected style
                                     //
-                                    NativeMethods.CHARFORMATA charFormat = (NativeMethods.CHARFORMATA)UnsafeNativeMethods.PtrToStructure(enprotected.lParam, typeof(NativeMethods.CHARFORMATA));
+                                    NativeMethods.CHARFORMATA charFormat = (NativeMethods.CHARFORMATA)Marshal.PtrToStructure(enprotected.lParam, typeof(NativeMethods.CHARFORMATA));
                                     if ((charFormat.dwMask & RichTextBoxConstants.CFM_PROTECTED) != 0) {
                                         m.Result = IntPtr.Zero;
                                         return;

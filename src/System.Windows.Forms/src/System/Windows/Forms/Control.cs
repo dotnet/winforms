@@ -15829,8 +15829,8 @@ example usage
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "AxSource:IsIE running under IE");
                             }
 
-                            if (container != null && UnsafeNativeMethods.IsComObject(container)) {
-                                UnsafeNativeMethods.ReleaseComObject(container);
+                            if (container != null && Marshal.IsComObject(container)) {
+                                Marshal.ReleaseComObject(container);
                             }
                         }
 
@@ -15905,7 +15905,7 @@ example usage
                         // is valid.
                         //
                         if (lpmsg != IntPtr.Zero) {
-                            NativeMethods.MSG msg = (NativeMethods.MSG)UnsafeNativeMethods.PtrToStructure(lpmsg, typeof(NativeMethods.MSG));
+                            NativeMethods.MSG msg = (NativeMethods.MSG)Marshal.PtrToStructure(lpmsg, typeof(NativeMethods.MSG));
                             Control target = control;
 
                             if (msg.hwnd != control.Handle && msg.message >= NativeMethods.WM_MOUSEFIRST && msg.message <= NativeMethods.WM_MOUSELAST) {
@@ -16205,7 +16205,7 @@ example usage
                     accelCount = (short)mnemonicList.Count;
 
                     if (accelCount > 0) {
-                        int accelSize = UnsafeNativeMethods.SizeOf(typeof(NativeMethods.ACCEL));
+                        int accelSize = Marshal.SizeOf(typeof(NativeMethods.ACCEL));
 
                         // In the worst case we may have two accelerators per mnemonic:  one lower case and
                         // one upper case, hence the * 2 below.
@@ -16396,7 +16396,7 @@ example usage
                 if (!activeXState[inPlaceVisible]) {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
                     NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI();
-                    inPlaceFrameInfo.cb = UnsafeNativeMethods.SizeOf(typeof(NativeMethods.tagOIFI));
+                    inPlaceFrameInfo.cb = Marshal.SizeOf(typeof(NativeMethods.tagOIFI));
                     IntPtr hwndParent = IntPtr.Zero;
 
                     // We are entering a secure context here.
@@ -16408,13 +16408,13 @@ example usage
                     NativeMethods.COMRECT posRect = new NativeMethods.COMRECT();
                     NativeMethods.COMRECT clipRect = new NativeMethods.COMRECT();
 
-                    if (inPlaceUiWindow != null && UnsafeNativeMethods.IsComObject(inPlaceUiWindow)) {
-                        UnsafeNativeMethods.ReleaseComObject(inPlaceUiWindow);
+                    if (inPlaceUiWindow != null && Marshal.IsComObject(inPlaceUiWindow)) {
+                        Marshal.ReleaseComObject(inPlaceUiWindow);
                         inPlaceUiWindow = null;
                     }
 
-                    if (inPlaceFrame != null && UnsafeNativeMethods.IsComObject(inPlaceFrame)) {
-                        UnsafeNativeMethods.ReleaseComObject(inPlaceFrame);
+                    if (inPlaceFrame != null && Marshal.IsComObject(inPlaceFrame)) {
+                        Marshal.ReleaseComObject(inPlaceFrame);
                         inPlaceFrame = null;
                     }
 
@@ -16481,14 +16481,14 @@ example usage
                     int hr = inPlaceFrame.SetBorderSpace(null);
                     if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
                         hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
-                        UnsafeNativeMethods.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR(hr);
                     }
 
                     if (inPlaceUiWindow != null) {
                         hr = inPlaceFrame.SetBorderSpace(null);
                         if (NativeMethods.Failed(hr) && hr != NativeMethods.OLE_E_INVALIDRECT &&
                             hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
-                            UnsafeNativeMethods.ThrowExceptionForHR(hr);
+                            Marshal.ThrowExceptionForHR(hr);
                         }
                     }
                 }
@@ -16532,13 +16532,13 @@ example usage
                 control.Visible = false;
                 hwndParent = IntPtr.Zero;
 
-                if (inPlaceUiWindow != null && UnsafeNativeMethods.IsComObject(inPlaceUiWindow)) {
-                    UnsafeNativeMethods.ReleaseComObject(inPlaceUiWindow);
+                if (inPlaceUiWindow != null && Marshal.IsComObject(inPlaceUiWindow)) {
+                    Marshal.ReleaseComObject(inPlaceUiWindow);
                     inPlaceUiWindow = null;
                 }
 
-                if (inPlaceFrame != null && UnsafeNativeMethods.IsComObject(inPlaceFrame)) {
-                    UnsafeNativeMethods.ReleaseComObject(inPlaceFrame);
+                if (inPlaceFrame != null && Marshal.IsComObject(inPlaceFrame)) {
+                    Marshal.ReleaseComObject(inPlaceFrame);
                     inPlaceFrame = null;
                 }
             }
@@ -16600,8 +16600,8 @@ example usage
 
                 Load(stream);
                 stream = null;
-                if (UnsafeNativeMethods.IsComObject(stg)) {
-                    UnsafeNativeMethods.ReleaseComObject(stg);
+                if (Marshal.IsComObject(stg)) {
+                    Marshal.ReleaseComObject(stg);
                 }
             }
 
@@ -16617,8 +16617,8 @@ example usage
                 bag.Read(stream);
                 Load(bag, null);
 
-                if (UnsafeNativeMethods.IsComObject(stream)) {
-                    UnsafeNativeMethods.ReleaseComObject(stream);
+                if (Marshal.IsComObject(stream)) {
+                    Marshal.ReleaseComObject(stream);
                 }
             }
 
@@ -16720,8 +16720,8 @@ example usage
                         }
                     }
                 }
-                if (UnsafeNativeMethods.IsComObject(pPropBag)) {
-                    UnsafeNativeMethods.ReleaseComObject(pPropBag);
+                if (Marshal.IsComObject(pPropBag)) {
+                    Marshal.ReleaseComObject(pPropBag);
                 }
             }
 
@@ -16873,7 +16873,7 @@ example usage
                     int hr = inPlaceFrame.SetBorderSpace(null);
 
                     if (NativeMethods.Failed(hr) && hr != NativeMethods.INPLACE_E_NOTOOLSPACE && hr != NativeMethods.E_NOTIMPL) {
-                        UnsafeNativeMethods.ThrowExceptionForHR(hr);
+                        Marshal.ThrowExceptionForHR(hr);
                     }
                 }
             }
@@ -16945,7 +16945,7 @@ example usage
                 //
                 int status;
 
-                pQaControl.cbSize = UnsafeNativeMethods.SizeOf(typeof(UnsafeNativeMethods.tagQACONTROL));
+                pQaControl.cbSize = Marshal.SizeOf(typeof(UnsafeNativeMethods.tagQACONTROL));
 
                 SetClientSite(pQaContainer.pClientSite);
 
@@ -16984,12 +16984,12 @@ example usage
                     }
                 }
 
-                if (pQaContainer.pPropertyNotifySink != null && UnsafeNativeMethods.IsComObject(pQaContainer.pPropertyNotifySink)) {
-                    UnsafeNativeMethods.ReleaseComObject(pQaContainer.pPropertyNotifySink);
+                if (pQaContainer.pPropertyNotifySink != null && Marshal.IsComObject(pQaContainer.pPropertyNotifySink)) {
+                    Marshal.ReleaseComObject(pQaContainer.pPropertyNotifySink);
                 }
 
-                if (pQaContainer.pUnkEventSink != null && UnsafeNativeMethods.IsComObject(pQaContainer.pUnkEventSink)) {
-                    UnsafeNativeMethods.ReleaseComObject(pQaContainer.pUnkEventSink);
+                if (pQaContainer.pUnkEventSink != null && Marshal.IsComObject(pQaContainer.pUnkEventSink)) {
+                    Marshal.ReleaseComObject(pQaContainer.pUnkEventSink);
                 }
             }
 
@@ -17267,7 +17267,7 @@ example usage
                 UnsafeNativeMethods.IStream stream = stg.CreateStream(this.GetStreamName(), NativeMethods.STGM_WRITE | NativeMethods.STGM_SHARE_EXCLUSIVE | NativeMethods.STGM_CREATE, 0, 0);
                 Debug.Assert(stream != null, "Stream should be non-null, or an exception should have been thrown.");
                 Save(stream, true);
-                UnsafeNativeMethods.ReleaseComObject(stream);
+                Marshal.ReleaseComObject(stream);
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.Save1"]/*' />
@@ -17282,8 +17282,8 @@ example usage
                 Save(bag, fClearDirty, false);
                 bag.Write(stream);
 
-                if (UnsafeNativeMethods.IsComObject(stream)) {
-                    UnsafeNativeMethods.ReleaseComObject(stream);
+                if (Marshal.IsComObject(stream)) {
+                    Marshal.ReleaseComObject(stream);
                 }
             }
 
@@ -17333,8 +17333,8 @@ example usage
                     }
                 }
 
-                if (UnsafeNativeMethods.IsComObject(pPropBag)) {
-                    UnsafeNativeMethods.ReleaseComObject(pPropBag);
+                if (Marshal.IsComObject(pPropBag)) {
+                    Marshal.ReleaseComObject(pPropBag);
                 }
 
                 if (fClearDirty) {
@@ -17372,8 +17372,8 @@ example usage
                 activeXState[viewAdvisePrimeFirst] = (advf & NativeMethods.ADVF_PRIMEFIRST) != 0 ? true : false;
                 activeXState[viewAdviseOnlyOnce] = (advf & NativeMethods.ADVF_ONLYONCE) != 0 ? true : false;
 
-                if (viewAdviseSink != null && UnsafeNativeMethods.IsComObject(viewAdviseSink)) {
-                    UnsafeNativeMethods.ReleaseComObject(viewAdviseSink);
+                if (viewAdviseSink != null && Marshal.IsComObject(viewAdviseSink)) {
+                    Marshal.ReleaseComObject(viewAdviseSink);
                 }
 
                 viewAdviseSink = pAdvSink;
@@ -17412,7 +17412,7 @@ example usage
                         }
                     }
 
-                    if (UnsafeNativeMethods.IsComObject(clientSite)) {
+                    if (Marshal.IsComObject(clientSite)) {
                         Marshal.FinalReleaseComObject(clientSite);
                     }
                 }
@@ -17843,8 +17843,8 @@ example usage
 
                 IAdviseSink sink = (IAdviseSink)adviseList[dwConnection - 1];
                 adviseList.RemoveAt(dwConnection - 1);
-                if (sink != null && UnsafeNativeMethods.IsComObject(sink)) {
-                    UnsafeNativeMethods.ReleaseComObject(sink);
+                if (sink != null && Marshal.IsComObject(sink)) {
+                    Marshal.ReleaseComObject(sink);
                 }
             }
 
@@ -17939,8 +17939,8 @@ example usage
                     viewAdviseSink.OnViewChange(NativeMethods.DVASPECT_CONTENT, -1);
 
                     if (activeXState[viewAdviseOnlyOnce]) {
-                        if (UnsafeNativeMethods.IsComObject(viewAdviseSink)) {
-                            UnsafeNativeMethods.ReleaseComObject(viewAdviseSink);
+                        if (Marshal.IsComObject(viewAdviseSink)) {
+                            Marshal.ReleaseComObject(viewAdviseSink);
                         }
                         viewAdviseSink = null;
                     }

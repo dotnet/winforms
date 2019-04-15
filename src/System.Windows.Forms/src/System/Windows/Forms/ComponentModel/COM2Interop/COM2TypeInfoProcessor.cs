@@ -290,7 +290,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 else {
                     typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
                 }
-                UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+                Marshal.PtrToStructure(pTypeAttr, typeAttr);
                 g = typeAttr.guid;
                 if (versions != null) {
                     versions[0] = typeAttr.wMajorVerNum;
@@ -345,7 +345,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                     try {
                         //(tagTYPEDESC)Marshal.PtrToStructure(typeDesc.unionMember, typeof(tagTYPEDESC));
-                        UnsafeNativeMethods.PtrToStructure(typeDesc.unionMember, refTypeDesc);
+                        Marshal.PtrToStructure(typeDesc.unionMember, refTypeDesc);
                     }
                     catch {
                         // above is failing, why?
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
 
                     NativeMethods.tagTYPEATTR refTypeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pRefTypeAttr, typeof(tagTYPEATTR));
-                    UnsafeNativeMethods.PtrToStructure(pRefTypeAttr, refTypeAttr);
+                    Marshal.PtrToStructure(pRefTypeAttr, refTypeAttr);
                     try {
                         Guid g = refTypeAttr.guid;
 
@@ -619,7 +619,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
 
             NativeMethods.tagTYPEATTR         typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-            UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+            Marshal.PtrToStructure(pTypeAttr, typeAttr);
             if (typeAttr == null) {
                 return;
             }
@@ -643,7 +643,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
 
                     //funcDesc = (tagFUNCDESC)Marshal.PtrToStructure(pFuncDesc, typeof(tagFUNCDESC));
-                    UnsafeNativeMethods.PtrToStructure(pFuncDesc, funcDesc);
+                    Marshal.PtrToStructure(pFuncDesc, funcDesc);
                     try {
                         if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
                             (dispidToGet != NativeMethods.MEMBERID_NIL && funcDesc.memid != dispidToGet)) {
@@ -724,7 +724,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
 
                 NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-                UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+                Marshal.PtrToStructure(pTypeAttr, typeAttr);
 
                 if (pTypeAttr == IntPtr.Zero) {
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: failed to get a typeAttr");
@@ -762,7 +762,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                         try {
                             //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
-                            UnsafeNativeMethods.PtrToStructure(pVarDesc, varDesc);
+                            Marshal.PtrToStructure(pVarDesc, varDesc);
 
                             if (varDesc == null ||
                                 varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
@@ -882,7 +882,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             }
 
             NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-            UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+            Marshal.PtrToStructure(pTypeAttr, typeAttr);
 
             try {
                 if (typeAttr == null) {
@@ -900,7 +900,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
 
                     //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
-                    UnsafeNativeMethods.PtrToStructure(pVarDesc, varDesc);
+                    Marshal.PtrToStructure(pVarDesc, varDesc);
 
                     try {
 

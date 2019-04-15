@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms {
             private bool gotNextEvent = false;
     
             public virtual IntPtr Callback(int code, IntPtr wparam, IntPtr lparam) {
-                NativeMethods.EVENTMSG eventmsg = (NativeMethods.EVENTMSG)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.EVENTMSG));
+                NativeMethods.EVENTMSG eventmsg = (NativeMethods.EVENTMSG)Marshal.PtrToStructure(lparam, typeof(NativeMethods.EVENTMSG));
                 
     
                 if (UnsafeNativeMethods.GetAsyncKeyState((int)Keys.Pause) != 0) {

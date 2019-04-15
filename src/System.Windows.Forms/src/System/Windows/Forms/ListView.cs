@@ -5382,7 +5382,7 @@ namespace System.Windows.Forms {
 
 
 
-                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) UnsafeNativeMethods.PtrToStructure((IntPtr) nmheader.pItem, typeof(NativeMethods.HDITEM2));
+                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) Marshal.PtrToStructure((IntPtr) nmheader.pItem, typeof(NativeMethods.HDITEM2));
                     int newColumnWidth = ((hdItem.mask & NativeMethods.HDI_WIDTH) != 0) ? hdItem.cxy : -1;
                     ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader.iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
@@ -5480,7 +5480,7 @@ namespace System.Windows.Forms {
                 NativeMethods.NMHEADER header = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (header.pItem != IntPtr.Zero) {
 
-                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) UnsafeNativeMethods.PtrToStructure((IntPtr) header.pItem, typeof(NativeMethods.HDITEM2));
+                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) Marshal.PtrToStructure((IntPtr) header.pItem, typeof(NativeMethods.HDITEM2));
                     if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER) {
 
                         int from = this.Columns[header.iItem].DisplayIndex;
