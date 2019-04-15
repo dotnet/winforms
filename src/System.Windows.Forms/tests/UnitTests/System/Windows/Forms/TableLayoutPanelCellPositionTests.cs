@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         public void TableLayoutPanelCellPosition_ConverterConvertFrom_InvalidString_ThrowsArgumentException(string value)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertFrom(value));
+            Assert.Throws<ArgumentException>("value", () => converter.ConvertFrom(value));
         }
 
         [Fact]

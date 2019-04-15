@@ -86,8 +86,8 @@ namespace System.Windows.Forms
         {
             if (value is string stringValue)
             {
-                string text = stringValue.Trim();
-                if (text.Length == 0)
+                stringValue = stringValue.Trim();
+                if (stringValue.Length == 0)
                 {
                     return null;
                 }
@@ -98,8 +98,7 @@ namespace System.Windows.Forms
                     culture = CultureInfo.CurrentCulture;
                 }
 
-                char sep = culture.TextInfo.ListSeparator[0];
-                string[] tokens = text.Split(new char[] { sep });
+                string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
                 int[] values = new int[tokens.Length];
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                 for (int i = 0; i < values.Length; i++)
@@ -110,9 +109,7 @@ namespace System.Windows.Forms
 
                 if (values.Length != 2)
                 {
-                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
-                                                                text,
-                                                                "column, row"));
+                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "column, row"), nameof(value));
                 }
 
                 return new TableLayoutPanelCellPosition(values[0], values[1]);
@@ -144,8 +141,8 @@ namespace System.Windows.Forms
             try
             {
                 return new TableLayoutPanelCellPosition(
-                    (int)propertyValues["Column"],
-                    (int)propertyValues["Row"]
+                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Column)],
+                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]
                 );
             }
             catch (InvalidCastException invalidCast)
@@ -163,7 +160,7 @@ namespace System.Windows.Forms
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(TableLayoutPanelCellPosition), attributes);
-            return props.Sort(new string[] { "Column", "Row" });
+            return props.Sort(new string[] { nameof(TableLayoutPanelCellPosition.Column), nameof(TableLayoutPanelCellPosition.Row) });
         }
 
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
