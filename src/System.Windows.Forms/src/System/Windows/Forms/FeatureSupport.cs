@@ -88,7 +88,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (featureId != null) 
+            if (featureId != null && typeof(IFeatureSupport).IsAssignableFrom(c))
             {
                 featureSupport = (IFeatureSupport) Activator.CreateInstance(c);
 
