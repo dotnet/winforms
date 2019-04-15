@@ -182,9 +182,9 @@ namespace System.Windows.Forms {
             string helpString = GetHelpString(ctl);
             string keyword = GetHelpKeyword(ctl);
             HelpNavigator navigator = GetHelpNavigator(ctl);
-            bool show = GetShowHelp(ctl);
 
-            if (!show) {
+            if (!GetShowHelp(ctl) || hevent == null)
+            {
                 return;
             }
 
