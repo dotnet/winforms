@@ -9201,50 +9201,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Pobiera pionowy pasek przewijania dla tego elementu ScrollableControl.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMixedZone">
-        <source>Mixed Zone</source>
-        <target state="translated">Strefa mieszana</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextMultipleSites">
-        <source>Multiple Sites</source>
-        <target state="translated">Wiele witryn</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownSite">
-        <source>Unknown Site</source>
-        <target state="translated">Nieznana witryna</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityRestrictedWindowTextUnknownZone">
-        <source>Unknown Zone</source>
-        <target state="translated">Nieznana strefa</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipCaption">
-        <source>Microsoft .NET Security Warning</source>
-        <target state="translated">Ostrzeżenie zabezpieczeń Microsoft .NET</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipMainText">
-        <source>Never enter personal information or passwords into a window unless you can verify and trust the source of the request.</source>
-        <target state="translated">Nigdy nie podawaj informacji osobistych ani haseł w oknach, jeśli nie możesz sprawdzić źródła żądania i zaufać mu.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipSourceInformation">
-        <source>Source: {0}</source>
-        <target state="translated">Źródło: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SecurityToolTipTextFormat">
-        <source>{0}
-
-{1}</source>
-        <target state="translated">{0}
-
-{1}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SelTabCountRange">
         <source>SelTabCount out of range.</source>
         <target state="translated">Wartość elementu SelTabCount poza zakresem.</target>
