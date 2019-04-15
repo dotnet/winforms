@@ -166,6 +166,14 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<char> GetCharTheoryData()
+        {
+            var data = new TheoryData<char>();
+            data.Add('\0');
+            data.Add('a');
+            return data;
+        }
+
         public static TheoryData<IntPtr> GetIntPtrTheoryData()
         {
             var data = new TheoryData<IntPtr>();
