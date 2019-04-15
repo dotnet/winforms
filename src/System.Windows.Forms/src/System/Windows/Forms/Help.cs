@@ -308,12 +308,7 @@ namespace System.Windows.Forms {
                     file = new Uri(partialUri);
                 }
                 catch (UriFormatException) {
-                    // eat URI parse exceptions...
-                    //
-                }   
-                catch (ArgumentNullException) {
-                    // Catch specific exceptions
-                    // Shouldnt get here...
+                    // Ignore invalid uris.
                 }
             }
 
@@ -337,13 +332,7 @@ namespace System.Windows.Forms {
                                    partialUri);
                 }
                 catch (UriFormatException) {
-                    // Catch specific exceptions
-                    // eat URI parse exceptions...
-                    //
-                }
-                catch (ArgumentNullException) {
-                    // Catch specific exceptions
-                    // Shouldnt get here...                    
+                    // Ignore invalid uris.
                 }
 
                 if (file != null && file.Scheme == "file") {
