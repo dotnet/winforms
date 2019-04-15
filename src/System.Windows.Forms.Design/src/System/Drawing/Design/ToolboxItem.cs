@@ -699,10 +699,6 @@ namespace System.Drawing.Design
             {
                 TypeName = type.FullName;
                 AssemblyName assemblyName = type.Assembly.GetName(true);
-                if (type.Assembly.GlobalAssemblyCache)
-                {
-                    assemblyName.CodeBase = null;
-                }
 
                 Dictionary<string, AssemblyName> parents = new Dictionary<string, AssemblyName>();
                 Type parentType = type;
