@@ -188,10 +188,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Stop() => Enabled = false;
 
-        public override string ToString()
-        {
-            return base.ToString() + ", Interval: " + Interval;
-        }
+        public override string ToString() => $"{base.ToString()}, Interval: {Interval}";
 
         private class TimerNativeWindow : NativeWindow
         {
