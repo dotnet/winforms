@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms {
 
             // Always use the managed FindStringInternal instead of LB_FINDSTRING.
             // The managed version correctly handles Turkish I.
-            return FindStringInternal(s, Items, startIndex, false);
+            return FindStringInternal(s, Items, startIndex, exact: false, ignoreCase: true);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.FindStringExact"]/*' />
@@ -1429,8 +1429,7 @@ namespace System.Windows.Forms {
 
             // Always use the managed FindStringInternal instead of LB_FINDSTRING.
             // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, true);
+            return FindStringInternal(s, Items, startIndex, exact: true, ignoreCase: true);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.GetItemHeight"]/*' />
