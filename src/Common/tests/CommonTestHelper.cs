@@ -200,6 +200,22 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Image> GetImageTheoryData()
+        {
+            var data = new TheoryData<Image>();
+            data.Add(new Bitmap(10, 10));
+            data.Add(null);
+            return data;
+        }
+
+        public static TheoryData<Font> GetFontTheoryData()
+        {
+            var data = new TheoryData<Font>();
+            data.Add(SystemFonts.MenuFont);
+            data.Add(null);
+            return data;
+        }
+
         public static TheoryData<Type> GetTypeWithNullTheoryData()
         {
             var data = new TheoryData<Type>();

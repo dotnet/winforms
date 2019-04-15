@@ -3649,7 +3649,7 @@ example usage
             set {
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }
 
                 RightToLeft oldValue = RightToLeft;

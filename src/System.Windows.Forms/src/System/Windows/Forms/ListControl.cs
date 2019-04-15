@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             {
                 if (value != null && !(value is IList || value is IListSource))
                 {
-                    throw new ArgumentException(SR.BadDataSourceForComplexBinding);
+                    throw new ArgumentException(SR.BadDataSourceForComplexBinding, nameof(value));
                 }
 
                 if (_dataSource == value)
@@ -150,11 +150,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_displayMemberConverter == null &&
-                    DataManager != null &&
-                    _displayMember != null)
+                if (_displayMemberConverter == null)
                 {
-                    PropertyDescriptorCollection props = DataManager.GetItemProperties();
+                    PropertyDescriptorCollection props = DataManager?.GetItemProperties();
                     if (props != null)
                     {
                         PropertyDescriptor displayMemberProperty = props.Find(_displayMember.BindingField, true);
@@ -285,17 +283,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool BindingMemberInfoInDataManager(BindingMemberInfo bindingMemberInfo)
+        private static bool BindingMemberInfoInDataManager(CurrencyManager dataManager, BindingMemberInfo bindingMemberInfo)
         {
-            if (_dataManager == null)
-            {
-                return false;
-            }
+            Debug.Assert(dataManager != null);
 
-            PropertyDescriptorCollection props = _dataManager.GetItemProperties();
-            int propsCount = props.Count;
+            PropertyDescriptorCollection props = dataManager.GetItemProperties();
 
-            for (int i = 0; i < propsCount; i++)
+            for (int i = 0; i < props.Count; i++)
             {
                 if (typeof(IList).IsAssignableFrom(props[i].PropertyType))
                 {
@@ -307,7 +301,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            for (int i = 0; i < propsCount; i++)
+            for (int i = 0; i < props.Count; i++)
             {
                 if (typeof(IList).IsAssignableFrom(props[i].PropertyType))
                 {
@@ -350,7 +344,7 @@ namespace System.Windows.Forms
                     // the properties in the dataManager
                     if (DataManager != null && !string.IsNullOrEmpty(value))
                     {
-                        if (!BindingMemberInfoInDataManager(newValueMember))
+                        if (!BindingMemberInfoInDataManager(DataManager, newValueMember))
                         {
                             throw new ArgumentException(SR.ListControlWrongValueMember, nameof(value));
                         }
@@ -474,7 +468,7 @@ namespace System.Windows.Forms
 
         protected object FilterItemOnProperty(object item, string field)
         {
-            if (item != null && field.Length > 0)
+            if (item != null && !string.IsNullOrEmpty(field))
             {
                 try
                 {
@@ -509,19 +503,18 @@ namespace System.Windows.Forms
 
         private protected int FindStringInternal(string str, IList items, int startIndex, bool exact, bool ignoreCase)
         {
-            if (str == null || items == null)
+            if (str == null)
             {
                 return -1;
             }
-
-            // The last item in the list is still a valid place to start looking.
+            if (items == null || items.Count == 0)
+            {
+                return -1;
+            }
             if (startIndex < -1 || startIndex >= items.Count)
             {
-                return -1;
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
             }
-
-            bool found = false;
-            int length = str.Length;
 
             // Start from the start index and wrap around until we find the string 
             // in question. Use a separate counter to ensure that we arent cycling through the list infinitely.
@@ -531,13 +524,15 @@ namespace System.Windows.Forms
             for (int index = (startIndex + 1) % items.Count; numberOfTimesThroughLoop < items.Count; index = (index + 1) % items.Count)
             {
                 numberOfTimesThroughLoop++;
+
+                bool found;
                 if (exact)
                 {
                     found = string.Compare(str, GetItemText(items[index]), ignoreCase, CultureInfo.CurrentCulture) == 0;
                 }
                 else
                 {
-                    found = string.Compare(str, 0, GetItemText(items[index]), 0, length, ignoreCase, CultureInfo.CurrentCulture) == 0;
+                    found = string.Compare(str, 0, GetItemText(items[index]), 0, str.Length, ignoreCase, CultureInfo.CurrentCulture) == 0;
                 }
 
                 if (found)
@@ -588,11 +583,6 @@ namespace System.Windows.Forms
             }
             catch (Exception exception) when (!ClientUtils.IsSecurityOrCriticalException(exception))
             {
-                if (filteredItem == null)
-                {
-                    return string.Empty;
-                }
-
                 // if we did not do any work then return the old ItemText
                 return Convert.ToString(item, CultureInfo.CurrentCulture);
             }
@@ -671,7 +661,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
-            OnSelectedValueChanged(EventArgs.Empty);
+            OnSelectedValueChanged(e);
         }
 
         protected virtual void OnValueMemberChanged(EventArgs e)
@@ -694,15 +684,11 @@ namespace System.Windows.Forms
 
         private void DataSourceDisposed(object sender, EventArgs e)
         {
-            Debug.Assert(sender == _dataSource, "how can we get dispose notification for anything other than our dataSource?");
             SetDataConnection(null, new BindingMemberInfo(string.Empty), true);
         }
 
         private void DataSourceInitialized(object sender, EventArgs e)
         {
-            ISupportInitializeNotification dsInit = (_dataSource as ISupportInitializeNotification);
-            Debug.Assert(dsInit != null, "ListControl: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
-            Debug.Assert(dsInit.IsInitialized, "ListControl: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
             SetDataConnection(_dataSource, _displayMember, true);
         }
 
@@ -763,7 +749,7 @@ namespace System.Windows.Forms
                         // "" is a good value for displayMember
                         if (_dataManager != null && (displayMemberChanged || dataSourceChanged) && !string.IsNullOrEmpty(_displayMember.BindingMember))
                         {
-                            if (!BindingMemberInfoInDataManager(_displayMember))
+                            if (!BindingMemberInfoInDataManager(_dataManager, _displayMember))
                             {
                                 throw new ArgumentException(SR.ListControlWrongDisplayMember, nameof(newDisplayMember));
                             }

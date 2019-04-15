@@ -2,122 +2,171 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using Xunit;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
+using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
     public class ControlTests
     {
-
-        #region Constructor
-
         [Fact]
-        public void Control_Constructor()
+        public void Control_Ctor_Default()
         {
-            var cont = new Control();
-
-            Assert.NotNull(cont);
-            Assert.Equal(DpiHelper.DeviceDpi, cont.deviceDpi);
-            Assert.True(cont.RequiredScalingEnabled);
-            Assert.Equal(BoundsSpecified.All, cont.RequiredScaling);
-            Assert.Equal(0, cont.TabIndex);
-            Assert.Equal(Size.Empty, cont.Size);
-            Assert.Null(cont.Parent);
-            Assert.True(cont.TabStop);
-            Assert.Equal(cont.Location, new Point());
-            Assert.True(cont.Enabled);
-            Assert.Equal(Control.DefaultFont, cont.Font);
-            Assert.Equal(Control.DefaultForeColor, cont.ForeColor);
-            Assert.Equal(Control.DefaultBackColor, cont.BackColor);
-            Assert.Equal("", cont.Text);
-            Assert.True(cont.Visible);
-            Assert.False(cont.Created);
+            var control = new Control();
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(0, control.Bottom);
+            Assert.False(control.Created);
+            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.True(control.Enabled);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Null(control.Parent);
+            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
+            Assert.True(control.RequiredScalingEnabled);
+            Assert.Equal(0, control.Right);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Empty(control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.True(control.Visible);
         }
 
-        [Fact]
-        public void Control_ConstructorText()
+        [Theory]
+        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        public void Control_Ctor_String(string text)
         {
-            var cont = new Control("Foo");
-
-            Assert.Equal("Foo", cont.Text);
-            Assert.Null(cont.Parent);
-            Assert.True(cont.TabStop);
-            Assert.Equal(cont.Location, new Point());
-            Assert.True(cont.Enabled);
-            Assert.Equal(Control.DefaultFont, cont.Font);
-            Assert.Equal(Control.DefaultForeColor, cont.ForeColor);
-            Assert.Equal(Control.DefaultBackColor, cont.BackColor);
-            Assert.True(cont.Visible);
-            Assert.False(cont.Created);
+            var control = new Control(text);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(0, control.Bottom);
+            Assert.False(control.Created);
+            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.True(control.Enabled);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Null(control.Parent);
+            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
+            Assert.True(control.RequiredScalingEnabled);
+            Assert.Equal(0, control.Right);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.True(control.Visible);
         }
 
-        [Fact]
-        public void Control_ConstructorSize()
+        public static IEnumerable<object[]> Ctor_String_Int_Int_Int_Int()
         {
-            var cont = new Control("Foo", 1, 2, 3, 4);
-
-            Assert.Equal("Foo", cont.Text);
-            Assert.Equal(1, cont.Left);
-            Assert.Equal(2, cont.Top);
-            Assert.Equal(3, cont.Width);
-            Assert.Equal(4, cont.Height);
-            Assert.True(cont.TabStop);
-            Assert.True(cont.Enabled);
-            Assert.Equal(Control.DefaultFont, cont.Font);
-            Assert.Equal(Control.DefaultForeColor, cont.ForeColor);
-            Assert.Equal(Control.DefaultBackColor, cont.BackColor);
-            Assert.True(cont.Visible);
-            Assert.False(cont.Created);
+            yield return new object[] { null, -1, -2, -3, -4 };
+            yield return new object[] { string.Empty, 0, 0, 0, 0 };
+            yield return new object[] { "Foo", 1, 2, 3, 4 };
         }
 
-        [Fact]
-        public void Control_ConstructorParent()
+        [Theory]
+        [MemberData(nameof(Ctor_String_Int_Int_Int_Int))]
+        public void Control_ConstructorSize(string text, int left, int top, int width, int height)
         {
-            var parent = new Control();
-
-            var cont = new Control(parent, "Foo");
-
-            Assert.NotNull(cont.Parent);
-            Assert.Equal(parent, cont.Parent);
-            Assert.Equal("Foo", cont.Text);
-            Assert.Equal(Size.Empty, cont.Size);
-            Assert.True(cont.TabStop);
-            Assert.Equal(cont.Location, new Point());
-            Assert.True(cont.Enabled);
-            Assert.Equal(Control.DefaultFont, cont.Font);
-            Assert.Equal(Control.DefaultForeColor, cont.ForeColor);
-            Assert.Equal(Control.DefaultBackColor, cont.BackColor);
-            Assert.True(cont.Visible);
-            Assert.False(cont.Created);
+            var control = new Control(text, left, top, width, height);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(top + height, control.Bottom);
+            Assert.False(control.Created);
+            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.True(control.Enabled);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(left, control.Left);
+            Assert.Equal(new Point(left, top), control.Location);
+            Assert.Null(control.Parent);
+            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
+            Assert.True(control.RequiredScalingEnabled);
+            Assert.Equal(left + width, control.Right);
+            Assert.Equal(new Size(width, height), control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Equal(top, control.Top);
+            Assert.True(control.Visible);
         }
 
-        [Fact]
-        public void Control_ConstructorAll()
+        public static IEnumerable<object[]> Ctor_Control_String_TestData()
         {
-            var parent = new Control();
-
-            var cont = new Control(parent, "Foo", 1, 2, 3, 4);
-
-            Assert.Equal(parent, cont.Parent);
-            Assert.Equal("Foo", cont.Text);
-            Assert.Equal(1, cont.Left);
-            Assert.Equal(2, cont.Top);
-            Assert.Equal(3, cont.Width);
-            Assert.Equal(4, cont.Height);
-            Assert.True(cont.TabStop);
-            Assert.True(cont.Enabled);
-            Assert.Equal(Control.DefaultFont, cont.Font);
-            Assert.Equal(Control.DefaultForeColor, cont.ForeColor);
-            Assert.Equal(Control.DefaultBackColor, cont.BackColor);
-            Assert.True(cont.Visible);
-            Assert.False(cont.Created);
+            yield return new object[] { null, null };
+            yield return new object[] { new Control(), string.Empty };
+            yield return new object[] { new Control(), "text" };
         }
 
-        #endregion
+        [Theory]
+        [MemberData(nameof(Ctor_Control_String_TestData))]
+        public void Control_Ctor_Control_String(Control parent, string text)
+        {
+            var control = new Control(parent, text);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(0, control.Bottom);
+            Assert.False(control.Created);
+            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.True(control.Enabled);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(0, control.Left);
+            Assert.Equal(Point.Empty, control.Location);
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
+            Assert.True(control.RequiredScalingEnabled);
+            Assert.Equal(0, control.Right);
+            Assert.Equal(Size.Empty, control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Equal(0, control.Top);
+            Assert.True(control.Visible);
+        }
+
+        public static IEnumerable<object[]> Ctor_Control_String_Int_Int_Int_Int_TestData()
+        {
+            yield return new object[] { null, null, -1, -2, -3, -4 };
+            yield return new object[] { new Control(), string.Empty, 0, 0, 0, 0 };
+            yield return new object[] { new Control(), "text", 1, 2, 3, 4 };
+        }
+
+        [Theory]
+        [MemberData(nameof(Ctor_Control_String_Int_Int_Int_Int_TestData))]
+        public void Control_Ctor_Control_String_Int_Int_Int_Int(Control parent, string text, int left, int top, int width, int height)
+        {
+            var control = new Control(parent, text, left, top, width, height);
+            Assert.Equal(Control.DefaultBackColor, control.BackColor);
+            Assert.Null(control.BindingContext);
+            Assert.Equal(top + height, control.Bottom);
+            Assert.False(control.Created);
+            Assert.Equal(DpiHelper.DeviceDpi, control.deviceDpi);
+            Assert.True(control.Enabled);
+            Assert.Equal(Control.DefaultFont, control.Font);
+            Assert.Equal(Control.DefaultForeColor, control.ForeColor);
+            Assert.Equal(left, control.Left);
+            Assert.Equal(new Point(left, top), control.Location);
+            Assert.Same(parent, control.Parent);
+            Assert.Equal(BoundsSpecified.All, control.RequiredScaling);
+            Assert.True(control.RequiredScalingEnabled);
+            Assert.Equal(left + width, control.Right);
+            Assert.Equal(new Size(width, height), control.Size);
+            Assert.Equal(0, control.TabIndex);
+            Assert.True(control.TabStop);
+            Assert.Equal(text ?? string.Empty, control.Text);
+            Assert.Equal(top, control.Top);
+            Assert.True(control.Visible);
+        }
 
         #region Control Creation
 
@@ -995,21 +1044,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Yes, cont.RightToLeft);
         }
 
-        /// <summary>
-        /// Data for the RightToLeftInvalid test
-        /// </summary>
-        public static TheoryData<RightToLeft> RightToLeftInvalidData =>
-            CommonTestHelper.GetEnumTheoryDataInvalid<RightToLeft>();
-
         [Theory]
-        [MemberData(nameof(RightToLeftInvalidData))]
-        public void Control_RightToLeftInvalid(RightToLeft expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        public void Control_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
-            var cont = new Control();
-
-            // act & assert
-            var ex = Assert.Throws<InvalidEnumArgumentException>(() => cont.RightToLeft = expected);
-            Assert.Equal("RightToLeft", ex.ParamName);
+            var control = new Control();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
         /// <summary>
@@ -1747,16 +1787,84 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.AutoScrollOffset);
         }
 
-        [Fact]
-        public void Control_BindingContextGetSet()
+        public static IEnumerable<object[]> BindingContext_Set_TestData()
         {
-            var cont = new Control();
-            var expected = new BindingContext();
+            yield return new object[] { null };
+            yield return new object[] { new BindingContext() };
+        }
 
-            cont.BindingContext = expected;
+        [Theory]
+        [MemberData(nameof(BindingContext_Set_TestData))]
+        public void Control_BindingContext_Set_GetReturnsExpected(BindingContext value)
+        {
+            var control = new Control
+            {
+                BindingContext = value
+            };
+            Assert.Same(value, control.BindingContext);
 
-            Assert.NotNull(cont.BindingContext);
-            Assert.Equal(expected, cont.BindingContext);
+            // Set same.
+            control.BindingContext = value;
+            Assert.Same(value, control.BindingContext);
+        }
+
+        [Theory]
+        [MemberData(nameof(BindingContext_Set_TestData))]
+        public void Control_BindingContext_SetWithNonNullBindingContext_GetReturnsExpected(BindingContext value)
+        {
+            var control = new Control
+            {
+                BindingContext = new BindingContext()
+            };
+
+            control.BindingContext = value;
+            Assert.Same(value, control.BindingContext);
+
+            // Set same.
+            control.BindingContext = value;
+            Assert.Same(value, control.BindingContext);
+        }
+
+        [Fact]
+        public void Control_BindingContext_SetWithHandler_CallsBindingContextChanged()
+        {
+            var control = new Control();
+            int callCount = 0;
+            EventHandler handler = (sender, e) =>
+            {
+                Assert.Same(control, sender);
+                Assert.Same(EventArgs.Empty, e);
+                callCount++;
+            };
+            control.BindingContextChanged += handler;
+
+            // Set different.
+            var context1 = new BindingContext();
+            control.BindingContext = context1;
+            Assert.Same(context1, control.BindingContext);
+            Assert.Equal(1, callCount);
+
+            // Set same.
+            control.BindingContext = context1;
+            Assert.Same(context1, control.BindingContext);
+            Assert.Equal(1, callCount);
+
+            // Set different.
+            var context2 = new BindingContext();
+            control.BindingContext = context2;
+            Assert.Same(context2, control.BindingContext);
+            Assert.Equal(2, callCount);
+
+            // Set null.
+            control.BindingContext = null;
+            Assert.Null(control.BindingContext);
+            Assert.Equal(3, callCount);
+
+            // Remove handler.
+            control.BindingContextChanged -= handler;
+            control.BindingContext = context1;
+            Assert.Same(context1, control.BindingContext);
+            Assert.Equal(3, callCount);
         }
 
         /// <summary>
