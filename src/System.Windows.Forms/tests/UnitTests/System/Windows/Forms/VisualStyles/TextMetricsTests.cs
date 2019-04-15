@@ -10,7 +10,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
     public class TextMetricsTests
     {
         [Fact]
-        public void Ctor_Default()
+        public void TextMetrics_Ctor_Default()
         {
             var metric = new TextMetrics();
             Assert.Equal(0, metric.Ascent);
@@ -36,7 +36,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void Ascent_Set_GetReturnsExpected(int value)
+        public void TextMetrics_Ascent_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -51,7 +51,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void AverageCharWidth_Set_GetReturnsExpected(int value)
+        public void TextMetrics_AverageCharWidth_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetCharTheoryData))]
-        public void BreakChar_Set_GetReturnsExpected(char value)
+        public void TextMetrics_BreakChar_Set_GetReturnsExpected(char value)
         {
             var metric = new TextMetrics
             {
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextMetricsCharacterSet))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextMetricsCharacterSet))]
-        public void CharSet_Set_GetReturnsExpected(TextMetricsCharacterSet value)
+        public void TextMetrics_CharSet_Set_GetReturnsExpected(TextMetricsCharacterSet value)
         {
             var metric = new TextMetrics
             {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetCharTheoryData))]
-        public void DefaultChar_Set_GetReturnsExpected(char value)
+        public void TextMetrics_DefaultChar_Set_GetReturnsExpected(char value)
         {
             var metric = new TextMetrics
             {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void Descent_Set_GetReturnsExpected(int value)
+        public void TextMetrics_Descent_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void DigitizedAspectX_Set_GetReturnsExpected(int value)
+        public void TextMetrics_DigitizedAspectX_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void DigitizedAspectY_Set_GetReturnsExpected(int value)
+        public void TextMetrics_DigitizedAspectY_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void ExternalLeading_Set_GetReturnsExpected(int value)
+        public void TextMetrics_ExternalLeading_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetCharTheoryData))]
-        public void FirstChar_Set_GetReturnsExpected(char value)
+        public void TextMetrics_FirstChar_Set_GetReturnsExpected(char value)
         {
             var metric = new TextMetrics
             {
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void Height_Set_GetReturnsExpected(int value)
+        public void TextMetrics_Height_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void InternalLeading_Set_GetReturnsExpected(int value)
+        public void TextMetrics_InternalLeading_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Italic_Set_GetReturnsExpected(bool value)
+        public void TextMetrics_Italic_Set_GetReturnsExpected(bool value)
         {
             var metric = new TextMetrics
             {
@@ -232,7 +232,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetCharTheoryData))]
-        public void LastChar_Set_GetReturnsExpected(char value)
+        public void TextMetrics_LastChar_Set_GetReturnsExpected(char value)
         {
             var metric = new TextMetrics
             {
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void MaxCharWidth_Set_GetReturnsExpected(int value)
+        public void TextMetrics_MaxCharWidth_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void Overhang_Set_GetReturnsExpected(int value)
+        public void TextMetrics_Overhang_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextMetricsPitchAndFamilyValues))]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextMetricsPitchAndFamilyValues))]
-        public void PitchAndFamily_GetReturnsExpected(TextMetricsPitchAndFamilyValues value)
+        public void TextMetrics_PitchAndFamily_GetReturnsExpected(TextMetricsPitchAndFamilyValues value)
         {
             var metric = new TextMetrics
             {
@@ -293,7 +293,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void StruckOut_Set_GetReturnsExpected(bool value)
+        public void TextMetrics_StruckOut_Set_GetReturnsExpected(bool value)
         {
             var metric = new TextMetrics
             {
@@ -308,7 +308,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void Underlined_Set_GetReturnsExpected(bool value)
+        public void TextMetrics_Underlined_Set_GetReturnsExpected(bool value)
         {
             var metric = new TextMetrics
             {
@@ -323,7 +323,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
-        public void Weight_Set_GetReturnsExpected(int value)
+        public void TextMetrics_Weight_Set_GetReturnsExpected(int value)
         {
             var metric = new TextMetrics
             {
