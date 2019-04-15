@@ -201,9 +201,26 @@ namespace System.Windows.Forms {
             ///      for the object.  This is useful for objects that are immutable, but still
             ///      want to provide changable properties.
             /// </devdoc>
-            public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues) {
-                return new LinkArea((int)propertyValues["Start"],
-                                 (int)propertyValues["Length"]);
+            public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+            {
+                if (propertyValues == null)
+                {
+                    throw new ArgumentNullException(nameof(propertyValues));
+                }
+
+                try
+                {
+                    return new LinkArea((int)propertyValues["Start"],
+                                    (int)propertyValues["Length"]);
+                }
+                catch (InvalidCastException invalidCast)
+                {
+                    throw new ArgumentException(SR.PropertyValueInvalidEntry, nameof(propertyValues), invalidCast);
+                }
+                catch (NullReferenceException nullRef)
+                {
+                    throw new ArgumentException(SR.PropertyValueInvalidEntry, nameof(propertyValues), nullRef);
+                }
             }
 
             /// <include file='doc\LinkArea.uex' path='docs/doc[@for="LinkArea.LinkAreaConverter.GetCreateInstanceSupported"]/*' />
