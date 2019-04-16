@@ -5239,49 +5239,49 @@ namespace System.Windows.Forms {
         }
     
         [StructLayout(LayoutKind.Sequential)]
-        public  sealed class  tagTYPEATTR {
+        public  struct  tagTYPEATTR {
             public Guid guid;
             [MarshalAs(UnmanagedType.U4)]
-            public   int lcid = 0;
+            public   int lcid;
             [MarshalAs(UnmanagedType.U4)]
-            public   int dwReserved = 0;
-            public   int memidConstructor = 0;
-            public   int memidDestructor = 0;
-            public   IntPtr lpstrSchema = IntPtr.Zero;
+            public   int dwReserved;
+            public   int memidConstructor;
+            public   int memidDestructor;
+            public   IntPtr lpstrSchema;
             [MarshalAs(UnmanagedType.U4)]
-            public   int cbSizeInstance = 0;
-            public    /*NativeMethods.tagTYPEKIND*/ int typekind = 0;
+            public   int cbSizeInstance;
+            public    /*NativeMethods.tagTYPEKIND*/ int typekind;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cFuncs = 0;
+            public   short cFuncs;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cVars = 0;
+            public   short cVars;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cImplTypes = 0;
+            public   short cImplTypes;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cbSizeVft = 0;
+            public   short cbSizeVft;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cbAlignment = 0;
+            public   short cbAlignment;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wTypeFlags = 0;
+            public   short wTypeFlags;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wMajorVerNum = 0;
+            public   short wMajorVerNum;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wMinorVerNum = 0;
+            public   short wMinorVerNum;
             
             //these are inline too
             //public    NativeMethods.tagTYPEDESC tdescAlias;
             [MarshalAs(UnmanagedType.U4)]
-            public   int tdescAlias_unionMember = 0;
+            public   int tdescAlias_unionMember;
             
             [MarshalAs(UnmanagedType.U2)]
-            public   short tdescAlias_vt = 0;
+            public   short tdescAlias_vt;
             
             //public    NativeMethods.tagIDLDESC idldescType;
             [MarshalAs(UnmanagedType.U4)]
-            public   int idldescType_dwReserved = 0;
+            public   int idldescType_dwReserved;
             
             [MarshalAs(UnmanagedType.U2)]
-            public   short idldescType_wIDLFlags = 0;
+            public   short idldescType_wIDLFlags;
             
             
             public tagTYPEDESC Get_tdescAlias(){
