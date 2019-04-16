@@ -880,14 +880,9 @@ namespace System.Windows.Forms {
         void IButtonControl.NotifyDefault(bool value) {
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnGotFocus"]/*' />
         /// <devdoc>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.GotFocus'/>
-        ///      event.
-        ///   </para>
+        /// Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.
         /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
         protected override void OnGotFocus(EventArgs e) {
             if (!this.processingOnGotFocus) {
                 base.OnGotFocus(e);

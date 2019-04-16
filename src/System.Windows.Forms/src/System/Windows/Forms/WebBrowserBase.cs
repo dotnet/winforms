@@ -67,14 +67,8 @@ namespace System.Windows.Forms
         // Internal fields:
         //
         internal WebBrowserContainer container;
-        internal object activeXInstance;    // this is internal to avoid the security demand
+        internal object activeXInstance;
 
-
-
-        //
-        // SECURITY NOTE: This must be internal, because by specifying a
-        // clsid here, someone will be able to create a native com object.
-        //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WebBrowserBase"]/*' />
         /// <devdoc>
         ///     <para>
@@ -238,7 +232,6 @@ namespace System.Windows.Forms
             base.OnBoundsUpdate(x, y, width, height);
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
@@ -346,7 +339,6 @@ namespace System.Windows.Forms
         // mnemonic. We have to ask the ActiveX control for it.
         //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ProcessMnemonic"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected internal override bool ProcessMnemonic(char charCode) {
             bool processed = false;
 

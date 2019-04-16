@@ -980,15 +980,7 @@ namespace System.Windows.Forms
             this.Size = Control.Size;
         }
     
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessCmdKey"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -998,12 +990,7 @@ namespace System.Windows.Forms
             return base.ProcessMnemonic( charCode );
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessDialogKey(Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessDialogKey(Keys keyData) => false;
 
         protected override void SetVisibleCore(bool visible) {
             // This is needed, because if you try and set set visible to true before the parent is visible,

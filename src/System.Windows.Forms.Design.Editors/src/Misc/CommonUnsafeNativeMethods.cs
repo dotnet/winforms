@@ -66,7 +66,6 @@ namespace System.Windows.Forms
 
         #region PInvoke DpiRelated
         // This section could go to Nativemethods.cs or Safenativemethods.cs but we have separate copies of them in each library (System.winforms, System.Design and System.Drawing).
-        // Keeping them here will reduce duplicating code but may have to take care of security warnings (if any).
         // These APIs are available starting Windows 10, version 1607 only.
         [DllImport(ExternDll.User32, SetLastError = true, ExactSpelling = true, CharSet = CharSet.Auto)]
         internal static extern DpiAwarenessContext GetThreadDpiAwarenessContext();

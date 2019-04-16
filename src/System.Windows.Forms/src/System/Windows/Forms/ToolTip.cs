@@ -2396,7 +2396,6 @@ namespace System.Windows.Forms {
                    if (currentCursor != null)
                    {
                         wp->x = cursorPos.X;
-                        // Since HotSpot requires a security demand .. we assert this and revert Assert immediately 
                         wp->y = cursorPos.Y;
                         if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom) {
                             wp->y = cursorPos.Y - wp->cy;
