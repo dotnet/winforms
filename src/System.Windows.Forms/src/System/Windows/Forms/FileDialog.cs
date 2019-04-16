@@ -663,7 +663,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
-            if (msg == NativeMethods.WM_NOTIFY) {
+            if (msg == Interop.WindowMessages.WM_NOTIFY) {
                 dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
                 try {
                     UnsafeNativeMethods.OFNOTIFY notify = Marshal.PtrToStructure<UnsafeNativeMethods.OFNOTIFY>(lparam);

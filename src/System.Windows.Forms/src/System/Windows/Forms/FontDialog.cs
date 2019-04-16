@@ -463,10 +463,10 @@ namespace System.Windows.Forms {
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             
             switch (msg) {
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     if ((int)wparam == 0x402) {
                         NativeMethods.LOGFONT lf = new NativeMethods.LOGFONT();
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), NativeMethods.WM_CHOOSEFONT_GETLOGFONT, 0, lf);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hWnd), Interop.WindowMessages.WM_CHOOSEFONT_GETLOGFONT, 0, lf);
                         UpdateFont(lf);
                         int index = (int)UnsafeNativeMethods.SendDlgItemMessage(new HandleRef(null, hWnd), 0x473, NativeMethods.CB_GETCURSEL, IntPtr.Zero, IntPtr.Zero);
                         if (index != NativeMethods.CB_ERR) {
@@ -488,7 +488,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_INITDIALOG:
+                case Interop.WindowMessages.WM_INITDIALOG:
                     if (!showColor) {
                         IntPtr hWndCtl = UnsafeNativeMethods.GetDlgItem(new HandleRef(null, hWnd), NativeMethods.cmb4);
                         SafeNativeMethods.ShowWindow(new HandleRef(null, hWndCtl), NativeMethods.SW_HIDE);

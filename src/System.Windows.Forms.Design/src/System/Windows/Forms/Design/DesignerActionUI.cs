@@ -1054,7 +1054,7 @@ namespace System.ComponentModel.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_ACTIVATE:
+                case Interop.WindowMessages.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }

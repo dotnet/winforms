@@ -574,7 +574,7 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.GetCursorPos(p);
                         UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
-                            SendMessage(NativeMethods.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                     }
                 }
             }
@@ -2446,14 +2446,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     splitterFocused = true;
                     base.WndProc(ref msg);
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     splitterFocused = false;
                     base.WndProc(ref msg);
                     break;
@@ -2496,9 +2496,9 @@ namespace System.Windows.Forms {
             /// </devdoc>
             /// <internalonly/>
             bool IMessageFilter.PreFilterMessage(ref Message m) {
-                if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
-                    if ((m.Msg == NativeMethods.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
-                        || (m.Msg == NativeMethods.WM_SYSKEYDOWN)) {
+                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
+                    if ((m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                        || (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)) {
                         //Notify that splitMOVE was reverted ..
                         //this is used in ONKEYUP!!
                         owner.splitBegin = false;

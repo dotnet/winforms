@@ -2508,7 +2508,7 @@ namespace System.Windows.Forms {
 
             switch (msg.Msg) {
 
-            case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+            case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                  NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) msg.GetLParam(typeof(NativeMethods.NMHDR));
                  if (nmhdr.code == NativeMethods.TTN_SHOW && !trackPosition) {
                      WmShow();
@@ -2521,22 +2521,22 @@ namespace System.Windows.Forms {
                  } 
                  break;                
             
-            case NativeMethods.WM_WINDOWPOSCHANGING:
+            case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                  WmWindowPosChanging(ref msg);
                  break;
 			
-            case NativeMethods.WM_WINDOWPOSCHANGED:
+            case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                  if (!WmWindowPosChanged() && window != null)
                  {
                     window.DefWndProc(ref msg);
                  }
                  break;
 					 
-            case NativeMethods.WM_MOUSEACTIVATE:
+            case Interop.WindowMessages.WM_MOUSEACTIVATE:
                  WmMouseActivate(ref msg);
                  break;
 
-            case NativeMethods.WM_MOVE:
+            case Interop.WindowMessages.WM_MOVE:
                  WmMove();
                  break;
             
@@ -2544,10 +2544,10 @@ namespace System.Windows.Forms {
                 WmWindowFromPoint(ref msg);
                 break;
    
-            case NativeMethods.WM_PRINTCLIENT:
-                goto case NativeMethods.WM_PAINT;
+            case Interop.WindowMessages.WM_PRINTCLIENT:
+                goto case Interop.WindowMessages.WM_PAINT;
                 
-            case NativeMethods.WM_PAINT:
+            case Interop.WindowMessages.WM_PAINT:
                 if (ownerDraw && !isBalloon && !trackPosition)
                 {
                     NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
@@ -2571,7 +2571,7 @@ namespace System.Windows.Forms {
                             }
                             Font font;
                             try {
-                                font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_GETFONT, 0, 0));
+                                font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_GETFONT, 0, 0));
                             }
                             catch (ArgumentException) {
                                 // If the current default tooltip font is a non-TrueType font, then

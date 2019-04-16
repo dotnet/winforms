@@ -297,7 +297,7 @@ namespace System.Windows.Forms.Design
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_NCHITTEST:
+                    case Interop.WindowMessages.WM_NCHITTEST:
                         m.Result = (IntPtr)(NativeMethods.HTTRANSPARENT);
                         break;
                     default:

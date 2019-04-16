@@ -1630,12 +1630,12 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_COMMAND + NativeMethods.WM_REFLECT:
+                case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
+                case Interop.WindowMessages.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
                         case NativeMethods.TTN_NEEDTEXT:

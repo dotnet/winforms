@@ -832,20 +832,21 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_HSCROLL:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL:
                     WmReflectScroll(ref m);
                     break;
-                case NativeMethods.WM_ERASEBKGND:
+
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     break;
 
-                case NativeMethods.WM_SIZE:
+                case Interop.WindowMessages.WM_SIZE:
                     // Fixes the scrollbar focus rect
                     if (UnsafeNativeMethods.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
-                        SendMessage(NativeMethods.WM_KILLFOCUS, 0, 0);
-                        SendMessage(NativeMethods.WM_SETFOCUS, 0, 0);
+                        SendMessage(Interop.WindowMessages.WM_KILLFOCUS, 0, 0);
+                        SendMessage(Interop.WindowMessages.WM_SETFOCUS, 0, 0);
                     }
                     break;
 

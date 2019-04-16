@@ -158,16 +158,16 @@ namespace System.Windows.Forms {
 
             switch (value) {
                 case MdiLayout.Cascade:
-                    SendMessage(NativeMethods.WM_MDICASCADE, 0, 0);
+                    SendMessage(Interop.WindowMessages.WM_MDICASCADE, 0, 0);
                     break;
                 case MdiLayout.TileVertical:
-                    SendMessage(NativeMethods.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
+                    SendMessage(Interop.WindowMessages.WM_MDITILE, NativeMethods.MDITILE_VERTICAL, 0);
                     break;
                 case MdiLayout.TileHorizontal:
-                    SendMessage(NativeMethods.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
+                    SendMessage(Interop.WindowMessages.WM_MDITILE, NativeMethods.MDITILE_HORIZONTAL, 0);
                     break;
                 case MdiLayout.ArrangeIcons:
-                    SendMessage(NativeMethods.WM_MDIICONARRANGE, 0, 0);
+                    SendMessage(Interop.WindowMessages.WM_MDIICONARRANGE, 0, 0);
                     break;
             }
         }
@@ -338,13 +338,13 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     if (ParentInternal != null && ParentInternal.Site != null && ParentInternal.Site.DesignMode && Handle != IntPtr.Zero) {
                         SetWindowRgn();
                     }
                     break;
 
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     InvokeGotFocus(ParentInternal, EventArgs.Empty);
                     Form childForm = null;
                     if (ParentInternal is Form) {
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
                     DefWndProc(ref m);
                     InvokeGotFocus(this, EventArgs.Empty);
                     return;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     InvokeLostFocus(ParentInternal, EventArgs.Empty);
                     break;
             }

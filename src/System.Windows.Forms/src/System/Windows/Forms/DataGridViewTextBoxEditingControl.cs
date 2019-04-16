@@ -285,7 +285,7 @@ namespace System.Windows.Forms
             switch ((Keys)(int) m.WParam)
             {
                 case Keys.Enter:
-                    if (m.Msg == NativeMethods.WM_CHAR &&
+                    if (m.Msg == Interop.WindowMessages.WM_CHAR &&
                         !(ModifierKeys == Keys.Shift && this.Multiline && this.AcceptsReturn))
                     {
                         // Ignore the Enter key and don't add it to the textbox content. This happens when failing validation brings
@@ -296,7 +296,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.LineFeed:
-                    if (m.Msg == NativeMethods.WM_CHAR &&
+                    if (m.Msg == Interop.WindowMessages.WM_CHAR &&
                         ModifierKeys == Keys.Control && this.Multiline && this.AcceptsReturn)
                     {
                         // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.A:
-                    if (m.Msg == NativeMethods.WM_KEYDOWN && ModifierKeys == Keys.Control)
+                    if (m.Msg == Interop.WindowMessages.WM_KEYDOWN && ModifierKeys == Keys.Control)
                     {
                         SelectAll();
                         return true;

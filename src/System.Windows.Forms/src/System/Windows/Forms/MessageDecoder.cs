@@ -20,805 +20,805 @@ namespace System.Windows.Forms
             string text;
             switch (msg)
             {
-                case NativeMethods.WM_NULL:
+                case Interop.WindowMessages.WM_NULL:
                     text = "WM_NULL";
                     break;
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     text = "WM_CREATE";
                     break;
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     text = "WM_DESTROY";
                     break;
-                case NativeMethods.WM_MOVE:
+                case Interop.WindowMessages.WM_MOVE:
                     text = "WM_MOVE";
                     break;
-                case NativeMethods.WM_SIZE:
+                case Interop.WindowMessages.WM_SIZE:
                     text = "WM_SIZE";
                     break;
-                case NativeMethods.WM_ACTIVATE:
+                case Interop.WindowMessages.WM_ACTIVATE:
                     text = "WM_ACTIVATE";
                     break;
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     text = "WM_SETFOCUS";
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     text = "WM_KILLFOCUS";
                     break;
-                case NativeMethods.WM_ENABLE:
+                case Interop.WindowMessages.WM_ENABLE:
                     text = "WM_ENABLE";
                     break;
-                case NativeMethods.WM_SETREDRAW:
+                case Interop.WindowMessages.WM_SETREDRAW:
                     text = "WM_SETREDRAW";
                     break;
-                case NativeMethods.WM_SETTEXT:
+                case Interop.WindowMessages.WM_SETTEXT:
                     text = "WM_SETTEXT";
                     break;
-                case NativeMethods.WM_GETTEXT:
+                case Interop.WindowMessages.WM_GETTEXT:
                     text = "WM_GETTEXT";
                     break;
-                case NativeMethods.WM_GETTEXTLENGTH:
+                case Interop.WindowMessages.WM_GETTEXTLENGTH:
                     text = "WM_GETTEXTLENGTH";
                     break;
-                case NativeMethods.WM_PAINT:
+                case Interop.WindowMessages.WM_PAINT:
                     text = "WM_PAINT";
                     break;
-                case NativeMethods.WM_CLOSE:
+                case Interop.WindowMessages.WM_CLOSE:
                     text = "WM_CLOSE";
                     break;
-                case NativeMethods.WM_QUERYENDSESSION:
+                case Interop.WindowMessages.WM_QUERYENDSESSION:
                     text = "WM_QUERYENDSESSION";
                     break;
-                case NativeMethods.WM_QUIT:
+                case Interop.WindowMessages.WM_QUIT:
                     text = "WM_QUIT";
                     break;
-                case NativeMethods.WM_QUERYOPEN:
+                case Interop.WindowMessages.WM_QUERYOPEN:
                     text = "WM_QUERYOPEN";
                     break;
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     text = "WM_ERASEBKGND";
                     break;
-                case NativeMethods.WM_SYSCOLORCHANGE:
+                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
                     text = "WM_SYSCOLORCHANGE";
                     break;
-                case NativeMethods.WM_ENDSESSION:
+                case Interop.WindowMessages.WM_ENDSESSION:
                     text = "WM_ENDSESSION";
                     break;
-                case NativeMethods.WM_SHOWWINDOW:
+                case Interop.WindowMessages.WM_SHOWWINDOW:
                     text = "WM_SHOWWINDOW";
                     break;
-                case NativeMethods.WM_WININICHANGE:
+                case Interop.WindowMessages.WM_WININICHANGE:
                     text = "WM_WININICHANGE";
                     break;
-                case NativeMethods.WM_DEVMODECHANGE:
+                case Interop.WindowMessages.WM_DEVMODECHANGE:
                     text = "WM_DEVMODECHANGE";
                     break;
-                case NativeMethods.WM_ACTIVATEAPP:
+                case Interop.WindowMessages.WM_ACTIVATEAPP:
                     text = "WM_ACTIVATEAPP";
                     break;
-                case NativeMethods.WM_FONTCHANGE:
+                case Interop.WindowMessages.WM_FONTCHANGE:
                     text = "WM_FONTCHANGE";
                     break;
-                case NativeMethods.WM_TIMECHANGE:
+                case Interop.WindowMessages.WM_TIMECHANGE:
                     text = "WM_TIMECHANGE";
                     break;
-                case NativeMethods.WM_CANCELMODE:
+                case Interop.WindowMessages.WM_CANCELMODE:
                     text = "WM_CANCELMODE";
                     break;
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     text = "WM_SETCURSOR";
                     break;
-                case NativeMethods.WM_MOUSEACTIVATE:
+                case Interop.WindowMessages.WM_MOUSEACTIVATE:
                     text = "WM_MOUSEACTIVATE";
                     break;
-                case NativeMethods.WM_CHILDACTIVATE:
+                case Interop.WindowMessages.WM_CHILDACTIVATE:
                     text = "WM_CHILDACTIVATE";
                     break;
-                case NativeMethods.WM_QUEUESYNC:
+                case Interop.WindowMessages.WM_QUEUESYNC:
                     text = "WM_QUEUESYNC";
                     break;
-                case NativeMethods.WM_GETMINMAXINFO:
+                case Interop.WindowMessages.WM_GETMINMAXINFO:
                     text = "WM_GETMINMAXINFO";
                     break;
-                case NativeMethods.WM_PAINTICON:
+                case Interop.WindowMessages.WM_PAINTICON:
                     text = "WM_PAINTICON";
                     break;
-                case NativeMethods.WM_ICONERASEBKGND:
+                case Interop.WindowMessages.WM_ICONERASEBKGND:
                     text = "WM_ICONERASEBKGND";
                     break;
-                case NativeMethods.WM_NEXTDLGCTL:
+                case Interop.WindowMessages.WM_NEXTDLGCTL:
                     text = "WM_NEXTDLGCTL";
                     break;
-                case NativeMethods.WM_SPOOLERSTATUS:
+                case Interop.WindowMessages.WM_SPOOLERSTATUS:
                     text = "WM_SPOOLERSTATUS";
                     break;
-                case NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_DRAWITEM:
                     text = "WM_DRAWITEM";
                     break;
-                case NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_MEASUREITEM:
                     text = "WM_MEASUREITEM";
                     break;
-                case NativeMethods.WM_DELETEITEM:
+                case Interop.WindowMessages.WM_DELETEITEM:
                     text = "WM_DELETEITEM";
                     break;
-                case NativeMethods.WM_VKEYTOITEM:
+                case Interop.WindowMessages.WM_VKEYTOITEM:
                     text = "WM_VKEYTOITEM";
                     break;
-                case NativeMethods.WM_CHARTOITEM:
+                case Interop.WindowMessages.WM_CHARTOITEM:
                     text = "WM_CHARTOITEM";
                     break;
-                case NativeMethods.WM_SETFONT:
+                case Interop.WindowMessages.WM_SETFONT:
                     text = "WM_SETFONT";
                     break;
-                case NativeMethods.WM_GETFONT:
+                case Interop.WindowMessages.WM_GETFONT:
                     text = "WM_GETFONT";
                     break;
-                case NativeMethods.WM_SETHOTKEY:
+                case Interop.WindowMessages.WM_SETHOTKEY:
                     text = "WM_SETHOTKEY";
                     break;
-                case NativeMethods.WM_GETHOTKEY:
+                case Interop.WindowMessages.WM_GETHOTKEY:
                     text = "WM_GETHOTKEY";
                     break;
-                case NativeMethods.WM_QUERYDRAGICON:
+                case Interop.WindowMessages.WM_QUERYDRAGICON:
                     text = "WM_QUERYDRAGICON";
                     break;
-                case NativeMethods.WM_COMPAREITEM:
+                case Interop.WindowMessages.WM_COMPAREITEM:
                     text = "WM_COMPAREITEM";
                     break;
-                case NativeMethods.WM_GETOBJECT:
+                case Interop.WindowMessages.WM_GETOBJECT:
                     text = "WM_GETOBJECT";
                     break;
-                case NativeMethods.WM_COMPACTING:
+                case Interop.WindowMessages.WM_COMPACTING:
                     text = "WM_COMPACTING";
                     break;
-                case NativeMethods.WM_COMMNOTIFY:
+                case Interop.WindowMessages.WM_COMMNOTIFY:
                     text = "WM_COMMNOTIFY";
                     break;
-                case NativeMethods.WM_WINDOWPOSCHANGING:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                     text = "WM_WINDOWPOSCHANGING";
                     break;
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     text = "WM_WINDOWPOSCHANGED";
                     break;
-                case NativeMethods.WM_POWER:
+                case Interop.WindowMessages.WM_POWER:
                     text = "WM_POWER";
                     break;
-                case NativeMethods.WM_COPYDATA:
+                case Interop.WindowMessages.WM_COPYDATA:
                     text = "WM_COPYDATA";
                     break;
-                case NativeMethods.WM_CANCELJOURNAL:
+                case Interop.WindowMessages.WM_CANCELJOURNAL:
                     text = "WM_CANCELJOURNAL";
                     break;
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     text = "WM_NOTIFY";
                     break;
-                case NativeMethods.WM_INPUTLANGCHANGEREQUEST:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGEREQUEST:
                     text = "WM_INPUTLANGCHANGEREQUEST";
                     break;
-                case NativeMethods.WM_INPUTLANGCHANGE:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
                     text = "WM_INPUTLANGCHANGE";
                     break;
-                case NativeMethods.WM_TCARD:
+                case Interop.WindowMessages.WM_TCARD:
                     text = "WM_TCARD";
                     break;
-                case NativeMethods.WM_HELP:
+                case Interop.WindowMessages.WM_HELP:
                     text = "WM_HELP";
                     break;
-                case NativeMethods.WM_USERCHANGED:
+                case Interop.WindowMessages.WM_USERCHANGED:
                     text = "WM_USERCHANGED";
                     break;
-                case NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_NOTIFYFORMAT:
                     text = "WM_NOTIFYFORMAT";
                     break;
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     text = "WM_CONTEXTMENU";
                     break;
-                case NativeMethods.WM_STYLECHANGING:
+                case Interop.WindowMessages.WM_STYLECHANGING:
                     text = "WM_STYLECHANGING";
                     break;
-                case NativeMethods.WM_STYLECHANGED:
+                case Interop.WindowMessages.WM_STYLECHANGED:
                     text = "WM_STYLECHANGED";
                     break;
-                case NativeMethods.WM_DISPLAYCHANGE:
+                case Interop.WindowMessages.WM_DISPLAYCHANGE:
                     text = "WM_DISPLAYCHANGE";
                     break;
-                case NativeMethods.WM_GETICON:
+                case Interop.WindowMessages.WM_GETICON:
                     text = "WM_GETICON";
                     break;
-                case NativeMethods.WM_SETICON:
+                case Interop.WindowMessages.WM_SETICON:
                     text = "WM_SETICON";
                     break;
-                case NativeMethods.WM_NCCREATE:
+                case Interop.WindowMessages.WM_NCCREATE:
                     text = "WM_NCCREATE";
                     break;
-                case NativeMethods.WM_NCDESTROY:
+                case Interop.WindowMessages.WM_NCDESTROY:
                     text = "WM_NCDESTROY";
                     break;
-                case NativeMethods.WM_NCCALCSIZE:
+                case Interop.WindowMessages.WM_NCCALCSIZE:
                     text = "WM_NCCALCSIZE";
                     break;
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     text = "WM_NCHITTEST";
                     break;
-                case NativeMethods.WM_NCPAINT:
+                case Interop.WindowMessages.WM_NCPAINT:
                     text = "WM_NCPAINT";
                     break;
-                case NativeMethods.WM_NCACTIVATE:
+                case Interop.WindowMessages.WM_NCACTIVATE:
                     text = "WM_NCACTIVATE";
                     break;
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     text = "WM_GETDLGCODE";
                     break;
-                case NativeMethods.WM_NCMOUSEMOVE:
+                case Interop.WindowMessages.WM_NCMOUSEMOVE:
                     text = "WM_NCMOUSEMOVE";
                     break;
-                case NativeMethods.WM_NCLBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCLBUTTONDOWN:
                     text = "WM_NCLBUTTONDOWN";
                     break;
-                case NativeMethods.WM_NCLBUTTONUP:
+                case Interop.WindowMessages.WM_NCLBUTTONUP:
                     text = "WM_NCLBUTTONUP";
                     break;
-                case NativeMethods.WM_NCLBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_NCLBUTTONDBLCLK:
                     text = "WM_NCLBUTTONDBLCLK";
                     break;
-                case NativeMethods.WM_NCRBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCRBUTTONDOWN:
                     text = "WM_NCRBUTTONDOWN";
                     break;
-                case NativeMethods.WM_NCRBUTTONUP:
+                case Interop.WindowMessages.WM_NCRBUTTONUP:
                     text = "WM_NCRBUTTONUP";
                     break;
-                case NativeMethods.WM_NCRBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_NCRBUTTONDBLCLK:
                     text = "WM_NCRBUTTONDBLCLK";
                     break;
-                case NativeMethods.WM_NCMBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCMBUTTONDOWN:
                     text = "WM_NCMBUTTONDOWN";
                     break;
-                case NativeMethods.WM_NCMBUTTONUP:
+                case Interop.WindowMessages.WM_NCMBUTTONUP:
                     text = "WM_NCMBUTTONUP";
                     break;
-                case NativeMethods.WM_NCMBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_NCMBUTTONDBLCLK:
                     text = "WM_NCMBUTTONDBLCLK";
                     break;
-                case NativeMethods.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
                     text = "WM_KEYDOWN";
                     break;
-                case NativeMethods.WM_KEYUP:
+                case Interop.WindowMessages.WM_KEYUP:
                     text = "WM_KEYUP";
                     break;
-                case NativeMethods.WM_CHAR:
+                case Interop.WindowMessages.WM_CHAR:
                     text = "WM_CHAR";
                     break;
-                case NativeMethods.WM_DEADCHAR:
+                case Interop.WindowMessages.WM_DEADCHAR:
                     text = "WM_DEADCHAR";
                     break;
-                case NativeMethods.WM_SYSKEYDOWN:
+                case Interop.WindowMessages.WM_SYSKEYDOWN:
                     text = "WM_SYSKEYDOWN";
                     break;
-                case NativeMethods.WM_SYSKEYUP:
+                case Interop.WindowMessages.WM_SYSKEYUP:
                     text = "WM_SYSKEYUP";
                     break;
-                case NativeMethods.WM_SYSCHAR:
+                case Interop.WindowMessages.WM_SYSCHAR:
                     text = "WM_SYSCHAR";
                     break;
-                case NativeMethods.WM_SYSDEADCHAR:
+                case Interop.WindowMessages.WM_SYSDEADCHAR:
                     text = "WM_SYSDEADCHAR";
                     break;
-                case NativeMethods.WM_KEYLAST:
+                case Interop.WindowMessages.WM_KEYLAST:
                     text = "WM_KEYLAST";
                     break;
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
                     text = "WM_IME_STARTCOMPOSITION";
                     break;
-                case NativeMethods.WM_IME_ENDCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
                     text = "WM_IME_ENDCOMPOSITION";
                     break;
-                case NativeMethods.WM_IME_COMPOSITION:
+                case Interop.WindowMessages.WM_IME_COMPOSITION:
                     text = "WM_IME_COMPOSITION";
                     break;
-                case NativeMethods.WM_INITDIALOG:
+                case Interop.WindowMessages.WM_INITDIALOG:
                     text = "WM_INITDIALOG";
                     break;
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     text = "WM_COMMAND";
                     break;
-                case NativeMethods.WM_SYSCOMMAND:
+                case Interop.WindowMessages.WM_SYSCOMMAND:
                     text = "WM_SYSCOMMAND";
                     break;
-                case NativeMethods.WM_TIMER:
+                case Interop.WindowMessages.WM_TIMER:
                     text = "WM_TIMER";
                     break;
-                case NativeMethods.WM_HSCROLL:
+                case Interop.WindowMessages.WM_HSCROLL:
                     text = "WM_HSCROLL";
                     break;
-                case NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
                     text = "WM_VSCROLL";
                     break;
-                case NativeMethods.WM_INITMENU:
+                case Interop.WindowMessages.WM_INITMENU:
                     text = "WM_INITMENU";
                     break;
-                case NativeMethods.WM_INITMENUPOPUP:
+                case Interop.WindowMessages.WM_INITMENUPOPUP:
                     text = "WM_INITMENUPOPUP";
                     break;
-                case NativeMethods.WM_MENUSELECT:
+                case Interop.WindowMessages.WM_MENUSELECT:
                     text = "WM_MENUSELECT";
                     break;
-                case NativeMethods.WM_MENUCHAR:
+                case Interop.WindowMessages.WM_MENUCHAR:
                     text = "WM_MENUCHAR";
                     break;
-                case NativeMethods.WM_ENTERIDLE:
+                case Interop.WindowMessages.WM_ENTERIDLE:
                     text = "WM_ENTERIDLE";
                     break;
-                case NativeMethods.WM_CTLCOLORMSGBOX:
+                case Interop.WindowMessages.WM_CTLCOLORMSGBOX:
                     text = "WM_CTLCOLORMSGBOX";
                     break;
-                case NativeMethods.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_CTLCOLOREDIT:
                     text = "WM_CTLCOLOREDIT";
                     break;
-                case NativeMethods.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
                     text = "WM_CTLCOLORLISTBOX";
                     break;
-                case NativeMethods.WM_CTLCOLORBTN:
+                case Interop.WindowMessages.WM_CTLCOLORBTN:
                     text = "WM_CTLCOLORBTN";
                     break;
-                case NativeMethods.WM_CTLCOLORDLG:
+                case Interop.WindowMessages.WM_CTLCOLORDLG:
                     text = "WM_CTLCOLORDLG";
                     break;
-                case NativeMethods.WM_CTLCOLORSCROLLBAR:
+                case Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
                     text = "WM_CTLCOLORSCROLLBAR";
                     break;
-                case NativeMethods.WM_CTLCOLORSTATIC:
+                case Interop.WindowMessages.WM_CTLCOLORSTATIC:
                     text = "WM_CTLCOLORSTATIC";
                     break;
-                case NativeMethods.WM_MOUSEMOVE:
+                case Interop.WindowMessages.WM_MOUSEMOVE:
                     text = "WM_MOUSEMOVE";
                     break;
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     text = "WM_LBUTTONDOWN";
                     break;
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     text = "WM_LBUTTONUP";
                     break;
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     text = "WM_LBUTTONDBLCLK";
                     break;
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     text = "WM_RBUTTONDOWN";
                     break;
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     text = "WM_RBUTTONUP";
                     break;
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     text = "WM_RBUTTONDBLCLK";
                     break;
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     text = "WM_MBUTTONDOWN";
                     break;
-                case NativeMethods.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONUP:
                     text = "WM_MBUTTONUP";
                     break;
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     text = "WM_MBUTTONDBLCLK";
                     break;
-                case NativeMethods.WM_MOUSEWHEEL:
+                case Interop.WindowMessages.WM_MOUSEWHEEL:
                     text = "WM_MOUSEWHEEL";
                     break;
-                case NativeMethods.WM_PARENTNOTIFY:
+                case Interop.WindowMessages.WM_PARENTNOTIFY:
                     text = "WM_PARENTNOTIFY";
                     break;
-                case NativeMethods.WM_ENTERMENULOOP:
+                case Interop.WindowMessages.WM_ENTERMENULOOP:
                     text = "WM_ENTERMENULOOP";
                     break;
-                case NativeMethods.WM_EXITMENULOOP:
+                case Interop.WindowMessages.WM_EXITMENULOOP:
                     text = "WM_EXITMENULOOP";
                     break;
-                case NativeMethods.WM_NEXTMENU:
+                case Interop.WindowMessages.WM_NEXTMENU:
                     text = "WM_NEXTMENU";
                     break;
-                case NativeMethods.WM_SIZING:
+                case Interop.WindowMessages.WM_SIZING:
                     text = "WM_SIZING";
                     break;
-                case NativeMethods.WM_CAPTURECHANGED:
+                case Interop.WindowMessages.WM_CAPTURECHANGED:
                     text = "WM_CAPTURECHANGED";
                     break;
-                case NativeMethods.WM_MOVING:
+                case Interop.WindowMessages.WM_MOVING:
                     text = "WM_MOVING";
                     break;
-                case NativeMethods.WM_POWERBROADCAST:
+                case Interop.WindowMessages.WM_POWERBROADCAST:
                     text = "WM_POWERBROADCAST";
                     break;
-                case NativeMethods.WM_DEVICECHANGE:
+                case Interop.WindowMessages.WM_DEVICECHANGE:
                     text = "WM_DEVICECHANGE";
                     break;
-                case NativeMethods.WM_IME_SETCONTEXT:
+                case Interop.WindowMessages.WM_IME_SETCONTEXT:
                     text = "WM_IME_SETCONTEXT";
                     break;
-                case NativeMethods.WM_IME_NOTIFY:
+                case Interop.WindowMessages.WM_IME_NOTIFY:
                     text = "WM_IME_NOTIFY";
                     break;
-                case NativeMethods.WM_IME_CONTROL:
+                case Interop.WindowMessages.WM_IME_CONTROL:
                     text = "WM_IME_CONTROL";
                     break;
-                case NativeMethods.WM_IME_COMPOSITIONFULL:
+                case Interop.WindowMessages.WM_IME_COMPOSITIONFULL:
                     text = "WM_IME_COMPOSITIONFULL";
                     break;
-                case NativeMethods.WM_IME_SELECT:
+                case Interop.WindowMessages.WM_IME_SELECT:
                     text = "WM_IME_SELECT";
                     break;
-                case NativeMethods.WM_IME_CHAR:
+                case Interop.WindowMessages.WM_IME_CHAR:
                     text = "WM_IME_CHAR";
                     break;
-                case NativeMethods.WM_IME_KEYDOWN:
+                case Interop.WindowMessages.WM_IME_KEYDOWN:
                     text = "WM_IME_KEYDOWN";
                     break;
-                case NativeMethods.WM_IME_KEYUP:
+                case Interop.WindowMessages.WM_IME_KEYUP:
                     text = "WM_IME_KEYUP";
                     break;
-                case NativeMethods.WM_MDICREATE:
+                case Interop.WindowMessages.WM_MDICREATE:
                     text = "WM_MDICREATE";
                     break;
-                case NativeMethods.WM_MDIDESTROY:
+                case Interop.WindowMessages.WM_MDIDESTROY:
                     text = "WM_MDIDESTROY";
                     break;
-                case NativeMethods.WM_MDIACTIVATE:
+                case Interop.WindowMessages.WM_MDIACTIVATE:
                     text = "WM_MDIACTIVATE";
                     break;
-                case NativeMethods.WM_MDIRESTORE:
+                case Interop.WindowMessages.WM_MDIRESTORE:
                     text = "WM_MDIRESTORE";
                     break;
-                case NativeMethods.WM_MDINEXT:
+                case Interop.WindowMessages.WM_MDINEXT:
                     text = "WM_MDINEXT";
                     break;
-                case NativeMethods.WM_MDIMAXIMIZE:
+                case Interop.WindowMessages.WM_MDIMAXIMIZE:
                     text = "WM_MDIMAXIMIZE";
                     break;
-                case NativeMethods.WM_MDITILE:
+                case Interop.WindowMessages.WM_MDITILE:
                     text = "WM_MDITILE";
                     break;
-                case NativeMethods.WM_MDICASCADE:
+                case Interop.WindowMessages.WM_MDICASCADE:
                     text = "WM_MDICASCADE";
                     break;
-                case NativeMethods.WM_MDIICONARRANGE:
+                case Interop.WindowMessages.WM_MDIICONARRANGE:
                     text = "WM_MDIICONARRANGE";
                     break;
-                case NativeMethods.WM_MDIGETACTIVE:
+                case Interop.WindowMessages.WM_MDIGETACTIVE:
                     text = "WM_MDIGETACTIVE";
                     break;
-                case NativeMethods.WM_MDISETMENU:
+                case Interop.WindowMessages.WM_MDISETMENU:
                     text = "WM_MDISETMENU";
                     break;
-                case NativeMethods.WM_ENTERSIZEMOVE:
+                case Interop.WindowMessages.WM_ENTERSIZEMOVE:
                     text = "WM_ENTERSIZEMOVE";
                     break;
-                case NativeMethods.WM_EXITSIZEMOVE:
+                case Interop.WindowMessages.WM_EXITSIZEMOVE:
                     text = "WM_EXITSIZEMOVE";
                     break;
-                case NativeMethods.WM_DROPFILES:
+                case Interop.WindowMessages.WM_DROPFILES:
                     text = "WM_DROPFILES";
                     break;
-                case NativeMethods.WM_MDIREFRESHMENU:
+                case Interop.WindowMessages.WM_MDIREFRESHMENU:
                     text = "WM_MDIREFRESHMENU";
                     break;
-                case NativeMethods.WM_MOUSEHOVER:
+                case Interop.WindowMessages.WM_MOUSEHOVER:
                     text = "WM_MOUSEHOVER";
                     break;
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     text = "WM_MOUSELEAVE";
                     break;
-                case NativeMethods.WM_CUT:
+                case Interop.WindowMessages.WM_CUT:
                     text = "WM_CUT";
                     break;
-                case NativeMethods.WM_COPY:
+                case Interop.WindowMessages.WM_COPY:
                     text = "WM_COPY";
                     break;
-                case NativeMethods.WM_PASTE:
+                case Interop.WindowMessages.WM_PASTE:
                     text = "WM_PASTE";
                     break;
-                case NativeMethods.WM_CLEAR:
+                case Interop.WindowMessages.WM_CLEAR:
                     text = "WM_CLEAR";
                     break;
-                case NativeMethods.WM_UNDO:
+                case Interop.WindowMessages.WM_UNDO:
                     text = "WM_UNDO";
                     break;
-                case NativeMethods.WM_RENDERFORMAT:
+                case Interop.WindowMessages.WM_RENDERFORMAT:
                     text = "WM_RENDERFORMAT";
                     break;
-                case NativeMethods.WM_RENDERALLFORMATS:
+                case Interop.WindowMessages.WM_RENDERALLFORMATS:
                     text = "WM_RENDERALLFORMATS";
                     break;
-                case NativeMethods.WM_DESTROYCLIPBOARD:
+                case Interop.WindowMessages.WM_DESTROYCLIPBOARD:
                     text = "WM_DESTROYCLIPBOARD";
                     break;
-                case NativeMethods.WM_DRAWCLIPBOARD:
+                case Interop.WindowMessages.WM_DRAWCLIPBOARD:
                     text = "WM_DRAWCLIPBOARD";
                     break;
-                case NativeMethods.WM_PAINTCLIPBOARD:
+                case Interop.WindowMessages.WM_PAINTCLIPBOARD:
                     text = "WM_PAINTCLIPBOARD";
                     break;
-                case NativeMethods.WM_VSCROLLCLIPBOARD:
+                case Interop.WindowMessages.WM_VSCROLLCLIPBOARD:
                     text = "WM_VSCROLLCLIPBOARD";
                     break;
-                case NativeMethods.WM_SIZECLIPBOARD:
+                case Interop.WindowMessages.WM_SIZECLIPBOARD:
                     text = "WM_SIZECLIPBOARD";
                     break;
-                case NativeMethods.WM_ASKCBFORMATNAME:
+                case Interop.WindowMessages.WM_ASKCBFORMATNAME:
                     text = "WM_ASKCBFORMATNAME";
                     break;
-                case NativeMethods.WM_CHANGECBCHAIN:
+                case Interop.WindowMessages.WM_CHANGECBCHAIN:
                     text = "WM_CHANGECBCHAIN";
                     break;
-                case NativeMethods.WM_HSCROLLCLIPBOARD:
+                case Interop.WindowMessages.WM_HSCROLLCLIPBOARD:
                     text = "WM_HSCROLLCLIPBOARD";
                     break;
-                case NativeMethods.WM_QUERYNEWPALETTE:
+                case Interop.WindowMessages.WM_QUERYNEWPALETTE:
                     text = "WM_QUERYNEWPALETTE";
                     break;
-                case NativeMethods.WM_PALETTEISCHANGING:
+                case Interop.WindowMessages.WM_PALETTEISCHANGING:
                     text = "WM_PALETTEISCHANGING";
                     break;
-                case NativeMethods.WM_PALETTECHANGED:
+                case Interop.WindowMessages.WM_PALETTECHANGED:
                     text = "WM_PALETTECHANGED";
                     break;
-                case NativeMethods.WM_HOTKEY:
+                case Interop.WindowMessages.WM_HOTKEY:
                     text = "WM_HOTKEY";
                     break;
-                case NativeMethods.WM_PRINT:
+                case Interop.WindowMessages.WM_PRINT:
                     text = "WM_PRINT";
                     break;
-                case NativeMethods.WM_PRINTCLIENT:
+                case Interop.WindowMessages.WM_PRINTCLIENT:
                     text = "WM_PRINTCLIENT";
                     break;
-                case NativeMethods.WM_HANDHELDFIRST:
+                case Interop.WindowMessages.WM_HANDHELDFIRST:
                     text = "WM_HANDHELDFIRST";
                     break;
-                case NativeMethods.WM_HANDHELDLAST:
+                case Interop.WindowMessages.WM_HANDHELDLAST:
                     text = "WM_HANDHELDLAST";
                     break;
-                case NativeMethods.WM_AFXFIRST:
+                case Interop.WindowMessages.WM_AFXFIRST:
                     text = "WM_AFXFIRST";
                     break;
-                case NativeMethods.WM_AFXLAST:
+                case Interop.WindowMessages.WM_AFXLAST:
                     text = "WM_AFXLAST";
                     break;
-                case NativeMethods.WM_PENWINFIRST:
+                case Interop.WindowMessages.WM_PENWINFIRST:
                     text = "WM_PENWINFIRST";
                     break;
-                case NativeMethods.WM_PENWINLAST:
+                case Interop.WindowMessages.WM_PENWINLAST:
                     text = "WM_PENWINLAST";
                     break;
-                case NativeMethods.WM_APP:
+                case Interop.WindowMessages.WM_APP:
                     text = "WM_APP";
                     break;
-                case NativeMethods.WM_USER:
+                case Interop.WindowMessages.WM_USER:
                     text = "WM_USER";
                     break;
-                case NativeMethods.WM_CTLCOLOR:
+                case Interop.WindowMessages.WM_CTLCOLOR:
                     text = "WM_CTLCOLOR";
                     break;
 
                 // RichEdit messages
-                case RichTextBoxConstants.EM_GETLIMITTEXT:
+                case Interop.EditMessages.EM_GETLIMITTEXT:
                     text = "EM_GETLIMITTEXT";
                     break;
-                case RichTextBoxConstants.EM_POSFROMCHAR:
+                case Interop.EditMessages.EM_POSFROMCHAR:
                     text = "EM_POSFROMCHAR";
                     break;
-                case RichTextBoxConstants.EM_CHARFROMPOS:
+                case Interop.EditMessages.EM_CHARFROMPOS:
                     text = "EM_CHARFROMPOS";
                     break;
-                case RichTextBoxConstants.EM_SCROLLCARET:
+                case Interop.EditMessages.EM_SCROLLCARET:
                     text = "EM_SCROLLCARET";
                     break;
-                case RichTextBoxConstants.EM_CANPASTE:
+                case Interop.EditMessages.EM_CANPASTE:
                     text = "EM_CANPASTE";
                     break;
-                case RichTextBoxConstants.EM_DISPLAYBAND:
+                case Interop.EditMessages.EM_DISPLAYBAND:
                     text = "EM_DISPLAYBAND";
                     break;
-                case RichTextBoxConstants.EM_EXGETSEL:
+                case Interop.EditMessages.EM_EXGETSEL:
                     text = "EM_EXGETSEL";
                     break;
-                case RichTextBoxConstants.EM_EXLIMITTEXT:
+                case Interop.EditMessages.EM_EXLIMITTEXT:
                     text = "EM_EXLIMITTEXT";
                     break;
-                case RichTextBoxConstants.EM_EXLINEFROMCHAR:
+                case Interop.EditMessages.EM_EXLINEFROMCHAR:
                     text = "EM_EXLINEFROMCHAR";
                     break;
-                case RichTextBoxConstants.EM_EXSETSEL:
+                case Interop.EditMessages.EM_EXSETSEL:
                     text = "EM_EXSETSEL";
                     break;
-                case RichTextBoxConstants.EM_FINDTEXT:
+                case Interop.EditMessages.EM_FINDTEXT:
                     text = "EM_FINDTEXT";
                     break;
-                case RichTextBoxConstants.EM_FORMATRANGE:
+                case Interop.EditMessages.EM_FORMATRANGE:
                     text = "EM_FORMATRANGE";
                     break;
-                case RichTextBoxConstants.EM_GETCHARFORMAT:
+                case Interop.EditMessages.EM_GETCHARFORMAT:
                     text = "EM_GETCHARFORMAT";
                     break;
-                case RichTextBoxConstants.EM_GETEVENTMASK:
+                case Interop.EditMessages.EM_GETEVENTMASK:
                     text = "EM_GETEVENTMASK";
                     break;
-                case RichTextBoxConstants.EM_GETOLEINTERFACE:
+                case Interop.EditMessages.EM_GETOLEINTERFACE:
                     text = "EM_GETOLEINTERFACE";
                     break;
-                case RichTextBoxConstants.EM_GETPARAFORMAT:
+                case Interop.EditMessages.EM_GETPARAFORMAT:
                     text = "EM_GETPARAFORMAT";
                     break;
-                case RichTextBoxConstants.EM_GETSELTEXT:
+                case Interop.EditMessages.EM_GETSELTEXT:
                     text = "EM_GETSELTEXT";
                     break;
-                case RichTextBoxConstants.EM_HIDESELECTION:
+                case Interop.EditMessages.EM_HIDESELECTION:
                     text = "EM_HIDESELECTION";
                     break;
-                case RichTextBoxConstants.EM_PASTESPECIAL:
+                case Interop.EditMessages.EM_PASTESPECIAL:
                     text = "EM_PASTESPECIAL";
                     break;
-                case RichTextBoxConstants.EM_REQUESTRESIZE:
+                case Interop.EditMessages.EM_REQUESTRESIZE:
                     text = "EM_REQUESTRESIZE";
                     break;
-                case RichTextBoxConstants.EM_SELECTIONTYPE:
+                case Interop.EditMessages.EM_SELECTIONTYPE:
                     text = "EM_SELECTIONTYPE";
                     break;
-                case RichTextBoxConstants.EM_SETBKGNDCOLOR:
+                case Interop.EditMessages.EM_SETBKGNDCOLOR:
                     text = "EM_SETBKGNDCOLOR";
                     break;
-                case RichTextBoxConstants.EM_SETCHARFORMAT:
+                case Interop.EditMessages.EM_SETCHARFORMAT:
                     text = "EM_SETCHARFORMAT";
                     break;
-                case RichTextBoxConstants.EM_SETEVENTMASK:
+                case Interop.EditMessages.EM_SETEVENTMASK:
                     text = "EM_SETEVENTMASK";
                     break;
-                case RichTextBoxConstants.EM_SETOLECALLBACK:
+                case Interop.EditMessages.EM_SETOLECALLBACK:
                     text = "EM_SETOLECALLBACK";
                     break;
-                case RichTextBoxConstants.EM_SETPARAFORMAT:
+                case Interop.EditMessages.EM_SETPARAFORMAT:
                     text = "EM_SETPARAFORMAT";
                     break;
-                case RichTextBoxConstants.EM_SETTARGETDEVICE:
+                case Interop.EditMessages.EM_SETTARGETDEVICE:
                     text = "EM_SETTARGETDEVICE";
                     break;
-                case RichTextBoxConstants.EM_STREAMIN:
+                case Interop.EditMessages.EM_STREAMIN:
                     text = "EM_STREAMIN";
                     break;
-                case RichTextBoxConstants.EM_STREAMOUT:
+                case Interop.EditMessages.EM_STREAMOUT:
                     text = "EM_STREAMOUT";
                     break;
-                case RichTextBoxConstants.EM_GETTEXTRANGE:
+                case Interop.EditMessages.EM_GETTEXTRANGE:
                     text = "EM_GETTEXTRANGE";
                     break;
-                case RichTextBoxConstants.EM_FINDWORDBREAK:
+                case Interop.EditMessages.EM_FINDWORDBREAK:
                     text = "EM_FINDWORDBREAK";
                     break;
-                case RichTextBoxConstants.EM_SETOPTIONS:
+                case Interop.EditMessages.EM_SETOPTIONS:
                     text = "EM_SETOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_GETOPTIONS:
+                case Interop.EditMessages.EM_GETOPTIONS:
                     text = "EM_GETOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_FINDTEXTEX:
+                case Interop.EditMessages.EM_FINDTEXTEX:
                     text = "EM_FINDTEXTEX";
                     break;
-                case RichTextBoxConstants.EM_GETWORDBREAKPROCEX:
+                case Interop.EditMessages.EM_GETWORDBREAKPROCEX:
                     text = "EM_GETWORDBREAKPROCEX";
                     break;
-                case RichTextBoxConstants.EM_SETWORDBREAKPROCEX:
+                case Interop.EditMessages.EM_SETWORDBREAKPROCEX:
                     text = "EM_SETWORDBREAKPROCEX";
                     break;
 
                 // Richedit v2.0 messages
-                case RichTextBoxConstants.EM_SETUNDOLIMIT:
+                case Interop.EditMessages.EM_SETUNDOLIMIT:
                     text = "EM_SETUNDOLIMIT";
                     break;
-                case RichTextBoxConstants.EM_REDO:
+                case Interop.EditMessages.EM_REDO:
                     text = "EM_REDO";
                     break;
-                case RichTextBoxConstants.EM_CANREDO:
+                case Interop.EditMessages.EM_CANREDO:
                     text = "EM_CANREDO";
                     break;
-                case RichTextBoxConstants.EM_GETUNDONAME:
+                case Interop.EditMessages.EM_GETUNDONAME:
                     text = "EM_GETUNDONAME";
                     break;
-                case RichTextBoxConstants.EM_GETREDONAME:
+                case Interop.EditMessages.EM_GETREDONAME:
                     text = "EM_GETREDONAME";
                     break;
-                case RichTextBoxConstants.EM_STOPGROUPTYPING:
+                case Interop.EditMessages.EM_STOPGROUPTYPING:
                     text = "EM_STOPGROUPTYPING";
                     break;
-                case RichTextBoxConstants.EM_SETTEXTMODE:
+                case Interop.EditMessages.EM_SETTEXTMODE:
                     text = "EM_SETTEXTMODE";
                     break;
-                case RichTextBoxConstants.EM_GETTEXTMODE:
+                case Interop.EditMessages.EM_GETTEXTMODE:
                     text = "EM_GETTEXTMODE";
                     break;
-                case RichTextBoxConstants.EM_AUTOURLDETECT:
+                case Interop.EditMessages.EM_AUTOURLDETECT:
                     text = "EM_AUTOURLDETECT";
                     break;
-                case RichTextBoxConstants.EM_GETAUTOURLDETECT:
+                case Interop.EditMessages.EM_GETAUTOURLDETECT:
                     text = "EM_GETAUTOURLDETECT";
                     break;
-                case RichTextBoxConstants.EM_SETPALETTE:
+                case Interop.EditMessages.EM_SETPALETTE:
                     text = "EM_SETPALETTE";
                     break;
-                case RichTextBoxConstants.EM_GETTEXTEX:
+                case Interop.EditMessages.EM_GETTEXTEX:
                     text = "EM_GETTEXTEX";
                     break;
-                case RichTextBoxConstants.EM_GETTEXTLENGTHEX:
+                case Interop.EditMessages.EM_GETTEXTLENGTHEX:
                     text = "EM_GETTEXTLENGTHEX";
                     break;
 
                 // Asia specific messages
-                case RichTextBoxConstants.EM_SETPUNCTUATION:
+                case Interop.EditMessages.EM_SETPUNCTUATION:
                     text = "EM_SETPUNCTUATION";
                     break;
-                case RichTextBoxConstants.EM_GETPUNCTUATION:
+                case Interop.EditMessages.EM_GETPUNCTUATION:
                     text = "EM_GETPUNCTUATION";
                     break;
-                case RichTextBoxConstants.EM_SETWORDWRAPMODE:
+                case Interop.EditMessages.EM_SETWORDWRAPMODE:
                     text = "EM_SETWORDWRAPMODE";
                     break;
-                case RichTextBoxConstants.EM_GETWORDWRAPMODE:
+                case Interop.EditMessages.EM_GETWORDWRAPMODE:
                     text = "EM_GETWORDWRAPMODE";
                     break;
-                case RichTextBoxConstants.EM_SETIMECOLOR:
+                case Interop.EditMessages.EM_SETIMECOLOR:
                     text = "EM_SETIMECOLOR";
                     break;
-                case RichTextBoxConstants.EM_GETIMECOLOR:
+                case Interop.EditMessages.EM_GETIMECOLOR:
                     text = "EM_GETIMECOLOR";
                     break;
-                case RichTextBoxConstants.EM_SETIMEOPTIONS:
+                case Interop.EditMessages.EM_SETIMEOPTIONS:
                     text = "EM_SETIMEOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_GETIMEOPTIONS:
+                case Interop.EditMessages.EM_GETIMEOPTIONS:
                     text = "EM_GETIMEOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_CONVPOSITION:
+                case Interop.EditMessages.EM_CONVPOSITION:
                     text = "EM_CONVPOSITION";
                     break;
-                case RichTextBoxConstants.EM_SETLANGOPTIONS:
+                case Interop.EditMessages.EM_SETLANGOPTIONS:
                     text = "EM_SETLANGOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_GETLANGOPTIONS:
+                case Interop.EditMessages.EM_GETLANGOPTIONS:
                     text = "EM_GETLANGOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_GETIMECOMPMODE:
+                case Interop.EditMessages.EM_GETIMECOMPMODE:
                     text = "EM_GETIMECOMPMODE";
                     break;
-                case RichTextBoxConstants.EM_FINDTEXTW:
+                case Interop.EditMessages.EM_FINDTEXTW:
                     text = "EM_FINDTEXTW";
                     break;
-                case RichTextBoxConstants.EM_FINDTEXTEXW:
+                case Interop.EditMessages.EM_FINDTEXTEXW:
                     text = "EM_FINDTEXTEXW";
                     break;
 
                 // Rich Edit 3.0 Asia msgs
-                case RichTextBoxConstants.EM_RECONVERSION:
+                case Interop.EditMessages.EM_RECONVERSION:
                     text = "EM_RECONVERSION";
                     break;
-                case RichTextBoxConstants.EM_SETIMEMODEBIAS:
+                case Interop.EditMessages.EM_SETIMEMODEBIAS:
                     text = "EM_SETIMEMODEBIAS";
                     break;
-                case RichTextBoxConstants.EM_GETIMEMODEBIAS:
+                case Interop.EditMessages.EM_GETIMEMODEBIAS:
                     text = "EM_GETIMEMODEBIAS";
                     break;
 
                 // BiDi Specific messages
-                case RichTextBoxConstants.EM_SETBIDIOPTIONS:
+                case Interop.EditMessages.EM_SETBIDIOPTIONS:
                     text = "EM_SETBIDIOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_GETBIDIOPTIONS:
+                case Interop.EditMessages.EM_GETBIDIOPTIONS:
                     text = "EM_GETBIDIOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_SETTYPOGRAPHYOPTIONS:
+                case Interop.EditMessages.EM_SETTYPOGRAPHYOPTIONS:
                     text = "EM_SETTYPOGRAPHYOPTIONS";
                     break;
-                case RichTextBoxConstants.EM_GETTYPOGRAPHYOPTIONS:
+                case Interop.EditMessages.EM_GETTYPOGRAPHYOPTIONS:
                     text = "EM_GETTYPOGRAPHYOPTIONS";
                     break;
 
                 // Extended Edit style specific messages
-                case RichTextBoxConstants.EM_SETEDITSTYLE:
+                case Interop.EditMessages.EM_SETEDITSTYLE:
                     text = "EM_SETEDITSTYLE";
                     break;
-                case RichTextBoxConstants.EM_GETEDITSTYLE:
+                case Interop.EditMessages.EM_GETEDITSTYLE:
                     text = "EM_GETEDITSTYLE";
                     break;
 
@@ -826,9 +826,9 @@ namespace System.Windows.Forms
                     text = null; break;
             }
 
-            if (text == null && ((msg & NativeMethods.WM_REFLECT) == NativeMethods.WM_REFLECT))
+            if (text == null && ((msg & Interop.WindowMessages.WM_REFLECT) == Interop.WindowMessages.WM_REFLECT))
             {
-                string subtext = MsgToString(msg - NativeMethods.WM_REFLECT) ?? "???";
+                string subtext = MsgToString(msg - Interop.WindowMessages.WM_REFLECT) ?? "???";
                
                 text = "WM_REFLECT + " + subtext;
             }
@@ -856,7 +856,7 @@ namespace System.Windows.Forms
             string id = Parenthesize(MsgToString(msg));
 
             string lDescription = string.Empty;
-            if (msg == NativeMethods.WM_PARENTNOTIFY)
+            if (msg == Interop.WindowMessages.WM_PARENTNOTIFY)
             {
                 lDescription = Parenthesize(MsgToString(NativeMethods.Util.LOWORD(wparam)));
             }

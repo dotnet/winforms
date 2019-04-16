@@ -2782,7 +2782,7 @@ namespace System.Windows.Forms {
             using (Graphics g = Graphics.FromImage(image)) {
                 IntPtr imageHdc = g.GetHdc();
                 //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.WM_PRINT, (IntPtr)imageHdc,
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)imageHdc,
                     (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                 //now BLT the result to the destination bitmap.
@@ -4589,10 +4589,10 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 
-            if (m.Msg == NativeMethods.WM_SETFOCUS) {
+            if (m.Msg == Interop.WindowMessages.WM_SETFOCUS) {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE) {
+            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE) {
                     // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                     // itself.  the mouse message will still go through, but focus wont be taken.
                     // if someone clicks on a child control (combobox, textbox, etc) focus will
@@ -4639,7 +4639,7 @@ namespace System.Windows.Forms {
 
             base.WndProc(ref m);
 
-            if (m.Msg == NativeMethods.WM_NCDESTROY) {
+            if (m.Msg == Interop.WindowMessages.WM_NCDESTROY) {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
                 // that point our handle is not actually destroyed so
@@ -5029,12 +5029,12 @@ namespace System.Windows.Forms {
                  
                   switch (m.Msg) {
                   
-                       case NativeMethods.WM_LBUTTONDOWN:
-                       case NativeMethods.WM_RBUTTONDOWN:
-                       case NativeMethods.WM_MBUTTONDOWN:
-                       case NativeMethods.WM_NCLBUTTONDOWN:
-                       case NativeMethods.WM_NCRBUTTONDOWN:
-                       case NativeMethods.WM_NCMBUTTONDOWN:
+                       case Interop.WindowMessages.WM_LBUTTONDOWN:
+                       case Interop.WindowMessages.WM_RBUTTONDOWN:
+                       case Interop.WindowMessages.WM_MBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCLBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCRBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCMBUTTONDOWN:
                             if (ownerToolStrip.ContainsFocus) {
                                 // if we've clicked on something that's not a child of the toolstrip and we 
                                 // currently have focus, restore it.

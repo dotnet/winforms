@@ -1152,14 +1152,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
+                case Interop.WindowMessages.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
                         case NativeMethods.NM_CLICK:
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms {
 
             protected void WndProc(ref Message msg) {
                 switch (msg.Msg) {
-                    case NativeMethods.WM_SETFOCUS:
+                    case Interop.WindowMessages.WM_SETFOCUS:
                         // 
 
 

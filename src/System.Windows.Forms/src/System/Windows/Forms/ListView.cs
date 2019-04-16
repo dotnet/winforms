@@ -5597,7 +5597,7 @@ namespace System.Windows.Forms {
 
         private Font GetListHeaderFont(){
             IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
-            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), NativeMethods.WM_GETFONT, 0, 0);
+            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), Interop.WindowMessages.WM_GETFONT, 0, 0);
             return Font.FromHfont(hFont);
         }
 
@@ -6049,10 +6049,10 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.  
@@ -6061,7 +6061,7 @@ namespace System.Windows.Forms {
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     break;
 
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.  
@@ -6070,9 +6070,9 @@ namespace System.Windows.Forms {
                     downButton = MouseButtons.Left;
                     break;
 
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_RBUTTONUP:
-                case NativeMethods.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONUP:
 
                     // see the mouse is on item
                     //
@@ -6095,21 +6095,21 @@ namespace System.Windows.Forms {
                     listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     CaptureInternal = false;
                     break;
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     break;
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case NativeMethods.WM_MOUSEMOVE:
+                case Interop.WindowMessages.WM_MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -6118,14 +6118,14 @@ namespace System.Windows.Forms {
                     CaptureInternal = false;
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_MOUSEHOVER:
+                case Interop.WindowMessages.WM_MOUSEHOVER:
                     if (HoverSelection) {
                         base.WndProc(ref m);
                     }
                     else
                         OnMouseHover(EventArgs.Empty);
                     break;
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     if(WmNotify(ref m))
                     {
                         break; // we are done - skip default handling
@@ -6134,7 +6134,7 @@ namespace System.Windows.Forms {
                     {
                         goto default;  //default handling needed
                     }
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     base.WndProc(ref m);
 
                     if (!this.RecreatingHandle && !this.ListViewHandleDestroyed) {
@@ -6150,23 +6150,23 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     // if the mouse leaves and then re-enters the ListView
                     // ItemHovered events should be raised.
                     prevHoveredItem = null;
                     base.WndProc(ref m);
                     break;
 
-                case NativeMethods.WM_PAINT:
+                case Interop.WindowMessages.WM_PAINT:
                     base.WndProc(ref m);
 
                     // win32 ListView 
                     BeginInvoke(new MethodInvoker(this.CleanPreviousBackgroundImageFiles));
                     break;
-                case NativeMethods.WM_PRINT:
+                case Interop.WindowMessages.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case NativeMethods.WM_TIMER:
+                case Interop.WindowMessages.WM_TIMER:
                     if (unchecked( (int) (long)m.WParam) != LVTOOLTIPTRACKING || !ComctlSupportsVisualStyles) {
                         base.WndProc(ref m);
                     }

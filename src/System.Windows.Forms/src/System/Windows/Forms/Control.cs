@@ -283,7 +283,7 @@ namespace System.Windows.Forms {
         private static readonly object EventPreviewKeyDown            = new object();
 
         #if WIN95_SUPPORT
-        private static int mouseWheelMessage = NativeMethods.WM_MOUSEWHEEL;
+        private static int mouseWheelMessage = Interop.WindowMessages.WM_MOUSEWHEEL;
         private static bool mouseWheelRoutingNeeded;
         private static bool mouseWheelInit;
         #endif
@@ -2022,7 +2022,7 @@ example usage
                     UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
                     if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
-                        SendMessage(NativeMethods.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
+                        SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, (IntPtr)NativeMethods.HTCLIENT);
                 }
 
                 if (!resolvedCursor.Equals(value)) {
@@ -4081,7 +4081,7 @@ example usage
                             // The side effect of this initial state is that adding new controls may clear the accelerator
                             // state (has been this way forever)
                             UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
-                                    NativeMethods.WM_CHANGEUISTATE,
+                                    Interop.WindowMessages.WM_CHANGEUISTATE,
                                     (IntPtr)(actionMask | NativeMethods.UIS_SET),
                                     IntPtr.Zero);
                         }
@@ -4121,7 +4121,7 @@ example usage
                         // The side effect of this initial state is that adding new controls may clear the focus cue state
                         // state (has been this way forever)
                         UnsafeNativeMethods.SendMessage(new HandleRef(TopMostParent, TopMostParent.Handle),
-                                NativeMethods.WM_CHANGEUISTATE,
+                                Interop.WindowMessages.WM_CHANGEUISTATE,
                                 (IntPtr)(actionMask | NativeMethods.UIS_SET),
                                 IntPtr.Zero);
 
@@ -5402,7 +5402,7 @@ example usage
             if (!IsHandleCreated) {
                 return;
             }
-            if (updateCount == 0) SendMessage(NativeMethods.WM_SETREDRAW, 0, 0);
+            if (updateCount == 0) SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
             updateCount++;
         }
 
@@ -5770,7 +5770,7 @@ example usage
             }
 
             if (0 != (NativeMethods.WS_EX_MDICHILD & (int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(window, InternalHandle), NativeMethods.GWL_EXSTYLE))) {
-                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, NativeMethods.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.DefMDIChildProc(InternalHandle, Interop.WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
             else {
                 window.DestroyHandle();
@@ -5963,7 +5963,7 @@ example usage
                 using (Graphics g = Graphics.FromImage(image)) {
                     IntPtr hDc = g.GetHdc();
                     //send the actual wm_print message
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.WM_PRINT, (IntPtr)hDc,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)hDc,
                         (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                     //now BLT the result to the destination bitmap.
@@ -6029,7 +6029,7 @@ example usage
                 Debug.Assert(IsHandleCreated, "Handle should be created by now");
                 updateCount--;
                 if (updateCount == 0) {
-                    SendMessage(NativeMethods.WM_SETREDRAW, -1, 0);
+                    SendMessage(Interop.WindowMessages.WM_SETREDRAW, -1, 0);
                     if (invalidate) {
                         Invalidate();
                     }
@@ -7371,7 +7371,7 @@ example usage
             else {
                 mask = NativeMethods.DLGC_WANTCHARS | NativeMethods.DLGC_WANTALLKEYS;
             }
-            return(unchecked( (int) (long)SendMessage(NativeMethods.WM_GETDLGCODE, 0, 0)) & mask) != 0;
+            return(unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IsInputKey"]/*' />
@@ -7403,7 +7403,7 @@ example usage
             }
 
             if (IsHandleCreated) {
-                return(unchecked( (int) (long)SendMessage(NativeMethods.WM_GETDLGCODE, 0, 0)) & mask) != 0;
+                return(unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_GETDLGCODE, 0, 0)) & mask) != 0;
             }
             else {
                 return false;
@@ -8176,7 +8176,7 @@ example usage
                         hdc = e.Graphics.GetHdc();
                         releaseDC = true;
                     }
-                    m = Message.Create(this.Handle, NativeMethods.WM_PRINTCLIENT, hdc, flags);
+                    m = Message.Create(this.Handle, Interop.WindowMessages.WM_PRINTCLIENT, hdc, flags);
                 }
                 else {
                     m = ppev.Message;
@@ -8460,7 +8460,7 @@ example usage
                 si.fMask = NativeMethods.SIF_RANGE;
                 if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    SendMessage(NativeMethods.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
+                    SendMessage(Interop.WindowMessages.WM_HSCROLL, NativeMethods.Util.MAKELPARAM(NativeMethods.SB_THUMBPOSITION, si.nPos), 0);
                 }                
             } 
         }
@@ -9745,7 +9745,7 @@ example usage
 
             bool ret;
 
-            if (msg.Msg == NativeMethods.WM_KEYDOWN || msg.Msg == NativeMethods.WM_SYSKEYDOWN) {
+            if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
                 if (!GetState2(STATE2_UICUES)) {
                     ProcessUICues(ref msg);
                 }
@@ -9762,8 +9762,8 @@ example usage
                     ret = ProcessDialogKey(keyData);
                 }
             }
-            else if (msg.Msg == NativeMethods.WM_CHAR || msg.Msg == NativeMethods.WM_SYSCHAR) {
-                if (msg.Msg == NativeMethods.WM_CHAR && IsInputChar((char)msg.WParam)) {
+            else if (msg.Msg == Interop.WindowMessages.WM_CHAR || msg.Msg == Interop.WindowMessages.WM_SYSCHAR) {
+                if (msg.Msg == Interop.WindowMessages.WM_CHAR && IsInputChar((char)msg.WParam)) {
                     SetState2(STATE2_INPUTCHAR, true);
                     ret = false;
                 }
@@ -9826,7 +9826,7 @@ example usage
                 Keys keyData = (Keys)(unchecked((int)(long)msg.WParam) | (int)ModifierKeys);
 
                 // Allow control to preview key down message.
-                if (msg.Msg == NativeMethods.WM_KEYDOWN || msg.Msg == NativeMethods.WM_SYSKEYDOWN) {
+                if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
                     target.ProcessUICues(ref msg);                    
 
                     PreviewKeyDownEventArgs args = new PreviewKeyDownEventArgs(keyData);
@@ -9842,7 +9842,7 @@ example usage
                 PreProcessControlState state = PreProcessControlState.MessageNotNeeded;
                 
                 if (!target.PreProcessMessage(ref msg)) {
-                    if (msg.Msg == NativeMethods.WM_KEYDOWN || msg.Msg == NativeMethods.WM_SYSKEYDOWN) {
+                    if (msg.Msg == Interop.WindowMessages.WM_KEYDOWN || msg.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
 
                         // check if IsInputKey has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
@@ -9851,7 +9851,7 @@ example usage
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
-                    else if (msg.Msg == NativeMethods.WM_CHAR || msg.Msg == NativeMethods.WM_SYSCHAR) {
+                    else if (msg.Msg == Interop.WindowMessages.WM_CHAR || msg.Msg == Interop.WindowMessages.WM_SYSCHAR) {
 
                         // check if IsInputChar has already procssed this message
                         // or if it is safe to call - we only want it to be called once.
@@ -9979,7 +9979,7 @@ example usage
         private void PrintToMetaFile_SendPrintMessage(HandleRef hDC, IntPtr lParam) {
             if(GetStyle(ControlStyles.UserPaint)) {
                 // We let user paint controls paint directly into the metafile
-                SendMessage(NativeMethods.WM_PRINT, hDC.Handle, lParam);
+                SendMessage(Interop.WindowMessages.WM_PRINT, hDC.Handle, lParam);
             }
             else {
                 // If a system control has no children in the Controls collection we
@@ -9994,7 +9994,7 @@ example usage
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
                 using (MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, this.Size)) {
-                    SendMessage(NativeMethods.WM_PRINT, dcWrapper.HDC, lParam);
+                    SendMessage(Interop.WindowMessages.WM_PRINT, dcWrapper.HDC, lParam);
                 }
             }
         }
@@ -10083,7 +10083,7 @@ example usage
             KeyPressEventArgs kpe = null;
             IntPtr newWParam = IntPtr.Zero;
 
-            if (m.Msg == NativeMethods.WM_CHAR || m.Msg == NativeMethods.WM_SYSCHAR) {
+            if (m.Msg == Interop.WindowMessages.WM_CHAR || m.Msg == Interop.WindowMessages.WM_SYSCHAR) {
                 int charsToIgnore = this.ImeWmCharsToIgnore;
 
                 if (charsToIgnore > 0) {
@@ -10099,7 +10099,7 @@ example usage
                     newWParam = (IntPtr) kpe.KeyChar;
                 }
             }
-            else if (m.Msg == NativeMethods.WM_IME_CHAR) {
+            else if (m.Msg == Interop.WindowMessages.WM_IME_CHAR) {
                 int charsToIgnore = this.ImeWmCharsToIgnore;
 
                 charsToIgnore += (3 - sizeof(char));
@@ -10120,7 +10120,7 @@ example usage
             }
             else {
                 ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
-                if (m.Msg == NativeMethods.WM_KEYDOWN || m.Msg == NativeMethods.WM_SYSKEYDOWN) {
+                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN) {
                     OnKeyDown(ke);
                 }
                 else {
@@ -10136,9 +10136,9 @@ example usage
             else {
                 Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "    processkeyeventarg returning: " + ke.Handled);
                 if (ke.SuppressKeyPress) {
-                    RemovePendingMessages(NativeMethods.WM_CHAR,     NativeMethods.WM_CHAR);
-                    RemovePendingMessages(NativeMethods.WM_SYSCHAR,  NativeMethods.WM_SYSCHAR);
-                    RemovePendingMessages(NativeMethods.WM_IME_CHAR, NativeMethods.WM_IME_CHAR);
+                    RemovePendingMessages(Interop.WindowMessages.WM_CHAR,     Interop.WindowMessages.WM_CHAR);
+                    RemovePendingMessages(Interop.WindowMessages.WM_SYSCHAR,  Interop.WindowMessages.WM_SYSCHAR);
+                    RemovePendingMessages(Interop.WindowMessages.WM_IME_CHAR, Interop.WindowMessages.WM_IME_CHAR);
                 }
                 return ke.Handled;
             }
@@ -10239,13 +10239,13 @@ example usage
              }
              
              Control topMostParent = null;
-             int current = unchecked( (int) (long)SendMessage(NativeMethods.WM_QUERYUISTATE, 0, 0));
+             int current = unchecked( (int) (long)SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0));
 
              // dont trust when a control says the accelerators are showing.
              // make sure the topmost parent agrees with this as we could be in a mismatched state.
              if (current == 0 /*accelerator and focus cues are showing*/) {
                  topMostParent = this.TopMostParent;
-                 current = (int)topMostParent.SendMessage(NativeMethods.WM_QUERYUISTATE, 0, 0);
+                 current = (int)topMostParent.SendMessage(Interop.WindowMessages.WM_QUERYUISTATE, 0, 0);
              }
              int toClear = 0;
 
@@ -10287,7 +10287,7 @@ example usage
                  //           (we're in charge here, we've got to change the state of the root window)
                  UnsafeNativeMethods.SendMessage(
                      new HandleRef(topMostParent, topMostParent.Handle),
-                     UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? NativeMethods.WM_CHANGEUISTATE : NativeMethods.WM_UPDATEUISTATE,
+                     UnsafeNativeMethods.GetParent(new HandleRef(null, topMostParent.Handle)) == IntPtr.Zero ? Interop.WindowMessages.WM_CHANGEUISTATE : Interop.WindowMessages.WM_UPDATEUISTATE,
                      (IntPtr)(NativeMethods.UIS_CLEAR | (toClear << 16)),
                      IntPtr.Zero);
              }
@@ -10548,7 +10548,7 @@ example usage
         internal static bool ReflectMessageInternal(IntPtr hWnd, ref Message m) {
             Control control = Control.FromHandleInternal(hWnd);
             if (control == null) return false;
-            m.Result = control.SendMessage(NativeMethods.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+            m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
             return true;
         }
 
@@ -11797,7 +11797,7 @@ example usage
         }
 
         private void SetWindowFont(){
-            SendMessage(NativeMethods.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
+            SendMessage(Interop.WindowMessages.WM_SETFONT, FontHandle, 0 /*redraw = false*/);
         }
 
         private void SetWindowStyle(int flag, bool value) {
@@ -12187,7 +12187,7 @@ example usage
                 }
 
                 if (lastParentHandle != IntPtr.Zero) {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), NativeMethods.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(null, lastParentHandle), Interop.WindowMessages.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
                 }
             }
 
@@ -12409,7 +12409,7 @@ example usage
 
             InternalAccessibleObject intAccessibleObject = null;
 
-            if (m.Msg == NativeMethods.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
+            if (m.Msg == Interop.WindowMessages.WM_GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && this.SupportsUiaProviders) {
                 // If the requested object identifier is UiaRootObjectId, 
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
                 intAccessibleObject = new InternalAccessibleObject(this.AccessibilityObject);
@@ -12852,7 +12852,7 @@ example usage
                     // (for a right button click), but since we're skipping DefWndProc
                     // we have to do it ourselves.
                     if (button == MouseButtons.Right) {
-                        SendMessage(NativeMethods.WM_CONTEXTMENU, this.Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
+                        SendMessage(Interop.WindowMessages.WM_CONTEXTMENU, this.Handle, NativeMethods.Util.MAKELPARAM(pt.X, pt.Y));
                     }
                 }
 
@@ -12935,11 +12935,11 @@ example usage
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
             if (!ReflectMessageInternal(nmhdr->hwndFrom,ref m)) {
                 if(nmhdr->code == NativeMethods.TTN_SHOW) {
-                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), NativeMethods.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                     return;
                 }
                 if(nmhdr->code == NativeMethods.TTN_POP) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), NativeMethods.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                 }
                 
                 DefWndProc(ref m);
@@ -12978,7 +12978,7 @@ example usage
                 if (handle != IntPtr.Zero) {
                     Control control = Control.FromHandleInternal(handle);
                     if (control != null) {
-                        m.Result = control.SendMessage(NativeMethods.WM_REFLECT + m.Msg, handle, m.LParam);
+                        m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, handle, m.LParam);
                         reflectCalled = true;
                     }
                 }
@@ -13214,10 +13214,10 @@ example usage
             int msg = NativeMethods.Util.LOWORD(m.WParam);
             IntPtr hWnd = IntPtr.Zero;
             switch (msg) {
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     hWnd = m.LParam;
                     break;
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     break;
                 default:
                     hWnd = UnsafeNativeMethods.GetDlgItem(new HandleRef(this, Handle), NativeMethods.Util.HIWORD(m.WParam));
@@ -13459,47 +13459,47 @@ example usage
             * messages which the Ocx would own before passing them onto Control.wndProc.
             */
             switch (m.Msg) {
-                case NativeMethods.WM_CAPTURECHANGED:
+                case Interop.WindowMessages.WM_CAPTURECHANGED:
                      WmCaptureChanged(ref m);
                      break;
 
-                case NativeMethods.WM_GETOBJECT:
+                case Interop.WindowMessages.WM_GETOBJECT:
                     WmGetObject(ref m);
                     break;
 
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     WmCommand(ref m);
                     break;
                     
-                case NativeMethods.WM_CLOSE:
+                case Interop.WindowMessages.WM_CLOSE:
                     WmClose(ref m);
                     break;
                     
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     WmContextMenu(ref m);
                     break;
                     
-                case NativeMethods.WM_DISPLAYCHANGE:
+                case Interop.WindowMessages.WM_DISPLAYCHANGE:
                     WmDisplayChange(ref m);
                     break;
                     
-                case NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
                     
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case NativeMethods.WM_EXITMENULOOP:
+                case Interop.WindowMessages.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
 
-                case NativeMethods.WM_HELP:
+                case Interop.WindowMessages.WM_HELP:
                     WmHelp(ref m);
                     break;
 
-                case NativeMethods.WM_PAINT:
+                case Interop.WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint)) {
                         WmPaint(ref m);
                     }
@@ -13508,7 +13508,7 @@ example usage
                     }
                     break;
 
-                case NativeMethods.WM_PRINTCLIENT:
+                case Interop.WindowMessages.WM_PRINTCLIENT:
                     if (GetStyle(ControlStyles.UserPaint)) {
                         WmPrintClient(ref m);
                     }
@@ -13517,11 +13517,11 @@ example usage
                     }
                     break;
 
-                case NativeMethods.WM_INITMENUPOPUP:
+                case Interop.WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
 
-                case NativeMethods.WM_SYSCOMMAND:
+                case Interop.WindowMessages.WM_SYSCOMMAND:
                     if ((unchecked((int)(long)m.WParam) & 0xFFF0) == NativeMethods.SC_KEYMENU) {
                         Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.WndProc processing " + m.ToString());
 
@@ -13534,229 +13534,229 @@ example usage
                     DefWndProc(ref m);
                     break;
                     
-                case NativeMethods.WM_INPUTLANGCHANGE:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
                     WmInputLangChange(ref m);
                     break;
 
-                case NativeMethods.WM_INPUTLANGCHANGEREQUEST:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGEREQUEST:
                     WmInputLangChangeRequest(ref m);
                     break;
 
-                case NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_MEASUREITEM:
                     WmMeasureItem(ref m);
                     break;
                     
-                case NativeMethods.WM_MENUCHAR:
+                case Interop.WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
 
-                case NativeMethods.WM_MENUSELECT:
+                case Interop.WindowMessages.WM_MENUSELECT:
                     WmMenuSelect(ref m);
                     break;
 
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     WmSetCursor(ref m);
                     break;
 
-                case NativeMethods.WM_WINDOWPOSCHANGING:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
 
-                case NativeMethods.WM_CHAR:
-                case NativeMethods.WM_KEYDOWN:
-                case NativeMethods.WM_SYSKEYDOWN:
-                case NativeMethods.WM_KEYUP:
-                case NativeMethods.WM_SYSKEYUP:
+                case Interop.WindowMessages.WM_CHAR:
+                case Interop.WindowMessages.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_SYSKEYDOWN:
+                case Interop.WindowMessages.WM_KEYUP:
+                case Interop.WindowMessages.WM_SYSKEYUP:
                     WmKeyChar(ref m);
                     break;
                     
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
                     
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     WmDestroy(ref m);
                     break;
 
-                case NativeMethods.WM_CTLCOLOR:
-                case NativeMethods.WM_CTLCOLORBTN:
-                case NativeMethods.WM_CTLCOLORDLG:
-                case NativeMethods.WM_CTLCOLORMSGBOX:
-                case NativeMethods.WM_CTLCOLORSCROLLBAR:
-                case NativeMethods.WM_CTLCOLOREDIT:
-                case NativeMethods.WM_CTLCOLORLISTBOX:
-                case NativeMethods.WM_CTLCOLORSTATIC:
+                case Interop.WindowMessages.WM_CTLCOLOR:
+                case Interop.WindowMessages.WM_CTLCOLORBTN:
+                case Interop.WindowMessages.WM_CTLCOLORDLG:
+                case Interop.WindowMessages.WM_CTLCOLORMSGBOX:
+                case Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case Interop.WindowMessages.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_CTLCOLORSTATIC:
 
                 // this is for the trinity guys.  The case is if you've got a windows
                 // forms edit or something hosted as an AX control somewhere, there isn't anyone to reflect
                 // these back.  If they went ahead and just sent them back, some controls don't like that 
                 // and end up recursing.  Our code handles it fine because we just pick the HWND out of the LPARAM.
                 //
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLOR:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORBTN:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORDLG:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORMSGBOX:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORSCROLLBAR:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLOREDIT:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORLISTBOX:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CTLCOLORSTATIC:                    
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOR:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORBTN:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORDLG:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORMSGBOX:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSCROLLBAR:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CTLCOLORSTATIC:                    
                     WmCtlColorControl(ref m);
                     break;
                     
-                case NativeMethods.WM_HSCROLL:
-                case NativeMethods.WM_VSCROLL:
-                case NativeMethods.WM_DELETEITEM:
-                case NativeMethods.WM_VKEYTOITEM:
-                case NativeMethods.WM_CHARTOITEM:
-                case NativeMethods.WM_COMPAREITEM:
+                case Interop.WindowMessages.WM_HSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
+                case Interop.WindowMessages.WM_DELETEITEM:
+                case Interop.WindowMessages.WM_VKEYTOITEM:
+                case Interop.WindowMessages.WM_CHARTOITEM:
+                case Interop.WindowMessages.WM_COMPAREITEM:
                     if (!ReflectMessageInternal(m.LParam, ref m)) {
                         DefWndProc(ref m);
                     }
                     break;
                     
-                case NativeMethods.WM_IME_CHAR:
+                case Interop.WindowMessages.WM_IME_CHAR:
                     WmImeChar(ref m);
                     break;
                     
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
                     WmImeStartComposition(ref m);
                     break;
                     
-                case NativeMethods.WM_IME_ENDCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_ENDCOMPOSITION:
                     WmImeEndComposition(ref m);
                     break;
                     
-                case NativeMethods.WM_IME_NOTIFY:
+                case Interop.WindowMessages.WM_IME_NOTIFY:
                     WmImeNotify(ref m);
                     break;
                     
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     WmKillFocus(ref m);
                     break;
                     
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Left, 1);
                     break;
                     
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Left, 1);
                     break;
                     
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     break;
                     
-                case NativeMethods.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Middle, 1);
                     break;
                     
-                case NativeMethods.WM_XBUTTONDOWN:
+                case Interop.WindowMessages.WM_XBUTTONDOWN:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
                     
-                case NativeMethods.WM_XBUTTONUP:
+                case Interop.WindowMessages.WM_XBUTTONUP:
                     WmMouseUp(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 1);
                     break;
                     
-                case NativeMethods.WM_XBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_XBUTTONDBLCLK:
                     WmMouseDown(ref m, GetXButton(NativeMethods.Util.HIWORD(m.WParam)), 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     WmMouseLeave(ref m);
                     break;
                     
-                case NativeMethods.WM_DPICHANGED_BEFOREPARENT:
+                case Interop.WindowMessages.WM_DPICHANGED_BEFOREPARENT:
                     WmDpiChangedBeforeParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
                     
-                case NativeMethods.WM_DPICHANGED_AFTERPARENT:
+                case Interop.WindowMessages.WM_DPICHANGED_AFTERPARENT:
                     WmDpiChangedAfterParent(ref m);
                     m.Result = IntPtr.Zero;
                     break;
                     
-                case NativeMethods.WM_MOUSEMOVE:
+                case Interop.WindowMessages.WM_MOUSEMOVE:
                     WmMouseMove(ref m);
                     break;
                     
-                case NativeMethods.WM_MOUSEWHEEL:
+                case Interop.WindowMessages.WM_MOUSEWHEEL:
                     WmMouseWheel(ref m);
                     break;
                     
-                case NativeMethods.WM_MOVE:
+                case Interop.WindowMessages.WM_MOVE:
                     WmMove(ref m);
                     break;
                     
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     WmNotify(ref m);
                     break;
                     
-                case NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_NOTIFYFORMAT:
                     WmNotifyFormat(ref m);
                     break;
                     
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
                     m.Result = (IntPtr)(NativeMethods.NFR_UNICODE);
                     break;
                     
-                case NativeMethods.WM_SHOWWINDOW:
+                case Interop.WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
                     
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     if (GetStyle(ControlStyles.StandardDoubleClick)) {
                         SetState(STATE_DOUBLECLICKFIRED, true);
                     }
                     break;
                     
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     break;
                     
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     WmMouseUp(ref m, MouseButtons.Right, 1);
                     break;
                     
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                     
-                case NativeMethods.WM_MOUSEHOVER:
+                case Interop.WindowMessages.WM_MOUSEHOVER:
                     WmMouseHover(ref m);
                     break;
                     
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
                     
-                case NativeMethods.WM_QUERYNEWPALETTE:
+                case Interop.WindowMessages.WM_QUERYNEWPALETTE:
                     WmQueryNewPalette(ref m);
                     break;
                     
-                case NativeMethods.WM_UPDATEUISTATE:
+                case Interop.WindowMessages.WM_UPDATEUISTATE:
                     WmUpdateUIState(ref m);
                     break;
                     
-                case NativeMethods.WM_PARENTNOTIFY:
+                case Interop.WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
                     
@@ -13797,7 +13797,7 @@ example usage
 
                                 while (result == IntPtr.Zero && hwndFocus != IntPtr.Zero && hwndFocus != hwndDesktop) {
                                     result = UnsafeNativeMethods.SendMessage(new HandleRef(null, hwndFocus),
-                                                                       NativeMethods.WM_MOUSEWHEEL,
+                                                                       Interop.WindowMessages.WM_MOUSEWHEEL,
                                                                        (unchecked((int)(long)m.WParam) << 16) | (int)keyState,
                                                                        m.LParam);
                                     hwndFocus = UnsafeNativeMethods.GetParent(new HandleRef(null, hwndFocus));
@@ -14007,11 +14007,11 @@ example usage
                 // to occur within control.
                 //
                 switch (m.Msg) {
-                    case NativeMethods.WM_MOUSELEAVE:
+                    case Interop.WindowMessages.WM_MOUSELEAVE:
                         control.UnhookMouseEvent();
                         break;
 
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (!control.GetState(Control.STATE_TRACKINGMOUSEEVENT)) {
                             control.HookMouseEvent();
                             if (!control.GetState(Control.STATE_MOUSEENTERPENDING)) {
@@ -14023,7 +14023,7 @@ example usage
                         }
                         break;
 
-                    case NativeMethods.WM_MOUSEWHEEL:
+                    case Interop.WindowMessages.WM_MOUSEWHEEL:
                         // TrackMouseEvent's mousehover implementation doesn't watch the wheel
                         // correctly...
                         //
@@ -15908,7 +15908,7 @@ example usage
                             NativeMethods.MSG msg = Marshal.PtrToStructure<NativeMethods.MSG>(lpmsg);
                             Control target = control;
 
-                            if (msg.hwnd != control.Handle && msg.message >= NativeMethods.WM_MOUSEFIRST && msg.message <= NativeMethods.WM_MOUSELAST) {
+                            if (msg.hwnd != control.Handle && msg.message >= Interop.WindowMessages.WM_MOUSEFIRST && msg.message <= Interop.WindowMessages.WM_MOUSELAST) {
 
                                 // Must translate message coordniates over to our HWND.  We first try
                                 //
@@ -15938,7 +15938,7 @@ example usage
                             }
 #endif // DEBUG
 
-                            if (msg.message == NativeMethods.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB) {
+                            if (msg.message == Interop.WindowMessages.WM_KEYDOWN && msg.wParam == (IntPtr)NativeMethods.VK_TAB) {
                                 target.SelectNextControl(null, Control.ModifierKeys != Keys.Shift, true, true, true);
                             }
                             else {
@@ -16052,7 +16052,7 @@ example usage
                                   //| NativeMethods.PRF_OWNED));
 
                     if(hdcType != NativeMethods.OBJ_ENHMETADC) {
-                        control.SendMessage(NativeMethods.WM_PRINT, hdcDraw, flags);
+                        control.SendMessage(Interop.WindowMessages.WM_PRINT, hdcDraw, flags);
                     } else {
                         control.PrintToMetaFile(new HandleRef(null, hdcDraw), flags);
                     }
@@ -17739,10 +17739,10 @@ example usage
                 bool needPreProcess = false;
 
                 switch (lpmsg.message) {
-                    case NativeMethods.WM_KEYDOWN:
-                    case NativeMethods.WM_SYSKEYDOWN:
-                    case NativeMethods.WM_CHAR:
-                    case NativeMethods.WM_SYSCHAR:
+                    case Interop.WindowMessages.WM_KEYDOWN:
+                    case Interop.WindowMessages.WM_SYSKEYDOWN:
+                    case Interop.WindowMessages.WM_CHAR:
+                    case Interop.WindowMessages.WM_SYSCHAR:
                         needPreProcess = true;
                         break;
                 }
@@ -17959,13 +17959,13 @@ example usage
             /// </devdoc>
             void IWindowTarget.OnMessage(ref Message m) {
                 if (activeXState[uiDead]) {
-                    if (m.Msg >= NativeMethods.WM_MOUSEFIRST && m.Msg <= NativeMethods.WM_MOUSELAST) {
+                    if (m.Msg >= Interop.WindowMessages.WM_MOUSEFIRST && m.Msg <= Interop.WindowMessages.WM_MOUSELAST) {
                         return;
                     }
-                    if (m.Msg >= NativeMethods.WM_NCLBUTTONDOWN && m.Msg <= NativeMethods.WM_NCMBUTTONDBLCLK) {
+                    if (m.Msg >= Interop.WindowMessages.WM_NCLBUTTONDOWN && m.Msg <= Interop.WindowMessages.WM_NCMBUTTONDBLCLK) {
                         return;
                     }
-                    if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
+                    if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                         return;
                     }
                 }

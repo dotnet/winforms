@@ -1269,7 +1269,7 @@ namespace System.Windows.Forms {
 
         private void OnSetScrollPosition(object sender, EventArgs e) {
             if (!IsMirrored) {
-                SendMessage(NativeMethods.WM_HSCROLL, 
+                SendMessage(Interop.WindowMessages.WM_HSCROLL, 
                             NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? NativeMethods.SB_RIGHT : NativeMethods.SB_LEFT,0), 0);
             }
         }
@@ -1464,13 +1464,13 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case NativeMethods.WM_HSCROLL:
+                case Interop.WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
-                case NativeMethods.WM_SETTINGCHANGE:
+                case Interop.WindowMessages.WM_SETTINGCHANGE:
                     WmSettingChange(ref m);
                     break;
                 default:

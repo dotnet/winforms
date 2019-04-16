@@ -544,7 +544,7 @@ namespace System.Windows.Forms {
       }
 
       protected override void  WndProc(ref Message m)            {                
-          if ((m.Msg == NativeMethods.WM_NCHITTEST) && SizingGrip) {
+          if ((m.Msg == Interop.WindowMessages.WM_NCHITTEST) && SizingGrip) {
             // if we're within the grip bounds tell windows
             // that we're the bottom right of the window.  
             Rectangle sizeGripBounds = SizeGripBounds;
@@ -605,7 +605,7 @@ namespace System.Windows.Forms {
                 }
             }
             protected override void WndProc(ref Message m) {
-                 if (m.Msg == NativeMethods.WM_NCHITTEST) {
+                 if (m.Msg == Interop.WindowMessages.WM_NCHITTEST) {
                     int x = NativeMethods.Util.LOWORD(m.LParam);
                     int y = NativeMethods.Util.HIWORD(m.LParam);
 

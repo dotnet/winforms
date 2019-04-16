@@ -906,15 +906,15 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case NativeMethods.WM_HSCROLL:
+                case Interop.WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case NativeMethods.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:

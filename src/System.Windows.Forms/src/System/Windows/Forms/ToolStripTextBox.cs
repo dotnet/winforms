@@ -888,7 +888,7 @@ namespace System.Windows.Forms {
 
                 }
                 protected override void WndProc(ref Message m) {
-                    if (m.Msg == NativeMethods.WM_NCPAINT) {
+                    if (m.Msg == Interop.WindowMessages.WM_NCPAINT) {
                         WmNCPaint(ref m);
                         return;
                     }
