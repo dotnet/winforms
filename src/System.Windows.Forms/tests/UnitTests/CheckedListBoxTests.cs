@@ -154,39 +154,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, box.ValueMember);
         }
 
-        /// <summary>
-        /// Data for the Padding test
-        /// </summary>
-        public static TheoryData<Padding> PaddingData =>
-            TestHelper.GetPaddingTheoryData();
-
         [Theory]
-        [MemberData(nameof(PaddingData))]
-        public void CheckedListBox_Padding(Padding expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void CheckedListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var box = new CheckedListBox();
-
-            box.Padding = expected;
-
+            var box = new CheckedListBox
+            {
+                Padding = value
+            };
             Assert.Equal(expected, box.Padding);
-        }
 
-        /// <summary>
-        /// Data for the PaddingInvalid test
-        /// </summary>
-        public static TheoryData<Padding> PaddingDataInvalid =>
-            TestHelper.GetPaddingTheoryDataInvalid();
-
-        [Theory]
-        [MemberData(nameof(PaddingDataInvalid))]
-        public void CheckedListBox_PaddingInvalid(Padding attempted)
-        {
-            var box = new CheckedListBox();
-
-            box.Padding = attempted;
-
-            Assert.NotEqual(attempted, box.Padding); //paddings cannot be negative
-            Assert.Equal(new Padding(), box.Padding);
+            // Set same.
+            box.Padding = value;
+            Assert.Equal(expected, box.Padding);
         }
 
         [Theory]
