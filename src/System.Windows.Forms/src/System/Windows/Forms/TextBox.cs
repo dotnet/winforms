@@ -771,25 +771,19 @@ namespace System.Windows.Forms {
         
                 }
                 else {
-                    try {
-                        if (IsHandleCreated) {
-                            int mode = 0;
-                            if (AutoCompleteMode == AutoCompleteMode.Suggest) {
-                                mode |=  NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
-                            }
-                            if (AutoCompleteMode == AutoCompleteMode.Append) {
-                                mode |=  NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
-                            }
-                            if (AutoCompleteMode == AutoCompleteMode.SuggestAppend) {
-                                mode |=  NativeMethods.AUTOSUGGEST;
-                                mode |=  NativeMethods.AUTOAPPEND;
-                            }
-                            int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle) , (int)AutoCompleteSource | mode);
+                    if (IsHandleCreated) {
+                        int mode = 0;
+                        if (AutoCompleteMode == AutoCompleteMode.Suggest) {
+                            mode |=  NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
                         }
-                    }
-                    catch (System.Security.SecurityException) {
-                        // If we don't have full trust, degrade gracefully. Allow the control to
-                        // function without auto-complete. Allow the app to continue running.
+                        if (AutoCompleteMode == AutoCompleteMode.Append) {
+                            mode |=  NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
+                        }
+                        if (AutoCompleteMode == AutoCompleteMode.SuggestAppend) {
+                            mode |=  NativeMethods.AUTOSUGGEST;
+                            mode |=  NativeMethods.AUTOAPPEND;
+                        }
+                        int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle) , (int)AutoCompleteSource | mode);
                     }
                 }
             }

@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Security;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms.Design.Behavior

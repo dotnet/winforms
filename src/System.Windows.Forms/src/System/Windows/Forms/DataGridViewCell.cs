@@ -3152,11 +3152,6 @@ namespace System.Windows.Forms
                     }
                 }
             }
-            else if (this.DataGridView.IsRestricted)
-            {
-                // In semi trust (demand for AllWindows fails), we truncate the tooltip at 256 if it exceeds 288 characters.
-                toolTipText = TruncateToolTipText(toolTipText);
-            }
 
             if (!string.IsNullOrEmpty(toolTipText))
             {
