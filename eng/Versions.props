@@ -12,6 +12,9 @@
       https://dotnetfeed.blob.core.windows.net/dotnet-coreclr/index.json
     </RestoreSources>
   </PropertyGroup>
+  <PropertyGroup>
+    <MicrosoftNetCoreAppPackageVersion>3.0.0-preview4-27601-04</MicrosoftNetCoreAppPackageVersion>
+  </PropertyGroup>
   <!-- Corefx-updated dependencies -->
   <PropertyGroup>
     <MicrosoftWin32RegistryPackageVersion>4.6.0-preview5.19216.2</MicrosoftWin32RegistryPackageVersion>
