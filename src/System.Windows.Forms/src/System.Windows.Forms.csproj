@@ -481,9 +481,6 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\east.cur">
       <LogicalName>System.Windows.Forms.east.cur</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\hand.cur">
-      <LogicalName>System.Windows.Forms.hand.cur</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\hsplit.cur">
       <LogicalName>System.Windows.Forms.hsplit.cur</LogicalName>
     </EmbeddedResource>
