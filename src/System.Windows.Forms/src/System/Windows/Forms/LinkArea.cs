@@ -193,8 +193,8 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    return new LinkArea((int)propertyValues["Start"],
-                                    (int)propertyValues["Length"]);
+                    return new LinkArea((int)propertyValues[nameof(LinkArea.Start)],
+                                    (int)propertyValues[nameof(LinkArea.Length)]);
                 }
                 catch (InvalidCastException invalidCast)
                 {
@@ -220,7 +220,7 @@ namespace System.Windows.Forms
             public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(LinkArea), attributes);
-                return props.Sort(new string[] { "Start", "Length" });
+                return props.Sort(new string[] { nameof(LinkArea.Start), nameof(LinkArea.Length) });
             }
 
 
