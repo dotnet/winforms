@@ -28,11 +28,11 @@ namespace System.Windows.Forms
     {
         private const int MaxSubItems = 4096;
 
-        private static readonly BitVector32.Section StateSelectedSection = BitVector32.CreateSection(1);
-        private static readonly BitVector32.Section StateImageMaskSet = BitVector32.CreateSection(1, StateSelectedSection);
-        private static readonly BitVector32.Section StateWholeRowOneStyleSection = BitVector32.CreateSection(1, StateImageMaskSet);
-        private static readonly BitVector32.Section SavedStateImageIndexSection = BitVector32.CreateSection(15, StateWholeRowOneStyleSection);
-        private static readonly BitVector32.Section SubItemCountSection = BitVector32.CreateSection(MaxSubItems, SavedStateImageIndexSection);
+        private static readonly BitVector32.Section s_stateSelectedSection = BitVector32.CreateSection(1);
+        private static readonly BitVector32.Section s_stateImageMaskSet = BitVector32.CreateSection(1, s_stateSelectedSection);
+        private static readonly BitVector32.Section s_stateWholeRowOneStyleSection = BitVector32.CreateSection(1, s_stateImageMaskSet);
+        private static readonly BitVector32.Section s_avedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
+        private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_avedStateImageIndexSection);
 
         private int indentCount = 0;
         private Point position = new Point(-1, -1);
@@ -54,28 +54,27 @@ namespace System.Windows.Forms
         private BitVector32 state = new BitVector32();
         private ListViewItemImageIndexer imageIndexer;
         private string toolTipText = string.Empty;
-        object userData;
+        private object userData;
 
         // We need a special way to defer to the ListView's image
         // list for indexing purposes.
         internal class ListViewItemImageIndexer : ImageList.Indexer
         {
-            private ListViewItem owner;
+            private readonly ListViewItem _owner;
 
 
             public ListViewItemImageIndexer(ListViewItem item)
             {
-                owner = item;
+                _owner = item;
             }
 
 
             public override ImageList ImageList
             {
-                get => owner?.ImageList;
+                get => _owner?.ImageList;
                 set => Debug.Fail("We should never set the image list");
             }
         }
-
 
         public ListViewItem()
         {
@@ -646,15 +645,15 @@ namespace System.Windows.Forms
             {
                 // State goes from zero to 15, but we need a negative
                 // number, so we store + 1.
-                return state[SavedStateImageIndexSection] - 1;
+                return state[s_avedStateImageIndexSection] - 1;
             }
             set
             {
                 // flag whether we've set a value.
-                state[StateImageMaskSet] = (value == -1 ? 0 : 1);
+                state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
 
                 // push in the actual value
-                state[SavedStateImageIndexSection] = value + 1;
+                state[s_avedStateImageIndexSection] = value + 1;
             }
         }
 
@@ -724,7 +723,7 @@ namespace System.Windows.Forms
 
                 if (listView != null && listView.IsHandleCreated)
                 {
-                    this.state[StateImageMaskSet] = (value == -1 ? 0 : 1);
+                    this.state[s_stateImageMaskSet] = (value == -1 ? 0 : 1);
                     int state = ((value + 1) << 12);  // index is 1-based
                     listView.SetItemState(Index, state, NativeMethods.LVIS_STATEIMAGEMASK);
                 }
@@ -732,15 +731,15 @@ namespace System.Windows.Forms
             }
         }
 
-        internal bool StateImageSet => (state[StateImageMaskSet] != 0);
+        internal bool StateImageSet => (state[s_stateImageMaskSet] != 0);
 
         /// <summary>
         /// Accessor for our state bit vector.
         /// </summary>
         internal bool StateSelected
         {
-            get => state[StateSelectedSection] == 1;
-            set => state[StateSelectedSection] = value ? 1 : 0;
+            get => state[s_stateSelectedSection] == 1;
+            set => state[s_stateSelectedSection] = value ? 1 : 0;
         }
 
         /// <summary>
@@ -748,8 +747,8 @@ namespace System.Windows.Forms
         /// </summary>
         private int SubItemCount
         {
-            get => state[SubItemCountSection];
-            set => state[SubItemCountSection] = value;
+            get => state[s_subItemCountSection];
+            set => state[s_subItemCountSection] = value;
         }
 
         [SRCategory(nameof(SR.CatData))]
@@ -843,8 +842,8 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatAppearance))]
         public bool UseItemStyleForSubItems
         {
-            get => state[StateWholeRowOneStyleSection] == 1;
-            set => state[StateWholeRowOneStyleSection] = value ? 1 : 0;
+            get => state[s_stateWholeRowOneStyleSection] == 1;
+            set => state[s_stateWholeRowOneStyleSection] = value ? 1 : 0;
         }
 
         /// <summary>
