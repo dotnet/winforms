@@ -331,6 +331,7 @@ namespace System.ComponentModel.Design
                     }
                 }
             }
+
             return false;
         }
 
@@ -669,7 +670,7 @@ namespace System.ComponentModel.Design
             {
                 Point middle = new Point(Convert.ToInt32(dropDownRect.Left + dropDownRect.Width / 2), Convert.ToInt32(dropDownRect.Top + dropDownRect.Height / 2));
 
-                //if the width is odd - favor pushing it over one pixel right.
+                // If the width is odd - favor pushing it over one pixel right.
                 middle.X += (dropDownRect.Width % 2);
 
                 Point[] arrow = new Point[] {
@@ -1316,10 +1317,7 @@ namespace System.ComponentModel.Design
 
                     finally
                     {
-                        if (format != null)
-                        {
-                            format.Dispose();
-                        }
+                        format?.Dispose();
                     }
 
                     Brush textBrush = new SolidBrush(textColor);
@@ -1385,7 +1383,6 @@ namespace System.ComponentModel.Design
             {
                 try
                 {
-
                     if (!_dirty || !CollectionEditable)
                     {
                         _dirty = false;
@@ -1445,7 +1442,6 @@ namespace System.ComponentModel.Design
                         }
                     }
                 }
-
             }
 
             /// <summary>
@@ -1669,13 +1665,10 @@ namespace System.ComponentModel.Design
                 }
             }
             /// <summary>
-            /// used to prevent flicker when playing with the list box selection call resume when done.
+            /// Used to prevent flicker when playing with the list box selection call resume when done.
             /// Calls to UpdateEnabled will return silently until Resume is called
             /// </summary>
-            private void SuspendEnabledUpdates()
-            {
-                _suspendEnabledCount++;
-            }
+            private void SuspendEnabledUpdates() => _suspendEnabledCount++;
             
             /// <summary>
             /// Called to show the dialog via the IWindowsFormsEditorService 

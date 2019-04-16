@@ -711,14 +711,6 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void CollectionForm_DisplayError_InvokeWithoutContext_Success()
-        {
-            var editor = new SubCollectionEditor(typeof(List<int>));
-            var form = new SubCollectionForm(editor);
-            form.DisplayError(new Exception());
-        }
-        
-        [Fact]
         public void CollectionForm_DisplayError_InvokeWithContextWithIUIService_CallsShowError()
         {
             var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
@@ -759,43 +751,6 @@ namespace System.ComponentModel.Design.Tests
             var form = new SubCollectionForm(editor);
             form.DisplayError(exception);
             mockService.Verify(s => s.ShowError(exception), Times.Once());
-        }
-        
-        [Theory]
-        [MemberData(nameof(InvalidDesignerHost_TestData))]
-        public void CollectionForm_DisplayError_InvokeWithContextWithInvalidIUIService_Success(object service)
-        {
-            var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
-            mockEditorService
-                .Setup(s => s.ShowDialog(It.IsAny<Form>()))
-                .Returns(DialogResult.OK);
-
-            var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);
-            mockServiceProvider
-                .Setup(p => p.GetService(typeof(IWindowsFormsEditorService)))
-                .Returns(mockEditorService.Object);
-
-            var mockContext = new Mock<ITypeDescriptorContext>(MockBehavior.Strict);
-            mockContext
-                .Setup(c => c.GetService(typeof(IDesignerHost)))
-                .Returns(null);
-            mockContext
-                .Setup(c => c.GetService(typeof(AmbientProperties)))
-                .Returns(null);
-            mockContext
-                .Setup(c => c.GetService(typeof(IComponentChangeService)))
-                .Returns(null);
-            mockContext
-                .Setup(c => c.GetService(typeof(IUIService)))
-                .Returns(service);
-
-            var editor = new SubCollectionEditor(typeof(List<int>));
-            var editValue = new object();
-            Assert.Same(editValue, editor.EditValue(mockContext.Object, mockServiceProvider.Object, editValue));
-            Assert.Same(mockContext.Object, editor.Context);
-
-            var form = new SubCollectionForm(editor);
-            form.DisplayError(new Exception());
         }
 
         [Theory]
