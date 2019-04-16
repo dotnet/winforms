@@ -3043,7 +3043,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // Focus the PropertyGridView window
                 //
                 if ( (flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus) {
-                    bool focused = PropertyGridView.FocusInternal();
+                    bool focused = PropertyGridView.Focus();
                 }
 
                 // Select the grid entry

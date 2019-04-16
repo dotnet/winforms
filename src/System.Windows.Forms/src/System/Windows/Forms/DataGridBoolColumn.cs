@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             //
             DataGrid grid = this.DataGridTableStyle.DataGrid;
             if (!grid.Focused)
-                grid.FocusInternal();
+                grid.Focus();
 
             if (!readOnly && !IsReadOnly()) {
                 editingRow = rowNum;

@@ -604,7 +604,7 @@ namespace System.Windows.Forms {
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
                 if (!Focused) {
-                    FocusInternal();    // This will cause an OnEnter event, which in turn will fire the click event
+                    Focus();    // This will cause an OnEnter event, which in turn will fire the click event
                 }
                 else {
                     PerformClick();     // Generate a click if already focused

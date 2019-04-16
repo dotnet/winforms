@@ -877,7 +877,7 @@ namespace System.Windows.Forms
                 if (lv.LabelEdit == false)
                     throw new InvalidOperationException(SR.ListViewBeginEditFailed);
                 if (!lv.Focused)
-                    lv.FocusInternal();
+                    lv.Focus();
                 UnsafeNativeMethods.SendMessage(new HandleRef(lv, lv.Handle), NativeMethods.LVM_EDITLABEL, Index, 0);
             }
         }                   

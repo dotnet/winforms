@@ -44,7 +44,6 @@ using System.Runtime.Versioning;
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+PARAFORMAT):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+POINT):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+RECT&):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+REPASTESPECIAL):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SIZE):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SYSTEMTIME):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SYSTEMTIMEARRAY):System.IntPtr")]
@@ -859,11 +858,8 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, int lParam);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.REPASTESPECIAL lParam);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
+
+        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]        
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         

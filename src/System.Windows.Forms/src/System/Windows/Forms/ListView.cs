@@ -3966,7 +3966,7 @@ namespace System.Windows.Forms {
                 // And that may cause GetItemAt to throw an out of bounds exception.
 
                 Point pos = Cursor.Position;
-                pos = PointToClientInternal(pos);
+                pos = PointToClient(pos);
                 item = GetItemAt(pos.X, pos.Y);
             }
 
@@ -5184,7 +5184,7 @@ namespace System.Windows.Forms {
 
             if (CheckBoxes) {
                 Point pos = Cursor.Position;
-                pos = PointToClientInternal(pos);
+                pos = PointToClient(pos);
                 NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
 
                 lvhi.pt_x = pos.X;
@@ -5214,7 +5214,7 @@ namespace System.Windows.Forms {
 
             if (CheckBoxes) {
                 Point pos = Cursor.Position;
-                pos = PointToClientInternal(pos);
+                pos = PointToClient(pos);
                 NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
 
                 lvhi.pt_x = pos.X;
@@ -5235,7 +5235,7 @@ namespace System.Windows.Forms {
             listViewState[LISTVIEWSTATE_expectingMouseUp] = true;
 
             //This is required to FORCE Validation before Windows ListView pushes its own message loop...
-            FocusInternal();
+            Focus();
 
             // Windows ListView pushes its own Windows ListView in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
@@ -5598,7 +5598,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private int GetIndexOfClickedItem(NativeMethods.LVHITTESTINFO lvhi) {
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             lvhi.pt_x = pos.X;
             lvhi.pt_y = pos.Y;
             return (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_HITTEST, 0, lvhi);
@@ -5781,7 +5781,7 @@ namespace System.Windows.Forms {
 
                     MouseButtons button = nmhdr->code == NativeMethods.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
-                    pos = PointToClientInternal(pos);
+                    pos = PointToClient(pos);
 
                     if (!ValidationCancelled && displayIndex != -1) {
                         OnClick(EventArgs.Empty);

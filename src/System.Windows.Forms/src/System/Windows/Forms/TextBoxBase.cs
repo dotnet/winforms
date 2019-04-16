@@ -2154,7 +2154,7 @@ namespace System.Windows.Forms {
                     client = new Point(Width/2, Height/2);
                 }
                 else {
-                    client = PointToClientInternal(new Point(x, y));
+                    client = PointToClient(new Point(x, y));
                 }
 
                 // 

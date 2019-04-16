@@ -261,7 +261,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override void OnClick(EventArgs e) {
-            Form form = FindFormInternal();
+            Form form = FindForm();
             if (form != null) form.DialogResult = dialogResult;
 
 

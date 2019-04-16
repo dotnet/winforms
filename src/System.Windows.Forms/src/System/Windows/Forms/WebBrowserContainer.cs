@@ -345,7 +345,7 @@ namespace System.Windows.Forms
             siteUIActive = site;
             ContainerControl f = site.ContainingControl;
             if (f != null && f.Contains(site)) {
-                f.SetActiveControlInternal(site);
+                f.SetActiveControl(site);
             }
         }
 
@@ -367,7 +367,7 @@ namespace System.Windows.Forms
                 siteActive = null;
                 ContainerControl parentContainer = parent.FindContainerControlInternal();
                 if (parentContainer != null) {
-                    parentContainer.SetActiveControlInternal(null);
+                    parentContainer.SetActiveControl(null);
                 }
             }
         }

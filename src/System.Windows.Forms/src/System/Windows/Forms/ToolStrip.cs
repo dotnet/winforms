@@ -1881,7 +1881,7 @@ namespace System.Windows.Forms {
                 // so we get the focus off the thing that's currently focused 
                 // e.g. go from a text box to a toolstrip button
                 if (ContainsFocus && !Focused) {
-                    this.FocusInternal();
+                    this.Focus();
                     if (controlHost == null) {
                         // if nextItem IS a toolstripcontrolhost, we're going to focus it anyways
                         // we only fire KeyboardActive when "focusing" a non-hwnd backed item
@@ -1893,7 +1893,7 @@ namespace System.Windows.Forms {
                         SnapFocus(UnsafeNativeMethods.GetFocus());
                     }
                     controlHost.Control.Select();
-                    controlHost.Control.FocusInternal();
+                    controlHost.Control.Focus();
                 }
 
 
@@ -3988,13 +3988,13 @@ namespace System.Windows.Forms {
            bool focusSuccess = false;
                    
            if ((hwndThatLostFocus != IntPtr.Zero) && (hwndThatLostFocus != this.Handle)) {
-                Control c = Control.FromHandleInternal(hwndThatLostFocus);
+                Control c = Control.FromHandle(hwndThatLostFocus);
 
                 Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "[ToolStrip RestoreFocus]: Will Restore Focus to: " + WindowsFormsUtils.GetControlInformation(hwndThatLostFocus));
                 hwndThatLostFocus = IntPtr.Zero;
 
                 if ((c != null) && c.Visible) {
-                    focusSuccess = c.FocusInternal();
+                    focusSuccess = c.Focus();
                 }
             }
             hwndThatLostFocus = IntPtr.Zero;
@@ -4117,7 +4117,7 @@ namespace System.Windows.Forms {
         protected override void Select(bool directed, bool forward) {
             bool correctParentActiveControl = true;
             if (ParentInternal != null) {
-                IContainerControl c = ParentInternal.GetContainerControlInternal();
+                IContainerControl c = ParentInternal.GetContainerControl();
 
                 if (c != null) {
                     c.ActiveControl = this;
@@ -4150,7 +4150,7 @@ namespace System.Windows.Forms {
         internal void SetFocusUnsafe() {
             if (TabStop) {
                 Debug.WriteLineIf(SnapFocusDebug.TraceVerbose,"[ToolStrip.SetFocus] Focusing toolstrip.");
-                FocusInternal();
+                Focus();
             }
             else {
                 Debug.WriteLineIf(SnapFocusDebug.TraceVerbose,"[ToolStrip.SetFocus] Entering menu mode.");

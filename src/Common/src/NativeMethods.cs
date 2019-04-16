@@ -4698,13 +4698,6 @@ namespace System.Windows.Forms
             public string       lpstrText;
         }
         
-        [StructLayout(LayoutKind.Sequential)]
-        public class REPASTESPECIAL
-        {
-            public int  dwAspect;
-            public int  dwParam;
-        }
-        
         [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
         public class ENLINK

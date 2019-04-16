@@ -1427,7 +1427,7 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
-                    dataGridView.FocusInternal();
+                    dataGridView.Focus();
                 }
                 if (dataGridViewCell.OwningRow != null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||

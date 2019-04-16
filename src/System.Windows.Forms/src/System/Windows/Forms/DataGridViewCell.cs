@@ -1305,10 +1305,10 @@ namespace System.Windows.Forms
             {
                 if (dgv.EditingControl.ContainsFocus)
                 {
-                    ContainerControl cc = dgv.GetContainerControlInternal() as ContainerControl;
+                    ContainerControl cc = dgv.GetContainerControl() as ContainerControl;
                     if (cc != null && (dgv.EditingControl == cc.ActiveControl || dgv.EditingControl.Contains(cc.ActiveControl)))
                     {
-                        dgv.FocusInternal();
+                        dgv.Focus();
                     }
                     else
                     {
@@ -5325,7 +5325,7 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
-                    this.owner.DataGridView.FocusInternal();
+                    this.owner.DataGridView.Focus();
                 }
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {

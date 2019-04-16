@@ -51,10 +51,10 @@ namespace System.Windows.Forms {
         static string productName;
         static string productVersion;
         static string safeTopLevelCaptionSuffix;
-        static bool useVisualStyles = false;
+        private static bool s_useVisualStyles = false;
         static bool comCtlSupportsVisualStylesInitialized = false;
         static bool comCtlSupportsVisualStyles = false;
-        static FormCollection forms = null;
+        private static FormCollection s_forms = null;
         private static object internalSyncObject = new object();
         static bool useWaitCursor = false;
 
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
         }
 
         private static bool InitializeComCtlSupportsVisualStyles() {
-            if (useVisualStyles && OSFeature.Feature.IsPresent(OSFeature.Themes)) {
+            if (s_useVisualStyles && OSFeature.Feature.IsPresent(OSFeature.Themes)) {
                 //NOTE: At this point, we may not have loaded ComCtl6 yet, but it will eventually
                 //      be loaded, so we return true here. This works because UseVisualStyles, once
                 //      set, cannot be turned off. If that changes (unlikely), this may not work.
@@ -434,52 +434,10 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.Forms"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the forms collection associated with this application.
-        ///    </para>
+        /// Gets the forms collection associated with this application.
         /// </devdoc>
-        public static FormCollection OpenForms {
-            get {
-                return OpenFormsInternal;
-            }
-        }
-
-        /// <devdoc>
-        ///    <para>
-        ///       Internal version of OpenForms without the security demand.
-        ///    </para>
-        /// </devdoc>
-        internal static FormCollection OpenFormsInternal {
-            get {
-                if (forms == null) {
-                    forms = new FormCollection();
-                }
-
-                return forms;
-            }
-        }
-
-        /// <devdoc>
-        ///    <para>
-        ///       Thread safe addition of form to the OpenForms collection.
-        ///    </para>
-        /// </devdoc>
-        internal static void OpenFormsInternalAdd(Form form)
-        {
-            OpenFormsInternal.Add(form);            
-        }
-
-        /// <devdoc>
-        ///    <para>
-        ///       Thread safe removal of form from the OpenForms collection.
-        ///    </para>
-        /// </devdoc>
-        internal static void OpenFormsInternalRemove(Form form)
-        {
-            OpenFormsInternal.Remove(form);
-        }
+        public static FormCollection OpenForms => s_forms ?? (s_forms = new FormCollection());
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ProductName"]/*' />
         /// <devdoc>
@@ -665,7 +623,7 @@ namespace System.Windows.Forms {
                 {
                     useWaitCursor = value;
                     // Set the WaitCursor of all forms.
-                    foreach (Form f in OpenFormsInternal)
+                    foreach (Form f in OpenForms)
                     {
                         f.UseWaitCursor = useWaitCursor;
                     }
@@ -716,12 +674,8 @@ namespace System.Windows.Forms {
             }
         }
 
-#if (DRAWING_DESIGN_NAMESPACE)
-        public static bool UseVisualStyles {
-            get {
-                return useVisualStyles;
-            }
-        }
+#if DRAWING_DESIGN_NAMESPACE
+        public static bool UseVisualStyles => s_useVisualStyles;
 #endif
 
         /// <remarks>
@@ -1006,35 +960,19 @@ namespace System.Windows.Forms {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopDoEventsModal, null);
         }
 
-        /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EnableVisualStyles"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///    Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
-        ///    Uses the default theming manifest file shipped with the redist.
-        ///    </para>
+        /// Enables visual styles for all subsequent Application.Run() and CreateHandle() calls.
+        /// Uses the default theming manifest file shipped with the redist.
         /// </devdoc>
-        public static void EnableVisualStyles() {
-            string assemblyLoc = null;
-            
-            assemblyLoc = typeof(Application).Assembly.Location;
-
+        public static void EnableVisualStyles()
+        {
             // Pull manifest from our resources
-            if (assemblyLoc != null) {
-                // CSC embeds DLL manifests as resource ID 2
-                // https://github.com/dotnet/roslyn/blob/fab7134296816fc80019c60b0f5bef7400cf23ea/src/Compilers/Core/Portable/CvtRes.cs#L562
-                EnableVisualStylesInternal(assemblyLoc, 2);
+            string assemblyLoc = typeof(Application).Assembly.Location;
+            if (assemblyLoc != null)
+            {
+                s_useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, 2);
+                Debug.Assert(s_useVisualStyles, "Enable Visual Styles failed");
             }
-        }
-
-        /// <devdoc>
-        ///    Internal version ***WITHOUT SECURITY DEMAND***.
-        /// </devdoc>
-        private static void EnableVisualStylesInternal(string assemblyFileName, int nativeResourceID) {
-            //Note that if the following call fails, we don't throw an exception.
-            //Theming scope won't work, thats all.
-            useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyFileName, nativeResourceID);
-
-            Debug.Assert(useVisualStyles, "Enable Visual Styles failed");
         }
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.EndModalMessageLoop"]/*' />
@@ -1086,8 +1024,8 @@ namespace System.Windows.Forms {
                 try
                 {
                     // Raise the FormClosing and FormClosed events for each open form
-                    if (forms != null) {
-                        foreach (Form f in OpenFormsInternal) {
+                    if (s_forms != null) {
+                        foreach (Form f in OpenForms) {
                             if (f.RaiseFormClosingOnAppExit()) {
                                 cancelExit = true;
                                 break; // quit the loop as soon as one form refuses to close
@@ -1095,9 +1033,9 @@ namespace System.Windows.Forms {
                         }
                     }
                     if (!cancelExit) {
-                        if (forms != null) {
-                            while (OpenFormsInternal.Count > 0) {
-                                OpenFormsInternal[0].RaiseFormClosedOnAppExit(); // OnFormClosed removes the form from the FormCollection
+                        if (s_forms != null) {
+                            while (OpenForms.Count > 0) {
+                                OpenForms[0].RaiseFormClosedOnAppExit(); // OnFormClosed removes the form from the FormCollection
                             }
                         }
                         ThreadContext.ExitApplication();
@@ -3209,7 +3147,7 @@ namespace System.Windows.Forms {
                 // that might create a window.
 
                 IntPtr userCookie = IntPtr.Zero;
-                if (useVisualStyles) {
+                if (s_useVisualStyles) {
                     userCookie = UnsafeNativeMethods.ThemingScope.Activate();
                 }
 
@@ -3521,7 +3459,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-                    Control target = Control.FromChildHandleInternal(msg.hwnd);
+                    Control target = Control.FromChildHandle(msg.hwnd);
                     bool retValue = false;
 
                     Message m = Message.Create(msg.hwnd, msg.message, msg.wParam, msg.lParam);
@@ -4105,7 +4043,7 @@ namespace System.Windows.Forms {
                     bool add = true;
 
                     if (onlyWinForms) {
-                        Control c = Control.FromHandleInternal(hWnd);
+                        Control c = Control.FromHandle(hWnd);
                         if (c == null) add = false;
                     }
 
@@ -4126,7 +4064,7 @@ namespace System.Windows.Forms {
                 for (int i = 0; i < windowCount; i++) {
                     IntPtr hWnd = windows[i];
                     if (UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) {
-                        Control c = Control.FromHandleInternal(hWnd);
+                        Control c = Control.FromHandle(hWnd);
                         if (c != null) {
                             c.Dispose();
                         }
@@ -4197,7 +4135,7 @@ namespace System.Windows.Forms {
                     //
                     IntPtr parentHandle = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, MainForm.Handle), NativeMethods.GWL_HWNDPARENT);
 
-                    parentControl = Control.FromHandleInternal(parentHandle);
+                    parentControl = Control.FromHandle(parentHandle);
 
                     if (parentControl != null && parentControl.InvokeRequired) {
                         parentWindowContext = GetContextForHandle(new HandleRef(this, parentHandle));                            

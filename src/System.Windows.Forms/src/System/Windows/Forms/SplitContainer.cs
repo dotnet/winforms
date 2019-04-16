@@ -1294,17 +1294,17 @@ namespace System.Windows.Forms {
                 if (e.Button == MouseButtons.Left && e.Clicks == 1 && !IsSplitterFixed) {
                     // Focus the current splitter OnMouseDown.
                     splitterFocused = true;
-                    IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                    IContainerControl c = this.ParentInternal.GetContainerControl();
                     if (c != null) {
                         ContainerControl cc = c as ContainerControl;
                         if (cc == null) {
                             c.ActiveControl = this;
                         }
                         else {
-                            cc.SetActiveControlInternal(this);
+                            cc.SetActiveControl(this);
                         }
                     }
-                    SetActiveControlInternal(null);
+                    SetActiveControl(null);
                     nextActiveControl = panel2;
 
                     SplitBegin(e.X, e.Y);
@@ -1947,17 +1947,17 @@ namespace System.Windows.Forms {
             if (ctl != null && this.TabStop) {
                 //we are on Splitter.....Focus it
                 splitterFocused = true;
-                IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                IContainerControl c = this.ParentInternal.GetContainerControl();
                 if (c != null) {
                     ContainerControl cc = c as ContainerControl;
                     if (cc == null) {
                         c.ActiveControl = this;
                     }
                     else {
-                        cc.SetActiveControlInternal(this);
+                        cc.SetActiveControl(this);
                     }
                 }
-                SetActiveControlInternal(null);
+                SetActiveControl(null);
                 nextActiveControl = ctl;
                 return true;
             }
@@ -2048,7 +2048,7 @@ namespace System.Windows.Forms {
                 bool correctParentActiveControl = true;
                 if (container.ParentInternal != null)
                 {
-                    IContainerControl c = container.ParentInternal.GetContainerControlInternal();
+                    IContainerControl c = container.ParentInternal.GetContainerControl();
                     if (c != null)
                     {
                         c.ActiveControl = container;
@@ -2398,7 +2398,7 @@ namespace System.Windows.Forms {
             }
 
             if (nextActiveControl != null) {
-                SetActiveControlInternal(nextActiveControl);
+                SetActiveControl(nextActiveControl);
                 nextActiveControl = null;
             }
 
@@ -2415,17 +2415,17 @@ namespace System.Windows.Forms {
                 else {
                     //We are om Splitter ......
                     splitterFocused = true;
-                    IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                    IContainerControl c = this.ParentInternal.GetContainerControl();
                     if (c != null) {
                         ContainerControl cc = c as ContainerControl;
                         if (cc == null) {
                             c.ActiveControl = this;
                         }
                         else {
-                            cc.SetActiveControlInternal(this);
+                            cc.SetActiveControl(this);
                         }
                     }
-                    SetActiveControlInternal(null);
+                    SetActiveControl(null);
                     return true;
                 }
             }

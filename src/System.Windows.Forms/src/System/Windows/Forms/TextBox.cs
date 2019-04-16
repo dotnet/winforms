@@ -919,7 +919,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;
-                    FocusInternal();
+                    Focus();
                     if (realState == MouseButtons && 
                        (!ValidationCancelled || wasValidationCancelled)) {
                            base.WndProc(ref m);

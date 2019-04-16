@@ -1614,7 +1614,7 @@ namespace System.Windows.Forms {
         protected override bool ProcessTabKey(bool forward) {
             if (this.ActiveControl == this.previewControl)
             {
-                this.pageCounter.FocusInternal();
+                this.pageCounter.Focus();
                 return true;
             }
             return false;

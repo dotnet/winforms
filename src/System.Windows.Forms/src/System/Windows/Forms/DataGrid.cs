@@ -5058,12 +5058,12 @@ namespace System.Windows.Forms {
                     }
 
                     if (focusTheGrid && gridState[GRIDSTATE_canFocus])
-                        this.FocusInternal();
+                        this.Focus();
                     editColumn.ConcedeFocus();
     
                     // set the focus back to the grid
                     if (focusTheGrid && gridState[GRIDSTATE_canFocus] && CanFocus && !Focused)
-                        this.FocusInternal();
+                        this.Focus();
     
                     // reset the editControl flag
                     gridState[GRIDSTATE_editControlChanging] = false;
@@ -8094,7 +8094,7 @@ namespace System.Windows.Forms {
                     
                     gridState[GRIDSTATE_editControlChanging] = true;
                     try {
-                        FocusInternal();
+                        Focus();
                     } finally {
                         gridState[GRIDSTATE_editControlChanging] = false;
                     }
@@ -8142,7 +8142,7 @@ namespace System.Windows.Forms {
                             // let the grid regain focus
                             // introduced because of that BeginInvoke thing in the OnLeave method....
                             if (gridState[GRIDSTATE_canFocus] && CanFocus && !Focused)
-                                this.FocusInternal();
+                                this.Focus();
                             return true;
                         }
                     }
@@ -8173,7 +8173,7 @@ namespace System.Windows.Forms {
                                 // let the grid regain focus
                                 // introduced because of that BeginInvoke thing in the OnLeave method....
                                 if (gridState[GRIDSTATE_canFocus] && CanFocus && !Focused)
-                                    this.FocusInternal();
+                                    this.Focus();
                                 return true;
                             }
                         }

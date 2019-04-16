@@ -2306,7 +2306,7 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    FocusInternal();
+                    Focus();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }

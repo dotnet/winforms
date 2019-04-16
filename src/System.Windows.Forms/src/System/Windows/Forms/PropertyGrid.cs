@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
               
                 Controls.AddRange(new Control[] { doccomment, hotcommands, gridView, toolStrip });
 
-                SetActiveControlInternal(gridView);
+                SetActiveControl(gridView);
                 toolStrip.ResumeLayout(false);  // SetupToolbar should perform the layout
                 SetupToolbar();
                 this.PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
@@ -2571,9 +2571,9 @@ namespace System.Windows.Forms {
             }
         
             if (this.ActiveControl != gridView) {
-                this.SetActiveControlInternal(gridView);
+                this.SetActiveControl(gridView);
             }
-            gridView.FocusInternal();
+            gridView.Focus();
         }
 
         internal bool HavePropEntriesChanged() {
@@ -2843,13 +2843,13 @@ namespace System.Windows.Forms {
             base.OnGotFocus(e);
             
             if (this.ActiveControl == null) {
-                this.SetActiveControlInternal(gridView);
+                this.SetActiveControl(gridView);
             }
             else {
                 // sometimes the edit is still the active control
                 // when it's hidden or disabled...
-                if (!this.ActiveControl.FocusInternal()) {
-                    this.SetActiveControlInternal(gridView);
+                if (!this.ActiveControl.Focus()) {
+                    this.SetActiveControl(gridView);
                 }
             }
         }
@@ -3135,7 +3135,7 @@ namespace System.Windows.Forms {
         private void OnButtonClick(object sender, EventArgs e) {
             // we don't want to steal focus from the property pages...
             if (sender != btnViewPropertyPages) {
-                gridView.FocusInternal();
+                gridView.Focus();
             }
         }
 
@@ -3609,7 +3609,7 @@ namespace System.Windows.Forms {
                         }
                         else if (gridView.FocusInside) {
                             if (toolStrip.Visible) {
-                                toolStrip.FocusInternal();
+                                toolStrip.Focus();
 
                                 // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
                                 if (toolStrip.Items.Count > 0) {
@@ -3637,7 +3637,7 @@ namespace System.Windows.Forms {
                                     gridView.ReverseFocus();
                                 }
                                 else if (toolStrip.Visible) {
-                                    toolStrip.FocusInternal();
+                                    toolStrip.Focus();
                                 }
                                 else {
                                     return base.ProcessDialogKey(keyData);
@@ -3654,7 +3654,7 @@ namespace System.Windows.Forms {
                         if (toolStrip.Focused) {
                             // normal stuff, just do the propsheet
                             if (peMain != null) {
-                                gridView.FocusInternal();
+                                gridView.Focus();
                             }
                             else {
                                 base.ProcessDialogKey(keyData);
@@ -3677,10 +3677,10 @@ namespace System.Windows.Forms {
                         else {
                             // coming from out side, start with the toolStrip
                             if (toolStrip.Visible) {
-                                toolStrip.FocusInternal();
+                                toolStrip.Focus();
                             }
                             else {
-                                gridView.FocusInternal();
+                                gridView.Focus();
                             }
                         }
 

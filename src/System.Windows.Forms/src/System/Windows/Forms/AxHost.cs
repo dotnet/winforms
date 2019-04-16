@@ -3274,8 +3274,10 @@ namespace System.Windows.Forms {
                 }
 
                 case Interop.WindowMessages.WM_COMMAND:
-                    if (!ReflectMessageInternal(m.LParam, ref m))
+                    if (!ReflectMessage(m.LParam, ref m))
+                    {
                         DefWndProc(ref m);
+                    }
                     break;
                 
                 case Interop.WindowMessages.WM_CONTEXTMENU:
