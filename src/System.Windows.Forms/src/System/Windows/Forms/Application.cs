@@ -2453,7 +2453,7 @@ namespace System.Windows.Forms {
                                 //
                                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Registering MSO component with the component manager");
                                 NativeMethods.MSOCRINFOSTRUCT info = new NativeMethods.MSOCRINFOSTRUCT();
-                                info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MSOCRINFOSTRUCT));
+                                info.cbSize = Marshal.SizeOf<NativeMethods.MSOCRINFOSTRUCT>();
                                 info.uIdleTimeInterval = 0;
                                 info.grfcrf = NativeMethods.MSOCM.msocrfPreTranslateAll | NativeMethods.MSOCM.msocrfNeedIdleTime;
                                 info.grfcadvf = NativeMethods.MSOCM.msocadvfModal;

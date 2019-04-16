@@ -3781,7 +3781,7 @@ namespace System.Windows.Forms {
                         if (hGlobalColumns != IntPtr.Zero) {
                             Marshal.FreeHGlobal(hGlobalColumns);
                         }
-                        hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * Marshal.SizeOf(typeof(int)));
+                        hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * Marshal.SizeOf<int>());
                         maxColumns = lvItem.cColumns;
                     }
 
@@ -4425,13 +4425,13 @@ namespace System.Windows.Forms {
                 IntPtr prc   = IntPtr.Zero;
                 IntPtr pwpos = IntPtr.Zero;
 
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(NativeMethods.RECT)));
+                prc = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.RECT>());
                 if (prc == IntPtr.Zero) {
                     return;
                 }
 
                 try {
-                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(NativeMethods.WINDOWPOS)));
+                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.WINDOWPOS>());
 
                     if (prc == IntPtr.Zero) {
                         // we could not allocate memory.
@@ -4449,7 +4449,7 @@ namespace System.Windows.Forms {
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, hdrHWND), NativeMethods.HDM_LAYOUT, 0, ref hd);
 
                     // now take the information from the native wpos struct and put it into a managed WINDOWPOS
-                    NativeMethods.WINDOWPOS wpos = (NativeMethods.WINDOWPOS) Marshal.PtrToStructure(pwpos, typeof(NativeMethods.WINDOWPOS));
+                    NativeMethods.WINDOWPOS wpos = Marshal.PtrToStructure<NativeMethods.WINDOWPOS>(pwpos);
 
                     // position the header control
                     SafeNativeMethods.SetWindowPos(new HandleRef(this, hdrHWND),
@@ -5382,7 +5382,7 @@ namespace System.Windows.Forms {
 
 
 
-                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) Marshal.PtrToStructure((IntPtr) nmheader.pItem, typeof(NativeMethods.HDITEM2));
+                    NativeMethods.HDITEM2 hdItem = Marshal.PtrToStructure<NativeMethods.HDITEM2>((IntPtr) nmheader.pItem);
                     int newColumnWidth = ((hdItem.mask & NativeMethods.HDI_WIDTH) != 0) ? hdItem.cxy : -1;
                     ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader.iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
@@ -5480,7 +5480,7 @@ namespace System.Windows.Forms {
                 NativeMethods.NMHEADER header = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (header.pItem != IntPtr.Zero) {
 
-                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) Marshal.PtrToStructure((IntPtr) header.pItem, typeof(NativeMethods.HDITEM2));
+                    NativeMethods.HDITEM2 hdItem = Marshal.PtrToStructure<NativeMethods.HDITEM2>((IntPtr) header.pItem);
                     if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER) {
 
                         int from = this.Columns[header.iItem].DisplayIndex;
@@ -5903,7 +5903,7 @@ namespace System.Windows.Forms {
                                 int cColumns = this.columnHeaders != null ? this.columnHeaders.Length : 0;
                                 dispInfo.item.cColumns = cColumns;
                                 if (cColumns > 0) {
-                                    dispInfo.item.puColumns = Marshal.AllocHGlobal(cColumns * Marshal.SizeOf(typeof(int)));
+                                    dispInfo.item.puColumns = Marshal.AllocHGlobal(cColumns * Marshal.SizeOf<int>());
                                     int[] columns = new int[cColumns];
                                     for (int c = 0; c < cColumns; c++) {
                                         columns[c] = c + 1;

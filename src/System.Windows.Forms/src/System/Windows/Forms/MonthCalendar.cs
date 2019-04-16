@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms {
             NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO();
             mchi.pt_x = x;
             mchi.pt_y = y;
-            mchi.cbSize = Marshal.SizeOf(typeof(NativeMethods.MCHITTESTINFO));
+            mchi.cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>();
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_HITTEST, 0, mchi);
 
             // If the hit area has an associated valid date, get it

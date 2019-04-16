@@ -2652,7 +2652,7 @@ namespace System.Windows.Forms {
                             Rectangle bounds = node.RowBounds;
                             
                             NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                            si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
+                            si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
                             si.fMask = NativeMethods.SIF_POS;
                             if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
 

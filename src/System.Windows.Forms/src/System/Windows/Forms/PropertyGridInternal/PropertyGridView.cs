@@ -7061,7 +7061,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
                 GC.KeepAlive(this);
                 if (nCode == NativeMethods.HC_ACTION) {
-                    NativeMethods.MOUSEHOOKSTRUCT mhs = (NativeMethods.MOUSEHOOKSTRUCT)Marshal.PtrToStructure(lparam, typeof(NativeMethods.MOUSEHOOKSTRUCT));
+                    NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
                     if (mhs != null) {
                         switch (unchecked( (int) (long)wparam)) {
                             case NativeMethods.WM_LBUTTONDOWN:

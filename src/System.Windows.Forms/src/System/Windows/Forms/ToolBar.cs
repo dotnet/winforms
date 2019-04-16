@@ -1124,7 +1124,7 @@ namespace System.Windows.Forms {
                 for (int x = 0; x < buttonCount; x++) {
 
                     NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO();
-                    tbbi.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
+                    tbbi.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
                     tbbi.cx = buttons[x].Width;
 
                     if (tbbi.cx > maxWidth) {
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms {
 
             // we have to set the button struct size, because they don't.
             //
-            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf(typeof(NativeMethods.TBBUTTON)), 0);
+            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<NativeMethods.TBBUTTON>(), 0);
 
             // set up some extra goo
             //
@@ -1358,7 +1358,7 @@ namespace System.Windows.Forms {
 
                     // insert the buttons and set their parent pointers
                     //
-                    int cb = Marshal.SizeOf(typeof(NativeMethods.TBBUTTON));
+                    int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
                     int count = buttonCount;
                     ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
 

@@ -324,7 +324,7 @@ namespace System.ComponentModel.Design
                         }
                         break;
                     case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
-                        NativeMethods.NMTREEVIEW nmtv = (NativeMethods.NMTREEVIEW)Marshal.PtrToStructure(m.LParam, typeof(NativeMethods.NMTREEVIEW));
+                        NativeMethods.NMTREEVIEW nmtv = Marshal.PtrToStructure<NativeMethods.NMTREEVIEW>(m.LParam);
                         if (nmtv.nmhdr.code == NativeMethods.NM_CLICK)
                         {
                             clickSeen = true;

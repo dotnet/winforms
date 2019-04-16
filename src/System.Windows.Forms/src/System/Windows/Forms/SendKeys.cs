@@ -587,7 +587,7 @@ namespace System.Windows.Forms {
             currentInput[1].inputUnion.ki.time = 0;
 
             // send each of our SKEvents using SendInput
-            int INPUTSize = Marshal.SizeOf(typeof(NativeMethods.INPUT));
+            int INPUTSize = Marshal.SizeOf<NativeMethods.INPUT>();
 
             // need these outside the lock below
             uint eventsSent=0;
@@ -1052,7 +1052,7 @@ namespace System.Windows.Forms {
             private bool gotNextEvent = false;
     
             public virtual IntPtr Callback(int code, IntPtr wparam, IntPtr lparam) {
-                NativeMethods.EVENTMSG eventmsg = (NativeMethods.EVENTMSG)Marshal.PtrToStructure(lparam, typeof(NativeMethods.EVENTMSG));
+                NativeMethods.EVENTMSG eventmsg = Marshal.PtrToStructure<NativeMethods.EVENTMSG>(lparam);
                 
     
                 if (UnsafeNativeMethods.GetAsyncKeyState((int)Keys.Pause) != 0) {

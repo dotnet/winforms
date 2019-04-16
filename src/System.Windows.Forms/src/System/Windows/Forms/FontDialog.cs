@@ -561,10 +561,10 @@ namespace System.Windows.Forms {
 
             IntPtr logFontPtr = IntPtr.Zero;
             try {
-                logFontPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf(typeof(NativeMethods.LOGFONT)));
+                logFontPtr = Marshal.AllocCoTaskMem(Marshal.SizeOf<NativeMethods.LOGFONT>());
                 Marshal.StructureToPtr(lf, logFontPtr, false);
 
-                cf.lStructSize = Marshal.SizeOf(typeof(NativeMethods.CHOOSEFONT));
+                cf.lStructSize = Marshal.SizeOf<NativeMethods.CHOOSEFONT>();
                 cf.hwndOwner = hWndOwner;
                 cf.hDC = IntPtr.Zero;
                 cf.lpLogFont = logFontPtr;
@@ -597,8 +597,7 @@ namespace System.Windows.Forms {
                 if (!SafeNativeMethods.ChooseFont(cf)) return false;
 
 
-                NativeMethods.LOGFONT lfReturned = null;
-                lfReturned = (NativeMethods.LOGFONT)Marshal.PtrToStructure(logFontPtr, typeof(NativeMethods.LOGFONT));
+                NativeMethods.LOGFONT lfReturned = Marshal.PtrToStructure<NativeMethods.LOGFONT>(logFontPtr);
 
                 if (lfReturned.lfFaceName != null && lfReturned.lfFaceName.Length > 0) {
                     lf = lfReturned;

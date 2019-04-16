@@ -208,7 +208,7 @@ namespace System.Windows.Forms.Design
         [StructLayout(LayoutKind.Sequential)]
         public class TRACKMOUSEEVENT
         {
-            public readonly int cbSize = Marshal.SizeOf(typeof(TRACKMOUSEEVENT));
+            public readonly int cbSize = Marshal.SizeOf<TRACKMOUSEEVENT>();
             public readonly int dwFlags;
             public readonly int dwHoverTime = 0;
             public readonly IntPtr hwndTrack;
@@ -4524,7 +4524,7 @@ namespace System.Windows.Forms.Design
         [StructLayout(LayoutKind.Sequential)]
         public class NONCLIENTMETRICS
         {
-            public int cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS));
+            public int cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
             public int iBorderWidth = 0;
             public int iScrollWidth = 0;
             public int iScrollHeight = 0;

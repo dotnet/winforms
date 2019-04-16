@@ -114,7 +114,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             
             if (toolInfos[index] == null){
                toolInfos[index] = new NativeMethods.TOOLINFO_T();
-               toolInfos[index].cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
+               toolInfos[index].cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
             }
             toolInfos[index].lpszText = this.toolTipText;

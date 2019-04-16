@@ -1116,7 +1116,7 @@ namespace System.Windows.Forms {
 
         private NativeMethods.TOOLINFO_TOOLTIP GetMinToolInfoForHandle(IntPtr handle) {
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.hwnd = handle;
             ti.uFlags |= NativeMethods.TTF_IDISHWND;
             ti.uId = handle;
@@ -1134,7 +1134,7 @@ namespace System.Windows.Forms {
         private NativeMethods.TOOLINFO_TOOLTIP GetTOOLINFO(Control ctl, string caption, out bool allocatedString) {
             allocatedString = false;
             NativeMethods.TOOLINFO_TOOLTIP ti = GetMinTOOLINFO(ctl);
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
 
             // RightToLeft reading order
@@ -1173,7 +1173,7 @@ namespace System.Windows.Forms {
 
         private NativeMethods.TOOLINFO_TOOLTIP GetWinTOOLINFO(IntPtr hWnd) {
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.hwnd = hWnd;
             ti.uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
                     
@@ -1976,7 +1976,7 @@ namespace System.Windows.Forms {
                 bool allocatedString = false;
                 NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
                 try {
-                    ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+                    ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
                     ti.hwnd = tool.Handle;
                     ti.uId = tool.Handle;
                     int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETTOOLINFO, 0, ti);
@@ -2149,7 +2149,7 @@ namespace System.Windows.Forms {
             NativeMethods.RECT r = new NativeMethods.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             if (ret != 0)
             {
@@ -2193,7 +2193,7 @@ namespace System.Windows.Forms {
         private void WmMouseActivate(ref Message msg) {
             
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             
             if (ret != 0) {
@@ -2249,7 +2249,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             
             if (ret != 0) {
@@ -2359,7 +2359,7 @@ namespace System.Windows.Forms {
 			
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             if (ret != 0) {
 
@@ -2446,7 +2446,7 @@ namespace System.Windows.Forms {
         private void WmPop() {
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             if (ret != 0) {
 
@@ -2561,7 +2561,7 @@ namespace System.Windows.Forms {
                             return;
                         }
                         NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-                        ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+                        ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
                         int ret = unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti));
                         if (ret != 0) {
                             IWin32Window win = (IWin32Window)owners[ti.hwnd];

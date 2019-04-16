@@ -8456,7 +8456,7 @@ example usage
         internal virtual void OnInvokedSetScrollPosition(object sender, EventArgs e) {
             if (!(this is ScrollableControl) && !IsMirrored) {
                 NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
+                si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
                 si.fMask = NativeMethods.SIF_RANGE;
                 if (UnsafeNativeMethods.GetScrollInfo(new HandleRef(this, Handle), NativeMethods.SB_HORZ,si) != false) {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
@@ -14626,7 +14626,7 @@ example usage
         int UnsafeNativeMethods.IOleControl.GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
 
-            pCI.cb = Marshal.SizeOf(typeof(NativeMethods.tagCONTROLINFO));
+            pCI.cb = Marshal.SizeOf<NativeMethods.tagCONTROLINFO>();
             pCI.hAccel = IntPtr.Zero;
             pCI.cAccel = 0;
             pCI.dwFlags = 0;
@@ -15905,7 +15905,7 @@ example usage
                         // is valid.
                         //
                         if (lpmsg != IntPtr.Zero) {
-                            NativeMethods.MSG msg = (NativeMethods.MSG)Marshal.PtrToStructure(lpmsg, typeof(NativeMethods.MSG));
+                            NativeMethods.MSG msg = Marshal.PtrToStructure<NativeMethods.MSG>(lpmsg);
                             Control target = control;
 
                             if (msg.hwnd != control.Handle && msg.message >= NativeMethods.WM_MOUSEFIRST && msg.message <= NativeMethods.WM_MOUSELAST) {
@@ -16205,7 +16205,7 @@ example usage
                     accelCount = (short)mnemonicList.Count;
 
                     if (accelCount > 0) {
-                        int accelSize = Marshal.SizeOf(typeof(NativeMethods.ACCEL));
+                        int accelSize = Marshal.SizeOf<NativeMethods.ACCEL>();
 
                         // In the worst case we may have two accelerators per mnemonic:  one lower case and
                         // one upper case, hence the * 2 below.
@@ -16396,7 +16396,7 @@ example usage
                 if (!activeXState[inPlaceVisible]) {
                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceVerbose, "\tActiveXImpl:InPlaceActivate --> inplacevisible");
                     NativeMethods.tagOIFI inPlaceFrameInfo = new NativeMethods.tagOIFI();
-                    inPlaceFrameInfo.cb = Marshal.SizeOf(typeof(NativeMethods.tagOIFI));
+                    inPlaceFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
                     IntPtr hwndParent = IntPtr.Zero;
 
                     // We are entering a secure context here.
@@ -16945,7 +16945,7 @@ example usage
                 //
                 int status;
 
-                pQaControl.cbSize = Marshal.SizeOf(typeof(UnsafeNativeMethods.tagQACONTROL));
+                pQaControl.cbSize = Marshal.SizeOf<UnsafeNativeMethods.tagQACONTROL>();
 
                 SetClientSite(pQaContainer.pClientSite);
 
@@ -17144,7 +17144,7 @@ example usage
                     /// </devdoc>
                     protected V LoadVtable<V>() {
                         IntPtr vtblptr = Marshal.ReadIntPtr(this.handle, 0);
-                        return (V)Marshal.PtrToStructure(vtblptr, typeof(V));
+                        return Marshal.PtrToStructure<V>(vtblptr);
                     }
                 }
 
@@ -18493,7 +18493,7 @@ example usage
                     }
 
                     NativeMethods.BITMAPINFO_FLAT lpbmi = new NativeMethods.BITMAPINFO_FLAT();
-                    lpbmi.bmiHeader_biSize = Marshal.SizeOf(typeof(NativeMethods.BITMAPINFOHEADER));
+                    lpbmi.bmiHeader_biSize = Marshal.SizeOf<NativeMethods.BITMAPINFOHEADER>();
                     lpbmi.bmiHeader_biWidth = bmp.bmWidth;
                     lpbmi.bmiHeader_biHeight = bmp.bmHeight;
                     lpbmi.bmiHeader_biPlanes = 1;
@@ -18510,7 +18510,7 @@ example usage
                     // Include the palette for 256 color bitmaps
                     long iColors = 1 << (bmp.bmBitsPixel * bmp.bmPlanes);
                     if (iColors <= 256) {
-                        byte[] aj = new byte[Marshal.SizeOf(typeof(NativeMethods.PALETTEENTRY)) * 256];
+                        byte[] aj = new byte[Marshal.SizeOf<NativeMethods.PALETTEENTRY>() * 256];
                         SafeNativeMethods.GetSystemPaletteEntries(hdcSrc, 0, (int)iColors, aj);
 
                         fixed (byte* pcolors = lpbmi.bmiColors) {

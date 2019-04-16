@@ -344,7 +344,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 try {
 
                     try {
-                        //(tagTYPEDESC)Marshal.PtrToStructure(typeDesc.unionMember, typeof(tagTYPEDESC));
                         Marshal.PtrToStructure(typeDesc.unionMember, refTypeDesc);
                     }
                     catch {
@@ -387,7 +386,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                     }
 
-                    NativeMethods.tagTYPEATTR refTypeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pRefTypeAttr, typeof(tagTYPEATTR));
+                    NativeMethods.tagTYPEATTR refTypeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
                     Marshal.PtrToStructure(pRefTypeAttr, refTypeAttr);
                     try {
                         Guid g = refTypeAttr.guid;
@@ -618,7 +617,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagTYPEATTR         typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
+            NativeMethods.tagTYPEATTR         typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
             Marshal.PtrToStructure(pTypeAttr, typeAttr);
             if (typeAttr == null) {
                 return;
@@ -642,7 +641,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    //funcDesc = (tagFUNCDESC)Marshal.PtrToStructure(pFuncDesc, typeof(tagFUNCDESC));
                     Marshal.PtrToStructure(pFuncDesc, funcDesc);
                     try {
                         if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
@@ -723,7 +721,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                 }
 
-                NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
+                NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
                 Marshal.PtrToStructure(pTypeAttr, typeAttr);
 
                 if (pTypeAttr == IntPtr.Zero) {
@@ -761,7 +759,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
 
                         try {
-                            //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
                             Marshal.PtrToStructure(pVarDesc, varDesc);
 
                             if (varDesc == null ||
@@ -787,19 +784,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                             // get the value
                             try {
-                                //varValue = (VARIANT)Marshal.PtrToStructure(varDesc.unionMember, typeof(VARIANT));
                                 varValue = Marshal.GetObjectForNativeVariant(varDesc.unionMember);
                             }
                             catch (Exception ex) {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: PtrtoStructFailed " + ex.GetType().Name + "," + ex.Message);
                             }
 
-                            /*if (varValue == null) {
-                                Debug.Fail("Couldn't get VARIANT from VARIANTDESC");
-                                continue;
-                            }*/
-
-                            //variant v = varValue.ToVariant();
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding variable value=" + Convert.ToString(varValue, CultureInfo.InvariantCulture));
                             vars.Add(varValue);
 
@@ -881,7 +871,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
+            NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
             Marshal.PtrToStructure(pTypeAttr, typeAttr);
 
             try {
@@ -899,7 +889,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
                     Marshal.PtrToStructure(pVarDesc, varDesc);
 
                     try {

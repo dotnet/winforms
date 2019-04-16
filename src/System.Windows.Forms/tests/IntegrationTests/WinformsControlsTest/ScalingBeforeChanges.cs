@@ -101,7 +101,7 @@ namespace WinformsControlsTest
                     int y = HIWORD(m.WParam);
                     if (x != deviceDpiX || y != deviceDpiY)
                     {
-                        RECT suggestedRect = (RECT)Marshal.PtrToStructure(m.LParam, typeof(RECT));
+                        RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
 
                         SetWindowPos(new HandleRef(this, Handle), new HandleRef(null, IntPtr.Zero), suggestedRect.left, suggestedRect.top,
                             suggestedRect.right - suggestedRect.left, suggestedRect.bottom - suggestedRect.top, 0x4 | 0x10);

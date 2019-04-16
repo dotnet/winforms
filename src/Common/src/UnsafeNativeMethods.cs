@@ -571,21 +571,21 @@ namespace System.Windows.Forms {
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGPEN lp);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGPEN lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGPEN)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGPEN>(), lp);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGBRUSH lb);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGBRUSH lb) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGBRUSH)), lb);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGBRUSH>(), lb);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGFONT lf);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGFONT lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGFONT)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGFONT>(), lp);
         }
         
         //HPALETTE
@@ -1588,13 +1588,13 @@ namespace System.Windows.Forms {
                             regionRects = new NativeMethods.RECT[pRgnDataHeader->nCount];
 
                             Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf(typeof(NativeMethods.RECT)) == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+                            Debug.Assert(Marshal.SizeOf<NativeMethods.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
 
                             // use the header size as the offset, and cast each rect in.
                             int rectStart = pRgnDataHeader->cbSizeOfStruct;
                             for (int i = 0; i < pRgnDataHeader->nCount; i++) {
                                 // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf(typeof(NativeMethods.RECT)) * i)));
+                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<NativeMethods.RECT>() * i)));
                             }
                         }
                     }
@@ -7183,7 +7183,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTAINER
     {
       [MarshalAs(UnmanagedType.U4)]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTAINER));
+      public int cbSize = Marshal.SizeOf<tagQACONTAINER>();
 
       public UnsafeNativeMethods.IOleClientSite pClientSite;
 
@@ -7235,7 +7235,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTROL
     {
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTROL));
+      public int cbSize = Marshal.SizeOf<tagQACONTROL>();
 
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=4, dwMiscStatus)*/]
       public int dwMiscStatus = 0;
@@ -7842,7 +7842,7 @@ namespace System.Windows.Forms {
 
                         enableThemingActivationContext = new ACTCTX();
 
-                        enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(ACTCTX));
+                        enableThemingActivationContext.cbSize = Marshal.SizeOf<ACTCTX>();
                         enableThemingActivationContext.lpSource = dllPath;
                         enableThemingActivationContext.lpResourceName = (IntPtr)nativeResourceManifestID;
                         enableThemingActivationContext.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;

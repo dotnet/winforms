@@ -1830,7 +1830,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool) {
                 NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T();
-                ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
+                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 ti.hwnd = parent.Handle;
                 if ((int)tool.id < 0) {
                     AssignId(tool);
@@ -1852,7 +1852,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool) {
                 NativeMethods.TOOLINFO_T ti = GetMinTOOLINFO(tool);
-                ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
+                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
 
                 // RightToLeft reading order

@@ -235,7 +235,7 @@ namespace System.Windows.Forms {
                     // to the top right which just looks wierd!
                     //
                     NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
-                    wp.length = Marshal.SizeOf(typeof(NativeMethods.WINDOWPLACEMENT));
+                    wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
 
                     for (int i=0; i < Controls.Count; i++) {
                         Control ctl = Controls[i];

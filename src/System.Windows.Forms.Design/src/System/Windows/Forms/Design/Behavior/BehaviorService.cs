@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     if (_isHooked && nCode == NativeMethods.HC_ACTION)
                     {
-                        NativeMethods.MOUSEHOOKSTRUCT mhs = (NativeMethods.MOUSEHOOKSTRUCT)Marshal.PtrToStructure(lparam, typeof(NativeMethods.MOUSEHOOKSTRUCT));
+                        NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
                         if (mhs != null)
                         {
                             try

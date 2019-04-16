@@ -308,7 +308,7 @@ namespace System.Windows.Forms {
             
             lprcClipRect = WebBrowserHelper.GetClipRect();
             if (lpFrameInfo != null) {
-                lpFrameInfo.cb = Marshal.SizeOf(typeof(NativeMethods.tagOIFI));
+                lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
                 lpFrameInfo.fMDIApp = false;
                 lpFrameInfo.hAccel = IntPtr.Zero;
                 lpFrameInfo.cAccelEntries = 0;

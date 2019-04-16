@@ -4878,7 +4878,7 @@ namespace System.Windows.Forms {
             FormStartPosition oldStartPosition = FormStartPosition.Manual;
 
             if (!IsMdiChild && (WindowState == FormWindowState.Minimized || WindowState == FormWindowState.Maximized)) {
-                wp.length = Marshal.SizeOf(typeof(NativeMethods.WINDOWPLACEMENT));
+                wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
             }
 
@@ -6103,7 +6103,7 @@ namespace System.Windows.Forms {
             if (IsHandleCreated) {
                 FormWindowState oldState = WindowState;
                 NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
-                wp.length = Marshal.SizeOf(typeof(NativeMethods.WINDOWPLACEMENT));
+                wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
 
                 switch (wp.showCmd) {

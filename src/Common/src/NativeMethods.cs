@@ -2174,7 +2174,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         public class FONTDESC {
-            public int      cbSizeOfStruct = Marshal.SizeOf(typeof(FONTDESC));
+            public int      cbSizeOfStruct = Marshal.SizeOf<FONTDESC>();
             public string   lpstrName;
             public long     cySize;
             public short    sWeight;
@@ -2189,7 +2189,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCbmp {
-            internal int cbSizeOfStruct = Marshal.SizeOf(typeof(PICTDESCbmp));
+            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCbmp>();
             internal int picType = Ole.PICTYPE_BITMAP;
             internal IntPtr hbitmap = IntPtr.Zero;
             internal IntPtr hpalette = IntPtr.Zero;
@@ -2206,7 +2206,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCicon {
-            internal int cbSizeOfStruct = Marshal.SizeOf(typeof(PICTDESCicon));
+            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCicon>();
             internal int picType = Ole.PICTYPE_ICON;
             internal IntPtr hicon = IntPtr.Zero;
             internal int unused1 = 0;
@@ -2222,7 +2222,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCemf {
-            internal int cbSizeOfStruct = Marshal.SizeOf(typeof(PICTDESCemf));
+            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCemf>();
             internal int picType = Ole.PICTYPE_ENHMETAFILE;
             internal IntPtr hemf = IntPtr.Zero;
             internal int unused1 = 0;
@@ -2264,7 +2264,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_AKLINK {
-            internal int        cbStruct=Marshal.SizeOf(typeof(HH_AKLINK));
+            internal int        cbStruct=Marshal.SizeOf<HH_AKLINK>();
             internal bool      fReserved = false;
             internal string    pszKeywords = null;
             internal string    pszUrl = null;
@@ -2276,7 +2276,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_POPUP {
-            internal int       cbStruct=Marshal.SizeOf(typeof(HH_POPUP));
+            internal int       cbStruct=Marshal.SizeOf<HH_POPUP>();
             internal IntPtr    hinst = IntPtr.Zero;
             internal int       idString = 0;
             internal IntPtr    pszText;
@@ -2292,7 +2292,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_FTS_QUERY {
-            internal int       cbStruct = Marshal.SizeOf(typeof(HH_FTS_QUERY));
+            internal int       cbStruct = Marshal.SizeOf<HH_FTS_QUERY>();
             internal bool      fUniCodeStrings = false;
             [MarshalAs(UnmanagedType.LPStr)]
             internal string    pszSearchQuery = null;
@@ -2306,7 +2306,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto, Pack=4)]
         public class MONITORINFOEX {
-            internal int     cbSize = Marshal.SizeOf(typeof(MONITORINFOEX));
+            internal int     cbSize = Marshal.SizeOf<MONITORINFOEX>();
             internal RECT    rcMonitor = new RECT();
             internal RECT    rcWork = new RECT();
             internal int     dwFlags = 0;
@@ -2316,7 +2316,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto, Pack=4)]
         public class MONITORINFO {
-            internal int     cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+            internal int     cbSize = Marshal.SizeOf<MONITORINFO>();
             internal RECT    rcMonitor = new RECT();
             internal RECT    rcWork = new RECT();
             internal int     dwFlags = 0;
@@ -2497,7 +2497,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class IMAGELISTDRAWPARAMS {
-            public int      cbSize = Marshal.SizeOf(typeof(IMAGELISTDRAWPARAMS));
+            public int      cbSize = Marshal.SizeOf<IMAGELISTDRAWPARAMS>();
             public IntPtr   himl = IntPtr.Zero;
             public int      i = 0;
             public IntPtr   hdcDst = IntPtr.Zero;
@@ -2531,7 +2531,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class TRACKMOUSEEVENT {
-                public int      cbSize = Marshal.SizeOf(typeof(TRACKMOUSEEVENT));
+                public int      cbSize = Marshal.SizeOf<TRACKMOUSEEVENT>();
                 public int      dwFlags;
                 public IntPtr   hwndTrack;
                 public int      dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
@@ -2631,7 +2631,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class NONCLIENTMETRICS {
-            public int      cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS));
+            public int      cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
             public int      iBorderWidth = 0; 
             public int      iScrollWidth = 0; 
             public int      iScrollHeight = 0; 
@@ -2689,7 +2689,7 @@ namespace System.Windows.Forms {
         
         [StructLayout(LayoutKind.Sequential)]
         public class SCROLLINFO {
-            public int cbSize = Marshal.SizeOf(typeof(SCROLLINFO));
+            public int cbSize = Marshal.SizeOf<SCROLLINFO>();
             public int fMask;
             public int nMin;
             public int nMax;
@@ -2703,7 +2703,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class TPMPARAMS {
-            public int  cbSize = Marshal.SizeOf(typeof(TPMPARAMS));
+            public int  cbSize = Marshal.SizeOf<TPMPARAMS>();
             // rcExclude was a by-value RECT structure
             public int  rcExclude_left;
             public int  rcExclude_top;
@@ -3021,7 +3021,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public  sealed class tagFONTDESC {
-             public int cbSizeofstruct = Marshal.SizeOf(typeof(tagFONTDESC)); 
+             public int cbSizeofstruct = Marshal.SizeOf<tagFONTDESC>(); 
              
              [MarshalAs(UnmanagedType.LPWStr)]
              public string lpstrName; 
@@ -3047,7 +3047,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class CHOOSECOLOR {
-            public int      lStructSize = Marshal.SizeOf(typeof(CHOOSECOLOR)); //ndirect.DllLib.sizeOf(this);
+            public int      lStructSize = Marshal.SizeOf<CHOOSECOLOR>(); //ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
             public IntPtr   hInstance;
             public int      rgbResult;
@@ -3167,7 +3167,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NOTIFYICONDATA {
-            public int      cbSize = Marshal.SizeOf(typeof(NOTIFYICONDATA));
+            public int      cbSize = Marshal.SizeOf<NOTIFYICONDATA>();
             public IntPtr   hWnd;
             public int      uID;
             public int      uFlags;
@@ -3188,7 +3188,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MENUITEMINFO_T
         {
-            public int      cbSize = Marshal.SizeOf(typeof(MENUITEMINFO_T));
+            public int      cbSize = Marshal.SizeOf<MENUITEMINFO_T>();
             public int      fMask;
             public int      fType;
             public int      fState;
@@ -3207,7 +3207,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MENUITEMINFO_T_RW
         {
-            public int      cbSize = Marshal.SizeOf(typeof(MENUITEMINFO_T_RW));
+            public int      cbSize = Marshal.SizeOf<MENUITEMINFO_T_RW>();
             public int      fMask = 0;
             public int      fType = 0;
             public int      fState = 0;
@@ -3240,7 +3240,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class OPENFILENAME_I
         {
-            public int      lStructSize = Marshal.SizeOf(typeof(OPENFILENAME_I)); //ndirect.DllLib.sizeOf(this);
+            public int      lStructSize = Marshal.SizeOf<OPENFILENAME_I>(); //ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
             public IntPtr   hInstance;
             public string   lpstrFilter;   // use embedded nulls to separate filters
@@ -3267,7 +3267,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class CHOOSEFONT {
-            public int      lStructSize = Marshal.SizeOf(typeof(CHOOSEFONT));   // ndirect.DllLib.sizeOf(this);
+            public int      lStructSize = Marshal.SizeOf<CHOOSEFONT>();   // ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
             public IntPtr   hDC;
             public IntPtr   lpLogFont;
@@ -3466,7 +3466,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential)]
         [Serializable]
         public class MSOCRINFOSTRUCT {
-            public int cbSize = Marshal.SizeOf(typeof(MSOCRINFOSTRUCT));              // size of MSOCRINFO structure in bytes.
+            public int cbSize = Marshal.SizeOf<MSOCRINFOSTRUCT>();              // size of MSOCRINFO structure in bytes.
             public int uIdleTimeInterval;   // If olecrfNeedPeriodicIdleTime is registered
                                             // in grfcrf, component needs to perform
                                             // periodic idle time tasks during an idle phase
@@ -3626,7 +3626,7 @@ namespace System.Windows.Forms {
         public sealed class tagCONTROLINFO
         {
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-            public int cb = Marshal.SizeOf(typeof(tagCONTROLINFO));
+            public int cb = Marshal.SizeOf<tagCONTROLINFO>();
             
             public IntPtr hAccel;
             
@@ -3805,11 +3805,11 @@ namespace System.Windows.Forms {
                     return (val != IntPtr.Zero);
 
                 case (int)tagVT.VT_VARIANT:
-                    VARIANT varStruct = (VARIANT)Marshal.PtrToStructure(val, typeof(VARIANT));
+                    VARIANT varStruct = Marshal.PtrToStructure<VARIANT>(val);
                     return varStruct.ToObject();
+
                 case (int)tagVT.VT_CLSID:
-                    //Debug.Fail("PtrToStructure will not work with System.Guid...");
-                    Guid guid =(Guid)Marshal.PtrToStructure(val, typeof(Guid));
+                    Guid guid = Marshal.PtrToStructure<Guid>(val);
                     return guid;
 
                 case (int)tagVT.VT_FILETIME:
@@ -3820,9 +3820,6 @@ namespace System.Windows.Forms {
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
 
                 case (int)tagVT.VT_ARRAY:
-                    //gSAFEARRAY sa = (tagSAFEARRAY)Marshal.PtrToStructure(val), typeof(tagSAFEARRAY));
-                    //return GetArrayFromSafeArray(sa);
-
                 case (int)tagVT.VT_VOID:
                 case (int)tagVT.VT_PTR:
                 case (int)tagVT.VT_SAFEARRAY:
@@ -3839,7 +3836,6 @@ namespace System.Windows.Forms {
                 case (int)tagVT.VT_BSTR_BLOB:
                 case (int)tagVT.VT_VECTOR:
                 case (int)tagVT.VT_BYREF:
-                    //case (int)tagVT.VT_RESERVED:
                 default:
                     int iVt = this.vt;
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
@@ -3855,7 +3851,7 @@ namespace System.Windows.Forms {
         public sealed class tagLICINFO
         {
           [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-          public int cbLicInfo = Marshal.SizeOf(typeof(tagLICINFO));
+          public int cbLicInfo = Marshal.SizeOf<tagLICINFO>();
           
           public int fRuntimeAvailable = 0;
           public int fLicVerified = 0;
@@ -4051,7 +4047,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLINFO_T
         {
-            public int      cbSize = Marshal.SizeOf(typeof(TOOLINFO_T));
+            public int      cbSize = Marshal.SizeOf<TOOLINFO_T>();
             public int      uFlags;
             public IntPtr   hwnd;
             public IntPtr   uId;
@@ -4064,7 +4060,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLINFO_TOOLTIP
         {
-            public int      cbSize = Marshal.SizeOf(typeof(TOOLINFO_TOOLTIP));
+            public int      cbSize = Marshal.SizeOf<TOOLINFO_TOOLTIP>();
             public int      uFlags;
             public IntPtr   hwnd;
             public IntPtr   uId;
@@ -4327,7 +4323,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class HELPINFO {
-            public int      cbSize = Marshal.SizeOf(typeof(HELPINFO));
+            public int      cbSize = Marshal.SizeOf<HELPINFO>();
             public int      iContextType = 0;
             public int      iCtrlId = 0;
             public IntPtr   hItemHandle = IntPtr.Zero;
@@ -4490,7 +4486,7 @@ namespace System.Windows.Forms {
         
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MCHITTESTINFO {
-            public int   cbSize = Marshal.SizeOf(typeof(MCHITTESTINFO));
+            public int   cbSize = Marshal.SizeOf<MCHITTESTINFO>();
             public int   pt_x = 0;
             public int   pt_y = 0;
             public int   uHit = 0;
@@ -4681,7 +4677,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         public class LVGROUP {
-            public uint cbSize = (uint)Marshal.SizeOf(typeof(LVGROUP));
+            public uint cbSize = (uint)Marshal.SizeOf<LVGROUP>();
             public uint mask;
             public IntPtr pszHeader;
             public int cchHeader;
@@ -4699,7 +4695,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVINSERTMARK {
-            public uint cbSize = (uint)Marshal.SizeOf(typeof(LVINSERTMARK));
+            public uint cbSize = (uint)Marshal.SizeOf<LVINSERTMARK>();
             public int dwFlags;
             public int iItem;
             public int dwReserved = 0;
@@ -4707,7 +4703,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVTILEVIEWINFO {
-            public uint cbSize = (uint)Marshal.SizeOf(typeof(LVTILEVIEWINFO));
+            public uint cbSize = (uint)Marshal.SizeOf<LVTILEVIEWINFO>();
             public int dwMask;
             public int dwFlags;
             public SIZE sizeTile;
@@ -4854,7 +4850,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMATW
         {
-            public int      cbSize = Marshal.SizeOf(typeof(CHARFORMATW));
+            public int      cbSize = Marshal.SizeOf<CHARFORMATW>();
             public int      dwMask;
             public int      dwEffects;
             public int      yHeight;
@@ -4869,7 +4865,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMATA
         {
-            public int      cbSize = Marshal.SizeOf(typeof(CHARFORMATA));
+            public int      cbSize = Marshal.SizeOf<CHARFORMATA>();
             public int      dwMask;
             public int      dwEffects;
             public int      yHeight;
@@ -4884,7 +4880,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMAT2A
         {
-            public int      cbSize = Marshal.SizeOf(typeof(CHARFORMAT2A));
+            public int      cbSize = Marshal.SizeOf<CHARFORMAT2A>();
             public int      dwMask = 0;
             public int      dwEffects = 0;
             public int      yHeight = 0;
@@ -4930,7 +4926,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential)]
         public class PARAFORMAT
         {
-            public int      cbSize = Marshal.SizeOf(typeof(PARAFORMAT));
+            public int      cbSize = Marshal.SizeOf<PARAFORMAT>();
             public int      dwMask;
             public short    wNumbering;
             public short    wReserved = 0;
@@ -4990,7 +4986,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public class OCPFIPARAMS
         {
-            public int cbSizeOfStruct = Marshal.SizeOf(typeof(OCPFIPARAMS));
+            public int cbSizeOfStruct = Marshal.SizeOf<OCPFIPARAMS>();
             public IntPtr hwndOwner;
             public int x = 0;
             public int y = 0;
@@ -5007,7 +5003,7 @@ namespace System.Windows.Forms {
         public class DOCHOSTUIINFO
         {
             [MarshalAs(UnmanagedType.U4)]
-            public int cbSize = Marshal.SizeOf(typeof(DOCHOSTUIINFO));
+            public int cbSize = Marshal.SizeOf<DOCHOSTUIINFO>();
             [MarshalAs(UnmanagedType.I4)]
             public int dwFlags;
             [MarshalAs(UnmanagedType.I4)]
@@ -5591,7 +5587,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public struct BITMAPINFO_FLAT {
-            public int      bmiHeader_biSize;// = Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+            public int      bmiHeader_biSize;// = Marshal.SizeOf<BITMAPINFOHEADER>();
             public int      bmiHeader_biWidth;
             public int      bmiHeader_biHeight;
             public short    bmiHeader_biPlanes;

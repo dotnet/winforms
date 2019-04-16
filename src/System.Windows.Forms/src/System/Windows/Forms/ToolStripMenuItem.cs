@@ -684,7 +684,7 @@ namespace System.Windows.Forms {
                 return false;
             }
             NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-            info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T_RW));
+            info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
             info.fMask = NativeMethods.MIIM_STATE;
             info.fType = NativeMethods.MIIM_STATE;
             info.wID = nativeMenuCommandID;
