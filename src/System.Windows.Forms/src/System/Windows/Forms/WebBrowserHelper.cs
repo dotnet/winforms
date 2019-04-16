@@ -2,42 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Configuration.Assemblies;
-using System.Runtime.Remoting;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.ComponentModel;
-using System.Diagnostics;
-using System;
-using System.Reflection;
-using System.Globalization;
-using Microsoft.Win32;
-using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
-using System.Drawing;    
-using System.Windows.Forms.Design;
-using System.Windows.Forms.ComponentModel;
-using System.Windows.Forms.ComponentModel.Com2Interop;
+using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Windows.Forms;
-using System.Drawing.Imaging;
-using System.Drawing.Design;
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    //
-    // This class contains static properties/methods that are internal.
-    // It also has types that make sense only for ActiveX hosting classes.
-    // In other words, this is a helper class for the ActiveX hosting classes.
-    //
-    internal static class WebBrowserHelper {
-        //
-        // Types:
-        //
-        
-        //
+namespace System.Windows.Forms
+{
+    /// <devdoc>
+    /// This class contains static properties/methods that are internal.
+    /// It also has types that make sense only for ActiveX hosting classes.
+    /// In other words, this is a helper class for the ActiveX hosting classes.
+    /// </devdoc>
+    internal static class WebBrowserHelper
+    {
         // Enumeration of the different states of the ActiveX control
         internal enum AXState {
             Passive = 0,        // Not loaded

@@ -2,18 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.ComponentModel;
+using System.Drawing;
 
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Security;
-
-    /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar"]/*' />
+namespace System.Windows.Forms
+{
     [DefaultProperty(nameof(Value))]
-    public class ToolStripProgressBar : ToolStripControlHost {
-
+    public class ToolStripProgressBar : ToolStripControlHost
+    {
         internal static readonly object EventRightToLeftLayoutChanged = new object();
 
         private static readonly Padding defaultMargin = new Padding(1, 2, 1, 1);

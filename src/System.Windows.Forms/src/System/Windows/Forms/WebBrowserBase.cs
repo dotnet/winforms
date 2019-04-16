@@ -2,34 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Configuration.Assemblies;
-using System.Runtime.Remoting;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System;
-using System.Reflection;
+using System.Drawing;
 using System.Globalization;
-using Microsoft.Win32;
-using System.Collections.Specialized;
-using System.IO;
-using System.Drawing;    
-using System.Windows.Forms.Design;
-using System.Windows.Forms.ComponentModel;
-using System.Windows.Forms.ComponentModel.Com2Interop;
-using System.ComponentModel.Design;
-using System.Drawing.Imaging;
-using System.Drawing.Design;
-using System.Security;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     <para>
     /// Wraps ActiveX controls and exposes them as fully featured windows forms controls
     /// (by inheriting from Control). Some of Control's properties that don't make sense
     /// for ActiveX controls are blocked here (by setting Browsable attributes on some and
@@ -41,16 +27,13 @@ namespace System.Windows.Forms {
     /// encapsulated in the class below.
     ///
     /// The classid of the ActiveX control is specified in the constructor.
-    ///     </para>
     /// </devdoc>
-    [ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter)),
-    Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
-    public class WebBrowserBase : Control {
-        //
-        // Privates fields:
-        //
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter))]
+    [Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
+    public class WebBrowserBase : Control
+    {
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;

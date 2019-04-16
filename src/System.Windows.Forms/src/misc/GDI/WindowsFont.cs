@@ -2,6 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
+using System.Globalization;
+
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
@@ -10,16 +16,6 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    using System;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Text;
-    using System.Security;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
     /// <devdoc>
     ///     <para>
     ///         Encapsulates a GDI Font object.

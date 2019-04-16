@@ -2,20 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Drawing.Printing;
-using System.IO;
-using System.Net;
 using System.Runtime.InteropServices;
-using System.Security;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement"]/*' />
     public sealed class HtmlElement
     {
         internal static readonly object EventClick = new object();

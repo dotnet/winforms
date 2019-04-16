@@ -2,24 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Runtime.Versioning;
-    using System.Security;
-    using System.Windows.Forms.Layout;
-    
-    /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost"]/*' />
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
+namespace System.Windows.Forms
+{
     /// <devdoc>
     /// ToolStripItem that can host Controls.
     /// </devdoc>
-    public class ToolStripControlHost : ToolStripItem {
- 
+    public class ToolStripControlHost : ToolStripItem
+    {
         private Control control;
         private int suspendSyncSizeCount = 0;
         private ContentAlignment controlAlign = ContentAlignment.MiddleCenter;

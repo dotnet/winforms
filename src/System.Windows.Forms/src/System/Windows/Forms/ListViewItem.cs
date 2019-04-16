@@ -2,42 +2,28 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
-namespace System.Windows.Forms {
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters;
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Security; 
-    using System;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.ComponentModel;
-    using System.IO;
-    using Microsoft.Win32;
-    using System.Collections;
-    using System.Collections.Specialized;
-    using System.Runtime.Remoting;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel.Design.Serialization;
-    using System.Reflection;
-    using System.Globalization;
-    
-    /// <include file='doc\ListViewItem.uex' path='docs/doc[@for="ListViewItem"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Implements an item of a <see cref='System.Windows.Forms.ListView'/>.
-    ///    </para>
+    /// Implements an item of a <see cref='System.Windows.Forms.ListView'/>.
     /// </devdoc>
-    [
-    TypeConverterAttribute(typeof(ListViewItemConverter)),
-    ToolboxItem(false),
-    DesignTimeVisible(false),
-    DefaultProperty(nameof(Text)),
-    Serializable,    
-    SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")
-    ]
+    [TypeConverterAttribute(typeof(ListViewItemConverter))]
+    [ToolboxItem(false)]
+    [DesignTimeVisible(false)]
+    [DefaultProperty(nameof(Text))]
+    [Serializable]
+    [SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly")]
     public class ListViewItem : ICloneable, ISerializable {
 
         private const int MAX_SUBITEMS = 4096;
