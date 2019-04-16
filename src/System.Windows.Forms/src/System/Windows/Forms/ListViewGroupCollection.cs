@@ -9,81 +9,36 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection"]/*' />
-    /// <devdoc>
-    ///    <para>
-    ///         A collection of listview groups.
-    ///    </para>
-    /// </devdoc>
+    /// <summary>
+    /// A collection of listview groups.
+    /// </summary>
     [ListBindable(false)]
-    public class ListViewGroupCollection : IList {
+    public class ListViewGroupCollection : IList
+    {
+        private ListView _listView;
 
-        private ListView listView;
+        private ArrayList _list;
 
-        private ArrayList list;
-
-        internal ListViewGroupCollection(ListView listView) {
-            this.listView = listView;
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Count"]/*' />
-        public int Count
+        internal ListViewGroupCollection(ListView listView)
         {
-            get
-            {
-                return this.List.Count;
-            }
+            this._listView = listView;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
-        object ICollection.SyncRoot {
-            get {
-                return this;
-            }
-        }
+        public int Count => List.Count;
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
-        bool ICollection.IsSynchronized {
-            get {
-                return true;
-            }
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
-        bool IList.IsFixedSize {
-            get {
-                return false;
-            }
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IsReadOnly"]/*' />
-        /// <internalonly/>
-        bool IList.IsReadOnly {
-            get {
-                return false;
-            }
-        }
+        object ICollection.SyncRoot => this;
 
-        private ArrayList List
+        bool ICollection.IsSynchronized => true;
+
+        bool IList.IsFixedSize => false;
+
+        bool IList.IsReadOnly => false;
+
+        private ArrayList List => _list ?? (_list = new ArrayList());
+
+        public ListViewGroup this[int index]
         {
-            get
-            {
-                if (list == null) {
-                    list = new ArrayList();
-                }
-                return list;
-            }
-        }
-                
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this"]/*' />
-        public ListViewGroup this[int index] {
-            get
-            {
-                return (ListViewGroup)this.List[index];
-            }
+            get => (ListViewGroup)this.List[index];
             set
             {
                 if (value == null)
@@ -91,70 +46,76 @@ namespace System.Windows.Forms
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                if (this.List.Contains(value)) {
+                if (List.Contains(value))
+                {
                     return;
                 }
-                this.List[index] = value;
+
+                List[index] = value;
             }
         }
-                
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.this2"]/*' />
-        public ListViewGroup this[string key] {
-            get {
 
-                if (list == null) {
+        public ListViewGroup this[string key]
+        {
+            get
+            {
+                if (_list == null)
+                {
                     return null;
                 }
 
-                for (int i = 0; i < list.Count; i ++) {
-                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) == 0) {
+                for (int i = 0; i < _list.Count; i++)
+                {
+                    if (string.Equals(key, this[i].Name, StringComparison.CurrentCulture))
+                    {
                         return this[i];
                     }
                 }
 
                 return null;
             }
-            set {
+            set
+            {
                 if (value == null)
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
 
-                int index = -1;
-
-                if (this.list == null) {
-                    return; // nothing to do
+                if (_list == null)
+                {
+                     // nothing to do
+                    return;
                 }
 
-                for (int i = 0; i < this.list.Count; i ++) {
-                    if (string.Compare(key, this[i].Name, false /*case insensitive*/, System.Globalization.CultureInfo.CurrentCulture) ==0) {
+                int index = -1;
+                for (int i = 0; i < _list.Count; i++)
+                {
+                    if (string.Equals(key, this[i].Name, StringComparison.CurrentCulture))
+                    {
                         index = i;
                         break;
                     }
                 }
 
-                if (index != -1) {
-                    this.list[index] = value;
+                if (index != -1)
+                {
+                    _list[index] = value;
                 }
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.this"]/*' />
-        /// <internalonly/>
-        object IList.this[int index] {
-            get
-            {
-                return this[index];
-            }
+        object IList.this[int index]
+        {
+            get => this[index];
             set
             {
-                if (value is ListViewGroup) {
-                    this[index] = (ListViewGroup)value;
+                if (value is ListViewGroup group)
+                {
+                    this[index] = group;
                 }
             }
         }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add"]/*' />
+
         public int Add(ListViewGroup group)
         {
             if (group == null)
@@ -162,44 +123,41 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(group));
             }
 
-            if (this.Contains(group)) {
+            if (Contains(group))
+            {
                 return -1;
             }
 
             // Will throw InvalidOperationException if group contains items which are parented by another listView.
             CheckListViewItems(group);
-            group.ListViewInternal = this.listView;
-            int index = this.List.Add(group);
-            if (listView.IsHandleCreated) {
-                listView.InsertGroupInListView(this.List.Count, group);
+            group.ListView = _listView;
+            int index = List.Add(group);
+            if (_listView.IsHandleCreated)
+            {
+                _listView.InsertGroupInListView(this.List.Count, group);
                 MoveGroupItems(group);
-            }            
+            }
+
             return index;
-        }        
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Add1"]/*' />
+        }
+
         public ListViewGroup Add(string key, string headerText)
         {
             ListViewGroup group = new ListViewGroup(key, headerText);
-            this.Add(group);
+            Add(group);
             return group;
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Add"]/*' />
-        /// <internalonly/>
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        [
-            SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "value" is the name of the param passed in.
-                                                                                                        // So we don't have to localize it.
-        ]
-        int IList.Add(object value) {
-            if (value is ListViewGroup) {
-                return Add((ListViewGroup)value);
+        int IList.Add(object value)
+        {
+            if (!(value is ListViewGroup group))
+            {
+                throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
             }
-            throw new ArgumentException(SR.ListViewGroupCollectionBadListViewGroup, nameof(value));
-        }
                 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange"]/*' />
+            return Add(group);
+        }
+
         public void AddRange(ListViewGroup[] groups)
         {
             if (groups == null)
@@ -207,12 +165,12 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(groups));
             }
 
-            for(int i=0; i < groups.Length; i++) {
+            for (int i = 0; i < groups.Length; i++)
+            {
                 Add(groups[i]);
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.AddRange2"]/*' />
         public void AddRange(ListViewGroupCollection groups)
         {
             if (groups == null)
@@ -220,138 +178,136 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(groups));
             }
 
-            for(int i=0; i < groups.Count; i++) {
+            for (int i = 0; i < groups.Count; i++)
+            {
                 Add(groups[i]);
             }
         }
 
-        private void CheckListViewItems(ListViewGroup group) {
-            for (int i = 0; i < group.Items.Count; i ++) {
+        private void CheckListViewItems(ListViewGroup group)
+        {
+            for (int i = 0; i < group.Items.Count; i++)
+            {
                 ListViewItem item = group.Items[i];
-                if (item.ListView != null && item.ListView != this.listView) {
+                if (item.ListView != null && item.ListView != _listView)
+                {
                     throw new ArgumentException(string.Format(SR.OnlyOneControl, item.Text));
                 }
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Clear"]/*' />
-        public void Clear() {
-            if (listView.IsHandleCreated) {
-                for(int i=0; i < Count; i++) {
-                    listView.RemoveGroupFromListView(this[i]);
+        public void Clear()
+        {
+            if (_listView.IsHandleCreated)
+            {
+                for (int i = 0; i < Count; i++)
+                {
+                    _listView.RemoveGroupFromListView(this[i]);
                 }
             }
+
             // Dissociate groups from the ListView
-            //
-            for(int i=0; i < Count; i++) {
-                this[i].ListViewInternal = null;
+            for (int i = 0; i < Count; i++)
+            {
+                this[i].ListView = null;
             }
-            this.List.Clear();
+            
+            List.Clear();
 
             // we have to tell the listView that there are no more groups
             // so the list view knows to remove items from the default group
-            this.listView.UpdateGroupView();
-        }
-        
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Contains"]/*' />
-        public bool Contains(ListViewGroup value) {
-            return this.List.Contains(value);
+            _listView.UpdateGroupView();
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Contains"]/*' />
-        /// <internalonly/>
+        public bool Contains(ListViewGroup value) => List.Contains(value);
+
         bool IList.Contains(object value)
         {
-            if (value is ListViewGroup) {
-                return Contains((ListViewGroup)value);
+            if (!(value is ListViewGroup group))
+            {
+                return false;
             }
-            return false;
+
+            return Contains(group);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.CopyTo"]/*' />
-        public void CopyTo(Array array, int index) {
-            this.List.CopyTo(array, index);
-        }
+        public void CopyTo(Array array, int index) => List.CopyTo(array, index);
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.GetEnumerator"]/*' />
-        public IEnumerator GetEnumerator()
+        public IEnumerator GetEnumerator() => List.GetEnumerator();
+
+        public int IndexOf(ListViewGroup value) => List.IndexOf(value);
+
+        int IList.IndexOf(object value)
         {
-            return this.List.GetEnumerator();
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IndexOf"]/*' />
-        public int IndexOf(ListViewGroup value) {
-            return this.List.IndexOf(value);
-        }
-
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
-        int IList.IndexOf(object value) {
-            if (value is ListViewGroup) {
-                return IndexOf((ListViewGroup)value);
+            if (!(value is ListViewGroup group))
+            {
+                return -1;
             }
-            return -1;
+
+            return IndexOf((ListViewGroup)value);
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Insert"]/*' />
-        public void Insert(int index, ListViewGroup group) {
+        public void Insert(int index, ListViewGroup group)
+        {
             if (group == null)
             {
                 throw new ArgumentNullException(nameof(group));
             }
 
-            if (Contains(group)) {
+            if (Contains(group))
+            {
                 return;
             }
-            group.ListViewInternal = this.listView;
-            this.List.Insert(index, group);
-            if (listView.IsHandleCreated) {
-                listView.InsertGroupInListView(index, group);
-                MoveGroupItems(group);
-            }            
-        }       
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Insert"]/*' />
-        /// <internalonly/>
-        void IList.Insert(int index, object value) {
-            if (value is ListViewGroup) {
-                Insert(index, (ListViewGroup)value);
-            }            
+            group.ListView = _listView;
+            List.Insert(index, group);
+            if (_listView.IsHandleCreated)
+            {
+                _listView.InsertGroupInListView(index, group);
+                MoveGroupItems(group);
+            }
         }
 
-        private void MoveGroupItems(ListViewGroup group) {
-            Debug.Assert(listView.IsHandleCreated, "MoveGroupItems pre-condition: listView handle must be created");
+        void IList.Insert(int index, object value)
+        {
+            if (value is ListViewGroup group)
+            {
+                Insert(index, group);
+            }
+        }
 
-            foreach(ListViewItem item in group.Items) {
-                if (item.ListView == this.listView) {
-                    item.UpdateStateToListView(item.Index);                    
+        private void MoveGroupItems(ListViewGroup group)
+        {
+            Debug.Assert(_listView.IsHandleCreated, "MoveGroupItems pre-condition: listView handle must be created");
+
+            foreach (ListViewItem item in group.Items)
+            {
+                if (item.ListView == this._listView)
+                {
+                    item.UpdateStateToListView(item.Index);
                 }
             }
         }
-       
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.Remove"]/*' />
-        public void Remove(ListViewGroup group) {
-            group.ListViewInternal = null;            
-            this.List.Remove(group);
 
-            if (listView.IsHandleCreated) {
-                listView.RemoveGroupFromListView(group);
+        public void Remove(ListViewGroup group)
+        {
+            group.ListView = null;
+            List.Remove(group);
+
+            if (_listView.IsHandleCreated)
+            {
+                _listView.RemoveGroupFromListView(group);
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object value)
         {
-            if (value is ListViewGroup) {
-                Remove((ListViewGroup)value);
+            if (value is ListViewGroup group)
+            {
+                Remove(group);
             }
         }
 
-        /// <include file='doc\ListViewGroup.uex' path='docs/doc[@for="ListViewGroup.ListViewGroupCollection.RemoveAt"]/*' />
-        public void RemoveAt(int index) {
-            Remove(this[index]);
-        }        
-    }        
+        public void RemoveAt(int index) => Remove(this[index]);
+    }
 }
-
