@@ -41,11 +41,11 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             if (attributes == null)
             {
-                throw new ArgumentNullException("attributes");
+                throw new ArgumentNullException(nameof(attributes));
             }
 
             IDesigner designer = GetDesigner(component);
@@ -65,11 +65,11 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             if (events == null)
             {
-                throw new ArgumentNullException("events");
+                throw new ArgumentNullException(nameof(events));
             }
 
             IDesigner designer = GetDesigner(component);
@@ -89,11 +89,11 @@ namespace System.ComponentModel.Design
         {
             if (component == null)
             {
-                throw new ArgumentNullException("component");
+                throw new ArgumentNullException(nameof(component));
             }
             if (properties == null)
             {
-                throw new ArgumentNullException("properties");
+                throw new ArgumentNullException(nameof(properties));
             }
 
             IDesigner designer = GetDesigner(component);

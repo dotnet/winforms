@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// </devdoc>
     public enum ToolStripItemOverflow
     {
-        Never,		// on the main winbar itself,
+        Never,		// on the main ToolStrip itself,
         Always,		// on the overflow window
         AsNeeded	// DEFAULT try for main, overflow as necessary
     }

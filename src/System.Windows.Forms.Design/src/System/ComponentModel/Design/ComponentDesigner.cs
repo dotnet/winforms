@@ -45,11 +45,10 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual ICollection AssociatedComponents
         {
-            get
-            {
-                return new IComponent[0];
-            }
+            get => new IComponent[0];
         }
+
+        internal virtual bool CanBeAssociatedWith(IDesigner parentDesigner) => true;
 
         /// <summary>
         /// Gets or sets a value indicating whether or not this component is being inherited.
@@ -453,6 +452,23 @@ namespace System.ComponentModel.Design
             if (thisHandler != null && thisDefaultEvent != null)
             {
                 eps.ShowCode(_component, thisDefaultEvent);
+            }
+        }
+
+        internal bool IsRootDesigner
+        {
+            get
+            {
+                Debug.Assert(_component != null,
+                    "this.component needs to be set before this method is valid.");
+
+                bool isRoot = false;
+                IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+                if (host != null && _component == host.RootComponent)
+                {
+                    isRoot = true;
+                }
+                return isRoot;
             }
         }
 
@@ -880,7 +896,7 @@ namespace System.ComponentModel.Design
                 {
                     if (propertyName == null)
                     {
-                        throw new ArgumentNullException("propertyName");
+                        throw new ArgumentNullException(nameof(propertyName));
                     }
 
                     // First, check to see if the name is in the given properties table
@@ -940,7 +956,7 @@ namespace System.ComponentModel.Design
             {
                 if (propertyName == null)
                 {
-                    throw new ArgumentNullException("propertyName");
+                    throw new ArgumentNullException(nameof(propertyName));
                 }
 
                 if (Contains(propertyName))

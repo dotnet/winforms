@@ -686,7 +686,7 @@ namespace System.Windows.Forms {
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     return owner.items[index];
                 }
                 // set not supported
@@ -850,7 +850,7 @@ namespace System.Windows.Forms {
 
                 // Validate our index
                 if (index < 0 || index > owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
                                 
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
@@ -1093,7 +1093,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 MenuItem item = owner.items[index];

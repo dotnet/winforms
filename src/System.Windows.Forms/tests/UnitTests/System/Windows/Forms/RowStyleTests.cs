@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void RowStyle_Ctor_NegativeHeight_ThrowsArgumentOutOfRangeException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("Size", () => new RowStyle(SizeType.AutoSize, -1));
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => new RowStyle(SizeType.AutoSize, -1));
         }
 
         [Theory]
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
         public void RowStyle_Height_SetNegative_ThrowsArgumentOutOfRangeException()
         {
             var style = new RowStyle();
-            Assert.Throws<ArgumentOutOfRangeException>("Size", () => style.Height = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => style.Height = -1);
         }
     }
 }

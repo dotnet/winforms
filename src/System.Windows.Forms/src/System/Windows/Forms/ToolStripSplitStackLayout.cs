@@ -81,7 +81,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        // the current winbar we're operating over.
+        // the current ToolStrip we're operating over.
         public ToolStrip ToolStrip {
             get {
                 return toolStrip;
@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
         }
 
         //
-        // This method will mark whether items should be placed in the overflow or on the main winbar.
+        // This method will mark whether items should be placed in the overflow or on the main ToolStrip.
         //
         private void CalculatePlacementsHorizontal() {
             ResetItemPlacements();
@@ -139,7 +139,7 @@ namespace System.Windows.Forms {
         }
 
         //
-        // This method will mark whether items should be placed in the overflow or on the main winbar.
+        // This method will mark whether items should be placed in the overflow or on the main ToolStrip.
         //
         private void CalculatePlacementsVertical() {
             ResetItemPlacements();
@@ -577,7 +577,7 @@ namespace System.Windows.Forms {
 
         // 
         // This method is called when we are walking through the item collection and we have realized that we 
-        // need to free up "X" amount of space to be able to fit an item onto the winbar.
+        // need to free up "X" amount of space to be able to fit an item onto the ToolStrip.
         private int SendNextItemToOverflow(int spaceNeeded, bool horizontal) {
 #if DEBUG
             if (DebugLayoutTraceSwitch.TraceVerbose) { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "SendNextItemToOverflow attempting to free {0}", spaceNeeded)); }

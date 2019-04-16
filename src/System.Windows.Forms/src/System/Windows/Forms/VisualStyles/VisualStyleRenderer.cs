@@ -403,7 +403,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
             
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count) {
-                throw new ArgumentOutOfRangeException(nameof(imageIndex), string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(imageIndex), imageIndex, string.Format(SR.InvalidArgument, nameof(imageIndex), imageIndex));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {

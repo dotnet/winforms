@@ -40,6 +40,8 @@ Note that this does **not** build using your machine-wide installed version of t
 * Other error may be from MSBuild tasks. You need to examine the build logs to investigate.
   * The logs are generated at `artifacts\log\Debug\Build.binlog`
   * The file format is an MSBuild Binary Log. Install the [MSBuild Structured Log Viewer][msbuild-log-viewer] to view them.
+* WinForms uses Visual Studio MSBuild but sometimes with a preview .NET Core SDK; so if you have a non-preview version of [Visual Studio][VS-download] (i.e. a release version), then you may need to enable `use preview` for .NET Core SDKs in VS.
+  * you can do this in VS at Tools :arrow_right: options :arrow_right: Projects and Solutions :arrow_right: .net core :arrow_right: use previews
 
 ## Creating a package
 
@@ -50,3 +52,4 @@ To create the Microsoft.Private.Winforms package, run `.\build -pack`
 [corefx-windows-instructions]: https://github.com/dotnet/corefx/blob/master/Documentation/building/windows-instructions.md
 [latest-core-build]: https://github.com/dotnet/core/blob/master/daily-builds.md
 [msbuild-log-viewer]: http://msbuildlog.com/
+[VS-download]: https://visualstudio.microsoft.com/downloads/

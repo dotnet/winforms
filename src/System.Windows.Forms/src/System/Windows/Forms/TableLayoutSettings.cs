@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
             set { 
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial)){
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "CellBorderStyle", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(CellBorderStyle), value));
                 }
                 _borderStyle = value;   
                 //set the CellBorderWidth according to the current CellBorderStyle.
@@ -107,9 +107,11 @@ namespace System.Windows.Forms {
                 return containerInfo.MaxColumns;
             }
             set { 
-                if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException(nameof(ColumnCount), value, string.Format (SR.InvalidLowBoundArgumentEx, "ColumnCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ColumnCount), value, 0));
                 }
+
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);         
                 containerInfo.MaxColumns = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Columns);
@@ -133,9 +135,11 @@ namespace System.Windows.Forms {
                 return containerInfo.MaxRows;
             }
             set { 
-                if (value < 0) {                    
-                     throw new ArgumentOutOfRangeException(nameof(RowCount), value, string.Format (SR.InvalidLowBoundArgumentEx, "RowCount", value.ToString (CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(RowCount), value, 0));
                 }
+
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
                 containerInfo.MaxRows = value;
                 LayoutTransaction.DoLayout(Owner, Owner, PropertyNames.Rows);
@@ -193,7 +197,7 @@ namespace System.Windows.Forms {
             set { 
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelGrowStyle.FixedSize, (int)TableLayoutPanelGrowStyle.AddColumns)){
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "GrowStyle", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(GrowStyle), value));
                 }            
                
                 TableLayout.ContainerInfo containerInfo = TableLayout.GetContainerInfo(Owner);
@@ -255,7 +259,7 @@ namespace System.Windows.Forms {
             }
             if (value < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "ColumnSpan", value));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
             }
 
             if (IsStub)
@@ -302,7 +306,7 @@ namespace System.Windows.Forms {
             }
             if (value < 1)
             {
-                throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidArgument, "RowSpan", value));
+                throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(value), value));
             }
 
             if (IsStub)
@@ -360,7 +364,7 @@ namespace System.Windows.Forms {
             }
             if (row < -1)
             {
-                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "Row", row));
+                throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
             }
 
             SetCellPosition(control, row, -1, rowSpecified: true, colSpecified: false);
@@ -436,7 +440,7 @@ namespace System.Windows.Forms {
             }
             if (column < -1)
             {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "Column", column));
+                throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
             }
 
             if (IsStub)

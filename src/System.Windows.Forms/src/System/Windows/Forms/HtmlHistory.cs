@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Back"]/*' />
         public void Back(int numberBack) {
             if (numberBack < 0) {
-                throw new ArgumentOutOfRangeException(nameof(numberBack), string.Format(SR.InvalidLowBoundArgumentEx, "numberBack", numberBack.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(numberBack), numberBack, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberBack), numberBack, 0));
             }
             else if (numberBack > 0) {
                 object oNumForward = (object)(-numberBack);
@@ -64,7 +64,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\HtmlHistory.uex' path='docs/doc[@for="HtmlHistory.Forward"]/*' />
         public void Forward(int numberForward) {
             if (numberForward < 0) {
-                throw new ArgumentOutOfRangeException(nameof(numberForward), string.Format(SR.InvalidLowBoundArgumentEx, "numberForward", numberForward.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(numberForward), numberForward, string.Format(SR.InvalidLowBoundArgumentEx, nameof(numberForward), numberForward, 0));
             }
             else if (numberForward > 0) {
                 object oNumForward = (object)numberForward;

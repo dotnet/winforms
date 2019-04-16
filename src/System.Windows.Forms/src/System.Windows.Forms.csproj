@@ -8,7 +8,7 @@
     <CLSCompliant>true</CLSCompliant>
     <!--the obsolete usage in public surface can't be removed-->
     <NoWarn>$(NoWarn);618</NoWarn>
-    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;WINFORMS_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;DRAWING_DESIGN_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
@@ -420,9 +420,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\wfc.ico">
       <LogicalName>System.Windows.Forms.wfc.ico</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\wfsecurity.ico">
-      <LogicalName>System.Windows.Forms.wfsecurity.ico</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\App\Timer.bmp">
       <LogicalName>System.Windows.Forms.Timer.bmp</LogicalName>

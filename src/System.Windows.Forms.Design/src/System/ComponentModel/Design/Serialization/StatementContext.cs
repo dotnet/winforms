@@ -9,7 +9,16 @@ using System.Collections.Generic;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    /// This object can be placed on the context stack to provide a place for statements  to be serialized into.  Normally, statements are serialized into whatever statement  collection that is on the context stack.  You can modify this behavior by creating a statement context and calling Populate with a collection of objects whose statements you would like stored in the statement table.  As each object is serialized in SerializeToExpression it will have its contents placed in the statement table. saved in a table within the context.  If you push this object on the stack it is your  responsibility to integrate the statements added to it into your own collection of statements.
+    /// This object can be placed on the context stack to provide a place for
+    /// statements to be serialized into. Normally, statements are serialized
+    /// into whatever statement collection that is on the context stack. You
+    /// can modify this behavior by creating a statement context and calling
+    /// Populate with a collection of objects whose statements you would like
+    /// stored in the statement table. As each object is serialized in
+    /// SerializeToExpression it will have its contents placed in the statement
+    /// table. saved in a table within the context. If you push this object on
+    /// the stack it is your responsibility to integrate the statements added
+    /// to it into your own collection of statements.
     /// </summary>
     public sealed class StatementContext
     {
@@ -20,15 +29,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public ObjectStatementCollection StatementCollection
         {
-            get
-            {
-                if (_statements == null)
-                {
-                    _statements = new ObjectStatementCollection();
-                }
-
-                return _statements;
-            }
+            get => _statements ?? (_statements = new ObjectStatementCollection());
         }
     }
 
@@ -91,7 +92,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (statementOwner == null)
                 {
-                    throw new ArgumentNullException("statementOwner");
+                    throw new ArgumentNullException(nameof(statementOwner));
                 }
 
                 if (_table != null)
@@ -126,7 +127,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (statementOwner == null)
             {
-                throw new ArgumentNullException("statementOwner");
+                throw new ArgumentNullException(nameof(statementOwner));
             }
 
             if (_table != null)
@@ -151,7 +152,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (statementOwners == null)
             {
-                throw new ArgumentNullException("statementOwners");
+                throw new ArgumentNullException(nameof(statementOwners));
             }
             foreach (object o in statementOwners)
             {
@@ -166,7 +167,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (owner == null)
             {
-                throw new ArgumentNullException("owner");
+                throw new ArgumentNullException(nameof(owner));
             }
             AddOwner(owner, null);
         }

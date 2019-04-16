@@ -62,10 +62,10 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelCellBorderStyle))]
-        public void TableLayoutPanel_CellBorderStyle_SetInvalid_ThrowsArgumentException(TableLayoutPanelCellBorderStyle value)
+        public void TableLayoutPanel_CellBorderStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelCellBorderStyle value)
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentException>(null, () => panel.CellBorderStyle = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => panel.CellBorderStyle = value);
         }
 
         [Fact]
@@ -183,7 +183,7 @@ namespace System.Windows.Forms.Tests
         public void TableLayoutPanel_ColumnCount_SetNegative_ThrowsArgumentOutOfRangeException()
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentOutOfRangeException>("ColumnCount", () => panel.ColumnCount = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => panel.ColumnCount = -1);
         }
 
         [Theory]
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Tests
         public void TableLayoutPanel_RowCount_SetNegative_ThrowsArgumentOutOfRangeException()
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentOutOfRangeException>("RowCount", () => panel.RowCount = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => panel.RowCount = -1);
         }
 
         [Theory]
@@ -221,10 +221,10 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData((TableLayoutPanelGrowStyle)(TableLayoutPanelGrowStyle.FixedSize - 1))]
         [InlineData((TableLayoutPanelGrowStyle)(TableLayoutPanelGrowStyle.AddColumns + 1))]
-        public void TableLayoutPanel_GrowStyle_SetNegative_ThrowsArgumentException(TableLayoutPanelGrowStyle value)
+        public void TableLayoutPanel_GrowStyle_SetNegative_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentException>(null, () => panel.GrowStyle = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => panel.GrowStyle = value);
         }
 
         [Fact]
@@ -513,10 +513,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void TableLayoutPanel_SetColumn_InvalidColumn_ThrowsArgumentException()
+        public void TableLayoutPanel_SetColumn_InvalidColumn_ThrowsArgumentOutOfRangeException()
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentException>(null, () => panel.SetColumn(new Control(), -2));
+            Assert.Throws<ArgumentOutOfRangeException>("column", () => panel.SetColumn(new Control(), -2));
         }
 
         [Theory]
@@ -599,19 +599,19 @@ namespace System.Windows.Forms.Tests
         [Theory]
         [InlineData(-2)]
         [InlineData(-1)]
-        public void TableLayoutPanel_GetControlFromPosition_NegativeColumn_ThrowsArgumentException(int column)
+        public void TableLayoutPanel_GetControlFromPosition_NegativeColumn_ThrowsArgumentOutOfRangeException(int column)
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentException>(null, () => panel.GetControlFromPosition(column, 0));
+            Assert.Throws<ArgumentOutOfRangeException>("column", () => panel.GetControlFromPosition(column, 0));
         }
 
         [Theory]
         [InlineData(-2)]
         [InlineData(-1)]
-        public void TableLayoutPanel_GetControlFromPosition_NegativeRow_ThrowsArgumentException(int row)
+        public void TableLayoutPanel_GetControlFromPosition_NegativeRow_ThrowsArgumentOutOfRangeException(int row)
         {
             var panel = new TableLayoutPanel();
-            Assert.Throws<ArgumentException>(null, () => panel.GetControlFromPosition(0, row));
+            Assert.Throws<ArgumentOutOfRangeException>("row", () => panel.GetControlFromPosition(0, row));
         }
 
         [Theory]

@@ -371,7 +371,7 @@ namespace System.Windows.Forms {
          }
 
 
-         /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyDown"]/*' />
+         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyDown"]/*' />
          /// <devdoc>
          /// <para>Occurs when a key is pressed down while the control has focus.</para>
          /// </devdoc>
@@ -385,7 +385,7 @@ namespace System.Windows.Forms {
              }
          }
       
-         /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyPress"]/*' />
+         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyPress"]/*' />
          /// <devdoc>
          /// <para> Occurs when a key is pressed while the control has focus.</para>
          /// </devdoc>
@@ -399,7 +399,7 @@ namespace System.Windows.Forms {
              }
          }
       
-         /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyUp"]/*' />
+         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyUp"]/*' />
          /// <devdoc>
          /// <para> Occurs when a key is released while the control has focus.</para>
          /// </devdoc>
@@ -780,15 +780,15 @@ namespace System.Windows.Forms {
         protected virtual void OnLostFocus(EventArgs e) {         
             RaiseEvent(EventLostFocus, e);                              
         } 
-        /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyDown"]/*' />
+        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyDown"]/*' />
         protected virtual void OnKeyDown(KeyEventArgs e) {         
             RaiseKeyEvent(EventKeyDown, e);                              
         } 
-        /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyPress"]/*' />
+        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyPress"]/*' />
         protected virtual void OnKeyPress(KeyPressEventArgs e) {         
             RaiseKeyPressEvent(EventKeyPress, e);                              
         } 
-        /// <include file='doc\WinBarControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyUp"]/*' />
+        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.OnKeyUp"]/*' />
         protected virtual void OnKeyUp(KeyEventArgs e) {         
             RaiseKeyEvent(EventKeyUp, e);                              
         } 

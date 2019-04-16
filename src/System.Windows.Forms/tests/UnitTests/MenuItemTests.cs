@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var menu = new SubMenu(new MenuItem[] { menuItem });
-            Assert.Throws<ArgumentOutOfRangeException>("Index", () => menuItem.Index = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => menuItem.Index = value);
         }
 
         [Theory]

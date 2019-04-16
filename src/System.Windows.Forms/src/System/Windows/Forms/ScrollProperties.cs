@@ -110,7 +110,7 @@ namespace System.Windows.Forms {
             set {
                 if (largeChange != value ) {
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.InvalidLowBoundArgumentEx, "LargeChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(LargeChange), value, 0));
                     }
                     largeChange = value;
                     largeChangeSetExternally = true;
@@ -175,7 +175,7 @@ namespace System.Windows.Forms {
                 }
                 if (minimum != value) {
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException(nameof(Minimum), string.Format(SR.InvalidLowBoundArgumentEx, "Minimum", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Minimum), value, 0));
                     }
                     if (maximum < value)
                         maximum = value;
@@ -231,7 +231,7 @@ namespace System.Windows.Forms {
                 if (smallChange != value) {
                 
                     if (value < 0) {                
-                        throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.InvalidLowBoundArgumentEx, "SmallChange", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SmallChange), value, 0));
                     }
                 
                     smallChange = value;
@@ -263,7 +263,7 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (value < minimum || value > maximum) {
-                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'minimum'", "'maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
                     this.value = value;
                     UpdateScrollInfo();
