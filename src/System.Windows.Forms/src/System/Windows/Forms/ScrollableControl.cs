@@ -890,7 +890,13 @@ namespace System.Windows.Forms {
         ///    Scrolls the currently active control into view if we are an AutoScroll
         ///    Form that has the Horiz or Vert scrollbar displayed...
         /// </devdoc>
-        public void ScrollControlIntoView(Control activeControl) {
+        public void ScrollControlIntoView(Control activeControl)
+        {
+            if (activeControl == null)
+            {
+                return;
+            }
+
             Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "ScrollControlIntoView(" + activeControl.GetType().FullName + ")");
             Debug.Indent();
 
@@ -899,7 +905,6 @@ namespace System.Windows.Forms {
             if (IsDescendant(activeControl)
                 && AutoScroll
                 && (HScroll || VScroll)
-                && activeControl != null
                 && (client.Width > 0 && client.Height > 0)) {
 
                 Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "Calculating...");
