@@ -186,7 +186,6 @@ namespace System.ComponentModel.Design
                 }
             }
 
-            Debug.Fail("Collection " + CollectionType.FullName + " contains no Item or Items property so we cannot display and edit any values");
             return typeof(object);
         }
 
@@ -398,13 +397,12 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual object SetItems(object editValue, object[] value)
         {
-            if (editValue != null)
+            // We look to see if the value implements IList, and if it does, we set through that.
+            if (editValue is IList list)
             {
-                // We look to see if the value implements IList, and if it does, we set through that.
-                Debug.Assert(editValue is Collections.IList, "editValue is not an IList");
-                if (editValue is Collections.IList list)
+                list.Clear();
+                if (value != null)
                 {
-                    list.Clear();
                     for (int i = 0; i < value.Length; i++)
                     {
                         list.Add(value[i]);
@@ -423,10 +421,6 @@ namespace System.ComponentModel.Design
             if (GetService(typeof(IHelpService)) is IHelpService helpService)
             {
                 helpService.ShowHelpFromKeyword(HelpTopic);
-            }
-            else
-            {
-                Debug.Fail("Unable to get IHelpService.");
             }
         }
 
@@ -2224,7 +2218,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
-                _editor = editor;
+                _editor = editor ?? throw new ArgumentNullException(nameof(editor));
             }
             
             /// <summary>
@@ -2292,7 +2286,10 @@ namespace System.ComponentModel.Design
                     bool canChange = false;
                     try
                     {
-                        canChange = Context.OnComponentChanging();
+                        if (Context != null)
+                        {
+                            canChange = Context.OnComponentChanging();
+                        }
                     }
                     catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                     {
@@ -2368,6 +2365,11 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
+                if (edSvc == null)
+                {
+                    throw new ArgumentNullException(nameof(edSvc));
+                }
+
                 return edSvc.ShowDialog(this);
             }
             
