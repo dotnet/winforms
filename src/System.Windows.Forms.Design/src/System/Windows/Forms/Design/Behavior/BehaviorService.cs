@@ -160,8 +160,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Graphics AdornerWindowGraphics
         {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             get
             {
                 Graphics result = _adornerWindow.CreateGraphics();
