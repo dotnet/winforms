@@ -13,7 +13,7 @@
     </RestoreSources>
   </PropertyGroup>
   <PropertyGroup>
-    <MicrosoftNetCoreAppPackageVersion>3.0.0-preview4-27601-04</MicrosoftNetCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview5-27616-06</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- Corefx-updated dependencies -->
   <PropertyGroup>
