@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace System.Windows.Forms
 {
-    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue")] // Maps to native enum.
+    [SuppressMessage("Microsoft.Design", "CA1008:EnumsShouldHaveZeroValue", Justification = "Maps to native enum.")]
     public enum SearchDirectionHint
     {
         Up = NativeMethods.VK_UP,

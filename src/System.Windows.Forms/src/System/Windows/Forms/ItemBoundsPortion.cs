@@ -2,60 +2,31 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    using System.Diagnostics;
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-
-
-
-    /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies the display bounds of a ListItem.
-    ///    </para>
+    /// Specifies the display bounds of a ListItem.
     /// </devdoc>
-    public enum ItemBoundsPortion {
-
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.Entire"]/*' />
+    public enum ItemBoundsPortion
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Both the icon and label
-        ///       portions. In Report View, this includes subitems.
-        ///
-        ///    </para>
+        /// Both the icon and label portions. In Report View, this includes subitems.
         /// </devdoc>
         Entire = NativeMethods.LVIR_BOUNDS,
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.Icon"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Only the icon portion.
-        ///    </para>
+        /// Only the icon portion.
         /// </devdoc>
         Icon = NativeMethods.LVIR_ICON,
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.Label"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Only the label portion.
-        ///    </para>
+        /// Only the label portion.
         /// </devdoc>
         Label = NativeMethods.LVIR_LABEL,
 
-        /// <include file='doc\ItemBoundsPortion.uex' path='docs/doc[@for="ItemBoundsPortion.ItemOnly"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Both the icon and label portions. In Report view, this
-        ///       does not include subitems. In all other views, this is the same as
-        ///    <see langword='Entire'/>
-        ///    .
-        /// </para>
+        /// Both the icon and label portions. In Report view, this <see langword='Entire'/>.
         /// </devdoc>
         ItemOnly = NativeMethods.LVIR_SELECTBOUNDS,
-
     }
 }

@@ -2,38 +2,26 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-
-    /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Specifies whether any characters in the
-    ///       current selection have the style or attribute.
-    ///
-    ///    </para>
+    /// Specifies whether any characters in the current selection have the
+    /// style or attribute.
     /// </devdoc>
-    public enum DockingBehavior {
-        /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior.Never"]/*' />
+    public enum DockingBehavior
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Some but not all characters.
-        ///    </para>
+        /// Some but not all characters.
         /// </devdoc>
-        Never     = 0,
+        Never = 0,
 
-        /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior.Ask"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       No characters.
-        ///    </para>
+        /// No characters.
         /// </devdoc>
-        Ask      = 1,
+        Ask = 1,
 
-        /// <include file='doc\DockingBehavior.uex' path='docs/doc[@for="DockingBehavior.AutoDock"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       All characters.
-        ///    </para>
+        /// All characters.
         /// </devdoc>
         AutoDock = 2
     }

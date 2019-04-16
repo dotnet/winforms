@@ -3649,7 +3649,7 @@ example usage
             set {
                 //valid values are 0x0 to 0x2.
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)RightToLeft.No, (int)RightToLeft.Inherit)){
-                    throw new InvalidEnumArgumentException(nameof(RightToLeft), (int)value, typeof(RightToLeft));
+                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(RightToLeft));
                 }
 
                 RightToLeft oldValue = RightToLeft;
@@ -3811,7 +3811,7 @@ example usage
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(TabIndex), string.Format(SR.InvalidLowBoundArgumentEx, "TabIndex", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(TabIndex), value, 0));
                 }
 
                 if (tabIndex != value) {
@@ -8648,25 +8648,28 @@ example usage
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnHelpRequested"]/*' />
-        /// <devdoc>
-        ///     Inheriting classes should override this method to handle this event.
-        ///     Call base.onHelp to send this event to any registered event listeners.
-        /// </devdoc>
+        /// <summary>
+        /// Inheriting classes should override this method to handle this event.
+        /// Call base.onHelp to send this event to any registered event listeners.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnHelpRequested(HelpEventArgs hevent) {
-            Contract.Requires(hevent != null);
+        protected virtual void OnHelpRequested(HelpEventArgs hevent)
+        {
             HelpEventHandler handler = (HelpEventHandler)Events[EventHelpRequested];
-            if (handler != null) {
+            if (handler != null)
+            {
                 handler(this,hevent);
-                // Set this to true so that multiple events aren't raised to the Form.
-                hevent.Handled = true;
+                // Mark the event as handled so that the event isn't raised for the
+                // control's parent.
+                if (hevent != null)
+                {
+                    hevent.Handled = true;
+                }
             }
 
-            if (!hevent.Handled) {
-                if (ParentInternal != null) {
-                    ParentInternal.OnHelpRequested(hevent);
-                }
+            if (hevent != null && !hevent.Handled)
+            {
+                ParentInternal?.OnHelpRequested(hevent);
             }
         }
 

@@ -75,13 +75,11 @@ namespace System.Windows.Forms {
         internal class TreeNodeImageIndexer : ImageList.Indexer {
            private TreeNode owner;
            
-           /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType"]/*' />
-           public enum ImageListType {
-               /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.Default"]/*' />
+            public enum ImageListType
+            {
                Default,
-               /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.State"]/*' />
                State
-           }
+            }
            private ImageListType imageListType;
 
            /// <include file='doc\TreeNode.uex' path='docs/doc[@for="ImageListType.TreeNodeImageIndexer"]/*' />
@@ -961,7 +959,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1 || value > ALLOWEDIMAGES) {
-                    throw new ArgumentOutOfRangeException(nameof(StateImageIndex), string.Format(SR.InvalidArgument, "StateImageIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
                 }
                 StateImageIndexer.Index = value;
                 if (treeView != null && !treeView.CheckBoxes)
@@ -1400,7 +1398,7 @@ namespace System.Windows.Forms {
                     case "IsChecked":
                         CheckedStateInternal = serializationInfo.GetBoolean(entry.Name);
                         break;
-                    case "ImageIndex":
+                    case nameof(ImageIndex):
                         imageIndex = serializationInfo.GetInt32(entry.Name);
                         break;
                     case "SelectedImageIndex":
@@ -1851,7 +1849,7 @@ namespace System.Windows.Forms {
             si.AddValue("ToolTipText", toolTipText);
             si.AddValue("Name", Name);
             si.AddValue("IsChecked", treeNodeState[TREENODESTATE_isChecked]);
-            si.AddValue("ImageIndex", ImageIndexer.Index);
+            si.AddValue(nameof(ImageIndex), ImageIndexer.Index);
             si.AddValue("ImageKey", ImageIndexer.Key);
             si.AddValue("SelectedImageIndex", SelectedImageIndexer.Index);
             si.AddValue("SelectedImageKey", SelectedImageIndexer.Key);

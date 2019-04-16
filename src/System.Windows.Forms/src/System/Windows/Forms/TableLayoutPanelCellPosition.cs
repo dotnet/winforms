@@ -18,10 +18,10 @@ namespace System.Windows.Forms {
         
         public TableLayoutPanelCellPosition(int column, int row) {
             if (row < -1) {
-                throw new ArgumentOutOfRangeException(nameof(row), string.Format(SR.InvalidArgument, "row", (row).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, nameof(row), row));
             } 
             if (column < -1) {
-                throw new ArgumentOutOfRangeException(nameof(column), string.Format(SR.InvalidArgument, "column", (column).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, nameof(column), column));
             }
             this.row = row;
             this.column = column;

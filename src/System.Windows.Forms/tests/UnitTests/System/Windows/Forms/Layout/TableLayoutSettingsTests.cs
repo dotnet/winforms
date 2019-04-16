@@ -95,7 +95,7 @@ namespace System.Windows.Forms.Layout.Tests
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<ArgumentOutOfRangeException>("ColumnCount", () => settings.ColumnCount = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.ColumnCount = -1);
         }
 
         [Theory]
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Layout.Tests
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<ArgumentOutOfRangeException>("RowCount", () => settings.RowCount = -1);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.RowCount = -1);
         }
 
         [Theory]
@@ -132,11 +132,11 @@ namespace System.Windows.Forms.Layout.Tests
         [Theory]
         [InlineData((TableLayoutPanelGrowStyle)(TableLayoutPanelGrowStyle.FixedSize - 1))]
         [InlineData((TableLayoutPanelGrowStyle)(TableLayoutPanelGrowStyle.AddColumns + 1))]
-        public void TableLayoutSettings_GrowStyle_SetNegative_ThrowsArgumentException(TableLayoutPanelGrowStyle value)
+        public void TableLayoutSettings_GrowStyle_SetNegative_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             var toolStrip = new ToolStrip { LayoutStyle = ToolStripLayoutStyle.Table };
             TableLayoutSettings settings = Assert.IsType<TableLayoutSettings>(toolStrip.LayoutSettings);
-            Assert.Throws<ArgumentException>(null, () => settings.GrowStyle = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => settings.GrowStyle = value);
         }
 
         [Theory]
@@ -651,9 +651,9 @@ namespace System.Windows.Forms.Layout.Tests
 
         [Theory]
         [MemberData(nameof(EmptySettings_TestData))]
-        public void TableLayoutSettings_SetColumn_InvalidColumn_ThrowsArgumentException(TableLayoutSettings settings)
+        public void TableLayoutSettings_SetColumn_InvalidColumn_ThrowsArgumentOutOfRangeException(TableLayoutSettings settings)
         {
-            Assert.Throws<ArgumentException>(null, () => settings.SetColumn("control", -2));
+            Assert.Throws<ArgumentOutOfRangeException>("column", () => settings.SetColumn("control", -2));
         }
 
         [Fact]

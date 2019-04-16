@@ -55,7 +55,8 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Runtime.Versioning;
-    
+    using static System.Windows.Forms.NativeMethods;
+
     /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods"]/*' />
     internal static class NativeMethods {
 
@@ -975,6 +976,12 @@ namespace System.Windows.Forms {
                          LOCALE_IFIRSTDAYOFWEEK = 0x0000100C;   /* first day of week specifier */
 
         public const int LOCALE_IMEASURE =              0x0000000D;   // 0 = metric, 1 = US
+
+        public const int TVM_SETEXTENDEDSTYLE = TV_FIRST + 44;
+        public const int TVM_GETEXTENDEDSTYLE = TV_FIRST + 45;
+
+        public const int TVS_EX_FADEINOUTEXPANDOS = 0x0040;
+        public const int TVS_EX_DOUBLEBUFFER = 0x0004;
 
         public static readonly int LOCALE_USER_DEFAULT = MAKELCID(LANG_USER_DEFAULT);
         public static readonly int LANG_USER_DEFAULT   = MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT);
@@ -1956,6 +1963,7 @@ namespace System.Windows.Forms {
         WM_MBUTTONDOWN = 0x0207,
         WM_MBUTTONUP = 0x0208,
         WM_MBUTTONDBLCLK = 0x0209,
+        WM_NCMOUSEHOVER = 0x02A0,
         WM_XBUTTONDOWN                 = 0x020B,
         WM_XBUTTONUP                   = 0x020C,
         WM_XBUTTONDBLCLK               = 0x020D,
@@ -4794,7 +4802,8 @@ namespace System.Windows.Forms {
             public int iButton = 0;
             public IntPtr pItem = IntPtr.Zero;    // HDITEM*
         }
-        
+
+        [SuppressMessage("Microsoft.Design", "CA1049:TypesThatOwnNativeResourcesShouldBeDisposable")]
         [StructLayout(LayoutKind.Sequential)]
         public class MOUSEHOOKSTRUCT {
             // pt was a by-value POINT structure
@@ -5694,6 +5703,8 @@ namespace System.Windows.Forms {
         public const int PS_GEOMETRIC = 0x00010000;
         public const int PS_ENDCAP_SQUARE = 0x00000100;
 
+        public const int WS_EX_TRANSPARENT = 0x00000020;
+
         public const int NULL_BRUSH = 5;
         public const int MM_HIMETRIC = 3;
 
@@ -6010,6 +6021,76 @@ namespace System.Windows.Forms {
         // This value requires KB2533623 to be installed.
         // Windows Server 2003 and Windows XP: This value is not supported.
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] ref RECT rect, int cPoints);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, [In, Out] POINT pt, int cPoints);
+
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr WindowFromPoint(int x, int y);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, int lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, int wParam, string lParam);
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern short GetKeyState(int keyCode);
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "DeleteObject", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        private static extern bool IntDeleteObject(IntPtr hObject);
+        public static bool DeleteObject(IntPtr hObject)
+        {
+            System.Internal.HandleCollector.Remove(hObject, CommonHandles.GDI);
+            return IntDeleteObject(hObject);
+        }
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool GetUpdateRect(IntPtr hwnd, [In, Out] ref RECT rc, bool fErase);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
+
+        [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.Process)]
+        private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
+        [ResourceExposure(ResourceScope.Process)]
+        [ResourceConsumption(ResourceScope.Process)]
+        public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
+        {
+            return System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), CommonHandles.GDI);
+        }
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr GetCursor();
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool GetCursorPos([In, Out] POINT pt);
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr SetParent(IntPtr hWnd, IntPtr hWndParent);
     }
 }
 

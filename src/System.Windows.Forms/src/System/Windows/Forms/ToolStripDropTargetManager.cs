@@ -108,7 +108,7 @@ namespace System.Windows.Forms {
                     lastDropTarget = ((IDropTarget)item);				
                 }
                 else if (owner.AllowDrop) {
-                    // the winbar wants this event
+                    // the ToolStrip wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStrip taking this because AllowDrop set to true.");   
                     lastDropTarget = ((IDropTarget)owner);
                     
@@ -162,7 +162,7 @@ namespace System.Windows.Forms {
                     newDropTarget = ((IDropTarget)item);				
                 }
                 else if (owner.AllowDrop) {
-                    // the winbar wants this event
+                    // the ToolStrip wants this event
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "ToolStrip taking this because AllowDrop set to true.");  
                     newDropTarget = ((IDropTarget)owner);
                 }	
@@ -289,7 +289,7 @@ namespace System.Windows.Forms {
 
                 // tell the last drag target you've left
                 if (lastDropTarget != null) {
-                    OnDragLeave(new EventArgs());
+                    OnDragLeave(EventArgs.Empty);
                 }
                 lastDropTarget = newTarget;
                 if (newTarget != null) {

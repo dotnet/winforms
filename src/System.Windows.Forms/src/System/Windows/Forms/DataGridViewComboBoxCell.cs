@@ -445,7 +445,7 @@ namespace System.Windows.Forms
                 //CheckNoSharedCell();
                 if (value < 1)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
                 }
                 this.Properties.SetInteger(PropComboBoxCellDropDownWidth, (int)value);
                 if (OwnsEditingComboBox(this.RowIndex))
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
                 //CheckNoSharedCell();
                 if (value < 1 || value > 100)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
                 }
                 this.Properties.SetInteger(PropComboBoxCellMaxDropDownItems, (int)value);
                 if (OwnsEditingComboBox(this.RowIndex))
@@ -2941,7 +2941,7 @@ namespace System.Windows.Forms
                 {
                     if (index < 0 || index >= this.InnerArray.Count) 
                     {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     return this.InnerArray[index];
                 }
@@ -2957,7 +2957,7 @@ namespace System.Windows.Forms
 
                     if (index < 0 || index >= this.InnerArray.Count)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
                     this.InnerArray[index] = value;
@@ -3054,7 +3054,7 @@ namespace System.Windows.Forms
                 
                 if (index < 0 || index > this.InnerArray.Count) 
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), nameof(index)));
                 }
                 
                 // If the combo box is sorted, then just treat this like an add
@@ -3096,7 +3096,7 @@ namespace System.Windows.Forms
                 
                 if (index < 0 || index >= this.InnerArray.Count) 
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
                 this.InnerArray.RemoveAt(index);
                 this.owner.OnItemsCollectionChanged();

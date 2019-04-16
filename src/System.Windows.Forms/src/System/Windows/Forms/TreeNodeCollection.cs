@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (index < 0 || index >= owner.childCount)
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;

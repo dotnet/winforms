@@ -4,98 +4,55 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-
-
-namespace System.Windows.Forms {
-    /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon"]/*' />
+namespace System.Windows.Forms
+{
     [SuppressMessage("Microsoft.Design", "CA1027:MarkEnumsWithFlags")]
-    public enum MessageBoxIcon {
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.None"]/*' />
+    public enum MessageBoxIcon
+    {
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the
-        ///       message box contain no symbols. 
-        ///    </para>
+        /// Specifies that the message box contain no symbols.
         /// </devdoc>
-        None         = 0,
+        None = 0,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Hand"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the
-        ///       message box contains a
-        ///       hand symbol. 
-        ///    </para>
+        /// Specifies that the message box contains a hand symbol.
         /// </devdoc>
-        Hand         = 0x00000010,
+        Hand = 0x00000010,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Question"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies
-        ///       that the message
-        ///       box contains a question
-        ///       mark symbol. 
-        ///    </para>
+        /// Specifies that the message box contains a question mark symbol.
         /// </devdoc>
-        Question     = 0x00000020,
+        Question = 0x00000020,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Exclamation"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the
-        ///       message box contains an
-        ///       exclamation symbol. 
-        ///    </para>
+        /// Specifies that the message box contains an exclamation symbol.
         /// </devdoc>
         Exclamation  = 0x00000030,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Asterisk"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the
-        ///       message box contains an
-        ///       asterisk symbol. 
-        ///    </para>
+        /// Specifies that the message box contains an asterisk symbol.
         /// </devdoc>
-        Asterisk     = 0x00000040,
+        Asterisk = 0x00000040,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Stop"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the message box contains a hand icon. This field is
-        ///       constant.
-        ///    </para>
+        /// Specifies that the message box contains a hand icon. This field is
+        /// constant.
         /// </devdoc>
-        Stop         = Hand,
+        Stop = Hand,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Error"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the
-        ///       message box contains a
-        ///       hand icon. 
-        ///    </para>
+        /// Specifies that the message box contains a hand icon.
         /// </devdoc>
-        Error        = Hand,
+        Error = Hand,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Warning"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the message box contains an exclamation icon. 
-        ///    </para>
+        /// Specifies that the message box contains an exclamation icon.
         /// </devdoc>
-        Warning      = Exclamation,
+        Warning = Exclamation,
 
-        /// <include file='doc\MessageBoxIcon.uex' path='docs/doc[@for="MessageBoxIcon.Information"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Specifies that the
-        ///       message box contains an
-        ///       asterisk icon. 
-        ///    </para>
+        /// Specifies that the message box contains an asterisk icon.
         /// </devdoc>
         Information  = Asterisk,
     }
 }
-

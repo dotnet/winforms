@@ -70,7 +70,7 @@ namespace System.Windows.Forms
             this.Thickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultWidth);
             this.MinimumThickness = ScaleToCurrentDpi(DATAGRIDVIEWCOLUMN_defaultMinColumnThickness);
             this.name = string.Empty;
-            this.bandIsRow = false;
+            this._bandIsRow = false;
             this.displayIndex = -1;
             this.cellTemplate = cellTemplate;
             this.autoSizeMode = DataGridViewAutoSizeColumnMode.NotSet;
@@ -365,18 +365,19 @@ namespace System.Windows.Forms
                 {
                     if (value == int.MaxValue)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DataGridViewColumn_DisplayIndexTooLarge, int.MaxValue));
                     }
-                    if (this.DataGridView != null)
+                    if (DataGridView != null)
                     {
                         if (value < 0)
                         {
-                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexNegative));
+                            throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridViewColumn_DisplayIndexNegative);
                         }
                         if (value >= this.DataGridView.Columns.Count)
                         {
-                            throw new ArgumentOutOfRangeException(nameof(DisplayIndex), value, string.Format(SR.DataGridViewColumn_DisplayIndexExceedsColumnCount));
+                            throw new ArgumentOutOfRangeException(nameof(value), value, SR.DataGridViewColumn_DisplayIndexExceedsColumnCount);
                         }
+
                         // Will throw an error if a visible frozen column is placed inside a non-frozen area or vice-versa.
                         this.DataGridView.OnColumnDisplayIndexChanging(this, value);
                         this.displayIndex = value;
@@ -485,11 +486,11 @@ namespace System.Windows.Forms
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(FillWeight), string.Format(SR.InvalidLowBoundArgument, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(FillWeight), value, 0));
                 }
                 if (value > (float)ushort.MaxValue)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(FillWeight), string.Format(SR.InvalidHighBoundArgumentEx, "FillWeight", (value).ToString(CultureInfo.CurrentCulture), (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(FillWeight), value, ushort.MaxValue));
                 }
                 if (this.DataGridView != null)
                 {

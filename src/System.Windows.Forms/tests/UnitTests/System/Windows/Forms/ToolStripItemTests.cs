@@ -828,7 +828,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotEqual(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 callCount++;
             };
             item.DisplayStyleChanged += handler;
@@ -2238,6 +2238,10 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
+        [InlineData((TextImageRelation)3)]
+        [InlineData((TextImageRelation)5)]
+        [InlineData((TextImageRelation)6)]
+        [InlineData((TextImageRelation)7)]
         public void ToolStripItem_TextImageRelation_SetInvalid_ThrowsInvalidEnumArgumentException(TextImageRelation value)
         {
             var item = new SubToolStripItem();
@@ -3938,8 +3942,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotNull(e);
-                Assert.NotSame(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 Assert.True(item.Pressed);
                 callCount++;
             };
@@ -3961,8 +3964,7 @@ namespace System.Windows.Forms.Tests
             EventHandler handler = (sender, e) =>
             {
                 Assert.Same(item, sender);
-                Assert.NotNull(e);
-                Assert.NotSame(EventArgs.Empty, e);
+                Assert.Same(EventArgs.Empty, e);
                 Assert.True(item.Pressed);
                 callCount++;
             };

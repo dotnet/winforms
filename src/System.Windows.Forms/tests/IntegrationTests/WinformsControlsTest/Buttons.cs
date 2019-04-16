@@ -24,6 +24,7 @@ namespace WinformsControlsTest
                 r.Location = new System.Drawing.Point(20, 20 + 60 * i);
                 r.AutoSize = false;
                 r.Size = new System.Drawing.Size(100, 20);
+                r.FlatStyle = styles[i];
                 r.Text = styles[i].ToString();
                 r.Checked = true;
                 Controls.Add(r);
@@ -36,6 +37,7 @@ namespace WinformsControlsTest
                 c.Location = new System.Drawing.Point(120, 20 + 60 * i);
                 c.AutoSize = false;
                 c.Size = new System.Drawing.Size(100, 20);
+                c.FlatStyle = styles[i];
                 c.Text = styles[i].ToString();
                 c.Checked = true;
                 Controls.Add(c);
@@ -48,6 +50,7 @@ namespace WinformsControlsTest
                 b.Location = new System.Drawing.Point(220, 20 + 60 * i);
                 b.AutoSize = false;
                 b.Size = new System.Drawing.Size(100, 20);
+                b.FlatStyle = styles[i];
                 b.Text = styles[i].ToString();
                 Controls.Add(b);
             }

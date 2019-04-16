@@ -319,7 +319,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         private static Bitmap GetBitmapFromIcon(string iconName, int iconsWidth, int iconsHeight) {
             Size desiredSize = new Size(iconsWidth, iconsHeight);
-            Icon icon = new Icon(BitmapSelector.GetResourceStream(typeof(PropertyGrid), iconName), desiredSize);
+            Icon icon = new Icon(new Icon(typeof(PropertyGrid), iconName), desiredSize);
             Bitmap b = icon.ToBitmap();
             icon.Dispose();
             
@@ -3954,7 +3954,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         return false;
                     case Keys.Return:
                         if (DialogButton.Focused || DropDownButton.Focused) {
-                           OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), new EventArgs());
+                           OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), EventArgs.Empty);
                            return true;
                         }
                         else if (selectedGridEntry != null && selectedGridEntry.Expandable) {

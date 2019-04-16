@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     public class ToolStripItemRenderEventArgs : EventArgs
     {
         /// <devdoc>
-        /// This class represents all the information to render the winbar
+        /// This class represents all the information to render the ToolStrip
         /// </devdoc>
         public ToolStripItemRenderEventArgs(Graphics g, ToolStripItem item)
         {

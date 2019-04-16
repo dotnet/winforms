@@ -403,7 +403,7 @@ namespace System.Windows.Forms.VisualStyles {
             }
             
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count) {
-                throw new ArgumentOutOfRangeException(nameof(imageIndex), string.Format(SR.InvalidArgument, "imageIndex", imageIndex.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(imageIndex), imageIndex, string.Format(SR.InvalidArgument, nameof(imageIndex), imageIndex));
             }
 
             if (bounds.Width < 0 || bounds.Height < 0) {
@@ -822,7 +822,7 @@ namespace System.Windows.Forms.VisualStyles {
 
             using( WindowsGraphicsWrapper wgr = new WindowsGraphicsWrapper( dc, AllGraphicsProperties ) ) {
                 HandleRef hdc = new HandleRef( wgr, wgr.WindowsGraphics.DeviceContext.Hdc );
-                lastHResult = SafeNativeMethods.GetThemeMargins( new HandleRef( this, Handle ), hdc, part, state, (int) prop, ref margins );
+                lastHResult = SafeNativeMethods.GetThemeMargins( new HandleRef( this, Handle ), hdc, part, state, (int) prop, prc: null, ref margins );
             }
 
             return new Padding(margins.cxLeftWidth, margins.cyTopHeight, margins.cxRightWidth, margins.cyBottomHeight);

@@ -16,7 +16,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        /// This class represents all the information to render the winbar
+        /// This class represents all the information to render the ToolStrip
         /// </devdoc>
         public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Image image, Rectangle imageRectangle) : base(g, item)
         {

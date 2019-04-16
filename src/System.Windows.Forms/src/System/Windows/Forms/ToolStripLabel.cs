@@ -14,7 +14,7 @@ namespace System.Windows.Forms {
 
     /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel"]/*' />
     /// <devdoc>
-    /// A non selectable winbar item
+    /// A non selectable ToolStrip item
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripLabel : ToolStripItem {
@@ -33,7 +33,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripLabel.uex' path='docs/doc[@for="ToolStripLabel.ToolStripLabel"]/*' />
         /// <devdoc>
-        /// A non selectable winbar item
+        /// A non selectable ToolStrip item
         /// </devdoc>
         public ToolStripLabel() {
         }

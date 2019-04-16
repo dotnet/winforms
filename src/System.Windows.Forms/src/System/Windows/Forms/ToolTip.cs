@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(AutomaticDelay), string.Format(SR.InvalidLowBoundArgumentEx, "AutomaticDelay", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
                 }
                 SetDelayTime(NativeMethods.TTDT_AUTOMATIC, value);
             }
@@ -193,7 +193,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(AutoPopDelay), string.Format(SR.InvalidLowBoundArgumentEx, "AutoPopDelay", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutoPopDelay), value, 0));
                 }
                 SetDelayTime(NativeMethods.TTDT_AUTOPOP, value);
             }
@@ -363,7 +363,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(InitialDelay), string.Format(SR.InvalidLowBoundArgumentEx, "InitialDelay", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(InitialDelay), value, 0));
                 }
                 SetDelayTime(NativeMethods.TTDT_INITIAL, value);
             }
@@ -409,7 +409,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(ReshowDelay), string.Format(SR.InvalidLowBoundArgumentEx, "ReshowDelay", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ReshowDelay), value, 0));
                 }
                 SetDelayTime(NativeMethods.TTDT_RESHOW, value);
             }
@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Show(string text, IWin32Window window, int duration) {
             if (duration < 0) {
-                throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window)) {
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(window));
             }
             if (duration < 0) {
-                throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window)) {
@@ -1697,7 +1697,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(window));
             }
             if (duration < 0) {
-                throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, "duration", (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(duration), duration, string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), duration, 0));
             }
 
             if (IsWindowActive(window)) {
@@ -1716,7 +1716,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(tool));
             }
             if (duration < 0) {
-                throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), 0));
             }
 
             Rectangle toolRectangle = tool.GetNativeScreenRectangle();
@@ -2639,12 +2639,13 @@ namespace System.Windows.Forms {
         private class TipInfo {
 
            [Flags]
-           public enum Type { 
+           public enum Type
+           { 
                None = 0x0000,
                Auto = 0x0001,
                Absolute = 0x0002,
                SemiAbsolute = 0x0004
-           };
+           }
            
            public  Type     TipType = Type.Auto;
            private string   caption;

@@ -4,6 +4,8 @@
 
 using System.Collections;
 using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
@@ -18,6 +20,14 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class ParentControlDesigner : ControlDesigner, IOleDragClient
     {
+        private Control pendingRemoveControl; // we've gotten an OnComponentRemoving, and are waiting for OnComponentRemove
+
+        private OleDragDropHandler oleDragDropHandler; // handler for ole drag drop operations
+        private IComponentChangeService componentChangeSvc;
+        private StatusCommandUI statusCommandUI; // UI for setting the StatusBar Information..
+
+        private int suspendChanging = 0;
+
         /// <summary>
         ///     This is called after the user selects a toolbox item (that has a ParentControlDesigner
         ///     associated with it) and draws a reversible rectangle on a designer's surface.  If
@@ -91,6 +101,256 @@ namespace System.Windows.Forms.Design
         ///     surface.
         /// </summary>
         public override IList SnapLines => throw new NotImplementedException(SR.NotImplementedByDesign);
+
+        internal Size ParentGridSize
+        {
+            get => GridSize;
+        }
+
+        internal OleDragDropHandler GetOleDragHandler()
+        {
+            if (oleDragDropHandler == null)
+            {
+                oleDragDropHandler = new OleDragDropHandler(null, (IServiceProvider)GetService(typeof(IDesignerHost)), this);
+            }
+            return oleDragDropHandler;
+        }
+
+        internal void AddControl(Control newChild, IDictionary defaultValues)
+        {
+            Point location = Point.Empty;
+            Size size = Size.Empty;
+            Size offset = new Size(0, 0);
+            bool hasLocation = (defaultValues != null && defaultValues.Contains("Location"));
+            bool hasSize = (defaultValues != null && defaultValues.Contains("Size"));
+
+            if (hasLocation)
+                location = (Point)defaultValues["Location"];
+            if (hasSize)
+                size = (Size)defaultValues["Size"];
+            if (defaultValues != null && defaultValues.Contains("Offset"))
+            {
+                offset = (Size)defaultValues["Offset"];
+            }
+
+            // If this component doesn't have a control designer, or if this control is top level, then ignore it.  We have the reverse logic in OnComponentAdded in the document designer so that we will add those guys to the tray. Also, if the child-control has already been parented, we assume it's also been located and return immediately. Otherwise, proceed with the parenting and locating.
+            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            if (host != null && newChild != null && !Control.Contains(newChild) && (host.GetDesigner(newChild) as ControlDesigner) != null && !(newChild is Form && ((Form)newChild).TopLevel))
+            {
+                Rectangle bounds = new Rectangle();
+                // If we were provided with a location, convert it to parent control coordinates. Otherwise, get the control's size and put the location in the middle of it
+                if (hasLocation)
+                {
+                    location = Control.PointToClient(location);
+                    bounds.X = location.X;
+                    bounds.Y = location.Y;
+                }
+                else
+                {
+                    // is the currently selected control this container?
+                    ISelectionService selSvc = (ISelectionService)GetService(typeof(ISelectionService));
+                    object primarySelection = selSvc.PrimarySelection;
+                    Control selectedControl = null;
+                    if (primarySelection != null)
+                    {
+                        selectedControl = ((IOleDragClient)this).GetControlForComponent(primarySelection);
+                    }
+
+                    // If the resulting control that came back isn't sited, it's not part of the design surface and should not be used as a marker.
+                    if (selectedControl != null && selectedControl.Site == null)
+                    {
+                        selectedControl = null;
+                    }
+
+                    // if the currently selected container is this parent control, default to 0,0
+                    if (primarySelection == Component || selectedControl == null)
+                    {
+                        bounds.X = DefaultControlLocation.X;
+                        bounds.Y = DefaultControlLocation.Y;
+                    }
+                    else
+                    {
+                        // otherwise offset from selected control.
+                        bounds.X = selectedControl.Location.X + GridSize.Width;
+                        bounds.Y = selectedControl.Location.Y + GridSize.Height;
+                    }
+
+                }
+                // If we were not given a size, ask the control for its default.  We also update the location here so the control is in the middle of the user's point, rather than at the edge.
+                if (hasSize)
+                {
+                    bounds.Width = size.Width;
+                    bounds.Height = size.Height;
+                }
+                else
+                {
+                    bounds.Size = GetDefaultSize(newChild);
+                }
+
+                // If we were given neither, center the control
+                if (!hasSize && !hasLocation)
+                {
+                    // get the adjusted location, then inflate the rect so we can find a nice spot for this control to live.
+                    Rectangle tempBounds = GetAdjustedSnapLocation(Rectangle.Empty, bounds);
+                    // compute the stacking location
+                    tempBounds = GetControlStackLocation(tempBounds);
+                    bounds = tempBounds;
+                }
+                else
+                {
+                    // Finally, convert the bounds to the appropriate grid snaps
+                    bounds = GetAdjustedSnapLocation(Rectangle.Empty, bounds);
+                }
+
+                // Adjust for the offset, if any
+                bounds.X += offset.Width;
+                bounds.Y += offset.Height;
+                // check to see if we have additional information for bounds from the behaviorservice dragdrop logic
+                if (defaultValues != null && defaultValues.Contains("ToolboxSnapDragDropEventArgs"))
+                {
+                    ToolboxSnapDragDropEventArgs e = defaultValues["ToolboxSnapDragDropEventArgs"] as ToolboxSnapDragDropEventArgs;
+                    Debug.Assert(e != null, "Why can't we get a ToolboxSnapDragDropEventArgs object out of our default values?");
+                    Rectangle snappedBounds = DesignerUtils.GetBoundsFromToolboxSnapDragDropInfo(e, bounds, Control.IsMirrored);
+                    //Make sure the snapped bounds intersects with the bounds of the root control before we go adjusting the drag offset.  A race condition exists where the user can drag a tbx item so fast that the adorner window will never receive the proper drag/mouse move messages and never properly adjust the snap drag info.  This cause the control to be added @ 0,0 w.r.t. the adorner window.
+                    if (host.RootComponent is Control rootControl && snappedBounds.IntersectsWith(rootControl.ClientRectangle))
+                    {
+                        bounds = snappedBounds;
+                    }
+                }
+                // Parent the control to the designer and set it to the front.
+                PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Control)["Controls"];
+                if (componentChangeSvc != null)
+                {
+                    componentChangeSvc.OnComponentChanging(Control, controlsProp);
+                }
+                AddChildControl(newChild);
+                // Now see if the control has size and location properties.  Update these values if it does.
+                PropertyDescriptorCollection props = TypeDescriptor.GetProperties(newChild);
+                if (props != null)
+                {
+                    PropertyDescriptor prop = props["Size"];
+                    if (prop != null)
+                    {
+                        prop.SetValue(newChild, new Size(bounds.Width, bounds.Height));
+                    }
+
+                    // ControlDesigner shadows the Location property. If the control is parented and the parent is a scrollable control, then it expects the Location to be in displayrectangle coordinates. At this point bounds are in clientrectangle coordinates, so we need to check if we need to adjust the coordinates. The reason this worked in Everett was that the AddChildControl was done AFTER this. The AddChildControl was moved above a while back. Not sure what will break if AddChildControl is moved down below, so let's just fix up things here.
+                    Point pt = new Point(bounds.X, bounds.Y);
+                    if (newChild.Parent is ScrollableControl p)
+                    {
+                        Point ptScroll = p.AutoScrollPosition;
+                        pt.Offset(-ptScroll.X, -ptScroll.Y); //always want to add the control below/right of the AutoScrollPosition
+                    }
+
+                    prop = props["Location"];
+                    if (prop != null)
+                    {
+                        prop.SetValue(newChild, pt);
+                    }
+                }
+
+                if (componentChangeSvc != null)
+                {
+                    componentChangeSvc.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
+                }
+                newChild.Update();
+            }
+        }
+
+        internal virtual void AddChildControl(Control newChild)
+        {
+            if (newChild.Left == 0 && newChild.Top == 0 && newChild.Width >= Control.Width && newChild.Height >= Control.Height)
+            {
+                // bump the control down one gridsize just so it's selectable...
+                Point loc = newChild.Location;
+                loc.Offset(GridSize.Width, GridSize.Height);
+                newChild.Location = loc;
+            }
+            Control.Controls.Add(newChild);
+            Control.Controls.SetChildIndex(newChild, 0);
+        }
+
+        private Rectangle GetControlStackLocation(Rectangle centeredLocation)
+        {
+            Control parent = Control;
+            int parentHeight = parent.ClientSize.Height;
+            int parentWidth = parent.ClientSize.Width;
+            if (centeredLocation.Bottom >= parentHeight || centeredLocation.Right >= parentWidth)
+            {
+                centeredLocation.X = DefaultControlLocation.X;
+                centeredLocation.Y = DefaultControlLocation.Y;
+            }
+            return centeredLocation;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
+        private Size GetDefaultSize(IComponent component)
+        {
+            //Check to see if the control is AutoSized. VSWhidbey #416721
+            PropertyDescriptor prop = TypeDescriptor.GetProperties(component)["AutoSize"];
+            Size size;
+            if (prop != null &&
+                !(prop.Attributes.Contains(DesignerSerializationVisibilityAttribute.Hidden) ||
+                  prop.Attributes.Contains(BrowsableAttribute.No)))
+            {
+                bool autoSize = (bool)prop.GetValue(component);
+                if (autoSize)
+                {
+                    prop = TypeDescriptor.GetProperties(component)["PreferredSize"];
+                    if (prop != null)
+                    {
+                        size = (Size)prop.GetValue(component);
+                        if (size != Size.Empty)
+                        {
+                            return size;
+                        }
+                    }
+                }
+            }
+
+            // attempt to get the size property of our component
+            prop = TypeDescriptor.GetProperties(component)["Size"];
+            if (prop != null)
+            {
+                // first, let's see if we can get a valid size...
+                size = (Size)prop.GetValue(component);
+                // ...if not, we'll see if there's a default size attribute...
+                if (size.Width <= 0 || size.Height <= 0)
+                {
+                    DefaultValueAttribute sizeAttr = (DefaultValueAttribute)prop.Attributes[typeof(DefaultValueAttribute)];
+                    if (sizeAttr != null)
+                    {
+                        return ((Size)sizeAttr.Value);
+                    }
+                }
+                else
+                {
+                    return size;
+                }
+            }
+            // Couldn't get the size or a def size attrib, returning 75,23...
+            return (new Size(75, 23));
+        }
+
+        private Rectangle GetAdjustedSnapLocation(Rectangle originalRect, Rectangle dragRect)
+        {
+            Rectangle adjustedRect = GetUpdatedRect(originalRect, dragRect, true);
+            //now, preserve the width and height that was originally passed in
+            adjustedRect.Width = dragRect.Width;
+            adjustedRect.Height = dragRect.Height;
+            // we need to keep in mind that if we adjust to the snap, that we could have possibly moved the control's position outside of the display rect. ex: groupbox's display rect.x = 3, but we might snap to 0. so we need to check with the control's designer to make sure this doesn't happen
+            Point minimumLocation = DefaultControlLocation;
+            if (adjustedRect.X < minimumLocation.X)
+            {
+                adjustedRect.X = minimumLocation.X;
+            }
+            if (adjustedRect.Y < minimumLocation.Y)
+            {
+                adjustedRect.Y = minimumLocation.Y;
+            }
+            // here's our rect that has been snapped to grid
+            return adjustedRect;
+        }
 
         bool IOleDragClient.CanModifyComponents => throw new NotImplementedException();
 
@@ -246,6 +506,12 @@ namespace System.Windows.Forms.Design
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }
 
+        internal Point GetSnappedPoint(Point pt)
+        {
+            Rectangle r = GetUpdatedRect(Rectangle.Empty, new Rectangle(pt.X, pt.Y, 0, 0), false);
+            return new Point(r.X, r.Y);
+        }
+
         /// <summary>
         ///     Updates the given rectangle, adjusting it for grid snaps as
         ///     needed.
@@ -261,7 +527,58 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override void Initialize(IComponent component)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            base.Initialize(component);
+            if (Control is ScrollableControl)
+            {
+                ((ScrollableControl)Control).Scroll += new ScrollEventHandler(OnScroll);
+            }
+            EnableDragDrop(true);
+            IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
+            if (host != null)
+            {
+                componentChangeSvc = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+            }
+            // update the Status Command
+            statusCommandUI = new StatusCommandUI(component.Site);
+        }
+
+        private void OnComponentRemoved(object sender, ComponentEventArgs e)
+        {
+            if (e.Component == pendingRemoveControl)
+            {
+                pendingRemoveControl = null;
+                componentChangeSvc.OnComponentChanged(Control, TypeDescriptor.GetProperties(Control)["Controls"], null, null);
+            }
+        }
+
+        private void OnComponentRemoving(object sender, ComponentEventArgs e)
+        {
+            if (e.Component is Control comp && comp.Parent != null && comp.Parent == Control)
+            {
+                pendingRemoveControl = (Control)comp;
+                //We suspend Component Changing Events for bulk operations to avoid unnecessary serialization\deserialization for undo
+                if (suspendChanging == 0)
+                {
+                    componentChangeSvc.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
+                }
+            }
+        }
+
+        internal void SuspendChangingEvents()
+        {
+            suspendChanging++;
+            Debug.Assert(suspendChanging > 0, "Unbalanced SuspendChangingEvents\\ResumeChangingEvents");
+        }
+
+        internal void ForceComponentChanging()
+        {
+            componentChangeSvc.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
+        }
+
+        internal void ResumeChangingEvents()
+        {
+            suspendChanging--;
+            Debug.Assert(suspendChanging >= 0, "Unbalanced SuspendChangingEvents\\ResumeChangingEvents");
         }
 
         /// <summary>
@@ -353,7 +670,6 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///     When the control is scrolled, we want to invalidate areas previously covered by glyphs.
-        ///     VSWhidbey# 183588.
         /// </summary>
         private void OnScroll(object sender, ScrollEventArgs se)
         {

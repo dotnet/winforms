@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <devdoc>
-    /// Called when the background of a winbar item is being rendered
+    /// Called when the background of a ToolStrip item is being rendered
     /// </devdoc>
     public delegate void ToolStripItemTextRenderEventHandler(object sender, ToolStripItemTextRenderEventArgs e);
 }

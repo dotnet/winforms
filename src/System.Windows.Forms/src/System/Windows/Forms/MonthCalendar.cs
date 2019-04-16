@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
             set {
                 if (value != maxDate) {
                     if (value < DateTimePicker.EffectiveMinDate(minDate)) {
-                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDate(value), nameof(MinDate)));
                     }
                     maxDate = value;
                     SetRange();
@@ -542,13 +542,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxSelectionCount), string.Format(SR.InvalidLowBoundArgumentEx, "MaxSelectionCount", (value).ToString("D", CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxSelectionCount), value.ToString("D"), 1));
                 }
 
                 if (value != maxSelectionCount) {
                     if (IsHandleCreated) {
                         if (unchecked( (int) (long)SendMessage(NativeMethods.MCM_SETMAXSELCOUNT, value, 0)) == 0)
-                            throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, (value).ToString("D", CultureInfo.CurrentCulture)), "MaxSelectionCount");
+                            throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                     }
                     maxSelectionCount = value;
                 }
@@ -572,13 +572,13 @@ namespace System.Windows.Forms {
             set {
                 if (value != minDate) {
                     if (value > DateTimePicker.EffectiveMaxDate(maxDate)) {
-                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
                     }
 
                     // If trying to set the minimum less than DateTimePicker.MinimumDateTime, throw
                     // an exception.
                     if (value < DateTimePicker.MinimumDateTime) {
-                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidLowBoundArgumentEx, "MinDate", FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
                     }
 
                     minDate = value;
@@ -708,10 +708,10 @@ namespace System.Windows.Forms {
                 if (scrollChange != value) {
 
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException(nameof(ScrollChange), string.Format(SR.InvalidLowBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
                     }
                     if (value > MaxScrollChange) {
-                        throw new ArgumentOutOfRangeException(nameof(ScrollChange), string.Format(SR.InvalidHighBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (MaxScrollChange).ToString("D", CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
                     }
 
                     if (IsHandleCreated) {
@@ -742,10 +742,10 @@ namespace System.Windows.Forms {
 
                     // Keep SelectionEnd within min and max
                     if (value < MinDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionEnd), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionEnd", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
                     }
                     if (value > MaxDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionEnd), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
                     }
 
                     // If we've moved SelectionEnd before SelectionStart, move SelectionStart back
@@ -786,10 +786,10 @@ namespace System.Windows.Forms {
                     // Keep SelectionStart within min and max
                     //
                     if (value < minDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
                     }
                     if (value > maxDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionStart", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
                     }
 
                     // If we've moved SelectionStart beyond SelectionEnd, move SelectionEnd forward
@@ -994,12 +994,12 @@ namespace System.Windows.Forms {
 
                     // throw if trying to set the TodayDate to a value greater than MaxDate
                     if (DateTime.Compare(value, maxDate) > 0) {
-                        throw new ArgumentOutOfRangeException(nameof(TodayDate), string.Format(SR.InvalidHighBoundArgumentEx, "TodayDate", FormatDate(value), FormatDate(maxDate)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(TodayDate), FormatDate(value), FormatDate(maxDate)));
                     }
 
                     // throw if trying to set the TodayDate to a value less than MinDate
                     if (DateTime.Compare(value, minDate) < 0) {
-                        throw new ArgumentOutOfRangeException(nameof(TodayDate), string.Format(SR.InvalidLowBoundArgument, "TodayDate", FormatDate(value), FormatDate(minDate)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(TodayDate), FormatDate(value), FormatDate(minDate)));
                     }
 
                     todayDate = value.Date;
@@ -1976,10 +1976,10 @@ namespace System.Windows.Forms {
         public void SetDate(DateTime date) {
 
             if (date.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date), string.Format(SR.InvalidLowBoundArgumentEx, "date", FormatDate(date), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidLowBoundArgumentEx, nameof(date), FormatDate(date), nameof(MinDate)));
             }
             if (date.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date), string.Format(SR.InvalidHighBoundArgumentEx, "date", FormatDate(date), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidHighBoundArgumentEx, nameof(date), FormatDate(date), nameof(MaxDate)));
             }
 
             SetSelectionRange(date, date);
@@ -1995,16 +1995,16 @@ namespace System.Windows.Forms {
 
             // Keep the dates within the min and max dates
             if (date1.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date1), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date1), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date1), nameof(MinDate)));
             }
             if (date1.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date1), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date1), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date1), nameof(MaxDate)));
             }
             if (date2.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date2), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date2), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date2), nameof(MinDate)));
             }
             if (date2.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date2), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date2), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date2), nameof(MaxDate)));
             }
 
             // If date1 > date2, we just select date2 (compat)
@@ -2412,100 +2412,95 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea"]/*' />
         /// <devdoc>
-        /// This enumeration has specific areas of the MonthCalendar control as its enumerated values.
-        /// The hitArea member of System.Windows.Forms.Win32.HitTestInfo will be one of these enumerated values, and
-        /// indicates which portion of a month calendar is under a specific point.
+        /// This enumeration has specific areas of the MonthCalendar control as
+        /// its enumerated values. The hitArea member of System.Windows.Forms.Win32.HitTestInfo
+        /// will be one of these enumerated values, and indicates which portion of
+        /// a month calendar is under a specific point.
         /// </devdoc>
-        public enum HitArea {
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.Nowhere"]/*' />
+        public enum HitArea
+        {
             /// <devdoc>
-            /// The given point was not on the month calendar control, or it was in an inactive portion of the control.
+            /// The given point was not on the month calendar control, or it was
+            /// in an inactive portion of the control.
             /// </devdoc>
             Nowhere = 0,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleBackground"]/*' />
             /// <devdoc>
             /// The given point was over the background of a month's title
             /// </devdoc>
             TitleBackground = 1,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleMonth"]/*' />
             /// <devdoc>
             /// The given point was in a month's title bar, over a month name
             /// </devdoc>
             TitleMonth = 2,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TitleYear"]/*' />
             /// <devdoc>
             /// The given point was in a month's title bar, over the year value
             /// </devdoc>
             TitleYear = 3,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.NextMonthButton"]/*' />
             /// <devdoc>
-            /// The given point was over the button at the top right corner of the control.
-            /// If the user clicks here, the month calendar will scroll its display to the next
-            /// month or set of months
+            /// The given point was over the button at the top right corner of
+            /// the control. If the user clicks here, the month calendar will
+            /// scroll its display to the next month or set of months
             /// </devdoc>
             NextMonthButton = 4,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.PrevMonthButton"]/*' />
             /// <devdoc>
-            /// The given point was over the button at the top left corner of the control. If the
-            /// user clicks here, the month calendar will scroll its display to the previous month
-            /// or set of months
+            /// The given point was over the button at the top left corner of
+            /// the control. If the user clicks here, the month calendar will
+            /// scroll its display to the previous month or set of months
             /// </devdoc>
             PrevMonthButton = 5,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.CalendarBackground"]/*' />
             /// <devdoc>
             /// The given point was in the calendar's background
             /// </devdoc>
             CalendarBackground = 6,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.Date"]/*' />
             /// <devdoc>
-            /// The given point was on a particular date within the calendar, and the time member of
-            /// HitTestInfo will be set to the date at the given point.
+            /// The given point was on a particular date within the calendar,
+            /// and the time member of HitTestInfo will be set to the date at
+            /// the given point.
             /// </devdoc>
             Date = 7,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.NextMonthDate"]/*' />
             /// <devdoc>
-            /// The given point was over a date from the next month (partially displayed at the end of
-            /// the currently displayed month). If the user clicks here, the month calendar will scroll
-            /// its display to the next month or set of months.
+            /// The given point was over a date from the next month (partially
+            /// displayed at the end of the currently displayed month). If the
+            /// user clicks here, the month calendar will scroll its display to
+            /// the next month or set of months.
             /// </devdoc>
             NextMonthDate = 8,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.PrevMonthDate"]/*' />
             /// <devdoc>
-            /// The given point was over a date from the previous month (partially displayed at the end
-            /// of the currently displayed month). If the user clicks here, the month calendar will scroll
-            /// its display to the previous month or set of months.
+            /// The given point was over a date from the previous month (partially
+            /// displayed at the end of the currently displayed month). If the
+            /// user clicks here, the month calendar will scroll its display to
+            /// the previous month or set of months.
             /// </devdoc>
             PrevMonthDate = 9,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.DayOfWeek"]/*' />
             /// <devdoc>
-            /// The given point was over a day abbreviation ("Fri", for example). The time member
-            /// of HitTestInfo will be set to the corresponding date on the top row.
+            /// The given point was over a day abbreviation ("Fri", for example).
+            /// The time member of HitTestInfo will be set to the corresponding
+            /// date on the top row.
             /// </devdoc>
             DayOfWeek = 10,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.WeekNumbers"]/*' />
             /// <devdoc>
-            /// The given point was over a week number.  This will only occur if the showWeekNumbers
-            /// property of MonthCalendar is enabled.  The time member of HitTestInfo will be set to
-            /// the corresponding date in the leftmost column.
+            /// The given point was over a week number.  This will only occur if
+            /// the showWeekNumbers property of MonthCalendar is enabled. The
+            /// time member of HitTestInfo will be set to the corresponding date
+            /// in the leftmost column.
             /// </devdoc>
             WeekNumbers = 11,
 
-            /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="HitArea.TodayLink"]/*' />
             /// <devdoc>
-            /// The given point was on the "today" link at the bottom of the month calendar control
+            /// The given point was on the "today" link at the bottom of the
+            /// month calendar control
             /// </devdoc>
             TodayLink = 12,
         }
