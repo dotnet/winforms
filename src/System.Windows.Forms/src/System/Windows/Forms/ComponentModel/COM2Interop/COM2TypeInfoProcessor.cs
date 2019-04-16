@@ -300,7 +300,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// user defined, which and may be aliased into other type infos.  This function
         /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </devdoc>
-        private static Type GetValueTypeFromTypeDesc(NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData, StructCache structCache) {
+        private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData, StructCache structCache) {
             IntPtr hreftype;
             int hr = 0;
 
@@ -325,28 +325,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_PTR:
                 // we'll need to recurse into a user defined reference typeinfo
                 Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
-                NativeMethods.tagTYPEDESC refTypeDesc = structCache.GetStruct<NativeMethods.tagTYPEDESC>();
+                ref readonly NativeMethods.tagTYPEDESC refTypeDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEDESC>(typeDesc.unionMember);
                 
-                try {
+                if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT) {
+                    return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
+                }
 
-                    try {
-                        Marshal.PtrToStructure(typeDesc.unionMember, refTypeDesc);
-                    }
-                    catch {
-                        // above is failing, why?
-                        refTypeDesc = new NativeMethods.tagTYPEDESC();
-                        refTypeDesc.unionMember = (IntPtr)Marshal.ReadInt32(typeDesc.unionMember);
-                        refTypeDesc.vt = Marshal.ReadInt16(typeDesc.unionMember, 4);
-                    }
-    
-                    if (refTypeDesc.vt == (int)NativeMethods.tagVT.VT_VARIANT) {
-                        return VTToType((NativeMethods.tagVT)refTypeDesc.vt);
-                    }
-                    hreftype = refTypeDesc.unionMember;
-                }
-                finally {
-                    structCache.ReleaseStruct(refTypeDesc);
-                }
+                hreftype = refTypeDesc.unionMember;
                 break;
             }
 
@@ -498,7 +483,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, NativeMethods.tagTYPEDESC typeDesc, int flags, StructCache structCache) {
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags, StructCache structCache) {
             string          pPropName = null;
             string          pPropDesc = null;
 
@@ -538,7 +523,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (pi.ValueType == null) {
                 object[] pTypeData = new object[1];
                 try {
-                    pi.ValueType = GetValueTypeFromTypeDesc(typeDesc, typeInfo, pTypeData, structCache);
+                    pi.ValueType = GetValueTypeFromTypeDesc(in typeDesc, typeInfo, pTypeData, structCache);
                 }
                 catch (Exception ex) {
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Hiding property " + pi.Name + " because value Type could not be resolved: " + ex.ToString());
@@ -644,7 +629,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 continue;
                             }
 
-                            typeDesc = funcDesc.elemdescFunc.tdesc;
+                            unsafe
+                            {
+                                typeDesc = *funcDesc.elemdescFunc.tdesc;
+                            }
                         }
                         else {
                             Debug.Assert(funcDesc.lprgelemdescParam != IntPtr.Zero, "ELEMDESC param is null!");
@@ -653,9 +641,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 continue;
                             }
                             Marshal.PtrToStructure(funcDesc.lprgelemdescParam, ed);
-                            typeDesc = ed.tdesc;
+
+                            unsafe
+                            {
+                                typeDesc = *ed.tdesc;
+                            }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, typeDesc, funcDesc.wFuncFlags, structCache);
+                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags, structCache);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet) {
@@ -865,9 +857,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
 
 
-                        PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, varDesc.elemdescVar.tdesc, varDesc.wVarFlags, structCache);
-                        if (pi.ReadOnly != PropInfo.ReadOnlyTrue) {
-                            pi.ReadOnly = PropInfo.ReadOnlyFalse;
+                        unsafe
+                        {
+                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in *varDesc.elemdescVar.tdesc, varDesc.wVarFlags, structCache);
+                            if (pi.ReadOnly != PropInfo.ReadOnlyTrue) {
+                                pi.ReadOnly = PropInfo.ReadOnlyFalse;
+                            }
                         }
                     }
                     finally {

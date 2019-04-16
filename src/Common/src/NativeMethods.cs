@@ -4041,8 +4041,8 @@ namespace System.Windows.Forms {
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct  value_tagELEMDESC {
-            public    NativeMethods.tagTYPEDESC tdesc;
+        public unsafe struct  value_tagELEMDESC {
+            public    NativeMethods.tagTYPEDESC* tdesc;
             public    NativeMethods.tagPARAMDESC paramdesc;
         }
 
@@ -5085,7 +5085,7 @@ namespace System.Windows.Forms {
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public  class  tagTYPEDESC {
+        public  struct  tagTYPEDESC {
             public   IntPtr unionMember;
             public   short vt;
         }
@@ -5285,7 +5285,7 @@ namespace System.Windows.Forms {
             
             
             public tagTYPEDESC Get_tdescAlias(){
-                tagTYPEDESC td = new tagTYPEDESC();
+                tagTYPEDESC td;
                 td.unionMember = (IntPtr)this.tdescAlias_unionMember;
                 td.vt = this.tdescAlias_vt;
                 return td;
@@ -5315,8 +5315,8 @@ namespace System.Windows.Forms {
        }
    
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagELEMDESC {
-            public    NativeMethods.tagTYPEDESC tdesc = null;
+        public sealed unsafe class tagELEMDESC {
+            public    NativeMethods.tagTYPEDESC* tdesc;
             public    NativeMethods.tagPARAMDESC paramdesc;
         }
         
