@@ -16,18 +16,20 @@ namespace System.Windows.Forms.Design
         public virtual DesignerOptions CompatibilityOptions => _options ?? (_options = new DesignerOptions());
 
         /// <summary>
-        /// This method is called on demand the first time a user asks for child options or properties of an
-        /// options collection.
+        /// This method is called on demand the first time a user asks for child options or
+        /// properties of an options collection.
         /// </summary>
         protected override void PopulateOptionCollection(DesignerOptionCollection options)
         {
-            if (options?.Parent == null)
+            if (options == null || options.Parent != null)
             {
-                DesignerOptions designerOptions = CompatibilityOptions;
-                if (designerOptions != null)
-                {
-                    CreateOptionCollection(options, "DesignerOptions", designerOptions);
-                }
+                return;
+            }
+
+            DesignerOptions designerOptions = CompatibilityOptions;
+            if (designerOptions != null)
+            {
+                CreateOptionCollection(options, "DesignerOptions", designerOptions);
             }
         }
     }

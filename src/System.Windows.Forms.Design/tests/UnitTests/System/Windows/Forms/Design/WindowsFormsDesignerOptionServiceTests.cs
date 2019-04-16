@@ -49,25 +49,76 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Fact]
-        public void WindowsFormsDesignerOptionService_PopulateOptionCollection_ValidOptions_Success()
+        public void WindowsFormsDesignerOptionService_PopulateOptionCollection_ValidOptionsFromSameClass_Success()
+        {
+            var service = new SubWindowsFormsDesignerOptionService();
+            service.PopulateOptionCollectionEntry(service.Options);
+            Assert.Equal(1, service.PopulateOptionCollectionCallCount);
+
+            // Should not retrieve again when accessing Options.
+            DesignerOptionService.DesignerOptionCollection childCollection = Assert.IsType<DesignerOptionService.DesignerOptionCollection>(Assert.Single(service.Options));
+            Assert.Equal(1, service.PopulateOptionCollectionCallCount);
+            Assert.Equal("DesignerOptions", childCollection.Name);
+            Assert.Same(service.Options, childCollection.Parent);
+            Assert.Equal(new string[] { "EnableInSituEditing", "GridSize", "ObjectBoundSmartTagAutoShow", "ShowGrid", "SnapToGrid", "UseOptimizedCodeGeneration", "UseSmartTags", "UseSnapLines" }, childCollection.Properties.Sort().Cast<PropertyDescriptor>().Select(p => p.Name));
+            Assert.Empty(childCollection);
+        }
+
+        [Fact]
+        public void WindowsFormsDesignerOptionService_PopulateOptionCollection_ValidOptionsFromOtherClass_Success()
         {
             var service = new SubWindowsFormsDesignerOptionService();
             var otherService = new SubWindowsFormsDesignerOptionService();
-            service.PopulateOptionCollection(otherService.Options);
-            Assert.Empty(service.Options);
-            Assert.Empty(otherService.Options);
+            service.PopulateOptionCollectionEntry(otherService.Options);
+            Assert.Equal(1, service.PopulateOptionCollectionCallCount);
+
+            // Should retrieve again when accessing Options.
+            DesignerOptionService.DesignerOptionCollection childCollection = Assert.IsType<DesignerOptionService.DesignerOptionCollection>(Assert.Single(service.Options));
+            Assert.Equal(2, service.PopulateOptionCollectionCallCount);
+            Assert.Equal("DesignerOptions", childCollection.Name);
+            Assert.Same(service.Options, childCollection.Parent);
+            Assert.Equal(new string[] { "EnableInSituEditing", "GridSize", "ObjectBoundSmartTagAutoShow", "ShowGrid", "SnapToGrid", "UseOptimizedCodeGeneration", "UseSmartTags", "UseSnapLines" }, childCollection.Properties.Sort().Cast<PropertyDescriptor>().Select(p => p.Name));
+            Assert.Empty(childCollection);
+
+            DesignerOptionService.DesignerOptionCollection otherChildCollection = Assert.IsType<DesignerOptionService.DesignerOptionCollection>(Assert.Single(service.Options));
+            Assert.Equal(0, otherService.PopulateOptionCollectionCallCount);
+            Assert.Equal("DesignerOptions", otherChildCollection.Name);
+            Assert.Same(service.Options, otherChildCollection.Parent);
+            Assert.Equal(new string[] { "EnableInSituEditing", "GridSize", "ObjectBoundSmartTagAutoShow", "ShowGrid", "SnapToGrid", "UseOptimizedCodeGeneration", "UseSmartTags", "UseSnapLines" }, childCollection.Properties.Sort().Cast<PropertyDescriptor>().Select(p => p.Name));
+            Assert.Empty(otherChildCollection);
         }
 
         [Fact]
         public void WindowsFormsDesignerOptionService_PopulateOptionCollection_NullOptions_Success()
         {
             var service = new SubWindowsFormsDesignerOptionService();
-            service.PopulateOptionCollection(null);
+            service.PopulateOptionCollectionEntry(null);
+            Assert.Equal(1, service.PopulateOptionCollectionCallCount);
+
+            // Should retrieve again when accessing Options.
+            DesignerOptionService.DesignerOptionCollection childCollection = Assert.IsType<DesignerOptionService.DesignerOptionCollection>(Assert.Single(service.Options));
+            Assert.Equal(2, service.PopulateOptionCollectionCallCount);
+            Assert.Equal("DesignerOptions", childCollection.Name);
+            Assert.Same(service.Options, childCollection.Parent);
+            Assert.Equal(new string[] { "EnableInSituEditing", "GridSize", "ObjectBoundSmartTagAutoShow", "ShowGrid", "SnapToGrid", "UseOptimizedCodeGeneration", "UseSmartTags", "UseSnapLines" }, childCollection.Properties.Sort().Cast<PropertyDescriptor>().Select(p => p.Name));
+            Assert.Empty(childCollection);
+            Assert.Equal(3, service.PopulateOptionCollectionCallCount);
         }
 
-        private class SubWindowsFormsDesignerOptionService : DesignerOptionService
+        private class SubWindowsFormsDesignerOptionService : WindowsFormsDesignerOptionService
         {
-            public new void PopulateOptionCollection(DesignerOptionCollection options) => base.PopulateOptionCollection(options);
+            public int PopulateOptionCollectionCallCount { get; set; }
+
+            public void PopulateOptionCollectionEntry(DesignerOptionCollection options)
+            {
+                PopulateOptionCollection(options);
+            }
+
+            protected override void PopulateOptionCollection(DesignerOptionCollection options)
+            {
+                PopulateOptionCollectionCallCount++;
+                base.PopulateOptionCollection(options);
+            }
         }
 
         private class NullCompatibilityOptions : WindowsFormsDesignerOptionService
