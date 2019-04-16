@@ -3781,7 +3781,7 @@ namespace System.Windows.Forms {
                         if (hGlobalColumns != IntPtr.Zero) {
                             Marshal.FreeHGlobal(hGlobalColumns);
                         }
-                        hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * Marshal.SizeOf<int>());
+                        hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * sizeof(int));
                         maxColumns = lvItem.cColumns;
                     }
 
@@ -5896,35 +5896,6 @@ namespace System.Windows.Forms {
                             if ((dispInfo.item.mask & NativeMethods.LVIF_INDENT) != 0) {
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
-
-                            /* Microsoft: Couldn't make this work. The dispInfo.item.iSubItem received for the subitems' text
-                                       are invalid
-                            if ((dispInfo.item.mask & NativeMethods.LVIF_COLUMNS) != 0) {
-                                int cColumns = this.columnHeaders != null ? this.columnHeaders.Length : 0;
-                                dispInfo.item.cColumns = cColumns;
-                                if (cColumns > 0) {
-                                    dispInfo.item.puColumns = Marshal.AllocHGlobal(cColumns * Marshal.SizeOf<int>());
-                                    int[] columns = new int[cColumns];
-                                    for (int c = 0; c < cColumns; c++) {
-                                        columns[c] = c + 1;
-                                    }
-                                    Marshal.Copy(columns, 0, dispInfo.item.puColumns, cColumns);
-                                }
-                            }
-                            */
-
-                            /* Microsoft: VirtualMode and grouping seem to be incompatible.
-                                       dispInfo.item.mask never includes NativeMethods.LVIF_GROUPID.
-                                       Besides, trying to send LVM_ENABLEGROUPVIEW to the listview fails in virtual mode.
-                            if (this.GroupsEnabled && (dispInfo.item.mask & NativeMethods.LVIF_GROUPID) != 0)
-                            {
-                                dispInfo.item.iGroupId = GetNativeGroupId(lvItem);
-                                #if DEBUG
-                                    Debug.Assert(SendMessage(NativeMethods.LVM_ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
-                                    Debug.Assert(SendMessage(NativeMethods.LVM_HASGROUP, dispInfo.item.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + dispInfo.item.iGroupId.ToString(CultureInfo.InvariantCulture));
-                                #endif
-                            }
-                            */
 
                             if ((dispInfo.item.stateMask & NativeMethods.LVIS_STATEIMAGEMASK) != 0) {
                                 dispInfo.item.state |= lvItem.RawStateImageIndex;
