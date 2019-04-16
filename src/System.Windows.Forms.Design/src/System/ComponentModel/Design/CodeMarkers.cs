@@ -393,7 +393,7 @@ namespace System.ComponentModel.Design
 
             if (strRegRoot == null)
             {
-                throw new ArgumentNullException(nameof(strRegRoot");
+                throw new ArgumentNullException(nameof(strRegRoot));
             }
             
             this.regroot = strRegRoot;

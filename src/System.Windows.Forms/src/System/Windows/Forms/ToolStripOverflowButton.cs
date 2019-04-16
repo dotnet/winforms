@@ -53,7 +53,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\WinBarOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.DefaultMargin"]/*' />
+        /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.DefaultMargin"]/*' />
         protected internal override Padding DefaultMargin {
             get {
                 return Padding.Empty;
@@ -96,7 +96,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripOverflowButton.uex' path='docs/doc[@for="ToolStripOverflowButton.CreateDefaultDropDown"]/*' />
         protected override ToolStripDropDown CreateDefaultDropDown() {
-            // AutoGenerate a Winbar DropDown - set the property so we hook events
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
              return new ToolStripOverflow(this);
         }
        

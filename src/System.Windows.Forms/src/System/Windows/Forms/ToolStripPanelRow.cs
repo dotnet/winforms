@@ -692,7 +692,7 @@ namespace System.Windows.Forms {
             #region MouseStuff
 
 #if DEBUG
-      internal static readonly TraceSwitch ToolStripPanelMouseDebug = new TraceSwitch("ToolStripPanelMouse", "Debug WinBar WM_MOUSEACTIVATE code");
+      internal static readonly TraceSwitch ToolStripPanelMouseDebug = new TraceSwitch("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
 #else
         internal static readonly TraceSwitch ToolStripPanelMouseDebug;
 #endif

@@ -9,68 +9,47 @@ using System.Runtime.Serialization;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///  The exception that is thrown when the code dom serializer experiences an error.
+    /// The exception that is thrown when the code dom serializer experiences an error.
     /// </summary>
     [Serializable]
     [SuppressMessage("Microsoft.Design", "CA1032:ImplementStandardExceptionConstructors")]
     public class CodeDomSerializerException : SystemException
     {
-
-        private readonly CodeLinePragma _linePragma;
-
-        /// <summary>
-        /// Initializes a new instance of the CodeDomSerializerException class.
-        /// </summary>
         public CodeDomSerializerException(string message, CodeLinePragma linePragma) : base(message)
         {
-            _linePragma = linePragma;
+            LinePragma = linePragma;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the CodeDomSerializerException class.
-        /// </summary>
-        public CodeDomSerializerException(Exception ex, CodeLinePragma linePragma) : base(ex.Message, ex)
+        public CodeDomSerializerException(Exception ex, CodeLinePragma linePragma) : base(ex?.Message, ex)
         {
-            _linePragma = linePragma;
+            LinePragma = linePragma;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the CodeDomSerializerException class.
-        /// </summary>
         public CodeDomSerializerException(string message, IDesignerSerializationManager manager) : base(message)
         {
-            FillLinePragmaFromContext(manager);
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the CodeDomSerializerException class.
-        /// </summary>
-        public CodeDomSerializerException(Exception ex, IDesignerSerializationManager manager) : base(ex.Message, ex)
+        public CodeDomSerializerException(Exception ex, IDesignerSerializationManager manager) : base(ex?.Message, ex)
         {
-            FillLinePragmaFromContext(manager);
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
         }
 
         protected CodeDomSerializerException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
-            _linePragma = (CodeLinePragma)info.GetValue("linePragma", typeof(CodeLinePragma));
+            LinePragma = (CodeLinePragma)info.GetValue("linePragma", typeof(CodeLinePragma));
         }
 
         /// <summary>
         /// Gets the line pragma object that is related to this error.
         /// </summary>
-        public CodeLinePragma LinePragma
-        {
-            get => _linePragma;
-        }
-
-        /// <summary>
-        /// Sniffs around in the context looking for a code statement.  if it finds one, it will add the statement's line # information to the exception.
-        /// </summary>
-        private void FillLinePragmaFromContext(IDesignerSerializationManager manager)
-        {
-            if (manager == null)
-                throw new ArgumentNullException(nameof(manager));
-        }
+        public CodeLinePragma LinePragma { get; }
 
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -78,7 +57,8 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(info));
             }
-            info.AddValue("linePragma", _linePragma);
+
+            info.AddValue("linePragma", LinePragma);
             base.GetObjectData(info, context);
         }
     }

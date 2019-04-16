@@ -331,11 +331,11 @@ namespace System.Windows.Forms
                 if ((this.DataGridView == null && rowIndex != -1) || 
                     (this.DataGridView != null && (rowIndex < 0 || rowIndex >= this.DataGridView.Rows.Count)))
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
                 if (this.DataGridView != null && this.DataGridView.Rows.SharedRow(rowIndex) != this.OwningRow)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
                 state |= (this.OwningRow.GetState(rowIndex) & DataGridViewElementStates.Frozen);
                 if (this.OwningRow.GetResizable(rowIndex) == DataGridViewTriState.True || (this.DataGridView != null && this.DataGridView.RowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing))
@@ -460,7 +460,7 @@ namespace System.Windows.Forms
                 }
                 if (this.DataGridView.Rows.SharedRow(rowIndex) != this.OwningRow)
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "rowIndex", rowIndex.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(rowIndex), rowIndex));
                 }
                 return new Size(this.DataGridView.RowHeadersWidth, this.OwningRow.GetHeight(rowIndex));
             }

@@ -39,8 +39,9 @@ namespace System.ComponentModel {
         private static TraceSwitch setBounds;
 
         private static BooleanSwitch lifetimeTracing;
-
+        
         private static TraceSwitch s_handleLeak;
+        private static BooleanSwitch s_traceCollect;
         private static BooleanSwitch s_commonDesignerServices;
 
         public static TraceSwitch ActiveX {
@@ -294,7 +295,7 @@ namespace System.ComponentModel {
                 return setBounds;
             }
         }
-        #endif 
+#endif
 
         public static TraceSwitch HandleLeak {
             get {
@@ -305,16 +306,16 @@ namespace System.ComponentModel {
             }
         }
 
-        private static BooleanSwitch traceCollect;
         public static BooleanSwitch TraceCollect {
             get {
-                if (traceCollect == null) {
-                    traceCollect = new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
+                if (s_traceCollect == null) {
+                    s_traceCollect = new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
                 }
-                return traceCollect;
+                return s_traceCollect;
             }
         }
-        internal static BooleanSwitch CommonDesignerServices
+
+        public static BooleanSwitch CommonDesignerServices
         {
             get
             {

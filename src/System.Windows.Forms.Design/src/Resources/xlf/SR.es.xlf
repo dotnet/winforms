@@ -22,6 +22,16 @@
         <target state="new">Move {0} Controls</target>
         <note />
       </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControl">
+        <source>Resize {0}</source>
+        <target state="new">Resize {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="BehaviorServiceResizeControls">
+        <source>Resize {0} Controls</source>
+        <target state="new">Resize {0} Controls</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
         <target state="translated">El almacén de serialización está cerrado. No se pueden agregar nuevos objetos a un almacén cerrado.</target>
@@ -35,26 +45,6 @@
       <trans-unit id="CodeDomComponentSerializationServiceUnknownStore">
         <source>This type of serialization store is not supported.  Use a store returned by the CreateStore method.</source>
         <target state="translated">No se admite este tipo de almacén de serialización. Utilice un almacén devuelto por el método CreateStore.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ComponentDesignerAddEvent">
-        <source>Adding event '{0}'</source>
-        <target state="translated">Agregando un evento '{0}'</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="COM2UnhandledVT">
-        <source>Unhandled VT: {0}.</source>
-        <target state="translated">VT no controlado: {0}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertDoubleToDate">
-        <source>Double cannot be converted to a date.</source>
-        <target state="translated">No se puede convertir double en date.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="CannotConvertIntToFloat">
-        <source>Integer cannot be converted to a float.</source>
-        <target state="translated">No se puede convertir integer en float.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
@@ -78,8 +68,10 @@
         <note />
       </trans-unit>
       <trans-unit id="CommandSetError">
-        <source>An error occurred while processing this command.\r\n{0}</source>
-        <target state="new">An error occurred while processing this command.\r\n{0}</target>
+        <source>An error occurred while processing this command.
+      {0}</source>
+        <target state="new">An error occurred while processing this command.
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetFormatSpacing">
@@ -105,6 +97,121 @@
       <trans-unit id="CommandSetUnknownSpacingCommand">
         <source>Unknown spacing command</source>
         <target state="new">Unknown spacing command</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ComponentDesignerAddEvent">
+        <source>Adding event '{0}'</source>
+        <target state="translated">Agregando un evento '{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="COM2UnhandledVT">
+        <source>Unhandled VT: {0}.</source>
+        <target state="translated">VT no controlado: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertDoubleToDate">
+        <source>Double cannot be converted to a date.</source>
+        <target state="translated">No se puede convertir double en date.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CannotConvertIntToFloat">
+        <source>Integer cannot be converted to a float.</source>
+        <target state="translated">No se puede convertir integer en float.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuAlignToGrid">
+        <source>Align To &amp;Grid</source>
+        <target state="new">Align To &amp;Grid</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuBringToFront">
+        <source>&amp;Bring To Front</source>
+        <target state="new">&amp;Bring To Front</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCopy">
+        <source>C&amp;opy</source>
+        <target state="new">C&amp;opy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuCut">
+        <source>&amp;Cut</source>
+        <target state="new">&amp;Cut</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDelete">
+        <source>&amp;Delete</source>
+        <target state="new">&amp;Delete</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuDocumentOutline">
+        <source>&amp;Document Outline</source>
+        <target state="new">&amp;Document Outline</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuLockControls">
+        <source>&amp;Lock Controls</source>
+        <target state="new">&amp;Lock Controls</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="new">&amp;Paste</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuProperties">
+        <source>&amp;Properties</source>
+        <target state="new">&amp;Properties</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSelect">
+        <source>&amp;Select</source>
+        <target state="new">&amp;Select</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuSendToBack">
+        <source>&amp;Send To Back</source>
+        <target state="new">&amp;Send To Back</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
+        <source>ShowCheckMargin</source>
+        <target state="new">ShowCheckMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
+        <source>Toggles the ShowCheckMargin property</source>
+        <target state="new">Toggles the ShowCheckMargin property</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
+        <source>ShowImageMargin</source>
+        <target state="new">ShowImageMargin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
+        <source>Toggles the ShowImageMargin property</source>
+        <target state="new">Toggles the ShowImageMargin property</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ContextMenuViewCode">
+        <source>View &amp;Code</source>
+        <target state="new">View &amp;Code</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlDesigner_WndProcException">
+        <source>The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</source>
+        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+
+      Exception:
+      {1}
+
+      Stack trace:{2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -168,8 +275,10 @@
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceFatalError">
-        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again.  The error message follows:\r\n\r\n{0}</source>
-        <target state="translated">Error al cargar el documento. Corrija el error y, a continuación, intente volver a cargar el documento. Mensaje de error:\r\n\r\n{0}</target>
+        <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</source>
+        <target state="needs-review-translation">Error al cargar el documento. Corrija el error y, a continuación, intente volver a cargar el documento. Mensaje de error:\r\n\r\n{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
@@ -337,6 +446,16 @@
         <target state="translated">Controla si los diseñadores deberían utilizar líneas de ajuste. Si es true, las líneas de ajuste se utilizarán como guías. Si es false, se utilizarán líneas de cuadrícula.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerShortcutDockInParent">
+        <source>Dock in Parent Container</source>
+        <target state="new">Dock in Parent Container</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerShortcutUndockInParent">
+        <source>Undock in Parent Container</source>
+        <target state="new">Undock in Parent Container</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DotNET_ComponentType">
         <source>.NET Component</source>
         <target state="translated">Componente .NET</target>
@@ -362,6 +481,16 @@
         <target state="translated">IDataObject no es compatible con SetData.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DragDropSizeComponent">
+        <source>Size {0}</source>
+        <target state="new">Size {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DragDropSizeComponents">
+        <source>Size {0} components</source>
+        <target state="new">Size {0} components</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
         <source>The extender provider {0} has already been added as an extender.  Adding another would result in duplicate properties.</source>
         <target state="translated">El proveedor extensor {0} ya se ha agregado como extensor. Si agrega otro habría propiedades duplicadas.</target>
@@ -372,14 +501,14 @@
         <target state="translated">Solo lectura</target>
         <note />
       </trans-unit>
-      <trans-unit id="DragDropSizeComponent">
-        <source>Size {0}</source>
-        <target state="new">Size {0}</target>
+      <trans-unit id="InvalidArgument">
+        <source>'{1}' is not a valid value for '{0}'.</source>
+        <target state="new">'{1}' is not a valid value for '{0}'.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DragDropSizeComponents">
-        <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+      <trans-unit id="InvalidBoundArgument">
+        <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
+        <target state="new">'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -492,6 +621,11 @@
         <target state="translated">Error al leer los recursos del archivo de recursos para la referencia cultural predeterminada: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerTypeAbstract">
+        <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
+        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
         <source>Could not find type '{0}'.  Please make sure that the assembly that contains this type is referenced.  If this type is a part of your development project, make sure that the project has been successfully built using settings for your current platform or Any CPU.</source>
         <target state="translated">No se encuentra el tipo '{0}'. Asegúrese de que se hace referencia al ensamblado que contiene este tipo. Si el tipo forma parte de su proyecto de desarrollo, asegúrese de que el proyecto se haya compilado correctamente con el valor de la plataforma actual o Cualquier CPU.</target>
@@ -500,6 +634,296 @@
       <trans-unit id="SerializerUndeclaredName">
         <source>The variable '{0}' is either undeclared or was never assigned.</source>
         <target state="translated">La variable '{0}' no está declarada o no se asignó nunca.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuAbout">
+        <source>&amp;About...</source>
+        <target state="new">&amp;About...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuContents">
+        <source>&amp;Contents</source>
+        <target state="new">&amp;Contents</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCopy">
+        <source>&amp;Copy</source>
+        <target state="new">&amp;Copy</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCreateDesc">
+        <source>Create Standard Menu</source>
+        <target state="new">Create Standard Menu</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCustomize">
+        <source>&amp;Customize</source>
+        <target state="new">&amp;Customize</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuCut">
+        <source>Cu&amp;t</source>
+        <target state="new">Cu&amp;t</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuEdit">
+        <source>&amp;Edit</source>
+        <target state="new">&amp;Edit</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuExit">
+        <source>E&amp;xit</source>
+        <target state="new">E&amp;xit</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuFile">
+        <source>&amp;File</source>
+        <target state="new">&amp;File</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuHelp">
+        <source>&amp;Help</source>
+        <target state="new">&amp;Help</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuIndex">
+        <source>&amp;Index</source>
+        <target state="new">&amp;Index</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuNew">
+        <source>&amp;New</source>
+        <target state="new">&amp;New</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOpen">
+        <source>&amp;Open</source>
+        <target state="new">&amp;Open</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuOptions">
+        <source>&amp;Options</source>
+        <target state="new">&amp;Options</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPaste">
+        <source>&amp;Paste</source>
+        <target state="new">&amp;Paste</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrint">
+        <source>&amp;Print</source>
+        <target state="new">&amp;Print</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuPrintPreview">
+        <source>Print Pre&amp;view</source>
+        <target state="new">Print Pre&amp;view</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuRedo">
+        <source>&amp;Redo</source>
+        <target state="new">&amp;Redo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSave">
+        <source>&amp;Save</source>
+        <target state="new">&amp;Save</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSaveAs">
+        <source>Save &amp;As</source>
+        <target state="new">Save &amp;As</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSearch">
+        <source>&amp;Search</source>
+        <target state="new">&amp;Search</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuSelectAll">
+        <source>Select &amp;All</source>
+        <target state="new">Select &amp;All</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuTools">
+        <source>&amp;Tools</source>
+        <target state="new">&amp;Tools</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardMenuUndo">
+        <source>&amp;Undo</source>
+        <target state="new">&amp;Undo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolCut">
+        <source>C&amp;ut</source>
+        <target state="new">C&amp;ut</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="StandardToolHelp">
+        <source>He&amp;lp</source>
+        <target state="new">He&amp;lp</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Dock">
+        <source>Dock:</source>
+        <target state="new">Dock:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_DockDesc">
+        <source>Changes the Dock property</source>
+        <target state="new">Changes the Dock property</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyle">
+        <source>GripStyle:</source>
+        <target state="new">GripStyle:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_GripStyleDesc">
+        <source>Changes the GripStyle property</source>
+        <target state="new">Changes the GripStyle property</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_Layout">
+        <source>Layout &amp;&amp; Appearance</source>
+        <target state="new">Layout &amp;&amp; Appearance</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderMode">
+        <source>RenderMode:</source>
+        <target state="new">RenderMode:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripActionList_RenderModeDesc">
+        <source>Changes the RenderMode property</source>
+        <target state="new">Changes the RenderMode property</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAddingItem">
+        <source>Adding {0} Item</source>
+        <target state="new">Adding {0} Item</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
+        <source>AllowItemReorder and AllowDrop cannot both be true.</source>
+        <target state="new">AllowItemReorder and AllowDrop cannot both be true.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripCreatingNewItemTransaction">
+        <source>ToolStrip New Item create Transaction.</source>
+        <target state="new">ToolStrip New Item create Transaction.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerb">
+        <source>Embed in ToolStripContainer</source>
+        <target state="new">Embed in ToolStripContainer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerEmbedVerbDesc">
+        <source>Embeds the current ToolStrip in ToolStripContainer</source>
+        <target state="new">Embeds the current ToolStrip in ToolStripContainer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerb">
+        <source>&amp;Insert Standard Items</source>
+        <target state="new">&amp;Insert Standard Items</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
+        <source>Inserts standard items in the current ToolStrip</source>
+        <target state="new">Inserts standard items in the current ToolStrip</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
+        <source>Type Here</source>
+        <target state="new">Type Here</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
+        <source>Type Text for ToolStripMenuItem</source>
+        <target state="new">Type Text for ToolStripMenuItem</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
+        <source>Add Menu Item</source>
+        <target state="new">Add Menu Item</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
+        <source>Add ToolStripStatusLabel</source>
+        <target state="new">Add ToolStripStatusLabel</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
+        <source>Add ToolStripButton</source>
+        <target state="new">Add ToolStripButton</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerToolStripAccessibleName">
+        <source>New item selection</source>
+        <target state="new">New item selection</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionAddingItem">
+        <source>Adding Item</source>
+        <target state="new">Adding Item</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDesignerTransactionRemovingItem">
+        <source>Removing Item</source>
+        <target state="new">Removing Item</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
+        <source>&amp;Edit DropDownItems...</source>
+        <target state="new">&amp;Edit DropDownItems...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
+        <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
+        <target state="new">ToolStrip MenuItem Insert in DropDown Transaction.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemCollectionEditorVerb">
+        <source>&amp;Edit Items...</source>
+        <target state="new">&amp;Edit Items...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuConvertTo">
+        <source>Con&amp;vert To</source>
+        <target state="new">Con&amp;vert To</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuInsert">
+        <source>&amp;Insert</source>
+        <target state="new">&amp;Insert</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemContextMenuSetImage">
+        <source>Set I&amp;mage...</source>
+        <target state="new">Set I&amp;mage...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripItemPropertyChangeTransaction">
+        <source>ToolStripItem Property Change Transaction.</source>
+        <target state="new">ToolStripItem Property Change Transaction.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripMorphingItemTransaction">
+        <source>ToolStripItem Morphing Transaction.</source>
+        <target state="new">ToolStripItem Morphing Transaction.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSelectMenuItem">
+        <source>'{0}'</source>
+        <target state="new">'{0}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ToolStripSeparatorError">
+        <source>Cannot add ToolStripSeparator to MenuStrip.</source>
+        <target state="new">Cannot add ToolStripSeparator to MenuStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -522,9 +946,29 @@
         <target state="translated">El tipo de datos {0} no se puede serializar. Los elementos agregados a un diccionario de propiedades deben ser serializables.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrayAutoArrange">
+        <source>Auto Arrange Tray Icons</source>
+        <target state="new">Auto Arrange Tray Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayLineUpIcons">
+        <source>Line Up Tray Icons</source>
+        <target state="new">Line Up Tray Icons</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrayShowLargeIcons">
+        <source>Show Large or Small Icons</source>
+        <target state="new">Show Large or Small Icons</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
         <source>Type '{0}' is not available in the target framework.</source>
         <target state="translated">El tipo "{0}" no está disponible en la plataforma de destino.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UIServiceHelper_ErrorCaption">
+        <source>Error</source>
+        <target state="new">Error</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
@@ -572,26 +1016,6 @@
         <target state="translated">El servicio {0} es obligatorio pero no se pudo encontrar. Si ha quitado este servicio, asegúrese de proporcionar un reemplazo.</target>
         <note />
       </trans-unit>
-      <trans-unit id="TrayAutoArrange">
-        <source>Auto Arrange Tray Icons</source>
-        <target state="new">Auto Arrange Tray Icons</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrayLineUpIcons">
-        <source>Line Up Tray Icons</source>
-        <target state="new">Line Up Tray Icons</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="TrayShowLargeIcons">
-        <source>Show Large or Small Icons</source>
-        <target state="new">Show Large or Small Icons</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UIServiceHelper_ErrorCaption">
-        <source>Error</source>
-        <target state="new">Error</target>
-        <note />
-      </trans-unit>
       <trans-unit id="UnsafeNativeMethodsNotImplemented">
         <source>Not implemented.</source>
         <target state="translated">Sin implementar.</target>
@@ -610,6 +1034,11 @@
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
         <target state="new">Vertical center of {0} component(s)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="lockedDescr">
+        <source>The Locked property determines if we can move or resize the control.</source>
+        <target state="new">The Locked property determines if we can move or resize the control.</target>
         <note />
       </trans-unit>
     </body>

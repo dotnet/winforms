@@ -28,14 +28,5 @@ namespace System.Windows.Forms.Design
     {
         public IntPtr Handle;
         public ThemedScrollbarMode Mode;
-    };
-
-    /// <summary>
-    /// Returns an enumeration of windows and flags of how their scrollbars need to be themed
-    /// when the designer is running inside Visual Studio.
-    /// </summary>
-    public interface IContainsThemedScrollbarWindows
-    {
-        IEnumerable ThemedScrollbarWindows();
     }
 }

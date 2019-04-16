@@ -421,9 +421,6 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\wfc.ico">
       <LogicalName>System.Windows.Forms.wfc.ico</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\wfsecurity.ico">
-      <LogicalName>System.Windows.Forms.wfsecurity.ico</LogicalName>
-    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\App\Timer.bmp">
       <LogicalName>System.Windows.Forms.Timer.bmp</LogicalName>
     </EmbeddedResource>

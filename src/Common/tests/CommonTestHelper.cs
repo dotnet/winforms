@@ -166,6 +166,14 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<char> GetCharTheoryData()
+        {
+            var data = new TheoryData<char>();
+            data.Add('\0');
+            data.Add('a');
+            return data;
+        }
+
         public static TheoryData<IntPtr> GetIntPtrTheoryData()
         {
             var data = new TheoryData<IntPtr>();
@@ -189,6 +197,22 @@ namespace WinForms.Common.Tests
             var data = new TheoryData<Color>();
             data.Add(Color.Red);
             data.Add(Color.Empty);
+            return data;
+        }
+
+        public static TheoryData<Image> GetImageTheoryData()
+        {
+            var data = new TheoryData<Image>();
+            data.Add(new Bitmap(10, 10));
+            data.Add(null);
+            return data;
+        }
+
+        public static TheoryData<Font> GetFontTheoryData()
+        {
+            var data = new TheoryData<Font>();
+            data.Add(SystemFonts.MenuFont);
+            data.Add(null);
             return data;
         }
 

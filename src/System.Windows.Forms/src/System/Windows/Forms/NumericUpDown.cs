@@ -135,7 +135,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0 || value > 99) {
-                    throw new ArgumentOutOfRangeException(nameof(DecimalPlaces), string.Format(SR.InvalidBoundArgument, "DecimalPlaces", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture), "99"));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(DecimalPlaces), value, 0, 99));
                 }
                 decimalPlaces = value;
                 UpdateEditText();
@@ -186,8 +186,8 @@ namespace System.Windows.Forms {
             }
 
             set {
-                if (value < (decimal)0.0) {
-                    throw new ArgumentOutOfRangeException(nameof(Increment), string.Format(SR.InvalidArgument, "Increment", value.ToString(CultureInfo.CurrentCulture)));
+                if (value < 0.0m) {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Increment), value));
                 }
                 else {
                     this.increment = value;
@@ -362,7 +362,7 @@ namespace System.Windows.Forms {
                 if (value != currentValue) {
                 
                     if (!initializing && ((value < minimum) || (value > maximum))) {
-                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", value.ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'{nameof(Maximum)}'"));
                     }
                     else {
                         currentValue = value;                       

@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
                         item.Site.Container.Remove(item);
                     }
 
-                    item.Menu = null;
+                    item.Parent = null;
                     item.Dispose();
                 }
                 items = null;
@@ -315,15 +315,7 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu.FindMenuItem"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
         public MenuItem FindMenuItem(int type, IntPtr value) {
-            return FindMenuItemInternal(type, value);
-        }
-
-        private MenuItem FindMenuItemInternal(int type, IntPtr value) {
             for (int i = 0; i < ItemCount; i++) {
                 MenuItem item = items[i];
                 switch (type) {
@@ -334,7 +326,7 @@ namespace System.Windows.Forms {
                         if (item.Shortcut == (Shortcut)(int)value) return item;
                         break;
                 }
-                item = item.FindMenuItemInternal(type, value);
+                item = item.FindMenuItem(type, value);
                 if (item != null) return item;
             }
             return null;
@@ -412,7 +404,7 @@ namespace System.Windows.Forms {
             Menu menuT;
             for (menuT = this; !(menuT is ContextMenu);) {
                 if (!(menuT is MenuItem)) return null;
-                menuT = ((MenuItem)menuT).Menu;
+                menuT = ((MenuItem)menuT).Parent;
             }
             return(ContextMenu)menuT;
 
@@ -430,7 +422,7 @@ namespace System.Windows.Forms {
             Menu menuT;
             for (menuT = this; !(menuT is MainMenu);) {
                 if (!(menuT is MenuItem)) return null;
-                menuT = ((MenuItem)menuT).Menu;
+                menuT = ((MenuItem)menuT).Parent;
             }
             return(MainMenu)menuT;
         }
@@ -568,9 +560,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         internal virtual bool ProcessInitMenuPopup(IntPtr handle) {
-            MenuItem item = FindMenuItemInternal(FindHandle, handle);
+            MenuItem item = FindMenuItem(FindHandle, handle);
             if (item != null) {
-                item._OnInitMenuPopup(EventArgs.Empty);
+                item.OnInitMenuPopup(EventArgs.Empty);
                 item.CreateMenuItems();
                 return true;
             }
@@ -582,7 +574,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData) {
-            MenuItem item = FindMenuItemInternal(FindShortcut, (IntPtr)(int)keyData);
+            MenuItem item = FindMenuItem(FindShortcut, (IntPtr)(int)keyData);
             return item != null? item.ShortcutClick(): false;
         }
 
@@ -622,7 +614,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         internal void WmMenuChar(ref Message m) {
-            Menu menu = (m.LParam == handle) ? this : FindMenuItemInternal(FindHandle, m.LParam);
+            Menu menu = (m.LParam == handle) ? this : FindMenuItem(FindHandle, m.LParam);
 
             if (menu == null)
                 return;
@@ -686,7 +678,7 @@ namespace System.Windows.Forms {
             public virtual MenuItem this[int index] {
                 get {
                     if (index < 0 || index >= owner.ItemCount)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     return owner.items[index];
                 }
                 // set not supported
@@ -821,7 +813,7 @@ namespace System.Windows.Forms {
                 }
                 
                 // MenuItems can only belong to one menu at a time
-                if (item.Menu != null) {
+                if (item.Parent != null) {
 
                     // First check that we're not adding ourself, i.e. walk
                     // the parent chain for equality
@@ -841,16 +833,16 @@ namespace System.Windows.Forms {
                     //if we're re-adding an item back to the same collection
                     //the target index needs to be decremented since we're
                     //removing an item from the collection
-                    if (item.Menu.Equals(owner) && index > 0) {
+                    if (item.Parent.Equals(owner) && index > 0) {
                         index--;
                     }
 
-                    item.Menu.MenuItems.Remove(item);
+                    item.Parent.MenuItems.Remove(item);
                 }
 
                 // Validate our index
                 if (index < 0 || index > owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
                                 
                 if (owner.items == null || owner.items.Length == owner.ItemCount) {
@@ -861,7 +853,7 @@ namespace System.Windows.Forms {
                 System.Array.Copy(owner.items, index, owner.items, index + 1, owner.ItemCount - index);
                 owner.items[index] = item;
                 owner._itemCount++;
-                item.Menu = owner;
+                item.Parent = owner;
                 owner.ItemsChanged(CHANGE_ITEMS);
                 if (owner is MenuItem) {
                    ((MenuItem) owner).ItemsChanged(CHANGE_ITEMADDED, item);
@@ -1060,7 +1052,7 @@ namespace System.Windows.Forms {
                 if (owner.ItemCount > 0) {
                     
                     for (int i = 0; i < owner.ItemCount; i++) {
-                        owner.items[i].Menu = null;
+                        owner.items[i].Parent = null;
                     }
 
                     owner._itemCount = 0;
@@ -1093,11 +1085,11 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public virtual void RemoveAt(int index) {
                 if (index < 0 || index >= owner.ItemCount) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument,"index",(index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 MenuItem item = owner.items[index];
-                item.Menu = null;
+                item.Parent = null;
                 owner._itemCount--;
                 System.Array.Copy(owner.items, index + 1, owner.items, index, owner.ItemCount - index);
                 owner.items[owner.ItemCount] = null;
@@ -1128,7 +1120,7 @@ namespace System.Windows.Forms {
             ///     items are moved down one slot.
             /// </devdoc>
             public virtual void Remove(MenuItem item) {
-                if (item.Menu == owner) {
+                if (item.Parent == owner) {
                     RemoveAt(item.Index);
                 }
             }
