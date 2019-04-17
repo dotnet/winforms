@@ -697,7 +697,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     ArrayList strs = new ArrayList();
                     ArrayList vars = new ArrayList();
 
-                    NativeMethods.tagVARDESC varDesc = structCache.GetStruct<NativeMethods.tagVARDESC>();
                     object varValue = null;
                     string enumName = null;
                     string name = null;
@@ -718,10 +717,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
 
                         try {
-                            Marshal.PtrToStructure(pVarDesc, varDesc);
+                            ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
-                            if (varDesc == null ||
-                                varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
+                            if (varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
                                 varDesc.unionMember == IntPtr.Zero) {
                                 continue;
                             }
@@ -770,7 +768,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                             }
                         }
                     }
-                    structCache.ReleaseStruct(varDesc);
+
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: returning enum with " + strs.Count.ToString(CultureInfo.InvariantCulture) + " items");
 
                     // just build our enumerator
@@ -831,7 +829,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             try {
                 ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
-                NativeMethods.tagVARDESC varDesc = structCache.GetStruct<NativeMethods.tagVARDESC>();
 
                 for (int i = 0; i < typeAttr.cVars; i++) {
                     IntPtr pVarDesc = IntPtr.Zero;
@@ -842,15 +839,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    Marshal.PtrToStructure(pVarDesc, varDesc);
-
                     try {
+                        ref readonly NativeMethods.tagVARDESC varDesc = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagVARDESC>(pVarDesc);
 
                         if (varDesc.varkind == (int)NativeMethods.tagVARKIND.VAR_CONST ||
                             (dispidToGet != NativeMethods.MEMBERID_NIL && varDesc.memid != dispidToGet)) {
                             continue;
                         }
-
 
                         unsafe
                         {
@@ -866,7 +861,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
                     }
                 }
-                structCache.ReleaseStruct(varDesc);
             }
             finally {
                 typeInfo.ReleaseTypeAttr(pTypeAttr);

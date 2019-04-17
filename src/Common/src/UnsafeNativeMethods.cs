@@ -7044,7 +7044,7 @@ namespace System.Windows.Forms {
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                    NativeMethods.tagFUNCDESC*[] ppFuncDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagVARDESC[] ppVarDesc,
+                   NativeMethods.tagVARDESC*[] ppVarDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                    UnsafeNativeMethods.ITypeComp[] ppTypeComp,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 

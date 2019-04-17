@@ -4030,14 +4030,14 @@ namespace System.Windows.Forms {
         }
         
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagVARDESC {
-            public   int memid = 0;
-            public   IntPtr lpstrSchema = IntPtr.Zero;
-            public   IntPtr unionMember = IntPtr.Zero;
+        public struct tagVARDESC {
+            public   int memid;
+            public   IntPtr lpstrSchema;
+            public   IntPtr unionMember;
             public   NativeMethods.value_tagELEMDESC elemdescVar;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wVarFlags = 0;
-            public    /*NativeMethods.tagVARKIND*/ int varkind = 0;
+            public   short wVarFlags;
+            public    /*NativeMethods.tagVARKIND*/ int varkind;
         }
 
         [StructLayout(LayoutKind.Sequential)]
