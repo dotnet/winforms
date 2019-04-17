@@ -3,20 +3,16 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop {
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
     using System.Windows.Forms;
-    using System.ComponentModel.Design;    
-    using Microsoft.Win32;
     using System.Collections;
     using Hashtable = System.Collections.Hashtable;
     
     using System.Reflection.Emit;
     using System.Reflection;
-    using System.Threading;
     using System.Globalization;
    
 
@@ -300,7 +296,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// user defined, which and may be aliased into other type infos.  This function
         /// will recusively walk the ITypeInfos to resolve the type to a clr Type.
         /// </devdoc>
-        private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData, StructCache structCache) {
+        private static Type GetValueTypeFromTypeDesc(in NativeMethods.tagTYPEDESC typeDesc, UnsafeNativeMethods.ITypeInfo typeInfo, object[] typeData) {
             IntPtr hreftype;
             int hr = 0;
 
@@ -369,11 +365,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         switch ((NativeMethods.tagTYPEKIND)refTypeAttr.typekind) {
 
                             case NativeMethods.tagTYPEKIND.TKIND_ENUM:
-                                return ProcessTypeInfoEnum(refTypeInfo, structCache);
+                                return ProcessTypeInfoEnum(refTypeInfo);
                                 //return VTToType(tagVT.VT_I4);
                             case NativeMethods.tagTYPEKIND.TKIND_ALIAS:
                                 // recurse here
-                                return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData, structCache);
+                                return GetValueTypeFromTypeDesc(refTypeAttr.Get_tdescAlias(), refTypeInfo, typeData);
                             case NativeMethods.tagTYPEKIND.TKIND_DISPATCH:
                                 return VTToType(NativeMethods.tagVT.VT_DISPATCH);
                                                         case NativeMethods.tagTYPEKIND.TKIND_INTERFACE:
@@ -405,13 +401,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int nameDispID = GetNameDispId((UnsafeNativeMethods.IDispatch)obj);
             bool addAboutBox = false;
             
-            StructCache structCache = new StructCache();            
-            
             // properties can live as functions with get_ and put_ or
             // as variables, so we do two steps here.
             try {
                 // DO FUNCDESC things
-                ProcessFunctions(typeInfo, propInfos, dispidToGet, nameDispID, ref addAboutBox, structCache);
+                ProcessFunctions(typeInfo, propInfos, dispidToGet, nameDispID, ref addAboutBox);
             }
             catch (ExternalException ex) {
                 Debug.Fail("ProcessFunctions failed with hr=" + ex.ErrorCode.ToString(CultureInfo.InvariantCulture) + ", message=" + ex.ToString());
@@ -419,7 +413,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
             try {
                 // DO VARDESC things.
-                ProcessVariables(typeInfo, propInfos, dispidToGet, nameDispID, structCache);
+                ProcessVariables(typeInfo, propInfos, dispidToGet, nameDispID);
             }
             catch (ExternalException ex) {
                 Debug.Fail("ProcessVariables failed with hr=" + ex.ErrorCode.ToString(CultureInfo.InvariantCulture) + ", message=" + ex.ToString());
@@ -483,7 +477,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags, StructCache structCache) {
+        private static PropInfo ProcessDataCore(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispid, int nameDispID, in NativeMethods.tagTYPEDESC typeDesc, int flags) {
             string          pPropName = null;
             string          pPropDesc = null;
 
@@ -523,7 +517,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             if (pi.ValueType == null) {
                 object[] pTypeData = new object[1];
                 try {
-                    pi.ValueType = GetValueTypeFromTypeDesc(in typeDesc, typeInfo, pTypeData, structCache);
+                    pi.ValueType = GetValueTypeFromTypeDesc(in typeDesc, typeInfo, pTypeData);
                 }
                 catch (Exception ex) {
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "Hiding property " + pi.Name + " because value Type could not be resolved: " + ex.ToString());
@@ -578,7 +572,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             return pi;
         }
 
-        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, ref bool addAboutBox, StructCache structCache) {
+        private static void ProcessFunctions(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, ref bool addAboutBox) {
             IntPtr pTypeAttr = IntPtr.Zero;
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
 
@@ -642,7 +636,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 typeDesc = *ed.tdesc;
                             }
                         }
-                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags, structCache);
+                        pi = ProcessDataCore(typeInfo, propInfoList, funcDesc.memid, nameDispID, in typeDesc, funcDesc.wFuncFlags);
 
                         // if we got a setmethod, it's not readonly
                         if (pi != null && !isPropGet) {
@@ -664,7 +658,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// This converts a type info that describes a IDL defined enum
         /// into one we can use
         /// </devdoc>
-        private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo, StructCache structCache) {
+        private static Type ProcessTypeInfoEnum(UnsafeNativeMethods.ITypeInfo enumTypeInfo) {
 
             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum entered");
 
@@ -813,7 +807,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
 
-        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID, StructCache structCache) {
+        private static void ProcessVariables(UnsafeNativeMethods.ITypeInfo typeInfo, IDictionary propInfoList, int dispidToGet, int nameDispID) {
             IntPtr pTypeAttr = IntPtr.Zero;
             int hr = typeInfo.GetTypeAttr(ref pTypeAttr);
 
@@ -843,7 +837,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                         unsafe
                         {
-                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in *varDesc.elemdescVar.tdesc, varDesc.wVarFlags, structCache);
+                            PropInfo pi = ProcessDataCore(typeInfo, propInfoList, varDesc.memid, nameDispID, in *varDesc.elemdescVar.tdesc, varDesc.wVarFlags);
                             if (pi.ReadOnly != PropInfo.ReadOnlyTrue) {
                                 pi.ReadOnly = PropInfo.ReadOnlyFalse;
                             }
@@ -994,85 +988,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     }
                 }
                 return retProps;
-            }
-        }
-
-        /// <summary>
-        /// This class manages a cache of structures that we can use for passing into
-        /// native so we don't have to create them every time. For many objects, these
-        /// can be used thousands of times.
-        /// </summary>
-        public class StructCache
-        {
-            private static readonly Hashtable s_queuedTypes = new Hashtable();
-
-#if DEBUG
-            private static readonly Hashtable s_releaseCheck = new Hashtable();
-
-            ~StructCache()
-            {
-                IEnumerator enumRelease = s_releaseCheck.Keys.GetEnumerator();
-                while (enumRelease.MoveNext())
-                {
-                    Type t = (Type)enumRelease.Current;
-                    Debug.Assert((int)s_releaseCheck[t] == 0, "Failed to release struct of type " + t.Name);
-                }
-            }
-#endif
-
-            private Queue GetQueue(Type t, bool create)
-            {
-                object queue = s_queuedTypes[t];
-
-                if (queue == null && create)
-                {
-                    queue = new Queue();
-                    s_queuedTypes[t] = queue;
-#if DEBUG
-                    s_releaseCheck[t] = 0;
-#endif
-                }
-
-                return (Queue)queue;
-            }
-
-            public T GetStruct<T>()
-            {
-                Type t = typeof(T);
-                Queue queue = GetQueue(t, true);
-
-                object str;
-                if (queue.Count == 0)
-                {
-                    str = Activator.CreateInstance(t);
-                }
-                else
-                {
-                    str = queue.Dequeue();
-                }
-
-#if DEBUG
-                int count = (int)s_releaseCheck[t];
-                s_releaseCheck[t] = ++count;
-#endif
-
-                return (T)str;
-            }
-
-            public void ReleaseStruct(object str)
-            {
-                Type t = str.GetType();
-                Queue queue = GetQueue(t, false);
-
-                if (queue != null)
-                {
-                    queue.Enqueue(str);
-
-#if DEBUG
-                    int count = (int)s_releaseCheck[t];
-                    s_releaseCheck[t] = --count;
-#endif
-                }
             }
         }
 
