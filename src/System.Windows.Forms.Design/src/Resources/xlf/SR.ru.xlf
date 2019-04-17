@@ -4,32 +4,32 @@
     <body>
       <trans-unit id="BehaviorServiceCopyControl">
         <source>Copy and move {0}</source>
-        <target state="new">Copy and move {0}</target>
+        <target state="translated">Копировать и переместить {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControls">
         <source>Copy and move {0} Controls</source>
-        <target state="new">Copy and move {0} Controls</target>
+        <target state="translated">Копировать и переместить {0} элементы управления</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControl">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">Переместить {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControls">
         <source>Move {0} Controls</source>
-        <target state="new">Move {0} Controls</target>
+        <target state="translated">Переместить {0} элементы управления</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceResizeControl">
         <source>Resize {0}</source>
-        <target state="new">Resize {0}</target>
+        <target state="translated">Изменить размер {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceResizeControls">
         <source>Resize {0} Controls</source>
-        <target state="new">Resize {0} Controls</target>
+        <target state="translated">Изменить размер {0} элементов управления</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -49,54 +49,52 @@
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
         <source>Format {0} components (alignment)</source>
-        <target state="new">Format {0} components (alignment)</target>
+        <target state="translated">Форматировать {0} компонентов (выравнивание)</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignToGrid">
         <source>Align {0} components to grid</source>
-        <target state="new">Align {0} components to grid</target>
+        <target state="translated">Выровнять {0} компонентов по сетке</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
         <source>Cut {0} Components</source>
-        <target state="new">Cut {0} Components</target>
+        <target state="translated">Вырезать {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetDelete">
         <source>Delete {0} components</source>
-        <target state="new">Delete {0} components</target>
+        <target state="translated">Удалить {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-        <target state="new">An error occurred while processing this command.
-      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetFormatSpacing">
         <source>Format {0} components (spacing)</source>
-        <target state="new">Format {0} components (spacing)</target>
+        <target state="translated">Форматировать {0} компонентов (с интервалом)</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
         <source>Paste components</source>
-        <target state="new">Paste components</target>
+        <target state="translated">Вставить компоненты</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
         <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+        <target state="translated">Изменить размер {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSizeToGrid">
         <source>Size {0} components to grid</source>
-        <target state="new">Size {0} components to grid</target>
+        <target state="translated">Изменить размер {0} компонентов по сетке</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetUnknownSpacingCommand">
         <source>Unknown spacing command</source>
-        <target state="new">Unknown spacing command</target>
+        <target state="translated">Неизвестная команда задания интервала</target>
         <note />
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
@@ -121,82 +119,80 @@
       </trans-unit>
       <trans-unit id="ContextMenuAlignToGrid">
         <source>Align To &amp;Grid</source>
-        <target state="new">Align To &amp;Grid</target>
+        <target state="translated">Выровнять по р&amp;ешетке</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuBringToFront">
         <source>&amp;Bring To Front</source>
-        <target state="new">&amp;Bring To Front</target>
+        <target state="translated">&amp;На передний план</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuCopy">
         <source>C&amp;opy</source>
-        <target state="new">C&amp;opy</target>
+        <target state="translated">К&amp;опировать</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuCut">
         <source>&amp;Cut</source>
-        <target state="new">&amp;Cut</target>
+        <target state="translated">&amp;Вырезать</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuDelete">
         <source>&amp;Delete</source>
-        <target state="new">&amp;Delete</target>
+        <target state="translated">&amp;Удалить</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuDocumentOutline">
         <source>&amp;Document Outline</source>
-        <target state="new">&amp;Document Outline</target>
+        <target state="translated">Структура до&amp;кумента</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuLockControls">
         <source>&amp;Lock Controls</source>
-        <target state="new">&amp;Lock Controls</target>
+        <target state="translated">&amp;Блокировка элементов управления</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuPaste">
         <source>&amp;Paste</source>
-        <target state="new">&amp;Paste</target>
+        <target state="translated">Вст&amp;авка</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">&amp;Свойства</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuSelect">
         <source>&amp;Select</source>
-        <target state="new">&amp;Select</target>
+        <target state="translated">Выб&amp;рать</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuSendToBack">
         <source>&amp;Send To Back</source>
-        <target state="new">&amp;Send To Back</target>
+        <target state="translated">&amp;На задний план</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
         <source>ShowCheckMargin</source>
-        <target state="new">ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
         <source>Toggles the ShowCheckMargin property</source>
-        <target state="new">Toggles the ShowCheckMargin property</target>
+        <target state="translated">Переключает свойство ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
         <source>ShowImageMargin</source>
-        <target state="new">ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
         <source>Toggles the ShowImageMargin property</source>
-        <target state="new">Toggles the ShowImageMargin property</target>
+        <target state="translated">Переключает свойство ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuViewCode">
         <source>View &amp;Code</source>
-        <target state="new">View &amp;Code</target>
+        <target state="translated">Перейти к ко&amp;ду</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDesigner_WndProcException">
@@ -206,62 +202,56 @@
       {1}
 
       Stack trace:{2}</source>
-        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
-
-      Exception:
-      {1}
-
-      Stack trace:{2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
         <source>Could not convert value '{0}' to the type '{1}'.</source>
-        <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
+        <target state="translated">Невозможно преобразовать значение '{0}' в тип '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'.</source>
-        <target state="new">Could not find method '{0}'.</target>
+        <target state="translated">Невозможно найти метод {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
         <source>Could not find property '{0}' on '{1}'.</source>
-        <target state="new">Could not find property '{0}' on '{1}'.</target>
+        <target state="translated">Невозможно найти свойство {0} в '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
         <source>{0} Tasks</source>
-        <target state="new">{0} Tasks</target>
+        <target state="translated">{0} Задачи</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
         <source>Error using the dropdown: {0}</source>
-        <target state="new">Error using the dropdown: {0}</target>
+        <target state="translated">Ошибка при использовании раскрывающегося списка: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
         <source>Error invoking '{0}'.  Details: {1}</source>
-        <target state="new">Error invoking '{0}'.  Details: {1}</target>
+        <target state="translated">Ошибка при вызове '{0}'.  Подробно: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorSettingValue">
         <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
-        <target state="new">Error setting value '{0}' to property '{1}'.  Details: {2}</target>
+        <target state="translated">Ошибка при установке значения '{0}' для свойства '{1}'.  Подробно: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
-        <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <target state="translated">Перед вызовом функций перетаскивания необходимо, чтобы успешно завершился вызов функции BeginDrag.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
         <source>Inherited control</source>
-        <target state="new">Inherited control</target>
+        <target state="translated">Унаследованный элемент управления</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInheritedReadOnly">
         <source>Inherited control (Private)</source>
-        <target state="new">Inherited control (Private)</target>
+        <target state="translated">Унаследованный элемент управления (Частный)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
@@ -278,7 +268,6 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-        <target state="needs-review-translation">Произошла ошибка при загрузке документа. Исправьте ошибку и повторите загрузку.  Сообщение об ошибке:\r\n\r\n{0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
@@ -448,12 +437,12 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
-        <target state="new">Dock in Parent Container</target>
+        <target state="translated">Закрепить в родительском контейнере</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
-        <target state="new">Undock in Parent Container</target>
+        <target state="translated">Открепить в родительском контейнере</target>
         <note />
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
@@ -463,17 +452,17 @@
       </trans-unit>
       <trans-unit id="DragDropDragComponents">
         <source>Drag {0} components</source>
-        <target state="new">Drag {0} components</target>
+        <target state="translated">Перетащить {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">Переместить {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponents">
         <source>Move {0} components</source>
-        <target state="new">Move {0} components</target>
+        <target state="translated">Переместить {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -483,12 +472,12 @@
       </trans-unit>
       <trans-unit id="DragDropSizeComponent">
         <source>Size {0}</source>
-        <target state="new">Size {0}</target>
+        <target state="translated">Изменить размер {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSizeComponents">
         <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+        <target state="translated">Изменить размер {0} компонентов</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -503,12 +492,12 @@
       </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
-        <target state="new">'{1}' is not a valid value for '{0}'.</target>
+        <target state="translated">'{1}' не является допустимым значением для '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
-        <target state="new">'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</target>
+        <target state="translated">'{1}' не является допустимым значением для '{0}'. Значение '{0}' должно лежать в диапазоне от {2} до {3}.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -523,7 +512,7 @@
       </trans-unit>
       <trans-unit id="RTL">
         <source>RTL_False</source>
-        <target state="new">RTL_False</target>
+        <target state="translated">RTL_False</target>
         <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
@@ -623,7 +612,7 @@
       </trans-unit>
       <trans-unit id="SerializerTypeAbstract">
         <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
-        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <target state="translated">Проектировщик должен создать экземпляр типа '{0}', однако это невозможно, поскольку тип объявлен как абстрактный.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
@@ -638,292 +627,288 @@
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
         <source>&amp;About...</source>
-        <target state="new">&amp;About...</target>
+        <target state="translated">&amp;О программе...</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuContents">
         <source>&amp;Contents</source>
-        <target state="new">&amp;Contents</target>
+        <target state="translated">&amp;Содержание</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCopy">
         <source>&amp;Copy</source>
-        <target state="new">&amp;Copy</target>
+        <target state="translated">&amp;Копировать</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCreateDesc">
         <source>Create Standard Menu</source>
-        <target state="new">Create Standard Menu</target>
+        <target state="translated">Создание стандартного меню</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCustomize">
         <source>&amp;Customize</source>
-        <target state="new">&amp;Customize</target>
+        <target state="translated">&amp;Настройки</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCut">
         <source>Cu&amp;t</source>
-        <target state="new">Cu&amp;t</target>
+        <target state="translated">Вырезат&amp;ь</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuEdit">
         <source>&amp;Edit</source>
-        <target state="new">&amp;Edit</target>
+        <target state="translated">&amp;Правка</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuExit">
         <source>E&amp;xit</source>
-        <target state="new">E&amp;xit</target>
+        <target state="translated">Вы&amp;ход</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuFile">
         <source>&amp;File</source>
-        <target state="new">&amp;File</target>
+        <target state="translated">&amp;Файл</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuHelp">
         <source>&amp;Help</source>
-        <target state="new">&amp;Help</target>
+        <target state="translated">&amp;Справка</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuIndex">
         <source>&amp;Index</source>
-        <target state="new">&amp;Index</target>
+        <target state="translated">&amp;Индекс</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuNew">
         <source>&amp;New</source>
-        <target state="new">&amp;New</target>
+        <target state="translated">Со&amp;здать</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuOpen">
         <source>&amp;Open</source>
-        <target state="new">&amp;Open</target>
+        <target state="translated">&amp;Открыть</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuOptions">
         <source>&amp;Options</source>
-        <target state="new">&amp;Options</target>
+        <target state="translated">&amp;Параметры</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPaste">
         <source>&amp;Paste</source>
-        <target state="new">&amp;Paste</target>
+        <target state="translated">Вст&amp;авка</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrint">
         <source>&amp;Print</source>
-        <target state="new">&amp;Print</target>
+        <target state="translated">&amp;Печать</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrintPreview">
         <source>Print Pre&amp;view</source>
-        <target state="new">Print Pre&amp;view</target>
+        <target state="translated">Предварительный прос&amp;мотр</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuRedo">
         <source>&amp;Redo</source>
-        <target state="new">&amp;Redo</target>
+        <target state="translated">&amp;Отмена действия</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSave">
         <source>&amp;Save</source>
-        <target state="new">&amp;Save</target>
+        <target state="translated">Со&amp;хранить</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSaveAs">
         <source>Save &amp;As</source>
-        <target state="new">Save &amp;As</target>
+        <target state="translated">Сохранить &amp;как</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSearch">
         <source>&amp;Search</source>
-        <target state="new">&amp;Search</target>
+        <target state="translated">&amp;Поиск</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSelectAll">
         <source>Select &amp;All</source>
-        <target state="new">Select &amp;All</target>
+        <target state="translated">Выделить &amp;все</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuTools">
         <source>&amp;Tools</source>
-        <target state="new">&amp;Tools</target>
+        <target state="translated">Сер&amp;вис</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuUndo">
         <source>&amp;Undo</source>
-        <target state="new">&amp;Undo</target>
+        <target state="translated">&amp;Отмена действия</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolCut">
         <source>C&amp;ut</source>
-        <target state="new">C&amp;ut</target>
+        <target state="translated">В&amp;ырезать</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolHelp">
         <source>He&amp;lp</source>
-        <target state="new">He&amp;lp</target>
+        <target state="translated">Спр&amp;авка</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-        <target state="new">Dock:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
         <source>Changes the Dock property</source>
-        <target state="new">Changes the Dock property</target>
+        <target state="translated">Изменяет свойство Dock</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyle">
         <source>GripStyle:</source>
-        <target state="new">GripStyle:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyleDesc">
         <source>Changes the GripStyle property</source>
-        <target state="new">Changes the GripStyle property</target>
+        <target state="translated">Изменяет свойство GripStyle</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Layout">
         <source>Layout &amp;&amp; Appearance</source>
-        <target state="new">Layout &amp;&amp; Appearance</target>
+        <target state="translated">Раскладка и внешний вид</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-        <target state="new">RenderMode:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
         <source>Changes the RenderMode property</source>
-        <target state="new">Changes the RenderMode property</target>
+        <target state="translated">Изменяет свойство RenderMode</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAddingItem">
         <source>Adding {0} Item</source>
-        <target state="new">Adding {0} Item</target>
+        <target state="translated">Добавление элемента {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
-        <target state="new">AllowItemReorder and AllowDrop cannot both be true.</target>
+        <target state="translated">AllowItemReorder и AllowDrop не могут одновременно иметь значение true.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
-        <target state="new">ToolStrip New Item create Transaction.</target>
+        <target state="translated">Новый элемент ToolStrip создает транзакцию.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-        <target state="new">Embed in ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">
         <source>Embeds the current ToolStrip in ToolStripContainer</source>
-        <target state="new">Embeds the current ToolStrip in ToolStripContainer</target>
+        <target state="translated">Внедряет текущий ToolStrip в ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerStandardItemsVerb">
         <source>&amp;Insert Standard Items</source>
-        <target state="new">&amp;Insert Standard Items</target>
+        <target state="translated">&amp;Вставить стандартные элементы</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
         <source>Inserts standard items in the current ToolStrip</source>
-        <target state="new">Inserts standard items in the current ToolStrip</target>
+        <target state="translated">Вставляет стандартные элементы в текущий ToolStrip</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
         <source>Type Here</source>
-        <target state="new">Type Here</target>
+        <target state="translated">Прототип для текста</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
         <source>Type Text for ToolStripMenuItem</source>
-        <target state="new">Type Text for ToolStripMenuItem</target>
+        <target state="translated">Введите текст для ToolStripMenuItem</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
         <source>Add Menu Item</source>
-        <target state="new">Add Menu Item</target>
+        <target state="translated">Добавить пункт меню</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
         <source>Add ToolStripStatusLabel</source>
-        <target state="new">Add ToolStripStatusLabel</target>
+        <target state="translated">Добавить ToolStripStatusLabel</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
         <source>Add ToolStripButton</source>
-        <target state="new">Add ToolStripButton</target>
+        <target state="translated">Добавить ToolStripButton</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerToolStripAccessibleName">
         <source>New item selection</source>
-        <target state="new">New item selection</target>
+        <target state="translated">Выбор нового элемента</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTransactionAddingItem">
         <source>Adding Item</source>
-        <target state="new">Adding Item</target>
+        <target state="translated">Добавление элемента</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTransactionRemovingItem">
         <source>Removing Item</source>
-        <target state="new">Removing Item</target>
+        <target state="translated">Удаление элемента</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
         <source>&amp;Edit DropDownItems...</source>
-        <target state="new">&amp;Edit DropDownItems...</target>
+        <target state="translated">&amp;Правка DropDownItems...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
         <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
-        <target state="new">ToolStrip MenuItem Insert in DropDown Transaction.</target>
+        <target state="translated">Вставка элементов меню ToolStrip в транзакцию DropDown.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
-        <target state="new">&amp;Edit Items...</target>
+        <target state="translated">&amp;Правка элементов…</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuConvertTo">
         <source>Con&amp;vert To</source>
-        <target state="new">Con&amp;vert To</target>
+        <target state="translated">Пр&amp;еобразовать в</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuInsert">
         <source>&amp;Insert</source>
-        <target state="new">&amp;Insert</target>
+        <target state="translated">&amp;Вставить</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuSetImage">
         <source>Set I&amp;mage...</source>
-        <target state="new">Set I&amp;mage...</target>
+        <target state="translated">Задать р&amp;исунок...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemPropertyChangeTransaction">
         <source>ToolStripItem Property Change Transaction.</source>
-        <target state="new">ToolStripItem Property Change Transaction.</target>
+        <target state="translated">Транзакция изменения свойства ToolStripItem.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
-        <target state="new">ToolStripItem Morphing Transaction.</target>
+        <target state="translated">Транзакция преобразования ToolStripItem</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">
         <source>'{0}'</source>
-        <target state="new">'{0}'</target>
+        <target state="translated">"{0}"</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSeparatorError">
         <source>Cannot add ToolStripSeparator to MenuStrip.</source>
-        <target state="new">Cannot add ToolStripSeparator to MenuStrip.</target>
+        <target state="translated">Не удается добавить ToolStripSeparator в MenuStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -948,17 +933,17 @@
       </trans-unit>
       <trans-unit id="TrayAutoArrange">
         <source>Auto Arrange Tray Icons</source>
-        <target state="new">Auto Arrange Tray Icons</target>
+        <target state="translated">Автоматически упорядочить значки на панели задач</target>
         <note />
       </trans-unit>
       <trans-unit id="TrayLineUpIcons">
         <source>Line Up Tray Icons</source>
-        <target state="new">Line Up Tray Icons</target>
+        <target state="translated">Выстроить значки на панели задач</target>
         <note />
       </trans-unit>
       <trans-unit id="TrayShowLargeIcons">
         <source>Show Large or Small Icons</source>
-        <target state="new">Show Large or Small Icons</target>
+        <target state="translated">Отображать крупные или мелкие значки</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
@@ -968,7 +953,7 @@
       </trans-unit>
       <trans-unit id="UIServiceHelper_ErrorCaption">
         <source>Error</source>
-        <target state="new">Error</target>
+        <target state="translated">Ошибка</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
@@ -1023,22 +1008,22 @@
       </trans-unit>
       <trans-unit id="WindowsFormsAddEvent">
         <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
-        <target state="new">&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</target>
+        <target state="translated">&lt;невозможно найти строку ресурса "WindowsFormsAddEvent"&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterX">
         <source>Horizontal center of {0} component(s)</source>
-        <target state="new">Horizontal center of {0} component(s)</target>
+        <target state="translated">Центр {0} компонентов по горизонтали</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
-        <target state="new">Vertical center of {0} component(s)</target>
+        <target state="translated">Центр {0} компонентов по вертикали</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">
         <source>The Locked property determines if we can move or resize the control.</source>
-        <target state="new">The Locked property determines if we can move or resize the control.</target>
+        <target state="translated">Свойство Locked определяет, можно ли перемещать элемент управления или изменять его размеры.</target>
         <note />
       </trans-unit>
     </body>
