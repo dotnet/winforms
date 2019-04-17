@@ -2658,7 +2658,7 @@ namespace System.Windows.Forms {
                     string name;
 
                     // return the full name of the link label
-                    // assometimes the link name in isolation
+                    // as sometimes the link name in isolation
                     // is unusable when using a screen reader
                     name = text;
                     if (link.Owner.UseMnemonic) {
