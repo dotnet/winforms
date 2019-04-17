@@ -732,7 +732,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxLength), string.Format(SR.InvalidLowBoundArgumentEx, "MaxLength", (value).ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxLength), value, 0));
                 }
 
                 if (maxLength != value) {
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 0){
-                    throw new ArgumentOutOfRangeException(nameof(SelectionLength), string.Format(SR.InvalidArgument, "SelectionLength", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionLength), value));
                 }
 
                 int selStart, selLength;
@@ -1163,7 +1163,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0){
-                    throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
                 Select(value, SelectionLength);
             }
@@ -1708,7 +1708,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public int GetFirstCharIndexFromLine(int lineNumber) {
             if (lineNumber < 0) {
-                throw new ArgumentOutOfRangeException(nameof(lineNumber), string.Format(SR.InvalidArgument, "lineNumber", lineNumber.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
             return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEINDEX, lineNumber, 0));
         }
@@ -1824,7 +1824,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Select(int start, int length) {
             if (start < 0){
-                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
             }
 
             int textLen = TextLength;

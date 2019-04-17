@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public DesignerSerializationManager(IServiceProvider provider)
         {
-            this.provider = provider ?? throw new ArgumentNullException("provider");
+            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
             preserveNames = true;
             validateRecycledTypes = true;
         }
@@ -412,7 +412,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (serializerType == null)
             {
-                throw new ArgumentNullException("serializerType");
+                throw new ArgumentNullException(nameof(serializerType));
             }
 
             object serializer = null;
@@ -624,7 +624,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (property == null)
             {
-                throw new ArgumentNullException("property");
+                throw new ArgumentNullException(nameof(property));
             }
             // owner can be null for static properties.
             return new WrappedPropertyDescriptor(property, owner);
@@ -766,7 +766,7 @@ namespace System.ComponentModel.Design.Serialization
             object instance = null;
             if (name == null)
             {
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
             }
 
             CheckSession();
@@ -798,7 +798,7 @@ namespace System.ComponentModel.Design.Serialization
             string name = null;
             if (value == null)
             {
-                throw new ArgumentNullException("value");
+                throw new ArgumentNullException(nameof(value));
             }
 
             CheckSession();
@@ -891,8 +891,8 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            if (instance == null) throw new ArgumentNullException("instance");
-            if (name == null) throw new ArgumentNullException("name");
+            if (instance == null) throw new ArgumentNullException(nameof(instance));
+            if (name == null) throw new ArgumentNullException(nameof(name));
 
             if (instancesByName == null)
             {

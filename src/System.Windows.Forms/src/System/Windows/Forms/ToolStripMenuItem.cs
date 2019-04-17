@@ -159,7 +159,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CreateDefaultDropDown"]/*' />
         protected override ToolStripDropDown CreateDefaultDropDown() {
-            // AutoGenerate a Winbar DropDown - set the property so we hook events
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
              return new ToolStripDropDownMenu(this, true);
         }
 
@@ -196,13 +196,13 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultMargin"]/*' />
+        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultMargin"]/*' />
         protected internal override Padding DefaultMargin {
             get {
                  return Padding.Empty;
             }
         }
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultPadding"]/*' />
+        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.DefaultPadding"]/*' />
         protected override Padding DefaultPadding {
             get {
                 if (IsOnDropDown) {
@@ -353,7 +353,7 @@ namespace System.Windows.Forms {
             return b;
         }
 
-         /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckOnClick"]/*' />
+         /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckOnClick"]/*' />
          [
          DefaultValue(false),
          SRCategory(nameof(SR.CatBehavior)),
@@ -436,7 +436,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.Overflow"]/*' />
         /// <devdoc>
-        /// <para>Specifies whether or not the item is glued to the winbar or overflow or
+        /// <para>Specifies whether or not the item is glued to the ToolStrip or overflow or
         /// can float between the two.</para>
         /// </devdoc>
         [
@@ -838,7 +838,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnClick"]/*' />
+        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.OnClick"]/*' />
         protected override void OnClick(EventArgs e) {
             if (checkOnClick) {
                 this.Checked = !this.Checked;
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms {
                 else {
                                         
 
-                    // Toplevel item support, menu items hosted on a plain winbar dropdown
+                    // Toplevel item support, menu items hosted on a plain ToolStrip dropdown
                     if ((DisplayStyle & ToolStripItemDisplayStyle.Text) == ToolStripItemDisplayStyle.Text) { 
                         renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, this.Text, InternalLayout.TextRectangle, textColor, this.Font, InternalLayout.TextFormat));
                     }
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms {
              return base.ProcessMnemonic(charCode);
         }
 
-        /// <include file='doc\WinBarMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.SetBounds"]/*' />
+        /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.SetBounds"]/*' />
         /// <devdoc> overridden here so we scooch over when we're in the ToolStripDropDownMenu</devdoc>
         internal protected override void SetBounds(Rectangle rect) {
 

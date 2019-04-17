@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     /// <devdoc>
     /// These methods allow the ToolStrip to route events
-    /// to the winbar item.  Since a ToolStrip is not a ToolStripItem,
+    /// to the ToolStrip item.  Since a ToolStrip is not a ToolStripItem,
     /// it cannot directly call OnPaint.
     /// </devdoc>
     internal enum ToolStripItemEventType

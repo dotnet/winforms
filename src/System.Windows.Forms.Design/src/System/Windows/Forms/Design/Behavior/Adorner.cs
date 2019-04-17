@@ -14,12 +14,16 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public sealed class Adorner
     {
+        private BehaviorService _behaviorService; //ptr back to the BehaviorService
+        private readonly GlyphCollection _glyphs; //collection of Glyphs that this particular Adorner manages
+
         /// <summary>
         ///     Standard constructor.  Creates a new GlyphCollection and by default is enabled.
         /// </summary>
         public Adorner()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _glyphs = new GlyphCollection();
+            EnabledInternal = true;
         }
 
         /// <summary>
@@ -28,8 +32,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public BehaviorService BehaviorService
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get => _behaviorService;
+            set => _behaviorService = value;
         }
 
         /// <summary>
@@ -38,14 +42,26 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public bool Enabled
         {
-            get => throw new NotImplementedException(SR.NotImplementedByDesign);
-            set => throw new NotImplementedException(SR.NotImplementedByDesign);
+            get => EnabledInternal;
+            set
+            {
+                if (value != EnabledInternal)
+                {
+                    EnabledInternal = value;
+                    Invalidate();
+                }
+            }
         }
+
+        internal bool EnabledInternal { get; set; }
 
         /// <summary>
         ///     Returns the stronly-typed Glyph collection.
         /// </summary>
-        public GlyphCollection Glyphs => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public GlyphCollection Glyphs
+        {
+            get => _glyphs;
+        }
 
         /// ///
         /// <summary>
@@ -53,7 +69,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate()
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _behaviorService?.Invalidate();
         }
 
         /// <summary>
@@ -61,7 +77,10 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Rectangle rectangle)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (_behaviorService != null)
+            {
+                _behaviorService.Invalidate(rectangle);
+            }
         }
 
         /// <summary>
@@ -69,7 +88,10 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void Invalidate(Region region)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            if (_behaviorService != null)
+            {
+                _behaviorService.Invalidate(region);
+            }
         }
     }
 }

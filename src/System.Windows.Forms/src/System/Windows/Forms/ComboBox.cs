@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownWidth), string.Format(SR.InvalidArgument, "DropDownWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
                 }
                 if (Properties.GetInteger(PropDropDownWidth) != value) {
                     Properties.SetInteger(PropDropDownWidth, value);
@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownHeight), string.Format(SR.InvalidArgument, "DropDownHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
                 }
                 if (Properties.GetInteger(PropDropDownHeight) != value) {
                     Properties.SetInteger(PropDropDownHeight, value);
@@ -722,7 +722,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemHeight), value));
                 }
 
                 ResetHeightCache();
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1 || value > 100) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), string.Format(SR.InvalidBoundArgument, "MaxDropDownItems", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
                 }
                 maxDropDownItems = (short)value;
             }
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (value < -1 || value >= itemCount) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                     }
 
                     if (IsHandleCreated) {
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
                 Select(value, SelectionLength);
             }
@@ -1991,81 +1991,46 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the combo box that starts with the given string.
-        ///     The search is not case sensitive.
+        /// Finds the first item in the combo box that starts with the given string.
+        /// The search is not case sensitive.
         /// </devdoc>
-        public int FindString(string s) {
-            return FindString(s, -1);
+        public int FindString(string s) => FindString(s, startIndex: -1);
+
+        /// <devdoc>
+        /// Finds the first item after the given index which starts with the given string.
+        /// The search is not case sensitive.
+        /// </devdoc>
+        public int FindString(string s, int startIndex)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index which starts with the given
-        ///     string. The search is not case sensitive.
+        /// Finds the first item in the combo box that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindString(string s, int startIndex) {
-            if (s == null) {
-                return -1;
-            }
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRING.
-            // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, false);
+        public int FindStringExact(string s) 
+        {
+            return FindStringExact(s, startIndex: -1, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the combo box that matches the given string.
-        ///     The strings must match exactly, except for differences in casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s) {
-            return FindStringExact(s, -1, true);
+        public int FindStringExact(string s, int startIndex)
+        {
+            return FindStringExact(s, startIndex, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s, int startIndex) {
-            return FindStringExact(s, startIndex, true);
-        }
-
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
-        /// </devdoc>
-        internal int FindStringExact(string s, int startIndex, bool ignorecase) {
-            if (s == null) return -1;
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRINGEXACT.
-            // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, true, ignorecase);
+        internal int FindStringExact(string s, int startIndex, bool ignoreCase)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
@@ -2105,7 +2070,7 @@ namespace System.Windows.Forms {
             }
 
             if (index < 0 || itemsCollection == null || index >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
             if (IsHandleCreated) {
@@ -3169,14 +3134,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Select(int start, int length) {
             if (start < 0) {
-                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
             }
             // the Length can be negative to support Selecting in the "reverse" direction..
             int end = start + length;
 
             // but end cannot be negative... this means Length is far negative...
             if (end < 0) {
-                throw new ArgumentOutOfRangeException(nameof(length), string.Format(SR.InvalidArgument, "length", length.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
             SendMessage(NativeMethods.CB_SETEDITSEL, 0, NativeMethods.Util.MAKELPARAM(start, end));
@@ -3273,7 +3238,7 @@ namespace System.Windows.Forms {
         public override string ToString() {
 
             string s = base.ToString();
-            return s + ", Items.Count: " + ((itemsCollection == null) ? (0).ToString(CultureInfo.CurrentCulture) : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
+            return s + ", Items.Count: " + ((itemsCollection == null) ? "0" : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <devdoc>
@@ -4100,7 +4065,7 @@ namespace System.Windows.Forms {
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
                     return InnerList[index];
@@ -4188,7 +4153,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index > InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 // If the combo box is sorted, then nust treat this like an add
@@ -4230,7 +4195,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 if (owner.IsHandleCreated) {
@@ -4267,7 +4232,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 InnerList[index] = value;

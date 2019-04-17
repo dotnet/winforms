@@ -6,12 +6,9 @@ namespace System.ComponentModel.Design
 {
     public sealed class DesignerActionPropertyItem : DesignerActionItem
     {
-        private readonly string _memberName;
-        private IComponent _relatedComponent;
-
         public DesignerActionPropertyItem(string memberName, string displayName, string category, string description) : base(displayName, category, description)
         {
-            _memberName = memberName;
+            MemberName = memberName;
         }
 
         public DesignerActionPropertyItem(string memberName, string displayName) : this(memberName, displayName, null, null)
@@ -22,16 +19,8 @@ namespace System.ComponentModel.Design
         {
         }
 
-        public string MemberName
-        {
-            get => _memberName;
-        }
+        public string MemberName { get; }
 
-        public IComponent RelatedComponent
-        {
-            get => _relatedComponent;
-            set => _relatedComponent = value;
-        }
-
+        public IComponent RelatedComponent { get; set; }
     }
 }

@@ -661,7 +661,10 @@ namespace System.Windows.Forms {
             set {
                 if (this.value != value) {
                     if (!initializing && ((value < minimum) || (value > maximum)))
-                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", (value).ToString(CultureInfo.CurrentCulture), "'Minimum'", "'Maximum'"));
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), value, $"'{nameof(Minimum)}'", $"'${nameof(Maximum)}'"));
+                    }
+
                     this.value = value;
                     SetTrackBarPosition();
                     OnValueChanged(EventArgs.Empty);
@@ -1120,7 +1123,7 @@ namespace System.Windows.Forms {
         public override string ToString() {
 
             string s = base.ToString();
-            return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + Value.ToString(CultureInfo.CurrentCulture);
+            return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.WndProc"]/*' />

@@ -22,4 +22,10 @@
     <CallTarget Targets="GenerateCoverageResult" />
   </Target>
 
+  <PropertyGroup>
+    <!-- If TargetFramework is not netcoreapp3.x, then reset RuntimeFrameworkVersion -->
+    <!-- TODO: /p:EnableInstallDotNetCoreRuntimes=true to endable this for tests once dotnet/arcade#2343 is in -->
+    <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('netcoreapp3.'))" />
+  </PropertyGroup>
+
 </Project>

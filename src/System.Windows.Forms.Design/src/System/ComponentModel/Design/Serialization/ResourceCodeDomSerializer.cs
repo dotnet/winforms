@@ -151,8 +151,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager == null) throw new ArgumentNullException("manager");
-            if (type == null) throw new ArgumentNullException("type");
+            if (manager == null) throw new ArgumentNullException(nameof(manager));
+            if (type == null) throw new ArgumentNullException(nameof(type));
 
             if (name != null && name.Equals(ResourceManagerName) && typeof(ResourceManager).IsAssignableFrom(type))
             {
@@ -953,7 +953,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (culture == null)
                 {
-                    throw new ArgumentNullException("culture");
+                    throw new ArgumentNullException(nameof(culture));
                 }
 
                 CultureInfo lastCulture;

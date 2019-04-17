@@ -2,894 +2,901 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 
-    using System;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     This is a small class that can efficiently store property values.
-    ///     It tries to optimize for size first, "get" access second, and
-    ///     "set" access third.  
+    /// This is a small class that can efficiently store property values.
+    /// It tries to optimize for size first, "get" access second, and
+    /// "set" access third.
     /// </devdoc>
-    internal class PropertyStore {
-    
-        private static int currentKey;
-    
-        private IntegerEntry[] intEntries;
-        private ObjectEntry[]  objEntries;
-    
+    internal class PropertyStore
+    {
+        private static int s_currentKey;
+
+        private IntegerEntry[] s_intEntries;
+        private ObjectEntry[] s_objEntries;
+
         /// <devdoc>
-        ///     Retrieves an integer value from our property list.
-        ///     This will set value to zero and return false if the 
-        ///     list does not contain the given key.
+        /// Retrieves an integer value from our property list.
+        /// This will set value to zero and return false if the
+        /// list does not contain the given key.
         /// </devdoc>
-        public bool ContainsInteger(int key) {
-            bool found;
-            GetInteger(key, out found);
+        public bool ContainsInteger(int key)
+        {
+            GetInteger(key, out bool found);
             return found;
         }
-        
+
         /// <devdoc>
-        ///     Retrieves an integer value from our property list.
-        ///     This will set value to zero and return false if the 
-        ///     list does not contain the given key.
+        /// Retrieves an integer value from our property list.
+        /// This will set value to zero and return false if the
+        /// list does not contain the given key.
         /// </devdoc>
-        public bool ContainsObject(int key) {
-            bool found;
-            GetObject(key, out found);
+        public bool ContainsObject(int key)
+        {
+            GetObject(key, out bool found);
             return found;
         }
-        
+
         /// <devdoc>
-        ///     Creates a new key for this property store.  This is NOT
-        ///     guarded by any thread safety so if you are calling it on
-        ///     multiple threads you should guard.  For our purposes,
-        ///     we're fine because this is designed to be called in a class
-        ///     initializer, and we never have the same class hierarchy
-        ///     initializing on multiple threads at once.
+        /// Creates a new key for this property store. This is NOT
+        /// guarded by any thread safety so if you are calling it on
+        /// multiple threads you should guard. For our purposes,
+        /// we're fine because this is designed to be called in a class
+        /// initializer, and we never have the same class hierarchy
+        /// initializing on multiple threads at once.
         /// </devdoc>
-        public static int CreateKey() {
-            return currentKey++;
-        }
+        public static int CreateKey() => s_currentKey++;
 
-        public Color GetColor(int key) {
-            bool found;
-            return GetColor(key, out found);                
-        }
+        public Color GetColor(int key) => GetColor(key, out _);
 
-        // this is a wrapper around GetObject designed to 
-        // reduce the boxing hit
-        public Color GetColor(int key, out bool found) {
+        /// <summary>
+        /// A wrapper around GetObject designed to reduce the boxing hit
+        /// </summary>
+        public Color GetColor(int key, out bool found)
+        {
             object storedObject = GetObject(key, out found);
-            
-            if (found) {
-                ColorWrapper wrapper = storedObject as ColorWrapper;
-
-                if (wrapper != null) {
+            if (found)
+            {
+                if (storedObject is ColorWrapper wrapper)
+                {
                     return wrapper.Color;
                 }
-#if DEBUG
-                else if (storedObject != null) {
-                    Debug.Fail("Have non-null object that isnt a color wrapper stored in a color entry!\r\nDid someone SetObject instead of SetColor?");
-                }
-#endif 
+
+                Debug.Assert(storedObject == null, $"Have non-null object that isnt a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
             }
-            // we didnt actually find a non-null color wrapper.
+
             found = false;
-            return Color.Empty;            
+            return Color.Empty;
         }
 
-        
-        public Padding GetPadding(int key) {
-            bool found;
-            return GetPadding(key, out found);                
-        }
-
-        // this is a wrapper around GetObject designed to 
-        // reduce the boxing hit
-        public Padding GetPadding(int key, out bool found) {
+        /// <summary>
+        /// A wrapper around GetObject designed to reduce the boxing hit.
+        /// </summary>
+        public Padding GetPadding(int key, out bool found)
+        {
             object storedObject = GetObject(key, out found);
-          
-            if (found) {
-                PaddingWrapper wrapper = storedObject as PaddingWrapper;
-                            
-
-                if (wrapper != null) {
+            if (found)
+            {
+                if (storedObject is PaddingWrapper wrapper)
+                {
                     return wrapper.Padding;
-                }               
-#if DEBUG
-                else if (storedObject != null) {
-                    Debug.Fail("Have non-null object that isnt a padding wrapper stored in a padding entry!\r\nDid someone SetObject instead of SetPadding?");
                 }
-#endif                
+
+                Debug.Assert(storedObject == null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
-            
-            // we didnt actually find a non-null padding wrapper.
+
             found = false;
-            return Padding.Empty;            
+            return Padding.Empty;
         }
-#if false // FXCOP currently not used 
-        public Size GetSize(int key) {
-            bool found;
-            return GetSize(key, out found);                
-        }
-#endif
 
-        // this is a wrapper around GetObject designed to 
-        // reduce the boxing hit
-        public Size GetSize(int key, out bool found) {
+        /// <summary>
+        /// A wrapper around GetObject designed to reduce the boxing hit.
+        /// </summary>
+        public Size GetSize(int key, out bool found)
+        {
             object storedObject = GetObject(key, out found);
-
-            if (found) {
-                SizeWrapper wrapper = storedObject as SizeWrapper;
-                if (wrapper != null) {
+            if (found)
+            {
+                if (storedObject is SizeWrapper wrapper)
+                {
                     return wrapper.Size;
                 }
-#if DEBUG
-                else if (storedObject != null) {
-                    Debug.Fail("Have non-null object that isnt a padding wrapper stored in a padding entry!\r\nDid someone SetObject instead of SetPadding?");
-                }
-#endif
+
+                Debug.Assert(storedObject == null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
-             // we didnt actually find a non-null size wrapper.
+
             found = false;
-            return Size.Empty;            
+            return Size.Empty;
         }
 
-        public Rectangle GetRectangle(int key) {
-            bool found;
-            return GetRectangle(key, out found);                
-        }
-     
-        // this is a wrapper around GetObject designed to 
-        // reduce the boxing hit
-        public Rectangle GetRectangle(int key, out bool found) {        
+        /// <summary>
+        /// A wrapper around GetObject designed to reduce the boxing hit.
+        /// </summary>
+        public Rectangle GetRectangle(int key, out bool found)
+        {
             object storedObject = GetObject(key, out found);
-            
-            if (found) {
-                RectangleWrapper wrapper = storedObject as RectangleWrapper;          
-                if (wrapper != null) {
+            if (found)
+            {
+                if (storedObject is RectangleWrapper wrapper)
+                {
                     return wrapper.Rectangle;
                 }
-#if DEBUG                
-                else if (storedObject != null) {
-                    Debug.Fail("Have non-null object that isnt a Rectangle wrapper stored in a Rectangle entry!\r\nDid someone SetObject instead of SetRectangle?");
-                }
-#endif                
+
+                Debug.Assert(storedObject == null, $"Have non-null object that isnt a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
             }
-            // we didnt actually find a non-null rectangle wrapper.
+
             found = false;
-            return Rectangle.Empty;            
+            return Rectangle.Empty;
         }
 
         /// <devdoc>
-        ///     Retrieves an integer value from our property list.
-        ///     This will set value to zero and return false if the 
-        ///     list does not contain the given key.
+        /// Retrieves an integer value from our property list.
+        /// This will set value to zero and return false if the
+        /// list does not contain the given key.
         /// </devdoc>
-        public int GetInteger(int key) {
-            bool found;
-            return GetInteger(key, out found);
-        }
-        
-        /// <devdoc>
-        ///     Retrieves an integer value from our property list.
-        ///     This will set value to zero and return false if the 
-        ///     list does not contain the given key.
-        /// </devdoc>
-        public int GetInteger(int key, out bool found) {
-        
-            int   value = 0;
-            int   index;
-            short element;
-            short keyIndex = SplitKey(key, out element);
-            
-            found = false;
-            
-            if (LocateIntegerEntry(keyIndex, out index)) {
-                // We have found the relevant entry.  See if
-                // the bitmask indicates the value is used.
-                //
-                if (((1 << element) & intEntries[index].Mask) != 0) {
-                
-                    found = true;
-                    
-                    switch(element) {
-                        case 0:
-                            value = intEntries[index].Value1;
-                            break;
-                            
-                        case 1:
-                            value = intEntries[index].Value2;
-                            break;
-                            
-                        case 2:
-                            value = intEntries[index].Value3;
-                            break;
-                            
-                        case 3:
-                            value = intEntries[index].Value4;
-                            break;
-                            
-                        default:
-                            Debug.Fail("Invalid element obtained from LocateIntegerEntry");
-                            break;
-                    }
-                }
-            }
-        
-            return value;
-        }
-    
-        /// <devdoc>
-        ///     Retrieves an object value from our property list.
-        ///     This will set value to null and return false if the 
-        ///     list does not contain the given key.
-        /// </devdoc>
-        public object GetObject(int key) {
-            bool found;
-            return GetObject(key, out found);
-        }
+        public int GetInteger(int key) =>  GetInteger(key, out _);
 
         /// <devdoc>
-        ///     Retrieves an object value from our property list.
-        ///     This will set value to null and return false if the 
-        ///     list does not contain the given key.
+        /// Retrieves an integer value from our property list.
+        /// This will set value to zero and return false if the
+        /// list does not contain the given key.
         /// </devdoc>
-        public object GetObject(int key, out bool found) {
-        
-            object value = null;
-            int   index;
-            short element;
-            short keyIndex = SplitKey(key, out element);
-            
-            found = false;
-            
-            if (LocateObjectEntry(keyIndex, out index)) {
-                // We have found the relevant entry.  See if
-                // the bitmask indicates the value is used.
-                //
-                if (((1 << element) & objEntries[index].Mask) != 0) {
-                    
-                    found = true;
-                    
-                    switch(element) {
-                        case 0:
-                            value = objEntries[index].Value1;
-                            break;
-                            
-                        case 1:
-                            value = objEntries[index].Value2;
-                            break;
-                            
-                        case 2:
-                            value = objEntries[index].Value3;
-                            break;
-                            
-                        case 3:
-                            value = objEntries[index].Value4;
-                            break;
-                            
-                        default:
-                            Debug.Fail("Invalid element obtained from LocateObjectEntry");
-                            break;
-                    }
-                }
+        public int GetInteger(int key, out bool found)
+        {
+            short keyIndex = SplitKey(key, out short element);
+            if (!LocateIntegerEntry(keyIndex, out int index))
+            {
+                found = false;
+                return default(int);
             }
 
-            return value;
+            // We have found the relevant entry. See if
+            // the bitmask indicates the value is used.
+            if (((1 << element) & s_intEntries[index].Mask) == 0)
+            {
+                found = false;
+                return default(int);
+            }
+
+            found = true;
+            switch (element)
+            {
+                case 0:
+                    return s_intEntries[index].Value1;
+                case 1:
+                    return s_intEntries[index].Value2;
+                case 2:
+                    return s_intEntries[index].Value3;
+                case 3:
+                    return s_intEntries[index].Value4;
+                default:
+                    Debug.Fail("Invalid element obtained from LocateIntegerEntry");
+                    return default(int);
+            }
         }
 
-        
         /// <devdoc>
-        ///     Locates the requested entry in our array if entries.  This does
-        ///     not do the mask check to see if the entry is currently being used,
-        ///     but it does locate the entry.  If the entry is found, this returns
-        ///     true and fills in index and element.  If the entry is not found,
-        ///     this returns false.  If the entry is not found, index will contain
-        ///     the insert point at which one would add a new element.
+        /// Retrieves an object value from our property list.
+        /// This will set value to null and return false if the
+        /// list does not contain the given key.
         /// </devdoc>
-        private bool LocateIntegerEntry(short entryKey, out int index) {
-            if (intEntries != null) {
-                int length = intEntries.Length;
-                if (length <= 16) {
-                    //if the array is small enough, we unroll the binary search to be more efficient.
-                    //usually the performance gain is around 10% to 20%
-                    //DON'T change this code unless you are very confident!
-                    index = 0;
-                    int midPoint = length / 2;
-                    if (intEntries[midPoint].Key <= entryKey) {
-                        index = midPoint;
-                    }
-                    //we don't move this inside the previous if branch since this catches both the case
-                    //index == 0 and index = midPoint
-                    if (intEntries[index].Key == entryKey) {
-                        return true;
-                    }
-                    
-                    midPoint = (length + 1) / 4;
-                    if (intEntries[index + midPoint].Key <= entryKey) {
-                        index += midPoint;
-                        if (intEntries[index].Key == entryKey) {
-                            return true;
-                        }
-                    }
-                    
-                    midPoint = (length + 3) / 8;
-                    if (intEntries[index + midPoint].Key <= entryKey) {
-                        index += midPoint;
-                        if (intEntries[index].Key == entryKey) {
-                            return true;
-                        }
-                    }
-                    
-                    midPoint = (length + 7) / 16;
-                    if (intEntries[index + midPoint].Key <= entryKey) {
-                        index += midPoint;
-                        if (intEntries[index].Key == entryKey) {
-                            return true;
-                        }
-                    }
+        public object GetObject(int key) => GetObject(key, out _);
 
-                    Debug.Assert(index < length);
-                    if (entryKey > intEntries[index].Key) {
-                        index++;
-                    }
-                    Debug_VerifyLocateIntegerEntry(index, entryKey, length);
-                    return false;
-                }
-                else {    
-                    // Entries are stored in numerical order by key index so we can
-                    // do a binary search on them.
-                    //
-                    int max = length - 1;
-                    int min = 0;
-                    int idx = 0;
-                    
-                    do {
-                        idx = (max + min) / 2;
-                        short currentKeyIndex = intEntries[idx].Key;
-                        
-                        if (currentKeyIndex == entryKey) {
-                            index = idx;
-                            return true;
-                        }
-                        else if (entryKey < currentKeyIndex) {
-                            max = idx - 1;
-                        }
-                        else {
-                            min = idx + 1;
-                        }
-                    }
-                    while (max >= min);
-                    
-                    // Didn't find the index.  Setup our output
-                    // appropriately
-                    //
-                    index = idx;
-                    if (entryKey > intEntries[idx].Key) {
-                        index++;
-                    }
-                    return false;
-                }
+        /// <devdoc>
+        /// Retrieves an object value from our property list.
+        /// This will set value to null and return false if the
+        /// list does not contain the given key.
+        /// </devdoc>
+        public object GetObject(int key, out bool found)
+        {
+            short keyIndex = SplitKey(key, out short element);
+            if (!LocateObjectEntry(keyIndex, out int index))
+            {
+                found = false;
+                return null;
             }
-            else {
+
+            // We have found the relevant entry. See if
+            // the bitmask indicates the value is used.
+            if (((1 << element) & s_objEntries[index].Mask) == 0)
+            {
+                found = false;
+                return null;
+            }
+
+            found = true;
+            switch (element)
+            {
+                case 0:
+                    return s_objEntries[index].Value1;
+                case 1:
+                    return s_objEntries[index].Value2;
+                case 2:
+                    return s_objEntries[index].Value3;
+                case 3:
+                    return s_objEntries[index].Value4;
+                default:
+                    Debug.Fail("Invalid element obtained from LocateObjectEntry");
+                    return null;
+            }
+        }
+
+        /// <devdoc>
+        /// Locates the requested entry in our array if entries. This does
+        /// not do the mask check to see if the entry is currently being used,
+        /// but it does locate the entry. If the entry is found, this returns
+        /// true and fills in index and element. If the entry is not found,
+        /// this returns false. If the entry is not found, index will contain
+        /// the insert point at which one would add a new element.
+        /// </devdoc>
+        private bool LocateIntegerEntry(short entryKey, out int index)
+        {
+            if (s_intEntries == null)
+            {
                 index = 0;
                 return false;
             }
-        }
-    
-        /// <devdoc>
-        ///     Locates the requested entry in our array if entries.  This does
-        ///     not do the mask check to see if the entry is currently being used,
-        ///     but it does locate the entry.  If the entry is found, this returns
-        ///     true and fills in index and element.  If the entry is not found,
-        ///     this returns false.  If the entry is not found, index will contain
-        ///     the insert point at which one would add a new element.
-        /// </devdoc>
-        private bool LocateObjectEntry(short entryKey, out int index) {
-            if (objEntries != null) {
-                int length = objEntries.Length;
-                Debug.Assert(length > 0);
-                if (length <= 16) {
-                    //if the array is small enough, we unroll the binary search to be more efficient.
-                    //usually the performance gain is around 10% to 20%
-                    //DON'T change this code unless you are very confident!
-                    index = 0;
-                    int midPoint = length / 2;
-                    if (objEntries[midPoint].Key <= entryKey) {
-                        index = midPoint;
-                    }
-                    //we don't move this inside the previous if branch since this catches both the case
-                    //index == 0 and index = midPoint
-                    if (objEntries[index].Key == entryKey) {
+
+            int length = s_intEntries.Length;
+            if (length <= 16)
+            {
+                // If the array is small enough, we unroll the binary search to be more efficient.
+                // Usually the performance gain is around 10% to 20%
+                // DON'T change this code unless you are very confident!
+                index = 0;
+                int midPoint = length / 2;
+                if (s_intEntries[midPoint].Key <= entryKey)
+                {
+                    index = midPoint;
+                }
+
+                // We don't move this inside the previous if branch since this catches both
+                // the case index == 0 and index = midPoint
+                if (s_intEntries[index].Key == entryKey)
+                {
+                    return true;
+                }
+
+                midPoint = (length + 1) / 4;
+                if (s_intEntries[index + midPoint].Key <= entryKey)
+                {
+                    index += midPoint;
+                    if (s_intEntries[index].Key == entryKey)
+                    {
                         return true;
                     }
-                    
+                }
+
+                midPoint = (length + 3) / 8;
+                if (s_intEntries[index + midPoint].Key <= entryKey)
+                {
+                    index += midPoint;
+                    if (s_intEntries[index].Key == entryKey)
+                    {
+                        return true;
+                    }
+                }
+
+                midPoint = (length + 7) / 16;
+                if (s_intEntries[index + midPoint].Key <= entryKey)
+                {
+                    index += midPoint;
+                    if (s_intEntries[index].Key == entryKey)
+                    {
+                        return true;
+                    }
+                }
+
+                Debug.Assert(index < length);
+                if (entryKey > s_intEntries[index].Key)
+                {
+                    index++;
+                }
+
+                Debug_VerifyLocateIntegerEntry(index, entryKey, length);
+                return false;
+            }
+            else
+            {
+                // Entries are stored in numerical order by key index so we can
+                // do a binary search on them.
+                int max = length - 1;
+                int min = 0;
+                int idx = 0;
+
+                do
+                {
+                    idx = (max + min) / 2;
+                    short currentKeyIndex = s_intEntries[idx].Key;
+
+                    if (currentKeyIndex == entryKey)
+                    {
+                        index = idx;
+                        return true;
+                    }
+                    else if (entryKey < currentKeyIndex)
+                    {
+                        max = idx - 1;
+                    }
+                    else
+                    {
+                        min = idx + 1;
+                    }
+                }
+                while (max >= min);
+
+                // Didn't find the index. Setup our output appropriately
+                index = idx;
+                if (entryKey > s_intEntries[idx].Key)
+                {
+                    index++;
+                }
+
+                return false;
+            }
+        }
+
+        /// <devdoc>
+        /// Locates the requested entry in our array if entries. This does
+        /// not do the mask check to see if the entry is currently being used,
+        /// but it does locate the entry. If the entry is found, this returns
+        /// true and fills in index and element. If the entry is not found,
+        /// this returns false. If the entry is not found, index will contain
+        /// the insert point at which one would add a new element.
+        /// </devdoc>
+        private bool LocateObjectEntry(short entryKey, out int index)
+        {
+            if (s_objEntries != null)
+            {
+                int length = s_objEntries.Length;
+                Debug.Assert(length > 0);
+                if (length <= 16)
+                {
+                    // If the array is small enough, we unroll the binary search to be more efficient.
+                    // Usually the performance gain is around 10% to 20%
+                    // DON'T change this code unless you are very confident!
+                    index = 0;
+                    int midPoint = length / 2;
+                    if (s_objEntries[midPoint].Key <= entryKey)
+                    {
+                        index = midPoint;
+                    }
+
+                    // We don't move this inside the previous if branch since this catches
+                    // both the case index == 0 and index = midPoint
+                    if (s_objEntries[index].Key == entryKey)
+                    {
+                        return true;
+                    }
+
                     midPoint = (length + 1) / 4;
-                    if (objEntries[index + midPoint].Key <= entryKey) {
+                    if (s_objEntries[index + midPoint].Key <= entryKey)
+                    {
                         index += midPoint;
-                        if (objEntries[index].Key == entryKey) {
+                        if (s_objEntries[index].Key == entryKey)
+                        {
                             return true;
                         }
                     }
-                    
+
                     midPoint = (length + 3) / 8;
-                    if (objEntries[index + midPoint].Key <= entryKey) {
+                    if (s_objEntries[index + midPoint].Key <= entryKey)
+                    {
                         index += midPoint;
-                        if (objEntries[index].Key == entryKey) {
+                        if (s_objEntries[index].Key == entryKey)
+                        {
                             return true;
                         }
                     }
-                   
+
                     midPoint = (length + 7) / 16;
-                    if (objEntries[index + midPoint].Key <= entryKey) {
+                    if (s_objEntries[index + midPoint].Key <= entryKey)
+                    {
                         index += midPoint;
-                        if (objEntries[index].Key == entryKey) {
+                        if (s_objEntries[index].Key == entryKey)
+                        {
                             return true;
                         }
                     }
 
                     Debug.Assert(index < length);
-                    if (entryKey > objEntries[index].Key) {
+                    if (entryKey > s_objEntries[index].Key)
+                    {
                         index++;
                     }
+
                     Debug_VerifyLocateObjectEntry(index, entryKey, length);
                     return false;
                 }
-                else {
+                else
+                {
                     // Entries are stored in numerical order by key index so we can
                     // do a binary search on them.
-                    //
                     int max = length - 1;
                     int min = 0;
                     int idx = 0;
-                    
-                    do {
+
+                    do
+                    {
                         idx = (max + min) / 2;
-                        short currentKeyIndex = objEntries[idx].Key;
-                        
-                        if (currentKeyIndex == entryKey) {
+                        short currentKeyIndex = s_objEntries[idx].Key;
+
+                        if (currentKeyIndex == entryKey)
+                        {
                             index = idx;
                             return true;
                         }
-                        else if (entryKey < currentKeyIndex) {
+                        else if (entryKey < currentKeyIndex)
+                        {
                             max = idx - 1;
                         }
-                        else {
+                        else
+                        {
                             min = idx + 1;
                         }
                     }
                     while (max >= min);
-                    
-                    // Didn't find the index.  Setup our output
-                    // appropriately
-                    //
+
+                    // Didn't find the index. Setup our output appropriately
                     index = idx;
-                    if (entryKey > objEntries[idx].Key) {
+                    if (entryKey > s_objEntries[idx].Key)
+                    {
                         index++;
                     }
+    
                     return false;
                 }
             }
-            else {
+            else
+            {
                 index = 0;
                 return false;
             }
         }
-/*
-        public Color RemoveColor(int key) {
-            RemoveObject(key);
-        }
-*/
+
         /// <devdoc>
-        ///     Removes the given key from the array
+        /// Removes the given key from the array
         /// </devdoc>
-        public void RemoveInteger(int key) {
-            int   index;
-            short element;
-            short entryKey = SplitKey(key, out element);
-                
-            if (LocateIntegerEntry(entryKey, out index)) {
-                if (((1 << element) & intEntries[index].Mask) == 0) {
-                    // this element is not being used - return right away
-                    return;
+        public void RemoveInteger(int key)
+        {
+            short entryKey = SplitKey(key, out short element);
+            if (!LocateIntegerEntry(entryKey, out int index))
+            {
+                return;
+            }
+
+            if (((1 << element) & s_intEntries[index].Mask) == 0)
+            {
+                // this element is not being used - return right away
+                return;
+            }
+
+            // declare that the element is no longer used
+            s_intEntries[index].Mask &= (short)(~((short)(1 << element)));
+
+            if (s_intEntries[index].Mask == 0)
+            {
+                // This object entry is no longer in use - let's remove it all together
+                // not great for perf but very simple and we don't expect to remove much
+                IntegerEntry[] newEntries = new IntegerEntry[s_intEntries.Length - 1];
+                if (index > 0)
+                {
+                    Array.Copy(s_intEntries, 0, newEntries, 0, index);
+                }
+                if (index < newEntries.Length)
+                {
+                    Debug.Assert(s_intEntries.Length - index - 1 > 0);
+                    Array.Copy(s_intEntries, index + 1, newEntries, index, s_intEntries.Length - index - 1);
                 }
 
-                // declare that the element is no longer used
-                intEntries[index].Mask &= (short) (~((short)(1 << element)));
+                s_intEntries = newEntries;
+            }
+            else
+            {
+                // This object entry is still in use - let's just clean up the deleted element
+                switch (element)
+                {
+                    case 0:
+                        s_intEntries[index].Value1 = 0;
+                        break;
 
-                if (intEntries[index].Mask == 0) {
-                    // this object entry is no longer in use - let's remove it all together
-                    // not great for perf but very simple and we don't expect to remove much
-                    IntegerEntry[] newEntries = new IntegerEntry[intEntries.Length - 1];
-                    if (index > 0) {
-                        Array.Copy(intEntries, 0, newEntries, 0, index);
-                    }
-                    if (index < newEntries.Length) {
-                        Debug.Assert(intEntries.Length - index - 1 > 0);
-                        Array.Copy(intEntries, index + 1, newEntries, index, intEntries.Length - index - 1);
-                    }
-                    intEntries = newEntries;
-                }
-                else {
-                    // this object entry is still in use - let's just clean up the deleted element
-                    switch (element)
-                    {
-                        case 0:
-                            intEntries[index].Value1 = 0;
-                            break;
+                    case 1:
+                        s_intEntries[index].Value2 = 0;
+                        break;
 
-                        case 1:
-                            intEntries[index].Value2 = 0;
-                            break;
+                    case 2:
+                        s_intEntries[index].Value3 = 0;
+                        break;
 
-                        case 2:
-                            intEntries[index].Value3 = 0;
-                            break;
+                    case 3:
+                        s_intEntries[index].Value4 = 0;
+                        break;
 
-                        case 3:
-                            intEntries[index].Value4 = 0;
-                            break;
-
-                        default:
-                            Debug.Fail("Invalid element obtained from LocateIntegerEntry");
-                            break;
-                    }
+                    default:
+                        Debug.Fail("Invalid element obtained from LocateIntegerEntry");
+                        break;
                 }
             }
         }
 
         /// <devdoc>
-        ///     Removes the given key from the array
+        /// Removes the given key from the array
         /// </devdoc>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public void RemoveObject(int key)
         {
-            int   index;
-            short element;
-            short entryKey = SplitKey(key, out element);
-                
-            if (LocateObjectEntry(entryKey, out index)) {
-                if (((1 << element) & objEntries[index].Mask) == 0) {
-                    // this element is not being used - return right away
-                    return;
+            short entryKey = SplitKey(key, out short element);
+            if (!LocateObjectEntry(entryKey, out int index))
+            {
+                return;
+            }
+
+            if (((1 << element) & s_objEntries[index].Mask) == 0)
+            {
+                // This element is not being used - return right away
+                return;
+            }
+
+            // Declare that the element is no longer used
+            s_objEntries[index].Mask &= (short)(~((short)(1 << element)));
+
+            if (s_objEntries[index].Mask == 0)
+            {
+                // This object entry is no longer in use - let's remove it all together
+                // not great for perf but very simple and we don't expect to remove much
+                if (s_objEntries.Length == 1)
+                {
+                    // Instead of allocating an array of length 0, we simply reset the array to null.
+                    s_objEntries = null;
                 }
-
-                // declare that the element is no longer used
-                objEntries[index].Mask &= (short)(~((short)(1 << element)));
-
-                if (objEntries[index].Mask == 0) {
-                    // this object entry is no longer in use - let's remove it all together
-                    // not great for perf but very simple and we don't expect to remove much
-                    if (objEntries.Length == 1)
+                else
+                {
+                    ObjectEntry[] newEntries = new ObjectEntry[s_objEntries.Length - 1];
+                    if (index > 0)
                     {
-                        // instead of allocating an array of length 0, we simply reset the array to null.
-                        objEntries = null;
+                        Array.Copy(s_objEntries, 0, newEntries, 0, index);
                     }
-                    else
+                    if (index < newEntries.Length)
                     {
-                        ObjectEntry[] newEntries = new ObjectEntry[objEntries.Length - 1];
-                        if (index > 0)
-                        {
-                            Array.Copy(objEntries, 0, newEntries, 0, index);
-                        }
-                        if (index < newEntries.Length)
-                        {
-                            Debug.Assert(objEntries.Length - index - 1 > 0);
-                            Array.Copy(objEntries, index + 1, newEntries, index, objEntries.Length - index - 1);
-                        }
-                        objEntries = newEntries;
+                        Debug.Assert(s_objEntries.Length - index - 1 > 0);
+                        Array.Copy(s_objEntries, index + 1, newEntries, index, s_objEntries.Length - index - 1);
                     }
+                    s_objEntries = newEntries;
                 }
-                else {
-                    // this object entry is still in use - let's just clean up the deleted element
-                    switch (element)
-                    {
-                        case 0:
-                            objEntries[index].Value1 = null;
-                            break;
+            }
+            else
+            {
+                // This object entry is still in use - let's just clean up the deleted element
+                switch (element)
+                {
+                    case 0:
+                        s_objEntries[index].Value1 = null;
+                        break;
 
-                        case 1:
-                            objEntries[index].Value2 = null;
-                            break;
+                    case 1:
+                        s_objEntries[index].Value2 = null;
+                        break;
 
-                        case 2:
-                            objEntries[index].Value3 = null;
-                            break;
+                    case 2:
+                        s_objEntries[index].Value3 = null;
+                        break;
 
-                        case 3:
-                            objEntries[index].Value4 = null;
-                            break;
+                    case 3:
+                        s_objEntries[index].Value4 = null;
+                        break;
 
-                        default:
-                            Debug.Fail("Invalid element obtained from LocateObjectEntry");
-                            break;
-                    }
+                    default:
+                        Debug.Fail("Invalid element obtained from LocateObjectEntry");
+                        break;
                 }
             }
         }
 
-        public void SetColor(int key, Color value) {
-            bool found;
-            object storedObject = GetObject(key, out found);
-
-            if (!found) {
+        public void SetColor(int key, Color value)
+        {
+            object storedObject = GetObject(key, out bool found);
+            if (!found)
+            {
                 SetObject(key, new ColorWrapper(value));
             }
-            else {            
-                ColorWrapper wrapper = storedObject as ColorWrapper;
-                if(wrapper != null) {
+            else
+            {
+                if (storedObject is ColorWrapper wrapper)
+                {
                     // re-using the wrapper reduces the boxing hit.
                     wrapper.Color = value;
                 }
-                else {                
+                else
+                {
                     Debug.Assert(storedObject == null, "object should either be null or ColorWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new ColorWrapper(value));
                 }
-               
-            }      
-        }
-        public void SetPadding(int key, Padding value) {
-            bool found;
-            object storedObject = GetObject(key, out found);
 
-            if (!found) {
+            }
+        }
+
+        public void SetPadding(int key, Padding value)
+        {
+            object storedObject = GetObject(key, out bool found);
+            if (!found)
+            {
                 SetObject(key, new PaddingWrapper(value));
             }
-            else {            
-                PaddingWrapper wrapper = storedObject as PaddingWrapper;
-                if(wrapper != null) {
+            else
+            {
+                if (storedObject is PaddingWrapper wrapper)
+                {
                     // re-using the wrapper reduces the boxing hit.
                     wrapper.Padding = value;
                 }
-                else {                
+                else
+                {
                     Debug.Assert(storedObject == null, "object should either be null or PaddingWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new PaddingWrapper(value));
                 }
-               
-            }      
+
+            }
         }
-        public void SetRectangle(int key, Rectangle value) {
-          
-            bool found;
-            object storedObject = GetObject(key, out found);
-            
-            if (!found) {
+
+        public void SetRectangle(int key, Rectangle value)
+        {
+            object storedObject = GetObject(key, out bool found);
+            if (!found)
+            {
                 SetObject(key, new RectangleWrapper(value));
             }
-            else {            
-                RectangleWrapper wrapper = storedObject as RectangleWrapper;
-                if(wrapper != null) {
+            else
+            {
+                if (storedObject is RectangleWrapper wrapper)
+                {
                     // re-using the wrapper reduces the boxing hit.
                     wrapper.Rectangle = value;
                 }
-                else {                
+                else
+                {
                     Debug.Assert(storedObject == null, "object should either be null or RectangleWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new RectangleWrapper(value));
                 }
-               
-            }      
-          
-        }        
-        public void SetSize(int key, Size value) {
-          
-            bool found;
-            object storedObject = GetObject(key, out found);
-            
-            if (!found) {
+            }
+        }
+
+        public void SetSize(int key, Size value)
+        {
+            object storedObject = GetObject(key, out bool found);
+            if (!found)
+            {
                 SetObject(key, new SizeWrapper(value));
             }
-            else {            
-                SizeWrapper wrapper = storedObject as SizeWrapper;
-                if(wrapper != null) {
+            else
+            {
+                if (storedObject is SizeWrapper wrapper)
+                {
                     // re-using the wrapper reduces the boxing hit.
                     wrapper.Size = value;
                 }
-                else {                
+                else
+                {
                     Debug.Assert(storedObject == null, "object should either be null or SizeWrapper"); // could someone have SetObject to this key behind our backs?
                     SetObject(key, new SizeWrapper(value));
                 }
-               
-            }      
+
+            }
         }
+
         /// <devdoc>
-        ///     Stores the given value in the key.
+        /// Stores the given value in the key.
         /// </devdoc>
-        public void SetInteger(int key, int value) {
-            int   index;
-            short element;
-            short entryKey = SplitKey(key, out element);
-            
-            if (!LocateIntegerEntry(entryKey, out index)) {
-                
+        public void SetInteger(int key, int value)
+        {
+            short entryKey = SplitKey(key, out short element);
+            if (!LocateIntegerEntry(entryKey, out int index))
+            {
                 // We must allocate a new entry.
-                //
-                if (intEntries != null) {
-                    IntegerEntry[] newEntries = new IntegerEntry[intEntries.Length + 1];
-                    
-                    if (index > 0) {
-                        Array.Copy(intEntries, 0, newEntries, 0, index);
+                if (s_intEntries != null)
+                {
+                    IntegerEntry[] newEntries = new IntegerEntry[s_intEntries.Length + 1];
+
+                    if (index > 0)
+                    {
+                        Array.Copy(s_intEntries, 0, newEntries, 0, index);
                     }
-                    
-                    if (intEntries.Length - index > 0) {
-                        Array.Copy(intEntries, index, newEntries, index + 1, intEntries.Length - index);
+
+                    if (s_intEntries.Length - index > 0)
+                    {
+                        Array.Copy(s_intEntries, index, newEntries, index + 1, s_intEntries.Length - index);
                     }
-                    
-                    intEntries = newEntries;
+
+                    s_intEntries = newEntries;
                 }
-                else {
-                    intEntries = new IntegerEntry[1];
+                else
+                {
+                    s_intEntries = new IntegerEntry[1];
                     Debug.Assert(index == 0, "LocateIntegerEntry should have given us a zero index.");
                 }
-            
-                intEntries[index].Key = entryKey;
+
+                s_intEntries[index].Key = entryKey;
             }
-        
+
             // Now determine which value to set.
-            //
-            switch(element) {
+            switch (element)
+            {
                 case 0:
-                    intEntries[index].Value1 = value;
+                    s_intEntries[index].Value1 = value;
                     break;
-                    
+
                 case 1:
-                    intEntries[index].Value2 = value;
+                    s_intEntries[index].Value2 = value;
                     break;
-                    
+
                 case 2:
-                    intEntries[index].Value3 = value;
+                    s_intEntries[index].Value3 = value;
                     break;
-                    
+
                 case 3:
-                    intEntries[index].Value4 = value;
+                    s_intEntries[index].Value4 = value;
                     break;
-                    
+
                 default:
                     Debug.Fail("Invalid element obtained from LocateIntegerEntry");
                     break;
             }
 
-            intEntries[index].Mask = (short)((1 << element) | (ushort)(intEntries[index].Mask));
+            s_intEntries[index].Mask = (short)((1 << element) | (ushort)(s_intEntries[index].Mask));
         }
-    
+
         /// <devdoc>
-        ///     Stores the given value in the key.
+        /// Stores the given value in the key.
         /// </devdoc>
-        public void SetObject(int key, object value) {
-            int   index;
-            short element;
-            short entryKey = SplitKey(key, out element);
-            
-            if (!LocateObjectEntry(entryKey, out index)) {
-                
+        public void SetObject(int key, object value)
+        {
+            short entryKey = SplitKey(key, out short element);
+            if (!LocateObjectEntry(entryKey, out int index))
+            {
                 // We must allocate a new entry.
-                //
-                if (objEntries != null) {
-                    ObjectEntry[] newEntries = new ObjectEntry[objEntries.Length + 1];
-                    
-                    if (index > 0) {
-                        Array.Copy(objEntries, 0, newEntries, 0, index);
+                if (s_objEntries != null)
+                {
+                    ObjectEntry[] newEntries = new ObjectEntry[s_objEntries.Length + 1];
+
+                    if (index > 0)
+                    {
+                        Array.Copy(s_objEntries, 0, newEntries, 0, index);
                     }
-                    
-                    if (objEntries.Length - index > 0) {
-                        Array.Copy(objEntries, index, newEntries, index + 1, objEntries.Length - index);
+
+                    if (s_objEntries.Length - index > 0)
+                    {
+                        Array.Copy(s_objEntries, index, newEntries, index + 1, s_objEntries.Length - index);
                     }
-                    
-                    objEntries = newEntries;
+
+                    s_objEntries = newEntries;
                 }
-                else {
-                    objEntries = new ObjectEntry[1];
+                else
+                {
+                    s_objEntries = new ObjectEntry[1];
                     Debug.Assert(index == 0, "LocateObjectEntry should have given us a zero index.");
                 }
-            
-                objEntries[index].Key = entryKey;
+
+                s_objEntries[index].Key = entryKey;
             }
-        
+
             // Now determine which value to set.
-            //
-            switch(element) {
+            switch (element)
+            {
                 case 0:
-                    objEntries[index].Value1 = value;
+                    s_objEntries[index].Value1 = value;
                     break;
-                    
+
                 case 1:
-                    objEntries[index].Value2 = value;
+                    s_objEntries[index].Value2 = value;
                     break;
-                    
+
                 case 2:
-                    objEntries[index].Value3 = value;
+                    s_objEntries[index].Value3 = value;
                     break;
-                    
+
                 case 3:
-                    objEntries[index].Value4 = value;
+                    s_objEntries[index].Value4 = value;
                     break;
-                    
+
                 default:
                     Debug.Fail("Invalid element obtained from LocateObjectEntry");
                     break;
             }
-            
-            objEntries[index].Mask = (short)((ushort)(objEntries[index].Mask)|(1 << element));
+
+            s_objEntries[index].Mask = (short)((ushort)(s_objEntries[index].Mask) | (1 << element));
         }
-        
+
         /// <devdoc>
-        ///     Takes the given key and splits it into an index
-        ///     and an element.
+        /// Takes the given key and splits it into an index and an element.
         /// </devdoc>
-        private short SplitKey(int key, out short element) {
+        private short SplitKey(int key, out short element)
+        {
             element = (short)(key & 0x00000003);
             return (short)(key & 0xFFFFFFFC);
         }
 
         [Conditional("DEBUG_PROPERTYSTORE")]
-        private void Debug_VerifyLocateIntegerEntry(int index, short entryKey, int length) {
+        private void Debug_VerifyLocateIntegerEntry(int index, short entryKey, int length)
+        {
             int max = length - 1;
             int min = 0;
             int idx = 0;
-            
-            do {
+
+            do
+            {
                 idx = (max + min) / 2;
-                short currentKeyIndex = intEntries[idx].Key;
-                
-                if (currentKeyIndex == entryKey) {
+                short currentKeyIndex = s_intEntries[idx].Key;
+
+                if (currentKeyIndex == entryKey)
+                {
                     Debug.Assert(index == idx, "GetIntegerEntry in property store broken. index is " + index + " while it should be " + idx + "length of the array is " + length);
                 }
-                else if (entryKey < currentKeyIndex) {
+                else if (entryKey < currentKeyIndex)
+                {
                     max = idx - 1;
                 }
-                else {
+                else
+                {
                     min = idx + 1;
                 }
             }
             while (max >= min);
-            
+
             // shouldn't find the index if we run this debug code
-            if (entryKey > intEntries[idx].Key) {
+            if (entryKey > s_intEntries[idx].Key)
+            {
                 idx++;
-            }  
+            }
             Debug.Assert(index == idx, "GetIntegerEntry in property store broken. index is " + index + " while it should be " + idx + "length of the array is " + length);
         }
 
         [Conditional("DEBUG_PROPERTYSTORE")]
-        private void Debug_VerifyLocateObjectEntry(int index, short entryKey, int length) {
+        private void Debug_VerifyLocateObjectEntry(int index, short entryKey, int length)
+        {
             int max = length - 1;
             int min = 0;
             int idx = 0;
-            
-            do {
+
+            do
+            {
                 idx = (max + min) / 2;
-                short currentKeyIndex = objEntries[idx].Key;
-                
-                if (currentKeyIndex == entryKey) {
+                short currentKeyIndex = s_objEntries[idx].Key;
+
+                if (currentKeyIndex == entryKey)
+                {
                     Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
                 }
-                else if (entryKey < currentKeyIndex) {
+                else if (entryKey < currentKeyIndex)
+                {
                     max = idx - 1;
                 }
-                else {
+                else
+                {
                     min = idx + 1;
                 }
             }
             while (max >= min);
-            
-            if (entryKey > objEntries[idx].Key) {
+
+            if (entryKey > s_objEntries[idx].Key)
+            {
                 idx++;
-            }   
+            }
             Debug.Assert(index == idx, "GetObjEntry in property store broken. index is " + index + " while is should be " + idx + "length of the array is " + length);
         }
-        
+
         /// <devdoc>
-        ///     Stores the relationship between a key and a value.
-        ///     We do not want to be so inefficient that we require
-        ///     four bytes for each four byte property, so use an algorithm
-        ///     that uses the bottom two bits of the key to identify
-        ///     one of four elements in an entry.
+        /// Stores the relationship between a key and a value.
+        /// We do not want to be so inefficient that we require
+        /// four bytes for each four byte property, so use an algorithm
+        /// that uses the bottom two bits of the key to identify
+        /// one of four elements in an entry.
         /// </devdoc>
-        private struct IntegerEntry {
+        private struct IntegerEntry
+        {
             public short Key;
             public short Mask;  // only lower four bits are used; mask of used values.
             public int Value1;
@@ -897,15 +904,16 @@ namespace System.Windows.Forms {
             public int Value3;
             public int Value4;
         }
-        
+
         /// <devdoc>
-        ///     Stores the relationship between a key and a value.
-        ///     We do not want to be so inefficient that we require
-        ///     four bytes for each four byte property, so use an algorithm
-        ///     that uses the bottom two bits of the key to identify
-        ///     one of four elements in an entry.
+        /// Stores the relationship between a key and a value.
+        /// We do not want to be so inefficient that we require
+        /// four bytes for each four byte property, so use an algorithm
+        /// that uses the bottom two bits of the key to identify
+        /// one of four elements in an entry.
         /// </devdoc>
-        private struct ObjectEntry {
+        private struct ObjectEntry
+        {
             public short Key;
             public short Mask;  // only lower four bits are used; mask of used values.
             public object Value1;
@@ -914,33 +922,44 @@ namespace System.Windows.Forms {
             public object Value4;
         }
 
-        
-        private sealed class ColorWrapper {
+        private sealed class ColorWrapper
+        {
             public Color Color;
-            public ColorWrapper(Color color){
-                this.Color = color;
+
+            public ColorWrapper(Color color)
+            {
+                Color = color;
             }
         }
 
-        
-        private sealed class PaddingWrapper{
+        private sealed class PaddingWrapper
+        {
             public Padding Padding;
-            public PaddingWrapper(Padding padding){
-                this.Padding = padding;
+
+            public PaddingWrapper(Padding padding)
+            {
+                Padding = padding;
             }
         }
-        private sealed class RectangleWrapper{
+
+        private sealed class RectangleWrapper
+        {
             public Rectangle Rectangle;
-            public RectangleWrapper(Rectangle rectangle){
-                this.Rectangle = rectangle;
+
+            public RectangleWrapper(Rectangle rectangle)
+            {
+                Rectangle = rectangle;
             }
         }
-        private sealed class SizeWrapper {
+
+        private sealed class SizeWrapper
+        {
             public Size Size;
-            public SizeWrapper(Size size){
-                this.Size = size;
+
+            public SizeWrapper(Size size)
+            {
+                Size = size;
             }
         }
-        
     }
 }

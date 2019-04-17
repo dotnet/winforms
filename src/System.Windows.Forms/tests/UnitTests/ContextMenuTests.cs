@@ -80,9 +80,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [InlineData(RightToLeft.Yes, RightToLeft.Yes)]
-        [InlineData(RightToLeft.No, RightToLeft.No)]
-        [InlineData(RightToLeft.Inherit, RightToLeft.No)]
+        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
         public void ContextMenu_RightToLeft_SetWithoutSourceControl_GetReturnsExpected(RightToLeft value, RightToLeft expectedValue)
         {
             var menu = new ContextMenu

@@ -294,7 +294,7 @@ namespace System.Windows.Forms.Tests
         public void ColumnHeader_ImageIndex_SetInvalid_ThrowsArgumentOutOfRangeException(int value)
         {
             var header = new ColumnHeader();
-            Assert.Throws<ArgumentOutOfRangeException>("ImageIndex", () => header.ImageIndex = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => header.ImageIndex = value);
         }
 
         [Theory]

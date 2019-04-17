@@ -14,8 +14,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.csproj" />
+    <Compile Include="..\..\..\Common\tests\CommonMemberDataAttribute.cs" Link="Common\CommonMemberDataAttribute.cs" />
     <Compile Include="..\..\..\Common\tests\CommonTestHelper.cs" Link="Common\CommonTestHelper.cs" />
     <ProjectReference Include="..\..\..\Common\tests\InternalUtilitiesForTests\InternalUtilitiesForTests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\16x16.bmp">
+      <LogicalName>System.Drawing.Design.Tests.16x16.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\24x16.bmp">
+      <LogicalName>System.Drawing.Design.Tests.24x16.bmp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\16x24.bmp">
+      <LogicalName>System.Drawing.Design.Tests.16x24.bmp</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

@@ -92,6 +92,46 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, padding.Bottom);
         }
 
+        [Fact]
+        public void Padding_AllPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var padding = new Padding(1, 2, 3, 4);
+            object boxedPadding = padding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(Padding.All)];
+            Assert.False(property.CanResetValue(boxedPadding));
+            Assert.False(property.ShouldSerializeValue(boxedPadding));
+            property.ResetValue(boxedPadding);
+    
+            Assert.Equal(0, ((Padding)boxedPadding).All);
+            Assert.Equal(0, ((Padding)boxedPadding).Left);
+            Assert.Equal(0, ((Padding)boxedPadding).Top);
+            Assert.Equal(0, ((Padding)boxedPadding).Right);
+            Assert.Equal(0, ((Padding)boxedPadding).Bottom);
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+        }
+
+        [Fact]
+        public void Padding_AllPropertyDescriptor_ResetValueOnAll_SetsToZero()
+        {
+            var padding = new Padding(1);
+            object boxedPadding = padding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(Padding.All)];
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+            property.ResetValue(boxedPadding);
+    
+            Assert.Equal(0, ((Padding)boxedPadding).All);
+            Assert.Equal(0, ((Padding)boxedPadding).Left);
+            Assert.Equal(0, ((Padding)boxedPadding).Top);
+            Assert.Equal(0, ((Padding)boxedPadding).Right);
+            Assert.Equal(0, ((Padding)boxedPadding).Bottom);
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_All_SetOnAll_GetReturnsExpected(int value)
@@ -120,6 +160,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, padding.Top);
             Assert.Equal(3, padding.Right);
             Assert.Equal(4, padding.Bottom);
+        }
+
+        [Fact]
+        public void Padding_LeftPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var padding = new Padding(1, 2, 3, 4);
+            object boxedPadding = padding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(Padding.Left)];
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+            property.ResetValue(boxedPadding);
+
+            Assert.Equal(-1, ((Padding)boxedPadding).All);
+            Assert.Equal(0, ((Padding)boxedPadding).Left);
+            Assert.Equal(2, ((Padding)boxedPadding).Top);
+            Assert.Equal(3, ((Padding)boxedPadding).Right);
+            Assert.Equal(4, ((Padding)boxedPadding).Bottom);
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
         }
 
         [Theory]
@@ -152,6 +212,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
+        [Fact]
+        public void Padding_TopPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var padding = new Padding(1, 2, 3, 4);
+            object boxedPadding = padding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(Padding.Top)];
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+            property.ResetValue(boxedPadding);
+
+            Assert.Equal(-1, ((Padding)boxedPadding).All);
+            Assert.Equal(1, ((Padding)boxedPadding).Left);
+            Assert.Equal(0, ((Padding)boxedPadding).Top);
+            Assert.Equal(3, ((Padding)boxedPadding).Right);
+            Assert.Equal(4, ((Padding)boxedPadding).Bottom);
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Top_SetOnAll_GetReturnsExpected(int value)
@@ -182,6 +262,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(4, padding.Bottom);
         }
 
+        [Fact]
+        public void Padding_RightPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var padding = new Padding(1, 2, 3, 4);
+            object boxedPadding = padding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(Padding.Right)];
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+            property.ResetValue(boxedPadding);
+
+            Assert.Equal(-1, ((Padding)boxedPadding).All);
+            Assert.Equal(1, ((Padding)boxedPadding).Left);
+            Assert.Equal(2, ((Padding)boxedPadding).Top);
+            Assert.Equal(0, ((Padding)boxedPadding).Right);
+            Assert.Equal(4, ((Padding)boxedPadding).Bottom);
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+        }
+
         [Theory]
         [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Right_SetOnAll_GetReturnsExpected(int value)
@@ -210,6 +310,26 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, padding.Top);
             Assert.Equal(3, padding.Right);
             Assert.Equal(value, padding.Bottom);
+        }
+
+        [Fact]
+        public void Padding_BottomPropertyDescriptor_ResetValue_SetsToZero()
+        {
+            var padding = new Padding(1, 2, 3, 4);
+            object boxedPadding = padding;
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(padding);
+            PropertyDescriptor property = properties[nameof(Padding.Bottom)];
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
+            property.ResetValue(boxedPadding);
+
+            Assert.Equal(-1, ((Padding)boxedPadding).All);
+            Assert.Equal(1, ((Padding)boxedPadding).Left);
+            Assert.Equal(2, ((Padding)boxedPadding).Top);
+            Assert.Equal(3, ((Padding)boxedPadding).Right);
+            Assert.Equal(0, ((Padding)boxedPadding).Bottom);
+            Assert.True(property.CanResetValue(boxedPadding));
+            Assert.True(property.ShouldSerializeValue(boxedPadding));
         }
 
         [Theory]
@@ -297,6 +417,13 @@ namespace System.Windows.Forms.Tests
         {
             var padding = new Padding(1);
             Assert.Equal("{Left=1,Top=1,Right=1,Bottom=1}", padding.ToString());
+        }
+
+        [Fact]
+        public void Padding_TypeConverter_Get_ReturnsPaddingConverter()
+        {
+            var padding = new Padding(1);
+            Assert.IsType<PaddingConverter>(TypeDescriptor.GetConverter(padding));
         }
     }
 }

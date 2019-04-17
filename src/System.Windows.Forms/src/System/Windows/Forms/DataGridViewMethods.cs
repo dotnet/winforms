@@ -322,9 +322,9 @@ namespace System.Windows.Forms
                 this.noAutoSizeCount++;
                 DataGridViewRow dataGridViewRow = this.Rows.SharedRow(rowIndex);
                 int preferredThickness = dataGridViewRow.Cells[dataGridViewColumn.Index].GetPreferredWidth(rowIndex, dataGridViewRow.GetHeight(rowIndex));
-                if (preferredThickness > DataGridViewBand.maxBandThickness)
+                if (preferredThickness > DataGridViewBand.MaxBandThickness)
                 {
-                    preferredThickness = DataGridViewBand.maxBandThickness;
+                    preferredThickness = DataGridViewBand.MaxBandThickness;
                 }
                 if (dataGridViewColumn.Width < preferredThickness)
                 {
@@ -412,9 +412,9 @@ namespace System.Windows.Forms
                 preferredThickness = height;
             }
             Debug.Assert(preferredThickness >= minimumHeight);
-            if (preferredThickness > DataGridViewBand.maxBandThickness)
+            if (preferredThickness > DataGridViewBand.MaxBandThickness)
             {
-                preferredThickness = DataGridViewBand.maxBandThickness;
+                preferredThickness = DataGridViewBand.MaxBandThickness;
             }
             if (height != preferredThickness)
             {
@@ -1880,9 +1880,9 @@ namespace System.Windows.Forms
                 {
                     preferredColumnWidth = dataGridViewColumn.MinimumThickness;
                 }
-                if (preferredColumnWidth > DataGridViewBand.maxBandThickness)
+                if (preferredColumnWidth > DataGridViewBand.MaxBandThickness)
                 {
-                    preferredColumnWidth = DataGridViewBand.maxBandThickness;
+                    preferredColumnWidth = DataGridViewBand.MaxBandThickness;
                 }
                 if (preferredColumnWidth != dataGridViewColumn.Thickness)
                 {
@@ -2312,9 +2312,9 @@ namespace System.Windows.Forms
                 {
                     preferredThickness = minimumHeight;
                 }
-                if (preferredThickness > DataGridViewBand.maxBandThickness)
+                if (preferredThickness > DataGridViewBand.MaxBandThickness)
                 {
-                    preferredThickness = DataGridViewBand.maxBandThickness;
+                    preferredThickness = DataGridViewBand.MaxBandThickness;
                 }
                 if (height != preferredThickness)
                 {
@@ -2558,7 +2558,7 @@ namespace System.Windows.Forms
             {
                 clip.X = this.layout.Data.X - this.mouseBarOffset - 1;
                 clip.Width = leftEdge - this.Columns[columnIndex].MinimumThickness - this.layout.Data.X + 3;
-                int overflowWidth = leftEdge - this.mouseBarOffset - clip.Left - DataGridViewBand.maxBandThickness + 1;
+                int overflowWidth = leftEdge - this.mouseBarOffset - clip.Left - DataGridViewBand.MaxBandThickness + 1;
                 if (overflowWidth > 0)
                 {
                     clip.X += overflowWidth;
@@ -2569,7 +2569,7 @@ namespace System.Windows.Forms
             {
                 clip.X = leftEdge + this.Columns[columnIndex].MinimumThickness - this.mouseBarOffset - 1;
                 clip.Width = this.layout.Data.Right - leftEdge - 1;
-                int overflowWidth = clip.Right + this.mouseBarOffset - leftEdge - DataGridViewBand.maxBandThickness;
+                int overflowWidth = clip.Right + this.mouseBarOffset - leftEdge - DataGridViewBand.MaxBandThickness;
                 if (overflowWidth > 0)
                 {
                     clip.Width -= overflowWidth;
@@ -6135,7 +6135,7 @@ namespace System.Windows.Forms
             {
                 int proposed = this.Columns[this.trackColumn].Thickness + delta;
                 Debug.Assert(proposed >= this.Columns[this.trackColumn].MinimumThickness);
-                Debug.Assert(proposed <= DataGridViewBand.maxBandThickness);
+                Debug.Assert(proposed <= DataGridViewBand.MaxBandThickness);
                 this.Columns[this.trackColumn].Thickness = proposed;
             }
         }
@@ -6420,7 +6420,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Rectangle rectScreen = Screen.FromControl(this).WorkingArea;
-                    int maxDisplayedRows = (int) (rectScreen.Height / DataGridViewBand.minBandThickness);
+                    int maxDisplayedRows = (int) (rectScreen.Height / DataGridViewBand.MinBandThickness);
 
                     // Make sure all displayed scrolling rows have the Displayed state.
                     int rowIndexTmp = this.displayedBandsInfo.FirstDisplayedScrollingRow;
@@ -6887,7 +6887,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                                    DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
             }
 
             int cellCount = 0;
@@ -10904,7 +10904,7 @@ namespace System.Windows.Forms
             float weightSum = this.Columns.GetColumnsFillWeight(DataGridViewElementStates.None) + dataGridViewColumn.FillWeight;
             if (weightSum > (float)ushort.MaxValue)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
 
             // check for correctness of frozen state - throws exception if state is incorrect.
@@ -11026,7 +11026,7 @@ namespace System.Windows.Forms
                 weightSum += dataGridViewColumn.FillWeight;
                 if (weightSum > (float)ushort.MaxValue)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
                 }
             }
 
@@ -11393,9 +11393,9 @@ namespace System.Windows.Forms
             DataGridViewAutoSizeColumnMode[] previousModes = e.PreviousModes;
             if (previousModes == null)
             {
-                throw new ArgumentNullException("e.PreviousModes");
+                throw new ArgumentNullException(nameof(e.PreviousModes));
             }
-            if (previousModes.Length != this.Columns.Count)
+            if (previousModes.Length != Columns.Count)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_PreviousModesHasWrongLength));
             }
@@ -13964,7 +13964,7 @@ namespace System.Windows.Forms
             float weightSum = this.Columns.GetColumnsFillWeight(DataGridViewElementStates.None) - dataGridViewColumn.FillWeight + fillWeight;
             if (weightSum > (float)ushort.MaxValue)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
         }
 

@@ -100,14 +100,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                //if (this.DataGridView != null && this.RowIndex == -1)
-                //{
-                //    throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidOperationOnSharedCell));
-                //}
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(MaxInputLength), string.Format(SR.InvalidLowBoundArgumentEx, "MaxInputLength", value.ToString(CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxInputLength), value, 0));
                 }
+
                 this.Properties.SetInteger(PropTextBoxCellMaxInputLength, value);
                 if (OwnsEditingTextBox(this.RowIndex))
                 {

@@ -88,25 +88,25 @@ namespace System.Windows.Forms {
               }
         }
         /// <devdoc>
-        ///     translates the winbar item state into a toolbar state, which is something the renderer understands
+        ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static int GetItemState(ToolStripItem item) {
             return (int)GetToolBarState(item);
         }
         /// <devdoc>
-        ///     translates the winbar item state into a toolbar state, which is something the renderer understands
+        ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static int GetSplitButtonDropDownItemState(ToolStripSplitButton item) {
             return (int)GetSplitButtonToolBarState(item, true);
         }
         /// <devdoc>
-        ///     translates the winbar item state into a toolbar state, which is something the renderer understands
+        ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static int GetSplitButtonItemState(ToolStripSplitButton item) {
             return (int)GetSplitButtonToolBarState(item, false);
         }
         /// <devdoc>
-        ///     translates the winbar item state into a toolbar state, which is something the renderer understands
+        ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static ToolBarState GetSplitButtonToolBarState(ToolStripSplitButton button, bool dropDownButton) {
             ToolBarState state  =  ToolBarState.Normal;
@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     translates the winbar item state into a toolbar state, which is something the renderer understands
+        ///     translates the ToolStrip item state into a toolbar state, which is something the renderer understands
         /// </devdoc>
         private static ToolBarState GetToolBarState(ToolStripItem item) {
             ToolBarState state  =  ToolBarState.Normal;
@@ -166,7 +166,7 @@ namespace System.Windows.Forms {
                 
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderBackground"]/*' />
         /// <devdoc>
-        /// Draw the winbar background.  ToolStrip users should override this if they want to draw differently.
+        /// Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
         /// </devdoc>
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {  
             ToolStrip toolStrip = e.ToolStrip;
@@ -434,7 +434,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderToolStripStatusLabel"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderToolStripStatusLabel"]/*' />
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e) {
             RenderLabelInternal(e);
             ToolStripStatusLabel item = e.Item as ToolStripStatusLabel;

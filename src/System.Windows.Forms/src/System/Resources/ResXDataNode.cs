@@ -825,13 +825,7 @@ namespace System.Resources {
             }
             
             if (result == null) {
-                // try to load it first from the gac
-#pragma warning disable 0618
-                //Although LoadWithPartialName is obsolete, we still have to call it: changing 
-                //this would be breaking in cases where people edited their resource files by
-                //hand.
-                result = Assembly.LoadWithPartialName(name.FullName);
-#pragma warning restore 0618                            
+                result = Assembly.Load(name.FullName);
                 if(result != null) {
                     cachedAssemblies[name] = result;
                 } 
@@ -882,13 +876,11 @@ namespace System.Resources {
                 return result;
             }
 
-            // Missed in cache, try to resolve the type. First try to resolve in the GAC
+            // Missed in cache, try to resolve the type from the reference assemblies.
             if(name.IndexOf(',') != -1) {
                 result = Type.GetType(name, false, ignoreCase);
             }
 
-            //
-            // Did not find it in the GAC, check the reference assemblies
             if(result == null && names != null) {
                 //
                 // If the type is assembly qualified name, we sort the assembly names
@@ -944,9 +936,9 @@ namespace System.Resources {
             }
 
             if(result != null) {
-                // Only cache types from .Net framework or GAC because they don't need to update.
+                // Only cache types from .Net framework  because they don't need to update.
                 // For simplicity, don't cache custom types
-                if (result.Assembly.GlobalAssemblyCache || IsNetFrameworkAssembly(result.Assembly.Location)) {
+                if (IsNetFrameworkAssembly(result.Assembly.Location)) {
                     cachedTypes[name] = result;
                 }
             }
