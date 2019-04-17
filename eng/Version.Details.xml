@@ -39,12 +39,12 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>f9f88bd7fd774ce433a764b6d388517c6460164a</Sha>
     </Dependency>
+  </ProductDependencies>
+  <ToolsetDependencies>
     <Dependency Name="Microsoft.NETCore.App" Version="3.0.0-preview5-27617-05">
       <Uri>https://github.com/dotnet/core-setup</Uri>
       <Sha>232d4c4ce89ee15260f8001ff1d6aa7a8e63fbfb</Sha>
     </Dependency>
-  </ProductDependencies>
-  <ToolsetDependencies>
     <Dependency Name="Microsoft.NETCore.Platforms" Version="3.0.0-preview5.19216.14" CoherentParentDependency="Microsoft.NETCore.App">
       <Uri>https://github.com/dotnet/corefx</Uri>
       <Sha>f9f88bd7fd774ce433a764b6d388517c6460164a</Sha>
