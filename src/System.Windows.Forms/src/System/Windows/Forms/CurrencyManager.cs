@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override void SetDataSource(object dataSource) {
+        private protected override void SetDataSource(object dataSource) {
             if (this.dataSource != dataSource) {
                 Release();
                 this.dataSource = dataSource;

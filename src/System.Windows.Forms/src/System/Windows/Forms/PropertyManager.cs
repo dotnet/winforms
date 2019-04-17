@@ -23,7 +23,7 @@ namespace System.Windows.Forms
             OnCurrentChanged(EventArgs.Empty);
         }
 
-        internal override void SetDataSource(object dataSource)
+        private protected override void SetDataSource(object dataSource)
         {
             if (_dataSource != null && !string.IsNullOrEmpty(_propName))
             {
