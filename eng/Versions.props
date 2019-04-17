@@ -13,7 +13,7 @@
     </RestoreSources>
   </PropertyGroup>
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview5-27617-04</MicrosoftNETCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview5-27617-05</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- Corefx-updated dependencies -->
   <PropertyGroup>
@@ -29,7 +29,7 @@
   </PropertyGroup>
   <!-- CoreCLR-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview5-27617-71</MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILAsmPackageVersion>
   </PropertyGroup>
   <!-- Arcade-updated dependencies -->
   <PropertyGroup>
