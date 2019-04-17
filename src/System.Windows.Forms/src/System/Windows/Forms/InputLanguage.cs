@@ -277,7 +277,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private static string GetLocalizedKeyboardLayoutName(string layoutDisplayName)
         {
-            if (layoutDisplayName != null && Environment.OSVersion.Version.Major >= 5)
+            if (layoutDisplayName != null)
             {
                 StringBuilder sb = new StringBuilder(512);
                 uint res = UnsafeNativeMethods.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);

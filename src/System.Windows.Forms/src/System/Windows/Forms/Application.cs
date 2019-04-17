@@ -3915,16 +3915,14 @@ namespace System.Windows.Forms {
                 CreateHandle();
             }
 
-            protected override CreateParams CreateParams {
-                get {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
                     CreateParams cp = base.CreateParams;
-
                     // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.  But, they are only supported
-                    // on NT.
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-                        cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
-                    }
+                    // full blown invisible windows.
+                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
                     return cp;
                 }
             }
@@ -3966,16 +3964,15 @@ namespace System.Windows.Forms {
                 DpiHelper.FirstParkingWindowCreated = true;
             }
 
-            protected override CreateParams CreateParams {
-                get {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
                     CreateParams cp = base.CreateParams;
 
                     // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.  But, they are only supported
-                    // on NT.
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-                        cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
-                    }
+                    // full blown invisible windows.
+                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
                     return cp;
                 }
             }

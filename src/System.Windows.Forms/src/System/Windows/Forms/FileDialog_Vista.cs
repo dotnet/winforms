@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         {
             get 
             {
-                if (UnsafeNativeMethods.IsVista && this._autoUpgradeEnabled && SettingsSupportVistaDialog)
+                if (_autoUpgradeEnabled && SettingsSupportVistaDialog)
                 {
                     return SystemInformation.BootMode == BootMode.Normal;
                 }

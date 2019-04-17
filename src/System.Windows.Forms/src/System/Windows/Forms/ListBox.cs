@@ -73,9 +73,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_DRAWITEM             = new object();
         private static readonly object EVENT_MEASUREITEM          = new object();
 
-        static bool checkedOS = false;
-        static bool runningOnWin2K = true;
-
         SelectedObjectCollection selectedItems;
         SelectedIndexCollection selectedIndices;
         ObjectCollection itemsCollection;
@@ -768,32 +765,6 @@ namespace System.Windows.Forms {
                 return DefaultSize;
             }
             return new Size(width, height) + Padding.Size;
-        }
-
-        /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.RightToLeft"]/*' />
-        public override RightToLeft RightToLeft {
-            get {
-                if (!RunningOnWin2K) {
-                    return RightToLeft.No;
-                }
-                return base.RightToLeft;
-            }
-            set {
-                base.RightToLeft = value;
-            }
-        }
-
-        static bool RunningOnWin2K {
-            get {
-                if (!checkedOS) {
-                    if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                        Environment.OSVersion.Version.Major < 5) {
-                        runningOnWin2K = false;
-                        checkedOS = true;
-                    }
-                }
-                return runningOnWin2K;
-            }
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ScrollAlwaysVisible"]/*' />

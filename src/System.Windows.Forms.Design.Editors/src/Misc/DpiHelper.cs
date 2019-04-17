@@ -159,8 +159,7 @@ namespace System.Windows.Forms
             try
             {
                 // Redstone 2 or greater, where all APIs required by this feature are available
-                if ((Environment.OSVersion.Platform == System.PlatformID.Win32NT) &&
-                        (Environment.OSVersion.Version.CompareTo(ConfigurationOptions.RS2Version) >= 0) &&
+                if ((Environment.OSVersion.Version.CompareTo(ConfigurationOptions.RS2Version) >= 0) &&
                         (IsExpectedConfigValue(ConfigurationStringConstants.DisableDpiChangedMessageHandlingKeyName, false)) &&
                         (IsDpiAwarenessValueSet()) &&
                         // The dynamic scaling features are implemented only in comclt32 v6, no point to

@@ -39,8 +39,6 @@ namespace System.Windows.Forms {
         private bool showHelp;
         private bool showNetwork;
 
-        private bool useEXDialog = false;
-
         /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.PrintDialog"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintDialog'/> class.</para>
@@ -222,42 +220,62 @@ namespace System.Windows.Forms {
 
 
         /// <summary>
-        ///    <para>
-        ///      UseEXDialog = true means to use the EX versions of the dialogs when running on XP or above, and to ignore the ShowHelp & ShowNetwork properties. 
-        ///      If running below XP then UseEXDialog is ignored and the non-EX dialogs are used & ShowHelp & ShowNetwork are respected.       
-        ///      UseEXDialog = false means to never use the EX versions of the dialog regardless of which O/S app is running on. ShowHelp & ShowNetwork will work in this case.
-        ///    </para>
+        /// UseEXDialog = true means to use the EX versions of the dialogs and to ignore the
+        /// ShowHelp & ShowNetwork properties. 
+        /// UseEXDialog = false means to never use the EX versions of the dialog.
+        /// ShowHelp & ShowNetwork will work in this case.
         /// </summary>
-        [
-        DefaultValue(false),
-        SRDescription(nameof(SR.PDuseEXDialog))
-        ]
-        public bool UseEXDialog {
-            get { return useEXDialog;}
-            set { useEXDialog = value;}
-        }
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.PDuseEXDialog))]
+        public bool UseEXDialog { get; set; }
 
-        private int GetFlags() {
+        private int GetFlags()
+        {
             int flags = 0;
 
             // Only set this flag when using PRINTDLG and PrintDlg,
             // and not when using PrintDlgEx and PRINTDLGEX.
-            if (!UseEXDialog || (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5)) {
+            if (!UseEXDialog)
+            {
                 flags |= NativeMethods.PD_ENABLEPRINTHOOK;
             }
 
-            if (!allowCurrentPage) flags |= NativeMethods.PD_NOCURRENTPAGE;
-            if (!allowPages) flags |= NativeMethods.PD_NOPAGENUMS;
-            if (!allowPrintToFile) flags |= NativeMethods.PD_DISABLEPRINTTOFILE;
-            if (!allowSelection) flags |= NativeMethods.PD_NOSELECTION;
+            if (!allowCurrentPage)
+            {
+                flags |= NativeMethods.PD_NOCURRENTPAGE;
+            }
+            if (!allowPages)
+            {
+                flags |= NativeMethods.PD_NOPAGENUMS;
+            }
+            if (!allowPrintToFile)
+            {
+                flags |= NativeMethods.PD_DISABLEPRINTTOFILE;
+            }
+            if (!allowSelection)
+            {
+                flags |= NativeMethods.PD_NOSELECTION;
+            }
 
-            flags |= (int) PrinterSettings.PrintRange;
+            flags |= (int)PrinterSettings.PrintRange;
 
-            if (printToFile) flags |= NativeMethods.PD_PRINTTOFILE;
-            if (showHelp) flags |= NativeMethods.PD_SHOWHELP;
-            if (!showNetwork) flags |= NativeMethods.PD_NONETWORKBUTTON;
-            if (PrinterSettings.Collate) flags |= NativeMethods.PD_COLLATE;
+            if (printToFile)
+            {
+                flags |= NativeMethods.PD_PRINTTOFILE;
+            }
+            if (showHelp)
+            {
+                flags |= NativeMethods.PD_SHOWHELP;
+            }
+            if (!showNetwork)
+            {
+                flags |= NativeMethods.PD_NONETWORKBUTTON;
+            }
+            if (PrinterSettings.Collate)
+            {
+                flags |= NativeMethods.PD_COLLATE;
+            }
+
             return flags;
         }
 
@@ -340,27 +358,20 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        /// <include file='doc\PrintDialog.uex' path='docs/doc[@for="PrintDialog.RunDialog"]/*' />
-        /// <devdoc>
-        /// </devdoc>
-        /// <internalonly/>
-        // Use PrintDlgEx and PRINTDLGEX on Win2k and newer OS'.
-        protected override bool RunDialog(IntPtr hwndOwner) {
-            bool returnValue = false;
+        protected override bool RunDialog(IntPtr hwndOwner)
+        {
+            var hookProcPtr = new NativeMethods.WndProc(this.HookProc);
 
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
-
-            if (!UseEXDialog || (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5)) {
+            if (!UseEXDialog)
+            {
                 NativeMethods.PRINTDLG data = CreatePRINTDLG();
-                returnValue = ShowPrintDialog(hwndOwner, hookProcPtr, data);
+                return ShowPrintDialog(hwndOwner, hookProcPtr, data);
             }
-            else {
+            else
+            {
                 NativeMethods.PRINTDLGEX data = CreatePRINTDLGEX();
-                returnValue = ShowPrintDialog(hwndOwner, data);
+                return ShowPrintDialog(hwndOwner, data);
             }
-
-            return returnValue;
         }
 
         // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
@@ -421,11 +432,10 @@ namespace System.Windows.Forms {
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
                 // to print, and the PD_COLLATE flag in the Flags member indicates 
                 // whether the user wants to print them collated.
-                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0) {
-                    if (Environment.OSVersion.Version.Major >= 6) {
-                        PrinterSettings.Copies = data.nCopies;
-                        PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
-                    }
+                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
+                {
+                    PrinterSettings.Copies = data.nCopies;
+                    PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
                 }
 
                 return true;
@@ -509,11 +519,10 @@ namespace System.Windows.Forms {
                 // PRINTDLG.nCopies or PRINTDLG.nCopies indicates the number of copies the user wants
                 // to print, and the PD_COLLATE flag in the Flags member indicates 
                 // whether the user wants to print them collated.
-                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0) {
-                    if(Environment.OSVersion.Version.Major >= 6) {
-                        PrinterSettings.Copies = (short)(data.nCopies);
-                        PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
-                    }
+                if ((data.Flags & NativeMethods.PD_USEDEVMODECOPIESANDCOLLATE) == 0)
+                {
+                    PrinterSettings.Copies = (short)(data.nCopies);
+                    PrinterSettings.Collate = ((data.Flags & NativeMethods.PD_COLLATE) == NativeMethods.PD_COLLATE);
                 }
 
                 // We should return true only if the user pressed the "Print" button while dismissing the dialog.
