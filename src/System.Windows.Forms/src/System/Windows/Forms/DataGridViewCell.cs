@@ -5498,7 +5498,7 @@ namespace System.Windows.Forms
                 if ((patternId == NativeMethods.UIA_TableItemPatternId ||
                     patternId == NativeMethods.UIA_GridItemPatternId) &&
                     // We don't want to implement patterns for header cells
-                    this.owner.ColumnIndex != -1 && this.owner.RowIndex != -1))
+                    this.owner.ColumnIndex != -1 && this.owner.RowIndex != -1)
                 {
                     return true;
                 }
