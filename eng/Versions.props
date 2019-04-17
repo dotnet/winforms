@@ -13,19 +13,19 @@
     </RestoreSources>
   </PropertyGroup>
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview5-27617-05</MicrosoftNETCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview5-27617-06</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- Corefx-updated dependencies -->
   <PropertyGroup>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview5.19216.14</MicrosoftWin32RegistryPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview5.19216.14</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview5.19216.14</SystemDrawingCommonPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview5.19216.14</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview5.19216.14</SystemSecurityCryptographyCngPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview5.19216.14</SystemCodeDomPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview5.19216.14</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview5.19216.14</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview5.19216.14</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview5.19217.2</MicrosoftWin32RegistryPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview5.19217.2</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview5.19217.2</SystemDrawingCommonPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview5.19217.2</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview5.19217.2</SystemSecurityCryptographyCngPackageVersion>
+    <SystemCodeDomPackageVersion>4.6.0-preview5.19217.2</SystemCodeDomPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview5.19217.2</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>4.6.0-preview5.19217.2</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview5.19217.2</MicrosoftNETCorePlatformsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR-updated dependencies -->
   <PropertyGroup>
