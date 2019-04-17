@@ -3996,10 +3996,10 @@ namespace System.Windows.Forms {
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagFUNCDESC {
-            public   int memid = 0;
+        public struct tagFUNCDESC {
+            public   int memid;
             
-            public IntPtr lprgscode = IntPtr.Zero;
+            public IntPtr lprgscode;
 
             // This is marked as NATIVE_TYPE_PTR,
             // but the EE doesn't look for that, tries to handle it as
@@ -4007,26 +4007,26 @@ namespace System.Windows.Forms {
             // isn't a NATIVE_TYPE_NESTEDSTRUCT
             /*[MarshalAs(UnmanagedType.PTR)]*/
             
-            public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam = IntPtr.Zero;
+            public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam;
 
             // cpb, Microsoft, the EE chokes on Enums in structs
             
-            public    /*NativeMethods.tagFUNCKIND*/ int funckind = 0;
+            public    /*NativeMethods.tagFUNCKIND*/ int funckind;
             
-            public    /*NativeMethods.tagINVOKEKIND*/ int invkind = 0;
+            public    /*NativeMethods.tagINVOKEKIND*/ int invkind;
             
-            public    /*NativeMethods.tagCALLCONV*/ int callconv = 0;
+            public    /*NativeMethods.tagCALLCONV*/ int callconv;
             [MarshalAs(UnmanagedType.I2)]
-            public   short cParams = 0;
+            public   short cParams;
             [MarshalAs(UnmanagedType.I2)]
-            public   short cParamsOpt =  0;
+            public   short cParamsOpt;
             [MarshalAs(UnmanagedType.I2)]
-            public   short oVft = 0;
+            public   short oVft;
             [MarshalAs(UnmanagedType.I2)]
-            public   short cScodesi = 0;
+            public   short cScodesi;
             public   NativeMethods.value_tagELEMDESC elemdescFunc;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wFuncFlags = 0;
+            public   short wFuncFlags;
         }
         
         [StructLayout(LayoutKind.Sequential)]
