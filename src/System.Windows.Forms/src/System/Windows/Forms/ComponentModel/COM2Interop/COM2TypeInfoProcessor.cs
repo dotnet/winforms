@@ -586,11 +586,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagELEMDESC ed = null;
             try {
                 ref readonly NativeMethods.tagTYPEATTR typeAttr = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagTYPEATTR>(pTypeAttr);
-
-                ed = structCache.GetStruct<NativeMethods.tagELEMDESC>();
                 
                 bool              isPropGet;
                 PropInfo          pi;
@@ -638,8 +635,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                                 
                                 continue;
                             }
-                            Marshal.PtrToStructure(funcDesc.lprgelemdescParam, ed);
 
+                            ref readonly NativeMethods.tagELEMDESC ed = ref UnsafeNativeMethods.PtrToRef<NativeMethods.tagELEMDESC>(funcDesc.lprgelemdescParam);
                             unsafe
                             {
                                 typeDesc = *ed.tdesc;
@@ -658,9 +655,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 }
             }
             finally {
-                if (ed != null) {
-                    structCache.ReleaseStruct(ed);
-                }
                 typeInfo.ReleaseTypeAttr(pTypeAttr);
             }
         }
