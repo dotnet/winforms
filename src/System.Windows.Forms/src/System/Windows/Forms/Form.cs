@@ -772,7 +772,7 @@ namespace System.Windows.Forms {
 
                 UpdateFormStyles();
 
-                // In Windows XP Theme, the FixedDialog tend to have a small Icon.
+                // In Windows Theme, the FixedDialog tend to have a small Icon.
                 // So to make this behave uniformly with other styles, we need to make
                 // the call to UpdateIcon after the the form styles have been updated.
                 if (formState[FormStateIconSet] == 0)

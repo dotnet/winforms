@@ -742,9 +742,7 @@ namespace System.Windows.Forms {
         private static string MakeFilterString(string s, bool dereferenceLinks) {
             if (s == null || s.Length == 0)
             {
-                // Workaround for Whidbey 
-
-                if (dereferenceLinks && System.Environment.OSVersion.Version.Major >= 5)
+                if (dereferenceLinks)
                 {
                     s = " |*.*";
                 }

@@ -35,16 +35,19 @@ namespace System.Experimental.Gdi
         /// fonts are synthesized if necessary.
         Proof = IntNativeMethods.PROOF_QUALITY,
 
+        /// <devdoc>
         /// Font is never antialiased.
-        /// WINVER >= 0x0400
+        /// </devdoc>
         NonAntiAliased = IntNativeMethods.NONANTIALIASED_QUALITY,
 
-        /// Font is always antialiased if the font supports it and the size of the font is not too small or too large. 
-        /// See note for Win9x systems.
-        /// WINVER >= 0x0400
+        /// <devdoc>
+        /// Font is always antialiased if the font supports it and the size of the font is not
+        /// too small or too large. 
+        /// </devdoc>
         AntiAliased = IntNativeMethods.ANTIALIASED_QUALITY,
 
-        /// Windows XP: The following situations do not support ClearType antialiasing: 
+        /// <devdoc>
+        /// The following situations do not support ClearType antialiasing: 
         /// - Text is rendered on a printer. 
         /// - Display set for 256 colors or less. 
         /// - Text is rendered to a terminal server client. 
@@ -53,11 +56,10 @@ namespace System.Experimental.Gdi
         ///     Type 1 fonts, Postscript OpenType fonts without TrueType outlines, bitmap fonts, vector fonts, and device fonts.
         /// - The font has tuned embedded bitmaps, for any font sizes that contain the embedded bitmaps. 
         ///   For example, this occurs commonly in East Asian fonts. 
-        /// Windows XP: If set, text is rendered (when possible) using ClearType antialiasing method. 
-        /// See Remarks for more information.
-        /// WIN32_WINNT >= 0x0500
+        /// If set, text is rendered (when possible) using ClearType antialiasing method. 
+        /// <devdoc>
         ClearType        = IntNativeMethods.CLEARTYPE_QUALITY,
-        /// WIN32_WINNT >= 0x0501
+
         ClearTypeNatural = IntNativeMethods.CLEARTYPE_NATURAL_QUALITY
     }
 }

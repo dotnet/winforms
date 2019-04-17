@@ -294,7 +294,6 @@ namespace System.Experimental.Gdi
    
             
             // If hdc is null, the function creates a memory DC compatible with the application's current screen.
-            // Win2K+: (See CreateCompatibleDC in the MSDN).
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed, 
             // the HDC is no longer valid.
 

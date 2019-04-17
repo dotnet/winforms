@@ -80,11 +80,8 @@ namespace System.Windows.Forms {
                 deviceName = "DISPLAY";
             }
             else {
-                // MultiMonitor System
-                // We call the 'A' version of GetMonitorInfoA() because
-                // the 'W' version just never fills out the struct properly on Win2K.
-                //
-                NativeMethods.MONITORINFOEX info = new NativeMethods.MONITORINFOEX();
+                // Multiple monitor system
+                var info = new NativeMethods.MONITORINFOEX();
                 SafeNativeMethods.GetMonitorInfo(new HandleRef(null, monitor), info);
                 bounds = Rectangle.FromLTRB(info.rcMonitor.left, info.rcMonitor.top, info.rcMonitor.right, info.rcMonitor.bottom);
                 primary = ((info.dwFlags & MONITORINFOF_PRIMARY) != 0);
@@ -237,11 +234,8 @@ namespace System.Windows.Forms {
                         workingArea = SystemInformation.WorkingArea;
                     }
                     else {
-                        // MultiMonitor System
-                        // We call the 'A' version of GetMonitorInfoA() because
-                        // the 'W' version just never fills out the struct properly on Win2K.
-                        //
-                        NativeMethods.MONITORINFOEX info = new NativeMethods.MONITORINFOEX();
+                        // Multiple monitor System
+                        var info = new NativeMethods.MONITORINFOEX();
                         SafeNativeMethods.GetMonitorInfo(new HandleRef(null, hmonitor), info);
                         workingArea = Rectangle.FromLTRB(info.rcWork.left, info.rcWork.top, info.rcWork.right, info.rcWork.bottom);
                     }

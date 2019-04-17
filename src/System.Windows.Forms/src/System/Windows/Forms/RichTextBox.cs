@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
         object oleCallback;
 
         private static int[] shortcutsToDisable;
-        private static int richEditMajorVersion = 3; //Assume version 3: it'll only be version 2 on Win98, and we don't yet load version 4.
+        private static int richEditMajorVersion = 3;
 
         private BitVector32 richTextBoxFlags = new BitVector32();
         private static readonly BitVector32.Section autoWordSelectionSection = BitVector32.CreateSection(1);

@@ -329,9 +329,6 @@ namespace System.Windows.Forms {
             return data;
         }
 
-        // Use PRINTDLGEX on Win2k and newer OS'. Note that at the time of this
-        // fix, PrinterSettings did not support multiple page ranges.
-        // Create a PRINTDLGEX with a few useful defaults.
         internal static NativeMethods.PRINTDLGEX CreatePRINTDLGEX() {
             NativeMethods.PRINTDLGEX data = new NativeMethods.PRINTDLGEX();
             data.lStructSize = Marshal.SizeOf(data);
@@ -374,10 +371,8 @@ namespace System.Windows.Forms {
             }
         }
 
-        // Due to the nature of PRINTDLGEX vs PRINTDLG, separate but similar methods
-        // are required for showing the print dialog on Win2k and newer OS'.
         private bool ShowPrintDialog(IntPtr hwndOwner, NativeMethods.WndProc hookProcPtr, NativeMethods.PRINTDLG data) {
-           
+
             data.Flags = GetFlags();
             data.nCopies = (short) PrinterSettings.Copies;
             data.hwndOwner = hwndOwner;

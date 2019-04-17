@@ -625,9 +625,9 @@ namespace System.Windows.Forms {
             button.dwMask = NativeMethods.TBIF_IMAGE
                             | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE;
 
-            // Comctl on Win98 interprets null strings as empty strings, which forces
-            // the button to leave space for text.  The only workaround is to avoid having comctl 
-            // update the text.
+            // Older platforms interpret null strings as empty, which forces the button to
+            // leave space for text.
+            // The only workaround is to avoid having comctl update the text.
             if (updateText) {
                 button.dwMask |= NativeMethods.TBIF_TEXT;
             }

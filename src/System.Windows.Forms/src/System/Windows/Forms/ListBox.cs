@@ -64,10 +64,10 @@ namespace System.Windows.Forms {
         public const int NoMatches = NativeMethods.LB_ERR;
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.DefaultItemHeight"]/*' />
         /// <devdoc>
-        ///     The default item height for an owner-draw ListBox.
+        /// The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        // item height is 13 for the default font on Windows.
         /// </devdoc>
-        public const int DefaultItemHeight = 13; // 13 == listbox's non-ownerdraw item height.  That's with Win2k and
-        // the default font; on other platforms and with other fonts, it may be different.
+        public const int DefaultItemHeight = 13;
 
         private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
         private static readonly object EVENT_DRAWITEM             = new object();
@@ -1485,12 +1485,10 @@ namespace System.Windows.Forms {
             }
 
             if (insertIndex == NativeMethods.LB_ERR) {
-                // On some platforms (e.g. Win98), the ListBox control
-                // appears to return LB_ERR if there are a large number (>32000)
-                // of items. It doesn't appear to set error codes appropriately,
-                // so we'll have to assume that LB_ERR corresponds to item
+                // On older platforms the ListBox control returns LB_ERR if there are a
+                // large number (>32000) of items. It doesn't appear to set error codes
+                // appropriately, so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
-                //
                 throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
@@ -1528,12 +1526,10 @@ namespace System.Windows.Forms {
             }
 
             if (insertIndex == NativeMethods.LB_ERR) {
-                // On some platforms (e.g. Win98), the ListBox control
-                // appears to return LB_ERR if there are a large number (>32000)
-                // of items. It doesn't appear to set error codes appropriately,
-                // so we'll have to assume that LB_ERR corresponds to item
+                // On older platforms the ListBox control returns LB_ERR if there are a
+                // large number (>32000) of items. It doesn't appear to set error codes
+                // appropriately, so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
-                //
                 throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 

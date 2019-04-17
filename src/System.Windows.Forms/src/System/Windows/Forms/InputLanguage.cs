@@ -106,9 +106,10 @@ namespace System.Windows.Forms
         {
             get
             {
-                // There is no good way to do this in Win32...  GetKeyboardLayoutName does what we want,
-                // but only for the current input language; setting and resetting the current input language
-                // would generate spurious InputLanguageChanged events.
+                // There is no good way to do this in Windows.
+                // GetKeyboardLayoutName does what we want, but only for the current input
+                // language; setting and resetting the current input language would generate
+                // spurious InputLanguageChanged events.
 
                 /*
                             HKL is a 32 bit value. HIWORD is a Device Handle. LOWORD is Language ID.
@@ -140,7 +141,7 @@ namespace System.Windows.Forms
                 Look in HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Keyboard Layouts\00010409
                 "Layout File": name of keyboard layout DLL (KBDDV.DLL)
                 "Layout Id": ID of this layout (0002)
-                Win32k will change the top nibble of layout ID to F, which makes F002.
+                Windows will change the top nibble of layout ID to F, which makes F002.
                 Combined with Language ID, the final HKL is F0020409.
                 */
 

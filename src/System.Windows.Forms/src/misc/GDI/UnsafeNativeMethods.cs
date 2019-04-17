@@ -399,12 +399,15 @@ namespace System.Experimental.Gdi
             return retVal;
         }
 
-        // WARNING: This method is currently used just for drawing the text background (ComponentEditorForm.cs) and not for rendering text.
-        //          Prefer using DrawText over this method if possible, it handles Win9x issues properly.  Ideally, we should remove this method
-        //          but to avoid issues at this point I'm leaving it here.
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
+        /// <remarks>
+        /// This method is currently used just for drawing the text background
+        /// (ComponentEditorForm.cs) and not for rendering text.
+        /// Prefer using DrawText over this method if possible, it handles issues on older
+        /// platforms properly. Ideally, we should remove this method but to avoid issues at this
+        /// point I'm leaving it here.
+        /// </remarks>
+        [SuppressMessage("Microsoft.Security", "CA2101:SpecifyMarshalingForPInvokeStringArguments")]
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=false, CharSet=CharSet.Auto)]
-        
         internal static extern bool ExtTextOut(HandleRef hdc, int x, int y, int options, ref IntNativeMethods.RECT rect, string str, int length, int[] spacing);
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint="LineTo", CharSet = CharSet.Auto)]

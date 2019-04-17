@@ -635,9 +635,7 @@ namespace System.Windows.Forms {
 #endif
 
             if (activeControl != null && activeControl.Visible) {
-
-                // Avoid focus loops, especially with ComboBoxes, on Win98/ME.
-                //
+                // Avoid focus loops, especially with ComboBoxes.
                 IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
                 if (focusHandle == IntPtr.Zero || Control.FromChildHandleInternal(focusHandle) != activeControl) {
                     UnsafeNativeMethods.SetFocus(new HandleRef(activeControl, activeControl.Handle));

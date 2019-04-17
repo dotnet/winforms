@@ -280,7 +280,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView.ApplyVisualStylesToHeaderCells)
                 {
-                    // XP Theming
+                    // Theming
                     int state = (int)HeaderItemState.Normal;
 
                     if (this.ButtonState != ButtonState.Normal)

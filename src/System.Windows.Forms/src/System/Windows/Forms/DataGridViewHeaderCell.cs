@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     /// 
     public class DataGridViewHeaderCell : DataGridViewCell
     {
-        private const byte DATAGRIDVIEWHEADERCELL_themeMargin = 100;  // used to calculate the margins required for XP theming rendering
+        private const byte DATAGRIDVIEWHEADERCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
 
         private static Type defaultFormattedValueType = typeof(string);
         private static Type defaultValueType = typeof(object);

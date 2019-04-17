@@ -12,8 +12,7 @@ namespace System.Windows.Forms
         #region PInvoke General
         // If this value is used, %windows%\system32 is searched for the DLL 
         // and its dependencies. Directories in the standard search path are not searched.
-        // Windows7, Windows Server 2008 R2, Windows Vista and Windows Server 2008:
-        // This value requires KB2533623 to be installed.
+        // Windows 7: this value requires KB2533623 to be installed.
         // Windows Server 2003 and Windows XP: This value is not supported.
         internal const int LOAD_LIBRARY_SEARCH_SYSTEM32 = 0x00000800;
 

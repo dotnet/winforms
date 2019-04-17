@@ -2721,10 +2721,8 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor"]/*' />
         /// <devdoc>
-        ///     Logic copied from Win2K sources to copy the lightening and
-        ///     darkening of colors.
+        /// Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </devdoc>
         private struct HLSColor {
             private const int ShadowAdj         = -333;
