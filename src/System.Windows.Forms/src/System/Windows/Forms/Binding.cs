@@ -82,12 +82,12 @@ namespace System.Windows.Forms
         {
             _bindToObject = new BindToObject(this, dataSource, dataMember);
 
-            this._propertyName = propertyName;
-            this._formattingEnabled = formattingEnabled;
-            this._formatString = formatString;
-            this._nullValue = nullValue;
-            this._formatInfo = formatInfo;
-            this._formattingEnabled = formattingEnabled;
+            _propertyName = propertyName;
+            _formattingEnabled = formattingEnabled;
+            _formatString = formatString;
+            _nullValue = nullValue;
+            _formatInfo = formatInfo;
+            _formattingEnabled = formattingEnabled;
             DataSourceUpdateMode = dataSourceUpdateMode;
 
             CheckBinding();
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
                 newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
             }
 
-            BindToObject.SetBindingManagerBase(newBindingManagerBase);
+            _bindToObject.SetBindingManagerBase(newBindingManagerBase);
             CheckBinding();
         }
 
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
             set
             {
                 // Try to compare logical values, not object references...
-                if (!Object.Equals(_dsNullValue, value))
+                if (!object.Equals(_dsNullValue, value))
                 {
                     // Save old Value
                     object oldValue = _dsNullValue;
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
 
         private void binding_MetaDataChanged(object sender, EventArgs e)
         {
-            Debug.Assert(sender == this._bindingManagerBase, "we should only receive notification from our binding manager base");
+            Debug.Assert(sender == _bindingManagerBase, "we should only receive notification from our binding manager base");
             CheckBinding();
         }
 
@@ -485,7 +485,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(string.Format(SR.ListBindingBindProperty, _propertyName), "PropertyName");
                 }
-                if (tempPropInfo.IsReadOnly && this._controlUpdateMode != ControlUpdateMode.Never)
+                if (tempPropInfo.IsReadOnly && _controlUpdateMode != ControlUpdateMode.Never)
                 {
                     throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, _propertyName), "PropertyName");
                 }
@@ -844,7 +844,7 @@ namespace System.Windows.Forms
                 if (lastException != null || (!FormattingEnabled && parsedValue == null))
                 {
                     parseFailed = true;
-                    parsedValue = this._bindToObject.GetValue();
+                    parsedValue = _bindToObject.GetValue();
                 }
 
                 // Format the parsed value to be re-displayed in the control
@@ -858,7 +858,7 @@ namespace System.Windows.Forms
                     else
                     {
                         object formattedObject = FormatObject(parsedValue);
-                        if (force || !FormattingEnabled || !Object.Equals(formattedObject, value))
+                        if (force || !FormattingEnabled || !object.Equals(formattedObject, value))
                         {
                             SetPropValue(formattedObject);
                         }
