@@ -16,40 +16,40 @@ namespace System.Windows.Forms
     public class Binding
     {
         // the two collection owners that this binding belongs to.
-        private IBindableComponent control;
-        private BindingManagerBase bindingManagerBase;
+        private IBindableComponent _control;
+        private BindingManagerBase _bindingManagerBase;
 
-        private BindToObject bindToObject = null;
+        private BindToObject _bindToObject = null;
 
-        private string propertyName = string.Empty;
+        private string _propertyName = string.Empty;
 
-        private PropertyDescriptor propInfo;
-        private PropertyDescriptor propIsNullInfo;
-        private EventDescriptor validateInfo;
-        private TypeConverter propInfoConverter;
+        private PropertyDescriptor _propInfo;
+        private PropertyDescriptor _propIsNullInfo;
+        private EventDescriptor _validateInfo;
+        private TypeConverter _propInfoConverter;
 
-        private bool formattingEnabled = false;
+        private bool _formattingEnabled = false;
 
-        private bool bound = false;
-        private bool modified = false;
+        private bool _bound = false;
+        private bool _modified = false;
 
         // Recursion guards
-        private bool inSetPropValue = false;
-        private bool inPushOrPull = false;
-        private bool inOnBindingComplete = false;
+        private bool _inSetPropValue = false;
+        private bool _inPushOrPull = false;
+        private bool _inOnBindingComplete = false;
 
         // formatting stuff
-        private string formatString = string.Empty;
-        private IFormatProvider formatInfo = null;
-        private object nullValue = null;
-        private object dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
-        private bool dsNullValueSet;
-        private ConvertEventHandler onParse = null;
-        private ConvertEventHandler onFormat = null;
+        private string _formatString = string.Empty;
+        private IFormatProvider _formatInfo = null;
+        private object _nullValue = null;
+        private object _dsNullValue = Formatter.GetDefaultDataSourceNullValue(null);
+        private bool _dsNullValueSet;
+        private ConvertEventHandler _onParse = null;
+        private ConvertEventHandler _onFormat = null;
 
         // binding stuff
-        private ControlUpdateMode controlUpdateMode = ControlUpdateMode.OnPropertyChanged;
-        private BindingCompleteEventHandler onComplete = null;
+        private ControlUpdateMode _controlUpdateMode = ControlUpdateMode.OnPropertyChanged;
+        private BindingCompleteEventHandler _onComplete = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.Binding'/> class
@@ -80,14 +80,14 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters", Justification = "'formatString' is an appropriate name, since its a string passed to the Format method")]
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
-            bindToObject = new BindToObject(this, dataSource, dataMember);
+            _bindToObject = new BindToObject(this, dataSource, dataMember);
 
-            this.propertyName = propertyName;
-            this.formattingEnabled = formattingEnabled;
-            this.formatString = formatString;
-            this.nullValue = nullValue;
-            this.formatInfo = formatInfo;
-            this.formattingEnabled = formattingEnabled;
+            this._propertyName = propertyName;
+            this._formattingEnabled = formattingEnabled;
+            this._formatString = formatString;
+            this._nullValue = nullValue;
+            this._formatInfo = formatInfo;
+            this._formattingEnabled = formattingEnabled;
             DataSourceUpdateMode = dataSourceUpdateMode;
 
             CheckBinding();
@@ -100,23 +100,23 @@ namespace System.Windows.Forms
         {
         }
 
-        internal BindToObject BindToObject => bindToObject;
+        internal BindToObject BindToObject => _bindToObject;
 
-        public object DataSource => bindToObject.DataSource;
+        public object DataSource => _bindToObject.DataSource;
 
-        public BindingMemberInfo BindingMemberInfo => bindToObject.BindingMemberInfo;
-
-        /// <summary>
-        /// Gets the control to which the binding belongs.
-        /// </summary>
-        [DefaultValue(null)]
-        public IBindableComponent BindableComponent => control;
+        public BindingMemberInfo BindingMemberInfo => _bindToObject.BindingMemberInfo;
 
         /// <summary>
         /// Gets the control to which the binding belongs.
         /// </summary>
         [DefaultValue(null)]
-        public Control Control => control as Control;
+        public IBindableComponent BindableComponent => _control;
+
+        /// <summary>
+        /// Gets the control to which the binding belongs.
+        /// </summary>
+        [DefaultValue(null)]
+        public Control Control => _control as Control;
 
         /// <summary>
         /// Is the binadable component in a 'created' (ready-to-use) state? For controls,
@@ -136,22 +136,22 @@ namespace System.Windows.Forms
         // <summary>
         /// Instance-specific property equivalent to the static method above
         // </summary>
-        internal bool ComponentCreated => IsComponentCreated(this.control);
+        internal bool ComponentCreated => IsComponentCreated(this._control);
 
         private void FormLoaded(object sender, EventArgs e)
         {
-            Debug.Assert(sender == control, "which other control can send us the Load event?");
+            Debug.Assert(sender == _control, "which other control can send us the Load event?");
             // update the binding
             CheckBinding();
         }
 
         internal void SetBindableComponent(IBindableComponent value)
         {
-            if (control != value)
+            if (_control != value)
             {
-                IBindableComponent oldTarget = control;
+                IBindableComponent oldTarget = _control;
                 BindTarget(false);
-                control = value;
+                _control = value;
                 BindTarget(true);
                 try
                 {
@@ -160,14 +160,14 @@ namespace System.Windows.Forms
                 catch
                 {
                     BindTarget(false);
-                    control = oldTarget;
+                    _control = oldTarget;
                     BindTarget(true);
                     throw;
                 }
 
                 // We are essentially doing to the listManager what we were doing to the
                 // BindToObject: bind only when the control is created and it has a BindingContext
-                BindingContext.UpdateBinding((control != null && IsComponentCreated(control) ? control.BindingContext : null), this);
+                BindingContext.UpdateBinding((_control != null && IsComponentCreated(_control) ? _control.BindingContext : null), this);
                 Form form = value as Form;
                 if (form != null)
                 {
@@ -179,22 +179,22 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets a value indicating whether the binding is active.
         /// </summary>
-        public bool IsBinding => bound;
+        public bool IsBinding => _bound;
 
         /// <summary>
         /// Gets the <see cref='System.Windows.Forms.BindingManagerBase'/> of this binding that
         /// allows enumeration of a set of bindings.
         /// </summary>
-        public BindingManagerBase BindingManagerBase => bindingManagerBase;
+        public BindingManagerBase BindingManagerBase => _bindingManagerBase;
 
         internal void SetListManager(BindingManagerBase newBindingManagerBase)
         {
-            if (bindingManagerBase is CurrencyManager oldCurrencyManagEr)
+            if (_bindingManagerBase is CurrencyManager oldCurrencyManagEr)
             {
                 oldCurrencyManagEr.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
             }
 
-            bindingManagerBase = newBindingManagerBase;
+            _bindingManagerBase = newBindingManagerBase;
 
             if (newBindingManagerBase is CurrencyManager newCurrencyManager)
             {
@@ -209,17 +209,17 @@ namespace System.Windows.Forms
         /// Gets or sets the property on the control to bind to.
         /// </summary>
         [DefaultValue("")]
-        public string PropertyName => propertyName;
+        public string PropertyName => _propertyName;
 
         public event BindingCompleteEventHandler BindingComplete
         {
             add
             {
-                onComplete += value;
+                _onComplete += value;
             }
             remove
             {
-                onComplete -= value;
+                _onComplete -= value;
             }
         }
 
@@ -227,11 +227,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                onParse += value;
+                _onParse += value;
             }
             remove
             {
-                onParse -= value;
+                _onParse -= value;
             }
         }
 
@@ -239,11 +239,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                onFormat += value;
+                _onFormat += value;
             }
             remove
             {
-                onFormat -= value;
+                _onFormat -= value;
             }
         }
 
@@ -254,12 +254,12 @@ namespace System.Windows.Forms
             // formatting features. However, it is also used to trigger other new Whidbey binding
             // behavior not related to formatting (such as error handling). This preserves Everett
             // legacy behavior for old bindings (where FormattingEnabled = false).
-            get => formattingEnabled;
+            get => _formattingEnabled;
             set
             {
-                if (formattingEnabled != value)
+                if (_formattingEnabled != value)
                 {
-                    formattingEnabled = value;
+                    _formattingEnabled = value;
                     if (IsBinding)
                     {
                         PushData();
@@ -271,12 +271,12 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         public IFormatProvider FormatInfo
         {
-            get => formatInfo;
+            get => _formatInfo;
             set
             {
-                if (formatInfo != value)
+                if (_formatInfo != value)
                 {
-                    formatInfo = value;
+                    _formatInfo = value;
                     if (IsBinding)
                     {
                         PushData();
@@ -287,7 +287,7 @@ namespace System.Windows.Forms
 
         public string FormatString
         {
-            get => formatString;
+            get => _formatString;
             set
             {
                 if (value == null)
@@ -295,9 +295,9 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (!value.Equals(formatString))
+                if (!value.Equals(_formatString))
                 {
-                    formatString = value;
+                    _formatString = value;
                     if (IsBinding)
                     {
                         PushData();
@@ -308,17 +308,17 @@ namespace System.Windows.Forms
 
         public object NullValue
         {
-            get => nullValue;
+            get => _nullValue;
             set
             {
                 // Try to compare logical values, not object references...
-                if (!object.Equals(nullValue, value))
+                if (!object.Equals(_nullValue, value))
                 {
-                    nullValue = value;
+                    _nullValue = value;
 
                     // If data member is currently DBNull, force update of bound
                     // control property so that it displays the new NullValue
-                    if (IsBinding && Formatter.IsNullData(bindToObject.GetValue(), dsNullValue))
+                    if (IsBinding && Formatter.IsNullData(_bindToObject.GetValue(), _dsNullValue))
                     {
                         PushData();
                     }
@@ -328,26 +328,26 @@ namespace System.Windows.Forms
 
         public object DataSourceNullValue
         {
-            get => dsNullValue;
+            get => _dsNullValue;
             set
             {
                 // Try to compare logical values, not object references...
-                if (!Object.Equals(dsNullValue, value))
+                if (!Object.Equals(_dsNullValue, value))
                 {
                     // Save old Value
-                    object oldValue = dsNullValue;
+                    object oldValue = _dsNullValue;
 
                     // Set value
-                    dsNullValue = value;
+                    _dsNullValue = value;
 
-                    dsNullValueSet = true;
+                    _dsNullValueSet = true;
 
                     // If control's property is capable of displaying a special value for DBNull,
                     // and the DBNull status of data source's property has changed, force the
                     // control property to refresh itself from the data source property.
                     if (IsBinding)
                     {
-                        object dsValue = bindToObject.GetValue();
+                        object dsValue = _bindToObject.GetValue();
 
                         // Check previous DataSourceNullValue for null
                         if (Formatter.IsNullData(dsValue, oldValue))
@@ -370,12 +370,12 @@ namespace System.Windows.Forms
         [DefaultValue(ControlUpdateMode.OnPropertyChanged)]
         public ControlUpdateMode ControlUpdateMode
         {
-            get => controlUpdateMode;
+            get => _controlUpdateMode;
             set
             {
-                if (controlUpdateMode != value)
+                if (_controlUpdateMode != value)
                 {
-                    controlUpdateMode = value;
+                    _controlUpdateMode = value;
 
                     // Refresh the control from the data source, to reflect the new update mode
                     if (IsBinding)
@@ -395,51 +395,51 @@ namespace System.Windows.Forms
             {
                 if (IsBinding)
                 {
-                    if (propInfo != null && control != null)
+                    if (_propInfo != null && _control != null)
                     {
                         EventHandler handler = new EventHandler(this.Target_PropertyChanged);
-                        propInfo.AddValueChanged(control, handler);
+                        _propInfo.AddValueChanged(_control, handler);
                     }
-                    if (validateInfo != null)
+                    if (_validateInfo != null)
                     {
                         CancelEventHandler handler = new CancelEventHandler(this.Target_Validate);
-                        validateInfo.AddEventHandler(control, handler);
+                        _validateInfo.AddEventHandler(_control, handler);
                     }
                 }
             }
             else
             {
-                if (propInfo != null && control != null)
+                if (_propInfo != null && _control != null)
                 {
                     EventHandler handler = new EventHandler(this.Target_PropertyChanged);
-                    propInfo.RemoveValueChanged(control, handler);
+                    _propInfo.RemoveValueChanged(_control, handler);
                 }
-                if (validateInfo != null)
+                if (_validateInfo != null)
                 {
                     CancelEventHandler handler = new CancelEventHandler(this.Target_Validate);
-                    validateInfo.RemoveEventHandler(control, handler);
+                    _validateInfo.RemoveEventHandler(_control, handler);
                 }
             }
         }
 
         private void binding_MetaDataChanged(object sender, EventArgs e)
         {
-            Debug.Assert(sender == this.bindingManagerBase, "we should only receive notification from our binding manager base");
+            Debug.Assert(sender == this._bindingManagerBase, "we should only receive notification from our binding manager base");
             CheckBinding();
         }
 
         private void CheckBinding()
         {
-            bindToObject.CheckBinding();
+            _bindToObject.CheckBinding();
 
-            if (control != null && !string.IsNullOrEmpty(propertyName))
+            if (_control != null && !string.IsNullOrEmpty(_propertyName))
             {
-                control.DataBindings.CheckDuplicates(this);
+                _control.DataBindings.CheckDuplicates(this);
 
-                Type controlClass = control.GetType();
+                Type controlClass = _control.GetType();
 
                 // Check Properties
-                string propertyNameIsNull = propertyName + "IsNull";
+                string propertyNameIsNull = _propertyName + "IsNull";
                 Type propType = null;
                 PropertyDescriptor tempPropInfo = null;
                 PropertyDescriptor tempPropIsNullInfo = null;
@@ -451,19 +451,19 @@ namespace System.Windows.Forms
                 // those of its designer.  Normally we want that, but for 
                 // inherited controls we don't because an inherited control should 
                 // "act" like a runtime control.
-                InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(control)[typeof(InheritanceAttribute)];
+                InheritanceAttribute attr = (InheritanceAttribute)TypeDescriptor.GetAttributes(_control)[typeof(InheritanceAttribute)];
                 if (attr != null && attr.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
                     propInfos = TypeDescriptor.GetProperties(controlClass);
                 }
                 else
                 {
-                    propInfos = TypeDescriptor.GetProperties(control);
+                    propInfos = TypeDescriptor.GetProperties(_control);
                 }
 
                 for (int i = 0; i < propInfos.Count; i++)
                 {
-                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, propertyName, StringComparison.OrdinalIgnoreCase))
+                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, _propertyName, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropInfo = propInfos[i];
                         if (tempPropIsNullInfo != null)
@@ -483,26 +483,26 @@ namespace System.Windows.Forms
 
                 if (tempPropInfo == null)
                 {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, _propertyName), "PropertyName");
                 }
-                if (tempPropInfo.IsReadOnly && this.controlUpdateMode != ControlUpdateMode.Never)
+                if (tempPropInfo.IsReadOnly && this._controlUpdateMode != ControlUpdateMode.Never)
                 {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, _propertyName), "PropertyName");
                 }
 
-                propInfo = tempPropInfo;
-                propType = propInfo.PropertyType;
-                propInfoConverter = propInfo.Converter;
+                _propInfo = tempPropInfo;
+                propType = _propInfo.PropertyType;
+                _propInfoConverter = _propInfo.Converter;
 
                 if (tempPropIsNullInfo != null && tempPropIsNullInfo.PropertyType == typeof(bool) && !tempPropIsNullInfo.IsReadOnly)
                 {
-                    propIsNullInfo = tempPropIsNullInfo;
+                    _propIsNullInfo = tempPropIsNullInfo;
                 }
 
                 // Check events
                 EventDescriptor tempValidateInfo = null;
                 string validateName = "Validating";
-                EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(control);
+                EventDescriptorCollection eventInfos = TypeDescriptor.GetEvents(_control);
                 for (int i = 0; i < eventInfos.Count; i++)
                 {
                     if (tempValidateInfo == null && string.Equals(eventInfos[i].Name, validateName, StringComparison.OrdinalIgnoreCase))
@@ -511,12 +511,12 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
-                validateInfo = tempValidateInfo;
+                _validateInfo = tempValidateInfo;
             }
             else
             {
-                propInfo = null;
-                validateInfo = null;
+                _propInfo = null;
+                _validateInfo = null;
             }
 
             // go see if we become bound now.
@@ -525,7 +525,7 @@ namespace System.Windows.Forms
 
         internal bool ControlAtDesignTime()
         {
-            if (!(control is IComponent comp))
+            if (!(_control is IComponent comp))
             {
                 return false;
             }
@@ -536,24 +536,23 @@ namespace System.Windows.Forms
 
         private object GetDataSourceNullValue(Type type)
         {
-            return dsNullValueSet ? dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
+            return _dsNullValueSet ? _dsNullValue : Formatter.GetDefaultDataSourceNullValue(type);
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "Perfectly acceptible when dealing with PropertyDescriptors")]
         private object GetPropValue()
         {
             bool isNull = false;
-            if (propIsNullInfo != null)
+            if (_propIsNullInfo != null)
             {
-                isNull = (bool)propIsNullInfo.GetValue(control);
+                isNull = (bool)_propIsNullInfo.GetValue(_control);
             }
-            object value;
             if (isNull)
             {
                 return DataSourceNullValue;
             }
              
-            return propInfo.GetValue(control) ?? DataSourceNullValue;
+            return _propInfo.GetValue(_control) ?? DataSourceNullValue;
         }
 
         private BindingCompleteEventArgs CreateBindingCompleteEventArgs(BindingCompleteContext context, Exception ex)
@@ -572,7 +571,7 @@ namespace System.Windows.Forms
             else
             {
                 // If data error info on data source for this binding, report that
-                errorText = bindToObject.DataErrorText;
+                errorText = _bindToObject.DataErrorText;
 
                 // We should not cancel with an IDataErrorInfo error - we didn't in Everett
                 if (!string.IsNullOrEmpty(errorText))
@@ -588,12 +587,12 @@ namespace System.Windows.Forms
         {
             // This recursion guard will only be in effect if FormattingEnabled because this method
             // is only called if formatting is enabled.
-            if (!inOnBindingComplete)
+            if (!_inOnBindingComplete)
             {
                 try
                 {
-                    inOnBindingComplete = true;
-                    onComplete?.Invoke(this, e);
+                    _inOnBindingComplete = true;
+                    _onComplete?.Invoke(this, e);
                 }
                 catch (Exception ex) when (!ClientUtils.IsSecurityOrCriticalException(ex))
                 {
@@ -605,16 +604,16 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    inOnBindingComplete = false;
+                    _inOnBindingComplete = false;
                 }
             }
         }
 
         protected virtual void OnParse(ConvertEventArgs cevent)
         {
-            onParse?.Invoke(this, cevent);
+            _onParse?.Invoke(this, cevent);
 
-            if (!formattingEnabled)
+            if (!_formattingEnabled)
             {
                 if (!(cevent.Value is DBNull) && cevent.Value != null && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
@@ -625,9 +624,9 @@ namespace System.Windows.Forms
 
         protected virtual void OnFormat(ConvertEventArgs cevent)
         {
-            onFormat?.Invoke(this, cevent);
+            _onFormat?.Invoke(this, cevent);
 
-            if (!formattingEnabled)
+            if (!_formattingEnabled)
             {
                 if (!(cevent.Value is DBNull) && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
@@ -638,8 +637,8 @@ namespace System.Windows.Forms
 
         private object ParseObject(object value)
         {
-            Type type = bindToObject.BindToType;
-            if (formattingEnabled)
+            Type type = _bindToObject.BindToType;
+            if (_formattingEnabled)
             {
                 // Fire the Parse event so that user code gets a chance to supply the parsed value for us
                 var e = new ConvertEventArgs(value, type);
@@ -655,12 +654,12 @@ namespace System.Windows.Forms
                 {
                     // Otherwise parse the formatted value ourselves
                     TypeConverter fieldInfoConverter = null;
-                    if (bindToObject.FieldInfo != null)
+                    if (_bindToObject.FieldInfo != null)
                     {
-                        fieldInfoConverter = bindToObject.FieldInfo.Converter;
+                        fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                     }
 
-                    return Formatter.ParseObject(value, type, (value == null ? propInfo.PropertyType : value.GetType()), fieldInfoConverter, propInfoConverter, formatInfo, nullValue, GetDataSourceNullValue(type));
+                    return Formatter.ParseObject(value, type, (value == null ? _propInfo.PropertyType : value.GetType()), fieldInfoConverter, _propInfoConverter, _formatInfo, _nullValue, GetDataSourceNullValue(type));
                 }
             }
             else
@@ -703,8 +702,8 @@ namespace System.Windows.Forms
                 return value;
             }
 
-            Type type = propInfo.PropertyType;
-            if (formattingEnabled)
+            Type type = _propInfo.PropertyType;
+            if (_formattingEnabled)
             {
                 // Fire the Format event so that user code gets a chance to supply the formatted value for us
                 var e = new ConvertEventArgs(value, type);
@@ -719,12 +718,12 @@ namespace System.Windows.Forms
                 {
                     // Otherwise format the parsed value ourselves
                     TypeConverter fieldInfoConverter = null;
-                    if (bindToObject.FieldInfo != null)
+                    if (_bindToObject.FieldInfo != null)
                     {
-                        fieldInfoConverter = bindToObject.FieldInfo.Converter;
+                        fieldInfoConverter = _bindToObject.FieldInfo.Converter;
                     }
 
-                    return Formatter.FormatObject(value, type, fieldInfoConverter, propInfoConverter, formatString, formatInfo, nullValue, dsNullValue);
+                    return Formatter.FormatObject(value, type, fieldInfoConverter, _propInfoConverter, _formatString, _formatInfo, _nullValue, _dsNullValue);
                 }
             }
             else
@@ -804,7 +803,7 @@ namespace System.Windows.Forms
                 // If control property supports change events, only pull if the value has been changed since
                 // the last update (ie. its dirty). For properties that do NOT support change events, we cannot
                 // track the dirty state, so we just have to pull all the time.
-                if (propInfo.SupportsChangeEvents && !modified)
+                if (_propInfo.SupportsChangeEvents && !_modified)
                 {
                     return false;
                 }
@@ -817,12 +816,12 @@ namespace System.Windows.Forms
             }
 
             // Re-entrancy check between push and pull (new for Whidbey - requires FormattingEnabled)
-            if (inPushOrPull && formattingEnabled)
+            if (_inPushOrPull && _formattingEnabled)
             {
                 return false;
             }
 
-            inPushOrPull = true;
+            _inPushOrPull = true;
 
             // Get the value from the bound control property
             object value = GetPropValue();
@@ -845,7 +844,7 @@ namespace System.Windows.Forms
                 if (lastException != null || (!FormattingEnabled && parsedValue == null))
                 {
                     parseFailed = true;
-                    parsedValue = this.bindToObject.GetValue();
+                    parsedValue = this._bindToObject.GetValue();
                 }
 
                 // Format the parsed value to be re-displayed in the control
@@ -869,7 +868,7 @@ namespace System.Windows.Forms
                 // Put the value into the data model
                 if (!parseFailed)
                 {
-                    bindToObject.SetValue(parsedValue);
+                    _bindToObject.SetValue(parsedValue);
                 }
             }
             catch (Exception ex) when (FormattingEnabled)
@@ -879,7 +878,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                inPushOrPull = false;
+                _inPushOrPull = false;
             }
 
             if (FormattingEnabled)
@@ -895,7 +894,7 @@ namespace System.Windows.Forms
                 // alone, so that the control's value will continue to be re-validated and re-pulled later.
                 if (args.BindingCompleteState == BindingCompleteState.Success && args.Cancel == false)
                 {
-                    modified = false;
+                    _modified = false;
                 }
 
                 return args.Cancel;
@@ -904,7 +903,7 @@ namespace System.Windows.Forms
             {
                 // Do not emit BindingComplete events, or allow the operation to be cancelled.
                 // If we get this far, treat the operation as successful and clear the dirty flag.
-                modified = false;
+                _modified = false;
                 return false;
             }
         }
@@ -928,21 +927,21 @@ namespace System.Windows.Forms
             }
 
             // Re-entrancy check between push and pull
-            if (inPushOrPull && formattingEnabled)
+            if (_inPushOrPull && _formattingEnabled)
             {
                 return false;
             }
 
-            inPushOrPull = true;
+            _inPushOrPull = true;
 
             try
             {
                 if (IsBinding)
                 {
-                    dataSourceValue = bindToObject.GetValue();
+                    dataSourceValue = _bindToObject.GetValue();
                     object controlValue = FormatObject(dataSourceValue);
                     SetPropValue(controlValue);
-                    modified = false;
+                    _modified = false;
                 }
                 else
                 {
@@ -956,7 +955,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                inPushOrPull = false;
+                _inPushOrPull = false;
             }
 
             if (FormattingEnabled)
@@ -995,59 +994,59 @@ namespace System.Windows.Forms
                 return;
             }
 
-            inSetPropValue = true;
+            _inSetPropValue = true;
 
             try
             {
                 bool isNull = value == null || Formatter.IsNullData(value, DataSourceNullValue);
                 if (isNull)
                 {
-                    if (propIsNullInfo != null)
+                    if (_propIsNullInfo != null)
                     {
-                        propIsNullInfo.SetValue(control, true);
+                        _propIsNullInfo.SetValue(_control, true);
                     }
                     else
                     {
-                        if (propInfo.PropertyType == typeof(object))
+                        if (_propInfo.PropertyType == typeof(object))
                         {
-                            propInfo.SetValue(control, DataSourceNullValue);
+                            _propInfo.SetValue(_control, DataSourceNullValue);
                         }
                         else
                         {
-                            propInfo.SetValue(control, null);
+                            _propInfo.SetValue(_control, null);
                         }
                     }
                 }
                 else
                 {
-                    propInfo.SetValue(control, value);
+                    _propInfo.SetValue(_control, value);
                 }
             }
             finally
             {
-                inSetPropValue = false;
+                _inSetPropValue = false;
             }
         }
 
-        private bool ShouldSerializeFormatString() => !string.IsNullOrEmpty(formatString);
+        private bool ShouldSerializeFormatString() => !string.IsNullOrEmpty(_formatString);
 
-        private bool ShouldSerializeNullValue() => nullValue != null;
+        private bool ShouldSerializeNullValue() => _nullValue != null;
 
         private bool ShouldSerializeDataSourceNullValue()
         {
-            return dsNullValueSet && dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
+            return _dsNullValueSet && _dsNullValue != Formatter.GetDefaultDataSourceNullValue(null);
         }
 
         private void Target_PropertyChanged(object sender, EventArgs e)
         {
-            if (inSetPropValue)
+            if (_inSetPropValue)
             {
                 return;
             }
 
             if (IsBinding)
             {
-                modified = true;
+                _modified = true;
 
                 // If required, update data source every time control property changes.
                 // NOTE: We need modified=true to be set both before pulling data
@@ -1056,7 +1055,7 @@ namespace System.Windows.Forms
                 if (DataSourceUpdateMode == DataSourceUpdateMode.OnPropertyChanged)
                 {
                     PullData(reformat: false);
-                    modified = true;
+                    _modified = true;
                 }
             }
         }
@@ -1090,21 +1089,21 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (control != null && !string.IsNullOrEmpty(propertyName) &&
-                                bindToObject.DataSource != null && bindingManagerBase != null);
+                return (_control != null && !string.IsNullOrEmpty(_propertyName) &&
+                                _bindToObject.DataSource != null && _bindingManagerBase != null);
             }
         }
 
         internal void UpdateIsBinding()
         {
-            bool newBound = IsBindable && ComponentCreated && bindingManagerBase.IsBinding;
-            if (bound != newBound)
+            bool newBound = IsBindable && ComponentCreated && _bindingManagerBase.IsBinding;
+            if (_bound != newBound)
             {
-                bound = newBound;
+                _bound = newBound;
                 BindTarget(newBound);
-                if (bound)
+                if (_bound)
                 {
-                    if (controlUpdateMode == ControlUpdateMode.Never)
+                    if (_controlUpdateMode == ControlUpdateMode.Never)
                     {
                         PullData(reformat: false, force: true);
                     }
