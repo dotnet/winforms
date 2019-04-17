@@ -491,7 +491,7 @@ namespace System.Windows.Forms {
                     continue;
                 }
 
-                BindToObject dataBinding = errBindings[j].BindToObject;
+                Binding dataBinding = errBindings[j];
                 string error = ((IDataErrorInfo) value)[dataBinding.BindingMemberInfo.BindingField];
 
                 if (error == null) {
@@ -500,8 +500,8 @@ namespace System.Windows.Forms {
 
                 string outputError = "";
 
-                if (controlError.Contains(errBindings[j].Control))
-                    outputError = (string) controlError[errBindings[j].Control];
+                if (controlError.Contains(dataBinding.Control))
+                    outputError = (string) controlError[dataBinding.Control];
 
                 // Utilize the error string without including the field name.
                 if (string.IsNullOrEmpty(outputError)) {
@@ -510,7 +510,7 @@ namespace System.Windows.Forms {
                     outputError = string.Concat(outputError, "\r\n", error);
                 }
 
-                controlError[errBindings[j].Control] = outputError;
+                controlError[dataBinding.Control] = outputError;
             }
 
             IEnumerator enumerator = controlError.GetEnumerator();

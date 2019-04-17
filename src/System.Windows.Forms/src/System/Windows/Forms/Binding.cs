@@ -100,7 +100,7 @@ namespace System.Windows.Forms
         {
         }
 
-        internal BindToObject BindToObject => _bindToObject;
+        internal BindToObject BindToObjectInternal => _bindToObject;
 
         public object DataSource => _bindToObject.DataSource;
 
