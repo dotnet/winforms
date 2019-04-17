@@ -777,7 +777,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal class ToolStripComboBoxControlAccessibleObject : ComboBoxUiaProvider {
+            internal class ToolStripComboBoxControlAccessibleObject : ComboBox.ComboBoxAccessibleObject {
 
                 private ComboBox.ChildAccessibleObject childAccessibleObject;
 

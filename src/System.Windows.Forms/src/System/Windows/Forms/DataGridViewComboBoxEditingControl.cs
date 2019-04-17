@@ -179,7 +179,7 @@ namespace System.Windows.Forms
     /// <summary>
     /// Defines the DataGridView ComboBox EditingControl accessible object.
     /// </summary>
-    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxUiaProvider
+    internal class DataGridViewComboBoxEditingControlAccessibleObject : ComboBox.ComboBoxAccessibleObject
     {
         private DataGridViewComboBoxEditingControl ownerControl;
 

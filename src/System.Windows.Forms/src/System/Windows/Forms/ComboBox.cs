@@ -4325,127 +4325,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]
-        internal class ComboBoxAccessibleObject : ControlAccessibleObject {
-
-            private const int COMBOBOX_ACC_ITEM_INDEX = 1;
-
-            public ComboBoxAccessibleObject(Control ownerControl)
-                : base(ownerControl) {
-            }
-
-            internal override string get_accNameInternal(object childID) {
-                this.ValidateChildID(ref childID);
-
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX) {
-                    return this.Name;
-                }
-                else {
-                    return base.get_accNameInternal(childID);
-                }
-            }
-
-            internal override string get_accKeyboardShortcutInternal(object childID) {
-                this.ValidateChildID(ref childID);
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX) {
-                    return this.KeyboardShortcut;
-                } else {
-                    return base.get_accKeyboardShortcutInternal(childID);
-                }
-            }
-        }
-
-        /// <devdoc>
-        /// </devdoc>
-        [ComVisible(true)]
-        internal class ComboBoxExAccessibleObject : ComboBoxAccessibleObject {
-
-            private ComboBox ownerItem = null;
-
-            private void ComboBoxDefaultAction(bool expand) {
-                if (ownerItem.DroppedDown != expand) {
-                    ownerItem.DroppedDown = expand;
-                }
-            }
-
-            public ComboBoxExAccessibleObject(ComboBox ownerControl)
-                : base(ownerControl) {
-                    ownerItem = ownerControl;
-            }
-
-            internal override bool IsIAccessibleExSupported() {
-                if (ownerItem != null) {
-                    return true;
-                }
-                return base.IsIAccessibleExSupported();
-            }
-
-            internal override bool IsPatternSupported(int patternId) {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId) {
-                    if (ownerItem.DropDownStyle == ComboBoxStyle.Simple) {
-                        return false;
-                    }
-                    return true;
-                }
-                else {
-                    if (patternId == NativeMethods.UIA_ValuePatternId) {
-                        return true;
-                    }
-                }
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override int[] RuntimeId {
-                get {
-                    if (ownerItem != null) {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a (RuntimeIDFirstItem)
-                        // second item can be anything, but here it is a hash
-
-                        var runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)ownerItem.Handle;
-                        runtimeId[2] = ownerItem.GetHashCode();
-                        return runtimeId;
-                    }
-                    
-                    return base.RuntimeId;
-                }
-            }
-
-            internal override object GetPropertyValue(int propertyID) {
-
-                switch (propertyID) {
-                    case NativeMethods.UIA_NamePropertyId:
-                        return Name;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ValuePatternId);
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-            
-            internal override void Expand() {
-                ComboBoxDefaultAction(true);
-            }
-
-            internal override void Collapse() {
-                ComboBoxDefaultAction(false);
-            }
-
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-                get {
-                    return ownerItem.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
-                }
-            }
-        }
-
         /// <summary>
         /// Represents the ComboBox item accessible object.
         /// </summary>
@@ -4718,7 +4597,9 @@ namespace System.Windows.Forms {
         /// to have all base functionality.
         /// </summary>
         [ComVisible(true)]
-        internal class ComboBoxUiaProvider : ComboBoxExAccessibleObject {
+        internal class ComboBoxAccessibleObject : ControlAccessibleObject {
+            private const int COMBOBOX_ACC_ITEM_INDEX = 1;
+
             private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
             private ComboBoxItemAccessibleObjectCollection _itemAccessibleObjects;
             private ComboBox _owningComboBox;
@@ -4727,9 +4608,115 @@ namespace System.Windows.Forms {
             /// Initializes new instance of ComboBoxUiaProvider.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox control.</param>
-            public ComboBoxUiaProvider(ComboBox owningComboBox) : base(owningComboBox) {
+            public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
+            {
                 _owningComboBox = owningComboBox;
                 _itemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
+            }
+
+            private void ComboBoxDefaultAction(bool expand)
+            {
+                if (_owningComboBox.DroppedDown != expand)
+                {
+                    _owningComboBox.DroppedDown = expand;
+                }
+            }
+
+            internal override bool IsIAccessibleExSupported()
+            {
+                if (_owningComboBox != null)
+                {
+                    return true;
+                }
+
+                return base.IsIAccessibleExSupported();
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                {
+                    if (_owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                else
+                {
+                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    {
+                        return true;
+                    }
+                }
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override int[] RuntimeId
+            {
+                get
+                {
+                    if (_owningComboBox != null)
+                    {
+                        // we need to provide a unique ID
+                        // others are implementing this in the same manner
+                        // first item is static - 0x2a (RuntimeIDFirstItem)
+                        // second item can be anything, but here it is a hash
+
+                        var runtimeId = new int[3];
+                        runtimeId[0] = RuntimeIDFirstItem;
+                        runtimeId[1] = (int)(long)_owningComboBox.Handle;
+                        runtimeId[2] = _owningComboBox.GetHashCode();
+                        return runtimeId;
+                    }
+
+                    return base.RuntimeId;
+                }
+            }
+
+            internal override void Expand()
+            {
+                ComboBoxDefaultAction(true);
+            }
+
+            internal override void Collapse()
+            {
+                ComboBoxDefaultAction(false);
+            }
+
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    return _owningComboBox.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                }
+            }
+
+            internal override string get_accNameInternal(object childID)
+            {
+                this.ValidateChildID(ref childID);
+
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                {
+                    return this.Name;
+                }
+                else
+                {
+                    return base.get_accNameInternal(childID);
+                }
+            }
+
+            internal override string get_accKeyboardShortcutInternal(object childID)
+            {
+                this.ValidateChildID(ref childID);
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                {
+                    return this.KeyboardShortcut;
+                }
+                else
+                {
+                    return base.get_accKeyboardShortcutInternal(childID);
+                }
             }
 
             /// <summary>
@@ -4847,10 +4834,16 @@ namespace System.Windows.Forms {
                 switch (propertyID) {
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_ComboBoxControlTypeId;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused;
                     case NativeMethods.UIA_NativeWindowHandlePropertyId:
                         return _owningComboBox.Handle;
+                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
 
                     default:
                         return base.GetPropertyValue(propertyID);
