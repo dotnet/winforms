@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            return new ComboBoxUiaProvider(this);
+            return new ComboBoxAccessibleObject(this);
         }
 
          /// <devdoc>
@@ -2461,7 +2461,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.ExpandCollapseState.Collapsed,
                 UnsafeNativeMethods.ExpandCollapseState.Expanded);
 
-            var accessibleObject = AccessibilityObject as ComboBoxUiaProvider;
+            var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
             if (accessibleObject != null) {
                 accessibleObject.SetComboBoxItemFocus();
             }
@@ -2597,7 +2597,7 @@ namespace System.Windows.Forms {
                 dropDownWillBeClosed = false;
             }
             else {
-                var accessibleObject = AccessibilityObject as ComboBoxUiaProvider;
+                var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
                 if (accessibleObject != null) {
 
                     // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
@@ -3003,7 +3003,7 @@ namespace System.Windows.Forms {
         internal override void ReleaseUiaProvider(IntPtr handle) {
             base.ReleaseUiaProvider(handle);
 
-            var uiaProvider = AccessibilityObject as ComboBoxUiaProvider;
+            var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
             uiaProvider?.ResetListItemAccessibleObjects();
         }
 
@@ -3762,7 +3762,7 @@ namespace System.Windows.Forms {
                             DefWndProc(ref m);
                             object after = _owner.SelectedItem;
                             if (before != after) {
-                                (_owner.AccessibilityObject as ComboBoxUiaProvider).SetComboBoxItemFocus();
+                                (_owner.AccessibilityObject as ComboBoxAccessibleObject).SetComboBoxItemFocus();
                             }
                         }
                         break;
@@ -4570,7 +4570,7 @@ namespace System.Windows.Forms {
             private ComboBox _owningComboBox;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxUiaProvider.
+            /// Initializes new instance of ComboBoxAccessibleObject.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox control.</param>
             public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
@@ -4884,19 +4884,19 @@ namespace System.Windows.Forms {
                             return null;
                         }
 
-                        var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1) { // DropDown button is next;
-                                return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                             }
                         }
 
                         return null;
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            var firstComboBoxChildFragment = comboBoxUiaProvider.GetChildFragment(0);
+                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId) {
                                 return firstComboBoxChildFragment;
                             }
@@ -5060,8 +5060,8 @@ namespace System.Windows.Forms {
                 }
 
                 var item = _owningComboBox.Items[index];
-                var comboBoxUiaProvider = _owningComboBox.AccessibilityObject as ComboBoxUiaProvider;
-                return comboBoxUiaProvider.ItemAccessibleObjects[item] as AccessibleObject;
+                var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
+                return comboBoxAccessibleObject.ItemAccessibleObjects[item] as AccessibleObject;
             }
 
             public int GetChildFragmentCount() {
@@ -5256,19 +5256,19 @@ namespace System.Windows.Forms {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1) { // DropDown button is next;
-                                return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                             }
                         }
 
                         return null;
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            var firstComboBoxChildFragment = comboBoxUiaProvider.GetChildFragment(0);
+                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId) {
                                 return firstComboBoxChildFragment;
                             }
@@ -5420,11 +5420,11 @@ namespace System.Windows.Forms {
                     return _owner.AccessibilityObject;
                 }
                 else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling) {
-                    var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                    if (comboBoxUiaProvider != null) {
-                        int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                    var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                    if (comboBoxAccessibleObject != null) {
+                        int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                         if (comboBoxChildFragmentCount > 1) { // Text or edit is previous;
-                            return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                            return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                         }
                     }
 
