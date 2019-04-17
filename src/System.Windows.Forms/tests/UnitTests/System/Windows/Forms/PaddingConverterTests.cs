@@ -60,7 +60,7 @@ namespace System.Windows.Forms.Tests
         public void PaddingConverter_ConvertFrom_InvalidString_ThrowsArgumentException(string value)
         {
             var converter = new PaddingConverter();
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertFrom(value));
+            Assert.Throws<ArgumentException>("value", () => converter.ConvertFrom(value));
         }
 
         [Theory]
