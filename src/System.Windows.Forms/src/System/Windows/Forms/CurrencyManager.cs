@@ -800,8 +800,8 @@ namespace System.Windows.Forms {
                         }
 
                         // we fire OnCurrentItemChanged event every time we fire the CurrentChanged + when a property of the Current item changed
-                        if (onCurrentItemChangedHandler != null) {
-                            onCurrentItemChangedHandler(this, e);
+                        if (_onCurrentItemChangedHandler != null) {
+                            _onCurrentItemChangedHandler(this, e);
                         }
                     }
                 }
@@ -815,8 +815,8 @@ namespace System.Windows.Forms {
         // and when the index of the ListChangedEventArgs == the position in the currency manager
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentItemChanged"]/*' />
         internal protected override void OnCurrentItemChanged(EventArgs e) {
-            if (onCurrentItemChangedHandler != null) {
-                onCurrentItemChangedHandler(this, e);
+            if (_onCurrentItemChangedHandler != null) {
+                _onCurrentItemChangedHandler(this, e);
             }
         }
         

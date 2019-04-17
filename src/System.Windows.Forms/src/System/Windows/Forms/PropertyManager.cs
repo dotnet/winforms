@@ -145,14 +145,14 @@ namespace System.Windows.Forms
             PushData();
 
             onCurrentChangedHandler?.Invoke(this, ea);
-            onCurrentItemChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
         internal protected override void OnCurrentItemChanged(EventArgs ea)
         {
             PushData();
 
-            onCurrentItemChangedHandler?.Invoke(this, ea);
+            _onCurrentItemChangedHandler?.Invoke(this, ea);
         }
 
         internal override object DataSource => _dataSource;

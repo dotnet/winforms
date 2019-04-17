@@ -12,42 +12,42 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Changing this would be a breaking change")]
     public abstract class BindingManagerBase
     {
-        private BindingsCollection bindings;
-        private bool pullingData = false;
+        private BindingsCollection _bindings;
+        private bool _pullingData = false;
 
         protected EventHandler onCurrentChangedHandler; // Don't rename (breaking change)
 
         protected EventHandler onPositionChangedHandler; // Don't rename (breaking change)
 
         // Hook BindingComplete events on all owned Binding objects, and propagate those events through our own BindingComplete event
-        private BindingCompleteEventHandler onBindingCompleteHandler = null;
+        private BindingCompleteEventHandler _onBindingCompleteHandler = null;
 
         // same deal about the new currentItemChanged event
-        private protected EventHandler onCurrentItemChangedHandler;
+        private protected EventHandler _onCurrentItemChangedHandler;
 
         // Event handler for the DataError event
-        private BindingManagerDataErrorEventHandler onDataErrorHandler;
+        private BindingManagerDataErrorEventHandler _onDataErrorHandler;
 
         public BindingsCollection Bindings
         {
             get
             {
-                if (bindings == null)
+                if (_bindings == null)
                 {
-                    bindings = new ListManagerBindingsCollection(this);
+                    _bindings = new ListManagerBindingsCollection(this);
 
                     // Hook collection change events on collection, so we can hook or unhook the BindingComplete events on individual bindings
-                    bindings.CollectionChanging += new CollectionChangeEventHandler(OnBindingsCollectionChanging);
-                    bindings.CollectionChanged += new CollectionChangeEventHandler(OnBindingsCollectionChanged);
+                    _bindings.CollectionChanging += new CollectionChangeEventHandler(OnBindingsCollectionChanging);
+                    _bindings.CollectionChanged += new CollectionChangeEventHandler(OnBindingsCollectionChanged);
                 }
 
-                return bindings;
+                return _bindings;
             }
         }
 
         protected internal void OnBindingComplete(BindingCompleteEventArgs args)
         {
-            onBindingCompleteHandler?.Invoke(this, args);
+            _onBindingCompleteHandler?.Invoke(this, args);
         }
 
         protected internal abstract void OnCurrentChanged(EventArgs e);
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
         protected internal void OnDataError(Exception e)
         {
-            onDataErrorHandler?.Invoke(this, new BindingManagerDataErrorEventArgs(e));
+            _onDataErrorHandler?.Invoke(this, new BindingManagerDataErrorEventArgs(e));
         }
 
         public abstract object Current { get; }
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
                     IList list;
                     if (offset == 0)
                     {
-                        list = this.DataSource as IList;
+                        list = DataSource as IList;
                     }
                     else
                     {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
                 {
                     if (property.Name.Equals(((PropertyDescriptor)listAccessors[offset]).Name))
                     {
-                        return this.GetItemProperties(property.PropertyType, offset + 1, dataSources, listAccessors);
+                        return GetItemProperties(property.PropertyType, offset + 1, dataSources, listAccessors);
                     }
                 }
             }
@@ -188,11 +188,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                onBindingCompleteHandler += value;
+                _onBindingCompleteHandler += value;
             }
             remove
             {
-                onBindingCompleteHandler -= value;
+                _onBindingCompleteHandler -= value;
             }
         }
 
@@ -212,11 +212,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                onCurrentItemChangedHandler += value;
+                _onCurrentItemChangedHandler += value;
             }
             remove
             {
-                onCurrentItemChangedHandler -= value;
+                _onCurrentItemChangedHandler -= value;
             }
         }
 
@@ -224,11 +224,11 @@ namespace System.Windows.Forms
         {
             add
             {
-                onDataErrorHandler += value;
+                _onDataErrorHandler += value;
             }
             remove
             {
-                onDataErrorHandler -= value;
+                _onDataErrorHandler -= value;
             }
         }
 
@@ -270,7 +270,7 @@ namespace System.Windows.Forms
         internal void PullData(out bool success)
         {
             success = true;
-            pullingData = true;
+            _pullingData = true;
 
             try
             {
@@ -287,13 +287,13 @@ namespace System.Windows.Forms
             }
             finally
             {
-                pullingData = false;
+                _pullingData = false;
             }
         }
 
         protected void PushData()
         {
-            if (pullingData)
+            if (_pullingData)
             {
                 return;
             }
@@ -340,7 +340,7 @@ namespace System.Windows.Forms
                     b.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
                     break;
                 case CollectionChangeAction.Refresh:
-                    foreach (Binding bi in bindings)
+                    foreach (Binding bi in _bindings)
                     {
                         bi.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
                     }
@@ -352,7 +352,7 @@ namespace System.Windows.Forms
         {
             if (e.Action == CollectionChangeAction.Refresh)
             {
-                foreach (Binding bi in bindings)
+                foreach (Binding bi in _bindings)
                 {
                     bi.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
                 }
