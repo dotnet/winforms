@@ -3285,7 +3285,7 @@ namespace System.Windows.Forms {
                         NativeMethods.ENDROPFILES endropfiles = (NativeMethods.ENDROPFILES)m.GetLParam(typeof(NativeMethods.ENDROPFILES));
 
                         // Only look at the first file.
-                        StringBuilder path = new StringBuilder(NativeMethods.MAX_PATH);
+                        StringBuilder path = new StringBuilder(Interop.Kernel32.MAX_PATH);
                         if (UnsafeNativeMethods.DragQueryFileLongPath(new HandleRef(endropfiles, endropfiles.hDrop), 0, path) != 0)
                         {
                             // Try to load the file as an RTF
@@ -3851,7 +3851,7 @@ namespace System.Windows.Forms {
                             if (menu == cm)
                                 break;
                             else
-                                menu = ((MenuItem) menu).Menu;
+                                menu = ((MenuItem)menu).Parent;
                         }
                     }
 

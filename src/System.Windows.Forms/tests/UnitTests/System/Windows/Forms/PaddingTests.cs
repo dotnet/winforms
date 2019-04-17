@@ -418,5 +418,12 @@ namespace System.Windows.Forms.Tests
             var padding = new Padding(1);
             Assert.Equal("{Left=1,Top=1,Right=1,Bottom=1}", padding.ToString());
         }
+
+        [Fact]
+        public void Padding_TypeConverter_Get_ReturnsPaddingConverter()
+        {
+            var padding = new Padding(1);
+            Assert.IsType<PaddingConverter>(TypeDescriptor.GetConverter(padding));
+        }
     }
 }

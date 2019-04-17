@@ -307,10 +307,9 @@ namespace System.Windows.Forms {
             }
         }
 
-        private sealed class InternalStateMachineTimer : Timer {
-            public void ClearTimerTickHandlers() {
-                this.onTimer = null;
-            }
+        private sealed class InternalStateMachineTimer : Timer
+        {
+            public void ClearTimerTickHandlers() => _onTimer = null;
         }
 
         private sealed class ToolToTipDictionary {
