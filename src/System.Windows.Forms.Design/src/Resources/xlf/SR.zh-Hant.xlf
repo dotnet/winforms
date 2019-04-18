@@ -4,32 +4,32 @@
     <body>
       <trans-unit id="BehaviorServiceCopyControl">
         <source>Copy and move {0}</source>
-        <target state="new">Copy and move {0}</target>
+        <target state="translated">複製並移動 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControls">
         <source>Copy and move {0} Controls</source>
-        <target state="new">Copy and move {0} Controls</target>
+        <target state="translated">複製並移動 {0} 個控制項</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControl">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">移動 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControls">
         <source>Move {0} Controls</source>
-        <target state="new">Move {0} Controls</target>
+        <target state="translated">移動 {0} 控制項</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceResizeControl">
         <source>Resize {0}</source>
-        <target state="new">Resize {0}</target>
+        <target state="translated">調整 {0} 的大小</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceResizeControls">
         <source>Resize {0} Controls</source>
-        <target state="new">Resize {0} Controls</target>
+        <target state="translated">重新調整 {0} 控制項大小</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -49,54 +49,54 @@
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
         <source>Format {0} components (alignment)</source>
-        <target state="new">Format {0} components (alignment)</target>
+        <target state="translated">格式化 {0} 元件 (對齊)</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignToGrid">
         <source>Align {0} components to grid</source>
-        <target state="new">Align {0} components to grid</target>
+        <target state="translated">將 {0} 元件對齊格線</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
         <source>Cut {0} Components</source>
-        <target state="new">Cut {0} Components</target>
+        <target state="translated">剪下 {0} 元件</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetDelete">
         <source>Delete {0} components</source>
-        <target state="new">Delete {0} components</target>
+        <target state="translated">刪除 {0} 元件</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-        <target state="new">An error occurred while processing this command.
+	<target state="new">An error occurred while processing this command.
       {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetFormatSpacing">
         <source>Format {0} components (spacing)</source>
-        <target state="new">Format {0} components (spacing)</target>
+        <target state="translated">格式化 {0} 元件 (間隔)</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
         <source>Paste components</source>
-        <target state="new">Paste components</target>
+        <target state="translated">貼上元件</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
         <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+        <target state="translated">調整 {0} 元件的大小</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSizeToGrid">
         <source>Size {0} components to grid</source>
-        <target state="new">Size {0} components to grid</target>
+        <target state="translated">將 {0} 元件調整為方格的大小</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetUnknownSpacingCommand">
         <source>Unknown spacing command</source>
-        <target state="new">Unknown spacing command</target>
+        <target state="translated">不明的間距命令</target>
         <note />
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
@@ -121,82 +121,82 @@
       </trans-unit>
       <trans-unit id="ContextMenuAlignToGrid">
         <source>Align To &amp;Grid</source>
-        <target state="new">Align To &amp;Grid</target>
+        <target state="translated">對齊格線(&amp;G)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuBringToFront">
         <source>&amp;Bring To Front</source>
-        <target state="new">&amp;Bring To Front</target>
+        <target state="translated">移到最上層(&amp;B)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuCopy">
         <source>C&amp;opy</source>
-        <target state="new">C&amp;opy</target>
+        <target state="translated">複製(&amp;O)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuCut">
         <source>&amp;Cut</source>
-        <target state="new">&amp;Cut</target>
+        <target state="translated">剪下(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuDelete">
         <source>&amp;Delete</source>
-        <target state="new">&amp;Delete</target>
+        <target state="translated">刪除(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuDocumentOutline">
         <source>&amp;Document Outline</source>
-        <target state="new">&amp;Document Outline</target>
+        <target state="translated">文件大綱(&amp;T)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuLockControls">
         <source>&amp;Lock Controls</source>
-        <target state="new">&amp;Lock Controls</target>
+        <target state="translated">鎖定控制項(&amp;L)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuPaste">
         <source>&amp;Paste</source>
-        <target state="new">&amp;Paste</target>
+        <target state="translated">貼上(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">屬性(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuSelect">
         <source>&amp;Select</source>
-        <target state="new">&amp;Select</target>
+        <target state="translated">選取(&amp;S)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuSendToBack">
         <source>&amp;Send To Back</source>
-        <target state="new">&amp;Send To Back</target>
+        <target state="translated">移到最下層(&amp;S)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
         <source>ShowCheckMargin</source>
-        <target state="new">ShowCheckMargin</target>
+	<target state="new">ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
         <source>Toggles the ShowCheckMargin property</source>
-        <target state="new">Toggles the ShowCheckMargin property</target>
+        <target state="translated">切換 ShowCheckMargin 屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
         <source>ShowImageMargin</source>
-        <target state="new">ShowImageMargin</target>
+	<target state="new">ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
         <source>Toggles the ShowImageMargin property</source>
-        <target state="new">Toggles the ShowImageMargin property</target>
+        <target state="translated">切換 ShowImageMargin 屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuViewCode">
         <source>View &amp;Code</source>
-        <target state="new">View &amp;Code</target>
+        <target state="translated">檢視程式碼(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDesigner_WndProcException">
@@ -206,7 +206,7 @@
       {1}
 
       Stack trace:{2}</source>
-        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+	<target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
 
       Exception:
       {1}
@@ -216,52 +216,52 @@
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
         <source>Could not convert value '{0}' to the type '{1}'.</source>
-        <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
+        <target state="translated">無法將值 '{0}' 轉換為類型 '{1}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'.</source>
-        <target state="new">Could not find method '{0}'.</target>
+        <target state="translated">找不到方法 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
         <source>Could not find property '{0}' on '{1}'.</source>
-        <target state="new">Could not find property '{0}' on '{1}'.</target>
+        <target state="translated">在 '{1}' 上找不到屬性 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
         <source>{0} Tasks</source>
-        <target state="new">{0} Tasks</target>
+        <target state="translated">{0} 工作</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
         <source>Error using the dropdown: {0}</source>
-        <target state="new">Error using the dropdown: {0}</target>
+        <target state="translated">使用下拉式清單時發生錯誤: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
         <source>Error invoking '{0}'.  Details: {1}</source>
-        <target state="new">Error invoking '{0}'.  Details: {1}</target>
+        <target state="translated">叫用 '{0}' 時發生錯誤。詳細資料: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorSettingValue">
         <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
-        <target state="new">Error setting value '{0}' to property '{1}'.  Details: {2}</target>
+        <target state="translated">將值 '{0}' 設定為屬性 '{1}' 時發生錯誤。詳細資料: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
-        <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <target state="translated">呼叫拖曳函式之前必須先成功呼叫 BeginDrag。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
         <source>Inherited control</source>
-        <target state="new">Inherited control</target>
+        <target state="translated">繼承的控制項</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInheritedReadOnly">
         <source>Inherited control (Private)</source>
-        <target state="new">Inherited control (Private)</target>
+        <target state="translated">繼承的控制項 (Private)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
@@ -278,7 +278,9 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-        <target state="needs-review-translation">載入文件時發生錯誤。請修正錯誤，然後重新嘗試載入文件。錯誤訊息為:\r\n\r\n{0}</target>
+	<target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
@@ -448,12 +450,12 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
-        <target state="new">Dock in Parent Container</target>
+        <target state="translated">停駐於父容器中</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
-        <target state="new">Undock in Parent Container</target>
+        <target state="translated">取消停駐於父容器中</target>
         <note />
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
@@ -463,17 +465,17 @@
       </trans-unit>
       <trans-unit id="DragDropDragComponents">
         <source>Drag {0} components</source>
-        <target state="new">Drag {0} components</target>
+        <target state="translated">拖曳 {0} 個元件</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">移動 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponents">
         <source>Move {0} components</source>
-        <target state="new">Move {0} components</target>
+        <target state="translated">移動 {0} 個元件</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -483,12 +485,12 @@
       </trans-unit>
       <trans-unit id="DragDropSizeComponent">
         <source>Size {0}</source>
-        <target state="new">Size {0}</target>
+        <target state="translated">大小 {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSizeComponents">
         <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+        <target state="translated">調整 {0} 元件的大小</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -503,12 +505,12 @@
       </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
-        <target state="new">'{1}' is not a valid value for '{0}'.</target>
+        <target state="translated">'{1}' 不是 '{0}' 的有效值。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
-        <target state="new">'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</target>
+        <target state="translated">'{1}' 不是 '{0}' 的有效值。'{0}' 應該介於 {2} 與 {3} 之間。</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -523,7 +525,7 @@
       </trans-unit>
       <trans-unit id="RTL">
         <source>RTL_False</source>
-        <target state="new">RTL_False</target>
+        <target state="translated">RTL_False</target>
         <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
@@ -623,7 +625,7 @@
       </trans-unit>
       <trans-unit id="SerializerTypeAbstract">
         <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
-        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <target state="translated">設計工具必須建立類型 '{0}' 的執行個體，但是因為已經將這個類型宣告為抽象，所以無法建立。</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
@@ -638,292 +640,292 @@
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
         <source>&amp;About...</source>
-        <target state="new">&amp;About...</target>
+        <target state="translated">關於(&amp;A)...</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuContents">
         <source>&amp;Contents</source>
-        <target state="new">&amp;Contents</target>
+        <target state="translated">內容(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCopy">
         <source>&amp;Copy</source>
-        <target state="new">&amp;Copy</target>
+        <target state="translated">複製(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCreateDesc">
         <source>Create Standard Menu</source>
-        <target state="new">Create Standard Menu</target>
+        <target state="translated">建立標準功能表</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCustomize">
         <source>&amp;Customize</source>
-        <target state="new">&amp;Customize</target>
+        <target state="translated">自訂(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCut">
         <source>Cu&amp;t</source>
-        <target state="new">Cu&amp;t</target>
+        <target state="translated">剪下(&amp;T)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuEdit">
         <source>&amp;Edit</source>
-        <target state="new">&amp;Edit</target>
+        <target state="translated">編輯(&amp;E)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuExit">
         <source>E&amp;xit</source>
-        <target state="new">E&amp;xit</target>
+        <target state="translated">結束(&amp;X)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuFile">
         <source>&amp;File</source>
-        <target state="new">&amp;File</target>
+        <target state="translated">檔案(&amp;F)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuHelp">
         <source>&amp;Help</source>
-        <target state="new">&amp;Help</target>
+        <target state="translated">說明(&amp;H)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuIndex">
         <source>&amp;Index</source>
-        <target state="new">&amp;Index</target>
+        <target state="translated">索引(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuNew">
         <source>&amp;New</source>
-        <target state="new">&amp;New</target>
+        <target state="translated">新增(&amp;N)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuOpen">
         <source>&amp;Open</source>
-        <target state="new">&amp;Open</target>
+        <target state="translated">開啟(&amp;O)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuOptions">
         <source>&amp;Options</source>
-        <target state="new">&amp;Options</target>
+        <target state="translated">選項(&amp;O)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPaste">
         <source>&amp;Paste</source>
-        <target state="new">&amp;Paste</target>
+        <target state="translated">貼上(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrint">
         <source>&amp;Print</source>
-        <target state="new">&amp;Print</target>
+        <target state="translated">列印(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrintPreview">
         <source>Print Pre&amp;view</source>
-        <target state="new">Print Pre&amp;view</target>
+        <target state="translated">預覽列印(&amp;V)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuRedo">
         <source>&amp;Redo</source>
-        <target state="new">&amp;Redo</target>
+        <target state="translated">取消復原(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSave">
         <source>&amp;Save</source>
-        <target state="new">&amp;Save</target>
+        <target state="translated">儲存(&amp;S)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSaveAs">
         <source>Save &amp;As</source>
-        <target state="new">Save &amp;As</target>
+        <target state="translated">另存新檔(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSearch">
         <source>&amp;Search</source>
-        <target state="new">&amp;Search</target>
+        <target state="translated">搜尋(&amp;S)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSelectAll">
         <source>Select &amp;All</source>
-        <target state="new">Select &amp;All</target>
+        <target state="translated">全選(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuTools">
         <source>&amp;Tools</source>
-        <target state="new">&amp;Tools</target>
+        <target state="translated">工具(&amp;T)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuUndo">
         <source>&amp;Undo</source>
-        <target state="new">&amp;Undo</target>
+        <target state="translated">復原(&amp;U)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolCut">
         <source>C&amp;ut</source>
-        <target state="new">C&amp;ut</target>
+        <target state="translated">剪下(&amp;U)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolHelp">
         <source>He&amp;lp</source>
-        <target state="new">He&amp;lp</target>
+        <target state="translated">說明(&amp;L)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-        <target state="new">Dock:</target>
+	<target state="new">Dock:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
         <source>Changes the Dock property</source>
-        <target state="new">Changes the Dock property</target>
+        <target state="translated">變更 Dock 屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyle">
         <source>GripStyle:</source>
-        <target state="new">GripStyle:</target>
+	<target state="new">GripStyle:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyleDesc">
         <source>Changes the GripStyle property</source>
-        <target state="new">Changes the GripStyle property</target>
+        <target state="translated">變更 GripStyle 屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Layout">
         <source>Layout &amp;&amp; Appearance</source>
-        <target state="new">Layout &amp;&amp; Appearance</target>
+        <target state="translated">配置與外觀</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-        <target state="new">RenderMode:</target>
+	<target state="new">RenderMode:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
         <source>Changes the RenderMode property</source>
-        <target state="new">Changes the RenderMode property</target>
+        <target state="translated">變更 RenderMode 屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAddingItem">
         <source>Adding {0} Item</source>
-        <target state="new">Adding {0} Item</target>
+        <target state="translated">加入 {0} 項目</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
-        <target state="new">AllowItemReorder and AllowDrop cannot both be true.</target>
+        <target state="translated">AllowItemReorder 和 AllowDrop 不能同時為 true。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
-        <target state="new">ToolStrip New Item create Transaction.</target>
+        <target state="translated">ToolStrip 新項目建立異動。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-        <target state="new">Embed in ToolStripContainer</target>
+	<target state="new">Embed in ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">
         <source>Embeds the current ToolStrip in ToolStripContainer</source>
-        <target state="new">Embeds the current ToolStrip in ToolStripContainer</target>
+        <target state="translated">將目前的 ToolStrip 嵌入 ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerStandardItemsVerb">
         <source>&amp;Insert Standard Items</source>
-        <target state="new">&amp;Insert Standard Items</target>
+        <target state="translated">插入標準項目(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
         <source>Inserts standard items in the current ToolStrip</source>
-        <target state="new">Inserts standard items in the current ToolStrip</target>
+        <target state="translated">將標準項目插入目前的 ToolStrip</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
         <source>Type Here</source>
-        <target state="new">Type Here</target>
+        <target state="translated">在此鍵入</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
         <source>Type Text for ToolStripMenuItem</source>
-        <target state="new">Type Text for ToolStripMenuItem</target>
+        <target state="translated">輸入 ToolStripMenuItem 的文字</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
         <source>Add Menu Item</source>
-        <target state="new">Add Menu Item</target>
+        <target state="translated">新增功能表項目</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
         <source>Add ToolStripStatusLabel</source>
-        <target state="new">Add ToolStripStatusLabel</target>
+        <target state="translated">加入 ToolStripStatusLabel</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
         <source>Add ToolStripButton</source>
-        <target state="new">Add ToolStripButton</target>
+        <target state="translated">加入 ToolStripButton</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerToolStripAccessibleName">
         <source>New item selection</source>
-        <target state="new">New item selection</target>
+        <target state="translated">新增項目選取範圍</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTransactionAddingItem">
         <source>Adding Item</source>
-        <target state="new">Adding Item</target>
+        <target state="translated">加入項目</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTransactionRemovingItem">
         <source>Removing Item</source>
-        <target state="new">Removing Item</target>
+        <target state="translated">移除項目</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
         <source>&amp;Edit DropDownItems...</source>
-        <target state="new">&amp;Edit DropDownItems...</target>
+        <target state="translated">編輯 DropDownItems(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
         <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
-        <target state="new">ToolStrip MenuItem Insert in DropDown Transaction.</target>
+        <target state="translated">DropDown 異動中的 ToolStrip MenuItem 插入。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
-        <target state="new">&amp;Edit Items...</target>
+        <target state="translated">編輯項目(&amp;E)...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuConvertTo">
         <source>Con&amp;vert To</source>
-        <target state="new">Con&amp;vert To</target>
+        <target state="translated">轉換為(&amp;V)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuInsert">
         <source>&amp;Insert</source>
-        <target state="new">&amp;Insert</target>
+        <target state="translated">插入(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuSetImage">
         <source>Set I&amp;mage...</source>
-        <target state="new">Set I&amp;mage...</target>
+        <target state="translated">設定影像(&amp;M)...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemPropertyChangeTransaction">
         <source>ToolStripItem Property Change Transaction.</source>
-        <target state="new">ToolStripItem Property Change Transaction.</target>
+        <target state="translated">ToolStripItem 屬性變更異動。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
-        <target state="new">ToolStripItem Morphing Transaction.</target>
+        <target state="translated">ToolStripItem 變形異動。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">
         <source>'{0}'</source>
-        <target state="new">'{0}'</target>
+        <target state="translated">'{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSeparatorError">
         <source>Cannot add ToolStripSeparator to MenuStrip.</source>
-        <target state="new">Cannot add ToolStripSeparator to MenuStrip.</target>
+        <target state="translated">無法將 ToolStripSeparator 加入 MenuStrip。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -948,17 +950,17 @@
       </trans-unit>
       <trans-unit id="TrayAutoArrange">
         <source>Auto Arrange Tray Icons</source>
-        <target state="new">Auto Arrange Tray Icons</target>
+        <target state="translated">自動排列匣圖示</target>
         <note />
       </trans-unit>
       <trans-unit id="TrayLineUpIcons">
         <source>Line Up Tray Icons</source>
-        <target state="new">Line Up Tray Icons</target>
+        <target state="translated">對齊匣圖示</target>
         <note />
       </trans-unit>
       <trans-unit id="TrayShowLargeIcons">
         <source>Show Large or Small Icons</source>
-        <target state="new">Show Large or Small Icons</target>
+        <target state="translated">顯示大型圖示或小型圖示</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
@@ -968,7 +970,7 @@
       </trans-unit>
       <trans-unit id="UIServiceHelper_ErrorCaption">
         <source>Error</source>
-        <target state="new">Error</target>
+        <target state="translated">錯誤</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
@@ -1023,22 +1025,22 @@
       </trans-unit>
       <trans-unit id="WindowsFormsAddEvent">
         <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
-        <target state="new">&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</target>
+        <target state="translated">&lt;找不到資源字串 "WindowsFormsAddEvent"&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterX">
         <source>Horizontal center of {0} component(s)</source>
-        <target state="new">Horizontal center of {0} component(s)</target>
+        <target state="translated">{0} 元件水平置中</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
-        <target state="new">Vertical center of {0} component(s)</target>
+        <target state="translated">{0} 元件垂直置中</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">
         <source>The Locked property determines if we can move or resize the control.</source>
-        <target state="new">The Locked property determines if we can move or resize the control.</target>
+        <target state="translated">鎖定的屬性決定我們是否可以移動控制項或調整控制項大小。</target>
         <note />
       </trans-unit>
     </body>

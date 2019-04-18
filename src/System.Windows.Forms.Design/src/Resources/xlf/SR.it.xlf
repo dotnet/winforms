@@ -4,32 +4,32 @@
     <body>
       <trans-unit id="BehaviorServiceCopyControl">
         <source>Copy and move {0}</source>
-        <target state="new">Copy and move {0}</target>
+        <target state="translated">Copia e sposta {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceCopyControls">
         <source>Copy and move {0} Controls</source>
-        <target state="new">Copy and move {0} Controls</target>
+        <target state="translated">Copia e sposta {0} controlli</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControl">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">Sposta {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceMoveControls">
         <source>Move {0} Controls</source>
-        <target state="new">Move {0} Controls</target>
+        <target state="translated">Sposta {0} controlli</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceResizeControl">
         <source>Resize {0}</source>
-        <target state="new">Resize {0}</target>
+        <target state="translated">Ridimensiona {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="BehaviorServiceResizeControls">
         <source>Resize {0} Controls</source>
-        <target state="new">Resize {0} Controls</target>
+        <target state="translated">Ridimensiona {0} controlli</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -49,54 +49,54 @@
       </trans-unit>
       <trans-unit id="CommandSetAlignByPrimary">
         <source>Format {0} components (alignment)</source>
-        <target state="new">Format {0} components (alignment)</target>
+        <target state="translated">Formatta {0} componenti (allineamento)</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetAlignToGrid">
         <source>Align {0} components to grid</source>
-        <target state="new">Align {0} components to grid</target>
+        <target state="translated">Allinea {0} componenti alla griglia</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
         <source>Cut {0} Components</source>
-        <target state="new">Cut {0} Components</target>
+        <target state="translated">Taglia {0} componenti</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetDelete">
         <source>Delete {0} components</source>
-        <target state="new">Delete {0} components</target>
+        <target state="translated">Elimina {0} componenti</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-        <target state="new">An error occurred while processing this command.
+	<target state="new">An error occurred while processing this command.
       {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetFormatSpacing">
         <source>Format {0} components (spacing)</source>
-        <target state="new">Format {0} components (spacing)</target>
+        <target state="translated">Formatta {0} componenti (spaziatura)</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
         <source>Paste components</source>
-        <target state="new">Paste components</target>
+        <target state="translated">Incolla componenti</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
         <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+        <target state="translated">Ridimensiona {0} componenti</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSizeToGrid">
         <source>Size {0} components to grid</source>
-        <target state="new">Size {0} components to grid</target>
+        <target state="translated">Adatta {0} componenti alla griglia</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetUnknownSpacingCommand">
         <source>Unknown spacing command</source>
-        <target state="new">Unknown spacing command</target>
+        <target state="translated">Comando di spaziatura sconosciuto</target>
         <note />
       </trans-unit>
       <trans-unit id="ComponentDesignerAddEvent">
@@ -121,82 +121,82 @@
       </trans-unit>
       <trans-unit id="ContextMenuAlignToGrid">
         <source>Align To &amp;Grid</source>
-        <target state="new">Align To &amp;Grid</target>
+        <target state="translated">&amp;Allinea alla griglia</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuBringToFront">
         <source>&amp;Bring To Front</source>
-        <target state="new">&amp;Bring To Front</target>
+        <target state="translated">&amp;Porta in primo piano</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuCopy">
         <source>C&amp;opy</source>
-        <target state="new">C&amp;opy</target>
+        <target state="translated">C&amp;opia</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuCut">
         <source>&amp;Cut</source>
-        <target state="new">&amp;Cut</target>
+        <target state="translated">&amp;Taglia</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuDelete">
         <source>&amp;Delete</source>
-        <target state="new">&amp;Delete</target>
+        <target state="translated">&amp;Elimina</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuDocumentOutline">
         <source>&amp;Document Outline</source>
-        <target state="new">&amp;Document Outline</target>
+        <target state="translated">S&amp;truttura documento</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuLockControls">
         <source>&amp;Lock Controls</source>
-        <target state="new">&amp;Lock Controls</target>
+        <target state="translated">&amp;Blocca controlli</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuPaste">
         <source>&amp;Paste</source>
-        <target state="new">&amp;Paste</target>
+        <target state="translated">&amp;Incolla</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuProperties">
         <source>&amp;Properties</source>
-        <target state="new">&amp;Properties</target>
+        <target state="translated">&amp;Proprietà</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuSelect">
         <source>&amp;Select</source>
-        <target state="new">&amp;Select</target>
+        <target state="translated">&amp;Seleziona</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuSendToBack">
         <source>&amp;Send To Back</source>
-        <target state="new">&amp;Send To Back</target>
+        <target state="translated">Porta in &amp;secondo piano</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
         <source>ShowCheckMargin</source>
-        <target state="new">ShowCheckMargin</target>
+	<target state="new">ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
         <source>Toggles the ShowCheckMargin property</source>
-        <target state="new">Toggles the ShowCheckMargin property</target>
+        <target state="translated">Attiva o disattiva la proprietà ShowCheckMargin.</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
         <source>ShowImageMargin</source>
-        <target state="new">ShowImageMargin</target>
+	<target state="new">ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
         <source>Toggles the ShowImageMargin property</source>
-        <target state="new">Toggles the ShowImageMargin property</target>
+        <target state="translated">Attiva o disattiva la proprietà ShowImageMargin.</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuViewCode">
         <source>View &amp;Code</source>
-        <target state="new">View &amp;Code</target>
+        <target state="translated">Visuali&amp;zza codice</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlDesigner_WndProcException">
@@ -206,7 +206,7 @@
       {1}
 
       Stack trace:{2}</source>
-        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+	<target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
 
       Exception:
       {1}
@@ -216,52 +216,52 @@
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
         <source>Could not convert value '{0}' to the type '{1}'.</source>
-        <target state="new">Could not convert value '{0}' to the type '{1}'.</target>
+        <target state="translated">Impossibile convertire il valore '{0}' nel tipo '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindMethod">
         <source>Could not find method '{0}'.</source>
-        <target state="new">Could not find method '{0}'.</target>
+        <target state="translated">Impossibile trovare il metodo '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotFindProperty">
         <source>Could not find property '{0}' on '{1}'.</source>
-        <target state="new">Could not find property '{0}' on '{1}'.</target>
+        <target state="translated">Impossibile trovare la proprietà '{0}' in '{1}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_DefaultPanelTitle">
         <source>{0} Tasks</source>
-        <target state="new">{0} Tasks</target>
+        <target state="translated">Attività di {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorActivatingDropDown">
         <source>Error using the dropdown: {0}</source>
-        <target state="new">Error using the dropdown: {0}</target>
+        <target state="translated">Errore durante l'utilizzo del menu a discesa: {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorInvokingAction">
         <source>Error invoking '{0}'.  Details: {1}</source>
-        <target state="new">Error invoking '{0}'.  Details: {1}</target>
+        <target state="translated">Errore durante la chiamata a '{0}'. Dettagli: {1}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_ErrorSettingValue">
         <source>Error setting value '{0}' to property '{1}'.  Details: {2}</source>
-        <target state="new">Error setting value '{0}' to property '{1}'.  Details: {2}</target>
+        <target state="translated">Errore durante l'impostazione del valore '{0}' sulla proprietà '{1}'. Dettagli: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
-        <target state="new">Call to BeginDrag must succeed before calling drag functions.</target>
+        <target state="translated">Prima di chiamare le funzioni di trascinamento, è necessario eseguire correttamente una chiamata a BeginDrag.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
         <source>Inherited control</source>
-        <target state="new">Inherited control</target>
+        <target state="translated">Controllo ereditato</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInheritedReadOnly">
         <source>Inherited control (Private)</source>
-        <target state="new">Inherited control (Private)</target>
+        <target state="translated">Controllo ereditato (Private)</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceContainerDispose">
@@ -278,7 +278,9 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-        <target state="needs-review-translation">Si è verificato un errore durante il caricamento del documento. Correggere l'errore e provare nuovamente a caricare il documento. Messaggio di errore:\r\n\r\n{0}</target>
+	<target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+
+      {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignSurfaceNoRootComponent">
@@ -448,12 +450,12 @@
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
-        <target state="new">Dock in Parent Container</target>
+        <target state="translated">Ancora nel contenitore padre</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutUndockInParent">
         <source>Undock in Parent Container</source>
-        <target state="new">Undock in Parent Container</target>
+        <target state="translated">Disancora nel contenitore padre</target>
         <note />
       </trans-unit>
       <trans-unit id="DotNET_ComponentType">
@@ -463,17 +465,17 @@
       </trans-unit>
       <trans-unit id="DragDropDragComponents">
         <source>Drag {0} components</source>
-        <target state="new">Drag {0} components</target>
+        <target state="translated">Trascina componenti {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
         <source>Move {0}</source>
-        <target state="new">Move {0}</target>
+        <target state="translated">Sposta {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponents">
         <source>Move {0} components</source>
-        <target state="new">Move {0} components</target>
+        <target state="translated">Sposta {0} componenti</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSetDataError">
@@ -483,12 +485,12 @@
       </trans-unit>
       <trans-unit id="DragDropSizeComponent">
         <source>Size {0}</source>
-        <target state="new">Size {0}</target>
+        <target state="translated">Ridimensiona {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropSizeComponents">
         <source>Size {0} components</source>
-        <target state="new">Size {0} components</target>
+        <target state="translated">Ridimensiona {0} componenti</target>
         <note />
       </trans-unit>
       <trans-unit id="ExtenderProviderServiceDuplicateProvider">
@@ -503,12 +505,12 @@
       </trans-unit>
       <trans-unit id="InvalidArgument">
         <source>'{1}' is not a valid value for '{0}'.</source>
-        <target state="new">'{1}' is not a valid value for '{0}'.</target>
+        <target state="translated">'{1}' non è un valore valido per '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
-        <target state="new">'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</target>
+        <target state="translated">'{1}' non è un valore valido per '{0}'. '{0}' deve essere compreso tra {2} e {3}.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotImplementedByDesign">
@@ -523,7 +525,7 @@
       </trans-unit>
       <trans-unit id="RTL">
         <source>RTL_False</source>
-        <target state="new">RTL_False</target>
+        <target state="translated">RTL_False</target>
         <note>RTL_False in Left-to-right languages and anything else (RTL_True) for right to left.</note>
       </trans-unit>
       <trans-unit id="SerializationManagerAreadyInSession">
@@ -623,7 +625,7 @@
       </trans-unit>
       <trans-unit id="SerializerTypeAbstract">
         <source>The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</source>
-        <target state="new">The designer must create an instance of type '{0}' but it cannot because the type is declared as abstract.</target>
+        <target state="translated">La finestra di progettazione deve creare un'istanza di tipo '{0}', ma non può perché il tipo è dichiarato come astratto.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerTypeNotFound">
@@ -638,292 +640,292 @@
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
         <source>&amp;About...</source>
-        <target state="new">&amp;About...</target>
+        <target state="translated">&amp;Informazioni su...</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuContents">
         <source>&amp;Contents</source>
-        <target state="new">&amp;Contents</target>
+        <target state="translated">&amp;Sommario</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCopy">
         <source>&amp;Copy</source>
-        <target state="new">&amp;Copy</target>
+        <target state="translated">&amp;Copia</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCreateDesc">
         <source>Create Standard Menu</source>
-        <target state="new">Create Standard Menu</target>
+        <target state="translated">Crea menu standard</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCustomize">
         <source>&amp;Customize</source>
-        <target state="new">&amp;Customize</target>
+        <target state="translated">&amp;Personalizza</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCut">
         <source>Cu&amp;t</source>
-        <target state="new">Cu&amp;t</target>
+        <target state="translated">&amp;Taglia</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuEdit">
         <source>&amp;Edit</source>
-        <target state="new">&amp;Edit</target>
+        <target state="translated">&amp;Modifica</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuExit">
         <source>E&amp;xit</source>
-        <target state="new">E&amp;xit</target>
+        <target state="translated">E&amp;sci</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuFile">
         <source>&amp;File</source>
-        <target state="new">&amp;File</target>
+        <target state="translated">&amp;File</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuHelp">
         <source>&amp;Help</source>
-        <target state="new">&amp;Help</target>
+        <target state="translated">&amp;?</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuIndex">
         <source>&amp;Index</source>
-        <target state="new">&amp;Index</target>
+        <target state="translated">&amp;Indice</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuNew">
         <source>&amp;New</source>
-        <target state="new">&amp;New</target>
+        <target state="translated">&amp;Nuovo</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuOpen">
         <source>&amp;Open</source>
-        <target state="new">&amp;Open</target>
+        <target state="translated">&amp;Apri</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuOptions">
         <source>&amp;Options</source>
-        <target state="new">&amp;Options</target>
+        <target state="translated">&amp;Opzioni</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPaste">
         <source>&amp;Paste</source>
-        <target state="new">&amp;Paste</target>
+        <target state="translated">&amp;Incolla</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrint">
         <source>&amp;Print</source>
-        <target state="new">&amp;Print</target>
+        <target state="translated">&amp;Stampa</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrintPreview">
         <source>Print Pre&amp;view</source>
-        <target state="new">Print Pre&amp;view</target>
+        <target state="translated">&amp;Anteprima di stampa</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuRedo">
         <source>&amp;Redo</source>
-        <target state="new">&amp;Redo</target>
+        <target state="translated">&amp;Ripristina</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSave">
         <source>&amp;Save</source>
-        <target state="new">&amp;Save</target>
+        <target state="translated">&amp;Salva</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSaveAs">
         <source>Save &amp;As</source>
-        <target state="new">Save &amp;As</target>
+        <target state="translated">Salva &amp;con nome</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSearch">
         <source>&amp;Search</source>
-        <target state="new">&amp;Search</target>
+        <target state="translated">&amp;Cerca</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSelectAll">
         <source>Select &amp;All</source>
-        <target state="new">Select &amp;All</target>
+        <target state="translated">Seleziona &amp;tutto</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuTools">
         <source>&amp;Tools</source>
-        <target state="new">&amp;Tools</target>
+        <target state="translated">&amp;Strumenti</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuUndo">
         <source>&amp;Undo</source>
-        <target state="new">&amp;Undo</target>
+        <target state="translated">&amp;Annulla</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolCut">
         <source>C&amp;ut</source>
-        <target state="new">C&amp;ut</target>
+        <target state="translated">&amp;Taglia</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolHelp">
         <source>He&amp;lp</source>
-        <target state="new">He&amp;lp</target>
+        <target state="translated">&amp;?</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-        <target state="new">Dock:</target>
+	<target state="new">Dock:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
         <source>Changes the Dock property</source>
-        <target state="new">Changes the Dock property</target>
+        <target state="translated">Modifica la proprietà Dock.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyle">
         <source>GripStyle:</source>
-        <target state="new">GripStyle:</target>
+	<target state="new">GripStyle:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyleDesc">
         <source>Changes the GripStyle property</source>
-        <target state="new">Changes the GripStyle property</target>
+        <target state="translated">Modifica la proprietà GripStyle.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Layout">
         <source>Layout &amp;&amp; Appearance</source>
-        <target state="new">Layout &amp;&amp; Appearance</target>
+        <target state="translated">&amp;Layout e aspetto</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-        <target state="new">RenderMode:</target>
+	<target state="new">RenderMode:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
         <source>Changes the RenderMode property</source>
-        <target state="new">Changes the RenderMode property</target>
+        <target state="translated">Modifica la proprietà RenderMode.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAddingItem">
         <source>Adding {0} Item</source>
-        <target state="new">Adding {0} Item</target>
+        <target state="translated">Aggiunta dell'elemento {0} in corso...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue">
         <source>AllowItemReorder and AllowDrop cannot both be true.</source>
-        <target state="new">AllowItemReorder and AllowDrop cannot both be true.</target>
+        <target state="translated">Le proprietà AllowItemReorder e AllowDrop non possono avere entrambe valore true.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripCreatingNewItemTransaction">
         <source>ToolStrip New Item create Transaction.</source>
-        <target state="new">ToolStrip New Item create Transaction.</target>
+        <target state="translated">Transazione Crea nuovo elemento del controllo ToolStrip</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-        <target state="new">Embed in ToolStripContainer</target>
+	<target state="new">Embed in ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">
         <source>Embeds the current ToolStrip in ToolStripContainer</source>
-        <target state="new">Embeds the current ToolStrip in ToolStripContainer</target>
+        <target state="translated">Incorpora l'elemento ToolStrip corrente in ToolStripContainer.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerStandardItemsVerb">
         <source>&amp;Insert Standard Items</source>
-        <target state="new">&amp;Insert Standard Items</target>
+        <target state="translated">&amp;Inserisci elementi standard</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerStandardItemsVerbDesc">
         <source>Inserts standard items in the current ToolStrip</source>
-        <target state="new">Inserts standard items in the current ToolStrip</target>
+        <target state="translated">Inserisce elementi standard nell'elemento ToolStrip corrente.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeEnterText">
         <source>Type Here</source>
-        <target state="new">Type Here</target>
+        <target state="translated">Digitare qui</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeLabelToolTip">
         <source>Type Text for ToolStripMenuItem</source>
-        <target state="new">Type Text for ToolStripMenuItem</target>
+        <target state="translated">Digitare un testo per ToolStripMenuItem.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripAccessibleName">
         <source>Add Menu Item</source>
-        <target state="new">Add Menu Item</target>
+        <target state="translated">Aggiungi voce di menu</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonStatusStripToolTip">
         <source>Add ToolStripStatusLabel</source>
-        <target state="new">Add ToolStripStatusLabel</target>
+        <target state="translated">Aggiungi ToolStripStatusLabel</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTemplateNodeSplitButtonToolTip">
         <source>Add ToolStripButton</source>
-        <target state="new">Add ToolStripButton</target>
+        <target state="translated">Aggiungi ToolStripButton</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerToolStripAccessibleName">
         <source>New item selection</source>
-        <target state="new">New item selection</target>
+        <target state="translated">Selezione nuovo elemento</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTransactionAddingItem">
         <source>Adding Item</source>
-        <target state="new">Adding Item</target>
+        <target state="translated">Aggiunta di un elemento in corso...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerTransactionRemovingItem">
         <source>Removing Item</source>
-        <target state="new">Removing Item</target>
+        <target state="translated">Rimozione di un elemento in corso...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDropDownItemCollectionEditorVerb">
         <source>&amp;Edit DropDownItems...</source>
-        <target state="new">&amp;Edit DropDownItems...</target>
+        <target state="translated">&amp;Modifica DropDownItems...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripInsertingIntoDropDownTransaction">
         <source>ToolStrip MenuItem Insert in DropDown Transaction.</source>
-        <target state="new">ToolStrip MenuItem Insert in DropDown Transaction.</target>
+        <target state="translated">Inserisci elemento MenuItem di un controllo ToolStrip in transazione DropDown</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemCollectionEditorVerb">
         <source>&amp;Edit Items...</source>
-        <target state="new">&amp;Edit Items...</target>
+        <target state="translated">&amp;Modifica elementi...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuConvertTo">
         <source>Con&amp;vert To</source>
-        <target state="new">Con&amp;vert To</target>
+        <target state="translated">Con&amp;verti in</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuInsert">
         <source>&amp;Insert</source>
-        <target state="new">&amp;Insert</target>
+        <target state="translated">&amp;Inserisci</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemContextMenuSetImage">
         <source>Set I&amp;mage...</source>
-        <target state="new">Set I&amp;mage...</target>
+        <target state="translated">I&amp;mposta immagine...</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemPropertyChangeTransaction">
         <source>ToolStripItem Property Change Transaction.</source>
-        <target state="new">ToolStripItem Property Change Transaction.</target>
+        <target state="translated">Transazione Modifica proprietà del controllo ToolStripItem.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripMorphingItemTransaction">
         <source>ToolStripItem Morphing Transaction.</source>
-        <target state="new">ToolStripItem Morphing Transaction.</target>
+        <target state="translated">Transazione Morphing del controllo ToolStripItem.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSelectMenuItem">
         <source>'{0}'</source>
-        <target state="new">'{0}'</target>
+        <target state="translated">'{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSeparatorError">
         <source>Cannot add ToolStripSeparator to MenuStrip.</source>
-        <target state="new">Cannot add ToolStripSeparator to MenuStrip.</target>
+        <target state="translated">Impossibile aggiungere ToolStripSeparator a MenuStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolboxItemInvalidKey">
@@ -948,17 +950,17 @@
       </trans-unit>
       <trans-unit id="TrayAutoArrange">
         <source>Auto Arrange Tray Icons</source>
-        <target state="new">Auto Arrange Tray Icons</target>
+        <target state="translated">Disponi automaticamente icone della barra delle applicazioni</target>
         <note />
       </trans-unit>
       <trans-unit id="TrayLineUpIcons">
         <source>Line Up Tray Icons</source>
-        <target state="new">Line Up Tray Icons</target>
+        <target state="translated">Allinea icone della barra delle applicazioni</target>
         <note />
       </trans-unit>
       <trans-unit id="TrayShowLargeIcons">
         <source>Show Large or Small Icons</source>
-        <target state="new">Show Large or Small Icons</target>
+        <target state="translated">Mostra icone grandi o piccole</target>
         <note />
       </trans-unit>
       <trans-unit id="TypeNotFoundInTargetFramework">
@@ -968,7 +970,7 @@
       </trans-unit>
       <trans-unit id="UIServiceHelper_ErrorCaption">
         <source>Error</source>
-        <target state="new">Error</target>
+        <target state="translated">Errore</target>
         <note />
       </trans-unit>
       <trans-unit id="UndoEngineComponentAdd0">
@@ -1023,22 +1025,22 @@
       </trans-unit>
       <trans-unit id="WindowsFormsAddEvent">
         <source>&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</source>
-        <target state="new">&lt;couldn't find resource string "WindowsFormsAddEvent"&gt;</target>
+        <target state="translated">&lt;impossibile trovare la stringa di risorsa "WindowsFormsAddEvent"&gt;</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterX">
         <source>Horizontal center of {0} component(s)</source>
-        <target state="new">Horizontal center of {0} component(s)</target>
+        <target state="translated">Centro orizzontale di {0} componente/i</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
-        <target state="new">Vertical center of {0} component(s)</target>
+        <target state="translated">Centro verticale di {0} componente/i</target>
         <note />
       </trans-unit>
       <trans-unit id="lockedDescr">
         <source>The Locked property determines if we can move or resize the control.</source>
-        <target state="new">The Locked property determines if we can move or resize the control.</target>
+        <target state="translated">La proprietà Locked determina se è possibile spostare o ridimensionare il controllo.</target>
         <note />
       </trans-unit>
     </body>
