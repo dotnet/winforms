@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
         // Form per instance members
         // Note: Do not add anything to this list unless absolutely neccessary.
 
-        private BitVector32      formState  = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
+        private BitVector32      formState   = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
         private BitVector32      formStateEx = new BitVector32();
 
 
