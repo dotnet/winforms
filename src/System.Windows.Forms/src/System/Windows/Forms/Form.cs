@@ -154,13 +154,13 @@ namespace System.Windows.Forms {
         private static readonly int PropMdiWindowListStrip     = PropertyStore.CreateKey();
         private static readonly int PropMdiControlStrip        = PropertyStore.CreateKey();
 
-        private static readonly int PropOpacity = PropertyStore.CreateKey();
+        private static readonly int PropOpacity         = PropertyStore.CreateKey();
         private static readonly int PropTransparencyKey = PropertyStore.CreateKey();
 
         // Form per instance members
         // Note: Do not add anything to this list unless absolutely neccessary.
 
-        private BitVector32      formState = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
+        private BitVector32      formState  = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
         private BitVector32      formStateEx = new BitVector32();
 
 
@@ -170,7 +170,7 @@ namespace System.Windows.Forms {
         private Size             minAutoSize = Size.Empty;
         private Rectangle        restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
         private BoundsSpecified  restoredWindowBoundsSpecified;
-        private DialogResult dialogResult;
+        private DialogResult     dialogResult;
         private MdiClient        ctlClient;
         private NativeWindow     ownerWindow;
         private bool             rightToLeftLayout = false;
