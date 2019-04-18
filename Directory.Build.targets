@@ -22,6 +22,14 @@
     <CallTarget Targets="GenerateCoverageResult" />
   </Target>
 
+  <ItemGroup>
+    <!-- Set TargetingPackVersion -->
+    <FrameworkReference Update="Microsoft.NETCore.App" 
+      Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) And '$(MSBuildProjectExtension)'!='.vcxproj'">
+    <TargetingPackVersion>$(MicrosoftNETCoreAppPackageVersion)</TargetingPackVersion>
+    </FrameworkReference>
+  </ItemGroup>
+
   <PropertyGroup>
     <!-- If TargetFramework is not netcoreapp3.x, then reset RuntimeFrameworkVersion -->
     <!-- TODO: /p:EnableInstallDotNetCoreRuntimes=true to endable this for tests once dotnet/arcade#2343 is in -->
