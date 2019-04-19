@@ -3914,7 +3914,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private void LvnBeginDrag(MouseButtons buttons, NativeMethods.NMLISTVIEW nmlv) {
+        private void LvnBeginDrag(MouseButtons buttons, in NativeMethods.NMLISTVIEW nmlv) {
             ListViewItem item = Items[nmlv.iItem];
             OnItemDrag(new ItemDragEventArgs(buttons, item));
         }
@@ -5622,7 +5622,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
-        private unsafe void WmReflectNotify(ref Message m) {
+        private void WmReflectNotify(ref Message m) {
 
             ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
 
@@ -5641,7 +5641,7 @@ namespace System.Windows.Forms {
                     }
 
                 case NativeMethods.LVN_COLUMNCLICK: {
-                        NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
+                        ref readonly NativeMethods.NMLISTVIEW nmlv = ref m.GetLParamRef<NativeMethods.NMLISTVIEW>();
                         listViewState[LISTVIEWSTATE_columnClicked] = true;
                         columnIndex = nmlv.iSubItem;
                         break;
@@ -5670,8 +5670,8 @@ namespace System.Windows.Forms {
                     // so don't tell the user about this operation...
                     // 
                     if (!this.ItemCollectionChangedInMouseDown) {
-                        NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
-                        LvnBeginDrag(MouseButtons.Left, nmlv);
+                        ref readonly NativeMethods.NMLISTVIEW nmlv = ref m.GetLParamRef<NativeMethods.NMLISTVIEW>();
+                        LvnBeginDrag(MouseButtons.Left, in nmlv);
                     }
 
                     break;
@@ -5683,23 +5683,23 @@ namespace System.Windows.Forms {
                     // so don't tell the user about this operation...
                     // 
                     if (!this.ItemCollectionChangedInMouseDown) {
-                        NativeMethods.NMLISTVIEW nmlv = (NativeMethods.NMLISTVIEW)m.GetLParam(typeof(NativeMethods.NMLISTVIEW));
-                        LvnBeginDrag(MouseButtons.Right, nmlv);
+                        ref readonly NativeMethods.NMLISTVIEW nmlv = ref m.GetLParamRef<NativeMethods.NMLISTVIEW>();
+                        LvnBeginDrag(MouseButtons.Right, in nmlv);
                     }
                     break;
                 }
 
 
                 case NativeMethods.LVN_ITEMCHANGING: {
-                        NativeMethods.NMLISTVIEW* nmlv = (NativeMethods.NMLISTVIEW*)m.LParam;
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0) {
+                        ref readonly NativeMethods.NMLISTVIEW nmlv = ref m.GetLParamRef<NativeMethods.NMLISTVIEW>();
+                        if ((nmlv.uChanged & NativeMethods.LVIF_STATE) != 0) {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
-                            CheckState oldState = (CheckState)(((nmlv->uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                            CheckState newState = (CheckState)(((nmlv->uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState oldState = (CheckState)(((nmlv.uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState newState = (CheckState)(((nmlv.uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                             if (oldState != newState) {
-                                ItemCheckEventArgs e = new ItemCheckEventArgs(nmlv->iItem, newState, oldState);
+                                ItemCheckEventArgs e = new ItemCheckEventArgs(nmlv.iItem, newState, oldState);
                                 OnItemCheck(e);
                                 m.Result = (IntPtr)(((int)e.NewValue == 0 ? 0 : 1) == (int)oldState ? 1 : 0);
                             }
@@ -5708,24 +5708,24 @@ namespace System.Windows.Forms {
                     }
 
                 case NativeMethods.LVN_ITEMCHANGED: {
-                        NativeMethods.NMLISTVIEW* nmlv = (NativeMethods.NMLISTVIEW*)m.LParam;
+                        ref readonly NativeMethods.NMLISTVIEW nmlv = ref m.GetLParamRef<NativeMethods.NMLISTVIEW>();
                         // Check for state changes to the selected state...
-                        if ((nmlv->uChanged & NativeMethods.LVIF_STATE) != 0) {
+                        if ((nmlv.uChanged & NativeMethods.LVIF_STATE) != 0) {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
                             // anything else means checked.  We convert this to the more standard 0 or 1
-                            CheckState oldValue = (CheckState)(((nmlv->uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
-                            CheckState newValue = (CheckState)(((nmlv->uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState oldValue = (CheckState)(((nmlv.uOldState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
+                            CheckState newValue = (CheckState)(((nmlv.uNewState & NativeMethods.LVIS_STATEIMAGEMASK) >> 12) == 1 ? 0 : 1);
 
                             if (newValue != oldValue) {
-                                ItemCheckedEventArgs e = new ItemCheckedEventArgs(Items[nmlv->iItem]);
+                                ItemCheckedEventArgs e = new ItemCheckedEventArgs(Items[nmlv.iItem]);
                                 OnItemChecked(e);
                                 
-                                AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
-                                AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
+                                AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv.iItem);
+                                AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv.iItem);
                             }
 
-                            int oldState = nmlv->uOldState & NativeMethods.LVIS_SELECTED;
-                            int newState = nmlv->uNewState & NativeMethods.LVIS_SELECTED;
+                            int oldState = nmlv.uOldState & NativeMethods.LVIS_SELECTED;
+                            int newState = nmlv.uNewState & NativeMethods.LVIS_SELECTED;
                             // Windows common control always fires
                             // this event twice, once with newState, oldState, and again with
                             // oldState, newState.
@@ -5733,7 +5733,7 @@ namespace System.Windows.Forms {
                             // fires the event on a Deselct of an Items from multiple selections.
                             // So leave it as it is...
                             if (newState != oldState) {
-                                if (this.VirtualMode && nmlv->iItem == -1)
+                                if (this.VirtualMode && nmlv.iItem == -1)
                                 {
                                     if (this.VirtualListSize > 0) {
                                         ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(0, this.VirtualListSize-1, newState != 0);
@@ -5749,8 +5749,8 @@ namespace System.Windows.Forms {
                                     // And that may cause GetItemAt to throw an out of bounds exception.
 
                                     if (this.Items.Count > 0) {
-                                        ListViewItemSelectionChangedEventArgs lvisce = new ListViewItemSelectionChangedEventArgs(this.Items[nmlv->iItem],
-                                                                                                                                 nmlv->iItem,
+                                        ListViewItemSelectionChangedEventArgs lvisce = new ListViewItemSelectionChangedEventArgs(this.Items[nmlv.iItem],
+                                                                                                                                 nmlv.iItem,
                                                                                                                                  newState != 0);
                                         OnItemSelectionChanged(lvisce);
                                     }
