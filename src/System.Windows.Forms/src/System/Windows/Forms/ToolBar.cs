@@ -1583,7 +1583,7 @@ namespace System.Windows.Forms {
         // position the tooltip window when the underlying toolbar control attempts to display it.
         private void WmNotifyHotItemChange(ref Message m) {
             // Should we set the hot item?
-            NativeMethods.NMTBHOTITEM nmTbHotItem = (NativeMethods.NMTBHOTITEM)m.GetLParam(typeof(NativeMethods.NMTBHOTITEM));
+            ref readonly NativeMethods.NMTBHOTITEM nmTbHotItem = ref m.GetLParamRef<NativeMethods.NMTBHOTITEM>();
             if (NativeMethods.HICF_ENTERING == (nmTbHotItem.dwFlags & NativeMethods.HICF_ENTERING))
                 this.hotItem = nmTbHotItem.idNew;
             else if (NativeMethods.HICF_LEAVING == (nmTbHotItem.dwFlags & NativeMethods.HICF_LEAVING))
