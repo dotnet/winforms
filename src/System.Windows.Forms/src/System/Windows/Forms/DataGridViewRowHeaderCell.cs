@@ -50,20 +50,6 @@ namespace System.Windows.Forms
         {
         }
 
-        /* Unused for now.
-        private static Bitmap ErrorBitmap
-        {
-            get
-            {
-                if (errorBmp == null)
-                {
-                    errorBmp = GetBitmap("DataGridViewRow.error");
-                }
-                return errorBmp;
-            }
-        }
-        */
-
         private static Bitmap LeftArrowBitmap
         {
             get
