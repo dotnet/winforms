@@ -2371,16 +2371,18 @@ namespace System.Windows.Forms {
         ///        events and let the user do the drawing.
         /// </devdoc>
         /// <internalonly/>
-        unsafe void CustomDraw(ref Message m) {
+        void CustomDraw(ref Message m) {
 
             bool dontmess = false;
             bool itemDrawDefault = false;
 
             try
             {
-                NativeMethods.NMLVCUSTOMDRAW* nmcd = (NativeMethods.NMLVCUSTOMDRAW*)m.LParam;
+                // Can't use 'ref readonly' because the struct is modified on some paths
+                NativeMethods.NMLVCUSTOMDRAW nmcd = m.GetLParamRef<NativeMethods.NMLVCUSTOMDRAW>();
+
                 // Find out which stage we're drawing
-                switch (nmcd->nmcd.dwDrawStage)
+                switch (nmcd.nmcd.dwDrawStage)
                 {
                     case NativeMethods.CDDS_PREPAINT:
                         if (OwnerDraw)
@@ -2397,7 +2399,7 @@ namespace System.Windows.Forms {
                         odCacheFontHandle = this.FontHandle;
 
                         // If preparing to paint a group item, make sure its bolded.
-                        if (nmcd->dwItemType == NativeMethods.LVCDI_GROUP)
+                        if (nmcd.dwItemType == NativeMethods.LVCDI_GROUP)
                         {
                             if (odCacheFontHandleWrapper != null)
                             {
@@ -2406,7 +2408,7 @@ namespace System.Windows.Forms {
                             odCacheFont = new Font(odCacheFont, FontStyle.Bold);
                             odCacheFontHandleWrapper = new Control.FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
-                            SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            SafeNativeMethods.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                             m.Result = (IntPtr)NativeMethods.CDRF_NEWFONT;
                         }
                         return;
@@ -2418,7 +2420,7 @@ namespace System.Windows.Forms {
 
                     case NativeMethods.CDDS_ITEMPREPAINT:
 
-                        int itemIndex = (int)nmcd->nmcd.dwItemSpec;
+                        int itemIndex = (int)nmcd.nmcd.dwItemSpec;
                         // The following call silently returns Rectangle.Empty if no corresponding
                         // item was found. We do this because the native listview, under some circumstances, seems
                         // to send spurious custom draw notifications. The check below does the rest.
@@ -2434,7 +2436,7 @@ namespace System.Windows.Forms {
                         if (OwnerDraw)
                         {
 
-                            Graphics g = Graphics.FromHdcInternal(nmcd->nmcd.hdc);
+                            Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
 
 #if DEBUGGING
                             Rectangle r = itemBounds;
@@ -2447,10 +2449,10 @@ namespace System.Windows.Forms {
                             try
                             {
                                 e = new DrawListViewItemEventArgs(g,
-                                       Items[(int)nmcd->nmcd.dwItemSpec],
+                                       Items[(int)nmcd.nmcd.dwItemSpec],
                                        itemBounds,
-                                       (int)nmcd->nmcd.dwItemSpec,
-                                       (ListViewItemStates)(nmcd->nmcd.uItemState));
+                                       (int)nmcd.nmcd.dwItemSpec,
+                                       (ListViewItemStates)(nmcd.nmcd.uItemState));
 
                                 OnDrawItem(e);
                             }
@@ -2499,7 +2501,7 @@ namespace System.Windows.Forms {
 
                     case (NativeMethods.CDDS_SUBITEM | NativeMethods.CDDS_ITEMPREPAINT):
 
-                        itemIndex = (int)nmcd->nmcd.dwItemSpec;
+                        itemIndex = (int)nmcd.nmcd.dwItemSpec;
                         // The following call silently returns Rectangle.Empty if no corresponding
                         // item was found. We do this because the native listview, under some circumstances, seems
                         // to send spurious custom draw notifications. The check below does the rest.
@@ -2515,7 +2517,7 @@ namespace System.Windows.Forms {
                         if (OwnerDraw && !itemDrawDefault)
                         {
 
-                            Graphics g = Graphics.FromHdcInternal(nmcd->nmcd.hdc);
+                            Graphics g = Graphics.FromHdcInternal(nmcd.nmcd.hdc);
                             DrawListViewSubItemEventArgs e = null;
 
                             // by default, we want to skip the customDrawCode
@@ -2526,13 +2528,13 @@ namespace System.Windows.Forms {
                                 //The ListView will send notifications for every column, even if no
                                 //corresponding subitem exists for a particular item. We shouldn't
                                 //fire events in such cases.
-                                if (nmcd->iSubItem < Items[itemIndex].SubItems.Count)
+                                if (nmcd.iSubItem < Items[itemIndex].SubItems.Count)
                                 {
-                                    Rectangle subItemBounds = GetSubItemRect(itemIndex, nmcd->iSubItem);
+                                    Rectangle subItemBounds = GetSubItemRect(itemIndex, nmcd.iSubItem);
 
                                     // For the first sub-item, the rectangle corresponds to the whole item.
                                     // We need to handle this case separately.
-                                    if (nmcd->iSubItem == 0 && Items[itemIndex].SubItems.Count > 1)
+                                    if (nmcd.iSubItem == 0 && Items[itemIndex].SubItems.Count > 1)
                                     {
                                         // Use the width for the first column header.
                                         subItemBounds.Width = this.columnHeaders[0].Width;
@@ -2543,11 +2545,11 @@ namespace System.Windows.Forms {
                                         e = new DrawListViewSubItemEventArgs(g,
                                                   subItemBounds,
                                                   Items[itemIndex],
-                                                  Items[itemIndex].SubItems[nmcd->iSubItem],
+                                                  Items[itemIndex].SubItems[nmcd.iSubItem],
                                                   itemIndex,
-                                                  nmcd->iSubItem,
-                                                  columnHeaders[nmcd->iSubItem],
-                                                  (ListViewItemStates)(nmcd->nmcd.uItemState));
+                                                  nmcd.iSubItem,
+                                                  columnHeaders[nmcd.iSubItem],
+                                                  (ListViewItemStates)(nmcd.nmcd.uItemState));
                                         OnDrawSubItem(e);
 
                                         // the customer still wants to draw the default.
@@ -2569,7 +2571,7 @@ namespace System.Windows.Forms {
                         }
 
                         // get the node
-                        ListViewItem item = Items[(int)(nmcd->nmcd.dwItemSpec)];
+                        ListViewItem item = Items[(int)(nmcd.nmcd.dwItemSpec)];
                         // if we're doing the whole row in one style, change our result!
                         if (dontmess && item.UseItemStyleForSubItems)
                         {
@@ -2577,14 +2579,14 @@ namespace System.Windows.Forms {
                         }
                         Debug.Assert(item != null, "Item was null in ITEMPREPAINT");
 
-                        int state = nmcd->nmcd.uItemState;
+                        int state = nmcd.nmcd.uItemState;
                         // There is a known and documented problem in the ListView winctl control -
                         // if the LVS_SHOWSELALWAYS style is set, then the item state will have
                         // the CDIS_SELECTED bit set for all items. So we need to verify with the
                         // real item state to be sure.
                         if (!HideSelection)
                         {
-                            int realState = GetItemState((int)(nmcd->nmcd.dwItemSpec));
+                            int realState = GetItemState((int)(nmcd.nmcd.dwItemSpec));
                             if ((realState & NativeMethods.LVIS_SELECTED) == 0)
                             {
                                 state &= ~NativeMethods.CDIS_SELECTED;
@@ -2595,7 +2597,7 @@ namespace System.Windows.Forms {
                         // cases where subitems aren't visible (ie. non-Details modes), so if subitem
                         // is invalid, point it at the main item's render info
 
-                        int subitem = ((nmcd->nmcd.dwDrawStage & NativeMethods.CDDS_SUBITEM) != 0) ? nmcd->iSubItem : 0;
+                        int subitem = ((nmcd.nmcd.dwDrawStage & NativeMethods.CDDS_SUBITEM) != 0) ? nmcd.iSubItem : 0;
 
                         // Work out the style in which to render this item
                         //
@@ -2664,11 +2666,11 @@ namespace System.Windows.Forms {
                         {
                             if (!haveRenderInfo || riFore.IsEmpty)
                             {
-                                nmcd->clrText = ColorTranslator.ToWin32(odCacheForeColor);
+                                nmcd.clrText = ColorTranslator.ToWin32(odCacheForeColor);
                             }
                             else
                             {
-                                nmcd->clrText = ColorTranslator.ToWin32(riFore);
+                                nmcd.clrText = ColorTranslator.ToWin32(riFore);
                             }
 
                             // Work-around for a comctl quirk where,
@@ -2679,14 +2681,14 @@ namespace System.Windows.Forms {
                             // Basically, if the color component is 0xFF, subtract 1 from it
                             // (adding 1 will overflow), else add 1 to it. If the color component is 0,
                             // skip it and go to the next color (unless it is our last option).
-                            if (nmcd->clrText == ColorTranslator.ToWin32(SystemColors.HotTrack))
+                            if (nmcd.clrText == ColorTranslator.ToWin32(SystemColors.HotTrack))
                             {
                                 int totalshift = 0;
                                 bool clrAdjusted = false;
                                 int mask = 0xFF0000;
                                 do
                                 {
-                                    int C = nmcd->clrText & mask;
+                                    int C = nmcd.clrText & mask;
                                     if (C != 0 || (mask == 0x0000FF)) // The color is not 0
                                     // or this is the last option
                                     {
@@ -2701,7 +2703,7 @@ namespace System.Windows.Forms {
                                             C = ((C >> n) + 1) << n;
                                         }
                                         // Copy the adjustment into nmcd->clrText
-                                        nmcd->clrText = (nmcd->clrText & (~mask)) | C;
+                                        nmcd.clrText = (nmcd.clrText & (~mask)) | C;
                                         clrAdjusted = true;
                                     }
                                     else
@@ -2717,11 +2719,11 @@ namespace System.Windows.Forms {
 
                             if (!haveRenderInfo || riBack.IsEmpty)
                             {
-                                nmcd->clrTextBk = ColorTranslator.ToWin32(odCacheBackColor);
+                                nmcd.clrTextBk = ColorTranslator.ToWin32(odCacheBackColor);
                             }
                             else
                             {
-                                nmcd->clrTextBk = ColorTranslator.ToWin32(riBack);
+                                nmcd.clrTextBk = ColorTranslator.ToWin32(riBack);
                             }
                         }
 
@@ -2730,7 +2732,7 @@ namespace System.Windows.Forms {
                             // safety net code just in case
                             if (odCacheFont != null)
                             {
-                                SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(null, odCacheFontHandle));
+                                SafeNativeMethods.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(null, odCacheFontHandle));
                             }
                         }
                         else
@@ -2740,7 +2742,7 @@ namespace System.Windows.Forms {
                                 odCacheFontHandleWrapper.Dispose();
                             }
                             odCacheFontHandleWrapper = new Control.FontHandleWrapper(subItemFont);
-                            SafeNativeMethods.SelectObject(new HandleRef(nmcd->nmcd, nmcd->nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
+                            SafeNativeMethods.SelectObject(new HandleRef(nmcd.nmcd, nmcd.nmcd.hdc), new HandleRef(odCacheFontHandleWrapper, odCacheFontHandleWrapper.Handle));
                         }
 
                         if (!dontmess)
@@ -5273,7 +5275,7 @@ namespace System.Windows.Forms {
 
         }
 
-        private unsafe bool WmNotify(ref Message m) {
+        private bool WmNotify(ref Message m) {
             ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
 
             // column header custom draw message handling
@@ -5281,9 +5283,9 @@ namespace System.Windows.Forms {
             {
                 try
                 {
-                    NativeMethods.NMCUSTOMDRAW* nmcd = (NativeMethods.NMCUSTOMDRAW*)m.LParam;
+                    ref readonly NativeMethods.NMCUSTOMDRAW nmcd = ref m.GetLParamRef<NativeMethods.NMCUSTOMDRAW>();
                     // Find out which stage we're drawing
-                    switch (nmcd->dwDrawStage)
+                    switch (nmcd.dwDrawStage)
                     {
                         case NativeMethods.CDDS_PREPAINT:
                             {
@@ -5293,18 +5295,18 @@ namespace System.Windows.Forms {
                             }
                         case NativeMethods.CDDS_ITEMPREPAINT:
                             {
-                                Graphics g = Graphics.FromHdcInternal(nmcd->hdc);
-                                Rectangle r = Rectangle.FromLTRB(nmcd->rc.left, nmcd->rc.top, nmcd->rc.right, nmcd->rc.bottom);
+                                Graphics g = Graphics.FromHdcInternal(nmcd.hdc);
+                                Rectangle r = Rectangle.FromLTRB(nmcd.rc.left, nmcd.rc.top, nmcd.rc.right, nmcd.rc.bottom);
                                 DrawListViewColumnHeaderEventArgs e = null;
 
                                 try
                                 {
-                                    Color foreColor = ColorTranslator.FromWin32(SafeNativeMethods.GetTextColor(new HandleRef(this, nmcd->hdc)));
-                                    Color backColor = ColorTranslator.FromWin32(SafeNativeMethods.GetBkColor(new HandleRef(this, nmcd->hdc)));
+                                    Color foreColor = ColorTranslator.FromWin32(SafeNativeMethods.GetTextColor(new HandleRef(this, nmcd.hdc)));
+                                    Color backColor = ColorTranslator.FromWin32(SafeNativeMethods.GetBkColor(new HandleRef(this, nmcd.hdc)));
                                     Font font = GetListHeaderFont();
-                                    e = new DrawListViewColumnHeaderEventArgs(g, r, (int)(nmcd->dwItemSpec),
-                                                                        columnHeaders[(int)nmcd->dwItemSpec],
-                                                                        (ListViewItemStates)(nmcd->uItemState),
+                                    e = new DrawListViewColumnHeaderEventArgs(g, r, (int)(nmcd.dwItemSpec),
+                                                                        columnHeaders[(int)nmcd.dwItemSpec],
+                                                                        (ListViewItemStates)(nmcd.uItemState),
                                                                         foreColor, backColor, font);
 
                                     OnDrawColumnHeader(e);

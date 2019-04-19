@@ -1362,17 +1362,17 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                private unsafe IntPtr MessageHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
+                private IntPtr MessageHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
                     if (nCode == NativeMethods.HC_ACTION)  {
                         if (isHooked && (int)wparam == NativeMethods.PM_REMOVE /*only process GetMessage, not PeekMessage*/) {
                             // only process messages we've pulled off the queue
-                            NativeMethods.MSG* msg = (NativeMethods.MSG*)lparam;
-                            if (msg != null) {
+                            if (lparam != IntPtr.Zero) {
+                                ref NativeMethods.MSG msg = ref UnsafeNativeMethods.PtrToRef<NativeMethods.MSG>(lparam);
                                 //Debug.WriteLine("Got " + Message.Create(msg->hwnd, msg->message, wparam, lparam).ToString());
                                 // call pretranslate on the message - this should execute
                                 // the message filters and preprocess message.
-                                if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg)) {
-                                    msg->message = Interop.WindowMessages.WM_NULL;
+                                if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref msg)) {
+                                    msg.message = Interop.WindowMessages.WM_NULL;
                                 }
                             }
                         }

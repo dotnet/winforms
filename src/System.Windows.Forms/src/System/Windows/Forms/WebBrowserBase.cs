@@ -1937,18 +1937,18 @@ namespace System.Windows.Forms
                 }
             }
 
-            private unsafe void WmWindowPosChanging(ref Message m) {
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS *)m.LParam;
-                wp->x = 0;
-                wp->y = 0;
+            private void WmWindowPosChanging(ref Message m) {
+                ref NativeMethods.WINDOWPOS wp = ref m.GetLParamRef<NativeMethods.WINDOWPOS>();
+                wp.x = 0;
+                wp.y = 0;
                 Size s = WebBrowserBase.webBrowserBaseChangingSize;
                 if (s.Width == -1) {   // Invalid value. Use WebBrowserBase.Bounds instead, when this is the case.
-                    wp->cx = WebBrowserBase.Width;
-                    wp->cy = WebBrowserBase.Height;
+                    wp.cx = WebBrowserBase.Width;
+                    wp.cy = WebBrowserBase.Height;
                 }
                 else {
-                    wp->cx = s.Width;
-                    wp->cy = s.Height;
+                    wp.cx = s.Width;
+                    wp.cy = s.Height;
                 }
                 m.Result = (IntPtr)0;
             }

@@ -13089,27 +13089,27 @@ example usage
         ///     Handles the WM_WINDOWPOSCHANGING message
         /// </devdoc>
         /// <internalonly/>
-        private unsafe void WmWindowPosChanging(ref Message m) {
+        private void WmWindowPosChanging(ref Message m) {
 
             // We let this fall through to defwndproc unless we are being surfaced as
             // an ActiveX control.  In that case, we must let the ActiveX side of things
             // manipulate our bounds here.
             //
             if (IsActiveX) {
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS *)m.LParam;
+                ref NativeMethods.WINDOWPOS wp = ref m.GetLParamRef<NativeMethods.WINDOWPOS>();
                 // Only call UpdateBounds if the new bounds are different.
                 //
                 bool different = false;
 
-                if ((wp->flags & NativeMethods.SWP_NOMOVE) == 0 && (wp->x != Left || wp->y != Top)) {
+                if ((wp.flags & NativeMethods.SWP_NOMOVE) == 0 && (wp.x != Left || wp.y != Top)) {
                     different = true;
                 }
-                if ((wp->flags & NativeMethods.SWP_NOSIZE) == 0 && (wp->cx != Width || wp->cy != Height)) {
+                if ((wp.flags & NativeMethods.SWP_NOSIZE) == 0 && (wp.cx != Width || wp.cy != Height)) {
                     different = true;
                 }
 
                 if (different) {
-                    ActiveXUpdateBounds(ref wp->x, ref wp->y, ref wp->cx, ref wp->cy, wp->flags);
+                    ActiveXUpdateBounds(ref wp.x, ref wp.y, ref wp.cx, ref wp.cy, wp.flags);
                 }
             }
 
@@ -13323,15 +13323,15 @@ example usage
         ///     Handles the WM_WINDOWPOSCHANGED message
         /// </devdoc>
         /// <internalonly/>
-        private unsafe void WmWindowPosChanged(ref Message m) {
+        private void WmWindowPosChanged(ref Message m) {
             DefWndProc(ref m);
             // Update new size / position
             UpdateBounds();
             if (parent != null && UnsafeNativeMethods.GetParent(new HandleRef(window, InternalHandle)) == parent.InternalHandle &&
                 (state & STATE_NOZORDER) == 0) {
 
-                NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS *)m.LParam;
-                if ((wp->flags & NativeMethods.SWP_NOZORDER) == 0) {
+                ref readonly NativeMethods.WINDOWPOS wp = ref m.GetLParamRef<NativeMethods.WINDOWPOS>();
+                if ((wp.flags & NativeMethods.SWP_NOZORDER) == 0) {
                     parent.UpdateChildControlIndex(this);
                 }
             }

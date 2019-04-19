@@ -2335,13 +2335,13 @@ namespace System.Windows.Forms {
         ///     Handles the WM_WINDOWPOSCHANGING message.
         /// </devdoc>
         /// <internalonly/>
-        private unsafe void WmWindowPosChanging(ref Message m) {
+        private void WmWindowPosChanging(ref Message m) {
             if (cancelled || isDisposing)
             {
             	return;
             }
 
-            NativeMethods.WINDOWPOS* wp = (NativeMethods.WINDOWPOS *)m.LParam;
+            ref NativeMethods.WINDOWPOS wp = ref m.GetLParamRef<NativeMethods.WINDOWPOS>();
             
             Cursor currentCursor = Cursor.CurrentInternal;
             Point cursorPos = Cursor.Position;
@@ -2380,7 +2380,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (IsBalloon) {
-                   wp->cx += 2*XBALLOONOFFSET;
+                   wp.cx += 2*XBALLOONOFFSET;
                    return;
                 }
 
@@ -2395,31 +2395,31 @@ namespace System.Windows.Forms {
                    Screen screen = Screen.FromPoint(cursorPos);
                    if (currentCursor != null)
                    {
-                        wp->x = cursorPos.X;
-                        wp->y = cursorPos.Y;
-                        if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom) {
-                            wp->y = cursorPos.Y - wp->cy;
+                        wp.x = cursorPos.X;
+                        wp.y = cursorPos.Y;
+                        if (wp.y + wp.cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom) {
+                            wp.y = cursorPos.Y - wp.cy;
                         }
                         else {
-                            wp->y = cursorPos.Y + currentCursor.Size.Height - currentCursor.HotSpot.Y;
+                            wp.y = cursorPos.Y + currentCursor.Size.Height - currentCursor.HotSpot.Y;
                         }
                    }
-                   if (wp->x + wp->cx >screen.WorkingArea.Right) {
-                      wp->x = screen.WorkingArea.Right - wp->cx;
+                   if (wp.x + wp.cx >screen.WorkingArea.Right) {
+                      wp.x = screen.WorkingArea.Right - wp.cx;
                    }
 
                 }
                 else if ((tt.TipType & TipInfo.Type.SemiAbsolute) != 0 && tt.Position != Point.Empty) {
 
                    Screen screen = Screen.FromPoint(tt.Position);
-                   wp->x = tt.Position.X;
-                   if (wp->x + wp->cx >screen.WorkingArea.Right) {
-                      wp->x = screen.WorkingArea.Right - wp->cx;
+                   wp.x = tt.Position.X;
+                   if (wp.x + wp.cx >screen.WorkingArea.Right) {
+                      wp.x = screen.WorkingArea.Right - wp.cx;
                    }
-                   wp->y = tt.Position.Y;
+                   wp.y = tt.Position.Y;
                    
-                   if (wp->y + wp->cy > screen.WorkingArea.Bottom) {
-                        wp->y = screen.WorkingArea.Bottom - wp->cy;
+                   if (wp.y + wp.cy > screen.WorkingArea.Bottom) {
+                        wp.y = screen.WorkingArea.Bottom - wp.cy;
                    }
                 }
             }
