@@ -5930,7 +5930,7 @@ namespace System.Windows.Forms {
                     }
                     else if (nmhdr.code == NativeMethods.LVN_ODFINDITEM) {
                         if (VirtualMode) {
-                            NativeMethods.NMLVFINDITEM nmlvif = (NativeMethods.NMLVFINDITEM) m.GetLParam(typeof(NativeMethods.NMLVFINDITEM));
+                            NativeMethods.NMLVFINDITEM nmlvif = m.GetLParam<NativeMethods.NMLVFINDITEM>();
 
                             if ((nmlvif.lvfi.flags & NativeMethods.LVFI_PARAM) != 0) {
                                 m.Result = (IntPtr) (-1);
