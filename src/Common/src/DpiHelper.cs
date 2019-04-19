@@ -293,6 +293,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Creating bitmap from Icon resource
+        /// </summary>
+        public static Bitmap GetBitMapFromIcon(Type t, string name)
+        {
+            Icon b = new Icon(t, name);
+            Bitmap bitmap = b.ToBitmap();
+            b.Dispose();
+            return bitmap;
+        }
+
+        /// <summary>
         /// Create a new bitmap scaled for the device units.
         /// When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
         /// </summary>

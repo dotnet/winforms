@@ -105,7 +105,7 @@ namespace System.Windows.Forms
             {
                 if (errorBmp == null)
                 {
-                    errorBmp = new Bitmap(typeof(DataGridView), "ImageInError");
+                    errorBmp = DpiHelper.GetBitMapFromIcon(typeof(DataGridView), "ImageInError");
                 }
                 return errorBmp;
             }
