@@ -1608,6 +1608,15 @@ namespace System.Windows.Forms {
             return regionRects;
         }
 
+        public static ref T PtrToRef<T>(IntPtr ptr)
+            where T : unmanaged
+        {
+            unsafe
+            {
+                return ref *(T*)ptr;
+            }
+        }
+
         /* Unused
         // for GetUserNameEx
         public enum EXTENDED_NAME_FORMAT {
