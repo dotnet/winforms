@@ -40,6 +40,22 @@ namespace System.Windows.Forms
         public object GetLParam(Type cls) => Marshal.PtrToStructure(LParam, cls);
 
         /// <summary>
+        /// Gets the <see cref='Message.lparam'/> value, and converts the value to an object of type
+        /// <typeparamref name="T"/>.
+        /// </summary>
+        internal T GetLParam<T>() => Marshal.PtrToStructure<T>(LParam);
+
+        /// <summary>
+        /// Gets a reference to the structure of type <typeparamref name="T"/> pointed to by the
+        /// <see cref='Message.lparam'/> value.
+        /// </summary>
+        internal ref T GetLParamRef<T>()
+            where T : unmanaged
+        {
+            return ref UnsafeNativeMethods.PtrToRef<T>(LParam);
+        }
+
+        /// <summary>
         /// Creates a new <see cref='System.Windows.Forms.Message'/> object.
         /// </summary>
         public static Message Create(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
