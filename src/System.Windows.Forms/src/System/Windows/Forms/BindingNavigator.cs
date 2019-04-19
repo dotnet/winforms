@@ -186,20 +186,20 @@ namespace System.Windows.Forms {
             // Set up images
             //
 
-            Icon moveFirstImage    = new Icon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
-            Icon movePreviousImage = new Icon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
-            Icon moveNextImage     = new Icon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
-            Icon moveLastImage     = new Icon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
-            Icon addNewImage       = new Icon(typeof(BindingNavigator), "BindingNavigator.AddNew");
-            Icon deleteImage       = new Icon(typeof(BindingNavigator), "BindingNavigator.Delete");
+            Bitmap moveFirstImage    = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
+            Bitmap movePreviousImage = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
+            Bitmap moveNextImage     = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
+            Bitmap moveLastImage     = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
+            Bitmap addNewImage       = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
+            Bitmap deleteImage       = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
 
 
-            MoveFirstItem.Image    = moveFirstImage.ToBitmap();
-            MovePreviousItem.Image = movePreviousImage.ToBitmap();
-            MoveNextItem.Image     = moveNextImage.ToBitmap();
-            MoveLastItem.Image     = moveLastImage.ToBitmap();
-            AddNewItem.Image       = addNewImage.ToBitmap();
-            DeleteItem.Image       = deleteImage.ToBitmap();
+            MoveFirstItem.Image    = moveFirstImage;
+            MovePreviousItem.Image = movePreviousImage;
+            MoveNextItem.Image     = moveNextImage;
+            MoveLastItem.Image     = moveLastImage;
+            AddNewItem.Image       = addNewImage;
+            DeleteItem.Image       = deleteImage;
 
             MoveFirstItem.RightToLeftAutoMirrorImage = true;
             MovePreviousItem.RightToLeftAutoMirrorImage = true;

@@ -1522,9 +1522,9 @@ namespace System.Windows.Forms
 
         private static Bitmap GetBitmap(string bitmapName)
         {
-            Icon icon = new Icon(typeof(DataGridViewCell), bitmapName);
-            var b = icon.ToBitmap();
-            if (DpiHelper.IsScalingRequired) {
+            Bitmap b = DpiHelper.GetBitMapFromIcon(typeof(DataGridViewCell), bitmapName);
+            if (DpiHelper.IsScalingRequired)
+            {
                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, new Size(iconsWidth, iconsHeight));
                 if (scaledBitmap != null)
                 {

@@ -207,10 +207,8 @@ namespace System.Windows.Forms {
         ///    <para>Gets the bitmap associated with the row.</para>
         /// </devdoc>
         protected Bitmap GetBitmap(string bitmapName) {
-            Icon b = null;
             try {
-                b = new Icon(typeof(DataGridCaption), bitmapName);
-                return b.ToBitmap();
+                return DpiHelper.GetBitMapFromIcon(typeof(DataGridCaption), bitmapName);
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());

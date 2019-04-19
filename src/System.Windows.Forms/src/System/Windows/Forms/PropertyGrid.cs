@@ -1589,7 +1589,9 @@ namespace System.Windows.Forms {
         }
 
         private int AddImage(Bitmap image) {
-
+            if (image.RawFormat.Guid != ImageFormat.Icon.Guid) {
+                image.MakeTransparent();
+            }
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
             if (DpiHelper.IsScalingRequired && (image.Size.Width != normalButtonSize.Width || image.Size.Height != normalButtonSize.Height)) {
                 image = DpiHelper.CreateResizedBitmap(image, normalButtonSize);
@@ -4402,7 +4404,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByPropertyImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBAlpha");
+                return DpiHelper.GetBitMapFromIcon(typeof(PropertyGrid), "PBAlpha");
             }
         }
 
@@ -4417,7 +4419,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByCategoryImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBCatego");
+                return DpiHelper.GetBitMapFromIcon(typeof(PropertyGrid), "PBCatego");
             }
         }
 
@@ -4432,7 +4434,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap ShowPropertyPageImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBPPage");
+                return DpiHelper.GetBitMapFromIcon(typeof(PropertyGrid), "PBPPage");
             }
         }
 

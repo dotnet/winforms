@@ -63,23 +63,15 @@ namespace System.Windows.Forms {
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>
         /// </devdoc>
         public PrintPreviewDialog() {
-
             
             #pragma warning disable 618
             base.AutoScaleBaseSize = new Size(5, 13);
             #pragma warning restore 618
-            
-            
 
             this.previewControl = new PrintPreviewControl();
             this.imageList = new ImageList();
-            
-            Icon printPreviewStrip = new Icon(typeof(PrintPreviewDialog), "PrintPreviewStrip");
-            imageList.Images.AddStrip(printPreviewStrip.ToBitmap());
-
+            imageList.Images.AddStrip(DpiHelper.GetBitMapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
             InitForm();
-
-            
         }
 
         //subhag addition
