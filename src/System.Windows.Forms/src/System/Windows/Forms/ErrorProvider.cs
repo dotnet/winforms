@@ -1254,7 +1254,7 @@ namespace System.Windows.Forms {
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
                     case Interop.WindowMessages.WM_NOTIFY:
-                        NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                        ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                         if (nmhdr.code == NativeMethods.TTN_SHOW || nmhdr.code == NativeMethods.TTN_POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr.idFrom, nmhdr.code == NativeMethods.TTN_SHOW);

@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms {
 
                 case Interop.WindowMessages.WM_NOTIFY:
                 case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
-                    NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
+                    ref readonly NativeMethods.NMHDR note = ref m.GetLParamRef<NativeMethods.NMHDR>();
                     switch (note.code) {
                         case NativeMethods.TTN_NEEDTEXT:
                             // MSDN:

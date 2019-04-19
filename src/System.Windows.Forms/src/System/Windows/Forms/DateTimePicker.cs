@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms {
         private void WmReflectCommand(ref Message m) {
             if (m.HWnd == Handle) {
 
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                 switch (nmhdr.code) {
                     case NativeMethods.DTN_CLOSEUP:
                         WmCloseUp(ref m);

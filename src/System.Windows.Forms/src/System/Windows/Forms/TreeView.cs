@@ -3101,7 +3101,7 @@ namespace System.Windows.Forms {
                     }
                     break;
                 case Interop.WindowMessages.WM_NOTIFY:
-                    NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
+                    ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                     switch (nmhdr.code) {
                         case NativeMethods.TTN_GETDISPINFO:
                             // MSDN:

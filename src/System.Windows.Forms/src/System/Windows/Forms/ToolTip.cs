@@ -2498,7 +2498,7 @@ namespace System.Windows.Forms {
             switch (msg.Msg) {
 
             case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
-                 NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) msg.GetLParam(typeof(NativeMethods.NMHDR));
+                 ref readonly NativeMethods.NMHDR nmhdr = ref msg.GetLParamRef<NativeMethods.NMHDR>();
                  if (nmhdr.code == NativeMethods.TTN_SHOW && !trackPosition) {
                      WmShow();
                  }

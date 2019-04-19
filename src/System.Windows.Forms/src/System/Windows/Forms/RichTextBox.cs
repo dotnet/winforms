@@ -3261,7 +3261,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void WmReflectNotify(ref Message m) {
             if (m.HWnd == Handle) {
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                 switch (nmhdr.code) {
                     case RichTextBoxConstants.EN_LINK:
                         EnLinkMsgHandler(ref m);

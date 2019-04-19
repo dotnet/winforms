@@ -2280,7 +2280,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
             if (m.HWnd == Handle) {
-                NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
+                ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                 switch (nmhdr.code) {
                     case NativeMethods.MCN_SELECT:
                         WmDateSelected(ref m);

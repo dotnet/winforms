@@ -2086,7 +2086,7 @@ namespace System.Windows.Forms {
 
                 case Interop.WindowMessages.WM_NOTIFY:
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
-                    NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
+                    ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                     switch (nmhdr.code) {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
                         //in case of validation cancelled...
