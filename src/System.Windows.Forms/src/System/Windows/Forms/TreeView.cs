@@ -2396,8 +2396,8 @@ namespace System.Windows.Forms {
             return s;
         }
 
-        private unsafe void TvnBeginDrag(MouseButtons buttons, NativeMethods.NMTREEVIEW* nmtv) {
-            ref readonly NativeMethods.TV_ITEM item = ref nmtv->itemNew;
+        private void TvnBeginDrag(MouseButtons buttons, in NativeMethods.NMTREEVIEW nmtv) {
+            ref readonly NativeMethods.TV_ITEM item = ref nmtv.itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero) {
@@ -2409,8 +2409,8 @@ namespace System.Windows.Forms {
             OnItemDrag(new ItemDragEventArgs(buttons, node));
         }
 
-        private unsafe IntPtr TvnExpanding(NativeMethods.NMTREEVIEW* nmtv) {
-            ref readonly NativeMethods.TV_ITEM item = ref nmtv->itemNew;
+        private IntPtr TvnExpanding(in NativeMethods.NMTREEVIEW nmtv) {
+            ref readonly NativeMethods.TV_ITEM item = ref nmtv.itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero) {
@@ -2429,8 +2429,8 @@ namespace System.Windows.Forms {
             return (IntPtr)(e.Cancel? 1: 0);
         }
 
-        private unsafe void TvnExpanded(NativeMethods.NMTREEVIEW* nmtv) {
-            ref readonly NativeMethods.TV_ITEM item = ref nmtv->itemNew;
+        private void TvnExpanded(in NativeMethods.NMTREEVIEW nmtv) {
+            ref readonly NativeMethods.TV_ITEM item = ref nmtv.itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero) {
@@ -2451,20 +2451,20 @@ namespace System.Windows.Forms {
             }
         }
 
-        private unsafe IntPtr TvnSelecting(NativeMethods.NMTREEVIEW* nmtv) {
+        private IntPtr TvnSelecting(in NativeMethods.NMTREEVIEW nmtv) {
             if (treeViewState[ TREEVIEWSTATE_ignoreSelects])
             {
                 return (IntPtr)1;
             }
             // Check for invalid node handle
-            if (nmtv->itemNew.hItem == IntPtr.Zero) {
+            if (nmtv.itemNew.hItem == IntPtr.Zero) {
                 return IntPtr.Zero;
             }
 
-            TreeNode node = NodeFromHandle(nmtv->itemNew.hItem);
+            TreeNode node = NodeFromHandle(nmtv.itemNew.hItem);
 
             TreeViewAction action = TreeViewAction.Unknown;
-            switch(nmtv->action) {
+            switch(nmtv.action) {
                 case NativeMethods.TVC_BYKEYBOARD:
                     action = TreeViewAction.ByKeyboard;
                     break;
@@ -2479,14 +2479,14 @@ namespace System.Windows.Forms {
             return (IntPtr)(e.Cancel? 1: 0);
         }
 
-        private unsafe void TvnSelected(NativeMethods.NMTREEVIEW* nmtv) {
+        private unsafe void TvnSelected(in NativeMethods.NMTREEVIEW nmtv) {
             if (nodesCollectionClear) //if called thru the Clear( ) of treeNodeCollection then just return...
             {
                 return;
             }
-            if (nmtv->itemNew.hItem != IntPtr.Zero) {
+            if (nmtv.itemNew.hItem != IntPtr.Zero) {
                 TreeViewAction action = TreeViewAction.Unknown;
-                switch(nmtv->action) {
+                switch(nmtv.action) {
                     case NativeMethods.TVC_BYKEYBOARD:
                         action = TreeViewAction.ByKeyboard;
                         break;
@@ -2494,15 +2494,15 @@ namespace System.Windows.Forms {
                         action = TreeViewAction.ByMouse;
                         break;
                 }
-                OnAfterSelect(new TreeViewEventArgs(NodeFromHandle(nmtv->itemNew.hItem), action));
+                OnAfterSelect(new TreeViewEventArgs(NodeFromHandle(nmtv.itemNew.hItem), action));
             }
 
             // TreeView doesn't properly revert back to the unselected image
             // if the unselected image is blank.
             //
             NativeMethods.RECT rc = new NativeMethods.RECT();
-            *((IntPtr *) &rc.left) = nmtv->itemOld.hItem;
-            if (nmtv->itemOld.hItem != IntPtr.Zero) {
+            *((IntPtr *) &rc.left) = nmtv.itemOld.hItem;
+            if (nmtv.itemOld.hItem != IntPtr.Zero) {
                 if (unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_GETITEMRECT, 1, ref rc)) != 0)
                     SafeNativeMethods.InvalidateRect(new HandleRef(this, Handle), ref rc, true);
             }
@@ -2888,7 +2888,7 @@ namespace System.Windows.Forms {
         }
 
 
-        private unsafe void WmNotify(ref Message m) {
+        private void WmNotify(ref Message m) {
             ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
             
             // Custom draw code is handled separately.
@@ -2898,26 +2898,26 @@ namespace System.Windows.Forms {
             }
             else {
                 
-                NativeMethods.NMTREEVIEW* nmtv = (NativeMethods.NMTREEVIEW*)m.LParam;
+                ref readonly NativeMethods.NMTREEVIEW nmtv = ref m.GetLParamRef<NativeMethods.NMTREEVIEW>();
 
-                switch (nmtv->nmhdr.code) {
+                switch (nmtv.nmhdr.code) {
                     case NativeMethods.TVN_ITEMEXPANDING:
-                        m.Result = TvnExpanding(nmtv);
+                        m.Result = TvnExpanding(in nmtv);
                         break;
                     case NativeMethods.TVN_ITEMEXPANDED:
                         TvnExpanded(nmtv);
                         break;
                     case NativeMethods.TVN_SELCHANGING:
-                        m.Result = TvnSelecting(nmtv);
+                        m.Result = TvnSelecting(in nmtv);
                         break;
                     case NativeMethods.TVN_SELCHANGED:
-                        TvnSelected(nmtv);
+                        TvnSelected(in nmtv);
                         break;
                     case NativeMethods.TVN_BEGINDRAG:
-                        TvnBeginDrag(MouseButtons.Left, nmtv);
+                        TvnBeginDrag(MouseButtons.Left, in nmtv);
                         break;
                     case NativeMethods.TVN_BEGINRDRAG:
-                        TvnBeginDrag(MouseButtons.Right, nmtv);
+                        TvnBeginDrag(MouseButtons.Right, in nmtv);
                         break;
                     case NativeMethods.TVN_BEGINLABELEDIT:
                         m.Result = TvnBeginLabelEdit((NativeMethods.NMTVDISPINFO)m.GetLParam(typeof(NativeMethods.NMTVDISPINFO)));
@@ -2935,16 +2935,16 @@ namespace System.Windows.Forms {
                         tvhip.pt_x = pos.X;
                         tvhip.pt_y = pos.Y;
                         IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
-                        if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
+                        if (nmtv.nmhdr.code != NativeMethods.NM_CLICK
                                     || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0) {
-                                button = nmtv->nmhdr.code == NativeMethods.NM_CLICK
+                                button = nmtv.nmhdr.code == NativeMethods.NM_CLICK
                                     ? MouseButtons.Left : MouseButtons.Right;
                         }
 
                         // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                         // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
                         // We work around that by calling OnMouseUp here.
-                        if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
+                        if (nmtv.nmhdr.code != NativeMethods.NM_CLICK
                             || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0 || FullRowSelect) {
                             if (hnode != IntPtr.Zero && !ValidationCancelled) {
                                 OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), button, 1, pos.X, pos.Y));
@@ -2953,7 +2953,7 @@ namespace System.Windows.Forms {
 
                             }
                         }
-                        if (nmtv->nmhdr.code == NativeMethods.NM_RCLICK) {
+                        if (nmtv.nmhdr.code == NativeMethods.NM_RCLICK) {
                             TreeNode treeNode = NodeFromHandle(hnode);
                             if (treeNode != null && (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null)) {
                                 ShowContextMenu(treeNode);
@@ -2967,7 +2967,7 @@ namespace System.Windows.Forms {
                         }
 
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired]) {
-                            if (nmtv->nmhdr.code != NativeMethods.NM_CLICK
+                            if (nmtv.nmhdr.code != NativeMethods.NM_CLICK
                             || (tvhip.flags & NativeMethods.TVHT_ONITEM) != 0) {
                                 // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
                                 // LBUTTONUP happens on TVHT_ONITEM. This is a comctl quirk.
