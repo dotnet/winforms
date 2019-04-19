@@ -1515,7 +1515,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         private void WmNotifyDropDown(ref Message m) {
-            NativeMethods.NMTOOLBAR nmTB = (NativeMethods.NMTOOLBAR)m.GetLParam(typeof(NativeMethods.NMTOOLBAR));
+            ref readonly NativeMethods.NMTOOLBAR nmTB = ref m.GetLParamRef<NativeMethods.NMTOOLBAR>();
 
             ToolBarButton tbb = (ToolBarButton)buttons[nmTB.iItem];
             if (tbb == null)
