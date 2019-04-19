@@ -550,7 +550,7 @@ namespace System.Windows.Forms.Design
                     IntPtr hwnd = NativeMethods.WindowFromPoint(p.x, p.y);
                     if (hwnd != IntPtr.Zero)
                     {
-                        NativeMethods.SendMessage(hwnd, NativeMethods.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
+                        NativeMethods.SendMessage(hwnd, Interop.WindowMessages.WM_SETCURSOR, hwnd, (IntPtr)NativeMethods.HTCLIENT);
                     }
                     else
                     {

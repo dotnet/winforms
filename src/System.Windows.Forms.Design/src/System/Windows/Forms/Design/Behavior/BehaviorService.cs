@@ -942,7 +942,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_PAINT:
+                    case Interop.WindowMessages.WM_PAINT:
                         // Stash off the region we have to update
                         IntPtr hrgn = NativeMethods.CreateRectRgn(0, 0, 0, 0);
                         NativeMethods.GetUpdateRgn(m.HWnd, hrgn, true);
@@ -974,7 +974,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         break;
 
-                    case NativeMethods.WM_NCHITTEST:
+                    case Interop.WindowMessages.WM_NCHITTEST:
                         Point pt = new Point((short)NativeMethods.Util.LOWORD(unchecked((int)(long)m.LParam)),
                                              (short)NativeMethods.Util.HIWORD(unchecked((int)(long)m.LParam)));
                         NativeMethods.POINT pt1 = new NativeMethods.POINT
@@ -994,7 +994,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                         break;
 
-                    case NativeMethods.WM_CAPTURECHANGED:
+                    case Interop.WindowMessages.WM_CAPTURECHANGED:
                         base.WndProc(ref m);
                         _behaviorService.OnLoseCapture();
                         break;
@@ -1015,56 +1015,56 @@ namespace System.Windows.Forms.Design.Behavior
                 _behaviorService.PropagateHitTest(mouseLoc);
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_LBUTTONDOWN:
+                    case Interop.WindowMessages.WM_LBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_RBUTTONDOWN:
+                    case Interop.WindowMessages.WM_RBUTTONDOWN:
                         if (_behaviorService.OnMouseDown(MouseButtons.Right, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (_behaviorService.OnMouseMove(Control.MouseButtons, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_LBUTTONUP:
+                    case Interop.WindowMessages.WM_LBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Left))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_RBUTTONUP:
+                    case Interop.WindowMessages.WM_RBUTTONUP:
                         if (_behaviorService.OnMouseUp(MouseButtons.Right))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_MOUSEHOVER:
+                    case Interop.WindowMessages.WM_MOUSEHOVER:
                         if (_behaviorService.OnMouseHover(mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_LBUTTONDBLCLK:
+                    case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Left, mouseLoc))
                         {
                             return false;
                         }
                         break;
 
-                    case NativeMethods.WM_RBUTTONDBLCLK:
+                    case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                         if (_behaviorService.OnMouseDoubleClick(MouseButtons.Right, mouseLoc))
                         {
                             return false;
@@ -1150,7 +1150,7 @@ namespace System.Windows.Forms.Design.Behavior
                 {
                     if (_isHooked && nCode == NativeMethods.HC_ACTION)
                     {
-                        NativeMethods.MOUSEHOOKSTRUCT mhs = (NativeMethods.MOUSEHOOKSTRUCT)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.MOUSEHOOKSTRUCT));
+                        NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
                         if (mhs != null)
                         {
                             try
@@ -1241,11 +1241,11 @@ namespace System.Windows.Forms.Design.Behavior
                                 NativeMethods.MapWindowPoints(IntPtr.Zero, adornerWindow.Handle, pt, 1);
                                 Message m = Message.Create(hWnd, msg, (IntPtr)0, (IntPtr)MAKELONG(pt.y, pt.x));
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
-                                if (m.Msg == NativeMethods.WM_LBUTTONDOWN)
+                                if (m.Msg == Interop.WindowMessages.WM_LBUTTONDOWN)
                                 {
                                     _lastLButtonDownTimeStamp = UnsafeNativeMethods.GetMessageTime();
                                 }
-                                else if (m.Msg == NativeMethods.WM_LBUTTONDBLCLK)
+                                else if (m.Msg == Interop.WindowMessages.WM_LBUTTONDBLCLK)
                                 {
                                     int lButtonDoubleClickTimeStamp = UnsafeNativeMethods.GetMessageTime();
                                     if (lButtonDoubleClickTimeStamp == _lastLButtonDownTimeStamp)

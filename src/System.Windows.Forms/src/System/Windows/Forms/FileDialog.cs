@@ -550,7 +550,7 @@ namespace System.Windows.Forms {
         ///     Processes the CDN_FILEOK notification.
         /// </devdoc>
         private bool DoFileOk(IntPtr lpOFN) {
-            NativeMethods.OPENFILENAME_I ofn = (NativeMethods.OPENFILENAME_I)UnsafeNativeMethods.PtrToStructure(lpOFN, typeof(NativeMethods.OPENFILENAME_I));
+            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN);
             int saveOptions = options;
             int saveFilterIndex = filterIndex;
             string[] saveFileNames = fileNames;
@@ -663,17 +663,17 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
-            if (msg == NativeMethods.WM_NOTIFY) {
+            if (msg == Interop.WindowMessages.WM_NOTIFY) {
                 dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
                 try {
-                    UnsafeNativeMethods.OFNOTIFY notify = (UnsafeNativeMethods.OFNOTIFY)UnsafeNativeMethods.PtrToStructure(lparam, typeof(UnsafeNativeMethods.OFNOTIFY));
+                    UnsafeNativeMethods.OFNOTIFY notify = Marshal.PtrToStructure<UnsafeNativeMethods.OFNOTIFY>(lparam);
 
                     switch (notify.hdr_code) {
                         case -601: /* CDN_INITDONE */
                             MoveToScreenCenter(dialogHWnd);
                             break;
                         case -602: /* CDN_SELCHANGE */
-                            NativeMethods.OPENFILENAME_I ofn = (NativeMethods.OPENFILENAME_I)UnsafeNativeMethods.PtrToStructure(notify.lpOFN, typeof(NativeMethods.OPENFILENAME_I));
+                            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify.lpOFN);
                             // Get the buffer size required to store the selected file names.
                             int sizeNeeded = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, dialogHWnd), 1124 /*CDM_GETSPEC*/, System.IntPtr.Zero, System.IntPtr.Zero);
                             if (sizeNeeded > ofn.nMaxFile) {
@@ -919,7 +919,7 @@ namespace System.Windows.Forms {
                 if (fileNames != null) {
                     charBuffer.PutString(fileNames[0]);
                 }
-                ofn.lStructSize = Marshal.SizeOf(typeof(NativeMethods.OPENFILENAME_I));
+                ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 // Degrade to the older style dialog if we're not on Win2K.
                 // We do this by setting the struct size to a different value
                 //

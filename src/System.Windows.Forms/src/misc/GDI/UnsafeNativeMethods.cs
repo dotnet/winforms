@@ -247,7 +247,7 @@ namespace System.Experimental.Gdi
         public static extern int IntGetObject(HandleRef hBrush, int nSize, [In, Out] IntNativeMethods.LOGBRUSH lb);
         public static int GetObject(HandleRef hBrush, IntNativeMethods.LOGBRUSH lb) 
         {
-            int retVal = IntGetObject(hBrush, System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntNativeMethods.LOGBRUSH)), lb);
+            int retVal = IntGetObject(hBrush, System.Runtime.InteropServices.Marshal.SizeOf<IntNativeMethods.LOGBRUSH>(), lb);
             DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGBRUSH]) failed.", hBrush.Handle);
             return retVal;
         }
@@ -258,7 +258,7 @@ namespace System.Experimental.Gdi
         public static extern int IntGetObject(HandleRef hFont, int nSize, [In, Out] IntNativeMethods.LOGFONT lf);
         public static int GetObject(HandleRef hFont, IntNativeMethods.LOGFONT lp) 
         {
-            int retVal = IntGetObject(hFont, System.Runtime.InteropServices.Marshal.SizeOf(typeof(IntNativeMethods.LOGFONT)), lp);
+            int retVal = IntGetObject(hFont, System.Runtime.InteropServices.Marshal.SizeOf<IntNativeMethods.LOGFONT>(), lp);
             DbgUtil.AssertWin32(retVal != 0, "GetObject(hObj=[0x{0:X8}], [LOGFONT]) failed.", hFont.Handle);
             return retVal;
         }

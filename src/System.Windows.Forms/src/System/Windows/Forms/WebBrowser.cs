@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WndProc"]/*' />
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     int y = NativeMethods.Util.SignedHIWORD(m.LParam);
 
@@ -1793,7 +1793,7 @@ namespace System.Windows.Forms
                 {
                     int keyCode = (int)msg.wParam | (int)Control.ModifierKeys;
 
-                    if (msg.message != NativeMethods.WM_CHAR
+                    if (msg.message != Interop.WindowMessages.WM_CHAR
                             && Enum.IsDefined(typeof(Shortcut), (Shortcut)keyCode)) {
                         return NativeMethods.S_OK;
                     }

@@ -2526,7 +2526,7 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
                     int y = NativeMethods.Util.SignedHIWORD(m.LParam);
                     bool inBounds = GetHitTest(new Point(x, y));
@@ -2536,8 +2536,8 @@ namespace System.Windows.Forms.Design
                     }
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_LBUTTONDOWN:
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     // commit any insitu if any...
                     Commit();
                     base.WndProc(ref m);

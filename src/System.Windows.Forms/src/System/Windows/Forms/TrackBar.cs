@@ -1135,8 +1135,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_REFLECT+NativeMethods.WM_HSCROLL:
-                case NativeMethods.WM_REFLECT+NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_REFLECT+Interop.WindowMessages.WM_HSCROLL:
+                case Interop.WindowMessages.WM_REFLECT+Interop.WindowMessages.WM_VSCROLL:
                     switch (NativeMethods.Util.LOWORD(m.WParam)) {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:

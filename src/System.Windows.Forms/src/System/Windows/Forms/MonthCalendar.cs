@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms {
             NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO();
             mchi.pt_x = x;
             mchi.pt_y = y;
-            mchi.cbSize = Marshal.SizeOf(typeof(NativeMethods.MCHITTESTINFO));
+            mchi.cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>();
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_HITTEST, 0, mchi);
 
             // If the hit area has an associated valid date, get it
@@ -2317,20 +2317,20 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     FocusInternal();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
                     break;
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     base.WndProc(ref m);
                     break;
                 default:

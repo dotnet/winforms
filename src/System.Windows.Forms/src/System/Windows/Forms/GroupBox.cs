@@ -314,13 +314,13 @@ namespace System.Windows.Forms {
                bool suspendRedraw = this.Visible;
                try {
                     if (suspendRedraw && IsHandleCreated) {
-                        SendMessage(NativeMethods.WM_SETREDRAW, 0, 0);
+                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
                     }
                     base.Text = value;
                }
                finally {
                     if (suspendRedraw && IsHandleCreated) {
-                        SendMessage(NativeMethods.WM_SETREDRAW, 1, 0);
+                        SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
                     }
                }
                Invalidate(true);
@@ -771,11 +771,11 @@ namespace System.Windows.Forms {
             }
 
             switch (m.Msg) {
-                case NativeMethods.WM_ERASEBKGND:
-                case NativeMethods.WM_PRINTCLIENT:
+                case Interop.WindowMessages.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_PRINTCLIENT:
                     WmEraseBkgnd(ref m);
                     break;
-                case NativeMethods.WM_GETOBJECT:
+                case Interop.WindowMessages.WM_GETOBJECT:
                     base.WndProc(ref m);
 
                     // Force MSAA to always treat a group box as a custom window. This ensures its child controls
