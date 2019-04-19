@@ -1039,7 +1039,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
-        private void WmNotifyNMClick(NativeMethods.NMHDR note) {
+        private void WmNotifyNMClick(in NativeMethods.NMHDR note) {
 
             if (!showPanels) {
                 return;
@@ -1166,7 +1166,7 @@ namespace System.Windows.Forms {
                         case NativeMethods.NM_RCLICK:
                         case NativeMethods.NM_DBLCLK:
                         case NativeMethods.NM_RDBLCLK:
-                            WmNotifyNMClick(note);
+                            WmNotifyNMClick(in note);
                             break;
                         default:
                             base.WndProc(ref m);
