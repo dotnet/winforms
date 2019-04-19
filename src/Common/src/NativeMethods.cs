@@ -4044,7 +4044,7 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct HDLAYOUT {
+        public struct HDLAYOUT {
             public IntPtr       prc;        // pointer to a RECT
             public IntPtr       pwpos;      // pointer to a WINDOWPOS
         }
@@ -4374,7 +4374,7 @@ namespace System.Windows.Forms
             public int      cColumns; // tile view columns
             public IntPtr   puColumns;
 
-            public unsafe void Reset() {
+            public void Reset() {
                 pszText = null;
                 mask = 0;
                 iItem = 0;

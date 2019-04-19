@@ -627,21 +627,19 @@ namespace System.Windows.Forms {
             // do the actual copy
             int offsetSrc = 0;
             int offsetDest = 0;
-            unsafe {
-                for (int i = 0; i < targetData.Height; i++)
-                {
-                    IntPtr srcPtr, destPtr;
-                    if (IntPtr.Size == 4) {
-                        srcPtr = new IntPtr(sourceData.Scan0.ToInt32() + offsetSrc);
-                        destPtr = new IntPtr(targetData.Scan0.ToInt32() + offsetDest);
-                    } else {
-                        srcPtr = new IntPtr(sourceData.Scan0.ToInt64() + offsetSrc);
-                        destPtr = new IntPtr(targetData.Scan0.ToInt64() + offsetDest);
-                    }
-                    UnsafeNativeMethods.CopyMemory(new HandleRef(this, destPtr), new HandleRef(this, srcPtr), Math.Abs(targetData.Stride)); 
-                    offsetSrc += sourceData.Stride;
-                    offsetDest += targetData.Stride;
+            for (int i = 0; i < targetData.Height; i++)
+            {
+                IntPtr srcPtr, destPtr;
+                if (IntPtr.Size == 4) {
+                    srcPtr = new IntPtr(sourceData.Scan0.ToInt32() + offsetSrc);
+                    destPtr = new IntPtr(targetData.Scan0.ToInt32() + offsetDest);
+                } else {
+                    srcPtr = new IntPtr(sourceData.Scan0.ToInt64() + offsetSrc);
+                    destPtr = new IntPtr(targetData.Scan0.ToInt64() + offsetDest);
                 }
+                UnsafeNativeMethods.CopyMemory(new HandleRef(this, destPtr), new HandleRef(this, srcPtr), Math.Abs(targetData.Stride)); 
+                offsetSrc += sourceData.Stride;
+                offsetDest += targetData.Stride;
             }
         }
         

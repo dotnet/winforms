@@ -4412,7 +4412,7 @@ namespace System.Windows.Forms {
                 eh(this, e);
         }
 
-        private unsafe void PositionHeader() {
+        private void PositionHeader() {
             IntPtr hdrHWND = UnsafeNativeMethods.GetWindow(new HandleRef(this, this.Handle), NativeMethods.GW_CHILD);
             if (hdrHWND != IntPtr.Zero) {
 
