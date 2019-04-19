@@ -2397,7 +2397,7 @@ namespace System.Windows.Forms {
         }
 
         private unsafe void TvnBeginDrag(MouseButtons buttons, NativeMethods.NMTREEVIEW* nmtv) {
-            NativeMethods.TV_ITEM item = nmtv->itemNew;
+            ref readonly NativeMethods.TV_ITEM item = ref nmtv->itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero) {
@@ -2410,7 +2410,7 @@ namespace System.Windows.Forms {
         }
 
         private unsafe IntPtr TvnExpanding(NativeMethods.NMTREEVIEW* nmtv) {
-            NativeMethods.TV_ITEM item = nmtv->itemNew;
+            ref readonly NativeMethods.TV_ITEM item = ref nmtv->itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero) {
@@ -2430,7 +2430,7 @@ namespace System.Windows.Forms {
         }
 
         private unsafe void TvnExpanded(NativeMethods.NMTREEVIEW* nmtv) {
-            NativeMethods.TV_ITEM item = nmtv->itemNew;
+            ref readonly NativeMethods.TV_ITEM item = ref nmtv->itemNew;
 
             // Check for invalid node handle
             if (item.hItem == IntPtr.Zero) {
@@ -3086,7 +3086,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.TVM_SETITEM:
                     base.WndProc(ref m);
                     if (this.CheckBoxes) {
-                        NativeMethods.TV_ITEM item = (NativeMethods.TV_ITEM) m.GetLParam(typeof(NativeMethods.TV_ITEM));
+                        ref readonly NativeMethods.TV_ITEM item = ref m.GetLParamRef<NativeMethods.TV_ITEM>();
                         // Check for invalid node handle
                         if (item.hItem != IntPtr.Zero) {
                             NativeMethods.TV_ITEM item1 = new NativeMethods.TV_ITEM();
