@@ -2817,10 +2817,10 @@ namespace System.Windows.Forms {
             return retval;
         }
 
-        private unsafe bool WmShowToolTip(ref Message m)
+        private bool WmShowToolTip(ref Message m)
         {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
-            IntPtr tooltipHandle = nmhdr->hwndFrom;
+            ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
+            IntPtr tooltipHandle = nmhdr.hwndFrom;
             
                 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
@@ -2889,11 +2889,11 @@ namespace System.Windows.Forms {
 
 
         private unsafe void WmNotify(ref Message m) {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR *)m.LParam;
+            ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
             
             // Custom draw code is handled separately.
             //
-            if ((nmhdr->code ==  NativeMethods.NM_CUSTOMDRAW)) {
+            if ((nmhdr.code ==  NativeMethods.NM_CUSTOMDRAW)) {
                 CustomDraw(ref m);
             }
             else {

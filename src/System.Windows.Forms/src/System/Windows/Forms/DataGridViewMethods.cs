@@ -29802,22 +29802,22 @@ namespace System.Windows.Forms
             }
         }
 
-        private unsafe bool WmNotify(ref Message m)
+        private bool WmNotify(ref Message m)
         {
             if (m.LParam == IntPtr.Zero)
             {
                 return false;
             }
 
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR *)m.LParam;
-            if (nmhdr->code == NativeMethods.TTN_GETDISPINFO && !DesignMode)
+            ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
+            if (nmhdr.code == NativeMethods.TTN_GETDISPINFO && !DesignMode)
             {
                 string toolTip = this.ToolTipPrivate;
 
                 if (!string.IsNullOrEmpty(toolTip))
                 {
                     // MSDN: Setting the max width has the added benefit of enabling multiline tool tips!
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr.hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                     NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
 
                     ttt.lpszText = toolTip;

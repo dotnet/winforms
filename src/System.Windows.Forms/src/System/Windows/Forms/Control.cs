@@ -12842,15 +12842,15 @@ example usage
         ///     Handles the WM_NOTIFY message
         /// </devdoc>
         /// <internalonly/>
-        private unsafe void WmNotify(ref Message m) {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
-            if (!ReflectMessage(nmhdr->hwndFrom,ref m)) {
-                if(nmhdr->code == NativeMethods.TTN_SHOW) {
-                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+        private void WmNotify(ref Message m) {
+            ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
+            if (!ReflectMessage(nmhdr.hwndFrom,ref m)) {
+                if(nmhdr.code == NativeMethods.TTN_SHOW) {
+                    m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr.hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                     return;
                 }
-                if(nmhdr->code == NativeMethods.TTN_POP) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
+                if(nmhdr.code == NativeMethods.TTN_POP) {
+                    UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr.hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                 }
                 
                 DefWndProc(ref m);

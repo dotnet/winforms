@@ -5274,10 +5274,10 @@ namespace System.Windows.Forms {
         }
 
         private unsafe bool WmNotify(ref Message m) {
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+            ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
 
             // column header custom draw message handling
-            if (nmhdr->code == NativeMethods.NM_CUSTOMDRAW && OwnerDraw)
+            if (nmhdr.code == NativeMethods.NM_CUSTOMDRAW && OwnerDraw)
             {
                 try
                 {
@@ -5339,12 +5339,12 @@ namespace System.Windows.Forms {
             }
 
 
-            if (nmhdr->code == NativeMethods.NM_RELEASEDCAPTURE && listViewState[LISTVIEWSTATE_columnClicked]) {
+            if (nmhdr.code == NativeMethods.NM_RELEASEDCAPTURE && listViewState[LISTVIEWSTATE_columnClicked]) {
                 listViewState[LISTVIEWSTATE_columnClicked] = false;
                 OnColumnClick(new ColumnClickEventArgs(columnIndex));
             }
 
-            if (nmhdr->code == NativeMethods.HDN_BEGINTRACK) {
+            if (nmhdr.code == NativeMethods.HDN_BEGINTRACK) {
                this.listViewState[LISTVIEWSTATE_headerControlTracking] = true;
 
                // Reset our tracking information for the new BEGINTRACK cycle.
@@ -5362,7 +5362,7 @@ namespace System.Windows.Forms {
                }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ITEMCHANGING) {
+            if (nmhdr.code == NativeMethods.HDN_ITEMCHANGING) {
                 NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
 
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length &&
@@ -5396,7 +5396,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if ((nmhdr->code == NativeMethods.HDN_ITEMCHANGED) &&
+            if ((nmhdr.code == NativeMethods.HDN_ITEMCHANGED) &&
                 !this.listViewState[LISTVIEWSTATE_headerControlTracking]) {
                 NativeMethods.NMHEADER nmheader = (NativeMethods.NMHEADER)m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (columnHeaders != null && nmheader.iItem < columnHeaders.Length) {
@@ -5443,7 +5443,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ENDTRACK) {
+            if (nmhdr.code == NativeMethods.HDN_ENDTRACK) {
                 Debug.Assert(this.listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync...");
                 this.listViewState[LISTVIEWSTATE_headerControlTracking] = false;
                 if (this.listViewState1[LISTVIEWSTATE1_cancelledColumnWidthChanging]) {
@@ -5465,7 +5465,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_ENDDRAG) {
+            if (nmhdr.code == NativeMethods.HDN_ENDDRAG) {
                 NativeMethods.NMHEADER header = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (header.pItem != IntPtr.Zero) {
 
@@ -5520,7 +5520,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (nmhdr->code == NativeMethods.HDN_DIVIDERDBLCLICK) {
+            if (nmhdr.code == NativeMethods.HDN_DIVIDERDBLCLICK) {
                 // We need to keep track that the user double clicked the column header divider
                 // so we know that the column header width is changing.
                 this.listViewState[LISTVIEWSTATE_headerDividerDblClick] = true;
@@ -5624,9 +5624,9 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         private unsafe void WmReflectNotify(ref Message m) {
 
-            NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+            ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
 
-            switch (nmhdr->code) {
+            switch (nmhdr.code) {
                 case NativeMethods.NM_CUSTOMDRAW:
                     CustomDraw(ref m);
                     break;
@@ -5779,7 +5779,7 @@ namespace System.Windows.Forms {
                     NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
                     int displayIndex = GetIndexOfClickedItem(lvhi);
 
-                    MouseButtons button = nmhdr->code == NativeMethods.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
+                    MouseButtons button = nmhdr.code == NativeMethods.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
                     pos = PointToClient(pos);
 
@@ -5840,7 +5840,7 @@ namespace System.Windows.Forms {
                     break;
 
                 default:
-                    if (nmhdr->code == NativeMethods.LVN_GETDISPINFO) {
+                    if (nmhdr.code == NativeMethods.LVN_GETDISPINFO) {
                         // we use the LVN_GETDISPINFO message only in virtual mode
                         if (this.VirtualMode && m.LParam != IntPtr.Zero) {
                             NativeMethods.NMLVDISPINFO_NOTEXT dispInfo= (NativeMethods.NMLVDISPINFO_NOTEXT) m.GetLParam(typeof(NativeMethods.NMLVDISPINFO_NOTEXT));
@@ -5892,7 +5892,7 @@ namespace System.Windows.Forms {
 
                         }
                     }
-                    else if (nmhdr->code == NativeMethods.LVN_ODSTATECHANGED) {
+                    else if (nmhdr.code == NativeMethods.LVN_ODSTATECHANGED) {
                         if (VirtualMode && m.LParam != IntPtr.Zero) {
                             NativeMethods.NMLVODSTATECHANGE odStateChange = (NativeMethods.NMLVODSTATECHANGE) m.GetLParam(typeof(NativeMethods.NMLVODSTATECHANGE));
                             bool selectedChanged = (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != (odStateChange.uOldState & NativeMethods.LVIS_SELECTED);
@@ -5906,7 +5906,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-                    else if (nmhdr->code == NativeMethods.LVN_GETINFOTIP) {
+                    else if (nmhdr.code == NativeMethods.LVN_GETINFOTIP) {
                         if (ShowItemToolTips && m.LParam != IntPtr.Zero) {
                             NativeMethods.NMLVGETINFOTIP infoTip = (NativeMethods.NMLVGETINFOTIP) m.GetLParam(typeof(NativeMethods.NMLVGETINFOTIP));
                             ListViewItem lvi = Items[infoTip.item];
@@ -5917,7 +5917,7 @@ namespace System.Windows.Forms {
                                 // tool tips!
                                 //
                                 
-                                UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr->hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
+                                UnsafeNativeMethods.SendMessage(new HandleRef(this, nmhdr.hwndFrom), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
@@ -5928,7 +5928,7 @@ namespace System.Windows.Forms {
                             }
                         }
                     }
-                    else if (nmhdr->code == NativeMethods.LVN_ODFINDITEM) {
+                    else if (nmhdr.code == NativeMethods.LVN_ODFINDITEM) {
                         if (VirtualMode) {
                             NativeMethods.NMLVFINDITEM nmlvif = (NativeMethods.NMLVFINDITEM) m.GetLParam(typeof(NativeMethods.NMLVFINDITEM));
 

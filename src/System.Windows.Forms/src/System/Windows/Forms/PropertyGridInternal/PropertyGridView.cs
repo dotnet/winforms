@@ -5181,12 +5181,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         }
         
-        private unsafe bool WmNotify(ref Message m) {
+        private bool WmNotify(ref Message m) {
             if (m.LParam != IntPtr.Zero) {
-                NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+                ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
             
-                if (nmhdr->hwndFrom == ToolTip.Handle) {
-                    switch (nmhdr->code) {
+                if (nmhdr.hwndFrom == ToolTip.Handle) {
+                    switch (nmhdr.code) {
                         case NativeMethods.TTN_POP:
                             break;
                         case NativeMethods.TTN_SHOW:
@@ -6704,13 +6704,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return psheet.WantsTab(forward);
             }
       
-            private unsafe bool WmNotify(ref Message m) {
+            private bool WmNotify(ref Message m) {
                 
                 if (m.LParam != IntPtr.Zero) {
-                   NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
+                   ref readonly NativeMethods.NMHDR nmhdr = ref m.GetLParamRef<NativeMethods.NMHDR>();
                    
-                   if (nmhdr->hwndFrom == psheet.ToolTip.Handle) {
-                       switch (nmhdr->code) {
+                   if (nmhdr.hwndFrom == psheet.ToolTip.Handle) {
+                       switch (nmhdr.code) {
                           case NativeMethods.TTN_SHOW:
                              PropertyGridView.PositionTooltip(this, psheet.ToolTip, ClientRectangle);
                              m.Result = (IntPtr)1;
