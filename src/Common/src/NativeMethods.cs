@@ -4024,7 +4024,7 @@ namespace System.Windows.Forms {
             public   short oVft;
             [MarshalAs(UnmanagedType.I2)]
             public   short cScodesi;
-            public   NativeMethods.value_tagELEMDESC elemdescFunc;
+            public   NativeMethods.tagELEMDESC elemdescFunc;
             [MarshalAs(UnmanagedType.U2)]
             public   short wFuncFlags;
         }
@@ -4034,16 +4034,10 @@ namespace System.Windows.Forms {
             public   int memid;
             public   IntPtr lpstrSchema;
             public   IntPtr unionMember;
-            public   NativeMethods.value_tagELEMDESC elemdescVar;
+            public   NativeMethods.tagELEMDESC elemdescVar;
             [MarshalAs(UnmanagedType.U2)]
             public   short wVarFlags;
             public    /*NativeMethods.tagVARKIND*/ int varkind;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public unsafe struct  value_tagELEMDESC {
-            public    NativeMethods.tagTYPEDESC* tdesc;
-            public    NativeMethods.tagPARAMDESC paramdesc;
         }
 
         [StructLayout(LayoutKind.Sequential)]
