@@ -148,10 +148,6 @@ namespace System.Windows.Forms {
         // ActiveX wrapper controls that derive from this class should override the
         // below method and return their own WebBrowserSiteBaseBase derived object.
         //
-        // This method is protected by an InheritanceDemand because extending a
-        // site is strictly an advanced feature for which one needs UnmanagedCode
-        // permissions.
-        //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.CreateWebBrowserSiteBase"]/*' />
         /// <devdoc>
         ///     <para>

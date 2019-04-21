@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Diagnostics;
     using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
     using System.Security;
     using System.Windows.Forms.Layout; 
     using System.Windows.Forms.Design; 

@@ -391,10 +391,7 @@ namespace System.Windows.Forms {
         ///       Gets the Win32 instance handle for the application.
         ///    </para>
         /// </devdoc>
-        /* SECURITYUNDONE : should require EventQueue permission */
         protected virtual IntPtr Instance {
-            
-            
             get { return UnsafeNativeMethods.GetModuleHandle(null); }
         }
 

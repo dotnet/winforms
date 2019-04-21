@@ -2771,8 +2771,6 @@ namespace System.Windows.Forms {
 
         private void DeleteFileName(string fileName) {
             if (!string.IsNullOrEmpty(fileName)) {
-                // the list view needs the FileIOPermission when the app runs on an UNC share
-                // and the list view creates / destroys temporary files for its background image
                 
                 System.IO.FileInfo fi = new System.IO.FileInfo(fileName);
                 if (fi.Exists) {
@@ -2865,9 +2863,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (!string.IsNullOrEmpty(this.backgroundImageFileName) || this.bkImgFileNames != null) {
-                    // we need the fileIoPermission when the app runs on an UNC share and
-                    // the list view creates/deletes temporary files for its background image
-                    
+
                     System.IO.FileInfo fi;
                     if (!string.IsNullOrEmpty(this.backgroundImageFileName)) {
                         fi = new System.IO.FileInfo(this.backgroundImageFileName);
@@ -4637,9 +4633,6 @@ namespace System.Windows.Forms {
             string fileNameToDelete = this.backgroundImageFileName;
 
             if (this.BackgroundImage != null) {
-
-                // the list view needs these permissions when the app runs on an UNC share
-                // and the list view creates / destroys temporary files for its background image
 
                 // save the image to a temporary file name
                 string tempDirName = System.IO.Path.GetTempPath();

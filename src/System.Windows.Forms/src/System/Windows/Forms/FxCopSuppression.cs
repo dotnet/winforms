@@ -951,7 +951,6 @@ using System.Diagnostics.CodeAnalysis;
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.#GetTextExtent(System.String,System.Windows.Forms.Internal.WindowsFont)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.#GetTextMetrics()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Internal.WindowsGraphics.#MeasureText(System.String,System.Windows.Forms.Internal.WindowsFont,System.Drawing.Size,System.Windows.Forms.Internal.IntTextFormatFlags)")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.IntSecurity.#DemandFileIO(System.Security.Permissions.FileIOPermissionAccess,System.String)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Label.#Dispose(System.Boolean)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Label.#GetLeadingTextPaddingFromTextFormatFlags()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Label.#GetPreferredSizeCore(System.Drawing.Size)")]

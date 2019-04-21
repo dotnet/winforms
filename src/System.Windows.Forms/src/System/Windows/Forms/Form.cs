@@ -4153,8 +4153,6 @@ namespace System.Windows.Forms {
                 // Make sure we activate the active control.
                 Control activeControl = ActiveControl;
 
-                // Seems safe to call this here without demanding permissions, since we only
-                // get here if this form is enabled and active.
                 if( activeControl == null ){
                     SelectNextControlInternal(this, true, true, true, true);
                 }

@@ -1203,10 +1203,6 @@ namespace System.Windows.Forms.Design.Behavior
                     {
                         return false;
                     }
-                    // We could have hooked a control in a semitrust web page.  This would put semitrust frames above us, which could cause this to fail.
-                    // SECREVIEW, UNDONE. Think hard about this. Does this allow a project to have a web page that pointed to a malicious control?
-                    // I don't think so, because the malicious control would still be on the frame.
-                    new NamedPermissionSet("FullTrust").Assert();
 
                     foreach (AdornerWindow adornerWindow in AdornerWindow.s_adornerWindowList)
                     {

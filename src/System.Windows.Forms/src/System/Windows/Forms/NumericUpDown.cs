@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Security.Permissions;
     using System.Windows.Forms.Layout;
 
     /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown"]/*' />

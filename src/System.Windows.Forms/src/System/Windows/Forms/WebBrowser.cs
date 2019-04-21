@@ -1636,10 +1636,6 @@ namespace System.Windows.Forms
         //
         // WebBrowserSite class:
         //
-        //
-        // We slap InheritanceDemand on this class so that only users with
-        // UnmanagedCode permissions can override this type.
-        //
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite"]/*' />
         /// <devdoc>
         ///     <para>
