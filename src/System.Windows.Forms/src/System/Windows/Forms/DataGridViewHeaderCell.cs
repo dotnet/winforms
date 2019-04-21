@@ -486,6 +486,29 @@ namespace System.Windows.Forms
                 rectThemeMargins.Y = rectContent.Y;
                 rectThemeMargins.Width = DATAGRIDVIEWHEADERCELL_themeMargin - rectContent.Right;
                 rectThemeMargins.Height = DATAGRIDVIEWHEADERCELL_themeMargin - rectContent.Bottom;
+                // On older platforms, the theming margins for a header are unexpectedly (3, 0, 0, 0) when you'd expect something like (0, 0, 2, 3)
+                if (rectThemeMargins.X == 3 &&
+                    rectThemeMargins.Y + rectThemeMargins.Width + rectThemeMargins.Height == 0)
+                {
+                    rectThemeMargins = new Rectangle(0, 0, 2, 3);
+                }
+                else
+                {
+                    // On some platforms, the theming margins for a header are unexpectedly (0, 0, 0, 0) when you'd expect something like (2, 1, 0, 2)
+                    // Padding themePadding = DataGridViewHeaderCellRenderer.VisualStyleRenderer.GetMargins(g, MarginProperty.ContentMargins); /* or MarginProperty.SizingMargins */
+                    // does not work either at this time. It AVs -So we hard code the margins for now.
+                    try
+                    {
+                        string themeFilename = System.IO.Path.GetFileName(System.Windows.Forms.VisualStyles.VisualStyleInformation.ThemeFilename);
+                        if (string.Equals(themeFilename, AEROTHEMEFILENAME, StringComparison.OrdinalIgnoreCase))
+                        {
+                            rectThemeMargins = new Rectangle(2, 1, 0, 2);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
             }
 
             return rectThemeMargins;
