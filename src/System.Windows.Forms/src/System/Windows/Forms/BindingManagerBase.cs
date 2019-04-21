@@ -261,11 +261,7 @@ namespace System.Windows.Forms
 
         public abstract void ResumeBinding();
 
-        protected void PullData()
-        {
-            bool success;
-            PullData(out success);
-        }
+        protected void PullData() => PullData(out _);
 
         internal void PullData(out bool success)
         {
