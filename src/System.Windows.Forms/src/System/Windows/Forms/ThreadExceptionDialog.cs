@@ -280,8 +280,8 @@ namespace System.Windows.Forms {
             if (detailAnchor) {
                 b = detailsButton;
 
-                expandImage = DpiHelper.GetBitMapFromIcon(GetType(), DownBitmapName);
-                collapseImage = DpiHelper.GetBitMapFromIcon(GetType(), UpBitmapName);
+                expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
+                collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
                 if (DpiHelper.IsScalingRequirementMet)
                 {
@@ -325,12 +325,12 @@ namespace System.Windows.Forms {
             if (expandImage != null) {
                 expandImage.Dispose();
             }
-            expandImage = DpiHelper.GetBitMapFromIcon(GetType(), DownBitmapName);
+            expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
             if (collapseImage != null) {
                 collapseImage.Dispose();
             }
-            collapseImage = DpiHelper.GetBitMapFromIcon(GetType(), UpBitmapName);
+            collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
             ScaleBitmapLogicalToDevice(ref expandImage);
             ScaleBitmapLogicalToDevice(ref collapseImage);

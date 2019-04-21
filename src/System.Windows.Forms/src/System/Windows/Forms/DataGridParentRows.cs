@@ -730,7 +730,7 @@ namespace System.Windows.Forms {
 
         private Bitmap GetBitmap(string bitmapName) {
             try {
-                return DpiHelper.GetBitMapFromIcon(typeof(DataGridParentRows), bitmapName);
+                return DpiHelper.GetBitmapFromIcon(typeof(DataGridParentRows), bitmapName);
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());

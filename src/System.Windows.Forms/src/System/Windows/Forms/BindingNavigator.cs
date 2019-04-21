@@ -186,12 +186,12 @@ namespace System.Windows.Forms {
             // Set up images
             //
 
-            Bitmap moveFirstImage    = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
-            Bitmap movePreviousImage = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
-            Bitmap moveNextImage     = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
-            Bitmap moveLastImage     = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
-            Bitmap addNewImage       = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
-            Bitmap deleteImage       = DpiHelper.GetBitMapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
+            Bitmap moveFirstImage    = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
+            Bitmap movePreviousImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
+            Bitmap moveNextImage     = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
+            Bitmap moveLastImage     = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
+            Bitmap addNewImage       = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
+            Bitmap deleteImage       = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
 
 
             MoveFirstItem.Image    = moveFirstImage;

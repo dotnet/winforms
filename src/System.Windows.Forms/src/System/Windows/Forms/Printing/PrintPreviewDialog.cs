@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
 
             this.previewControl = new PrintPreviewControl();
             this.imageList = new ImageList();
-            imageList.Images.AddStrip(DpiHelper.GetBitMapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
+            imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
             InitForm();
         }
 
