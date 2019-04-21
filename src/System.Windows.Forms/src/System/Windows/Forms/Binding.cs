@@ -125,18 +125,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool IsComponentCreated(IBindableComponent component)
         {
-            if (component is Control ctrl)
-            {
-                return ctrl.Created;
-            }
-            
-            return true;
+            return !(component is Control control) || control.Created;
         }
 
         // <summary>
         /// Instance-specific property equivalent to the static method above
         // </summary>
-        internal bool ComponentCreated => IsComponentCreated(this._control);
+        internal bool ComponentCreated => IsComponentCreated(_control);
 
         private void FormLoaded(object sender, EventArgs e)
         {
@@ -213,38 +208,20 @@ namespace System.Windows.Forms
 
         public event BindingCompleteEventHandler BindingComplete
         {
-            add
-            {
-                _onComplete += value;
-            }
-            remove
-            {
-                _onComplete -= value;
-            }
+            add => _onComplete += value;
+            remove => _onComplete -= value;
         }
 
         public event ConvertEventHandler Parse
         {
-            add
-            {
-                _onParse += value;
-            }
-            remove
-            {
-                _onParse -= value;
-            }
+            add => _onParse += value;
+            remove => _onParse -= value;
         }
 
         public event ConvertEventHandler Format
         {
-            add
-            {
-                _onFormat += value;
-            }
-            remove
-            {
-                _onFormat -= value;
-            }
+            add => _onFormat += value;
+            remove => _onFormat -= value;
         }
 
         [DefaultValue(false)]
@@ -397,12 +374,12 @@ namespace System.Windows.Forms
                 {
                     if (_propInfo != null && _control != null)
                     {
-                        EventHandler handler = new EventHandler(this.Target_PropertyChanged);
+                        EventHandler handler = new EventHandler(Target_PropertyChanged);
                         _propInfo.AddValueChanged(_control, handler);
                     }
                     if (_validateInfo != null)
                     {
-                        CancelEventHandler handler = new CancelEventHandler(this.Target_Validate);
+                        CancelEventHandler handler = new CancelEventHandler(Target_Validate);
                         _validateInfo.AddEventHandler(_control, handler);
                     }
                 }
@@ -411,12 +388,12 @@ namespace System.Windows.Forms
             {
                 if (_propInfo != null && _control != null)
                 {
-                    EventHandler handler = new EventHandler(this.Target_PropertyChanged);
+                    EventHandler handler = new EventHandler(Target_PropertyChanged);
                     _propInfo.RemoveValueChanged(_control, handler);
                 }
                 if (_validateInfo != null)
                 {
-                    CancelEventHandler handler = new CancelEventHandler(this.Target_Validate);
+                    CancelEventHandler handler = new CancelEventHandler(Target_Validate);
                     _validateInfo.RemoveEventHandler(_control, handler);
                 }
             }
@@ -530,8 +507,7 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            ISite site = comp.Site;
-            return site != null && site.DesignMode;
+            return comp.Site?.DesignMode ?? false;
         }
 
         private object GetDataSourceNullValue(Type type)
@@ -542,12 +518,7 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "Perfectly acceptible when dealing with PropertyDescriptors")]
         private object GetPropValue()
         {
-            bool isNull = false;
-            if (_propIsNullInfo != null)
-            {
-                isNull = (bool)_propIsNullInfo.GetValue(_control);
-            }
-            if (isNull)
+            if (_propIsNullInfo != null && (bool)_propIsNullInfo.GetValue(_control))
             {
                 return DataSourceNullValue;
             }
