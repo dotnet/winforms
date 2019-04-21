@@ -2532,12 +2532,6 @@ namespace System.ComponentModel.Design
                     public static int LOWORD(int n) => n & 0xffff;
                 }
 
-                public static class CommonHandles
-                {
-                    public static HandleCollector GdiHandleCollector = new HandleCollector("GDI", 500);
-                    public static HandleCollector HdcHandleCollector = new HandleCollector("HDC", 2);
-                }
-
                 [StructLayout(LayoutKind.Sequential)]
                 public class SIZE
                 {

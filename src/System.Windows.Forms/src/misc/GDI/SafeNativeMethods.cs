@@ -29,27 +29,6 @@ namespace System.Experimental.Gdi
 #endif
     static partial class IntSafeNativeMethods 
     {
-        public sealed class CommonHandles 
-        {
-            static CommonHandles(){}
-            
-            /// <devdoc>
-            ///     Handle type for enhanced metafiles.
-            /// </devdoc>
-            public static readonly int EMF = System.Internal.HandleCollector.RegisterType("EnhancedMetaFile", 20, 500);
-
-            /// <devdoc>
-            ///     Handle type for GDI objects.
-            /// </devdoc>
-            public static readonly int GDI = System.Internal.HandleCollector.RegisterType("GDI", 90, 50);
-
-            /// <devdoc>
-            ///     Handle type for HDC's that count against the Win98 limit of five DC's.  HDC's
-            ///     which are not scarce, such as HDC's for bitmaps, are counted as GDIHANDLE's.
-            /// </devdoc>
-            public static readonly int HDC = System.Internal.HandleCollector.RegisterType("HDC", 100, 2); // wait for 2 dc's before collecting
-        }
-       
         // Brush.
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint = "CreateSolidBrush", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
