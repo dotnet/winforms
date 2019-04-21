@@ -282,17 +282,15 @@ namespace System.Windows.Forms {
         internal static readonly object EventPaddingChanged           = new object();
         private static readonly object EventPreviewKeyDown            = new object();
 
-        #if WIN95_SUPPORT
         private static int mouseWheelMessage = Interop.WindowMessages.WM_MOUSEWHEEL;
         private static bool mouseWheelRoutingNeeded;
         private static bool mouseWheelInit;
-        #endif
 
         private static int threadCallbackMessage;
 
         // Initially check for illegal multithreading based on whether the
         // debugger is attached.
-        
+
         private static bool checkForIllegalCrossThreadCalls = Debugger.IsAttached;
         private static ContextCallback invokeMarshaledCallbackHelperDelegate;
 
@@ -494,9 +492,7 @@ example usage
                      ControlStyles.UseTextForAccessibility |
                      ControlStyles.Selectable,true);
 
-#if WIN95_SUPPORT
             InitMouseWheelSupport();
-#endif
 
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
@@ -6912,7 +6908,6 @@ example usage
             }
         }
 
-        #if WIN95_SUPPORT
         /// <devdoc>
         ///     Initializes mouse wheel support. This may involve registering some windows
         ///     messages on older operating systems.
@@ -6949,7 +6944,6 @@ example usage
                 mouseWheelInit = true;
             }
         }
-        #endif
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidate"]/*' />
         /// <devdoc>
@@ -13776,7 +13770,6 @@ example usage
                         return;
                     }
 
-                    #if WIN95_SUPPORT
                     // If we have to route the mousewheel messages, do it (this logic was taken
                     // from the MFC sources...)
                     //
@@ -13805,7 +13798,6 @@ example usage
                             }
                         }
                     }
-                    #endif
 
                     if (m.Msg == NativeMethods.WM_MOUSEENTER) {
                         WmMouseEnter(ref m);

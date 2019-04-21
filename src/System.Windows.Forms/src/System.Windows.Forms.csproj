@@ -8,7 +8,7 @@
     <CLSCompliant>true</CLSCompliant>
     <!--the obsolete usage in public surface can't be removed-->
     <NoWarn>$(NoWarn);618</NoWarn>
-    <DefineConstants>$(DefineConstants);WIN95_SUPPORT;WINDOWS_FORMS_SWITCHES;DRAWING_DESIGN_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
+    <DefineConstants>$(DefineConstants);WINDOWS_FORMS_SWITCHES;DRAWING_DESIGN_NAMESPACE;OPTIMIZED_MEASUREMENTDC;</DefineConstants>
     <Win32Manifest>Resources\System\Windows\Forms\XPThemes.manifest</Win32Manifest>
     <Deterministic>true</Deterministic>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
