@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Design {
                 if (!checkedBmp && bitmap == null) {
                     string bmpName = GetType().Name + "";
                     try {
-                        bitmap = DpiHelper.GetBitMapFromIcon(GetType(), bmpName);
+                        bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bmpName);
                     }
                     catch (Exception ex) {
                         Debug.Fail("Failed to find bitmap '" + bmpName + "' for class " + GetType().FullName, ex.ToString());

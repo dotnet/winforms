@@ -277,7 +277,7 @@ namespace System.Windows.Forms {
                             indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap indeterminateCheckedBmp = DpiHelper.GetBitMapFromIcon(typeof(ToolStripMenuItem), "IndeterminateChecked");
+                            Bitmap indeterminateCheckedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "IndeterminateChecked");
                             if (indeterminateCheckedBmp != null) {
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp);
@@ -294,7 +294,7 @@ namespace System.Windows.Forms {
                             checkedImage = GetBitmapFromIcon("Checked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap checkedBmp = DpiHelper.GetBitMapFromIcon(typeof(ToolStripMenuItem), "Checked");
+                            Bitmap checkedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "Checked");
                             if (checkedBmp != null) {
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp);

@@ -60,7 +60,7 @@ namespace System.Windows.Forms {
          private static Image DownImage {
             get { 
                 if (downScrollImage == null) {
-                    downScrollImage = DpiHelper.GetBitMapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
+                    downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
                 }
                 return downScrollImage;
             }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms {
         private static Image UpImage {
             get { 
                 if (upScrollImage == null) {
-                    upScrollImage = DpiHelper.GetBitMapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
+                    upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
                 }
                 return upScrollImage;
             }

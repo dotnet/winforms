@@ -4404,7 +4404,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByPropertyImage {
             get {
-                return DpiHelper.GetBitMapFromIcon(typeof(PropertyGrid), "PBAlpha");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBAlpha");
             }
         }
 
@@ -4419,7 +4419,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByCategoryImage {
             get {
-                return DpiHelper.GetBitMapFromIcon(typeof(PropertyGrid), "PBCatego");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBCatego");
             }
         }
 
@@ -4434,7 +4434,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap ShowPropertyPageImage {
             get {
-                return DpiHelper.GetBitMapFromIcon(typeof(PropertyGrid), "PBPPage");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBPPage");
             }
         }
 
