@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms 
 {
-    using System.Internal;
     using System;
     using System.Drawing;
     using System.Windows.Forms.Internal;

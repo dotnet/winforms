@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, source));
             UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, target));
 
-            return System.Internal.HandleCollector.Add(colorMask, NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(colorMask, Interop.CommonHandles.GDI);
         }
 
         internal static IntPtr CreateHalftoneHBRUSH() {

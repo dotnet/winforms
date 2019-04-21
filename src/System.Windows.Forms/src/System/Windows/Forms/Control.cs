@@ -6336,7 +6336,7 @@ example usage
         internal IntPtr GetHRgn(Region region) {
             Graphics graphics = CreateGraphicsInternal();
             IntPtr handle = region.GetHrgn(graphics);
-            System.Internal.HandleCollector.Add(handle, NativeMethods.CommonHandles.GDI);
+            Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             graphics.Dispose();
             return handle;
         }
@@ -11517,7 +11517,7 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetVisibleCore"]/*' />
         protected virtual void SetVisibleCore(bool value) {
             try {
-                System.Internal.HandleCollector.SuspendCollect();
+                Interop.HandleCollector.SuspendCollect();
 
                 if (GetVisibleCore() != value) {
                     if (!value) {
@@ -11606,7 +11606,7 @@ example usage
                 }
             }
             finally {
-                System.Internal.HandleCollector.ResumeCollect();
+                Interop.HandleCollector.ResumeCollect();
             }
         }
 
@@ -19101,7 +19101,7 @@ example usage
                 if (CompModSwitches.LifetimeTracing.Enabled) stackOnCreate = new System.Diagnostics.StackTrace().ToString();
 #endif
                 handle = font.ToHfont();
-                System.Internal.HandleCollector.Add(handle, NativeMethods.CommonHandles.GDI);
+                Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             }
 
             internal IntPtr Handle {

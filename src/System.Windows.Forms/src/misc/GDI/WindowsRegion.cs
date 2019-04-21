@@ -11,7 +11,6 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;
-    using System.Internal;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -78,7 +77,7 @@ namespace System.Experimental.Gdi
 
                 if (takeOwnership) {
                     wr.ownHandle = true;
-                    System.Internal.HandleCollector.Add(hRegion, IntSafeNativeMethods.CommonHandles.GDI);
+                    Interop.HandleCollector.Add(hRegion, Interop.CommonHandles.GDI);
                 }
             }
             return wr;
