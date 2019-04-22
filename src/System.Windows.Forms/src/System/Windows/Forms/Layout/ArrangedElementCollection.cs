@@ -5,7 +5,6 @@
 namespace System.Windows.Forms.Layout {
 
     using System.Collections;
-    using System.Security.Permissions;
 
     /// <include file='doc\Layout.uex' path='docs/doc[@for="Layout.ArrangedElementCollection"]/*' />
     public class ArrangedElementCollection : IList

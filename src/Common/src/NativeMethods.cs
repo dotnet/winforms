@@ -46,7 +46,6 @@ namespace System.Windows.Forms {
     using Accessibility;
     using System.Runtime.InteropServices;
     using System;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Diagnostics;
     using System.IO;
@@ -361,27 +360,7 @@ namespace System.Windows.Forms {
         CONNECT_E_NOCONNECTION = unchecked((int)0x80040200),
         CONNECT_E_CANNOTCONNECT = unchecked((int)0x80040202),
         CTRLINFO_EATS_RETURN    = 1,
-        CTRLINFO_EATS_ESCAPE    = 2,
-        CSIDL_DESKTOP                    = 0x0000,        // <desktop>
-        CSIDL_INTERNET                   = 0x0001,        // Internet Explorer (icon on desktop)
-        CSIDL_PROGRAMS                   = 0x0002,        // Start Menu\Programs
-        CSIDL_PERSONAL                   = 0x0005,        // My Documents
-        CSIDL_FAVORITES                  = 0x0006,        // <user name>\Favorites
-        CSIDL_STARTUP                    = 0x0007,        // Start Menu\Programs\Startup
-        CSIDL_RECENT                     = 0x0008,        // <user name>\Recent
-        CSIDL_SENDTO                     = 0x0009,        // <user name>\SendTo
-        CSIDL_STARTMENU                  = 0x000b,        // <user name>\Start Menu
-        CSIDL_DESKTOPDIRECTORY           = 0x0010,        // <user name>\Desktop
-        CSIDL_TEMPLATES                  = 0x0015,
-        CSIDL_APPDATA                    = 0x001a,        // <user name>\Application Data
-        CSIDL_LOCAL_APPDATA              = 0x001c,        // <user name>\Local Settings\Applicaiton Data (non roaming)
-        CSIDL_INTERNET_CACHE             = 0x0020,
-        CSIDL_COOKIES                    = 0x0021,
-        CSIDL_HISTORY                    = 0x0022,
-        CSIDL_COMMON_APPDATA             = 0x0023,        // All Users\Application Data
-        CSIDL_SYSTEM                     = 0x0025,        // GetSystemDirectory()
-        CSIDL_PROGRAM_FILES              = 0x0026,        // C:\Program Files
-        CSIDL_PROGRAM_FILES_COMMON       = 0x002b;        // C:\Program Files\Common
+        CTRLINFO_EATS_ESCAPE    = 2;
 
         public const int DUPLICATE = 0x06,
         DISPID_UNKNOWN = (-1),
@@ -491,29 +470,7 @@ namespace System.Windows.Forms {
         EN_ALIGN_LTR_EC = 0x0700,
         EN_ALIGN_RTL_EC = 0x0701,
         EC_LEFTMARGIN = 0x0001,
-        EC_RIGHTMARGIN = 0x0002,
-        EM_GETSEL = 0x00B0,
-        EM_SETSEL = 0x00B1,
-        EM_SCROLL = 0x00B5,
-        EM_SCROLLCARET = 0x00B7,
-        EM_GETMODIFY = 0x00B8,
-        EM_SETMODIFY = 0x00B9,
-        EM_GETLINECOUNT = 0x00BA,
-        EM_REPLACESEL = 0x00C2,
-        EM_GETLINE = 0x00C4,
-        EM_LIMITTEXT = 0x00C5,
-        EM_CANUNDO = 0x00C6,
-        EM_UNDO = 0x00C7,
-        EM_SETPASSWORDCHAR = 0x00CC,
-        EM_GETPASSWORDCHAR = 0x00D2,
-        EM_EMPTYUNDOBUFFER = 0x00CD,
-        EM_SETREADONLY = 0x00CF,
-        EM_SETMARGINS = 0x00D3,
-        EM_POSFROMCHAR = 0x00D6,
-        EM_CHARFROMPOS = 0x00D7,
-        EM_LINEFROMCHAR = 0x00C9,
-        EM_GETFIRSTVISIBLELINE = 0x00CE,
-        EM_LINEINDEX = 0x00BB;
+        EC_RIGHTMARGIN = 0x0002;
 
         public const int ERROR_INVALID_HANDLE = 6;
         public const int ERROR_CLASS_ALREADY_EXISTS = 1410;
@@ -1007,8 +964,6 @@ namespace System.Windows.Forms {
 
 
         public const int MEMBERID_NIL = (-1),
-        MAX_PATH = 260,
-        MAX_UNICODESTRING_LEN =  short.MaxValue, // maximum unicode string length 
         ERROR_INSUFFICIENT_BUFFER = 122, //https://msdn.microsoft.com/en-us/library/windows/desktop/ms681382(v=vs.85).aspx
         MA_ACTIVATE = 0x0001,
         MA_ACTIVATEANDEAT = 0x0002,
@@ -1101,10 +1056,10 @@ namespace System.Windows.Forms {
         NIIF_INFO = 0x00000001,
         NIIF_WARNING = 0x00000002,
         NIIF_ERROR = 0x00000003,
-        NIN_BALLOONSHOW = (WM_USER + 2),
-        NIN_BALLOONHIDE = (WM_USER + 3),
-        NIN_BALLOONTIMEOUT = (WM_USER + 4),
-        NIN_BALLOONUSERCLICK = (WM_USER + 5),
+        NIN_BALLOONSHOW = (Interop.WindowMessages.WM_USER + 2),
+        NIN_BALLOONHIDE = (Interop.WindowMessages.WM_USER + 3),
+        NIN_BALLOONTIMEOUT = (Interop.WindowMessages.WM_USER + 4),
+        NIN_BALLOONUSERCLICK = (Interop.WindowMessages.WM_USER + 5),
         NFR_ANSI = 1,
         NFR_UNICODE = 2,
         NM_CLICK = ((0-0)-2),
@@ -1612,7 +1567,7 @@ namespace System.Windows.Forms {
         TTM_POP = (0x0400 + 28),
         TTM_ADJUSTRECT = (0x400 + 31),
         TTM_SETDELAYTIME = (0x0400 + 3),
-        TTM_SETTITLE = (WM_USER + 33), // wParam = TTI_*, lParam = wchar* szTitle
+        TTM_SETTITLE = (Interop.WindowMessages.WM_USER + 33), // wParam = TTI_*, lParam = wchar* szTitle
         TTM_ADDTOOL = (0x0400 + 50),
         TTM_DELTOOL = (0x0400 + 51),
         TTM_NEWTOOLRECT = (0x0400 + 52),
@@ -1816,265 +1771,53 @@ namespace System.Windows.Forms {
         VK_INSERT = 0x002D,
         VK_DELETE = 0x002E;
 
-        public const int WH_JOURNALPLAYBACK = 1,
-        WH_GETMESSAGE = 3,
-        WH_MOUSE = 7,
-        WSF_VISIBLE = 0x0001,
-        WM_NULL = 0x0000,
-        WM_CREATE = 0x0001,
-        WM_DELETEITEM = 0x002D,
-        WM_DESTROY = 0x0002,
-        WM_MOVE = 0x0003,
-        WM_SIZE = 0x0005,
-        WM_ACTIVATE = 0x0006,
-        WA_INACTIVE = 0,
-        WA_ACTIVE = 1,
-        WA_CLICKACTIVE = 2,
-        WM_SETFOCUS = 0x0007,
-        WM_KILLFOCUS = 0x0008,
-        WM_ENABLE = 0x000A,
-        WM_SETREDRAW = 0x000B,
-        WM_SETTEXT = 0x000C,
-        WM_GETTEXT = 0x000D,
-        WM_GETTEXTLENGTH = 0x000E,
-        WM_PAINT = 0x000F,
-        WM_CLOSE = 0x0010,
-        WM_QUERYENDSESSION = 0x0011,
-        WM_QUIT = 0x0012,
-        WM_QUERYOPEN = 0x0013,
-        WM_ERASEBKGND = 0x0014,
-        WM_SYSCOLORCHANGE = 0x0015,
-        WM_ENDSESSION = 0x0016,
-        WM_SHOWWINDOW = 0x0018,
-        WM_WININICHANGE = 0x001A,
-        WM_SETTINGCHANGE = 0x001A,
-        WM_DEVMODECHANGE = 0x001B,
-        WM_ACTIVATEAPP = 0x001C,
-        WM_FONTCHANGE = 0x001D,
-        WM_TIMECHANGE = 0x001E,
-        WM_CANCELMODE = 0x001F,
-        WM_SETCURSOR = 0x0020,
-        WM_MOUSEACTIVATE = 0x0021,
-        WM_CHILDACTIVATE = 0x0022,
-        WM_QUEUESYNC = 0x0023,
-        WM_GETMINMAXINFO = 0x0024,
-        WM_PAINTICON = 0x0026,
-        WM_ICONERASEBKGND = 0x0027,
-        WM_NEXTDLGCTL = 0x0028,
-        WM_SPOOLERSTATUS = 0x002A,
-        WM_DRAWITEM = 0x002B,
-        WM_MEASUREITEM = 0x002C,
-        WM_VKEYTOITEM = 0x002E,
-        WM_CHARTOITEM = 0x002F,
-        WM_SETFONT = 0x0030,
-        WM_GETFONT = 0x0031,
-        WM_SETHOTKEY = 0x0032,
-        WM_GETHOTKEY = 0x0033,
-        WM_QUERYDRAGICON = 0x0037,
-        WM_COMPAREITEM = 0x0039,
-        WM_GETOBJECT = 0x003D,
-        WM_COMPACTING = 0x0041,
-        WM_COMMNOTIFY = 0x0044,
-        WM_WINDOWPOSCHANGING = 0x0046,
-        WM_WINDOWPOSCHANGED = 0x0047,
-        WM_POWER = 0x0048,
-        WM_COPYDATA = 0x004A,
-        WM_CANCELJOURNAL = 0x004B,
-        WM_NOTIFY = 0x004E,
-        WM_INPUTLANGCHANGEREQUEST = 0x0050,
-        WM_INPUTLANGCHANGE = 0x0051,
-        WM_TCARD = 0x0052,
-        WM_HELP = 0x0053,
-        WM_USERCHANGED = 0x0054,
-        WM_NOTIFYFORMAT = 0x0055,
-        WM_CONTEXTMENU = 0x007B,
-        WM_STYLECHANGING = 0x007C,
-        WM_STYLECHANGED = 0x007D,
-        WM_DISPLAYCHANGE = 0x007E,
-        WM_GETICON = 0x007F,
-        WM_SETICON = 0x0080,
-        WM_NCCREATE = 0x0081,
-        WM_NCDESTROY = 0x0082,
-        WM_NCCALCSIZE = 0x0083,
-        WM_NCHITTEST = 0x0084,
-        WM_NCPAINT = 0x0085,
-        WM_NCACTIVATE = 0x0086,
-        WM_GETDLGCODE = 0x0087,
-        WM_NCMOUSEMOVE = 0x00A0,
-        WM_NCMOUSELEAVE = 0x02A2,
-        WM_NCLBUTTONDOWN = 0x00A1,
-        WM_NCLBUTTONUP = 0x00A2,
-        WM_NCLBUTTONDBLCLK = 0x00A3,
-        WM_NCRBUTTONDOWN = 0x00A4,
-        WM_NCRBUTTONUP = 0x00A5,
-        WM_NCRBUTTONDBLCLK = 0x00A6,
-        WM_NCMBUTTONDOWN = 0x00A7,
-        WM_NCMBUTTONUP = 0x00A8,
-        WM_NCMBUTTONDBLCLK = 0x00A9,
-        WM_NCXBUTTONDOWN               = 0x00AB,
-        WM_NCXBUTTONUP                 = 0x00AC,
-        WM_NCXBUTTONDBLCLK             = 0x00AD,
-        WM_KEYFIRST = 0x0100,
-        WM_KEYDOWN = 0x0100,
-        WM_KEYUP = 0x0101,
-        WM_CHAR = 0x0102,
-        WM_DEADCHAR = 0x0103,
-        WM_CTLCOLOR = 0x0019,
-        WM_SYSKEYDOWN = 0x0104,
-        WM_SYSKEYUP = 0x0105,
-        WM_SYSCHAR = 0x0106,
-        WM_SYSDEADCHAR = 0x0107,
-        WM_KEYLAST = 0x0108,
-        WM_IME_STARTCOMPOSITION = 0x010D,
-        WM_IME_ENDCOMPOSITION = 0x010E,
-        WM_IME_COMPOSITION = 0x010F,
-        WM_IME_KEYLAST = 0x010F,
-        WM_INITDIALOG = 0x0110,
-        WM_COMMAND = 0x0111,
-        WM_SYSCOMMAND = 0x0112,
-        WM_TIMER = 0x0113,
-        WM_HSCROLL = 0x0114,
-        WM_VSCROLL = 0x0115,
-        WM_INITMENU = 0x0116,
-        WM_INITMENUPOPUP = 0x0117,
-        WM_MENUSELECT = 0x011F,
-        WM_MENUCHAR = 0x0120,
-        WM_ENTERIDLE = 0x0121,
-        WM_UNINITMENUPOPUP = 0x0125,
-        WM_CHANGEUISTATE = 0x0127,
-        WM_UPDATEUISTATE = 0x0128,
-        WM_QUERYUISTATE = 0x0129,
-        WM_CTLCOLORMSGBOX = 0x0132,
-        WM_CTLCOLOREDIT = 0x0133,
-        WM_CTLCOLORLISTBOX = 0x0134,
-        WM_CTLCOLORBTN = 0x0135,
-        WM_CTLCOLORDLG = 0x0136,
-        WM_CTLCOLORSCROLLBAR = 0x0137,
-        WM_CTLCOLORSTATIC = 0x0138,
-        WM_MOUSEFIRST = 0x0200,
-        WM_MOUSEMOVE = 0x0200,
-        WM_LBUTTONDOWN = 0x0201,
-        WM_LBUTTONUP = 0x0202,
-        WM_LBUTTONDBLCLK = 0x0203,
-        WM_RBUTTONDOWN = 0x0204,
-        WM_RBUTTONUP = 0x0205,
-        WM_RBUTTONDBLCLK = 0x0206,
-        WM_MBUTTONDOWN = 0x0207,
-        WM_MBUTTONUP = 0x0208,
-        WM_MBUTTONDBLCLK = 0x0209,
-        WM_XBUTTONDOWN                 = 0x020B,
-        WM_XBUTTONUP                   = 0x020C,
-        WM_XBUTTONDBLCLK               = 0x020D,
-        WM_MOUSEWHEEL = 0x020A,
-        WM_MOUSELAST = 0x020A;
+        public const int WH_JOURNALPLAYBACK = 1;
+        public const int WH_GETMESSAGE = 3;
+        public const int WH_MOUSE = 7;
+        public const int WSF_VISIBLE = 0x0001;
 
-        public const int WHEEL_DELTA = 120,
-        WM_PARENTNOTIFY = 0x0210,
-        WM_ENTERMENULOOP = 0x0211,
-        WM_EXITMENULOOP = 0x0212,
-        WM_NEXTMENU = 0x0213,
-        WM_SIZING = 0x0214,
-        WM_CAPTURECHANGED = 0x0215,
-        WM_MOVING = 0x0216,
-        WM_POWERBROADCAST = 0x0218,
-        WM_DEVICECHANGE = 0x0219,
-        WM_IME_SETCONTEXT = 0x0281,
-        WM_IME_NOTIFY = 0x0282,
-        WM_IME_CONTROL = 0x0283,
-        WM_IME_COMPOSITIONFULL = 0x0284,
-        WM_IME_SELECT = 0x0285,
-        WM_IME_CHAR = 0x0286,
-        WM_IME_KEYDOWN = 0x0290,
-        WM_IME_KEYUP = 0x0291,
-        WM_MDICREATE = 0x0220,
-        WM_MDIDESTROY = 0x0221,
-        WM_MDIACTIVATE = 0x0222,
-        WM_MDIRESTORE = 0x0223,
-        WM_MDINEXT = 0x0224,
-        WM_MDIMAXIMIZE = 0x0225,
-        WM_MDITILE = 0x0226,
-        WM_MDICASCADE = 0x0227,
-        WM_MDIICONARRANGE = 0x0228,
-        WM_MDIGETACTIVE = 0x0229,
-        WM_MDISETMENU = 0x0230,
-        WM_ENTERSIZEMOVE = 0x0231,
-        WM_EXITSIZEMOVE = 0x0232,
-        WM_DROPFILES = 0x0233,
-        WM_MDIREFRESHMENU = 0x0234,
-        WM_MOUSEHOVER = 0x02A1,
-        WM_MOUSELEAVE = 0x02A3,
-        WM_DPICHANGED = 0x02E0,
-        WM_GETDPISCALEDSIZE = 0x02e1,
-        WM_DPICHANGED_BEFOREPARENT = 0x02E2,
-        WM_DPICHANGED_AFTERPARENT = 0x02E3,
-        WM_CUT = 0x0300,
-        WM_COPY = 0x0301,
-        WM_PASTE = 0x0302,
-        WM_CLEAR = 0x0303,
-        WM_UNDO = 0x0304,
-        WM_RENDERFORMAT = 0x0305,
-        WM_RENDERALLFORMATS = 0x0306,
-        WM_DESTROYCLIPBOARD = 0x0307,
-        WM_DRAWCLIPBOARD = 0x0308,
-        WM_PAINTCLIPBOARD = 0x0309,
-        WM_VSCROLLCLIPBOARD = 0x030A,
-        WM_SIZECLIPBOARD = 0x030B,
-        WM_ASKCBFORMATNAME = 0x030C,
-        WM_CHANGECBCHAIN = 0x030D,
-        WM_HSCROLLCLIPBOARD = 0x030E,
-        WM_QUERYNEWPALETTE = 0x030F,
-        WM_PALETTEISCHANGING = 0x0310,
-        WM_PALETTECHANGED = 0x0311,
-        WM_HOTKEY = 0x0312,
-        WM_PRINT = 0x0317,
-        WM_PRINTCLIENT = 0x0318,
-        WM_THEMECHANGED = 0x031A,
-        WM_HANDHELDFIRST = 0x0358,
-        WM_HANDHELDLAST = 0x035F,
-        WM_AFXFIRST = 0x0360,
-        WM_AFXLAST = 0x037F,
-        WM_PENWINFIRST = 0x0380,
-        WM_PENWINLAST = 0x038F,
-        WM_APP = unchecked((int)0x8000),
-        WM_USER = 0x0400,
-        WM_REFLECT = NativeMethods.WM_USER + 0x1C00,
-        WS_OVERLAPPED = 0x00000000,
-        WS_POPUP = unchecked((int)0x80000000),
-        WS_CHILD = 0x40000000,
-        WS_MINIMIZE = 0x20000000,
-        WS_VISIBLE = 0x10000000,
-        WS_DISABLED = 0x08000000,
-        WS_CLIPSIBLINGS = 0x04000000,
-        WS_CLIPCHILDREN = 0x02000000,
-        WS_MAXIMIZE = 0x01000000,
-        WS_CAPTION = 0x00C00000,
-        WS_BORDER = 0x00800000,
-        WS_DLGFRAME = 0x00400000,
-        WS_VSCROLL = 0x00200000,
-        WS_HSCROLL = 0x00100000,
-        WS_SYSMENU = 0x00080000,
-        WS_THICKFRAME = 0x00040000,
-        WS_TABSTOP = 0x00010000,
-        WS_MINIMIZEBOX = 0x00020000,
-        WS_MAXIMIZEBOX = 0x00010000,
-        WS_EX_DLGMODALFRAME = 0x00000001,
-        WS_EX_MDICHILD = 0x00000040,
-        WS_EX_TOOLWINDOW = 0x00000080,
-        WS_EX_CLIENTEDGE = 0x00000200,
-        WS_EX_CONTEXTHELP = 0x00000400,
-        WS_EX_RIGHT = 0x00001000,
-        WS_EX_LEFT = 0x00000000,
-        WS_EX_RTLREADING = 0x00002000,
-        WS_EX_LEFTSCROLLBAR = 0x00004000,
-        WS_EX_CONTROLPARENT = 0x00010000,
-        WS_EX_STATICEDGE = 0x00020000,
-        WS_EX_APPWINDOW = 0x00040000,
-        WS_EX_LAYERED           = 0x00080000,
-        WS_EX_TOPMOST = 0x00000008,
-        WS_EX_LAYOUTRTL = 0x00400000,
-        WS_EX_NOINHERITLAYOUT = 0x00100000,
-        WPF_SETMINPOSITION = 0x0001,
-        WM_CHOOSEFONT_GETLOGFONT = (0x0400+1);
+        public const int WA_INACTIVE = 0;
+        public const int WA_ACTIVE = 1;
+        public const int WA_CLICKACTIVE = 2;
+
+        public const int WS_OVERLAPPED = 0x00000000;
+        public const int WS_POPUP = unchecked((int)0x80000000);
+        public const int WS_CHILD = 0x40000000;
+        public const int WS_MINIMIZE = 0x20000000;
+        public const int WS_VISIBLE = 0x10000000;
+        public const int WS_DISABLED = 0x08000000;
+        public const int WS_CLIPSIBLINGS = 0x04000000;
+        public const int WS_CLIPCHILDREN = 0x02000000;
+        public const int WS_MAXIMIZE = 0x01000000;
+        public const int WS_CAPTION = 0x00C00000;
+        public const int WS_BORDER = 0x00800000;
+        public const int WS_DLGFRAME = 0x00400000;
+        public const int WS_VSCROLL = 0x00200000;
+        public const int WS_HSCROLL = 0x00100000;
+        public const int WS_SYSMENU = 0x00080000;
+        public const int WS_THICKFRAME = 0x00040000;
+        public const int WS_TABSTOP = 0x00010000;
+        public const int WS_MINIMIZEBOX = 0x00020000;
+        public const int WS_MAXIMIZEBOX = 0x00010000;
+        public const int WS_EX_DLGMODALFRAME = 0x00000001;
+        public const int WS_EX_MDICHILD = 0x00000040;
+        public const int WS_EX_TOOLWINDOW = 0x00000080;
+        public const int WS_EX_CLIENTEDGE = 0x00000200;
+        public const int WS_EX_CONTEXTHELP = 0x00000400;
+        public const int WS_EX_RIGHT = 0x00001000;
+        public const int WS_EX_LEFT = 0x00000000;
+        public const int WS_EX_RTLREADING = 0x00002000;
+        public const int WS_EX_LEFTSCROLLBAR = 0x00004000;
+        public const int WS_EX_CONTROLPARENT = 0x00010000;
+        public const int WS_EX_STATICEDGE = 0x00020000;
+        public const int WS_EX_APPWINDOW = 0x00040000;
+        public const int WS_EX_LAYERED           = 0x00080000;
+        public const int WS_EX_TOPMOST = 0x00000008;
+        public const int WS_EX_LAYOUTRTL = 0x00400000;
+        public const int WS_EX_NOINHERITLAYOUT = 0x00100000;
+        public const int WPF_SETMINPOSITION = 0x0001;
+
+        public const int WHEEL_DELTA = 120;
 
         // wParam of report message WM_IME_NOTIFY (public\sdk\imm.h)
         public const int
@@ -2195,7 +1938,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         public class FONTDESC {
-            public int      cbSizeOfStruct = Marshal.SizeOf(typeof(FONTDESC));
+            public int      cbSizeOfStruct = Marshal.SizeOf<FONTDESC>();
             public string   lpstrName;
             public long     cySize;
             public short    sWeight;
@@ -2210,7 +1953,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCbmp {
-            internal int cbSizeOfStruct = Marshal.SizeOf(typeof(PICTDESCbmp));
+            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCbmp>();
             internal int picType = Ole.PICTYPE_BITMAP;
             internal IntPtr hbitmap = IntPtr.Zero;
             internal IntPtr hpalette = IntPtr.Zero;
@@ -2227,7 +1970,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCicon {
-            internal int cbSizeOfStruct = Marshal.SizeOf(typeof(PICTDESCicon));
+            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCicon>();
             internal int picType = Ole.PICTYPE_ICON;
             internal IntPtr hicon = IntPtr.Zero;
             internal int unused1 = 0;
@@ -2243,7 +1986,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
         public class PICTDESCemf {
-            internal int cbSizeOfStruct = Marshal.SizeOf(typeof(PICTDESCemf));
+            internal int cbSizeOfStruct = Marshal.SizeOf<PICTDESCemf>();
             internal int picType = Ole.PICTYPE_ENHMETAFILE;
             internal IntPtr hemf = IntPtr.Zero;
             internal int unused1 = 0;
@@ -2285,7 +2028,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_AKLINK {
-            internal int        cbStruct=Marshal.SizeOf(typeof(HH_AKLINK));
+            internal int        cbStruct=Marshal.SizeOf<HH_AKLINK>();
             internal bool      fReserved = false;
             internal string    pszKeywords = null;
             internal string    pszUrl = null;
@@ -2297,7 +2040,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_POPUP {
-            internal int       cbStruct=Marshal.SizeOf(typeof(HH_POPUP));
+            internal int       cbStruct=Marshal.SizeOf<HH_POPUP>();
             internal IntPtr    hinst = IntPtr.Zero;
             internal int       idString = 0;
             internal IntPtr    pszText;
@@ -2313,7 +2056,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class HH_FTS_QUERY {
-            internal int       cbStruct = Marshal.SizeOf(typeof(HH_FTS_QUERY));
+            internal int       cbStruct = Marshal.SizeOf<HH_FTS_QUERY>();
             internal bool      fUniCodeStrings = false;
             [MarshalAs(UnmanagedType.LPStr)]
             internal string    pszSearchQuery = null;
@@ -2327,7 +2070,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto, Pack=4)]
         public class MONITORINFOEX {
-            internal int     cbSize = Marshal.SizeOf(typeof(MONITORINFOEX));
+            internal int     cbSize = Marshal.SizeOf<MONITORINFOEX>();
             internal RECT    rcMonitor = new RECT();
             internal RECT    rcWork = new RECT();
             internal int     dwFlags = 0;
@@ -2337,7 +2080,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential,CharSet=CharSet.Auto, Pack=4)]
         public class MONITORINFO {
-            internal int     cbSize = Marshal.SizeOf(typeof(MONITORINFO));
+            internal int     cbSize = Marshal.SizeOf<MONITORINFO>();
             internal RECT    rcMonitor = new RECT();
             internal RECT    rcWork = new RECT();
             internal int     dwFlags = 0;
@@ -2518,7 +2261,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class IMAGELISTDRAWPARAMS {
-            public int      cbSize = Marshal.SizeOf(typeof(IMAGELISTDRAWPARAMS));
+            public int      cbSize = Marshal.SizeOf<IMAGELISTDRAWPARAMS>();
             public IntPtr   himl = IntPtr.Zero;
             public int      i = 0;
             public IntPtr   hdcDst = IntPtr.Zero;
@@ -2552,7 +2295,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class TRACKMOUSEEVENT {
-                public int      cbSize = Marshal.SizeOf(typeof(TRACKMOUSEEVENT));
+                public int      cbSize = Marshal.SizeOf<TRACKMOUSEEVENT>();
                 public int      dwFlags;
                 public IntPtr   hwndTrack;
                 public int      dwHoverTime = 100; // Never set this to field ZERO, or to HOVER_DEFAULT, ever!
@@ -2652,7 +2395,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class NONCLIENTMETRICS {
-            public int      cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS));
+            public int      cbSize = Marshal.SizeOf<NONCLIENTMETRICS>();
             public int      iBorderWidth = 0; 
             public int      iScrollWidth = 0; 
             public int      iScrollHeight = 0; 
@@ -2710,7 +2453,7 @@ namespace System.Windows.Forms {
         
         [StructLayout(LayoutKind.Sequential)]
         public class SCROLLINFO {
-            public int cbSize = Marshal.SizeOf(typeof(SCROLLINFO));
+            public int cbSize = Marshal.SizeOf<SCROLLINFO>();
             public int fMask;
             public int nMin;
             public int nMax;
@@ -2724,7 +2467,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class TPMPARAMS {
-            public int  cbSize = Marshal.SizeOf(typeof(TPMPARAMS));
+            public int  cbSize = Marshal.SizeOf<TPMPARAMS>();
             // rcExclude was a by-value RECT structure
             public int  rcExclude_left;
             public int  rcExclude_top;
@@ -3042,7 +2785,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public  sealed class tagFONTDESC {
-             public int cbSizeofstruct = Marshal.SizeOf(typeof(tagFONTDESC)); 
+             public int cbSizeofstruct = Marshal.SizeOf<tagFONTDESC>(); 
              
              [MarshalAs(UnmanagedType.LPWStr)]
              public string lpstrName; 
@@ -3068,7 +2811,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class CHOOSECOLOR {
-            public int      lStructSize = Marshal.SizeOf(typeof(CHOOSECOLOR)); //ndirect.DllLib.sizeOf(this);
+            public int      lStructSize = Marshal.SizeOf<CHOOSECOLOR>(); //ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
             public IntPtr   hInstance;
             public int      rgbResult;
@@ -3188,7 +2931,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class NOTIFYICONDATA {
-            public int      cbSize = Marshal.SizeOf(typeof(NOTIFYICONDATA));
+            public int      cbSize = Marshal.SizeOf<NOTIFYICONDATA>();
             public IntPtr   hWnd;
             public int      uID;
             public int      uFlags;
@@ -3209,7 +2952,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MENUITEMINFO_T
         {
-            public int      cbSize = Marshal.SizeOf(typeof(MENUITEMINFO_T));
+            public int      cbSize = Marshal.SizeOf<MENUITEMINFO_T>();
             public int      fMask;
             public int      fType;
             public int      fState;
@@ -3228,7 +2971,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MENUITEMINFO_T_RW
         {
-            public int      cbSize = Marshal.SizeOf(typeof(MENUITEMINFO_T_RW));
+            public int      cbSize = Marshal.SizeOf<MENUITEMINFO_T_RW>();
             public int      fMask = 0;
             public int      fType = 0;
             public int      fState = 0;
@@ -3261,7 +3004,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class OPENFILENAME_I
         {
-            public int      lStructSize = Marshal.SizeOf(typeof(OPENFILENAME_I)); //ndirect.DllLib.sizeOf(this);
+            public int      lStructSize = Marshal.SizeOf<OPENFILENAME_I>(); //ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
             public IntPtr   hInstance;
             public string   lpstrFilter;   // use embedded nulls to separate filters
@@ -3269,9 +3012,9 @@ namespace System.Windows.Forms {
             public int      nMaxCustFilter = 0;
             public int      nFilterIndex;
             public IntPtr   lpstrFile;
-            public int      nMaxFile = NativeMethods.MAX_PATH;
+            public int      nMaxFile = Interop.Kernel32.MAX_PATH;
             public IntPtr   lpstrFileTitle = IntPtr.Zero;
-            public int      nMaxFileTitle = NativeMethods.MAX_PATH;
+            public int      nMaxFileTitle = Interop.Kernel32.MAX_PATH;
             public string   lpstrInitialDir;
             public string   lpstrTitle;
             public int      Flags;
@@ -3288,7 +3031,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class CHOOSEFONT {
-            public int      lStructSize = Marshal.SizeOf(typeof(CHOOSEFONT));   // ndirect.DllLib.sizeOf(this);
+            public int      lStructSize = Marshal.SizeOf<CHOOSEFONT>();   // ndirect.DllLib.sizeOf(this);
             public IntPtr   hwndOwner;
             public IntPtr   hDC;
             public IntPtr   lpLogFont;
@@ -3487,7 +3230,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential)]
         [Serializable]
         public class MSOCRINFOSTRUCT {
-            public int cbSize = Marshal.SizeOf(typeof(MSOCRINFOSTRUCT));              // size of MSOCRINFO structure in bytes.
+            public int cbSize = Marshal.SizeOf<MSOCRINFOSTRUCT>();              // size of MSOCRINFO structure in bytes.
             public int uIdleTimeInterval;   // If olecrfNeedPeriodicIdleTime is registered
                                             // in grfcrf, component needs to perform
                                             // periodic idle time tasks during an idle phase
@@ -3647,7 +3390,7 @@ namespace System.Windows.Forms {
         public sealed class tagCONTROLINFO
         {
             [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-            public int cb = Marshal.SizeOf(typeof(tagCONTROLINFO));
+            public int cb = Marshal.SizeOf<tagCONTROLINFO>();
             
             public IntPtr hAccel;
             
@@ -3826,11 +3569,11 @@ namespace System.Windows.Forms {
                     return (val != IntPtr.Zero);
 
                 case (int)tagVT.VT_VARIANT:
-                    VARIANT varStruct = (VARIANT)UnsafeNativeMethods.PtrToStructure(val, typeof(VARIANT));
+                    VARIANT varStruct = Marshal.PtrToStructure<VARIANT>(val);
                     return varStruct.ToObject();
+
                 case (int)tagVT.VT_CLSID:
-                    //Debug.Fail("PtrToStructure will not work with System.Guid...");
-                    Guid guid =(Guid)UnsafeNativeMethods.PtrToStructure(val, typeof(Guid));
+                    Guid guid = Marshal.PtrToStructure<Guid>(val);
                     return guid;
 
                 case (int)tagVT.VT_FILETIME:
@@ -3841,9 +3584,6 @@ namespace System.Windows.Forms {
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, "VT_USERDEFINED"));
 
                 case (int)tagVT.VT_ARRAY:
-                    //gSAFEARRAY sa = (tagSAFEARRAY)Marshal.PtrToStructure(val), typeof(tagSAFEARRAY));
-                    //return GetArrayFromSafeArray(sa);
-
                 case (int)tagVT.VT_VOID:
                 case (int)tagVT.VT_PTR:
                 case (int)tagVT.VT_SAFEARRAY:
@@ -3860,7 +3600,6 @@ namespace System.Windows.Forms {
                 case (int)tagVT.VT_BSTR_BLOB:
                 case (int)tagVT.VT_VECTOR:
                 case (int)tagVT.VT_BYREF:
-                    //case (int)tagVT.VT_RESERVED:
                 default:
                     int iVt = this.vt;
                     throw new ArgumentException(string.Format(SR.COM2UnhandledVT, iVt.ToString(CultureInfo.InvariantCulture)));
@@ -3876,7 +3615,7 @@ namespace System.Windows.Forms {
         public sealed class tagLICINFO
         {
           [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cb)*/]
-          public int cbLicInfo = Marshal.SizeOf(typeof(tagLICINFO));
+          public int cbLicInfo = Marshal.SizeOf<tagLICINFO>();
           
           public int fRuntimeAvailable = 0;
           public int fLicVerified = 0;
@@ -4072,7 +3811,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLINFO_T
         {
-            public int      cbSize = Marshal.SizeOf(typeof(TOOLINFO_T));
+            public int      cbSize = Marshal.SizeOf<TOOLINFO_T>();
             public int      uFlags;
             public IntPtr   hwnd;
             public IntPtr   uId;
@@ -4085,7 +3824,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class TOOLINFO_TOOLTIP
         {
-            public int      cbSize = Marshal.SizeOf(typeof(TOOLINFO_TOOLTIP));
+            public int      cbSize = Marshal.SizeOf<TOOLINFO_TOOLTIP>();
             public int      uFlags;
             public IntPtr   hwnd;
             public IntPtr   uId;
@@ -4348,7 +4087,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public class HELPINFO {
-            public int      cbSize = Marshal.SizeOf(typeof(HELPINFO));
+            public int      cbSize = Marshal.SizeOf<HELPINFO>();
             public int      iContextType = 0;
             public int      iCtrlId = 0;
             public IntPtr   hItemHandle = IntPtr.Zero;
@@ -4511,7 +4250,7 @@ namespace System.Windows.Forms {
         
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class MCHITTESTINFO {
-            public int   cbSize = Marshal.SizeOf(typeof(MCHITTESTINFO));
+            public int   cbSize = Marshal.SizeOf<MCHITTESTINFO>();
             public int   pt_x = 0;
             public int   pt_y = 0;
             public int   uHit = 0;
@@ -4702,7 +4441,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
         public class LVGROUP {
-            public uint cbSize = (uint)Marshal.SizeOf(typeof(LVGROUP));
+            public uint cbSize = (uint)Marshal.SizeOf<LVGROUP>();
             public uint mask;
             public IntPtr pszHeader;
             public int cchHeader;
@@ -4720,7 +4459,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVINSERTMARK {
-            public uint cbSize = (uint)Marshal.SizeOf(typeof(LVINSERTMARK));
+            public uint cbSize = (uint)Marshal.SizeOf<LVINSERTMARK>();
             public int dwFlags;
             public int iItem;
             public int dwReserved = 0;
@@ -4728,7 +4467,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
         public class LVTILEVIEWINFO {
-            public uint cbSize = (uint)Marshal.SizeOf(typeof(LVTILEVIEWINFO));
+            public uint cbSize = (uint)Marshal.SizeOf<LVTILEVIEWINFO>();
             public int dwMask;
             public int dwFlags;
             public SIZE sizeTile;
@@ -4875,7 +4614,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMATW
         {
-            public int      cbSize = Marshal.SizeOf(typeof(CHARFORMATW));
+            public int      cbSize = Marshal.SizeOf<CHARFORMATW>();
             public int      dwMask;
             public int      dwEffects;
             public int      yHeight;
@@ -4890,7 +4629,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMATA
         {
-            public int      cbSize = Marshal.SizeOf(typeof(CHARFORMATA));
+            public int      cbSize = Marshal.SizeOf<CHARFORMATA>();
             public int      dwMask;
             public int      dwEffects;
             public int      yHeight;
@@ -4905,7 +4644,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, Pack=4)]
         public class CHARFORMAT2A
         {
-            public int      cbSize = Marshal.SizeOf(typeof(CHARFORMAT2A));
+            public int      cbSize = Marshal.SizeOf<CHARFORMAT2A>();
             public int      dwMask = 0;
             public int      dwEffects = 0;
             public int      yHeight = 0;
@@ -4951,7 +4690,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential)]
         public class PARAFORMAT
         {
-            public int      cbSize = Marshal.SizeOf(typeof(PARAFORMAT));
+            public int      cbSize = Marshal.SizeOf<PARAFORMAT>();
             public int      dwMask;
             public short    wNumbering;
             public short    wReserved = 0;
@@ -5011,7 +4750,7 @@ namespace System.Windows.Forms {
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public class OCPFIPARAMS
         {
-            public int cbSizeOfStruct = Marshal.SizeOf(typeof(OCPFIPARAMS));
+            public int cbSizeOfStruct = Marshal.SizeOf<OCPFIPARAMS>();
             public IntPtr hwndOwner;
             public int x = 0;
             public int y = 0;
@@ -5028,7 +4767,7 @@ namespace System.Windows.Forms {
         public class DOCHOSTUIINFO
         {
             [MarshalAs(UnmanagedType.U4)]
-            public int cbSize = Marshal.SizeOf(typeof(DOCHOSTUIINFO));
+            public int cbSize = Marshal.SizeOf<DOCHOSTUIINFO>();
             [MarshalAs(UnmanagedType.I4)]
             public int dwFlags;
             [MarshalAs(UnmanagedType.I4)]
@@ -5612,7 +5351,7 @@ namespace System.Windows.Forms {
 
         [StructLayout(LayoutKind.Sequential)]
         public struct BITMAPINFO_FLAT {
-            public int      bmiHeader_biSize;// = Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+            public int      bmiHeader_biSize;// = Marshal.SizeOf<BITMAPINFOHEADER>();
             public int      bmiHeader_biWidth;
             public int      bmiHeader_biHeight;
             public short    bmiHeader_biPlanes;
@@ -5700,6 +5439,8 @@ namespace System.Windows.Forms {
 
         public const int PS_GEOMETRIC = 0x00010000;
         public const int PS_ENDCAP_SQUARE = 0x00000100;
+
+        public const int WS_EX_TRANSPARENT = 0x00000020;
 
         public const int NULL_BRUSH = 5;
         public const int MM_HIMETRIC = 3;
@@ -6042,6 +5783,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public extern static IntPtr SendMessage(IntPtr hWnd, int Msg, int wParam, [In, Out] TV_HITTESTINFO lParam);
+
+        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr DefWindowProc(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.None)]
         public static extern short GetKeyState(int keyCode);
@@ -6065,6 +5810,8 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Gdi32, ExactSpelling = true, EntryPoint = "CreateRectRgn", CharSet = CharSet.Auto)]
         [ResourceExposure(ResourceScope.Process)]
         private static extern IntPtr IntCreateRectRgn(int x1, int y1, int x2, int y2);
+        [ResourceExposure(ResourceScope.Process)]
+        [ResourceConsumption(ResourceScope.Process)]
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
         {
             return System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), CommonHandles.GDI);

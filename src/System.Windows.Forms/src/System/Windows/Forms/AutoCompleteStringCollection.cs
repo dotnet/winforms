@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System.Collections;
-    using System.Security.Permissions;
     using System.ComponentModel;
 
     /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection"]/*' />
@@ -210,7 +209,6 @@ namespace System.Windows.Forms {
         /// <para>Gets an object that can be used to synchronize access to the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/>.</para>
         /// </devdoc>
         public object SyncRoot {
-            [HostProtection(Synchronization=true)]                
             [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
             get {
                 return this;

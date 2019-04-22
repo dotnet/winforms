@@ -7,10 +7,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// IOverlayService is a service that supports adding simple overlay windows to a design surface. Overlay windows can be used to paint extra glyphs on top of existing controls.
-    /// Once an overlay is added, it will be forced on top of the Z-order for the other controls and overlays.
-    /// If you want the overlay to be transparent, then you must do this work yourself.
-    /// A typical way to make an overlay control transparent is to use the method setRegion on the control class to define the non-transparent portion of the contro.
+    /// IOverlayService is a service that supports adding simple overlay windows to a design surface. Overlay windows can be used to paint extra glyphs on top of existing controls. Once an overlay is added, it will be forced on top of the Z-order for the other controls and overlays. If you want the overlay to be transparent, then you must do this work yourself. A typical way to make an overlay control transparent is to use the method setRegion on the control class to define the non-transparent portion of the control.
     /// </summary>
     internal interface IOverlayService
     {

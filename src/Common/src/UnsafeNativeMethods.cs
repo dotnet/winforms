@@ -92,8 +92,8 @@ namespace System.Windows.Forms {
         
         public static extern int ReadClassStg(HandleRef pStg, [In, Out] ref Guid pclsid);
 
-        [DllImport(ExternDll.Ole32, SetLastError = true, CharSet = CharSet.Auto, ExactSpelling = true)]
-        internal extern static void CoTaskMemFree(IntPtr pv);
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern int GetMessageTime();
 
         [DllImport(ExternDll.User32)]
         
@@ -194,24 +194,6 @@ namespace System.Windows.Forms {
         
         public static extern int OleSaveToStream(IPersistStream pPersistStream, IStream pStream);
 
-        [DllImport(ExternDll.Ole32)]
-        
-        public static extern int CoGetMalloc(int dwReserved, out IMalloc pMalloc);
-
-        /* Commenting this out until someone actually needs to use it again...
-        [DllImport(ExternDll.Ole32)]
-          public static extern int OleSetMenuDescriptor(IntPtr hOleMenu, IntPtr hWndFrame, IntPtr hWndActiveObject, IOleInPlaceFrame frame, IOleInPlaceActiveObject activeObject);
-        */
-
-        /* Commenting this out until someone actually needs to use it again...
-        [DllImport(ExternDll.Kernel32)]
-        public static extern bool IsBadReadPtr(HandleRef ptr, int size);
-        */
-
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
-        public static extern int GetMessageTime();
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         [ResourceExposure(ResourceScope.Process)]
         public static extern int GetWindowThreadProcessId(HandleRef hWnd, out int lpdwProcessId);
@@ -296,7 +278,7 @@ namespace System.Windows.Forms {
                     // passing null for buffer will return actual number of charectors in the file name.
                     // So, one extra call would be suffice to avoid while loop in case of long path.
                     int capacity = DragQueryFile(hDrop, iFile, null, 0);
-                    if (capacity < NativeMethods.MAX_UNICODESTRING_LEN)
+                    if (capacity < Interop.Kernel32.MAX_UNICODESTRING_LEN)
                     {
                         lpszFile.EnsureCapacity(capacity);
                         resultValue = DragQueryFile(hDrop, iFile, lpszFile, capacity);
@@ -443,17 +425,17 @@ namespace System.Windows.Forms {
         public static extern int GetModuleFileName(HandleRef hModule, StringBuilder buffer, int length);
         public static StringBuilder GetModuleFileNameLongPath(HandleRef hModule)
         {
-            StringBuilder buffer = new StringBuilder(NativeMethods.MAX_PATH);
+            StringBuilder buffer = new StringBuilder(Interop.Kernel32.MAX_PATH);
             int noOfTimes = 1;
             int length = 0;
             // Iterating by allocating chunk of memory each time we find the length is not sufficient.
             // Performance should not be an issue for current MAX_PATH length due to this change.
             while (((length = GetModuleFileName(hModule, buffer, buffer.Capacity)) == buffer.Capacity) 
                 && Marshal.GetLastWin32Error() == NativeMethods.ERROR_INSUFFICIENT_BUFFER 
-                && buffer.Capacity < NativeMethods.MAX_UNICODESTRING_LEN)
+                && buffer.Capacity < Interop.Kernel32.MAX_UNICODESTRING_LEN)
             {
                 noOfTimes += 2; // Increasing buffer size by 520 in each iteration.
-                int capacity = noOfTimes * NativeMethods.MAX_PATH < NativeMethods.MAX_UNICODESTRING_LEN ? noOfTimes * NativeMethods.MAX_PATH : NativeMethods.MAX_UNICODESTRING_LEN;
+                int capacity = noOfTimes * Interop.Kernel32.MAX_PATH < Interop.Kernel32.MAX_UNICODESTRING_LEN ? noOfTimes * Interop.Kernel32.MAX_PATH : Interop.Kernel32.MAX_UNICODESTRING_LEN;
                 buffer.EnsureCapacity(capacity);
             }
             buffer.Length = length;
@@ -589,21 +571,21 @@ namespace System.Windows.Forms {
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGPEN lp);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGPEN lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGPEN)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGPEN>(), lp);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGBRUSH lb);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGBRUSH lb) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGBRUSH)), lb);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGBRUSH>(), lb);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGFONT lf);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGFONT lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGFONT)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGFONT>(), lp);
         }
         
         //HPALETTE
@@ -836,7 +818,12 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.LVBKIMAGE lParam);
-        
+
+        [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
+
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern int SendMessage(HandleRef hWnd, int msg, int wParam, ref NativeMethods.LVHITTESTINFO lParam);
@@ -1001,7 +988,11 @@ namespace System.Windows.Forms {
         
         public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
-        
+
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
         
@@ -1016,17 +1007,7 @@ namespace System.Windows.Forms {
         
         public static extern IntPtr CallWindowProc(IntPtr wndProc, IntPtr hWnd, int msg,
                                                 IntPtr wParam, IntPtr lParam);
-        
-/*                                               
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr GetProp(HandleRef hWnd, int atom);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr GetProp(HandleRef hWnd, string name);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr RemoveProp(HandleRef hWnd, short atom);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        public static extern IntPtr RemoveProp(HandleRef hWnd, string propName);
-   */
+
         [DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern short GlobalDeleteAtom(short atom);
@@ -1041,10 +1022,7 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern bool GetClassInfo(HandleRef hInst, string lpszClass, IntPtr h);
-/*
-        [DllImport(ExternDll.Shell32, CharSet=CharSet.Auto)]
-        public static extern int SHGetFolderPath(HandleRef hwndOwner, int nFolder, HandleRef hToken, int dwFlags, StringBuilder lpszPath);
-*/        
+
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int GetSystemMetrics(int nIndex);
@@ -1053,6 +1031,9 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int GetSystemMetricsForDpi(int nIndex, uint dpi);
+
+        [DllImport(ExternDll.Gdi32, CharSet = CharSet.Auto)]
+        public static extern bool GetTextMetrics(HandleRef hdc, NativeMethods.TEXTMETRIC tm);
 
         /// <summary>
         /// Tries to get system metrics for the dpi. dpi is ignored if "GetSystemMetricsForDpi" is not available on the OS that this application is running.
@@ -1143,6 +1124,10 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Ole32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern int RevokeDragDrop(HandleRef hwnd);
+
+        [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern int RevokeDragDrop(IntPtr hwnd);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern bool PeekMessage([In, Out] ref NativeMethods.MSG msg, HandleRef hwnd, int msgMin, int msgMax, int remove);
@@ -1169,6 +1154,11 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc);
+
+        [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.Process)]
+        public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, IntPtr pAcc);
+
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern int CreateStdAccessibleObject(HandleRef hWnd, int objID, ref Guid refiid, [In, Out, MarshalAs(UnmanagedType.Interface)] ref object pAcc);
@@ -1193,7 +1183,11 @@ namespace System.Windows.Forms {
         public static IntPtr BeginPaint(HandleRef hWnd, [In, Out, MarshalAs(UnmanagedType.LPStruct)] ref NativeMethods.PAINTSTRUCT lpPaint) {
             return System.Internal.HandleCollector.Add(IntBeginPaint(hWnd, ref lpPaint), NativeMethods.CommonHandles.HDC);
         }
-        
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "BeginPaint", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern IntPtr BeginPaint(IntPtr hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
+
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="EndPaint", CharSet=CharSet.Auto)]
         
         private static extern bool IntEndPaint(HandleRef hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
@@ -1201,6 +1195,10 @@ namespace System.Windows.Forms {
             System.Internal.HandleCollector.Remove(lpPaint.hdc, NativeMethods.CommonHandles.HDC);
             return IntEndPaint(hWnd, ref lpPaint);
         }
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "EndPaint", CharSet = CharSet.Auto)]
+        [ResourceExposure(ResourceScope.None)]
+        public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="GetDC", CharSet=CharSet.Auto)]
         
@@ -1590,13 +1588,13 @@ namespace System.Windows.Forms {
                             regionRects = new NativeMethods.RECT[pRgnDataHeader->nCount];
 
                             Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf(typeof(NativeMethods.RECT)) == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+                            Debug.Assert(Marshal.SizeOf<NativeMethods.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
 
                             // use the header size as the offset, and cast each rect in.
                             int rectStart = pRgnDataHeader->cbSizeOfStruct;
                             for (int i = 0; i < pRgnDataHeader->nCount; i++) {
                                 // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf(typeof(NativeMethods.RECT)) * i)));
+                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<NativeMethods.RECT>() * i)));
                             }
                         }
                     }
@@ -7185,7 +7183,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTAINER
     {
       [MarshalAs(UnmanagedType.U4)]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTAINER));
+      public int cbSize = Marshal.SizeOf<tagQACONTAINER>();
 
       public UnsafeNativeMethods.IOleClientSite pClientSite;
 
@@ -7237,7 +7235,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTROL
     {
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTROL));
+      public int cbSize = Marshal.SizeOf<tagQACONTROL>();
 
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=4, dwMiscStatus)*/]
       public int dwMiscStatus = 0;
@@ -7292,271 +7290,68 @@ namespace System.Windows.Forms {
         string DefaultAction { get; }
     }
 
-    [ComImport(), Guid("0000000A-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface ILockBytes {
-
-        
-         void ReadAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-                [Out] 
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbRead);
-
-        
-         void WriteAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbWritten);
-
-        
-         void Flush();
-
-        
-         void SetSize(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb);
-
-        
-         void LockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void UnlockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void Stat(
-                [Out] 
-                  NativeMethods.STATSTG pstatstg,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int grfStatFlag);
-
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public class OFNOTIFY
-    {
-        // hdr was a by-value NMHDR structure
-        public IntPtr hdr_hwndFrom = IntPtr.Zero;
-        public IntPtr hdr_idFrom = IntPtr.Zero;
-        public int  hdr_code = 0;
-    
-        public IntPtr lpOFN = IntPtr.Zero;
-        public IntPtr pszFile = IntPtr.Zero;
-    }
-
-    internal static bool IsComObject(object o)
-    {
-        return Marshal.IsComObject(o);
-    }
-
-    internal static int ReleaseComObject(object objToRelease)
-    {
-        return Marshal.ReleaseComObject(objToRelease);
-    }
-            
-    public static object PtrToStructure(IntPtr lparam, Type cls) {
-        return Marshal.PtrToStructure(lparam, cls);
-    }
-    
-    public static void PtrToStructure(IntPtr lparam, object data) {
-        Marshal.PtrToStructure(lparam, data);
-    }
-
-        internal static int SizeOf(Type t)
+        [ComImport]
+        [Guid("0000000A-0000-0000-C000-000000000046")]
+        [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ILockBytes
         {
-            return Marshal.SizeOf(t);
+            void ReadAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                [Out] IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbRead
+            );
+
+            void WriteAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbWritten
+            );
+
+            void Flush();
+
+            void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
+
+            void LockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void UnlockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void Stat(
+                [Out] NativeMethods.STATSTG pstatstg,
+                [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag
+            );
         }
 
-        internal static void ThrowExceptionForHR(int errorCode)
+        [StructLayout(LayoutKind.Sequential)]
+        public class OFNOTIFY
         {
-            Marshal.ThrowExceptionForHR(errorCode);
-        }
+            // hdr was a by-value NMHDR structure
+            public IntPtr hdr_hwndFrom = IntPtr.Zero;
+            public IntPtr hdr_idFrom = IntPtr.Zero;
+            public int hdr_code = 0;
 
-
-        public delegate int BrowseCallbackProc(
-            IntPtr hwnd,
-            int msg, 
-            IntPtr lParam, 
-            IntPtr lpData);
-
-        [Flags]    
-        public enum BrowseInfos
-        {
-            NewDialogStyle      = 0x0040,   // Use the new dialog layout with the ability to resize
-            HideNewFolderButton = 0x0200    // Don't display the 'New Folder' button
-        }
-
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        public class BROWSEINFO 
-        {
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr hwndOwner; //HWND hwndOwner; // HWND of the owner for the dialog
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr pidlRoot; //LPCITEMIDLIST pidlRoot; // Root ITEMIDLIST
-    
-            // For interop purposes, send over a buffer of MAX_PATH size. 
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr pszDisplayName; //LPWSTR pszDisplayName; // Return display name of item selected.
-    
-            public string lpszTitle; //LPCWSTR lpszTitle; // text to go in the banner over the tree.
-            public int ulFlags; //UINT ulFlags; // Flags that control the return stuff
-            public BrowseCallbackProc lpfn; //BFFCALLBACK lpfn; // Call back pointer
-            [SuppressMessage("Microsoft.Reliability", "CA2006:UseSafeHandleToEncapsulateNativeResources")]
-            public IntPtr lParam; //LPARAM lParam; // extra info that's passed back in callbacks
-            public int iImage; //int iImage; // output var: where to return the Image index.
+            public IntPtr lpOFN = IntPtr.Zero;
+            public IntPtr pszFile = IntPtr.Zero;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
         internal class Shell32 
         {
-            [DllImport(ExternDll.Shell32)]
-            
-            public static extern int SHGetSpecialFolderLocation(IntPtr hwnd, int csidl, ref IntPtr ppidl);
-            //SHSTDAPI SHGetSpecialFolderLocation(HWND hwnd, int csidl, LPITEMIDLIST *ppidl);
-
-            [DllImport(ExternDll.Shell32, CharSet = CharSet.Auto)]
-            
-            private static extern bool SHGetPathFromIDListEx(IntPtr pidl, IntPtr pszPath, int cchPath, int flags);
-            //SHSTDAPI_(BOOL) SHGetPathFromIDListW(LPCITEMIDLIST pidl, LPWSTR pszPath);
-
-            public static bool SHGetPathFromIDListLongPath(IntPtr pidl, ref IntPtr pszPath)
-            {
-                int noOfTimes = 1;
-                int length = NativeMethods.MAX_PATH;
-                bool result = false;
-
-                // SHGetPathFromIDListEx returns false in case of insufficient buffer.
-                // This method does not distinguish between insufficient memory and an error. Until we get a proper solution,
-                // this logic would work. In the worst case scenario, loop exits when length reaches unicode string length.
-                while ((result = SHGetPathFromIDListEx(pidl, pszPath, length, 0)) == false 
-                        && length < NativeMethods.MAX_UNICODESTRING_LEN)
-                {
-                    string path = Marshal.PtrToStringAuto(pszPath);
-
-                    if (path.Length != 0 && path.Length < length)
-                        break;
-
-                    noOfTimes += 2; //520 chars capacity increase in each iteration.
-                    length = noOfTimes * length >= NativeMethods.MAX_UNICODESTRING_LEN 
-                        ? NativeMethods.MAX_UNICODESTRING_LEN : noOfTimes * length;
-                    pszPath = Marshal.ReAllocHGlobal(pszPath, (IntPtr)((length + 1) * sizeof(char)));
-                }
-
-                return result;
-            }
-
-            [DllImport(ExternDll.Shell32, CharSet=CharSet.Auto)]
-            
-            public static extern IntPtr SHBrowseForFolder([In] BROWSEINFO lpbi);        
-            //SHSTDAPI_(LPITEMIDLIST) SHBrowseForFolderW(LPBROWSEINFOW lpbi);
-              
-            [DllImport(ExternDll.Shell32)]
-            
-            public static extern int SHGetMalloc([Out, MarshalAs(UnmanagedType.LPArray)] UnsafeNativeMethods.IMalloc[] ppMalloc);
-            //SHSTDAPI SHGetMalloc(LPMALLOC * ppMalloc);
-
-            [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            
-            private static extern int SHGetKnownFolderPath(ref Guid rfid, uint dwFlags, IntPtr hToken, out IntPtr pszPath);
-
-            public static int SHGetFolderPathEx(ref Guid rfid, uint dwFlags, IntPtr hToken, StringBuilder pszPath)
-            {                
-                if (IsVista)
-                {
-                    IntPtr path = IntPtr.Zero;
-                    int result = -1;
-                    if ((result = SHGetKnownFolderPath(ref rfid, dwFlags, hToken, out path)) == NativeMethods.S_OK)
-                    {
-                        pszPath.Append(Marshal.PtrToStringAuto(path));
-                        CoTaskMemFree(path);
-                    }
-                    return result;
-                }
-                throw new NotSupportedException();
-            }
-
-            [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            
             public static extern int SHCreateShellItem(IntPtr pidlParent, IntPtr psfParent, IntPtr pidl, out FileDialogNative.IShellItem ppsi);
 
             [DllImport(ExternDll.Shell32, PreserveSig = true)]
-            
             public static extern int SHILCreateFromPath([MarshalAs(UnmanagedType.LPWStr)]string pszPath, out IntPtr ppIdl, ref uint rgflnOut);
         }
-
-        [
-        ComImport(), 
-        Guid("00000002-0000-0000-c000-000000000046"), 
-        System.Runtime.InteropServices.InterfaceTypeAttribute(System.Runtime.InteropServices.ComInterfaceType.InterfaceIsIUnknown)]
-        public interface IMalloc 
-        {
-            [PreserveSig]
-            IntPtr Alloc(int cb);
-
-            [PreserveSig]
-            IntPtr Realloc(IntPtr pv, int cb);
-
-            [PreserveSig]
-            void Free(IntPtr pv);
-
-            [PreserveSig]
-            int GetSize(IntPtr pv);
-
-            [PreserveSig]
-            int DidAlloc(IntPtr pv);
-
-            [PreserveSig]
-            void HeapMinimize();
-        }
-
-          [
-          ComImport,
-          Guid("00000126-0000-0000-C000-000000000046"),
-          InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)
-          ]
-          public interface IRunnableObject 
-          {
-               void GetRunningClass(out Guid guid);
-
-               [PreserveSig]
-               int Run(IntPtr lpBindContext);
-               bool IsRunning();
-               void LockRunning(bool fLock, bool fLastUnlockCloses);
-               void SetContainedObject(bool fContained);          
-          }
-
-        [ComVisible(true), ComImport(), Guid("B722BCC7-4E68-101B-A2BC-00AA00404770"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-               public interface IOleDocumentSite 
-          {
-    
-               [return: MarshalAs(UnmanagedType.I4)]
-               [PreserveSig]
-               int ActivateMe(
-                    [In, MarshalAs(UnmanagedType.Interface)] 
-                    IOleDocumentView pViewToActivate);
-    
-          }
 
           [ComVisible(true), Guid("B722BCC6-4E68-101B-A2BC-00AA00404770"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
                public interface IOleDocumentView 
@@ -8047,7 +7842,7 @@ namespace System.Windows.Forms {
 
                         enableThemingActivationContext = new ACTCTX();
 
-                        enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(ACTCTX));
+                        enableThemingActivationContext.cbSize = Marshal.SizeOf<ACTCTX>();
                         enableThemingActivationContext.lpSource = dllPath;
                         enableThemingActivationContext.lpResourceName = (IntPtr)nativeResourceManifestID;
                         enableThemingActivationContext.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
@@ -8333,16 +8128,10 @@ namespace System.Windows.Forms {
             IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd);
         }
 
-        /// <SecurityNote>
-        ///     Critical:Elevates to Unmanaged code permission
-        /// </SecurityNote>
         [ComImport()]
         [Guid("6D5140C1-7436-11CE-8034-00AA006009FA")]
         [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IServiceProvider {
-            ///<SecurityNote>
-            /// Critical elevates via a SUC.
-            ///</SecurityNote>
             [PreserveSig]
             int QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObj);
         }

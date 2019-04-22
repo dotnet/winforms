@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -141,7 +142,7 @@ namespace System.Windows.Forms.Tests
         public void TableLayoutPanelCellPosition_ConverterConvertFrom_InvalidString_ThrowsArgumentException(string value)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-            Assert.Throws<ArgumentException>(null, () => converter.ConvertFrom(value));
+            Assert.Throws<ArgumentException>("value", () => converter.ConvertFrom(value));
         }
 
         [Fact]
@@ -177,6 +178,7 @@ namespace System.Windows.Forms.Tests
             InstanceDescriptor descriptor = Assert.IsType<InstanceDescriptor>(converter.ConvertTo(new TableLayoutPanelCellPosition(1, 2), typeof(InstanceDescriptor)));
             Assert.Equal(typeof(TableLayoutPanelCellPosition).GetConstructor(new Type[] { typeof(int), typeof(int) }), descriptor.MemberInfo);
             Assert.Equal(new object[] { 1, 2 }, descriptor.Arguments);
+            Assert.True(descriptor.IsComplete);
         }
 
         [Fact]
@@ -208,12 +210,12 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             TableLayoutPanelCellPosition position = Assert.IsType<TableLayoutPanelCellPosition>(converter.CreateInstance(null, new Dictionary<string, object>
             {
-                {"Column", 1},
-                {"Row", 2}
+                {nameof(TableLayoutPanelCellPosition.Column), 1},
+                {nameof(TableLayoutPanelCellPosition.Row), 2}
             }));
-            Assert.Equal(1, position.Column);
-            Assert.Equal(2, position.Row);
+            Assert.Equal(new TableLayoutPanelCellPosition(1, 2), position);
         }
+
 
         [Fact]
         public void TableLayoutPanelCellPosition_ConverterCreateInstance_NullPropertyValues_ThrowsArgumentNullException()
@@ -221,16 +223,63 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(null, null));
         }
+        public static IEnumerable<object[]> CreateInstance_InvalidPropertyValueType_TestData()
+        {
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(TableLayoutPanelCellPosition.Row), new object()},
+                    {nameof(TableLayoutPanelCellPosition.Column), 2},
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(TableLayoutPanelCellPosition.Row), null},
+                    {nameof(TableLayoutPanelCellPosition.Column), 2},
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(TableLayoutPanelCellPosition.Column), 2}
+                }
+            };
 
-        [Fact]
-        public void TableLayoutPanelCellPosition_ConverterCreateInstance_InvalidColumnType_ThrowsInvalidCastException()
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(TableLayoutPanelCellPosition.Row), 1},
+                    {nameof(TableLayoutPanelCellPosition.Column), new object()}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(TableLayoutPanelCellPosition.Row), 1},
+                    {nameof(TableLayoutPanelCellPosition.Column), null}
+                }
+            };
+            yield return new object[]
+            {
+                new Dictionary<string, object>
+                {
+                    {nameof(TableLayoutPanelCellPosition.Row), 1}
+                }
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(CreateInstance_InvalidPropertyValueType_TestData))]
+        public void TableLayoutPanelCellPosition_CreateInstance_InvalidPropertyValueType_ThrowsArgumentException(IDictionary propertyValues)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(null, new Dictionary<string, object>
-            {
-                {"Column", new object()},
-                {"Row", 2}
-            }));
+            Assert.Throws<ArgumentException>("propertyValues", () => converter.CreateInstance(null, propertyValues));
         }
 
         [Fact]
@@ -239,8 +288,8 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentOutOfRangeException>("column", () => converter.CreateInstance(null, new Dictionary<string, object>
             {
-                {"Column", -2},
-                {"Row", 2}
+                {nameof(TableLayoutPanelCellPosition.Column), -2},
+                {nameof(TableLayoutPanelCellPosition.Row), 2}
             }));
         }
 
@@ -250,19 +299,8 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentOutOfRangeException>("row", () => converter.CreateInstance(null, new Dictionary<string, object>
             {
-                {"Column", 1},
-                {"Row", -2}
-            }));
-        }
-
-        [Fact]
-        public void TableLayoutPanelCellPosition_ConverterCreateInstance_InvalidRowType_ThrowsInvalidCastException()
-        {
-            TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
-            Assert.Throws<InvalidCastException>(() => converter.CreateInstance(null, new Dictionary<string, object>
-            {
-                {"Column", 1},
-                {"Row", new object()}
+                {nameof(TableLayoutPanelCellPosition.Column), 1},
+                {nameof(TableLayoutPanelCellPosition.Row), -2}
             }));
         }
 
@@ -279,8 +317,8 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             PropertyDescriptorCollection properties = converter.GetProperties(null);
             Assert.Equal(2, properties.Count);
-            Assert.Equal("Column", properties[0].Name);
-            Assert.Equal("Row", properties[1].Name);
+            Assert.Equal(nameof(TableLayoutPanelCellPosition.Column), properties[0].Name);
+            Assert.Equal(nameof(TableLayoutPanelCellPosition.Row), properties[1].Name);
         }
 
         [Fact]

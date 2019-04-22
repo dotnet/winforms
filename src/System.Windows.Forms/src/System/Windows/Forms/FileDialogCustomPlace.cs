@@ -5,7 +5,6 @@
 using System;
 using System.IO;
 using System.Security;
-using System.Security.Permissions;
 using System.Text;
 
 namespace System.Windows.Forms
@@ -68,53 +67,24 @@ namespace System.Windows.Forms
 
         internal FileDialogNative.IShellItem GetNativePath()
         {
-            //This can throw in a multitude of ways if the path or Guid doesn't correspond
-            //to an actual filesystem directory.  Caller is responsible for handling these situations.
-            string filePathString = "";
-            if (!string.IsNullOrEmpty(this._path))
+            // This can throw in a multitude of ways if the path or Guid doesn't correspond
+            // to an actual filesystem directory.
+            // The Caller is responsible for handling these situations.
+            string filePathString;
+            if (!string.IsNullOrEmpty(_path))
             {
-                filePathString = this._path;
+                filePathString = _path;
             }
             else
             {
-                filePathString = GetFolderLocation(this._knownFolderGuid);
+                int result = Interop.Shell32.SHGetKnownFolderPath(ref _knownFolderGuid, 0, IntPtr.Zero, out filePathString);
+                if (result == 0)
+                {
+                    return null;
+                }
             }
 
-            if (string.IsNullOrEmpty(filePathString))
-            {
-                return null;
-            }
-            else
-            {
-                return FileDialog.GetShellItemForPath(filePathString);
-            }
-        }
-
-        private static string GetFolderLocation(Guid folderGuid)
-        {
-            //returns a null string if the path can't be found
-
-            //SECURITY: This exposes the filesystem path of the GUID.  The returned value
-            // must not be made available to user code.
-
-            if (!UnsafeNativeMethods.IsVista)
-            { 
-                return null;
-            }
-
-            StringBuilder path = new StringBuilder();
-
-            int result = UnsafeNativeMethods.Shell32.SHGetFolderPathEx(ref folderGuid, 0, IntPtr.Zero, path);
-            if (NativeMethods.S_OK == result) 
-            {
-                string ret = path.ToString();
-                return ret;
-            }
-            else
-            {
-                // 0x80070002 is an explicit FileNotFound error.
-                return null;
-            }
+            return FileDialog.GetShellItemForPath(filePathString);
         }
     }
 }

@@ -1613,7 +1613,7 @@
     <value>Editing Panel</value>
   </data>
   <data name="DataGridView_AccHorizontalScrollBarAccName" xml:space="preserve">
-    <value>Horizontal Scroll Bar</value>
+    <value>Horizontal</value>
   </data>
   <data name="DataGridView_AccLinkCellDefaultAction" xml:space="preserve">
     <value>Click</value>
@@ -1646,7 +1646,7 @@
     <value>Top Row</value>
   </data>
   <data name="DataGridView_AccVerticalScrollBarAccName" xml:space="preserve">
-    <value>Vertical Scroll Bar</value>
+    <value>Vertical</value>
   </data>
   <data name="DataGridView_AColumnHasNoCellTemplate" xml:space="preserve">
     <value>At least one of the DataGridView control's columns has no cell template.</value>
@@ -5515,32 +5515,6 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ScrollBarVisibleDescr" xml:space="preserve">
     <value>Gets or sets a Boolean value controlling whether the scrollbar is showing.</value>
-  </data>
-  <data name="SecurityRestrictedWindowTextMixedZone" xml:space="preserve">
-    <value>Mixed Zone</value>
-  </data>
-  <data name="SecurityRestrictedWindowTextMultipleSites" xml:space="preserve">
-    <value>Multiple Sites</value>
-  </data>
-  <data name="SecurityRestrictedWindowTextUnknownSite" xml:space="preserve">
-    <value>Unknown Site</value>
-  </data>
-  <data name="SecurityRestrictedWindowTextUnknownZone" xml:space="preserve">
-    <value>Unknown Zone</value>
-  </data>
-  <data name="SecurityToolTipCaption" xml:space="preserve">
-    <value>Microsoft .NET Security Warning</value>
-  </data>
-  <data name="SecurityToolTipMainText" xml:space="preserve">
-    <value>Never enter personal information or passwords into a window unless you can verify and trust the source of the request.</value>
-  </data>
-  <data name="SecurityToolTipSourceInformation" xml:space="preserve">
-    <value>Source: {0}</value>
-  </data>
-  <data name="SecurityToolTipTextFormat" xml:space="preserve">
-    <value>{0}
-
-{1}</value>
   </data>
   <data name="selectedIndexChangedEventDescr" xml:space="preserve">
     <value>Occurs when the value of the SelectedIndex property changes.</value>

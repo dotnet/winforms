@@ -191,7 +191,7 @@ namespace System.Windows.Forms {
             set {
                 if (ImageIndexer.Index != value) {
                     if (value < -1)
-                        throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), -1));
+                        throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
 
                     ImageIndexer.Index = value;
                     UpdateButton(false);
@@ -547,7 +547,7 @@ namespace System.Windows.Forms {
             int buttonWidth = Parent.ButtonSize.Width;
             
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
-            button.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
+            button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
             button.dwMask = NativeMethods.TBIF_SIZE;
             
             int buttonID = (int)UnsafeNativeMethods.SendMessage(new HandleRef(Parent, Parent.Handle), NativeMethods.TB_GETBUTTONINFO, commandId, ref button);
@@ -621,7 +621,7 @@ namespace System.Windows.Forms {
         internal NativeMethods.TBBUTTONINFO GetTBBUTTONINFO(bool updateText, int newCommandId) {
 
             NativeMethods.TBBUTTONINFO button = new NativeMethods.TBBUTTONINFO();
-            button.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
+            button.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
             button.dwMask = NativeMethods.TBIF_IMAGE
                             | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE;
 

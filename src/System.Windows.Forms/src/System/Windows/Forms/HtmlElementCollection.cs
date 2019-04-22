@@ -9,7 +9,6 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;
@@ -52,8 +51,8 @@ namespace System.Windows.Forms {
         public HtmlElement this[int index] {
             get {
                 //do some bounds checking here...
-                if (index < 0 || index >= this.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
+                if (index < 0 || index >= Count) {
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
                 }
 
                 if (this.NativeHtmlElementCollection != null) {

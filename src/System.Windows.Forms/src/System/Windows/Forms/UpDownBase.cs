@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms {
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     if (!HostedInWin32DialogManager) {
                         if (ActiveControl == null) {
                             SetActiveControlInternal(TextBox);
@@ -1222,7 +1222,7 @@ namespace System.Windows.Forms {
                         base.WndProc(ref m);
                     }
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     DefWndProc(ref m);
                     break;
                 default:

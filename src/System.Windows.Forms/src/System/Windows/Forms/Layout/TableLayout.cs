@@ -1241,10 +1241,10 @@ namespace System.Windows.Forms.Layout {
 
         internal IArrangedElement GetControlFromPosition (IArrangedElement container, int column, int row) {
             if (row < 0) {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "RowPosition", row.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(row), row, string.Format(SR.InvalidArgument, "RowPosition", row));
             }
             if (column < 0) {
-                throw new ArgumentException(string.Format(SR.InvalidArgument, "ColumnPosition", column.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(column), column, string.Format(SR.InvalidArgument, "ColumnPosition", column));
             }
             ArrangedElementCollection children = container.Children;
             ContainerInfo containerInfo = GetContainerInfo(container);

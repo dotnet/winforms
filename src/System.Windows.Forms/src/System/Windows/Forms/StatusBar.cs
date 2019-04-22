@@ -1152,14 +1152,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
                     WmDrawItem(ref m);
                     break;
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
+                case Interop.WindowMessages.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
                         case NativeMethods.NM_CLICK:
@@ -1230,7 +1230,7 @@ namespace System.Windows.Forms {
                     int length = owner.panels.Count;
 
                     if (index < 0|| index >= length)
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
                     StatusBarPanel oldPanel = (StatusBarPanel) owner.panels[index];
                     oldPanel.ParentInternal = null;
@@ -1476,7 +1476,7 @@ namespace System.Windows.Forms {
                 int length = owner.panels.Count;
 
                 if (index < 0 || index > length)
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 value.ParentInternal = owner;
 
                 switch (value.AutoSize) {
@@ -1563,7 +1563,7 @@ namespace System.Windows.Forms {
             public virtual void RemoveAt(int index) {
                 int length = Count;
                 if (index < 0 || index >= length)
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
                 // clear any tooltip
                 //
@@ -1830,7 +1830,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private NativeMethods.TOOLINFO_T GetMinTOOLINFO(Tool tool) {
                 NativeMethods.TOOLINFO_T ti = new NativeMethods.TOOLINFO_T();
-                ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
+                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 ti.hwnd = parent.Handle;
                 if ((int)tool.id < 0) {
                     AssignId(tool);
@@ -1852,7 +1852,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             private NativeMethods.TOOLINFO_T GetTOOLINFO(Tool tool) {
                 NativeMethods.TOOLINFO_T ti = GetMinTOOLINFO(tool);
-                ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
+                ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
                 ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
 
                 // RightToLeft reading order
@@ -1882,7 +1882,7 @@ namespace System.Windows.Forms {
 
             protected void WndProc(ref Message msg) {
                 switch (msg.Msg) {
-                    case NativeMethods.WM_SETFOCUS:
+                    case Interop.WindowMessages.WM_SETFOCUS:
                         // 
 
 

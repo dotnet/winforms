@@ -553,7 +553,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(ItemSize), string.Format(SR.InvalidArgument, "ItemSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemSize), value));
                 }
                 itemSize = value;
                 ApplyItemSize();
@@ -620,10 +620,10 @@ namespace System.Windows.Forms {
                 return padding;
             }
             set {
-                //do some validation checking here, against min & max GridSize
-                //
-                if ( value.X < 0 || value.Y < 0 )
-                    throw new ArgumentOutOfRangeException(nameof(Padding), string.Format(SR.InvalidArgument, "Padding", value.ToString()));
+                if (value.X < 0 || value.Y < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(Padding), value));
+                }
 
                 if (padding != value) {
                     padding = value;
@@ -712,7 +712,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidLowBoundArgumentEx, "SelectedIndex", value.ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectedIndex), value, -1));
                 }
 
                 if (SelectedIndex != value) {
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms {
         internal TabPage GetTabPage(int index) {
 
             if (index < 0 || index >= tabPageCount) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             return tabPages[index];
         }
@@ -1207,7 +1207,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public Rectangle GetTabRect(int index) {
             if (index < 0 || (index >= tabPageCount && !tabControlState[TABCONTROLSTATE_getTabRectfromItemSize])) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
             tabControlState[TABCONTROLSTATE_getTabRectfromItemSize] = false ;
             NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms {
         private void InsertItem(int index, TabPage tabPage) {
 
             if (index < 0 || ((tabPages != null) && index > tabPageCount))
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             if (tabPage == null)
                 throw new ArgumentNullException(nameof(tabPage));
 
@@ -1654,7 +1654,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void RemoveTabPage(int index) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             tabPageCount--;
             if (index < tabPageCount) {
                 Array.Copy(tabPages, index + 1, tabPages, index, tabPageCount - index);
@@ -1700,7 +1700,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         internal void SetTabPage(int index, TabPage tabPage, NativeMethods.TCITEM_T tcitem) {
             if (index < 0 || index >= tabPageCount)
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             if (IsHandleCreated)
                 UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TCM_SETITEM, index, tcitem);
             // Make the Updated tab page the currently selected tab page
@@ -2076,16 +2076,16 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
 
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
                     // We use TCM_SETITEMSIZE instead
                     break;
 
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (nmhdr.code) {
                         // new switch added to prevent the TabControl from changing to next TabPage ...

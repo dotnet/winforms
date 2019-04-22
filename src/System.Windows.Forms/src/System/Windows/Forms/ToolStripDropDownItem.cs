@@ -196,7 +196,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpening"]/*' />
+        /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpening"]/*' />
         [
         SRCategory(nameof(SR.CatAction)),
         SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
@@ -300,7 +300,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.CreateDefaultDropDown"]/*' />
         protected virtual ToolStripDropDown CreateDefaultDropDown() {
-            // AutoGenerate a Winbar DropDown - set the property so we hook events
+            // AutoGenerate a ToolStrip DropDown - set the property so we hook events
              return new ToolStripDropDown(this, true);
         }
 

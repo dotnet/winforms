@@ -784,7 +784,7 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// Returns the drop target manager that all the hwndless
-        /// items and this winbar share.  this is necessary as
+        /// items and this ToolStrip share.  this is necessary as
         /// RegisterDragDrop requires an HWND.
         /// </devdoc>
         internal ToolStripDropTargetManager DropTargetManager {
@@ -852,7 +852,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ForeColor"]/*' />
         /// <internalonly/>
         /// <devdoc>
-        /// Forecolor really has no meaning for winbars - so lets hide it
+        /// Forecolor really has no meaning for ToolStrips - so lets hide it
         /// </devdoc>
         [Browsable(false)]
         public new Color ForeColor {
@@ -949,7 +949,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripMargin"]/*' />
         /// <devdoc>
-        /// The external spacing between the grip and the padding of the winbar and the first item in the collection
+        /// The external spacing between the grip and the padding of the ToolStrip and the first item in the collection
         /// </devdoc>
         [
         SRCategory(nameof(SR.CatLayout)),
@@ -966,7 +966,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GripRectangle"]/*' />
         /// <devdoc>
-        /// The boundaries of the grip on the winbar.  If it is invisible - returns Rectangle.Empty.
+        /// The boundaries of the grip on the ToolStrip.  If it is invisible - returns Rectangle.Empty.
         /// </devdoc>
         [
         Browsable(false)
@@ -1139,7 +1139,7 @@ namespace System.Windows.Forms {
         /// The items that belong to this ToolStrip.
         /// Note - depending on space and layout preferences, not all items
         /// in this collection will be displayed.  They may not even be displayed
-        /// on this winbar (say in the case where we're overflowing the item).
+        /// on this ToolStrip (say in the case where we're overflowing the item).
         /// The collection of _Displayed_ items is the DisplayedItems collection.
         /// The displayed items collection also includes things like the OverflowButton
         /// and the Grip.
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms {
               Events.RemoveHandler(EventItemRemoved, value);
           }
         }
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="ToolStrip.IsDropDown"]/*' />
+        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IsDropDown"]/*' />
         /// <devdoc> handy check for painting and sizing </devdoc>
         [Browsable(false)]
         public bool IsDropDown {
@@ -1235,7 +1235,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// The OnDrag[blah] methods that will be called if AllowItemReorder is true.
         ///
-        /// This allows us to have methods that handle drag/drop of the winbar items
+        /// This allows us to have methods that handle drag/drop of the ToolStrip items
         /// without calling back on the user's code
         /// </devdoc>
         internal IDropTarget ItemReorderDropTarget {
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms {
         /// The OnQueryContinueDrag and OnGiveFeedback methods that will be called if
         /// AllowItemReorder is true.
         ///
-        /// This allows us to have methods that handle drag/drop of the winbar items
+        /// This allows us to have methods that handle drag/drop of the ToolStrip items
         /// without calling back on the user's code
         /// </devdoc>
         internal ISupportOleDropSource ItemReorderDropSource {
@@ -1625,7 +1625,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>
-        /// The renderer is used to paint the hwndless winbar items.  If someone wanted to
+        /// The renderer is used to paint the hwndless ToolStrip items.  If someone wanted to
         /// change the "Hot" look of all of their buttons to be a green triangle, they should
         /// create a class that derives from ToolStripRenderer, assign it to this property and call
         /// invalidate.
@@ -2180,37 +2180,32 @@ namespace System.Windows.Forms {
             return GetNextItem(start, direction);
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.GetNextItem"]/*' />
-        /// <devdoc>
+        /// <summary>
         /// Gets the next item from the given start item in the direction specified.
         ///   - This function wraps if at the end
         ///   - This function will only surf the items in the current container
         ///   - Overriding this function will change the tab ordering and accessible child ordering.
-        /// </devdoc>
+        /// </summary>
         public virtual ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction)
         {
-            if (!WindowsFormsUtils.EnumValidator.IsValidArrowDirection(direction)) {
-                throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
-            }
-
-            switch (direction) {
+            switch (direction)
+            {
                 case ArrowDirection.Right:
-                    return GetNextItemHorizontal(start, /*forward = */true);
+                    return GetNextItemHorizontal(start, forward: true);
                 case ArrowDirection.Left:
-                    return GetNextItemHorizontal(start, /*forward = */false);
+                    return GetNextItemHorizontal(start, forward: false);
                 case ArrowDirection.Down:
-                    return GetNextItemVertical(start, /*forward = */true);
+                    return GetNextItemVertical(start, down: true);
                 case ArrowDirection.Up:
-                    return GetNextItemVertical(start, /*forward = */false);
+                    return GetNextItemVertical(start, down: false);
+                default:
+                    throw new InvalidEnumArgumentException(nameof(direction), (int)direction, typeof(ArrowDirection));
             }
-
-            return null;
        }
 
-
-        // <devdoc>
-        //  Helper function for GetNextItem - do not directly call this.
-        // </devdoc>
+        /// <remarks>
+        /// Helper function for GetNextItem - do not directly call this.
+        /// </remarks>
         private ToolStripItem GetNextItemHorizontal(ToolStripItem start, bool forward) {
 
             if (DisplayedItems.Count <= 0)
@@ -2261,12 +2256,9 @@ namespace System.Windows.Forms {
             return null;
         }
 
-
-
-
-       // <devdoc>
-       //  Helper function for GetNextItem - do not directly call this.
-       // </devdoc>       
+       /// <remarks>
+       ///  Helper function for GetNextItem - do not directly call this.
+       /// </remarks>       
        [SuppressMessage("Microsoft.Portability", "CA1902:AvoidTestingForFloatingPointEquality")]
        private ToolStripItem GetNextItemVertical(ToolStripItem selectedItem, bool down) {
      
@@ -2650,7 +2642,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        //initialize winbar
+        //initialize ToolStrip
         private void InitializeRenderer(ToolStripRenderer renderer) {
             // wrap this in a LayoutTransaction so that if they change sizes
             // in this method we've suspended layout.
@@ -2664,7 +2656,7 @@ namespace System.Windows.Forms {
         }
 
 
-        // sometimes you only want to force a layout if the winbar is visible.
+        // sometimes you only want to force a layout if the ToolStrip is visible.
         private void InvalidateLayout() {
             if (IsHandleCreated) {
                 LayoutTransaction.DoLayout(this, this, null);
@@ -2790,7 +2782,7 @@ namespace System.Windows.Forms {
             using (Graphics g = Graphics.FromImage(image)) {
                 IntPtr imageHdc = g.GetHdc();
                 //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.WM_PRINT, (IntPtr)imageHdc,
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)imageHdc,
                     (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                 //now BLT the result to the destination bitmap.
@@ -3322,7 +3314,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.OnItemClicked"]/*' />
         /// <devdoc>
-        /// Called when an item has been clicked on the winbar.
+        /// Called when an item has been clicked on the ToolStrip.
         /// </devdoc>
         protected virtual void OnItemClicked(ToolStripItemClickedEventArgs e) {
             ToolStripItemClickedEventHandler handler = (ToolStripItemClickedEventHandler)Events[EventItemClicked];
@@ -3418,7 +3410,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseDown"]/*' />
         /// <devdoc>
-        /// Delegate mouse down to the winbar and its affected items
+        /// Delegate mouse down to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseDown(System.Windows.Forms.MouseEventArgs mea) {
 
@@ -3453,7 +3445,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseMove"]/*' />
         /// <devdoc>
-        /// Delegate mouse moves to the winbar and its affected items
+        /// Delegate mouse moves to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseMove(System.Windows.Forms.MouseEventArgs mea) {
             Debug.WriteLineIf(ToolStripItem.MouseDebugging.TraceVerbose,"OnMouseMove called");
@@ -3516,7 +3508,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseLeave"]/*' />
         /// <devdoc>
-        /// Delegate mouse leave to the winbar and its affected items
+        /// Delegate mouse leave to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseLeave(System.EventArgs e) {
             HandleMouseLeave();
@@ -3539,7 +3531,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.OnMouseUp"]/*' />
         /// <devdoc>
-        /// Delegate mouse up to the winbar and its affected items
+        /// Delegate mouse up to the ToolStrip and its affected items
         /// </devdoc>
         protected override void OnMouseUp(System.Windows.Forms.MouseEventArgs mea) {
      
@@ -4024,7 +4016,7 @@ namespace System.Windows.Forms {
             RenderMode = ToolStripRenderMode.ManagerRenderMode;
         }
 
-        /// <include file='doc\WinBar.uex' path='docs/doc[@for="ToolStrip.ResetMinimumSize"]/*' />
+        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ResetMinimumSize"]/*' />
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ResetMinimumSize() {
             CommonProperties.SetMinimumSize(this, new Size(-1,-1));
@@ -4231,94 +4223,103 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.SetDisplayedItems"]/*' />
         /// <devdoc>
         /// Afer we've performed a layout we need to reset the DisplayedItems and the OverflowItems collection.
         /// OverflowItems are not supported in layouts other than ToolStripSplitStack
         /// </devdoc>
-        protected virtual void SetDisplayedItems() {
-            this.DisplayedItems.Clear();
-            this.OverflowItems.Clear();
+        protected virtual void SetDisplayedItems()
+        {
+            DisplayedItems.Clear();
+            OverflowItems.Clear();
             HasVisibleItems = false;
-            
-            Size biggestItemSize  = Size.Empty; // used in determining OnPaint caching.
 
+            Size biggestItemSize = Size.Empty; // used in determining OnPaint caching.
 
-            if (this.LayoutEngine is ToolStripSplitStackLayout) {
-                if (ToolStripGripStyle.Visible == GripStyle) {
-                    this.DisplayedItems.Add(Grip);
+            if (LayoutEngine is ToolStripSplitStackLayout)
+            {
+                if (ToolStripGripStyle.Visible == GripStyle)
+                {
+                    DisplayedItems.Add(Grip);
                     SetupGrip();
-                }               
+                }
 
-                // for splitstack layout we re-arrange the items in the displayed items
+                // For splitstack layout we re-arrange the items in the displayed items
                 // collection so that we can easily tab through them in natural order
-                Rectangle displayRect = this.DisplayRectangle;
+                Rectangle displayRect = DisplayRectangle;
                 int lastRightAlignedItem = -1;
 
-                for (int pass=0; pass < 2; pass++) {
+                for (int pass = 0; pass < 2; pass++)
+                {
                     int j = 0;
-                    
-                    if (pass == 1 /*add right aligned items*/) {
-                        j = lastRightAlignedItem;      
+
+                    if (pass == 1 /*add right aligned items*/)
+                    {
+                        j = lastRightAlignedItem;
                     }
 
                     // add items to the DisplayedItem collection.
                     // in pass 0, we go forward adding the head (left) aligned items
                     // in pass 1, we go backward starting from the last (right) aligned item we found
-                    
-                    for (; j >= 0 && j < Items.Count; j = (pass == 0) ? j+1 : j-1){
-                        
+                    for (; j >= 0 && j < Items.Count; j = (pass == 0) ? j + 1 : j - 1)
+                    {
+
                         ToolStripItem item = Items[j];
                         ToolStripItemPlacement placement = item.Placement;
-                        if (((IArrangedElement)item).ParticipatesInLayout) {
-                            if (placement == ToolStripItemPlacement.Main) {
-                               bool addItem = false;
-                               if (pass == 0) { // Align.Left items
-                                    addItem = (item.Alignment ==  ToolStripItemAlignment.Left);                                
-                                    if (!addItem) {
+                        if (((IArrangedElement)item).ParticipatesInLayout)
+                        {
+                            if (placement == ToolStripItemPlacement.Main)
+                            {
+                                bool addItem = false;
+                                if (pass == 0)
+                                { // Align.Left items
+                                    addItem = (item.Alignment == ToolStripItemAlignment.Left);
+                                    if (!addItem)
+                                    {
                                         // stash away this index so we dont have to iterate through the whole list again.
                                         lastRightAlignedItem = j;
-                                    }                                  
-                               }
-                               else if (pass == 1) { // Align.Right items
-                                   addItem =  (item.Alignment ==  ToolStripItemAlignment.Right);                                   
-                               }
-                               if (addItem) {
-                                   HasVisibleItems = true;
-                                   biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
-                                   this.DisplayedItems.Add(item);
-                               }
+                                    }
+                                }
+                                else if (pass == 1)
+                                {
+                                    // Align.Right items
+                                    addItem = (item.Alignment == ToolStripItemAlignment.Right);
+                                }
+                                if (addItem)
+                                {
+                                    HasVisibleItems = true;
+                                    biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
+                                    this.DisplayedItems.Add(item);
+                                }
                             }
-                            else if (placement == ToolStripItemPlacement.Overflow && !(item is ToolStripSeparator)) {
-                                if (item is ToolStripControlHost && this.OverflowButton.DropDown.IsRestrictedWindow) {
-                                   // Control hosts cannot be added to the overflow in the Internet
-                                   // just set the placement to None.
-                                   item.SetPlacement(ToolStripItemPlacement.None);
-                                }
-                                else {
-                                    this.OverflowItems.Add(item);
-                                }
+                            else if (placement == ToolStripItemPlacement.Overflow && !(item is ToolStripSeparator))
+                            {
+                                this.OverflowItems.Add(item);
                             }
                         }
-                        else {
+                        else
+                        {
                             item.SetPlacement(ToolStripItemPlacement.None);
                         }
                     }
-                
+
                 }
                 ToolStripOverflow overflow = GetOverflow();
-                if (overflow != null) {
+                if (overflow != null)
+                {
                     overflow.LayoutRequired = true;
                 }
-                if (OverflowItems.Count ==0) {
+                if (OverflowItems.Count == 0)
+                {
                     this.OverflowButton.Visible = false;
                 }
-                else if (CanOverflow){
+                else if (CanOverflow)
+                {
                     this.DisplayedItems.Add(OverflowButton);
                 }
-        
+
             }
-            else {
+            else
+            {
                 // NOT a SplitStack layout.  We dont change the order of the displayed items collection
                 // for custom keyboard handling override GetNextItem.
                 Debug.WriteLineIf(LayoutDebugSwitch.TraceVerbose, "Setting Displayed Items: Current bounds: " + this.Bounds.ToString());
@@ -4326,30 +4327,34 @@ namespace System.Windows.Forms {
 
                 // for all other layout managers, we ignore overflow placement
                 bool allContained = true;
-                for (int j = 0; j < Items.Count; j++) {
+                for (int j = 0; j < Items.Count; j++)
+                {
                     ToolStripItem item = Items[j];
                     if (((IArrangedElement)item).ParticipatesInLayout)
-					{
+                    {
                         item.ParentInternal = this;
 
                         bool boundsCheck = !IsDropDown;
                         bool intersects = item.Bounds.IntersectsWith(clientBounds);
 
                         bool verticallyContained = clientBounds.Contains(clientBounds.X, item.Bounds.Top) &&
-                        						clientBounds.Contains(clientBounds.X, item.Bounds.Bottom);
-                        if (!verticallyContained) {
-                        	allContained = false;
+                                                clientBounds.Contains(clientBounds.X, item.Bounds.Bottom);
+                        if (!verticallyContained)
+                        {
+                            allContained = false;
                         }
 
-                        if (!boundsCheck || intersects) {
-                        	HasVisibleItems = true;
-                        	biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
-                        	this.DisplayedItems.Add(item);
-                        	item.SetPlacement(ToolStripItemPlacement.Main);
+                        if (!boundsCheck || intersects)
+                        {
+                            HasVisibleItems = true;
+                            biggestItemSize = LayoutUtils.UnionSizes(biggestItemSize, item.Bounds.Size);
+                            this.DisplayedItems.Add(item);
+                            item.SetPlacement(ToolStripItemPlacement.Main);
                         }
                     }
-                    else {
-                         item.SetPlacement(ToolStripItemPlacement.None);
+                    else
+                    {
+                        item.SetPlacement(ToolStripItemPlacement.None);
                     }
 
                     Debug.WriteLineIf(LayoutDebugSwitch.TraceVerbose, item.ToString() + Items[j].Bounds);
@@ -4362,7 +4367,6 @@ namespace System.Windows.Forms {
 
             SetLargestItemSize(biggestItemSize);
         }
-
      
         /// <devdoc>
         ///     Sets the current value of the specified bit in the control's state.
@@ -4585,10 +4589,10 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 
-            if (m.Msg == NativeMethods.WM_SETFOCUS) {
+            if (m.Msg == Interop.WindowMessages.WM_SETFOCUS) {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE) {
+            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE) {
                     // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                     // itself.  the mouse message will still go through, but focus wont be taken.
                     // if someone clicks on a child control (combobox, textbox, etc) focus will
@@ -4635,7 +4639,7 @@ namespace System.Windows.Forms {
 
             base.WndProc(ref m);
 
-            if (m.Msg == NativeMethods.WM_NCDESTROY) {
+            if (m.Msg == Interop.WindowMessages.WM_NCDESTROY) {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
                 // that point our handle is not actually destroyed so
@@ -5025,12 +5029,12 @@ namespace System.Windows.Forms {
                  
                   switch (m.Msg) {
                   
-                       case NativeMethods.WM_LBUTTONDOWN:
-                       case NativeMethods.WM_RBUTTONDOWN:
-                       case NativeMethods.WM_MBUTTONDOWN:
-                       case NativeMethods.WM_NCLBUTTONDOWN:
-                       case NativeMethods.WM_NCRBUTTONDOWN:
-                       case NativeMethods.WM_NCMBUTTONDOWN:
+                       case Interop.WindowMessages.WM_LBUTTONDOWN:
+                       case Interop.WindowMessages.WM_RBUTTONDOWN:
+                       case Interop.WindowMessages.WM_MBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCLBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCRBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCMBUTTONDOWN:
                             if (ownerToolStrip.ContainsFocus) {
                                 // if we've clicked on something that's not a child of the toolstrip and we 
                                 // currently have focus, restore it.

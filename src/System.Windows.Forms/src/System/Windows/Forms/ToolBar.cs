@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
             set {
 
                 if (value.Width < 0 || value.Height < 0)
-                    throw new ArgumentOutOfRangeException(nameof(ButtonSize), string.Format(SR.InvalidArgument, "ButtonSize", value.ToString()));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ButtonSize), value));
 
                 if (buttonSize != value) {
                     buttonSize = value;
@@ -1124,7 +1124,7 @@ namespace System.Windows.Forms {
                 for (int x = 0; x < buttonCount; x++) {
 
                     NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO();
-                    tbbi.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
+                    tbbi.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
                     tbbi.cx = buttons[x].Width;
 
                     if (tbbi.cx > maxWidth) {
@@ -1175,7 +1175,7 @@ namespace System.Windows.Forms {
             if (value == null)
                 throw new ArgumentNullException(nameof(value));
             if (index < 0 || ((buttons != null) && (index > buttonCount)))
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
 
             // insert the button into our local array, and then into the
             // real windows ToolBar control
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms {
 
             // we have to set the button struct size, because they don't.
             //
-            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf(typeof(NativeMethods.TBBUTTON)), 0);
+            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<NativeMethods.TBBUTTON>(), 0);
 
             // set up some extra goo
             //
@@ -1358,7 +1358,7 @@ namespace System.Windows.Forms {
 
                     // insert the buttons and set their parent pointers
                     //
-                    int cb = Marshal.SizeOf(typeof(NativeMethods.TBBUTTON));
+                    int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
                     int count = buttonCount;
                     ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
 
@@ -1630,12 +1630,12 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_COMMAND + NativeMethods.WM_REFLECT:
+                case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
-                case NativeMethods.WM_NOTIFY:
-                case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
+                case Interop.WindowMessages.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
                         case NativeMethods.TTN_NEEDTEXT:
@@ -1752,7 +1752,7 @@ namespace System.Windows.Forms {
             public virtual ToolBarButton this[int index] {
                 get {
                     if (index < 0 || ((owner.buttons != null) && (index >= owner.buttonCount)))
-                         throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                    return owner.buttons[index];
                 }
                 set {
@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms {
                     // Sanity check parameters
                     //
                     if (index < 0 || ((owner.buttons != null) && index >= owner.buttonCount)) {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", index.ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
                     if (value == null) {
                         throw new ArgumentNullException(nameof(value));

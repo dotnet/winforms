@@ -148,10 +148,6 @@ namespace System.Windows.Forms {
         // ActiveX wrapper controls that derive from this class should override the
         // below method and return their own WebBrowserSiteBaseBase derived object.
         //
-        // This method is protected by an InheritanceDemand because extending a
-        // site is strictly an advanced feature for which one needs UnmanagedCode
-        // permissions.
-        //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.CreateWebBrowserSiteBase"]/*' />
         /// <devdoc>
         ///     <para>
@@ -382,7 +378,7 @@ namespace System.Windows.Forms {
                         // alt key setting.
                         NativeMethods.MSG msg = new NativeMethods.MSG();
                         msg.hwnd = IntPtr.Zero;
-                        msg.message = NativeMethods.WM_SYSKEYDOWN;
+                        msg.message = Interop.WindowMessages.WM_SYSKEYDOWN;
                         msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
                         msg.lParam = (IntPtr) 0x20180001;
                         msg.time = SafeNativeMethods.GetTickCount();
@@ -417,39 +413,39 @@ namespace System.Windows.Forms {
                 //
                 // Things we explicitly ignore and pass to the ActiveX's windproc
                 //
-                case NativeMethods.WM_ERASEBKGND:
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
-                case NativeMethods.WM_SETCURSOR:
-                case NativeMethods.WM_SYSCOLORCHANGE:
-                case NativeMethods.WM_LBUTTONDBLCLK:
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_MBUTTONDBLCLK:
-                case NativeMethods.WM_MBUTTONUP:
-                case NativeMethods.WM_RBUTTONDBLCLK:
-                case NativeMethods.WM_RBUTTONUP:
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                 //
                 // Some of the MSComCtl controls respond to this message to do some
                 // custom painting. So, we should just pass this message through.
-                case NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_DRAWITEM:
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     if (!ReflectMessageInternal(m.LParam, ref m))
                         DefWndProc(ref m);
                     break;
                 
-                case NativeMethods.WM_HELP:
+                case Interop.WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ActiveX have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_LBUTTONDOWN:
-                case NativeMethods.WM_MBUTTONDOWN:
-                case NativeMethods.WM_RBUTTONDOWN:
-                case NativeMethods.WM_MOUSEACTIVATE:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_MOUSEACTIVATE:
                     if (!DesignMode) {
                         if (containingControl != null && containingControl.ActiveControl != this) {
                             FocusInternal();
@@ -458,7 +454,7 @@ namespace System.Windows.Forms {
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     hwndFocus = (IntPtr)m.WParam;
                     try {
                         base.WndProc(ref m);
@@ -468,7 +464,7 @@ namespace System.Windows.Forms {
                     }
                     break;    
 
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     //
                     // If we are currently in a state of InPlaceActive or above,
                     // we should first reparent the ActiveX control to our parking
@@ -1957,7 +1953,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
-                    case NativeMethods.WM_WINDOWPOSCHANGING:
+                    case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                         WmWindowPosChanging(ref m);
                         break;
                     default:

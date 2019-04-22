@@ -3,23 +3,18 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 using System.Windows.Forms.Design.Behavior;
 
-namespace System.Windows.Forms.Design
+namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature. This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.
-    /// Responding to this single event will enable the DesignerActionUI to perform all neceessary UI-related operations.Note that the DesignerActionUI uses the BehaviorService to manage all UI
-    /// interaction.
-    /// For every component containing a DesignerAction (determined by the DesignerActionsChagned event) there will be an associated DesignerActionGlyph and DesignerActionBehavior.
-    /// Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
+    /// The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.  Responding to this single event will enable the DesignerActionUI to perform all neceessary UI-related operations. Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.  For every component containing a DesignerAction (determined by the DesignerActionsChagned event) there will be an associated  DesignerActionGlyph and DesignerActionBehavior. Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
     /// </summary>
     internal class DesignerActionUI : IDisposable
     {
@@ -32,14 +27,14 @@ namespace System.Windows.Forms.Design
         private DesignerActionUIService _designerActionUIService; //this is how all designeractions UI elements will be managed
         private BehaviorService _behaviorService; //this is how all of our UI is implemented (glyphs, behaviors, etc...)
         private readonly IMenuCommandService _menuCommandService;
-        private DesignerActionKeyboardBehavior _dapkb; //out keyboard behavior
+        private DesignerActionKeyboardBehavior _dapkb;   //out keyboard behavior
         private readonly Hashtable _componentToGlyph; //used for quick reference between compoments and our glyphs
         private Control _marshalingControl; //used to invoke events on our main gui thread
         private IComponent _lastPanelComponent;
 
         private readonly IUIService _uiService;
         private readonly IWin32Window _mainParentWindow;
-        internal DesignerActionToolStripDropDown _designerActionHost;
+        internal DesignerActionToolStripDropDown designerActionHost;
 
         private readonly MenuCommand _cmdShowDesignerActions; //used to respond to the Alt+Shft+F10 command
         private bool _inTransaction = false;
@@ -49,27 +44,21 @@ namespace System.Windows.Forms.Design
         private readonly bool _disposeActionUIService;
 
         private delegate void ActionChangedEventHandler(object sender, DesignerActionListsChangedEventArgs e);
-
 #if DEBUG
-        internal static readonly TraceSwitch s_dropDownVisibilityDebug = new TraceSwitch("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
+        internal static readonly TraceSwitch DropDownVisibilityDebug = new TraceSwitch("DropDownVisibilityDebug", "Debug ToolStrip Selection code");
 #else
-        internal static readonly TraceSwitch s_dropDownVisibilityDebug;
+        internal static readonly TraceSwitch DropDownVisibilityDebug;
 #endif
-
         /// <summary>
-        /// Constructor that takes a service provider.  This is needed to establish
-        /// references to the BehaviorService and SelecteionService, as well as
-        /// spin-up the DesignerActionService.
+        /// Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelecteionService, as well as spin-up the DesignerActionService.
         /// </summary>
         public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
         {
             _serviceProvider = serviceProvider;
             _designerActionAdorner = containerAdorner;
-
             _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
             _menuCommandService = (IMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
             _selSvc = (ISelectionService)serviceProvider.GetService(typeof(ISelectionService));
-
             if (_behaviorService == null || _selSvc == null)
             {
                 Debug.Fail("Either BehaviorService or ISelectionService is null, cannot continue.");
@@ -100,7 +89,6 @@ namespace System.Windows.Forms.Design
                 cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
             }
 
-
             if (_menuCommandService != null)
             {
                 _cmdShowDesignerActions = new MenuCommand(new EventHandler(OnKeyShowDesignerActions), MenuCommands.KeyInvokeSmartTag);
@@ -110,9 +98,7 @@ namespace System.Windows.Forms.Design
             _uiService = (IUIService)serviceProvider.GetService(typeof(IUIService));
             if (_uiService != null)
                 _mainParentWindow = _uiService.GetDialogOwnerWindow();
-
             _componentToGlyph = new Hashtable();
-
             _marshalingControl = new Control();
             _marshalingControl.CreateControl();
         }
@@ -120,7 +106,8 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Disposes all UI-related objects and unhooks services.
         /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
+        // Don't need to dispose of designerActionUIService.
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed")]
         public void Dispose()
         {
             if (_marshalingControl != null)
@@ -128,7 +115,6 @@ namespace System.Windows.Forms.Design
                 _marshalingControl.Dispose();
                 _marshalingControl = null;
             }
-
             if (_serviceProvider != null)
             {
                 IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
@@ -150,7 +136,6 @@ namespace System.Windows.Forms.Design
             _serviceProvider = null;
             _behaviorService = null;
             _selSvc = null;
-
             if (_designerActionService != null)
             {
                 _designerActionService.DesignerActionListsChanged -= new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
@@ -200,7 +185,7 @@ namespace System.Windows.Forms.Design
                 {
                     DesignerActionBehavior dab = new DesignerActionBehavior(_serviceProvider, comp, dalColl, this);
 
-                    // if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
+                    //if comp is a component then try to find a traycontrol associated with it... this should really be in ComponentTray but there is no behaviorService for the CT
                     if (!(comp is Control) || comp is ToolStripDropDown)
                     {
                         //Here, we'll try to get the traycontrol associated with the comp and supply the glyph with an alternative bounds
@@ -215,7 +200,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    // either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
+                    //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
                     if (dag == null)
                     {
                         //if the related comp is a control, then this shortcut will just hang off its bounds
@@ -248,26 +233,26 @@ namespace System.Windows.Forms.Design
                 RemoveActionGlyph(comp);
                 return null;
             }
-
         }
 
         /// <summary>
-        /// We monitor this event so we can update smart tag locations when controls move.
+        /// We monitor this event so we can update smart tag locations when  controls move.
         /// </summary>
         private void OnComponentChanged(object source, ComponentChangedEventArgs ce)
         {
+            //validate event args
             if (ce.Component == null || ce.Member == null || !IsDesignerActionPanelVisible)
             {
                 return;
             }
 
-            // If the smart tag is showing, we only move the smart tag if the changing component is the component for the currently showing smart tag.
+            // If the smart tag is showing, we only move the smart tag if the changing  component is the component for the currently showing smart tag.
             if (_lastPanelComponent != null && !_lastPanelComponent.Equals(ce.Component))
             {
                 return;
             }
 
-            // if something changed on a component we have actions associated with then invalidate all (repaint & reposition)
+            //if something changed on a component we have actions associated with then invalidate all (repaint & reposition)
             if (_componentToGlyph[ce.Component] is DesignerActionGlyph glyph)
             {
                 glyph.Invalidate();
@@ -290,7 +275,7 @@ namespace System.Windows.Forms.Design
         private void RecreatePanel(IComponent comp)
         {
             if (_inTransaction || comp != _selSvc.PrimarySelection)
-            { //we only ever need to do that when the comp is the primary selection
+            { // we only ever need to do that when the comp is the primary selection
                 return;
             }
             // we check wether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
@@ -303,7 +288,6 @@ namespace System.Windows.Forms.Design
                 }
                 if (host.InTransaction && !hostIsClosingTransaction)
                 {
-                    //Debug.WriteLine("In transaction, bail, but first hookup to the end of the transaction...");
                     host.TransactionClosed += new DesignerTransactionCloseEventHandler(DesignerTransactionClosed);
                     _inTransaction = true;
                     _relatedComponentTransaction = comp;
@@ -317,7 +301,7 @@ namespace System.Windows.Forms.Design
         {
             if (e.LastTransaction && _relatedComponentTransaction != null)
             {
-                // surprise surprise we can get multiple even with e.LastTransaction set to true, even though we unhook here this is because the list on which we enumerate (the event handler list) is copied before it's enumerated on which means that if the undo engine for example creates and commit a transaction during the OnCancel of another completed transaction we will get this twice. So we have to check also for relatedComponentTransaction != null
+                // surprise surprise we can get multiple even with e.LastTransaction set to true, even though we unhook here this is because the list on which we enumerate (the event handler list) is copied before it's enumerated on which means that if the undo engine for example creates and commit a transaction during the OnCancel of another  completed transaction we will get this twice. So we have to check also for relatedComponentTransaction != null
                 _inTransaction = false;
                 IDesignerHost host = _serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
                 host.TransactionClosed -= new DesignerTransactionCloseEventHandler(DesignerTransactionClosed);
@@ -328,11 +312,11 @@ namespace System.Windows.Forms.Design
 
         private void RecreateInternal(IComponent comp)
         {
-            //Debug.WriteLine("not in a transaction, do it now!");
             DesignerActionGlyph glyph = GetDesignerActionGlyph(comp);
             if (glyph != null)
             {
-                VerifyGlyphIsInAdorner(glyph); // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...                   
+                VerifyGlyphIsInAdorner(glyph); 
+                // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...                   
                 RecreatePanel(glyph); // recreate the DAP itself
                 UpdateDAPLocation(comp, glyph); // reposition the thing
             }
@@ -342,7 +326,7 @@ namespace System.Windows.Forms.Design
             // we don't want to do anything if the panel is not visible
             if (!IsDesignerActionPanelVisible)
             {
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.RecreatePanel] panel is not visible, bail");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.RecreatePanel] panel is not visible, bail");
                 return;
             }
             //recreate a designeraction panel
@@ -351,10 +335,10 @@ namespace System.Windows.Forms.Design
                 if (glyphWithPanelToRegen.Behavior is DesignerActionBehavior behaviorWithPanelToRegen)
                 {
                     Debug.Assert(behaviorWithPanelToRegen.RelatedComponent != null, "could not find related component for this refresh");
-                    DesignerActionPanel dap = _designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
+                    DesignerActionPanel dap = designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
                     dap.UpdateTasks(behaviorWithPanelToRegen.ActionLists, new DesignerActionListCollection(), string.Format(SR.DesignerActionPanel_DefaultPanelTitle,
                         behaviorWithPanelToRegen.RelatedComponent.GetType().Name), null);
-                    _designerActionHost.UpdateContainerSize();
+                    designerActionHost.UpdateContainerSize();
                 }
             }
         }
@@ -380,8 +364,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.  The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object.
-        /// Note that when new DesignerActions are added, if the related control is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
+        /// This event is fired by the DesignerActionService in response to a DesignerActionCollection changing.  The event args contains information about the related object, the type of change (added or removed) and the remaining DesignerActionCollection for the object. Note that when new DesignerActions are added, if the related control/ is not yet parented - we add these actions to a "delay" list and they are later created when the control is finally parented.
         /// </summary>
         private void OnDesignerActionsChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
@@ -436,8 +419,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnInvokedDesignerActionChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
-            DesignerActionGlyph g = null;
             IComponent relatedComponent = e.RelatedObject as IComponent;
+            DesignerActionGlyph g = null;
             if (e.ChangeType == DesignerActionListsChangedType.ActionListsAdded)
             {
                 if (relatedComponent == null)
@@ -445,7 +428,6 @@ namespace System.Windows.Forms.Design
                     Debug.Fail("How can we add a DesignerAction glyphs when it's related object is not  an IComponent?");
                     return;
                 }
-
                 IComponent primSel = _selSvc.PrimarySelection as IComponent;
                 if (primSel == e.RelatedObject)
                 {
@@ -460,10 +442,9 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
             if (e.ChangeType == DesignerActionListsChangedType.ActionListsRemoved && e.ActionLists.Count == 0)
             {
-                // only remove our glyph if there are no more DesignerActions associated with it.
+                //only remove our glyph if there are no more DesignerActions associated with it.
                 RemoveActionGlyph(e.RelatedObject);
             }
             else if (g != null)
@@ -474,23 +455,23 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called when our KeyShowDesignerActions menu command is fired (a.k.a. Alt+Shift+F10) - we will find the primary selection, see if it has designer actions, and if so - show the menu.
+        /// Called when our KeyShowDesignerActions menu command is fired  (a.k.a. Alt+Shift+F10) - we will find the primary selection, see if it has designer actions, and if so - show the menu.
         /// </summary>
         private void OnKeyShowDesignerActions(object sender, EventArgs e)
         {
             ShowDesignerActionPanelForPrimarySelection();
         }
 
-        // we cannot attach several menu command to the same command id, we need a single entry point, we put it in designershortcutui. but we need a way to call the show ui on the related behavior hence this internal function to hack it together we return false if we have nothing to display, we hide it and return true if we're already displaying
+        // we cannot attach several menu command to the same command id, we need a single entry point, we put it in designershortcutui. but we need a way to call the show ui on the related behavior hence this internal function to hack it together. we return false if we have nothing to display, we hide it and return true if we're already displaying
         internal bool ShowDesignerActionPanelForPrimarySelection()
         {
+            //can't do anythign w/o selection service
             if (_selSvc == null)
             {
                 return false;
             }
 
             object primarySelection = _selSvc.PrimarySelection;
-
             //verfiy that we have obtained a valid component with designer actions
             if (primarySelection == null || !_componentToGlyph.Contains(primarySelection))
             {
@@ -500,6 +481,7 @@ namespace System.Windows.Forms.Design
             DesignerActionGlyph glyph = (DesignerActionGlyph)_componentToGlyph[primarySelection];
             if (glyph != null && glyph.Behavior is DesignerActionBehavior)
             {
+                // show the menu
                 if (glyph.Behavior is DesignerActionBehavior behavior)
                 {
                     if (!IsDesignerActionPanelVisible)
@@ -526,7 +508,6 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
-
             if (IsDesignerActionPanelVisible && relatedObject == _lastPanelComponent)
             {
                 HideDesignerActionPanel();
@@ -535,7 +516,6 @@ namespace System.Windows.Forms.Design
             DesignerActionGlyph glyph = (DesignerActionGlyph)_componentToGlyph[relatedObject];
             if (glyph != null)
             {
-
                 // Check ComponentTray first
                 if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray && compTray.SelectionGlyphs != null)
                 {
@@ -551,7 +531,7 @@ namespace System.Windows.Forms.Design
                 }
                 _componentToGlyph.Remove(relatedObject);
 
-                // we only do this when we're in a transaction. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
+                // we only do this when we're in a transaction, see bug VSWHIDBEY 418709. This is for compat reason - infragistic. if we're not in a transaction, too bad, we don't update the screen
                 if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host && host.InTransaction)
                 {
                     host.TransactionClosed += new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
@@ -569,7 +549,6 @@ namespace System.Windows.Forms.Design
                 {
                     host.TransactionClosed -= new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
                 }
-
                 if (_relatedGlyphTransaction != null)
                 {
                     _relatedGlyphTransaction.InvalidateOwnerLocation();
@@ -582,24 +561,18 @@ namespace System.Windows.Forms.Design
         {
             if (IsDesignerActionPanelVisible)
             {
-                _designerActionHost.Close();
+                designerActionHost.Close();
             }
         }
 
         internal bool IsDesignerActionPanelVisible
         {
-            get
-            {
-                return (_designerActionHost != null && _designerActionHost.Visible);
-            }
+            get => (designerActionHost != null && designerActionHost.Visible);
         }
 
         internal IComponent LastPanelComponent
         {
-            get
-            {
-                return (IsDesignerActionPanelVisible ? _lastPanelComponent : null);
-            }
+            get => (IsDesignerActionPanelVisible ? _lastPanelComponent : null);
         }
 
         private void ToolStripDropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
@@ -607,29 +580,28 @@ namespace System.Windows.Forms.Design
             if (_cancelClose || e.Cancel)
             {
                 e.Cancel = true;
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] cancelClose true, bail");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] cancelClose true, bail");
                 return;
             }
             if (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked)
             {
                 e.Cancel = true;
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] ItemClicked: e.Cancel set to: " + e.Cancel.ToString());
             }
             if (e.CloseReason == ToolStripDropDownCloseReason.Keyboard)
             {
                 e.Cancel = false;
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: " + e.Cancel.ToString());
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Keyboard: e.Cancel set to: " + e.Cancel.ToString());
             }
 
             if (e.Cancel == false)
             { // we WILL disappear
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Closing...");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Closing...");
                 Debug.Assert(_lastPanelComponent != null, "last panel component should not be null here... " +
                     "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
                 if (_lastPanelComponent == null)
                     return;
-                // if we're actually closing get the coordinate of the last message, the one causing us to close, is it within the glyph coordinate
-                // if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH, that means that he actually wants to close it. The activation change is going to do that for us but we should NOT reopen right away because he clicked on the glyph... this code is here to prevent this...
+                // if we're actually closing get the coordinate of the last message, the one causing us to close, is it within the glyph coordinate. if it is that mean that someone just clicked back from the panel, on VS, but ON THE GLYPH, that means that he actually wants to close it. The activation change is going to do that for us but we should NOT reopen right away because he clicked on the glyph... this code is here to prevent this...
                 Point point = DesignerUtils.LastCursorPoint;
                 if (_componentToGlyph[_lastPanelComponent] is DesignerActionGlyph currentGlyph)
                 {
@@ -641,10 +613,7 @@ namespace System.Windows.Forms.Design
                     }
                     currentGlyph.InvalidateOwnerLocation();
                 }
-
-                // unset the ownership relationship
                 _lastPanelComponent = null;
-
                 // panel is going away, pop the behavior that's on the stack...
                 Debug.Assert(_dapkb != null, "why is dapkb null?");
                 System.Windows.Forms.Design.Behavior.Behavior popBehavior = _behaviorService.PopBehavior(_dapkb);
@@ -659,14 +628,14 @@ namespace System.Windows.Forms.Design
                 component = _lastPanelComponent;
             }
 
-            if (_designerActionHost == null)
+            if (designerActionHost == null)
             {
                 return Point.Empty;
             }
 
             if (component == null || glyph == null)
             {
-                return _designerActionHost.Location;
+                return designerActionHost.Location;
             }
 
             // check that the glyph is still visible in the adorner window
@@ -674,14 +643,14 @@ namespace System.Windows.Forms.Design
                 !_behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
             {
                 HideDesignerActionPanel();
-                return _designerActionHost.Location;
+                return designerActionHost.Location;
             }
 
             Point glyphLocationScreenCoord = GetGlyphLocationScreenCoord(component, glyph);
             Rectangle rectGlyph = new Rectangle(glyphLocationScreenCoord, glyph.Bounds.Size);
-            Point pt = DesignerActionPanel.ComputePreferredDesktopLocation(rectGlyph, _designerActionHost.Size, out DockStyle edgeToDock);
+            Point pt = DesignerActionPanel.ComputePreferredDesktopLocation(rectGlyph, designerActionHost.Size, out DockStyle edgeToDock);
             glyph.DockEdge = edgeToDock;
-            _designerActionHost.Location = pt;
+            designerActionHost.Location = pt;
             return pt;
         }
 
@@ -692,7 +661,7 @@ namespace System.Windows.Forms.Design
             {
                 glyphLocationScreenCoord = _behaviorService.AdornerWindowPointToScreen(glyph.Bounds.Location);
             }
-            // ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem
+            //ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem
             else if (relatedComponent is ToolStripItem)
             {
                 if (relatedComponent is ToolStripItem item && item.Owner != null)
@@ -711,30 +680,27 @@ namespace System.Windows.Forms.Design
         }
 
         bool _cancelClose = false;
-
         /// <summary>
         /// This shows the actual chrome paenl that is created by the DesignerActionBehavior object.  
         /// </summary>
         internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
         {
-            if (_designerActionHost == null)
+            if (designerActionHost == null)
             {
-                _designerActionHost = new DesignerActionToolStripDropDown(this, _mainParentWindow)
+                designerActionHost = new DesignerActionToolStripDropDown(this, _mainParentWindow)
                 {
                     AutoSize = false,
                     Padding = Padding.Empty,
                     Renderer = new NoBorderRenderer(),
                     Text = "DesignerActionTopLevelForm"
                 };
-                _designerActionHost.Closing += new ToolStripDropDownClosingEventHandler(ToolStripDropDown_Closing);
-
-
+                designerActionHost.Closing += new ToolStripDropDownClosingEventHandler(ToolStripDropDown_Closing);
             }
             // set the accessible name of the panel to the same title as the panel header. do that every time
-            _designerActionHost.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
+            designerActionHost.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
             panel.AccessibleName = string.Format(SR.DesignerActionPanel_DefaultPanelTitle, relatedComponent.GetType().Name);
 
-            _designerActionHost.SetDesignerActionPanel(panel, glyph);
+            designerActionHost.SetDesignerActionPanel(panel, glyph);
             Point location = UpdateDAPLocation(relatedComponent, glyph);
 
             // check that the panel will have at least it's parent glyph visible on the adorner window
@@ -744,25 +710,20 @@ namespace System.Windows.Forms.Design
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
-                    UnsafeNativeMethods.SetWindowLong(new HandleRef(_designerActionHost, _designerActionHost.Handle),
-                                                      NativeMethods.GWL_HWNDPARENT,
-                                                      new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
+                    UnsafeNativeMethods.SetWindowLong(new HandleRef(designerActionHost, designerActionHost.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
                 }
 
                 _cancelClose = true;
-
-                _designerActionHost.Show(location);
-                _designerActionHost.Focus();
+                designerActionHost.Show(location);
+                designerActionHost.Focus();
                 // when a control is drag and dropped and authoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
-                _designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
-
+                designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
                 // invalidate the glyph to have it point the other way
                 glyph.InvalidateOwnerLocation();
                 _lastPanelComponent = relatedComponent;
-
                 // push new behavior for keyboard handling on the behavior stack
-                _dapkb = new DesignerActionKeyboardBehavior(_designerActionHost.CurrentPanel, _serviceProvider, _behaviorService);
+                _dapkb = new DesignerActionKeyboardBehavior(designerActionHost.CurrentPanel, _serviceProvider, _behaviorService);
                 _behaviorService.PushBehavior(_dapkb);
             }
         }
@@ -770,12 +731,11 @@ namespace System.Windows.Forms.Design
         private void OnShowComplete(object sender, EventArgs e)
         {
             _cancelClose = false;
-
             // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
-            if (_designerActionHost != null && _designerActionHost.Handle != IntPtr.Zero && _designerActionHost.Visible)
+            if (designerActionHost != null && designerActionHost.Handle != IntPtr.Zero && designerActionHost.Visible)
             {
-                UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, _designerActionHost.Handle));
-                _designerActionHost.CheckFocusIsRight();
+                UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, designerActionHost.Handle));
+                designerActionHost.CheckFocusIsRight();
             }
         }
     }
@@ -786,7 +746,6 @@ namespace System.Windows.Forms.Design
         private ToolStripControlHost _panel;
         private readonly DesignerActionUI _designerActionUI;
         private bool _cancelClose = false;
-
         private Glyph _relatedGlyph;
 
         public DesignerActionToolStripDropDown(DesignerActionUI designerActionUI, IWin32Window mainParentWindow)
@@ -794,7 +753,6 @@ namespace System.Windows.Forms.Design
             _mainParentWindow = mainParentWindow;
             _designerActionUI = designerActionUI;
         }
-
 
         public DesignerActionPanel CurrentPanel
         {
@@ -814,7 +772,7 @@ namespace System.Windows.Forms.Design
         // we're not topmost because we can show modal editors above us.
         protected override bool TopMost
         {
-            get { return false; }
+            get => false;
         }
 
         public void UpdateContainerSize()
@@ -836,21 +794,21 @@ namespace System.Windows.Forms.Design
         }
 
         public void CheckFocusIsRight()
-        { // hack to get the focus to NOT stay on ContainerControl
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "Checking focus...");
+        { // fix to get the focus to NOT stay on ContainerControl
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "Checking focus...");
             IntPtr focusedControl = UnsafeNativeMethods.GetFocus();
             if (focusedControl == Handle)
             {
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "    putting focus on the panel...");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    putting focus on the panel...");
                 _panel.Focus();
             }
             focusedControl = UnsafeNativeMethods.GetFocus();
             if (CurrentPanel != null && CurrentPanel.Handle == focusedControl)
             {
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "    selecting next available control on the panel...");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    selecting next available control on the panel...");
                 CurrentPanel.SelectNextControl(null, true, true, true, true);
             }
-            _ = UnsafeNativeMethods.GetFocus();
+            UnsafeNativeMethods.GetFocus();
         }
 
         protected override void OnLayout(LayoutEventArgs levent)
@@ -862,31 +820,31 @@ namespace System.Windows.Forms.Design
 
         protected override void OnClosing(ToolStripDropDownClosingEventArgs e)
         {
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "_____________________________Begin OnClose " + e.CloseReason.ToString());
+
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "_____________________________Begin OnClose " + e.CloseReason.ToString());
             Debug.Indent();
             if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange && _cancelClose)
             {
                 _cancelClose = false;
                 e.Cancel = true;
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "cancel close prepopulated");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "cancel close prepopulated");
             }
-            // when we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.
+            // when we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.  
             // - if it's a modal window that's owned by VS dont exit
             // - if it's a window that's owned by the toolstrip dropdown dont exit
-
             else if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange || e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
             {
                 IntPtr hwndActivating = UnsafeNativeMethods.GetActiveWindow();
                 if (Handle == hwndActivating && e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
                 {
                     e.Cancel = false;
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] activation hasnt changed, but we've certainly clicked somewhere else.");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] activation hasnt changed, but we've certainly clicked somewhere else.");
                 }
                 else if (WindowOwnsWindow(Handle, hwndActivating))
                 {
                     // we're being de-activated for someone owned by the panel
                     e.Cancel = true;
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] Cancel close - the window activating is owned by this window");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] Cancel close - the window activating is owned by this window");
                 }
                 else if (_mainParentWindow != null && !WindowOwnsWindow(_mainParentWindow.Handle, hwndActivating))
                 {
@@ -894,55 +852,45 @@ namespace System.Windows.Forms.Design
                     {
                         // the activated windows is not a child/owned windows of the main top level windows let toolstripdropdown handle this
                         e.Cancel = false;
-                        Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] Call close: the activated windows is not a child/owned windows of the main top level windows ");
+                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] Call close: the activated windows is not a child/owned windows of the main top level windows ");
                     }
                     else
                     {
                         e.Cancel = true;
-                        Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] we're being deactivated by a foreign window, but the main window is not enabled - we should stay up");
+                        Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] we're being deactivated by a foreign window, but the main window is not enabled - we should stay up");
                     }
-
                     base.OnClosing(e);
                     Debug.Unindent();
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "_____________________________End OnClose e.Cancel: " + e.Cancel.ToString());
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "_____________________________End OnClose e.Cancel: " + e.Cancel.ToString());
                     return;
                 }
                 else
                 {
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] since the designer action panel dropdown doesnt own the activating window " + hwndActivating.ToString("x") + ", calling close. ");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] since the designer action panel dropdown doesnt own the activating window " + hwndActivating.ToString("x") + ", calling close. ");
                 }
-
 
                 // what's the owner of the windows being activated?
                 IntPtr parent = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, hwndActivating), NativeMethods.GWL_HWNDPARENT);
                 // is it currently disabled (ie, the activating windows is in modal mode)
                 if (!IsWindowEnabled(parent))
                 {
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] modal window activated - cancelling close");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] modal window activated - cancelling close");
                     // we are in a modal case
                     e.Cancel = true;
                 }
             }
-            else
-            {
-            }
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] calling base.OnClosing with e.Cancel: " + e.Cancel.ToString());
-
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] calling base.OnClosing with e.Cancel: " + e.Cancel.ToString());
             base.OnClosing(e);
             Debug.Unindent();
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "_____________________________End OnClose e.Cancel: " + e.Cancel.ToString());
-
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "_____________________________End OnClose e.Cancel: " + e.Cancel.ToString());
         }
 
         public void SetDesignerActionPanel(DesignerActionPanel panel, Glyph relatedGlyph)
         {
             if (_panel != null && panel == (DesignerActionPanel)_panel.Control)
                 return;
-
             Debug.Assert(relatedGlyph != null, "related glyph cannot be null");
-
             _relatedGlyph = relatedGlyph;
-
             panel.SizeChanged += new EventHandler(PanelResized);
             // hook up the event
             if (_panel != null)
@@ -962,7 +910,6 @@ namespace System.Windows.Forms.Design
             Size = panel.Size;
             Items.Add(_panel);
             ResumeLayout();
-
             if (Visible)
             {
                 CheckFocusIsRight();
@@ -970,7 +917,7 @@ namespace System.Windows.Forms.Design
 
         }
 
-        private void PanelResized(object sender, EventArgs e)
+        private void PanelResized(object sender, System.EventArgs e)
         {
             Control ctrl = sender as Control;
             if (Size.Width != ctrl.Size.Width || Size.Height != ctrl.Size.Height)
@@ -988,7 +935,7 @@ namespace System.Windows.Forms.Design
 
         protected override void SetVisibleCore(bool visible)
         {
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.SetVisibleCore] setting dropdown visible=" + visible.ToString());
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.SetVisibleCore] setting dropdown visible=" + visible.ToString());
             base.SetVisibleCore(visible);
             if (visible)
             {
@@ -1002,21 +949,18 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private static bool WindowOwnsWindow(IntPtr hWndOwner, IntPtr hWndDescendant)
         {
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[WindowOwnsWindow] Testing if " + hWndOwner.ToString("x") + " is a owned by " + hWndDescendant.ToString("x") + "... ");
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[WindowOwnsWindow] Testing if " + hWndOwner.ToString("x") + " is a owned by " + hWndDescendant.ToString("x") + "... ");
 #if DEBUG
-            if (DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose)
-            {
+            if (DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
                 Debug.WriteLine("\t\tOWNER: " + GetControlInformation(hWndOwner));
                 Debug.WriteLine("\t\tOWNEE: " + GetControlInformation(hWndDescendant));
-
                 IntPtr claimedOwnerHwnd = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWndDescendant), NativeMethods.GWL_HWNDPARENT);
-                Debug.WriteLine("OWNEE's CLAIMED OWNER: " + GetControlInformation(claimedOwnerHwnd));
+                Debug.WriteLine("OWNEE's CLAIMED OWNER: "+ GetControlInformation(claimedOwnerHwnd));
             }
-
 #endif
             if (hWndDescendant == hWndOwner)
             {
-                Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "they match, YES.");
+                Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "they match, YES.");
                 return true;
             }
 
@@ -1025,19 +969,18 @@ namespace System.Windows.Forms.Design
                 hWndDescendant = UnsafeNativeMethods.GetWindowLong(new HandleRef(null, hWndDescendant), NativeMethods.GWL_HWNDPARENT);
                 if (hWndDescendant == IntPtr.Zero)
                 {
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "NOPE.");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "NOPE.");
                     return false;
                 }
                 if (hWndDescendant == hWndOwner)
                 {
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "YES.");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "YES.");
                     return true;
                 }
             }
-            Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "NO.");
+            Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "NO.");
             return false;
         }
-
         // helper function for generating infomation about a particular control use AssertControlInformation if sticking in an assert - then the work to figure out the control info will only be done when the assertion is false.
         internal static string GetControlInformation(IntPtr hwnd)
         {
@@ -1046,27 +989,21 @@ namespace System.Windows.Forms.Design
                 return "Handle is IntPtr.Zero";
             }
 #if DEBUG
-            if (!DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose)
-            {
+	     if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
                 return string.Empty;
-            }
-
-            int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(null, hwnd));
-            StringBuilder sb = new StringBuilder(textLen + 1);
-            UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
-
-            string typeOfControl = "Unknown";
-            string nameOfControl = "";
-            Control c = Control.FromHandle(hwnd);
-            if (c != null)
-            {
+             }
+             int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(null, hwnd));
+             StringBuilder sb = new StringBuilder(textLen+1);
+             UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
+             string typeOfControl = "Unknown";
+             string nameOfControl = "";
+             Control c = Control.FromHandle(hwnd);
+             if (c != null) {
                 typeOfControl = c.GetType().Name;
-                if (!string.IsNullOrEmpty(c.Name))
-                {
+                if (!string.IsNullOrEmpty(c.Name)) {
                     nameOfControl += c.Name;
                 }
-                else
-                {
+                else {
                     nameOfControl += "Unknown";
                     // some extra debug info for toolstripdropdowns...
                     if (c is ToolStripDropDown dd)
@@ -1077,10 +1014,10 @@ namespace System.Windows.Forms.Design
                         }
                     }
                 }
-            }
-            return sb.ToString() + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
-#else 
-	     return String.Empty;
+             }
+             return sb.ToString() + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
+#else
+            return string.Empty;
 #endif
 
         }
@@ -1097,10 +1034,8 @@ namespace System.Windows.Forms.Design
                 IntPtr hwndActivating = m.LParam;
                 if (WindowOwnsWindow(Handle, hwndActivating))
                 {
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");
-
-                    Debug.WriteLineIf(DesignerActionUI.s_dropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(UnsafeNativeMethods.GetFocus()));
-
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");
+                    Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] checking the focus... " + GetControlInformation(UnsafeNativeMethods.GetFocus()));
                     _cancelClose = true;
                 }
                 else
@@ -1112,7 +1047,6 @@ namespace System.Windows.Forms.Design
             {
                 _cancelClose = false;
             }
-
             base.WndProc(ref m);
         }
 
@@ -1120,7 +1054,7 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_ACTIVATE:
+                case Interop.WindowMessages.WM_ACTIVATE:
                     WmActivate(ref m);
                     return;
             }
@@ -1129,7 +1063,7 @@ namespace System.Windows.Forms.Design
 
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            // since we're not hosted in a form we need to do the same logic as Form.cs. If we get an enter key we need to find the current focused control if it's a button, we click it and return that we handled the message
+            // since we're not hosted in a form we need to do the same logic as Form.cs. If we get an enter key we need to find the current focused control. if it's a button, we click it and return that we handled the message
             if (keyData == Keys.Enter)
             {
                 IntPtr focusedControlPtr = UnsafeNativeMethods.GetFocus();

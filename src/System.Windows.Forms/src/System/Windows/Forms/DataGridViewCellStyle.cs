@@ -418,10 +418,7 @@ namespace System.Windows.Forms
         ]
         public Padding Padding
         {
-            get
-            {
-                return this.Properties.GetPadding(PropPadding);
-            }
+            get => Properties.GetPadding(PropPadding, out _);
             set
             {
                 if (value.Left < 0 || value.Right < 0 || value.Top < 0 || value.Bottom < 0)

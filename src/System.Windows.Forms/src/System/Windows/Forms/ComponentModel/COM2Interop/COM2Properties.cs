@@ -384,7 +384,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                 get {
                     if (countOffset == -1) {
-                        countOffset = Marshal.SizeOf(typeof(Guid)) + IntPtr.Size + 24;
+                        countOffset = Marshal.SizeOf<Guid>() + IntPtr.Size + 24;
                     }
                     return countOffset;
                 }

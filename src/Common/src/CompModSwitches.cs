@@ -6,10 +6,10 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="System.ComponentModel.CompModSwitches.get_LayoutPerformance():System.Diagnostics.TraceSwitch")]
 
 namespace System.ComponentModel {
-    using System.Diagnostics;  
-    
+    using System.Diagnostics;
+
     internal static class CompModSwitches {
-#if WINDOWS_FORMS_SWITCHES
+
         private static TraceSwitch activeX;
         private static TraceSwitch flowLayout;
         private static TraceSwitch dataCursor;
@@ -18,17 +18,17 @@ namespace System.ComponentModel {
         private static TraceSwitch dataGridKeys;
         private static TraceSwitch dataGridLayout;
         private static TraceSwitch dataGridPainting;
-        private static TraceSwitch dataGridParents;        
+        private static TraceSwitch dataGridParents;
         private static TraceSwitch dataGridScrolling;
-        private static TraceSwitch dataGridSelection;           
-        private static TraceSwitch dataObject;        
+        private static TraceSwitch dataGridSelection;
+        private static TraceSwitch dataObject;
         private static TraceSwitch dataView;
         private static TraceSwitch debugGridView;
-        private static TraceSwitch dgCaptionPaint;     
-        private static TraceSwitch dgEditColumnEditing;                                                                
+        private static TraceSwitch dgCaptionPaint;
+        private static TraceSwitch dgEditColumnEditing;
         private static TraceSwitch dgRelationShpRowLayout;
         private static TraceSwitch dgRelationShpRowPaint;
-        private static TraceSwitch dgRowPaint;        
+        private static TraceSwitch dgRowPaint;
         private static TraceSwitch dragDrop;
         private static TraceSwitch imeMode;
         private static TraceSwitch msaa;
@@ -41,6 +41,7 @@ namespace System.ComponentModel {
         private static BooleanSwitch lifetimeTracing;
 
         private static TraceSwitch s_handleLeak;
+        private static BooleanSwitch s_traceCollect;
         private static BooleanSwitch s_commonDesignerServices;
 
         public static TraceSwitch ActiveX {
@@ -50,7 +51,7 @@ namespace System.ComponentModel {
                 }
                 return activeX;
             }
-        }         
+        }
 
         public static TraceSwitch DataCursor {
             get {
@@ -87,7 +88,7 @@ namespace System.ComponentModel {
                 return dataGridKeys;
             }
         }
-                
+
         public static TraceSwitch DataGridLayout {
             get {
                 if (dataGridLayout == null) {
@@ -105,7 +106,7 @@ namespace System.ComponentModel {
                 return dataGridPainting;
             }
         }
-                                                                                        
+
         public static TraceSwitch DataGridParents {
             get {
                 if (dataGridParents == null) {
@@ -132,7 +133,7 @@ namespace System.ComponentModel {
                 return dataGridSelection;
             }
         }
-                                                                                
+
         public static TraceSwitch DataObject {
             get {
                 if (dataObject == null) {
@@ -149,7 +150,7 @@ namespace System.ComponentModel {
                 }
                 return dataView;
             }
-        }        
+        }
 
         public static TraceSwitch DebugGridView {
             get {
@@ -158,8 +159,8 @@ namespace System.ComponentModel {
                 }
                 return debugGridView;
             }
-        }        
-        
+        }
+
         public static TraceSwitch DGCaptionPaint {
             get {
                 if (dgCaptionPaint == null) {
@@ -168,7 +169,7 @@ namespace System.ComponentModel {
                 return dgCaptionPaint;
             }
         }
-        
+
         public static TraceSwitch DGEditColumnEditing {
             get {
                 if (dgEditColumnEditing == null) {
@@ -177,7 +178,7 @@ namespace System.ComponentModel {
                 return dgEditColumnEditing;
             }
         }
-        
+
         public static TraceSwitch DGRelationShpRowLayout {
             get {
                 if (dgRelationShpRowLayout == null) {
@@ -186,7 +187,7 @@ namespace System.ComponentModel {
                 return dgRelationShpRowLayout;
             }
         }
-                                                                            
+
         public static TraceSwitch DGRelationShpRowPaint {
             get {
                 if (dgRelationShpRowPaint == null) {
@@ -194,8 +195,8 @@ namespace System.ComponentModel {
                 }
                 return dgRelationShpRowPaint;
             }
-        }    
-        
+        }
+
         public static TraceSwitch DGRowPaint {
             get {
                 if (dgRowPaint == null) {
@@ -221,8 +222,8 @@ namespace System.ComponentModel {
                 }
                 return flowLayout;
             }
-        }       
-                
+        }
+
         public static TraceSwitch ImeMode {
             get {
                 if (imeMode == null) {
@@ -240,7 +241,7 @@ namespace System.ComponentModel {
                 return layoutPerformance;
             }
         }
-                                
+
         public static TraceSwitch LayoutSuspendResume {
             get {
                 if (layoutSuspendResume == null) {
@@ -258,7 +259,7 @@ namespace System.ComponentModel {
                 return lifetimeTracing;
             }
         }
-        
+
         public static TraceSwitch MSAA {
             get {
                 if (msaa == null) {
@@ -267,7 +268,7 @@ namespace System.ComponentModel {
                 return msaa;
             }
         }
-        
+
         public static TraceSwitch MSOComponentManager {
             get {
                 if (msoComponentManager == null) {
@@ -276,7 +277,7 @@ namespace System.ComponentModel {
                 return msoComponentManager;
             }
         }
-                                
+
         public static TraceSwitch RichLayout {
             get {
                 if (richLayout == null) {
@@ -294,7 +295,6 @@ namespace System.ComponentModel {
                 return setBounds;
             }
         }
-        #endif 
 
         public static TraceSwitch HandleLeak {
             get {
@@ -305,16 +305,16 @@ namespace System.ComponentModel {
             }
         }
 
-        private static BooleanSwitch traceCollect;
         public static BooleanSwitch TraceCollect {
             get {
-                if (traceCollect == null) {
-                    traceCollect = new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
+                if (s_traceCollect == null) {
+                    s_traceCollect = new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
                 }
-                return traceCollect;
+                return s_traceCollect;
             }
         }
-        internal static BooleanSwitch CommonDesignerServices
+
+        public static BooleanSwitch CommonDesignerServices
         {
             get
             {

@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Text;
     using System.Windows.Forms;
-    using System.Security.Permissions;
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
     using System.Runtime.InteropServices;
@@ -185,9 +184,11 @@ namespace System.Windows.Forms {
                 return ImageIndexer.Index;
             }
             set {
-                if (value < -1) {
-                    throw new ArgumentOutOfRangeException ("ImageIndex", string.Format (SR.InvalidLowBoundArgumentEx,  "imageIndex", (value).ToString (CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                if (value < -1)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
+
                 TabControl parent = ParentInternal as TabControl;
 
                 if (parent != null) {

@@ -562,12 +562,12 @@ namespace System.Windows.Forms {
             NativeMethods.BITMAP bmp = new NativeMethods.BITMAP();
 
             if (info.hbmColor != IntPtr.Zero) {
-                UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf(typeof(NativeMethods.BITMAP)), bmp);
+                UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmColor), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
                 SafeNativeMethods.IntDeleteObject(new HandleRef(null, info.hbmColor));
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight);
             }
             else if (info.hbmMask != IntPtr.Zero) {
-                UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmMask), Marshal.SizeOf(typeof(NativeMethods.BITMAP)), bmp);
+                UnsafeNativeMethods.GetObject(new HandleRef(null, info.hbmMask), Marshal.SizeOf<NativeMethods.BITMAP>(), bmp);
                 iconSize = new Size(bmp.bmWidth, bmp.bmHeight / 2);
             }
             

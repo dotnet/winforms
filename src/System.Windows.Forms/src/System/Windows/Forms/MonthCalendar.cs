@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
             set {
                 if (value != maxDate) {
                     if (value < DateTimePicker.EffectiveMinDate(minDate)) {
-                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDate(value), nameof(MinDate)));
                     }
                     maxDate = value;
                     SetRange();
@@ -542,13 +542,13 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxSelectionCount), string.Format(SR.InvalidLowBoundArgumentEx, "MaxSelectionCount", (value).ToString("D", CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxSelectionCount), value.ToString("D"), 1));
                 }
 
                 if (value != maxSelectionCount) {
                     if (IsHandleCreated) {
                         if (unchecked( (int) (long)SendMessage(NativeMethods.MCM_SETMAXSELCOUNT, value, 0)) == 0)
-                            throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, (value).ToString("D", CultureInfo.CurrentCulture)), "MaxSelectionCount");
+                            throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                     }
                     maxSelectionCount = value;
                 }
@@ -572,13 +572,13 @@ namespace System.Windows.Forms {
             set {
                 if (value != minDate) {
                     if (value > DateTimePicker.EffectiveMaxDate(maxDate)) {
-                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
                     }
 
                     // If trying to set the minimum less than DateTimePicker.MinimumDateTime, throw
                     // an exception.
                     if (value < DateTimePicker.MinimumDateTime) {
-                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidLowBoundArgumentEx, "MinDate", FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
                     }
 
                     minDate = value;
@@ -708,10 +708,10 @@ namespace System.Windows.Forms {
                 if (scrollChange != value) {
 
                     if (value < 0) {
-                        throw new ArgumentOutOfRangeException(nameof(ScrollChange), string.Format(SR.InvalidLowBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (0).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
                     }
                     if (value > MaxScrollChange) {
-                        throw new ArgumentOutOfRangeException(nameof(ScrollChange), string.Format(SR.InvalidHighBoundArgumentEx, "ScrollChange", (value).ToString("D", CultureInfo.CurrentCulture), (MaxScrollChange).ToString("D", CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
                     }
 
                     if (IsHandleCreated) {
@@ -742,10 +742,10 @@ namespace System.Windows.Forms {
 
                     // Keep SelectionEnd within min and max
                     if (value < MinDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionEnd), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionEnd", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
                     }
                     if (value > MaxDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionEnd), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
                     }
 
                     // If we've moved SelectionEnd before SelectionStart, move SelectionStart back
@@ -786,10 +786,10 @@ namespace System.Windows.Forms {
                     // Keep SelectionStart within min and max
                     //
                     if (value < minDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
                     }
                     if (value > maxDate) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionStart", FormatDate(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
                     }
 
                     // If we've moved SelectionStart beyond SelectionEnd, move SelectionEnd forward
@@ -994,12 +994,12 @@ namespace System.Windows.Forms {
 
                     // throw if trying to set the TodayDate to a value greater than MaxDate
                     if (DateTime.Compare(value, maxDate) > 0) {
-                        throw new ArgumentOutOfRangeException(nameof(TodayDate), string.Format(SR.InvalidHighBoundArgumentEx, "TodayDate", FormatDate(value), FormatDate(maxDate)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(TodayDate), FormatDate(value), FormatDate(maxDate)));
                     }
 
                     // throw if trying to set the TodayDate to a value less than MinDate
                     if (DateTime.Compare(value, minDate) < 0) {
-                        throw new ArgumentOutOfRangeException(nameof(TodayDate), string.Format(SR.InvalidLowBoundArgument, "TodayDate", FormatDate(value), FormatDate(minDate)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(TodayDate), FormatDate(value), FormatDate(minDate)));
                     }
 
                     todayDate = value.Date;
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms {
             NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO();
             mchi.pt_x = x;
             mchi.pt_y = y;
-            mchi.cbSize = Marshal.SizeOf(typeof(NativeMethods.MCHITTESTINFO));
+            mchi.cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>();
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_HITTEST, 0, mchi);
 
             // If the hit area has an associated valid date, get it
@@ -1976,10 +1976,10 @@ namespace System.Windows.Forms {
         public void SetDate(DateTime date) {
 
             if (date.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date), string.Format(SR.InvalidLowBoundArgumentEx, "date", FormatDate(date), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidLowBoundArgumentEx, nameof(date), FormatDate(date), nameof(MinDate)));
             }
             if (date.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date), string.Format(SR.InvalidHighBoundArgumentEx, "date", FormatDate(date), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidHighBoundArgumentEx, nameof(date), FormatDate(date), nameof(MaxDate)));
             }
 
             SetSelectionRange(date, date);
@@ -1995,16 +1995,16 @@ namespace System.Windows.Forms {
 
             // Keep the dates within the min and max dates
             if (date1.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date1), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date1), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date1), nameof(MinDate)));
             }
             if (date1.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date1), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date1), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date1), nameof(MaxDate)));
             }
             if (date2.Ticks < minDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date2), string.Format(SR.InvalidLowBoundArgumentEx, "SelectionStart", FormatDate(date2), "MinDate"));
+                throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date2), nameof(MinDate)));
             }
             if (date2.Ticks > maxDate.Ticks) {
-                throw new ArgumentOutOfRangeException(nameof(date2), string.Format(SR.InvalidHighBoundArgumentEx, "SelectionEnd", FormatDate(date2), "MaxDate"));
+                throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date2), nameof(MaxDate)));
             }
 
             // If date1 > date2, we just select date2 (compat)
@@ -2317,20 +2317,20 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     FocusInternal();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
                     break;
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     base.WndProc(ref m);
                     break;
                 default:

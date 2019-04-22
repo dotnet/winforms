@@ -517,7 +517,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownWidth), string.Format(SR.InvalidArgument, "DropDownWidth", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownWidth), value));
                 }
                 if (Properties.GetInteger(PropDropDownWidth) != value) {
                     Properties.SetInteger(PropDropDownWidth, value);
@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(DropDownHeight), string.Format(SR.InvalidArgument, "DropDownHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(DropDownHeight), value));
                 }
                 if (Properties.GetInteger(PropDropDownHeight) != value) {
                     Properties.SetInteger(PropDropDownHeight, value);
@@ -722,7 +722,7 @@ namespace System.Windows.Forms {
 
             set {
                 if (value < 1) {
-                    throw new ArgumentOutOfRangeException(nameof(ItemHeight), string.Format(SR.InvalidArgument, "ItemHeight", (value).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(ItemHeight), value));
                 }
 
                 ResetHeightCache();
@@ -788,7 +788,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 1 || value > 100) {
-                    throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), string.Format(SR.InvalidBoundArgument, "MaxDropDownItems", (value).ToString(CultureInfo.CurrentCulture), (1).ToString(CultureInfo.CurrentCulture), (100).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
                 }
                 maxDropDownItems = (short)value;
             }
@@ -1019,7 +1019,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (value < -1 || value >= itemCount) {
-                        throw new ArgumentOutOfRangeException(nameof(SelectedIndex), string.Format(SR.InvalidArgument, "SelectedIndex", (value).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectedIndex), value));
                     }
 
                     if (IsHandleCreated) {
@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms {
                     if (IsHandleCreated) {
                         Debug.Assert(childEdit != null);
                         if (childEdit != null) {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
                         }
                     }
                 }
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < 0) {
-                    throw new ArgumentOutOfRangeException(nameof(SelectionStart), string.Format(SR.InvalidArgument, "SelectionStart", value.ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(SelectionStart), value));
                 }
                 Select(value, SelectionLength);
             }
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms {
         private void ChildWndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_CHAR:
+                case Interop.WindowMessages.WM_CHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1592,7 +1592,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_SYSCHAR:
+                case Interop.WindowMessages.WM_SYSCHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1605,8 +1605,8 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case NativeMethods.WM_KEYDOWN:
-                case NativeMethods.WM_SYSKEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_SYSKEYDOWN:
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive) {
                         finder.FindDropDowns(false);
                     }
@@ -1636,12 +1636,12 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_INPUTLANGCHANGE:
+                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
                     DefChildWndProc( ref m ); 
                     break;
 
-                case NativeMethods.WM_KEYUP:
-                case NativeMethods.WM_SYSKEYUP:
+                case Interop.WindowMessages.WM_KEYUP:
+                case Interop.WindowMessages.WM_SYSKEYUP:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1658,7 +1658,7 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode) {
@@ -1677,7 +1677,7 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
 
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
                     // set the status. Do we need to? This happens when we have a DropDownList.
@@ -1710,14 +1710,14 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_SETFONT:
+                case Interop.WindowMessages.WM_SETFONT:
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle) {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_SETMARGINS,
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
                                                   NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                     }
                     break;
-                case NativeMethods.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                     break;
 
-                case NativeMethods.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                     break;
 
-                case NativeMethods.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1765,7 +1765,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                     break;
 
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     NativeMethods.RECT r = new NativeMethods.RECT();
@@ -1816,7 +1816,7 @@ namespace System.Windows.Forms {
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
                     break;
-                case NativeMethods.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                     break;
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                     break;
-                case NativeMethods.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1856,7 +1856,7 @@ namespace System.Windows.Forms {
                     DefChildWndProc(ref m);
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                     break;
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1871,17 +1871,17 @@ namespace System.Windows.Forms {
                     OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
                     break;
 
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
                     if (this.ContextMenu != null || this.ContextMenuStrip != null) {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_CONTEXTMENU, m.WParam, m.LParam);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
                     else {
                         DefChildWndProc(ref m);
                     }
                     break;
 
-                case NativeMethods.WM_MOUSEMOVE:
+                case Interop.WindowMessages.WM_MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
                     //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms {
                     OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
                     break;
 
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT) {
                         Cursor.CurrentInternal = Cursor;
                     }
@@ -1899,7 +1899,7 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     DefChildWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
@@ -2001,81 +2001,46 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the combo box that starts with the given string.
-        ///     The search is not case sensitive.
+        /// Finds the first item in the combo box that starts with the given string.
+        /// The search is not case sensitive.
         /// </devdoc>
-        public int FindString(string s) {
-            return FindString(s, -1);
+        public int FindString(string s) => FindString(s, startIndex: -1);
+
+        /// <devdoc>
+        /// Finds the first item after the given index which starts with the given string.
+        /// The search is not case sensitive.
+        /// </devdoc>
+        public int FindString(string s, int startIndex)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: false, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindString1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index which starts with the given
-        ///     string. The search is not case sensitive.
+        /// Finds the first item in the combo box that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindString(string s, int startIndex) {
-            if (s == null) {
-                return -1;
-            }
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRING.
-            // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, false);
+        public int FindStringExact(string s) 
+        {
+            return FindStringExact(s, startIndex: -1, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact"]/*' />
         /// <devdoc>
-        ///     Finds the first item in the combo box that matches the given string.
-        ///     The strings must match exactly, except for differences in casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s) {
-            return FindStringExact(s, -1, true);
+        public int FindStringExact(string s, int startIndex)
+        {
+            return FindStringExact(s, startIndex, ignoreCase: true);
         }
 
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
         /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
+        /// Finds the first item after the given index that matches the given string.
+        /// The strings must match exactly, except for differences in casing.
         /// </devdoc>
-        public int FindStringExact(string s, int startIndex) {
-            return FindStringExact(s, startIndex, true);
-        }
-
-        /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.FindStringExact1"]/*' />
-        /// <devdoc>
-        ///     Finds the first item after the given index that matches the given
-        ///     string. The strings must match exactly, except for differences in
-        ///     casing.
-        /// </devdoc>
-        internal int FindStringExact(string s, int startIndex, bool ignorecase) {
-            if (s == null) return -1;
-
-            if (itemsCollection == null || itemsCollection.Count == 0) {
-                return -1;
-            }
-
-            // The last item in the list is still a valid starting point for a search.
-            if (startIndex < -1 || startIndex >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
-            }
-
-            // Always use the managed FindStringInternal instead of CB_FINDSTRINGEXACT.
-            // The managed version correctly handles Turkish I.
-            //
-            return FindStringInternal(s, Items, startIndex, true, ignorecase);
+        internal int FindStringExact(string s, int startIndex, bool ignoreCase)
+        {
+            return FindStringInternal(s, itemsCollection, startIndex, exact: true, ignoreCase);
         }
 
         // GetPreferredSize and SetBoundsCore call this method to allow controls to self impose
@@ -2115,7 +2080,7 @@ namespace System.Windows.Forms {
             }
 
             if (index < 0 || itemsCollection == null || index >= itemsCollection.Count) {
-                throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
             if (IsHandleCreated) {
@@ -2144,13 +2109,13 @@ namespace System.Windows.Forms {
         }
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg) {
-            if ((msg == NativeMethods.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
+            if ((msg == Interop.WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
                 return IntPtr.Zero;
             }
-            else if ((msg == NativeMethods.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
+            else if ((msg == Interop.WindowMessages.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
@@ -2166,7 +2131,7 @@ namespace System.Windows.Forms {
         // Returns true when the key processing needs to be intercepted to allow
         // auto-completion in DropDownList style.
         private bool InterceptAutoCompleteKeystroke(Message m) {
-            if (m.Msg == NativeMethods.WM_KEYDOWN) {
+            if (m.Msg == Interop.WindowMessages.WM_KEYDOWN) {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
                 if ((Keys)unchecked( (int) (long)m.WParam) == Keys.Delete) {
@@ -2179,7 +2144,7 @@ namespace System.Windows.Forms {
                     return false;
                 }
             }
-            else if (m.Msg == NativeMethods.WM_CHAR) {
+            else if (m.Msg == Interop.WindowMessages.WM_CHAR) {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 char keyChar = unchecked((char)(long)m.WParam);
                 if (keyChar == (char)Keys.Back) {
@@ -2402,7 +2367,7 @@ namespace System.Windows.Forms {
 
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
                     //
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_SETMARGINS,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
                                               NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                 }
             }
@@ -3187,14 +3152,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void Select(int start, int length) {
             if (start < 0) {
-                throw new ArgumentOutOfRangeException(nameof(start), string.Format(SR.InvalidArgument, "start", start.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidArgument, nameof(start), start));
             }
             // the Length can be negative to support Selecting in the "reverse" direction..
             int end = start + length;
 
             // but end cannot be negative... this means Length is far negative...
             if (end < 0) {
-                throw new ArgumentOutOfRangeException(nameof(length), string.Format(SR.InvalidArgument, "length", length.ToString(CultureInfo.CurrentCulture)));
+                throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
             SendMessage(NativeMethods.CB_SETEDITSEL, 0, NativeMethods.Util.MAKELPARAM(start, end));
@@ -3291,7 +3256,7 @@ namespace System.Windows.Forms {
         public override string ToString() {
 
             string s = base.ToString();
-            return s + ", Items.Count: " + ((itemsCollection == null) ? (0).ToString(CultureInfo.CurrentCulture) : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
+            return s + ", Items.Count: " + ((itemsCollection == null) ? "0" : itemsCollection.Count.ToString(CultureInfo.CurrentCulture));
         }
 
         /// <devdoc>
@@ -3372,7 +3337,7 @@ namespace System.Windows.Forms {
 
             if (DropDownStyle == ComboBoxStyle.DropDown) {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.WM_SETTEXT, IntPtr.Zero, s);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.WindowMessages.WM_SETTEXT, IntPtr.Zero, s);
                 }
             }
         }
@@ -3408,7 +3373,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private void WmParentNotify(ref Message m) {
             base.WndProc(ref m);
-            if (unchecked((int)(long)m.WParam) == (NativeMethods.WM_CREATE | 1000 << 16)) {
+            if (unchecked((int)(long)m.WParam) == (Interop.WindowMessages.WM_CREATE | 1000 << 16)) {
                 dropDownHandle = m.LParam;
 
                 if (AccessibilityImprovements.Level3) {
@@ -3589,7 +3554,7 @@ namespace System.Windows.Forms {
             switch (m.Msg) {
                 // We don't want to fire the focus events twice -
                 // once in the combobox and once in the ChildWndProc.
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     try {
                         fireSetFocus = false;
                         base.WndProc(ref m);
@@ -3599,7 +3564,7 @@ namespace System.Windows.Forms {
                         fireSetFocus = true;
                     }
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     try {
                         fireLostFocus = false;
                         base.WndProc(ref m);
@@ -3615,7 +3580,7 @@ namespace System.Windows.Forms {
                         // as with Theming on.
                         
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && this.DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.WM_MOUSELEAVE, 0, 0);                            
+                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);                            
                         }
                     }
 
@@ -3623,30 +3588,30 @@ namespace System.Windows.Forms {
                         fireLostFocus = true;
                     }
                     break;
-                case NativeMethods.WM_CTLCOLOREDIT:
-                case NativeMethods.WM_CTLCOLORLISTBOX:
+                case Interop.WindowMessages.WM_CTLCOLOREDIT:
+                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
                     m.Result = InitializeDCForWmCtlColor(m.WParam, m.Msg);
                     break;
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
-                case NativeMethods.WM_PARENTNOTIFY:
+                case Interop.WindowMessages.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_MEASUREITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     mouseEvents = true;
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     NativeMethods.RECT r = new NativeMethods.RECT();
@@ -3677,12 +3642,12 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case NativeMethods.WM_MOUSELEAVE:
+                case Interop.WindowMessages.WM_MOUSELEAVE:
                     DefWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
 
-                case NativeMethods.WM_PAINT:
+                case Interop.WindowMessages.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
 
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect)) {
@@ -3735,7 +3700,7 @@ namespace System.Windows.Forms {
                     
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_PRINTCLIENT: 
+                case Interop.WindowMessages.WM_PRINTCLIENT: 
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) {
                         DefWndProc(ref m);
@@ -3751,11 +3716,11 @@ namespace System.Windows.Forms {
                     }
                     base.WndProc(ref m);
                     return;                    
-                case NativeMethods.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SETCURSOR:
                     base.WndProc(ref m);
                     break;
 
-                case NativeMethods.WM_SETFONT:
+                case Interop.WindowMessages.WM_SETFONT:
                     //(
                     if (Width == 0) {
                         suppressNextWindosPos = true;
@@ -3764,14 +3729,14 @@ namespace System.Windows.Forms {
                     break;
 
 
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     if (!suppressNextWindosPos) {
                         base.WndProc(ref m);
                     }
                     suppressNextWindosPos = false;
                     break;
 
-                case NativeMethods.WM_NCDESTROY:
+                case Interop.WindowMessages.WM_NCDESTROY:
                     base.WndProc(ref m);
                     ReleaseChildWindow();
                     break;
@@ -3803,10 +3768,10 @@ namespace System.Windows.Forms {
 
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
-                    case NativeMethods.WM_GETOBJECT:
+                    case Interop.WindowMessages.WM_GETOBJECT:
                         WmGetObject(ref m);
                         return;
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (_childWindowType == ChildWindowType.DropDownList) {
 
                             // Need to track the selection change via mouse over to
@@ -4122,7 +4087,7 @@ namespace System.Windows.Forms {
             public virtual object this[int index] {
                 get {
                     if (index < 0 || index >= InnerList.Count) {
-                        throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                        throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
                     return InnerList[index];
@@ -4210,7 +4175,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index > InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 // If the combo box is sorted, then nust treat this like an add
@@ -4252,7 +4217,7 @@ namespace System.Windows.Forms {
                 owner.CheckNoDataSource();
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 if (owner.IsHandleCreated) {
@@ -4289,7 +4254,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (index < 0 || index >= InnerList.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidArgument, "index", (index).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
                 InnerList[index] = value;
@@ -5699,7 +5664,7 @@ namespace System.Windows.Forms {
                     inWndProcCnt--;
                 }
 
-                if (m.Msg == NativeMethods.WM_NCDESTROY) {
+                if (m.Msg == Interop.WindowMessages.WM_NCDESTROY) {
                     Debug.Assert(ACWindows.ContainsKey(this.Handle));
                     ACWindows.Remove(this.Handle);   //so we do not leak ac windows.
                 }

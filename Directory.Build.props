@@ -24,8 +24,9 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> <!-- required due to https://github.com/tonerdo/coverlet/issues/72 -->
     <CoverletOutputFormat>opencover</CoverletOutputFormat>
     <Include>[System.Windows.*]*</Include>
-    <!-- Exclude only Obsolete and tagged with ExcludeFromCodeCoverage !!Avoid using this!! -->
-    <Exclude />
+    <!-- Exclude dependencies that embed their symbol information -->
+    <Exclude>[Microsoft.DotNet.XUnitExtensions]*,[xunit*]*</Exclude>
+    <!-- Exclude anything tagged with Obsolete or with ExcludeFromCodeCoverage !!Avoid using this!! -->
     <ExcludeByAttribute>Obsolete,ExcludeFromCodeCoverage</ExcludeByAttribute>
     <ExcludeByFile />
   </PropertyGroup>
@@ -37,6 +38,11 @@
   <!-- workaround for package downgrade in Microsoft.NetCore.Platforms -->
   <PropertyGroup>
     <DisableImplicitNETCorePlatformsReference>true</DisableImplicitNETCorePlatformsReference>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- Set RuntimeFrameworkVersion to MicrosoftNETCoreAppPackageVersion from Core Setup to prevent large SDK cycle -->
+    <RuntimeFrameworkVersion Condition="'$(MicrosoftNETCoreAppPackageVersion)'!='' And $(TargetFramework.StartsWith('netcoreapp3.')) ">$(MicrosoftNETCoreAppPackageVersion)</RuntimeFrameworkVersion>
   </PropertyGroup>
 
 </Project>

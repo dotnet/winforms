@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Diagnostics;
     using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
     using System.Security;
     using System.Windows.Forms.Layout; 
     using System.Windows.Forms.Design; 
@@ -19,7 +18,7 @@ namespace System.Windows.Forms {
 
     /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel"]/*' />
     /// <devdoc>
-    /// A non selectable winbar item
+    /// A non selectable ToolStrip item
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
     public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion {
@@ -35,7 +34,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel.ToolStripStatusLabel"]/*' />
         /// <devdoc>
-        /// A non selectable winbar item
+        /// A non selectable ToolStrip item
         /// </devdoc>
         public ToolStripStatusLabel() {
             Initialize();

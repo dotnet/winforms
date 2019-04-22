@@ -314,17 +314,17 @@ namespace System.ComponentModel.Design
             {
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_GETDLGCODE:
+                    case Interop.WindowMessages.WM_GETDLGCODE:
                         m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTALLKEYS);
                         return;
-                    case NativeMethods.WM_MOUSEMOVE:
+                    case Interop.WindowMessages.WM_MOUSEMOVE:
                         if (clickSeen)
                         {
                             clickSeen = false;
                         }
                         break;
-                    case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
-                        NativeMethods.NMTREEVIEW nmtv = (NativeMethods.NMTREEVIEW)Marshal.PtrToStructure(m.LParam, typeof(NativeMethods.NMTREEVIEW));
+                    case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                        NativeMethods.NMTREEVIEW nmtv = Marshal.PtrToStructure<NativeMethods.NMTREEVIEW>(m.LParam);
                         if (nmtv.nmhdr.code == NativeMethods.NM_CLICK)
                         {
                             clickSeen = true;

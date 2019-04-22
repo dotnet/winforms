@@ -9,18 +9,16 @@ using System.Windows.Forms.Design;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// The DesignerActionService manages DesignerActions.  All DesignerActions are associated with an object. DesignerActions can be added or removed at any given time.
-    /// The DesignerActionService controls the expiration of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration.
-    /// Designer implementing this service will need to monitor the DesignerActionsChanged event on this class.  This event will fire every time a change is made to any object's DesignerActions.
+    /// The DesignerActionService manages DesignerActions. All DesignerActions are associated with an object. DesignerActions can be added or removed at any  given time. The DesignerActionService controls the expiration of DesignerActions by monitoring three basic events: selection change, component change, and timer expiration. Designer implementing this service will need to monitor the DesignerActionsChanged event on this class. This event will fire every time a change is made to any object's DesignerActions.
     /// </summary>
     public class DesignerActionService : IDisposable
     {
-        private readonly Hashtable _designerActionLists; //this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
+        private readonly Hashtable _designerActionLists; // this is how we store 'em.  Syntax: key = object, value = DesignerActionListCollection
         private DesignerActionListsChangedEventHandler _designerActionListsChanged;
-        private readonly IServiceProvider _serviceProvider; //standard service provider
+        private readonly IServiceProvider _serviceProvider; // standard service provider
         private readonly ISelectionService _selSvc; // selection service
         private readonly Hashtable _componentToVerbsEventHookedUp; //table component true/false
-        // Gaurd against ReEntrant Code.  The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accesssed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
+        // Gaurd against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accesssed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
         private bool _reEntrantCode = false;
 
         /// <summary>
@@ -28,7 +26,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         public DesignerActionService(IServiceProvider serviceProvider)
         {
-
             if (serviceProvider != null)
             {
                 _serviceProvider = serviceProvider;
@@ -47,9 +44,6 @@ namespace System.ComponentModel.Design
             }
             _designerActionLists = new Hashtable();
             _componentToVerbsEventHookedUp = new Hashtable();
-#if DEBUGDESIGNERTASKS
-            Debug.WriteLine("DesignerActionService - created");
-#endif
         }
 
         /// <summary>
@@ -57,14 +51,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public event DesignerActionListsChangedEventHandler DesignerActionListsChanged
         {
-            add
-            {
-                _designerActionListsChanged += value;
-            }
-            remove
-            {
-                _designerActionListsChanged -= value;
-            }
+            add => _designerActionListsChanged += value;
+            remove => _designerActionListsChanged -= value;
         }
 
         /// <summary>
@@ -90,6 +78,8 @@ namespace System.ComponentModel.Design
             {
                 _designerActionLists.Add(comp, designerActionListCollection);
             }
+
+            //fire event
             OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsAdded, GetComponentActions(comp)));
         }
 
@@ -98,7 +88,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Add(IComponent comp, DesignerActionList actionList)
         {
-            Add(comp, new DesignerActionListCollection( new [] { actionList } ));
+            Add(comp, new DesignerActionListCollection( new[] { actionList } ));
         }
 
         /// <summary>
@@ -106,7 +96,6 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Clear()
         {
-
             if (_designerActionLists.Count == 0)
             {
                 return;
@@ -121,7 +110,6 @@ namespace System.ComponentModel.Design
 
             //actually clear our hashtable
             _designerActionLists.Clear();
-
             //fire our DesignerActionsChanged event for each comp we just removed
             foreach (Component comp in compsRemoved)
             {
@@ -173,7 +161,6 @@ namespace System.ComponentModel.Design
             return GetComponentActions(component, ComponentActionsType.All);
         }
 
-
         public virtual DesignerActionListCollection GetComponentActions(IComponent component, ComponentActionsType type)
         {
             if (component == null)
@@ -193,7 +180,6 @@ namespace System.ComponentModel.Design
                 case ComponentActionsType.Service:
                     GetComponentServiceActions(component, result);
                     break;
-
             }
             return result;
         }
@@ -237,12 +223,10 @@ namespace System.ComponentModel.Design
                             {
                                 if (hookupEvents)
                                 {
-                                    //Debug.WriteLine("hooking up change event for verb " + verb.Text);
                                     verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
                                 }
                                 if (verb.Enabled && verb.Visible)
                                 {
-                                    //Debug.WriteLine("adding verb to collection for panel... " + verb.Text);
                                     verbsArray.Add(verb);
                                 }
                             }
@@ -254,7 +238,7 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    // remove all the ones that are empty... ie GetSortedActionList returns nothing we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
+                    // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
                     // NOTE: We do this AFTER the verb check that way to disable auto verb upgrading you can just return an empty actionlist collection
                     if (pullCollection != null)
                     {
@@ -290,7 +274,6 @@ namespace System.ComponentModel.Design
                                     DesignerActionUIService dapUISvc = (DesignerActionUIService)sc.GetService(typeof(DesignerActionUIService));
                                     if (dapUISvc != null)
                                     {
-                                        //Debug.WriteLine("Calling refresh on component  " + comp.Site.Name);
                                         dapUISvc.Refresh(comp); // we need to refresh, a verb on the current panel has changed its state
                                     }
                                 }
@@ -321,7 +304,7 @@ namespace System.ComponentModel.Design
             if (pushCollection != null)
             {
                 actionLists.AddRange(pushCollection);
-                // remove all the ones that are empty... ie GetSortedActionList returns nothing we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
+                // remove all the ones that are empty... ie GetSortedActionList returns nothing. we might waste some time doing this twice but don't have much of a choice here... the panel is not yet displayed and we want to know if a non empty panel is present...
                 foreach (DesignerActionList actionList in pushCollection)
                 {
                     DesignerActionItemCollection collection = actionList.GetSortedActionItems();
@@ -334,7 +317,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// We hook the OnComponentRemoved event so we can clean up all associated actions.
+        /// We hook the OnComponentRemoved event so we can clean up  all associated actions.
         /// </summary>
         private void OnComponentRemoved(object source, ComponentEventArgs ce)
         {
@@ -365,12 +348,11 @@ namespace System.ComponentModel.Design
             }
 
             _designerActionLists.Remove(comp);
-
             OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
         }
 
         /// <summary>
-        /// This will remove the specified Designeraction from  the DesignerActionService. All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        /// This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {
@@ -391,7 +373,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        /// This will remove the all instances of the DesignerAction from  the 'comp' object.  If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
+        /// This will remove the all instances of the DesignerAction from  the 'comp' object. If an alarm was set, it will be unhooked. This will also fire the DesignerActionChanged event.
         /// </summary>
         public void Remove(IComponent comp, DesignerActionList actionList)
         {
@@ -409,7 +391,6 @@ namespace System.ComponentModel.Design
             }
 
             DesignerActionListCollection actionLists = (DesignerActionListCollection)_designerActionLists[comp];
-
             if (!actionLists.Contains(actionList))
             {
                 return;
@@ -437,7 +418,6 @@ namespace System.ComponentModel.Design
                 {
                     actionLists.Remove(t);
                 }
-
                 OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
             }
         }

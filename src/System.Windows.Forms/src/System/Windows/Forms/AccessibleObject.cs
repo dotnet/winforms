@@ -2094,9 +2094,6 @@ namespace System.Windows.Forms
                         ref IID_IEnumVariant,
                         ref en);
 
-            Debug.Assert(acc != null, "SystemIAccessible is null");
-            Debug.Assert(en != null, "SystemIEnumVariant is null");
-
             if (acc != null || en != null)
             {
                 systemIAccessible = (IAccessible)acc;
@@ -2706,7 +2703,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
-        /// Create a new wrapper. Protect this with UnmanagedCode Permission
+        /// Create a new wrapper.
         /// </summary>
         internal InternalAccessibleObject(AccessibleObject accessibleImplemention)
         {

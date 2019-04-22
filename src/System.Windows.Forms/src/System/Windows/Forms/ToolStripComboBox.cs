@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Drawing2D;
     using System.Windows.Forms.Design; 
     using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Internal;     
     using System.Globalization;
@@ -153,7 +152,7 @@ namespace System.Windows.Forms {
             comboBox.Font = ToolStripManager.DefaultFont;
             return comboBox;
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteCustomSource"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteCustomSource"]/*' />
         [
         DesignerSerializationVisibility(DesignerSerializationVisibility.Content),
         Localizable(true),
@@ -166,7 +165,7 @@ namespace System.Windows.Forms {
             set { ComboBox.AutoCompleteCustomSource = value;}
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteMode"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteMode"]/*' />
         [
         DefaultValue(AutoCompleteMode.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteModeDescr)),
@@ -177,7 +176,7 @@ namespace System.Windows.Forms {
             set { ComboBox.AutoCompleteMode = value;}
         }
         
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteSource"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.AutoCompleteSource"]/*' />
         [
         DefaultValue(AutoCompleteSource.None),
         SRDescription(nameof(SR.ComboBoxAutoCompleteSourceDescr)),
@@ -259,7 +258,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown {
             add {
@@ -270,7 +269,7 @@ namespace System.Windows.Forms {
             }
         }
 
-         /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
+         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed {
             add {
@@ -280,7 +279,7 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventDropDownClosed, value);
             }
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyleChanged"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged {
             add {
@@ -292,7 +291,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownHeight"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownHeight"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownHeightDescr)),
@@ -305,7 +304,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyle"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyle"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(ComboBoxStyle.DropDown),
@@ -317,7 +316,7 @@ namespace System.Windows.Forms {
             set { ComboBox.DropDownStyle = value;}
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownWidth"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownWidth"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))
@@ -327,7 +326,7 @@ namespace System.Windows.Forms {
             set { ComboBox.DropDownWidth = value;}
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DroppedDown"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DroppedDown"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -338,7 +337,7 @@ namespace System.Windows.Forms {
             set { ComboBox.DroppedDown = value;}
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FlatStyle"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FlatStyle"]/*' />
         [
         SRCategory(nameof(SR.CatAppearance)),
         DefaultValue(FlatStyle.Popup),
@@ -350,7 +349,7 @@ namespace System.Windows.Forms {
             set { ComboBox.FlatStyle = value;}
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.IntegralHeight"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.IntegralHeight"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(true),
@@ -378,7 +377,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxDropDownItems"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxDropDownItems"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(8),
@@ -389,7 +388,7 @@ namespace System.Windows.Forms {
             get { return ComboBox.MaxDropDownItems; }
             set { ComboBox.MaxDropDownItems = value;}
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxLength"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxLength"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(0),
@@ -401,7 +400,7 @@ namespace System.Windows.Forms {
            set {  ComboBox.MaxLength = value; }
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndex"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndex"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -411,7 +410,7 @@ namespace System.Windows.Forms {
             get { return ComboBox.SelectedIndex; }
             set { ComboBox.SelectedIndex = value;}
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndexChanged"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
             add {
@@ -421,7 +420,7 @@ namespace System.Windows.Forms {
                 Events.RemoveHandler(EventSelectedIndexChanged, value);
             }
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedItem"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedItem"]/*' />
         [
         Browsable(false),
         Bindable(true),
@@ -433,7 +432,7 @@ namespace System.Windows.Forms {
             set { ComboBox.SelectedItem = value;}
         }  
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedText"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedText"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -443,7 +442,7 @@ namespace System.Windows.Forms {
             get { return ComboBox.SelectedText; }
             set { ComboBox.SelectedText = value;}
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionLength"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionLength"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -454,7 +453,7 @@ namespace System.Windows.Forms {
             set { ComboBox.SelectionLength = value;}
         }
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionStart"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionStart"]/*' />
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -464,7 +463,7 @@ namespace System.Windows.Forms {
             get { return ComboBox.SelectionStart; }
             set { ComboBox.SelectionStart = value;}
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Sorted"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Sorted"]/*' />
         [
         SRCategory(nameof(SR.CatBehavior)),
         DefaultValue(false),
@@ -476,7 +475,7 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.TextUpdate"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.TextUpdate"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate {
             add {
@@ -489,23 +488,23 @@ namespace System.Windows.Forms {
 
 #region WrappedMethods        
 
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.BeginUpdate"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.BeginUpdate"]/*' />
         public void BeginUpdate() { ComboBox.BeginUpdate(); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.EndUpdate"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.EndUpdate"]/*' />
         public void EndUpdate() { ComboBox.EndUpdate(); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindString"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindString"]/*' />
         public int FindString(string s) { return ComboBox.FindString(s); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindString1"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindString1"]/*' />
         public int FindString(string s, int startIndex) { return ComboBox.FindString(s, startIndex); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindStringExact"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindStringExact"]/*' />
         public int FindStringExact(string s) { return ComboBox.FindStringExact(s); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindStringExact1"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.FindStringExact1"]/*' />
         public int FindStringExact(string s, int startIndex) { return ComboBox.FindStringExact(s, startIndex); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.GetItemHeight"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.GetItemHeight"]/*' />
         public int GetItemHeight(int index) { return ComboBox.GetItemHeight(index); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Select"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Select"]/*' />
         public void Select(int start, int length) { ComboBox.Select(start, length); }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectAll"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectAll"]/*' />
         public void SelectAll() { ComboBox.SelectAll(); }
 
 #endregion WrappedMethods
@@ -539,7 +538,7 @@ namespace System.Windows.Forms {
             OnTextUpdate(e);
         }
      
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDown"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDown"]/*' />
         protected virtual void OnDropDown(EventArgs e) {
             if (ParentInternal != null) {
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter); 
@@ -547,7 +546,7 @@ namespace System.Windows.Forms {
             }            
             RaiseEvent(EventDropDown, e);            
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDown"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDown"]/*' />
         protected virtual void OnDropDownClosed(EventArgs e) {
             if (ParentInternal != null) {
                 // PERF, 
@@ -557,24 +556,24 @@ namespace System.Windows.Forms {
             }
             RaiseEvent(EventDropDownClosed, e);            
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDownStyleChanged"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnDropDownStyleChanged"]/*' />
         protected virtual void OnDropDownStyleChanged(EventArgs e) {
             RaiseEvent(EventDropDownStyleChanged, e);            
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSelectedIndexChanged"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSelectedIndexChanged"]/*' />
         protected virtual void OnSelectedIndexChanged(EventArgs e) {
             RaiseEvent(EventSelectedIndexChanged, e);            
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSelectionChangeCommitted"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSelectionChangeCommitted"]/*' />
         protected virtual void OnSelectionChangeCommitted(EventArgs e) {
             RaiseEvent(EventSelectionChangeCommitted, e);            
         }
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnTextUpdate"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnTextUpdate"]/*' />
         protected virtual void OnTextUpdate(EventArgs e) {
             RaiseEvent(EventTextUpdate, e);            
         }
        
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSubscribeControlEvents"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnSubscribeControlEvents"]/*' />
         protected override void OnSubscribeControlEvents(Control control) {
             ComboBox comboBox = control as ComboBox;
             if (comboBox != null) {
@@ -591,7 +590,7 @@ namespace System.Windows.Forms {
             base.OnSubscribeControlEvents(control);
         }
       
-        /// <include file='doc\WinBarComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnUnsubscribeControlEvents"]/*' />
+        /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.OnUnsubscribeControlEvents"]/*' />
         protected override void OnUnsubscribeControlEvents(Control control) {
             ComboBox comboBox = control as ComboBox;
             if (comboBox != null) {

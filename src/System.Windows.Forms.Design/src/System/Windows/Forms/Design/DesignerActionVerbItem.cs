@@ -8,37 +8,15 @@ namespace System.ComponentModel.Design
     {
         private readonly DesignerVerb _targetVerb;
 
-        public DesignerActionVerbItem(DesignerVerb verb)
+        public DesignerActionVerbItem(DesignerVerb verb) : base(null, null, null)
         {
-            _targetVerb = verb ?? throw new ArgumentNullException();
+            _targetVerb = verb ?? throw new ArgumentNullException(nameof(verb));
         }
 
-        public override string Category
-        {
-            get => "Verbs";
-        }
+        public override string Category => "Verbs";
 
-        public override string Description { get; }
+        public override string DisplayName => _targetVerb.Text;
 
-        public override string DisplayName
-        {
-            get => _targetVerb.Text;
-        }
-
-        public override string MemberName
-        {
-            get => null;
-        }
-
-        public override bool IncludeAsDesignerVerb
-        {
-            get => false;
-        }
-
-        public override void Invoke()
-        {
-            _targetVerb.Invoke();
-        }
-
+        public override void Invoke() => _targetVerb.Invoke();
     }
 }

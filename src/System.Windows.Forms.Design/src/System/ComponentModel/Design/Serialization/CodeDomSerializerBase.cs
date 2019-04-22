@@ -139,7 +139,7 @@ namespace System.ComponentModel.Design.Serialization
             return TypeDescriptor.GetReflectionType(type);
         }
 
-        private static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
+        internal static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
         {
             if (manager == null) throw new ArgumentNullException(nameof(manager));
             if (exceptionText == null) throw new ArgumentNullException(nameof(exceptionText));
