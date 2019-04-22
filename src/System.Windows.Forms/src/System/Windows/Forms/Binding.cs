@@ -1092,7 +1092,7 @@ namespace System.Windows.Forms
         private class BindToObject
         {
             private PropertyDescriptor _fieldInfo;
-            private Binding _owner;
+            private readonly Binding _owner;
             private string _errorText = string.Empty;
 
             private bool _dataSourceInitialized = false;
@@ -1135,6 +1135,7 @@ namespace System.Windows.Forms
 
             internal BindToObject(Binding owner)
             {
+                Debug.Assert(owner != null);
                 _owner = owner;
                 CheckBinding();
             }
@@ -1272,7 +1273,7 @@ namespace System.Windows.Forms
             internal void CheckBinding()
             {
                 // At design time, don't check anything.
-                if (_owner != null && _owner.BindableComponent != null && _owner.ControlAtDesignTime())
+                if (_owner.BindableComponent != null && _owner.ControlAtDesignTime())
                 {
                     return;
                 }
@@ -1287,13 +1288,11 @@ namespace System.Windows.Forms
                     _fieldInfo.RemoveValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
                 }
 
-                if (_owner != null &&
-                    _owner.BindingManagerBase != null &&
+                if (_owner.BindingManagerBase != null &&
                     _owner.BindableComponent != null &&
                     _owner.ComponentCreated &&
                     IsDataSourceInitialized)
                 {
-
                     string dataField = _owner.BindingMemberInfo.BindingField;
 
                     _fieldInfo = _owner.BindingManagerBase.GetItemProperties().Find(dataField, true);
