@@ -100,8 +100,6 @@ namespace System.Windows.Forms
         {
         }
 
-        internal BindToObject BindToObjectInternal => _bindToObject;
-
         public object DataSource => _bindToObject.DataSource;
 
         public BindingMemberInfo BindingMemberInfo => _bindToObject.BindingMemberInfo;
@@ -180,24 +178,29 @@ namespace System.Windows.Forms
         /// Gets the <see cref='System.Windows.Forms.BindingManagerBase'/> of this binding that
         /// allows enumeration of a set of bindings.
         /// </summary>
-        public BindingManagerBase BindingManagerBase => _bindingManagerBase;
-
-        internal void SetListManager(BindingManagerBase newBindingManagerBase)
+        public BindingManagerBase BindingManagerBase
         {
-            if (_bindingManagerBase is CurrencyManager oldCurrencyManagEr)
+            get => _bindingManagerBase;
+            internal set
             {
-                oldCurrencyManagEr.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                if (_bindingManagerBase != value)
+                {
+                    if (_bindingManagerBase is CurrencyManager oldCurrencyManager)
+                    {
+                        oldCurrencyManager.MetaDataChanged -= new EventHandler(binding_MetaDataChanged);
+                    }
+
+                    _bindingManagerBase = value;
+
+                    if (value is CurrencyManager newCurrencyManager)
+                    {
+                        newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
+                    }
+
+                    _bindToObject.SetBindingManagerBase(value);
+                    CheckBinding();
+                }
             }
-
-            _bindingManagerBase = newBindingManagerBase;
-
-            if (newBindingManagerBase is CurrencyManager newCurrencyManager)
-            {
-                newCurrencyManager.MetaDataChanged += new EventHandler(binding_MetaDataChanged);
-            }
-
-            _bindToObject.SetBindingManagerBase(newBindingManagerBase);
-            CheckBinding();
         }
 
         /// <summary>
@@ -1086,12 +1089,11 @@ namespace System.Windows.Forms
             }
         }
 
-        internal class BindToObject
+        private class BindToObject
         {
             private PropertyDescriptor _fieldInfo;
             private BindingMemberInfo _dataMember;
             private object _dataSource;
-            private BindingManagerBase _bindingManager;
             private Binding _owner;
             private string _errorText = string.Empty;
 
@@ -1100,7 +1102,7 @@ namespace System.Windows.Forms
 
             private void PropValueChanged(object sender, EventArgs e)
             {
-                _bindingManager?.OnCurrentChanged(EventArgs.Empty);
+                _owner.BindingManagerBase?.OnCurrentChanged(EventArgs.Empty);
             }
 
             private bool IsDataSourceInitialized
@@ -1135,9 +1137,9 @@ namespace System.Windows.Forms
 
             internal BindToObject(Binding owner, object dataSource, string dataMember)
             {
-                this._owner = owner;
-                this._dataSource = dataSource;
-                this._dataMember = new BindingMemberInfo(dataMember);
+                _owner = owner;
+                _dataSource = dataSource;
+                _dataMember = new BindingMemberInfo(dataMember);
                 CheckBinding();
             }
 
@@ -1163,19 +1165,13 @@ namespace System.Windows.Forms
 
             internal void SetBindingManagerBase(BindingManagerBase lManager)
             {
-                if (_bindingManager == lManager)
-                {
-                    return;
-                }
-
                 // remove notification from the backEnd
-                if (_bindingManager != null && _fieldInfo != null && _bindingManager.IsBinding && !(_bindingManager is CurrencyManager))
+                if (_owner.BindingManagerBase != null && _fieldInfo != null && _owner.BindingManagerBase.IsBinding && !(_owner.BindingManagerBase is CurrencyManager))
                 {
-                    _fieldInfo.RemoveValueChanged(_bindingManager.Current, new EventHandler(PropValueChanged));
+                    _fieldInfo.RemoveValueChanged(_owner.BindingManagerBase.Current, new EventHandler(PropValueChanged));
                     _fieldInfo = null;
                 }
 
-                _bindingManager = lManager;
                 CheckBinding();
             }
 
@@ -1212,7 +1208,7 @@ namespace System.Windows.Forms
 
             internal object GetValue()
             {
-                object obj = _bindingManager.Current;
+                object obj = _owner.BindingManagerBase.Current;
 
                 // Update IDataErrorInfo text: it's ok to get this now because we're going to need
                 // this as part of the BindingCompleteEventArgs anyway.
@@ -1234,7 +1230,7 @@ namespace System.Windows.Forms
                     {
                         // if we are bound to a list w/o any properties, then
                         // take the type from the BindingManager
-                        Type type = _bindingManager.BindType;
+                        Type type = _owner.BindingManagerBase.BindType;
                         if (typeof(Array).IsAssignableFrom(type))
                         {
                             type = type.GetElementType();
@@ -1252,7 +1248,7 @@ namespace System.Windows.Forms
 
                 if (_fieldInfo != null)
                 {
-                    obj = _bindingManager.Current;
+                    obj = _owner.BindingManagerBase.Current;
                     if (obj is IEditableObject editableObject)
                     {
                         editableObject.BeginEdit();
@@ -1264,7 +1260,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_bindingManager is CurrencyManager cm)
+                    if (_owner.BindingManagerBase is CurrencyManager cm)
                     {
                         cm[cm.Position] = value;
                         obj = value;
@@ -1280,8 +1276,6 @@ namespace System.Windows.Forms
             internal object DataSource => _dataSource;
 
             internal PropertyDescriptor FieldInfo => _fieldInfo;
-
-            internal BindingManagerBase BindingManagerBase => _bindingManager;
 
             internal void CheckBinding()
             {

@@ -420,7 +420,7 @@ namespace System.Windows.Forms
             {
                 // we need to first check for cycles before adding this binding to the collection
                 // of bindings.
-                if (binding.BindToObjectInternal.BindingManagerBase is PropertyManager)
+                if (binding.BindingManagerBase is PropertyManager)
                 {
                     CheckPropertyBindingCycles(newBindingContext, binding);
                 }
