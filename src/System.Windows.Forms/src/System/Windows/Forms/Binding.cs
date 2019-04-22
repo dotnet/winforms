@@ -21,8 +21,6 @@ namespace System.Windows.Forms
 
         private BindToObject _bindToObject = null;
 
-        private string _propertyName = string.Empty;
-
         private PropertyDescriptor _propInfo;
         private PropertyDescriptor _propIsNullInfo;
         private EventDescriptor _validateInfo;
@@ -80,9 +78,11 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters", Justification = "'formatString' is an appropriate name, since its a string passed to the Format method")]
         public Binding(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode dataSourceUpdateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
-            _bindToObject = new BindToObject(this, dataSource, dataMember);
+            DataSource = dataSource;
+            BindingMemberInfo = new BindingMemberInfo(dataMember);
+            _bindToObject = new BindToObject(this);
 
-            _propertyName = propertyName;
+            PropertyName = propertyName;
             _formattingEnabled = formattingEnabled;
             _formatString = formatString;
             _nullValue = nullValue;
@@ -100,9 +100,9 @@ namespace System.Windows.Forms
         {
         }
 
-        public object DataSource => _bindToObject.DataSource;
+        public object DataSource { get; }
 
-        public BindingMemberInfo BindingMemberInfo => _bindToObject.BindingMemberInfo;
+        public BindingMemberInfo BindingMemberInfo { get; }
 
         /// <summary>
         /// Gets the control to which the binding belongs.
@@ -207,7 +207,7 @@ namespace System.Windows.Forms
         /// Gets or sets the property on the control to bind to.
         /// </summary>
         [DefaultValue("")]
-        public string PropertyName => _propertyName;
+        public string PropertyName { get; } = string.Empty;
 
         public event BindingCompleteEventHandler BindingComplete
         {
@@ -412,14 +412,14 @@ namespace System.Windows.Forms
         {
             _bindToObject.CheckBinding();
 
-            if (_control != null && !string.IsNullOrEmpty(_propertyName))
+            if (_control != null && !string.IsNullOrEmpty(PropertyName))
             {
                 _control.DataBindings.CheckDuplicates(this);
 
                 Type controlClass = _control.GetType();
 
                 // Check Properties
-                string propertyNameIsNull = _propertyName + "IsNull";
+                string propertyNameIsNull = PropertyName + "IsNull";
                 Type propType = null;
                 PropertyDescriptor tempPropInfo = null;
                 PropertyDescriptor tempPropIsNullInfo = null;
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
 
                 for (int i = 0; i < propInfos.Count; i++)
                 {
-                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, _propertyName, StringComparison.OrdinalIgnoreCase))
+                    if (tempPropInfo == null && string.Equals(propInfos[i].Name, PropertyName, StringComparison.OrdinalIgnoreCase))
                     {
                         tempPropInfo = propInfos[i];
                         if (tempPropIsNullInfo != null)
@@ -463,11 +463,11 @@ namespace System.Windows.Forms
 
                 if (tempPropInfo == null)
                 {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, _propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindProperty, PropertyName), nameof(PropertyName));
                 }
                 if (tempPropInfo.IsReadOnly && _controlUpdateMode != ControlUpdateMode.Never)
                 {
-                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, _propertyName), "PropertyName");
+                    throw new ArgumentException(string.Format(SR.ListBindingBindPropertyReadOnly, PropertyName), nameof(PropertyName));
                 }
 
                 _propInfo = tempPropInfo;
@@ -1063,8 +1063,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                return (_control != null && !string.IsNullOrEmpty(_propertyName) &&
-                                _bindToObject.DataSource != null && _bindingManagerBase != null);
+                return (_control != null && !string.IsNullOrEmpty(PropertyName) &&
+                                DataSource != null && _bindingManagerBase != null);
             }
         }
 
@@ -1092,8 +1092,6 @@ namespace System.Windows.Forms
         private class BindToObject
         {
             private PropertyDescriptor _fieldInfo;
-            private BindingMemberInfo _dataMember;
-            private object _dataSource;
             private Binding _owner;
             private string _errorText = string.Empty;
 
@@ -1109,13 +1107,13 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(_dataSource != null, "how can we determine if DataSource is initialized or not if we have no data source?");
+                    Debug.Assert(_owner.DataSource != null, "how can we determine if DataSource is initialized or not if we have no data source?");
                     if (_dataSourceInitialized)
                     {
                         return true;
                     }
 
-                    if (!(_dataSource is ISupportInitializeNotification ds) || ds.IsInitialized)
+                    if (!(_owner.DataSource is ISupportInitializeNotification ds) || ds.IsInitialized)
                     {
                         _dataSourceInitialized = true;
                         return true;
@@ -1135,22 +1133,20 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal BindToObject(Binding owner, object dataSource, string dataMember)
+            internal BindToObject(Binding owner)
             {
                 _owner = owner;
-                _dataSource = dataSource;
-                _dataMember = new BindingMemberInfo(dataMember);
                 CheckBinding();
             }
 
             private void DataSource_Initialized(object sender, EventArgs e)
             {
-                Debug.Assert(sender == _dataSource, "data source should not change");
-                Debug.Assert(_dataSource is ISupportInitializeNotification, "data source should not change on the BindToObject");
+                Debug.Assert(sender == _owner.DataSource, "data source should not change");
+                Debug.Assert(_owner.DataSource is ISupportInitializeNotification, "data source should not change on the BindToObject");
                 Debug.Assert(_waitingOnDataSource);
 
                 // Unhook the Initialized event.
-                if (_dataSource is ISupportInitializeNotification ds)
+                if (_owner.DataSource is ISupportInitializeNotification ds)
                 {
                     ds.Initialized -= new EventHandler(DataSource_Initialized);
                 }
@@ -1226,7 +1222,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_dataMember.BindingField.Length == 0)
+                    if (_owner.BindingMemberInfo.BindingField.Length == 0)
                     {
                         // if we are bound to a list w/o any properties, then
                         // take the type from the BindingManager
@@ -1271,10 +1267,6 @@ namespace System.Windows.Forms
                 _errorText = GetErrorText(obj);
             }
 
-            internal BindingMemberInfo BindingMemberInfo => _dataMember;
-
-            internal object DataSource => _dataSource;
-
             internal PropertyDescriptor FieldInfo => _fieldInfo;
 
             internal void CheckBinding()
@@ -1302,7 +1294,7 @@ namespace System.Windows.Forms
                     IsDataSourceInitialized)
                 {
 
-                    string dataField = _dataMember.BindingField;
+                    string dataField = _owner.BindingMemberInfo.BindingField;
 
                     _fieldInfo = _owner.BindingManagerBase.GetItemProperties().Find(dataField, true);
                     if (_owner.BindingManagerBase.DataSource != null && _fieldInfo == null && dataField.Length > 0)
