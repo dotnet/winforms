@@ -841,11 +841,7 @@ namespace System.Windows.Forms {
             return ForeColor != defaultForeColor;
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.ToString"]/*' />
         /// <devdoc>
@@ -906,9 +902,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override bool IsPatternSupported(int patternId) {
                 if (patternId == NativeMethods.UIA_ValuePatternId ||

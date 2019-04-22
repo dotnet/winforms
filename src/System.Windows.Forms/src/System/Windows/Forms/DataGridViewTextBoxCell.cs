@@ -826,10 +826,7 @@ namespace System.Windows.Forms
             {
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {

@@ -1031,9 +1031,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 _owningPropertyDescriptorGridEntry = owner;
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
             /// Returns the element in the specified direction.

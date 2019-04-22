@@ -709,11 +709,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
         
         private int TipColumn {
             get{
@@ -6053,11 +6049,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// Indicates whether or not the control supports UIA Providers via
             /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
             /// </summary>
-            internal override bool SupportsUiaProviders {
-                get {
-                    return true;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             /// <summary>
             /// Constructs the new instance of the accessibility object for this control.
@@ -6443,12 +6435,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// Indicates whether or not the control supports UIA Providers via
             /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
             /// </summary>
-            internal override bool SupportsUiaProviders {
-                get {
-                    return true;
-                }
-            }
-            
+            internal override bool SupportsUiaProviders => true;
+
             public override bool Focused {
                 get {
                     if (dontFocusMe) {
@@ -6830,9 +6818,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
 
-                internal override bool IsIAccessibleExSupported() {
-                    return true;
-                }
+                internal override bool IsIAccessibleExSupported() => true;
 
                 /// <summary>
                 /// Returns the element in the specified direction.

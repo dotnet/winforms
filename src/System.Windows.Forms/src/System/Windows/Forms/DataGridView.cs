@@ -5025,13 +5025,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SupportsUiaProviders
-        {
-            get
-            {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Text"]/*' />
         [
@@ -7056,13 +7050,7 @@ namespace System.Windows.Forms
                 this.owningDataGridView = owningDataGridView;
             }
 
-            internal override bool SupportsUiaProviders
-            {
-                get
-                {
-                    return true;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             protected override AccessibleObject CreateAccessibilityInstance()
             {

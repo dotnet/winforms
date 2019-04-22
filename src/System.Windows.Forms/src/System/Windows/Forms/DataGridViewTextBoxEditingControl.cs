@@ -107,13 +107,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SupportsUiaProviders
-        {
-            get
-            {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.ApplyCellStyleToEditingControl"]/*' />
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)

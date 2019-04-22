@@ -4610,11 +4610,7 @@ namespace System.Windows.Forms {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <devdoc>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
@@ -5438,11 +5434,7 @@ namespace System.Windows.Forms {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         /// Constructs the new instance of the accessibility object for this control.

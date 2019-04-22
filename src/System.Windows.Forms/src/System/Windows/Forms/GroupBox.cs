@@ -727,11 +727,7 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.ToString"]/*' />
         /// <devdoc>
@@ -813,9 +809,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 switch (propertyID) {

@@ -771,11 +771,7 @@ namespace System.Windows.Forms {
                 Update(); 
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return true;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             internal class ToolStripComboBoxControlAccessibleObject : ComboBox.ComboBoxAccessibleObject {
 

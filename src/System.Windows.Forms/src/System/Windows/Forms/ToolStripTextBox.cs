@@ -692,7 +692,7 @@ namespace System.Windows.Forms {
                     get { return base.Font; }
                     set { 
                         base.Font = value;
-                        isFontSet = ShouldSerializeFont();    
+                        isFontSet = ShouldSerializeFont();
                     }
                 }
 
@@ -701,11 +701,7 @@ namespace System.Windows.Forms {
                    set { ownerItem = value; }
                 }
 
-                internal override bool SupportsUiaProviders {
-                    get {
-                        return true;
-                    }
-                }
+                internal override bool SupportsUiaProviders => true;
 
                 private void InvalidateNonClient() {
                     if (!IsPopupTextBox) {

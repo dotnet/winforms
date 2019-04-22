@@ -1658,11 +1658,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ToString"]/*' />
         /// <devdoc>
@@ -1715,9 +1711,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {

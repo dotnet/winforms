@@ -204,11 +204,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         internal void UpdateTextRenderingEngine() {
             m_labelTitle.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;

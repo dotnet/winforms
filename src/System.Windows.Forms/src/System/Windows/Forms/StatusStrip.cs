@@ -355,13 +355,8 @@ namespace System.Windows.Forms {
            
        }
   
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+       internal override bool SupportsUiaProviders => true;
 
-    
        protected override void SetDisplayedItems() {
            if (state[stateCalledSpringTableLayout]) {
                bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));

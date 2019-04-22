@@ -520,11 +520,7 @@ namespace System.Windows.Forms {
                 set { ownerItem = value; }
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return true;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             protected override AccessibleObject CreateAccessibilityInstance() {
                 return new ToolStripProgressBarControlAccessibleObject(this);

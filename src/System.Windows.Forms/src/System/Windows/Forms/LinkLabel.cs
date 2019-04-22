@@ -1873,11 +1873,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return false;
-            }
-        }
+        internal override bool SupportsUiaProviders => false;
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.WmSetCursor"]/*' />
         /// <devdoc>
@@ -2495,9 +2491,7 @@ namespace System.Windows.Forms {
             public LinkLabelAccessibleObject(LinkLabel owner) : base(owner) {
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject.GetChild"]/*' />
             /// <devdoc>
@@ -2656,9 +2650,7 @@ namespace System.Windows.Forms {
                 link.Owner.OnLinkClicked(new LinkLabelLinkClickedEventArgs(link));
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_IsEnabledPropertyId) {

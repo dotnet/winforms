@@ -1617,11 +1617,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>

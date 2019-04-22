@@ -877,9 +877,7 @@ namespace System.Windows.Forms {
                 return _accessibleObject.GetPropertyValue(propertyID);
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override bool IsPatternSupported(int patternId) {
                 return _accessibleObject.IsPatternSupported(patternId);

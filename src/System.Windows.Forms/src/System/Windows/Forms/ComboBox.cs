@@ -1338,9 +1338,7 @@ namespace System.Windows.Forms {
             this.lastTextChangedValue = text;
         }
 
-        internal override bool SupportsUiaProviders {
-            get => true;
-        }
+        internal override bool SupportsUiaProviders => true;
 
         // Returns true if using System AutoComplete
         private bool SystemAutoCompleteEnabled {
@@ -4964,9 +4962,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
             /// Gets the runtime ID.
