@@ -451,7 +451,6 @@ namespace System.Windows.Forms {
                 document.PrintController = new PrintControllerWithStatusDialog(previewController, 
                                                                                string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
-                // Want to make sure we've reverted any security asserts before we call Print -- that calls into user code
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
                 Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");

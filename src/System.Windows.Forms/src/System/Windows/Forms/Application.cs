@@ -2501,8 +2501,6 @@ namespace System.Windows.Forms {
                     var parkingWindow = GetParkingWindowForContext(context);
                     if (parkingWindow == null) {
 #if DEBUG
-                        // if we use Debug.WriteLine instead of "if", we need extra security permissions
-                        // to get the stack trace!
                         if (CoreSwitches.PerfTrack.Enabled) {
                             Debug.WriteLine("Creating parking form!");
                             Debug.WriteLine(CoreSwitches.PerfTrack.Enabled, Environment.StackTrace);
@@ -2578,8 +2576,6 @@ namespace System.Windows.Forms {
                     lock (this) {
                         if (marshalingControl == null) {
 #if DEBUG
-                            // if we use Debug.WriteLine instead of "if", we need extra security permissions
-                            // to get the stack trace!
                             if (CoreSwitches.PerfTrack.Enabled) {
                                 Debug.WriteLine("Creating marshalling control!");
                                 Debug.WriteLine(CoreSwitches.PerfTrack.Enabled, Environment.StackTrace);

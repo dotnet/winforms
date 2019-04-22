@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Design; 
     using System.Security;
-    using System.Security.Permissions;
     using Microsoft.Win32;
     
     /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox"]/*' />

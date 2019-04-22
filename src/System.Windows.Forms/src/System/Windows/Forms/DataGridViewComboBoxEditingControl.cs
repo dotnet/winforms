@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     using System.Diagnostics;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using Security.Permissions;
 
     /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl"]/*' />
     [
@@ -207,7 +206,6 @@ namespace System.Windows.Forms
 
         public override AccessibleObject Parent
         {
-            [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.UnmanagedCode)]
             get
             {
                 return _parentAccessibleObject;

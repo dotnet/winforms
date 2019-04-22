@@ -6262,16 +6262,6 @@ example usage
 
             IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, Handle), pt.X, pt.Y, value);
 
-            // Security Reviewed
-            // While doing a security review it was noticed that GetChildAtPoint
-            // does work to ensure that you can only gain access to children of your own control,
-            // but the methods it uses to determine the children demand all window permission first,
-            // negating the extra check.
-            // It is OK to return child windows for children within your own control for semitrust.
-
-            // Hence  calling the Internal methods to ByPass the Security Demand...
-            // for IntSecurity.ControlFromHandleOrLocation == ALLWindows.
-
             Control ctl = FromChildHandleInternal(hwnd);
 
             return(ctl == this) ? null : ctl;
@@ -6804,7 +6794,7 @@ example usage
 
         /// <devdoc>
         ///     Return ((Control) window).Handle if window is a Control.
-        ///     Otherwise, demands permission for AllWindows and returns window.Handle
+        ///     Otherwise, returns window.Handle
         /// </devdoc>
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
@@ -16435,9 +16425,7 @@ example usage
                     this.hwndParent = hwndParent;
                     UnsafeNativeMethods.SetParent(new HandleRef(control, control.Handle), new HandleRef(null, hwndParent));
 
-                    // Now create our handle if it hasn't already been done. Note that because
-                    // this raises events to the user that it CANNOT be done with a security assertion
-                    // in place!
+                    // Now create our handle if it hasn't already been done.
                     //
                     control.CreateControl();
 
@@ -18601,8 +18589,6 @@ example usage
 
                 this.ownerControl = ownerControl;
 
-                // call get_Handle outside the UnmanagedCode permission because if the handle is not created yet,
-                // we will invoke 3rd party HandleCreated event handlers
                 IntPtr handle = ownerControl.Handle;
 
                 this.Handle = handle;

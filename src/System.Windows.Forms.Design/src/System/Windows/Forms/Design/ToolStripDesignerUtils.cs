@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Reflection;
 using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 
@@ -539,24 +538,16 @@ namespace System.Windows.Forms.Design
                 {
                     if (s_bitsPerPixel == 0)
                     {
-                        new EnvironmentPermission(PermissionState.Unrestricted).Assert();
-                        try
+                        foreach (Screen s in Screen.AllScreens)
                         {
-                            foreach (Screen s in Screen.AllScreens)
+                            if (s_bitsPerPixel == 0)
                             {
-                                if (s_bitsPerPixel == 0)
-                                {
-                                    s_bitsPerPixel = (short)s.BitsPerPixel;
-                                }
-                                else
-                                {
-                                    s_bitsPerPixel = (short)Math.Min(s.BitsPerPixel, s_bitsPerPixel);
-                                }
+                                s_bitsPerPixel = (short)s.BitsPerPixel;
                             }
-                        }
-                        finally
-                        {
-                            CodeAccessPermission.RevertAssert();
+                            else
+                            {
+                                s_bitsPerPixel = (short)Math.Min(s.BitsPerPixel, s_bitsPerPixel);
+                            }
                         }
                     }
                     return s_bitsPerPixel;

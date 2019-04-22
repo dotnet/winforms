@@ -8128,16 +8128,10 @@ namespace System.Windows.Forms {
             IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd);
         }
 
-        /// <SecurityNote>
-        ///     Critical:Elevates to Unmanaged code permission
-        /// </SecurityNote>
         [ComImport()]
         [Guid("6D5140C1-7436-11CE-8034-00AA006009FA")]
         [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IServiceProvider {
-            ///<SecurityNote>
-            /// Critical elevates via a SUC.
-            ///</SecurityNote>
             [PreserveSig]
             int QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObj);
         }

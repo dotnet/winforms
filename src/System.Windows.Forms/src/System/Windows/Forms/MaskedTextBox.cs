@@ -1263,10 +1263,6 @@ namespace System.Windows.Forms
                             throw;
                         }
                     }
-                    finally
-                    {
-                        CodeAccessPermission.RevertAssert();
-                    }
 
                     MaskedTextBox.systemPwdChar = foundRsc ? (char) int.Parse(charVal.ToString()) : MaskedTextProvider.DefaultPasswordChar;
                     */

@@ -9,7 +9,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Reflection;
     using System.Security;
-    using System.Security.Permissions;
     
     internal class Formatter
     {

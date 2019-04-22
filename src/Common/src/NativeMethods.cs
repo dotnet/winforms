@@ -46,7 +46,6 @@ namespace System.Windows.Forms {
     using Accessibility;
     using System.Runtime.InteropServices;
     using System;
-    using System.Security.Permissions;
     using System.Collections;
     using System.Diagnostics;
     using System.IO;
