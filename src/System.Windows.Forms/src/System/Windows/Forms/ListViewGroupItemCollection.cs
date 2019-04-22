@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     internal class ListViewGroupItemCollection : ListView.ListViewItemCollection.IInnerList
     {
-        private ListViewGroup _group;
+        private readonly ListViewGroup _group;
         private ArrayList _items;
 
         public ListViewGroupItemCollection(ListViewGroup group)
