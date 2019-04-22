@@ -43,6 +43,8 @@ dotnet build
 
 ## Preparing the WinForms Core App for the Classic Designer
 
+### Option 1
+
 1. Start Visual Studio and open this project.
 1. Save the project in Visual Studio, and with that, also save the Solution file.
 1. Open the context menu of the solution (not the project!) in the Solution Explorer and chose *Add New Project*.
@@ -61,7 +63,7 @@ dotnet build
 
 1. Erase the existing Form files in both projects.
 
-### The following steps you always repeat, when you need to insert a new Form or a new UserControl
+#### The following steps you always repeat, when you need to insert a new Form or a new UserControl
 
 1. In the Classing Framework project, open the project's context menu, and click *Add New Item*.
 
@@ -94,6 +96,39 @@ dotnet build
 1. As the last but important step, we need to re-nest the linked form files. If you installed the *File Nesting* Visual Studio Extension (see above), then that is done easily: Select both the *Form.Designer.cs* and *Form.resx* file, and from the context menu click *File Nesting* and *Nest Items*. In the dialog, pick the main form file (Form.cs), and click OK.
 
 Now, whenever you need to use the Designer on one of the Core Form or UserControl files, simply open the linked files in the Classic Framework project with the Classic Windows Forms Designer.
+
+### Option 2
+
+1. Start Visual Studio and open this project.
+1. Save the project in Visual Studio, and with that, also save the Solution file.
+1. Open the project file in the text editor and change the ``TargetFramework`` xml node from:
+
+```xml
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+```
+
+to:
+
+```xml
+    <TargetFrameworks>net472;netcoreapp3.0</TargetFrameworks>
+```
+
+4. Keep the file open in editor and also add for any and every form file you have in this ``ItemGroup``:
+
+```xml
+<ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <Compile Update="Form1.cs">
+        <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Form1.Designer.cs">
+        <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="Form1.resx">
+        <DependentUpon>Form1.cs</DependentUpon>
+        <! -- the resource generator that I forgot the name of. -->
+    </EmbeddedResource>
+</ItemGroup>
+```
 
 [comment]: <> (URI Links)
 
