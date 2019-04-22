@@ -703,12 +703,11 @@ namespace System.Windows.Forms {
                 if (value != max) {
                     if (value < EffectiveMinDate(min))
                     {
-                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.InvalidLowBoundArgumentEx, "MaxDate", FormatDateTime(value), "MinDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxDate), FormatDateTime(value), nameof(MinDate)));
                     }
-
-                    // If trying to set the maximum greater than MaxDateTime, throw.
-                    if (value > MaximumDateTime) {
-                        throw new ArgumentOutOfRangeException(nameof(MaxDate), string.Format(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
+                    if (value > MaximumDateTime)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DateTimePickerMaxDate, FormatDateTime(DateTimePicker.MaxDateTime)));
                     }
 
                     max = value;
@@ -757,13 +756,11 @@ namespace System.Windows.Forms {
                 {
                     if (value > EffectiveMaxDate(max))
                     {
-                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.InvalidHighBoundArgument, "MinDate", FormatDateTime(value), "MaxDate"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDateTime(value), nameof(MaxDate)));
                     }
-
-                    // If trying to set the minimum less than MinimumDateTime, throw.
                     if (value < MinimumDateTime)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(MinDate), string.Format(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.DateTimePickerMinDate, FormatDateTime(DateTimePicker.MinimumDateTime)));
                     }
 
                     min = value;
@@ -993,7 +990,7 @@ namespace System.Windows.Forms {
                 // update anyway.
                 if (!userHasSetValue || valueChanged) {
                     if ((value < MinDate) || (value > MaxDate)) {
-                        throw new ArgumentOutOfRangeException(nameof(Value), string.Format(SR.InvalidBoundArgument, "Value", FormatDateTime(value), "'MinDate'", "'MaxDate'"));
+                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(Value), FormatDateTime(value), $"'{nameof(MinDate)}'", $"'{nameof(MaxDate)}'"));
                     }
 
                     string oldText = this.Text;
@@ -1648,17 +1645,17 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     FocusInternal();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     UpdateUpDown();
                     break;

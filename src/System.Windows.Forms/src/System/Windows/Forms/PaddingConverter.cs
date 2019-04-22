@@ -42,10 +42,10 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes", Justification = "ConvertFromString returns an object")]
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value is string valueStr)
+            if (value is string stringValue)
             {
-                valueStr = valueStr.Trim();
-                if (valueStr.Length == 0)
+                stringValue = stringValue.Trim();
+                if (stringValue.Length == 0)
                 {
                     return null;
                 }
@@ -56,8 +56,7 @@ namespace System.Windows.Forms
                     culture = CultureInfo.CurrentCulture;
                 }
 
-                char sep = culture.TextInfo.ListSeparator[0];
-                string[] tokens = valueStr.Split(new char[] { sep });
+                string[] tokens = stringValue.Split(new char[] { culture.TextInfo.ListSeparator[0] });
                 int[] values = new int[tokens.Length];
                 TypeConverter intConverter = TypeDescriptor.GetConverter(typeof(int));
                 for (int i = 0; i < values.Length; i++)
@@ -68,10 +67,7 @@ namespace System.Windows.Forms
 
                 if (values.Length != 4)
                 {
-                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat,
-                                            nameof(value),
-                                            valueStr,
-                                            "left, top, right, bottom"));
+                    throw new ArgumentException(string.Format(SR.TextParseFailedFormat, stringValue, "left, top, right, bottom"), nameof(value));
                 }
 
                 return new Padding(values[0], values[1], values[2], values[3]);
@@ -139,7 +135,7 @@ namespace System.Windows.Forms
             Padding original = (Padding)context.PropertyDescriptor.GetValue(context.Instance);
             try
             {
-                int all = (int)propertyValues["All"];
+                int all = (int)propertyValues[nameof(Padding.All)];
                 if (original.All != all)
                 {
                     return new Padding(all);
@@ -147,10 +143,10 @@ namespace System.Windows.Forms
                 else
                 {
                     return new Padding(
-                        (int)propertyValues["Left"],
-                        (int)propertyValues["Top"],
-                        (int)propertyValues["Right"],
-                        (int)propertyValues["Bottom"]
+                        (int)propertyValues[nameof(Padding.Left)],
+                        (int)propertyValues[nameof(Padding.Top)],
+                        (int)propertyValues[nameof(Padding.Right)],
+                        (int)propertyValues[nameof(Padding.Bottom)]
                     );
                 }
             }
@@ -169,7 +165,7 @@ namespace System.Windows.Forms
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(Padding), attributes);
-            return props.Sort(new string[] { "All", "Left", "Top", "Right", "Bottom" });
+            return props.Sort(new string[] { nameof(Padding.All), nameof(Padding.Left), nameof(Padding.Top), nameof(Padding.Right), nameof(Padding.Bottom) });
         }
 
         public override bool GetPropertiesSupported(ITypeDescriptorContext context) => true;

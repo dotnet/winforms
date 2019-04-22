@@ -9,7 +9,7 @@ namespace System.Windows.Forms
     /// </devdoc>
     public enum ToolStripItemPlacement
     {
-        Main,          // in the main winbar itself
+        Main,          // in the main ToolStrip itself
         Overflow,      // in the overflow window
         None           // either offscreen or visible == false so we didn't lay it out
     }

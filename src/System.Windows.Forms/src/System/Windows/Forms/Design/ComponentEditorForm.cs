@@ -839,7 +839,7 @@ namespace System.Windows.Forms.Design {
             }
 
             protected override void WndProc(ref Message m) {
-                if (m.Msg == NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY) {
+                if (m.Msg == Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY) {
                     NativeMethods.NMHDR nmh = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                     if (nmh.code == NativeMethods.NM_CUSTOMDRAW) {
                         OnCustomDraw(ref m);

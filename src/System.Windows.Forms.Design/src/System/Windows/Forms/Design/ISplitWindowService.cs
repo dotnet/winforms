@@ -5,8 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// Supports the hosting of several 'pane' windows
-    /// separated by splitter bars.
+    /// Supports the hosting of several 'pane' windows separated by splitter bars.
     /// </summary>
     internal interface ISplitWindowService
     {

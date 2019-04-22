@@ -21,8 +21,6 @@ namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Security.Policy;
     using System.Threading;
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
@@ -91,20 +89,12 @@ namespace System.Windows.Forms {
         private static readonly BitVector32.Section FormStateMdiChildMax                 = BitVector32.CreateSection(1, FormStateSWCalled);
         private static readonly BitVector32.Section FormStateRenderSizeGrip              = BitVector32.CreateSection(1, FormStateMdiChildMax);
         private static readonly BitVector32.Section FormStateSizeGripStyle               = BitVector32.CreateSection(2, FormStateRenderSizeGrip);
-        private static readonly BitVector32.Section FormStateIsRestrictedWindow          = BitVector32.CreateSection(1, FormStateSizeGripStyle);
-        private static readonly BitVector32.Section FormStateIsRestrictedWindowChecked   = BitVector32.CreateSection(1, FormStateIsRestrictedWindow);
-        private static readonly BitVector32.Section FormStateIsWindowActivated           = BitVector32.CreateSection(1, FormStateIsRestrictedWindowChecked);
+        private static readonly BitVector32.Section FormStateIsWindowActivated           = BitVector32.CreateSection(1, FormStateSizeGripStyle);
         private static readonly BitVector32.Section FormStateIsTextEmpty                 = BitVector32.CreateSection(1, FormStateIsWindowActivated);
         private static readonly BitVector32.Section FormStateIsActive                    = BitVector32.CreateSection(1, FormStateIsTextEmpty);
         private static readonly BitVector32.Section FormStateIconSet                     = BitVector32.CreateSection(1, FormStateIsActive);
 
-#if SECURITY_DIALOG
-        private static readonly BitVector32.Section FormStateAddedSecurityMenuItem       = BitVector32.CreateSection(1, FormStateIconSet);
-#endif
-
-        //
         // The following flags should be used with formStateEx[...] not formState[..]
-        //
         private static readonly BitVector32.Section FormStateExCalledClosing                               = BitVector32.CreateSection(1);
         private static readonly BitVector32.Section FormStateExUpdateMenuHandlesSuspendCount               = BitVector32.CreateSection(8, FormStateExCalledClosing);
         private static readonly BitVector32.Section FormStateExUpdateMenuHandlesDeferred                   = BitVector32.CreateSection(1, FormStateExUpdateMenuHandlesSuspendCount);
@@ -126,7 +116,6 @@ namespace System.Windows.Forms {
         private const int SizeGripSize = 16;
 
         private static Icon defaultIcon = null;
-        private static Icon defaultRestrictedIcon = null;
 #if MAGIC_PADDING
         private static Padding FormPadding = new Padding(9);  // UI guideline
 #endif
@@ -164,26 +153,14 @@ namespace System.Windows.Forms {
         private static readonly int PropMainMenuStrip          = PropertyStore.CreateKey();
         private static readonly int PropMdiWindowListStrip     = PropertyStore.CreateKey();
         private static readonly int PropMdiControlStrip        = PropertyStore.CreateKey();
-        private static readonly int PropSecurityTip = PropertyStore.CreateKey();
 
-        private static readonly int PropOpacity = PropertyStore.CreateKey();
+        private static readonly int PropOpacity         = PropertyStore.CreateKey();
         private static readonly int PropTransparencyKey = PropertyStore.CreateKey();
-#if SECURITY_DIALOG
-        private static readonly int PropSecuritySystemMenuItem = PropertyStore.CreateKey();
-#endif
 
-        ///////////////////////////////////////////////////////////////////////
         // Form per instance members
-        //
         // Note: Do not add anything to this list unless absolutely neccessary.
-        //
-        // Begin Members {
 
-        // List of properties that are generally set, so we keep them directly on
-        // Form.
-        //
-
-        private BitVector32      formState = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
+        private BitVector32      formState   = new BitVector32(0x21338);   // magic value... all the defaults... see the ctor for details...
         private BitVector32      formStateEx = new BitVector32();
 
 
@@ -193,43 +170,26 @@ namespace System.Windows.Forms {
         private Size             minAutoSize = Size.Empty;
         private Rectangle        restoredWindowBounds = new Rectangle(-1, -1, -1, -1);
         private BoundsSpecified  restoredWindowBoundsSpecified;
-        private DialogResult dialogResult;
+        private DialogResult     dialogResult;
         private MdiClient        ctlClient;
         private NativeWindow     ownerWindow;
-        private string           userWindowText; // Used to cache user's text in semi-trust since the window text is added security info.
-        private string           securityZone;
-        private string           securitySite;
         private bool             rightToLeftLayout = false;
 
-
-        //Whidbey RestoreBounds ...
         private Rectangle        restoreBounds = new Rectangle(-1, -1, -1, -1);
         private CloseReason      closeReason = CloseReason.None;
 
         private VisualStyleRenderer sizeGripRenderer;
 
-        // } End Members
-        ///////////////////////////////////////////////////////////////////////
-
-
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Form"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Initializes a new instance of the <see cref='System.Windows.Forms.Form'/> class.
-        ///    </para>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.Form'/> class.
         /// </devdoc>
-        public Form()
-        : base() {
-
-            // we must setup the formState *before* calling Control's ctor... so we do that
-            // at the member variable... that magic number is generated by switching
-            // the line below to "true" and running a form.
-            //
-            // keep the "init" and "assert" sections always in sync!
-            //
+        public Form() : base()
+        {
+            // The magic number formState is generated by switching the line below to "true"
+            // and running a form.
+            // Keep the "init" and "assert" sections always in sync!
 #if false
-            // init section...
-            //
+            // Init section.
             formState[FormStateAllowTransparency]           = 0;
             formState[FormStateBorderStyle]                 = (int)FormBorderStyle.Sizable;
             formState[FormStateTaskBar]                     = 1;
@@ -249,25 +209,14 @@ namespace System.Windows.Forms {
             formState[FormStateMdiChildMax]                 = 0;
             formState[FormStateRenderSizeGrip]              = 0;
             formState[FormStateSizeGripStyle]               = 0;
-            formState[FormStateIsRestrictedWindow]          = 0;
-            formState[FormStateIsRestrictedWindowChecked]   = 0;
             formState[FormStateIsWindowActivated]           = 0;
             formState[FormStateIsTextEmpty]                 = 0;
             formState[FormStateIsActive]                    = 0;
             formState[FormStateIconSet]                     = 0;
-
-#if SECURITY_DIALOG
-            formState[FormStateAddedSecurityMenuItem]       = 0;
-
-#endif
-
-
-
-
             Debug.WriteLine("initial formState: 0x" + formState.Data.ToString("X"));
 #endif
-            // assert section...
-            //
+
+            // Assert section.
             Debug.Assert(formState[FormStateAllowTransparency]           == 0, "Failed to set formState[FormStateAllowTransparency]");
             Debug.Assert(formState[FormStateBorderStyle]                 == (int)FormBorderStyle.Sizable, "Failed to set formState[FormStateBorderStyle]");
             Debug.Assert(formState[FormStateTaskBar]                     == 1, "Failed to set formState[FormStateTaskBar]");
@@ -287,25 +236,10 @@ namespace System.Windows.Forms {
             Debug.Assert(formState[FormStateMdiChildMax]                 == 0, "Failed to set formState[FormStateMdiChildMax]");
             Debug.Assert(formState[FormStateRenderSizeGrip]              == 0, "Failed to set formState[FormStateRenderSizeGrip]");
             Debug.Assert(formState[FormStateSizeGripStyle]               == 0, "Failed to set formState[FormStateSizeGripStyle]");
-            // can't check these... Control::.ctor may force the check
-            // of security... you can only assert these are 0 when running
-            // under full trust...
-            //
-            //Debug.Assert(formState[FormStateIsRestrictedWindow]          == 0, "Failed to set formState[FormStateIsRestrictedWindow]");
-            //Debug.Assert(formState[FormStateIsRestrictedWindowChecked]   == 0, "Failed to set formState[FormStateIsRestrictedWindowChecked]");
             Debug.Assert(formState[FormStateIsWindowActivated]           == 0, "Failed to set formState[FormStateIsWindowActivated]");
             Debug.Assert(formState[FormStateIsTextEmpty]                 == 0, "Failed to set formState[FormStateIsTextEmpty]");
             Debug.Assert(formState[FormStateIsActive]                    == 0, "Failed to set formState[FormStateIsActive]");
             Debug.Assert(formState[FormStateIconSet]                     == 0, "Failed to set formState[FormStateIconSet]");
-
-
-#if SECURITY_DIALOG
-            Debug.Assert(formState[FormStateAddedSecurityMenuItem]       == 0, "Failed to set formState[FormStateAddedSecurityMenuItem]");
-#endif
-
-            // SECURITY NOTE: The IsRestrictedWindow check is done once and cached. We force it to happen here
-            // since we want to ensure the check is done on the code that constructs the form.
-            bool temp = IsRestrictedWindow;
 
             formStateEx[FormStateExShowIcon]                             = 1;
 
@@ -357,58 +291,56 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Retrieves true if this form is currently active.
+        /// Retrieves true if this form is currently active.
         /// </devdoc>
-        internal bool Active {
-            get {
+        internal bool Active
+        {
+            get
+            {
                 Form parentForm = ParentFormInternal;
-                if (parentForm == null) {
+                if (parentForm == null)
+                {
                     return formState[FormStateIsActive] != 0;
                 }
-                return(parentForm.ActiveControl == this && parentForm.Active);
+
+                return parentForm.ActiveControl == this && parentForm.Active;
             }
-
-            set {
+            set
+            {
                 Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Form::set_Active - " + this.Name);
-                if ((formState[FormStateIsActive] != 0) != value) {
-                    if (value) {
-                        // There is a weird user32 
-
-
-
-                        if (!CanRecreateHandle()){
-                            //Debug.Fail("Setting Active window when not yet visible");
+                if ((formState[FormStateIsActive] != 0) != value)
+                {
+                    if (value)
+                    {
+                        if (!CanRecreateHandle())
+                        {
                             return;
                         }
                     }
 
                     formState[FormStateIsActive] = value ? 1 : 0;
 
-                    if (value) {
+                    if (value)
+                    {
                         formState[FormStateIsWindowActivated] = 1;
-                        if (IsRestrictedWindow) {
-                            WindowText = userWindowText;
-                        }
+
                         // Check if validation has been cancelled to avoid raising Validation event multiple times.
-                        if (!ValidationCancelled) {
-                            if( ActiveControl == null ) {
-                                // Security reviewed : This internal method is called from various places, all
-                                // of which are OK. Since SelectNextControl (a public function)
-                                // Demands ModifyFocus, we must call the internal version.
-                                //
-                                SelectNextControlInternal(null, true, true, true, false);
+                        if (!ValidationCancelled)
+                        {
+                            if (ActiveControl == null)
+                            {
                                 // If no control is selected focus will go to form
+                                SelectNextControlInternal(null, true, true, true, false);
                             }
 
                             InnerMostActiveContainerControl.FocusActiveControlInternal();
                         }
+    
                         OnActivated(EventArgs.Empty);
-                     }
-                    else {
+                    }
+                    else
+                    {
                         formState[FormStateIsWindowActivated] = 0;
-                        if (IsRestrictedWindow) {
-                            Text = userWindowText;
-                        }
                         OnDeactivate(EventArgs.Empty);
                     }
                 }
@@ -456,7 +388,7 @@ namespace System.Windows.Forms {
                 if( mdiChild == null ){
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
                     if( this.ctlClient != null && this.ctlClient.IsHandleCreated){
-                        IntPtr hwnd = this.ctlClient.SendMessage(NativeMethods.WM_MDIGETACTIVE, 0, 0);
+                        IntPtr hwnd = this.ctlClient.SendMessage(Interop.WindowMessages.WM_MDIGETACTIVE, 0, 0);
                         mdiChild = Control.FromHandleInternal( hwnd ) as Form;
                     }
                 }
@@ -802,63 +734,26 @@ namespace System.Windows.Forms {
             }
         }
 
-
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.FormBorderStyle"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the border style of the form.
-        ///    </para>
+        /// Gets or sets the border style of the form.
         /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(FormBorderStyle.Sizable),
-        DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE),
-        SRDescription(nameof(SR.FormBorderStyleDescr))
-        ]
-        public FormBorderStyle FormBorderStyle {
-            get {
-                return(FormBorderStyle)formState[FormStateBorderStyle];
-            }
-
-            set {
-                //validate FormBorderStyle enum
-                //
-                //valid values are 0x0 to 0x6
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue(FormBorderStyle.Sizable)]
+        [DispId(NativeMethods.ActiveX.DISPID_BORDERSTYLE)]
+        [SRDescription(nameof(SR.FormBorderStyleDescr))]
+        public FormBorderStyle FormBorderStyle
+        {
+            get => (FormBorderStyle)formState[FormStateBorderStyle];
+            set
+            {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormBorderStyle.None, (int)FormBorderStyle.SizableToolWindow))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormBorderStyle));
                 }
 
-                // In rectricted mode we don't allow windows w/o min/max/close functionality.
-                if (IsRestrictedWindow) {
-                    switch (value) {
-                        case FormBorderStyle.None:
-                            value = FormBorderStyle.FixedSingle;
-                            break;
-                        case FormBorderStyle.FixedSingle:
-                        case FormBorderStyle.Fixed3D:
-                        case FormBorderStyle.FixedDialog:
-                        case FormBorderStyle.Sizable:
-                            // nothing needed here, we can just let these stay
-                            //
-                            break;
-                        case FormBorderStyle.FixedToolWindow:
-                            value = FormBorderStyle.FixedSingle;
-                            break;
-                        case FormBorderStyle.SizableToolWindow:
-                            value = FormBorderStyle.Sizable;
-                            break;
-                        default:
-                            value = FormBorderStyle.Sizable;
-                            break;
-                    }
-                }
-
                 formState[FormStateBorderStyle] = (int)value;
-
-                //(
-
-                if (formState[FormStateSetClientSize] == 1 && !IsHandleCreated) {
+                if (formState[FormStateSetClientSize] == 1 && !IsHandleCreated)
+                {
                     ClientSize = ClientSize;
                 }
 
@@ -870,7 +765,7 @@ namespace System.Windows.Forms {
                 // these existing values from being lost. Then, if the WindowState is something other than
                 // FormWindowState.Normal after the call to UpdateFormStyles(), restore these cached values to
                 // the restoredWindowBounds field.
-                Rectangle       preClientUpdateRestoredWindowBounds = restoredWindowBounds;
+                Rectangle preClientUpdateRestoredWindowBounds = restoredWindowBounds;
                 BoundsSpecified preClientUpdateRestoredWindowBoundsSpecified = restoredWindowBoundsSpecified;
                 int preWindowBoundsWidthIsClientSize = formStateEx[FormStateExWindowBoundsWidthIsClientSize];
                 int preWindowBoundsHeightIsClientSize = formStateEx[FormStateExWindowBoundsHeightIsClientSize];
@@ -880,12 +775,14 @@ namespace System.Windows.Forms {
                 // In Windows XP Theme, the FixedDialog tend to have a small Icon.
                 // So to make this behave uniformly with other styles, we need to make
                 // the call to UpdateIcon after the the form styles have been updated.
-                if (formState[FormStateIconSet] == 0 && !IsRestrictedWindow) {
+                if (formState[FormStateIconSet] == 0)
+                {
                     UpdateWindowIcon(false);
                 }
 
                 // Now restore the values cached above.
-                if (WindowState != FormWindowState.Normal) {
+                if (WindowState != FormWindowState.Normal)
+                {
                     restoredWindowBounds = preClientUpdateRestoredWindowBounds;
                     restoredWindowBoundsSpecified = preClientUpdateRestoredWindowBoundsSpecified;
                     formStateEx[FormStateExWindowBoundsWidthIsClientSize] = preWindowBoundsWidthIsClientSize;
@@ -937,33 +834,19 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ControlBox"]/*' />
         /// <devdoc>
-        ///    <para>Gets or sets a value indicating whether a control box is displayed in the
-        ///       caption bar of the form.</para>
+        /// Gets or sets a value indicating whether a control box is displayed in the
+        /// caption bar of the form.
         /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FormControlBoxDescr))
-        ]
-        public bool ControlBox {
-            get {
-                return formState[FormStateControlBox] != 0;
-            }
-
-            set {
-                // Window style in restricted mode must always have a control box.
-                if (IsRestrictedWindow) {
-                    return;
-                }
-
-                if (value) {
-                    formState[FormStateControlBox] = 1;
-                }
-                else {
-                    formState[FormStateControlBox] = 0;
-                }
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FormControlBoxDescr))]
+        public bool ControlBox
+        {
+            get => formState[FormStateControlBox] != 0;
+            set
+            {
+                formState[FormStateControlBox] = value ? 1 : 0;
                 UpdateFormStyles();
             }
         }
@@ -1052,10 +935,6 @@ namespace System.Windows.Forms {
                     }
                 }
 
-                if (IsRestrictedWindow) {
-                    cp.Caption = RestrictedWindowText(cp.Caption);
-                }
-
                 if (RightToLeft == RightToLeft.Yes && RightToLeftLayout == true) {
                     //We want to turn on mirroring for Form explicitly.
                     cp.ExStyle |= NativeMethods.WS_EX_LAYOUTRTL | NativeMethods.WS_EX_NOINHERITLAYOUT;
@@ -1095,33 +974,6 @@ namespace System.Windows.Forms {
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.NoControl;
-            }
-        }
-
-        /// <devdoc>
-        ///     The default icon used by the Form. This is the standard "windows forms" icon.
-        /// </devdoc>
-        private static Icon DefaultRestrictedIcon {
-            get {
-                // Note: We do this as a static property to allow delay
-                // loading of the resource. There are some issues with doing
-                // an OleInitialize from a static constructor...
-                //
-
-                // Avoid locking if the value is filled in...
-                //
-                if (defaultRestrictedIcon == null) {
-                    lock (internalSyncObject)
-                    {
-                        // Once we grab the lock, we re-check the value to avoid a
-                        // race condition.
-                        //
-                        if (defaultRestrictedIcon == null) {
-                            defaultRestrictedIcon = new Icon(typeof(Form), "wfsecurity.ico");
-                        }
-                    }
-                }
-                return defaultRestrictedIcon;
             }
         }
 
@@ -1269,49 +1121,41 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Icon"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the icon for the form.
-        ///    </para>
+        /// Gets or sets the icon for the form.
         /// </devdoc>
-        [
-        AmbientValue(null),
-        Localizable(true),
-        SRCategory(nameof(SR.CatWindowStyle)),
-        SRDescription(nameof(SR.FormIconDescr))
-        ]
-        public Icon Icon {
-            get {
-                if (formState[FormStateIconSet] == 0) {
-                    // In restricted mode, the security icon cannot be changed.
-                    if (IsRestrictedWindow) {
-                        return DefaultRestrictedIcon;
-                    }
-                    else {
-                        return DefaultIcon;
-                    }
+        [AmbientValue(null)]
+        [Localizable(true)]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [SRDescription(nameof(SR.FormIconDescr))]
+        public Icon Icon
+        {
+            get
+            {
+                if (formState[FormStateIconSet] == 0)
+                {
+                    return DefaultIcon;
                 }
 
                 return icon;
             }
-
-            set {
-                if (icon != value && !IsRestrictedWindow) {
-
-                    // If the user is poking the default back in,
-                    // treat this as a null (reset).
-                    //
-                    if (value == defaultIcon) {
+            set
+            {
+                if (icon != value)
+                {
+                    // If the user is setting the default back in, treat this
+                    // as a reset.
+                    if (value == defaultIcon)
+                    {
                         value = null;
                     }
 
-                    // And if null is passed, reset the icon.
-                    //
-                    formState[FormStateIconSet] = (value == null ? 0 : 1);
-                    this.icon = value;
+                    // If null is passed, reset the icon.
+                    formState[FormStateIconSet] = value == null ? 0 : 1;
+                    icon = value;
 
-                    if (smallIcon != null) {
+                    if (smallIcon != null)
+                    {
                         smallIcon.Dispose();
                         smallIcon = null;
                     }
@@ -1415,32 +1259,13 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.IsRestrictedWindow"]/*' />
-        /// <internalonly/>
         /// <devdoc>
-        ///    <para> Determines if this form should display a warning banner
-        ///       when the form is displayed in an unsecure mode.</para>
+        /// Determines if this form should display a warning banner when the form is
+        /// displayed in an unsecure mode.
         /// </devdoc>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool IsRestrictedWindow {
-            get {
-                /// 
-                if (formState[FormStateIsRestrictedWindowChecked] == 0) {
-                    formState[FormStateIsRestrictedWindow] = 0;
-#if DEBUG
-                    if (AlwaysRestrictWindows.Enabled) {
-                        formState[FormStateIsRestrictedWindow] = 1;
-                        formState[FormStateIsRestrictedWindowChecked] = 1;
-                        return true;
-                    }
-#endif
-
-                    formState[FormStateIsRestrictedWindowChecked] = 1;
-                }
-
-                return formState[FormStateIsRestrictedWindow] != 0;
-            }
-        }
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public bool IsRestrictedWindow => false;
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.KeyPreview"]/*' />
         /// <devdoc>
@@ -1493,7 +1318,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected Rectangle MaximizedBounds {
             get {
-                return Properties.GetRectangle(PropMaximizedBounds);            
+                return Properties.GetRectangle(PropMaximizedBounds, out _);            
             }
             set {
                 if (!value.Equals( MaximizedBounds )) {
@@ -1673,62 +1498,63 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MinimumSize"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets the minimum size the form can be resized to.
-        ///    </para>
+        /// Gets the minimum size the form can be resized to.
         /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        Localizable(true),
-        SRDescription(nameof(SR.FormMinimumSizeDescr)),
-        RefreshProperties(RefreshProperties.Repaint),
-        ]
-        public override Size MinimumSize {
-            get {
-                if (Properties.ContainsInteger(PropMinTrackSizeWidth)) {
+        [SRCategory(nameof(SR.CatLayout))]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.FormMinimumSizeDescr))]
+        [RefreshProperties(RefreshProperties.Repaint)]
+        public override Size MinimumSize
+        {
+            get
+            {
+                if (Properties.ContainsInteger(PropMinTrackSizeWidth))
+                {
                     return new Size(Properties.GetInteger(PropMinTrackSizeWidth), Properties.GetInteger(PropMinTrackSizeHeight));
                 }
+
                 return DefaultMinimumSize;
             }
-            set {
-                if (!value.Equals( MinimumSize )) {
-
-                    if (value.Width < 0 || value.Height < 0 ) {
+            set
+            {
+                if (!value.Equals(MinimumSize))
+                {
+                    if (value.Width < 0 || value.Height < 0)
+                    {
                         throw new ArgumentOutOfRangeException(nameof(MinimumSize));
                     }
 
-                    // ensure that the size we've applied fits into the screen 
-                    // when IsRestrictedWindow.
                     Rectangle bounds = this.Bounds;
-                    bounds.Size = value;                    
+                    bounds.Size = value;
                     value = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(bounds).Size;
 
                     Properties.SetInteger(PropMinTrackSizeWidth, value.Width);
                     Properties.SetInteger(PropMinTrackSizeHeight, value.Height);
 
                     // Bump maximum size if necessary
-                    //
-                    if (!MaximumSize.IsEmpty && !value.IsEmpty) {
-
-                        if (Properties.GetInteger(PropMaxTrackSizeWidth) < value.Width) {
+                    if (!MaximumSize.IsEmpty && !value.IsEmpty)
+                    {
+                        if (Properties.GetInteger(PropMaxTrackSizeWidth) < value.Width)
+                        {
                             Properties.SetInteger(PropMaxTrackSizeWidth, value.Width);
                         }
 
-                        if (Properties.GetInteger(PropMaxTrackSizeHeight) < value.Height) {
+                        if (Properties.GetInteger(PropMaxTrackSizeHeight) < value.Height)
+                        {
                             Properties.SetInteger(PropMaxTrackSizeHeight, value.Height);
                         }
                     }
 
                     // Keep form size within new limits
-                    //
                     Size size = Size;
-                    if (size.Width < value.Width || size.Height < value.Height) {
+                    if (size.Width < value.Width || size.Height < value.Height)
+                    {
                         Size = new Size(Math.Max(size.Width, value.Width), Math.Max(size.Height, value.Height));
                     }
 
-                    if (IsHandleCreated) {
+                    if (IsHandleCreated)
+                    {
                         // "Move" the form to the same size and position to prevent windows from moving it
                         // when the user tries to grab a resizing border.
                         SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), NativeMethods.NullHandleRef,
@@ -1839,41 +1665,47 @@ namespace System.Windows.Forms {
             }
         }
 
-        private Form MdiParentInternal {
-            get {
-                return (Form)Properties.GetObject(PropFormMdiParent);
-            }
-            set {
+        private Form MdiParentInternal
+        {
+            get => (Form)Properties.GetObject(PropFormMdiParent);
+            set
+            {
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
-                if (value == formMdiParent && (value != null || ParentInternal == null)) {
+                if (value == formMdiParent && (value != null || ParentInternal == null))
+                {
                     return;
                 }
 
-                if (value != null && this.CreateThreadId != value.CreateThreadId) {
-                    throw new ArgumentException(SR.AddDifferentThreads, "value");
+                if (value != null && CreateThreadId != value.CreateThreadId)
+                {
+                    throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
 
                 bool oldVisibleBit = GetState(STATE_VISIBLE);
-                //
                 Visible = false;
 
-                try {
-                    if (value == null) {
+                try
+                {
+                    if (value == null)
+                    {
                         ParentInternal = null;
-                        // Not calling SetTopLevelInternal so that IntSecurity.TopLevelWindow.Demand() isn't skipped.
                         SetTopLevel(true);
                     }
-                    else {
-                        if (IsMdiContainer) {
-                            throw new ArgumentException(SR.FormMDIParentAndChild, "value");
+                    else
+                    {
+                        if (IsMdiContainer)
+                        {
+                            throw new ArgumentException(SR.FormMDIParentAndChild, nameof(value));
                         }
-                        if (!value.IsMdiContainer) {
-                            throw new ArgumentException(SR.MDIParentNotContainer, "value");
+                        if (!value.IsMdiContainer)
+                        {
+                            throw new ArgumentException(SR.MDIParentNotContainer, nameof(value));
                         }
 
                         // Setting TopLevel forces a handle recreate before Parent is set,
-                        // which causes problems because we try to assign an MDI child to the parking window,
-                        // which can't take MDI children.  So we explicitly destroy and create the handle here.
+                        // which causes problems because we try to assign an MDI child to the
+                        // parking window, which can't take MDI children. We explicitly destroy
+                        // and create the handle here.
 
                         Dock = DockStyle.None;
                         Properties.SetObject(PropFormMdiParent, value);
@@ -1886,15 +1718,18 @@ namespace System.Windows.Forms {
                         // when MdiChild's visibility is set to true (see 
 
                         // But if the handle has already been created, we need to destroy it
-                        // so the form gets MDI-parented properly. See 
-                        if (ParentInternal.IsHandleCreated && IsMdiChild && IsHandleCreated) {
+                        // so the form gets MDI-parented properly. 
+                        if (ParentInternal.IsHandleCreated && IsMdiChild && IsHandleCreated)
+                        {
                             DestroyHandle();
                         }
                     }
+
                     InvalidateMergedMenu();
                     UpdateMenuHandles();
                 }
-                finally {
+                finally
+                {
                     UpdateStyles();
                     Visible = oldVisibleBit;
                 }
@@ -1997,38 +1832,34 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Opacity"]/*' />
         /// <devdoc>
-        ///     Determines the opacity of the form. This can only be set on top level
-        ///     controls.  Opacity requires Windows 2000 or later, and is ignored on earlier
-        ///     operating systems.
+        /// Determines the opacity of the form. This can only be set on top level controls.
+        /// Opacity requires Windows 2000 or later, and is ignored on earlier operating systems.
         /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatWindowStyle)),
-        TypeConverterAttribute(typeof(OpacityConverter)),
-        SRDescription(nameof(SR.FormOpacityDescr)),
-        DefaultValue(1.0)
-        ]
-        public double Opacity {
-            get {
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [TypeConverterAttribute(typeof(OpacityConverter))]
+        [SRDescription(nameof(SR.FormOpacityDescr))]
+        [DefaultValue(1.0)]
+        public double Opacity
+        {
+            get
+            {
                 object opacity = Properties.GetObject(PropOpacity);
-                if (opacity != null) {
+                if (opacity != null)
+                {
                     return Convert.ToDouble(opacity, CultureInfo.InvariantCulture);
                 }
-                else {
-                    return 1.0f;
-                }
+                
+                return 1.0f;
             }
-            set {
-                // In restricted mode a form cannot be made less visible than 50% opacity.
-                if (IsRestrictedWindow) {
-                    value = Math.Max(value, .50f);
-                }
-
-                if (value > 1.0) {
+            set
+            {
+                if (value > 1.0)
+                {
                     value = 1.0f;
                 }
-                else if (value < 0.0) {
+                else if (value < 0.0)
+                {
                     value = 0.0f;
                 }
 
@@ -2039,19 +1870,24 @@ namespace System.Windows.Forms {
                 if (OpacityAsByte < 255 && OSFeature.Feature.IsPresent(OSFeature.LayeredWindows))
                 {
                     AllowTransparency = true;
-                    if (formState[FormStateLayered] != 1) {
+                    if (formState[FormStateLayered] != 1)
+                    {
                         formState[FormStateLayered] = 1;
-                        if (!oldLayered) {
+                        if (!oldLayered)
+                        {
                             UpdateStyles();
                         }
                     }
                 }
-                else {
+                else
+                {
                     formState[FormStateLayered] = (this.TransparencyKey != Color.Empty) ? 1 : 0;
-                    if (oldLayered != (formState[FormStateLayered] != 0)) {
+                    if (oldLayered != (formState[FormStateLayered] != 0))
+                    {
                         int exStyle = unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
                         CreateParams cp = CreateParams;
-                        if (exStyle != cp.ExStyle) {
+                        if (exStyle != cp.ExStyle)
+                        {
                             UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE, new HandleRef(null, (IntPtr)cp.ExStyle));
                         }
                     }
@@ -2203,34 +2039,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ShowInTaskbar"]/*' />
         /// <devdoc>
-        ///    <para>If ShowInTaskbar is true then the form will be displayed
-        ///       in the Windows Taskbar.</para>
+        /// If ShowInTaskbar is true then the form will be displayed in the Windows Taskbar.
         /// </devdoc>
-        [
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatWindowStyle)),
-        SRDescription(nameof(SR.FormShowInTaskbarDescr))
-        ]
-        public bool ShowInTaskbar {
-            get {
-                return formState[FormStateTaskBar] != 0;
-            }
-            set {
-                // Restricted windows must always show in task bar.
-                if (IsRestrictedWindow) {
-                    return;
-                }
-
-                if (ShowInTaskbar != value) {
-                    if (value) {
-                        formState[FormStateTaskBar] = 1;
-                    }
-                    else {
-                        formState[FormStateTaskBar] = 0;
-                    }
-                    if (IsHandleCreated) {
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [SRDescription(nameof(SR.FormShowInTaskbarDescr))]
+        public bool ShowInTaskbar
+        {
+            get => formState[FormStateTaskBar] != 0;
+            set
+            {
+                if (ShowInTaskbar != value)
+                {
+                    formState[FormStateTaskBar] = value ? 1 : 0;
+                    if (IsHandleCreated)
+                    {
                         RecreateHandle();
                     }
                 }
@@ -2238,33 +2062,25 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    Gets or sets a value indicating whether an icon is displayed in the
-        ///    caption bar of the form.
-        ///    If ControlBox == false, then the icon won't be shown no matter what
-        ///    the value of ShowIcon is
+        /// Gets or sets a value indicating whether an icon is displayed in the
+        /// caption bar of the form.
+        /// If ControlBox == false, then the icon won't be shown no matter what
+        /// the value of ShowIcon is
         /// </devdoc>
-        [
-        DefaultValue(true),
-        SRCategory(nameof(SR.CatWindowStyle)),
-        SRDescription(nameof(SR.FormShowIconDescr))
-        ]
-        public bool ShowIcon {
-            get {
-                return formStateEx[FormStateExShowIcon] != 0;
-            }
-
-            set {
-                if (value) {
-                    formStateEx[FormStateExShowIcon] = 1;
-                }
-                else {
-                    // The icon must always be shown for restricted forms.
-                    if (IsRestrictedWindow) {
-                        return;
-                    }
-                    formStateEx[FormStateExShowIcon] = 0;
+        [DefaultValue(true)]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [SRDescription(nameof(SR.FormShowIconDescr))]
+        public bool ShowIcon
+        {
+            get => formStateEx[FormStateExShowIcon] != 0;
+            set
+            {
+                formStateEx[FormStateExShowIcon] = value ? 1 : 0;
+                if (value)
+                {
                     UpdateStyles();
                 }
+
                 UpdateWindowIcon(true);
             }
         }
@@ -2497,38 +2313,26 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.TopMost"]/*' />
         /// <devdoc>
-        ///    <para>Gets or sets a value indicating whether the form should be displayed as the top-most
-        ///       form of your application.</para>
+        /// Gets or sets a value indicating whether the form should be displayed as the
+        /// top-most form of the application.
         /// </devdoc>
-        [
-        DefaultValue(false),
-        SRCategory(nameof(SR.CatWindowStyle)),
-        SRDescription(nameof(SR.FormTopMostDescr))
-        ]
-        public bool TopMost {
-            get {
-                return formState[FormStateTopMost] != 0;
-            }
-            set {
-                // Restricted windows cannot be top most to avoid DOS attack by obscuring other windows.
-                if (IsRestrictedWindow) {
-                    return;
-                }
-
-                if (IsHandleCreated && TopLevel) {
+        [DefaultValue(false)]
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [SRDescription(nameof(SR.FormTopMostDescr))]
+        public bool TopMost
+        {
+            get => formState[FormStateTopMost] != 0;
+            set
+            {
+                if (IsHandleCreated && TopLevel)
+                {
                     HandleRef key = value ? NativeMethods.HWND_TOPMOST : NativeMethods.HWND_NOTOPMOST;
                     SafeNativeMethods.SetWindowPos(new HandleRef(this, Handle), key, 0, 0, 0, 0,
                                          NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE);
                 }
 
-                if (value) {
-                    formState[FormStateTopMost] = 1;
-                }
-                else {
-                    formState[FormStateTopMost] = 0;
-                }
+                formState[FormStateTopMost] = value ? 1 : 0;
             }
         }
 
@@ -2612,9 +2416,6 @@ namespace System.Windows.Forms {
                     }
                 }
             }
-            else {
-                ResetSecurityTip(true /* modalOnly */);
-            }
 
             if (!IsMdiChild)  {
                 base.SetVisibleCore(value);
@@ -2625,7 +2426,7 @@ namespace System.Windows.Forms {
                 // when WM_SHOWWINDOW gets called, we'll flip this bit to true
                 //
                 if (0==formState[FormStateSWCalled]) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_SHOWWINDOW, value ? 1 : 0, 0);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_SHOWWINDOW, value ? 1 : 0, 0);
                 }
             }
             else  {
@@ -2683,41 +2484,25 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.WindowState"]/*' />
         /// <devdoc>
-        ///    <para> Gets or sets the form's window state.
-        ///       </para>
+        /// Gets or sets the form's window state.
         /// </devdoc>
-        [
-        SRCategory(nameof(SR.CatLayout)),
-        DefaultValue(FormWindowState.Normal),
-        SRDescription(nameof(SR.FormWindowStateDescr))
-        ]
-        public FormWindowState WindowState {
-            get {
-                return(FormWindowState)formState[FormStateWindowState];
-            }
-            set {
-
-                //verify that 'value' is a valid enum type...
-                //valid values are 0x0 to 0x2
+        [SRCategory(nameof(SR.CatLayout))]
+        [DefaultValue(FormWindowState.Normal)]
+        [SRDescription(nameof(SR.FormWindowStateDescr))]
+        public FormWindowState WindowState
+        {
+            get => (FormWindowState)formState[FormStateWindowState];
+            set
+            {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormWindowState.Normal, (int)FormWindowState.Maximized))
                 {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FormWindowState));
                 }
 
-                if (TopLevel && IsRestrictedWindow) {
-                    // We don't allow to minimize or maximze a top level window programatically if it is restricted.
-                    // When maximized, the desktop is obscured by the window (DOS attack) and when minimize spoofing 
-                    // identity is the thread, the minimized window could steal the user's keystrokes and obtain a 
-                    // password for instance.
-                    if (value != FormWindowState.Normal) {
-                        return;
-                    }
-                }
-
-                switch (value) {
-                        case FormWindowState.Normal:
+                switch (value)
+                {
+                    case FormWindowState.Normal:
                         SetState(STATE_SIZELOCKEDBYOS, false);
                         break;
                     case FormWindowState.Maximized:
@@ -2726,9 +2511,11 @@ namespace System.Windows.Forms {
                         break;
                 }
 
-                if (IsHandleCreated && Visible) {
+                if (IsHandleCreated && Visible)
+                {
                     IntPtr hWnd = Handle;
-                    switch (value) {
+                    switch (value)
+                    {
                         case FormWindowState.Normal:
                             SafeNativeMethods.ShowWindow(new HandleRef(this, hWnd), NativeMethods.SW_NORMAL);
                             break;
@@ -2748,48 +2535,26 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <internalonly/>
         /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the text to display in the caption bar of the form.
-        ///    </para>
+        /// Gets or sets the text to display in the caption bar of the form.
         /// </devdoc>
-        internal override string WindowText {
-            get {
-                // In restricted mode, the windows caption (Text) is modified to show the url of the window.
-                // The userWindowText is used to cache the user's text.
-                if (IsRestrictedWindow && formState[FormStateIsWindowActivated] == 1) {
-                    if (userWindowText == null) {
-                        return "";
-                    }
-                    return userWindowText;
-                }
+        internal override string WindowText
+        {
+            get => base.WindowText;
+            set
+            {
+                string oldText = WindowText;
+                base.WindowText = value;
 
-                return base.WindowText;
-
-            }
-
-            set {
-                string oldText = this.WindowText;
-
-                userWindowText = value;
-
-                if (IsRestrictedWindow && formState[FormStateIsWindowActivated] == 1) {
-                    if (value == null) {
-                        value = "";
-                    }
-                    base.WindowText = RestrictedWindowText(value);
-                }
-                else {
-                    base.WindowText = value;
-                }
-
-                // For non-default FormBorderStyles, we do not set the WS_CAPTION style if the Text property is null or "".
-                // When we reload the form from code view, the text property is not set till the very end, and so we do not
-                // end up updating the CreateParams with WS_CAPTION. Fixed this by making sure we call UpdateStyles() when
-                // we transition from a non-null value to a null value or vice versa in Form.WindowText.
-                //
-                if (oldText == null || (oldText.Length == 0)|| value == null || (value.Length == 0)) {
+                // For non-default FormBorderStyles, we do not set the WS_CAPTION style if
+                // the Text property is null or "".
+                // When we reload the form from code view, the text property is not set till
+                // the very end, and so we do not end up updating the CreateParams with
+                // WS_CAPTION. Fixed this by making sure we call UpdateStyles() when
+                // we transition from a non-null value to a null value or vice versa in
+                // Form.WindowText.
+                if (string.IsNullOrEmpty(oldText) || string.IsNullOrEmpty(value))
+                {
                     UpdateFormStyles();
                 }
             }
@@ -3023,7 +2788,7 @@ namespace System.Windows.Forms {
         public void Activate() {
             if (Visible && IsHandleCreated) {
                 if (IsMdiChild) {
-                    MdiParentInternal.MdiClient.SendMessage(NativeMethods.WM_MDIACTIVATE, Handle, 0);
+                    MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
                 }
                 else {
                     UnsafeNativeMethods.SetForegroundWindow(new HandleRef(this, Handle));
@@ -3031,43 +2796,37 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ActivateMdiChildInternal"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///     This function handles the activation of a MDI child form. If a subclass
-        ///     overrides this function, it must call base.ActivateMdiChild.
-        ///     From MSDN: This member supports the .NET Framework infrastructure and is not intended 
-        ///     to be used directly from your code.
-        /// </devdoc>
-        protected void ActivateMdiChild(Form form) {
-            ActivateMdiChildInternal(form);
-        }
-
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        private void ActivateMdiChildInternal(Form form) {
-            if (FormerlyActiveMdiChild != null && !FormerlyActiveMdiChild.IsClosing) {
+        protected void ActivateMdiChild(Form form)
+        {
+            if (FormerlyActiveMdiChild != null && !FormerlyActiveMdiChild.IsClosing)
+            {
                 FormerlyActiveMdiChild.UpdateWindowIcon(true);
                 FormerlyActiveMdiChild = null;
             }
 
             Form activeMdiChild = ActiveMdiChildInternal;
-            if (activeMdiChild == form) {
+            if (activeMdiChild == form)
+            {
                 return;
             }
 
-            //Don't believe we ever hit this with non-null, but leaving it intact in case removing it would cause a problem.
-            if (null != activeMdiChild) {
+            // Don't believe we ever hit this with non-null, but leaving it intact in
+            // case removing it would cause a problem.
+            if (activeMdiChild != null)
+            {
                 activeMdiChild.Active = false;
             }
 
             activeMdiChild = form;
             ActiveMdiChildInternal = form;
 
-            if (null != activeMdiChild) {
+            if (activeMdiChild != null)
+            {
                 activeMdiChild.IsMdiChildFocusable = true;
                 activeMdiChild.Active = true;
             }
-            else if (this.Active) {
+            else if (Active)
+            {
                 ActivateControlInternal(this);
             }
 
@@ -3218,55 +2977,7 @@ namespace System.Windows.Forms {
                 UnsafeNativeMethods.EnableMenuItem(new HandleRef(this, hmenu), NativeMethods.SC_SIZE,
                                        NativeMethods.MF_BYCOMMAND | NativeMethods.MF_ENABLED);
             }
-
-#if SECURITY_DIALOG
-            AdjustSystemMenuForSecurity(hmenu);
-#endif
         }
-
-#if SECURITY_DIALOG
-        private void AdjustSystemMenuForSecurity(IntPtr hmenu) {
-            if (formState[FormStateAddedSecurityMenuItem] == 0) {
-                formState[FormStateAddedSecurityMenuItem] = 1;
-
-                SecurityMenuItem securitySystemMenuItem = new SecurityMenuItem(this);
-                Properties.SetObject(PropSecuritySystemMenuItem, securitySystemMenuItem);
-
-                NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
-                info.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                             NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA;
-                info.fType = 0;
-                info.fState = 0;
-                info.wID = securitySystemMenuItem.ID;
-                info.hbmpChecked = IntPtr.Zero;
-                info.hbmpUnchecked = IntPtr.Zero;
-                info.dwItemData = IntPtr.Zero;
-
-                // Note:  This code is not shipping in the final product.  We do not want to measure the
-                //     :  performance hit of loading the localized resource for this at startup, so I
-                //     :  am hard-wiring the strings below.  If you need to localize these, move them to
-                //     :  a SECONDARY resource file so we don't have to contend with our big error message
-                //     :  file on startup.
-                //
-                if (IsRestrictedWindow) {
-                    info.dwTypeData = ".NET Restricted Window...";
-                }
-                else {
-                    info.dwTypeData = ".NET Window...";
-                }
-                info.cch = 0;
-                UnsafeNativeMethods.InsertMenuItem(new HandleRef(this, hmenu), 0, true, info);
-
-
-                NativeMethods.MENUITEMINFO_T sep = new NativeMethods.MENUITEMINFO_T();
-                sep.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
-                             NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE | NativeMethods.MIIM_DATA;
-                sep.fType = NativeMethods.MFT_MENUBREAK;
-                UnsafeNativeMethods.InsertMenuItem(new HandleRef(this, hmenu), 1, true, sep);
-
-            }
-        }
-#endif
 
         /// <devdoc>
         ///     This forces the SystemMenu to look like we want.
@@ -3502,7 +3213,7 @@ namespace System.Windows.Forms {
 
             if (IsHandleCreated) {
                 closeReason = CloseReason.UserClosing;
-                SendMessage(NativeMethods.WM_CLOSE, 0, 0);
+                SendMessage(Interop.WindowMessages.WM_CLOSE, 0, 0);
             }
             else{
                 // MSDN: When a form is closed, all resources created within the object are closed and the form is disposed.
@@ -3634,7 +3345,7 @@ namespace System.Windows.Forms {
                     // reflects the real icon of the application
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero) {
-                       UnsafeNativeMethods.SendMessage(TaskbarOwner, NativeMethods.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
+                       UnsafeNativeMethods.SendMessage(TaskbarOwner, Interop.WindowMessages.WM_SETICON, NativeMethods.ICON_BIG, icon.Handle);
                     }
                 }
 
@@ -3666,7 +3377,7 @@ namespace System.Windows.Forms {
                 if (!activeMdiChild.IsClosing) {
                     FormerlyActiveMdiChild = activeMdiChild;
                 }
-                // Enter/Leave events on child controls are raised from the ActivateMdiChildInternal method, usually when another 
+                // Enter/Leave events on child controls are raised from the ActivateMdiChild method, usually when another 
                 // Mdi child is getting activated after deactivating this one; but if this is the only visible MDI child 
                 // we need to fake the activation call so MdiChildActivate and Leave events are raised properly. (We say
                 // in the MSDN doc that the MdiChildActivate event is raised when an mdi child is activated or closed -
@@ -3680,7 +3391,7 @@ namespace System.Windows.Forms {
                 }
 
                 if( fakeActivation ){
-                    mdiParent.ActivateMdiChildInternal(null);
+                    mdiParent.ActivateMdiChild(null);
                 }
 
                 ActiveMdiChildInternal = null;
@@ -3771,8 +3482,6 @@ namespace System.Windows.Forms {
                     smallIcon = null;
                 }
 
-                ResetSecurityTip(false /* modalOnly */);
-
                 base.Dispose(disposing);
                 ctlClient = null;
 
@@ -3812,65 +3521,67 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Adjusts the window style of the CreateParams to reflect the bordericons.
+        /// Adjusts the window style of the CreateParams to reflect the bordericons.
         /// </devdoc>
-        /// <internalonly/>
-        private void FillInCreateParamsBorderIcons(CreateParams cp) {
-            if (FormBorderStyle != FormBorderStyle.None) {
-                if (Text != null && Text.Length != 0) {
+        private void FillInCreateParamsBorderIcons(CreateParams cp)
+        {
+            if (FormBorderStyle != FormBorderStyle.None)
+            {
+                if (!string.IsNullOrEmpty(Text))
+                {
                     cp.Style |= NativeMethods.WS_CAPTION;
                 }
 
-                // In restricted mode, the form must have a system menu, caption and max/min/close boxes.
-
-                if (ControlBox || IsRestrictedWindow) {
+                if (ControlBox)
+                {
                     cp.Style |= NativeMethods.WS_SYSMENU | NativeMethods.WS_CAPTION;
                 }
-                else {
+                else
+                {
                     cp.Style &= (~NativeMethods.WS_SYSMENU);
                 }
 
-                if (MaximizeBox || IsRestrictedWindow) {
+                if (MaximizeBox)
+                {
                     cp.Style |= NativeMethods.WS_MAXIMIZEBOX;
                 }
-                else {
+                else
+                {
                     cp.Style &= ~NativeMethods.WS_MAXIMIZEBOX;
                 }
 
-                if (MinimizeBox || IsRestrictedWindow) {
+                if (MinimizeBox)
+                {
                     cp.Style |= NativeMethods.WS_MINIMIZEBOX;
                 }
-                else {
+                else
+                {
                     cp.Style &= ~NativeMethods.WS_MINIMIZEBOX;
                 }
 
-                if (HelpButton && !MaximizeBox && !MinimizeBox && ControlBox) {
+                if (HelpButton && !MaximizeBox && !MinimizeBox && ControlBox)
+                {
                     // Windows should ignore WS_EX_CONTEXTHELP unless all those conditions hold.
                     // But someone must have failed the check, because Windows 2000
                     // will show a help button if either the maximize or
                     // minimize button is disabled.
                     cp.ExStyle |= NativeMethods.WS_EX_CONTEXTHELP;
                 }
-                else {
+                else
+                {
                     cp.ExStyle &= ~NativeMethods.WS_EX_CONTEXTHELP;
                 }
             }
         }
 
         /// <devdoc>
-        ///     Adjusts the window style of the CreateParams to reflect the borderstyle.
+        /// Adjusts the window style of the CreateParams to reflect the borderstyle.
         /// </devdoc>
-        private void FillInCreateParamsBorderStyles(CreateParams cp) {
-            switch ((FormBorderStyle)formState[FormStateBorderStyle]) {
+        private void FillInCreateParamsBorderStyles(CreateParams cp)
+        {
+            switch ((FormBorderStyle)formState[FormStateBorderStyle])
+            {
                 case FormBorderStyle.None:
-                    // 
-
-
-
-
-                    if (IsRestrictedWindow) {
-                        goto case FormBorderStyle.FixedSingle;
-                    }
                     break;
                 case FormBorderStyle.FixedSingle:
                     cp.Style |= NativeMethods.WS_BORDER;
@@ -3898,26 +3609,23 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Adjusts the CreateParams to reflect the window bounds and start position.
+        /// Adjusts the CreateParams to reflect the window bounds and start position.
         /// </devdoc>
-        private void FillInCreateParamsStartPosition(CreateParams cp) {
+        private void FillInCreateParamsStartPosition(CreateParams cp)
+        {
 
-            if (formState[FormStateSetClientSize] != 0) {
-
+            if (formState[FormStateSetClientSize] != 0)
+            {
                 // When computing the client window size, don't tell them that
                 // we are going to be maximized!
-                //
                 int maskedStyle = cp.Style & ~(NativeMethods.WS_MAXIMIZE | NativeMethods.WS_MINIMIZE);
                 Size correct = ComputeWindowSize(ClientSize, maskedStyle, cp.ExStyle);
-                
-                if (IsRestrictedWindow) {
-                    correct = ApplyBoundsConstraints(cp.X, cp.Y, correct.Width, correct.Height).Size;
-                }               
                 cp.Width = correct.Width;
                 cp.Height = correct.Height;
             }
 
-            switch ((FormStartPosition)formState[FormStateStartPos]) {
+            switch ((FormStartPosition)formState[FormStateStartPos])
+            {
                 case FormStartPosition.WindowsDefaultBounds:
                     cp.Width = NativeMethods.CW_USEDEFAULT;
                     cp.Height = NativeMethods.CW_USEDEFAULT;
@@ -3929,7 +3637,8 @@ namespace System.Windows.Forms {
                     // several times when a window is shown, we'll need to force the location
                     // each time for MdiChild windows that are docked so that the window will
                     // be created in the correct location and scroll bars will not be displayed.
-                    if (IsMdiChild && DockStyle.None != Dock){
+                    if (IsMdiChild && DockStyle.None != Dock)
+                    {
                         break;
                     }
 
@@ -3937,49 +3646,48 @@ namespace System.Windows.Forms {
                     cp.Y = NativeMethods.CW_USEDEFAULT;
                     break;
                 case FormStartPosition.CenterScreen:
-                    if (IsMdiChild) {
+                    if (IsMdiChild)
+                    {
                         Control mdiclient = MdiParentInternal.MdiClient;
                         Rectangle clientRect = mdiclient.ClientRectangle;
 
-                        cp.X = Math.Max(clientRect.X,clientRect.X + (clientRect.Width - cp.Width)/2);
-                        cp.Y = Math.Max(clientRect.Y,clientRect.Y + (clientRect.Height - cp.Height)/2);
+                        cp.X = Math.Max(clientRect.X, clientRect.X + (clientRect.Width - cp.Width) / 2);
+                        cp.Y = Math.Max(clientRect.Y, clientRect.Y + (clientRect.Height - cp.Height) / 2);
                     }
-                    else {
+                    else
+                    {
                         Screen desktop = null;
                         IWin32Window dialogOwner = (IWin32Window)Properties.GetObject(PropDialogOwner);
-                        if ((OwnerInternal != null) || (dialogOwner != null)) {
+                        if ((OwnerInternal != null) || (dialogOwner != null))
+                        {
                             IntPtr ownerHandle = (dialogOwner != null) ? Control.GetSafeHandle(dialogOwner) : OwnerInternal.Handle;
                             desktop = Screen.FromHandleInternal(ownerHandle);
                         }
-                        else {
+                        else
+                        {
                             desktop = Screen.FromPoint(Control.MousePosition);
                         }
+    
                         Rectangle screenRect = desktop.WorkingArea;
-                        //if, we're maximized, then don't set the x & y coordinates (they're @ (0,0) )
-                        if (WindowState != FormWindowState.Maximized) {
-                            cp.X = Math.Max(screenRect.X,screenRect.X + (screenRect.Width - cp.Width)/2);
-                            cp.Y = Math.Max(screenRect.Y,screenRect.Y + (screenRect.Height - cp.Height)/2);
+                        // if, we're maximized, then don't set the x & y coordinates (they're @ (0,0) )
+                        if (WindowState != FormWindowState.Maximized)
+                        {
+                            cp.X = Math.Max(screenRect.X, screenRect.X + (screenRect.Width - cp.Width) / 2);
+                            cp.Y = Math.Max(screenRect.Y, screenRect.Y + (screenRect.Height - cp.Height) / 2);
                         }
                     }
+
                     break;
             }
         }
 
         /// <devdoc>
-        ///     Adjusts the Createparams to reflect the window state.
+        /// Adjusts the Createparams to reflect the window state.
         /// </devdoc>
-        private void FillInCreateParamsWindowState(CreateParams cp) {
-            // SECUNDONE: We don't need to check for restricted window here since the only way to set the WindowState
-            //            programatically is by changing the property and we have a check for it in the property setter.
-            //            We don't want to check it here again because it would not allow to set the CreateParams.Style
-            //            to the current WindowState so the window will be set to its current Normal size 
-            //            (which in some cases is quite bogus) when Control.UpdateStylesCore is called.              
-            //
-            //    if( IsRestrictedWindow ){
-            //        return;
-            //    }
-
-            switch ((FormWindowState)formState[FormStateWindowState]) {
+        private void FillInCreateParamsWindowState(CreateParams cp)
+        {
+            switch ((FormWindowState)formState[FormStateWindowState])
+            {
                 case FormWindowState.Maximized:
                     cp.Style |= NativeMethods.WS_MAXIMIZE;
                     break;
@@ -3990,16 +3698,16 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///    <para> Sets focus to the Form.</para>
-        ///    <para>Attempts to set focus to this Form.</para>
+        /// Attempts to set focus to this Form.</para>
         /// </devdoc>
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal override bool FocusInternal() {
+        internal override bool FocusInternal()
+        {
             Debug.Assert( IsHandleCreated, "Attempt to set focus to a form that has not yet created its handle." );
-            //if this form is a MdiChild, then we need to set the focus in a different way...
-            //
-            if (IsMdiChild) {
-                MdiParentInternal.MdiClient.SendMessage(NativeMethods.WM_MDIACTIVATE, Handle, 0);
+
+            // If this form is a MdiChild, then we need to set the focus differently.
+            if (IsMdiChild)
+            {
+                MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
                 return Focused;
             }
 
@@ -4089,170 +3797,6 @@ namespace System.Windows.Forms {
             }
 #endif
             return preferredSize;
-        }
-
-        /// <devdoc>
-        ///    This private method attempts to resolve security zone and site
-        ///    information given a list of urls (sites).  This list is supplied
-        ///    by the runtime and will contain the paths of all loaded assemblies
-        ///    on the stack.  From here, we can examine zones and sites and
-        ///    attempt to identify the unique and mixed scenarios for each.  This
-        ///    information will be displayed in the titlebar of the Form in a
-        ///    semi-trust environment.
-        /// </devdoc>
-        private void ResolveZoneAndSiteNames(ArrayList sites, ref string securityZone, ref string securitySite) {
-
-            //Start by defaulting to 'unknown zone' and 'unknown site' strings.  We will return this
-            //information if anything goes wrong while trying to resolve this information.
-            //
-            securityZone = SR.SecurityRestrictedWindowTextUnknownZone;
-            securitySite = SR.SecurityRestrictedWindowTextUnknownSite;
-
-            try
-            {
-                //these conditions must be met
-                //
-                if (sites == null || sites.Count == 0)
-                    return;
-
-                //create a new zone array list which has no duplicates and no
-                //instances of mycomputer
-                ArrayList zoneList = new ArrayList();
-                foreach (object arrayElement in sites)
-                {
-                    if (arrayElement == null)
-                        return;
-
-                    string url = arrayElement.ToString();
-
-                    if (url.Length == 0)
-                        return;
-
-                    //into a zoneName
-                    //
-                    Zone currentZone = Zone.CreateFromUrl(url);
-
-                    //skip this if the zone is mycomputer
-                    //
-                    if (currentZone.SecurityZone.Equals(SecurityZone.MyComputer))
-                        continue;
-
-                    //add our unique zonename to our list of zones
-                    //
-                    string zoneName = currentZone.SecurityZone.ToString();
-
-                    if (!zoneList.Contains(zoneName))
-                    {
-                        zoneList.Add(zoneName);
-                    }
-                }
-
-                //now, we resolve the zone name based on the unique information
-                //left in the zoneList
-                //
-                if (zoneList.Count == 0)
-                {
-                    //here, all the original zones were 'mycomputer'
-                    //so we can just return that
-                    securityZone = SecurityZone.MyComputer.ToString();
-                }
-                else if (zoneList.Count == 1)
-                {
-                    //we only found 1 unique zone other than
-                    //mycomputer
-                    securityZone = zoneList[0].ToString();
-                }
-                else
-                {
-                    //here, we found multiple zones
-                    //
-                    securityZone = SR.SecurityRestrictedWindowTextMixedZone;
-                }
-
-                //generate a list of loaded assemblies that came from the gac, this
-                //way we can safely ignore these from the url list
-                ArrayList loadedAssembliesFromGac = new ArrayList();
-
-                foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    if (asm.GlobalAssemblyCache)
-                    {
-                        loadedAssembliesFromGac.Add(asm.CodeBase.ToUpper(CultureInfo.InvariantCulture));
-                    }
-                }
-
-                //now, build up a sitelist which contains a friendly string
-                //we've extracted via the uri class and omit any urls that reference
-                //our local gac
-                //
-                ArrayList siteList = new ArrayList();
-                foreach (object arrayElement in sites)
-                {
-                    //we know that each element is valid because of our
-                    //first pass
-                    Uri currentSite = new Uri(arrayElement.ToString());
-
-                    //if we see a site that contains the path to our gac,
-                    //we'll just skip it
-
-                    if (loadedAssembliesFromGac.Contains(currentSite.AbsoluteUri.ToUpper(CultureInfo.InvariantCulture)))
-                    {
-                        continue;
-                    }
-
-                    //add the unique host name to our list
-                    string hostName = currentSite.Host;
-                    if (hostName.Length > 0 && !siteList.Contains(hostName))
-                        siteList.Add(hostName);
-                }
-
-
-                //resolve the site name from our list, if siteList.count == 0
-                //then we have already set our securitySite to "unknown site"
-                //
-                if (siteList.Count == 0) {
-                    //here, we'll set the local machine name to the site string
-                    securitySite = Environment.MachineName;
-                }
-                else if (siteList.Count == 1)
-                {
-                    //We found 1 unique site other than the info in the
-                    //gac
-                    securitySite = siteList[0].ToString();
-                }
-                else
-                {
-                    //multiple sites, we'll have to return 'mixed sites'
-                    //
-                    securitySite = SR.SecurityRestrictedWindowTextMultipleSites;
-                }
-            }
-            catch
-            {
-                //We'll do nothing here. The idea is that zone and security strings are set
-                //to "unkown" at the top of this method - if an exception is thrown, we'll
-                //stick with those values
-            }
-        }
-
-        /// <devdoc>
-        ///    Sets the restricted window text (titlebar text of a form) when running
-        ///    in a semi-trust environment.  The format is: [zone info] - Form Text - [site info]
-        /// </devdoc>
-        private string RestrictedWindowText(string original) {
-            EnsureSecurityInformation();
-            return string.Format(CultureInfo.CurrentCulture, Application.SafeTopLevelCaptionFormat, original, securityZone, securitySite);
-        }
-
-        private void EnsureSecurityInformation() {
-            if (securityZone == null || securitySite == null) {
-                ArrayList zones;
-                ArrayList sites;
-
-                SecurityManager.GetZoneAndOrigin( out zones, out sites );
-
-                ResolveZoneAndSiteNames(sites, ref securityZone, ref securitySite);
-            }
         }
 
         private void CallShownEvent()
@@ -4609,8 +4153,6 @@ namespace System.Windows.Forms {
                 // Make sure we activate the active control.
                 Control activeControl = ActiveControl;
 
-                // Seems safe to call this here without demanding permissions, since we only
-                // get here if this form is enabled and active.
                 if( activeControl == null ){
                     SelectNextControlInternal(this, true, true, true, true);
                 }
@@ -4652,27 +4194,19 @@ namespace System.Windows.Forms {
             UpdateLayered();
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnHandleDestroyed"]/*' />
-        /// <internalonly/>
         /// <devdoc>
-        ///    Inheriting classes should override this method to find out when the
-        ///    handle is about to be destroyed.
-        ///    Call base.OnHandleDestroyed last.
+        /// Inheriting classes should override this method to find out when the
+        /// handle is about to be destroyed.
+        /// Call base.OnHandleDestroyed last.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void OnHandleDestroyed(EventArgs e) {
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
             base.OnHandleDestroyed(e);
             formStateEx[FormStateExUseMdiChildProc] = 0;
 
             // just make sure we're no longer in the forms collection list
             Application.OpenFormsInternalRemove(this);
-
-            // If the handle is being destroyed, and the security tip hasn't been dismissed
-            // then we remove it from the property bag. When we come back around and get
-            // an NCACTIVATE we will see that this is missing and recreate the security
-            // tip in it's default state.
-            //
-            ResetSecurityTip(true /* modalOnly */);
         }
 
         /// <internalonly/>
@@ -4891,19 +4425,14 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnMenuStart"]/*' />
         /// <devdoc>
-        /// <para>Raises the <see cref='System.Windows.Forms.Form.MenuStart'/>
-        /// event.</para>
+        /// Raises the <see cref='System.Windows.Forms.Form.MenuStart'/> event.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnMenuStart(EventArgs e) {
-            SecurityToolTip secTip = (SecurityToolTip)Properties.GetObject(PropSecurityTip);
-            if (secTip != null) {
-                secTip.Pop(true /*noLongerFirst*/);
-            }
+        protected virtual void OnMenuStart(EventArgs e)
+        {
             EventHandler handler = (EventHandler)Events[EVENT_MENUSTART];
-            if (handler != null) handler(this,e);
+            handler?.Invoke(this,e);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnMenuComplete"]/*' />
@@ -5347,7 +4876,7 @@ namespace System.Windows.Forms {
             FormStartPosition oldStartPosition = FormStartPosition.Manual;
 
             if (!IsMdiChild && (WindowState == FormWindowState.Minimized || WindowState == FormWindowState.Maximized)) {
-                wp.length = Marshal.SizeOf(typeof(NativeMethods.WINDOWPLACEMENT));
+                wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
             }
 
@@ -5448,17 +4977,6 @@ namespace System.Windows.Forms {
             UpdateWindowIcon(true);
         }
 
-        void ResetSecurityTip(bool modalOnly) {
-            SecurityToolTip secTip = (SecurityToolTip)Properties.GetObject(PropSecurityTip);
-            if (secTip != null) {
-                if ((modalOnly && secTip.Modal) || !modalOnly) {
-                    secTip.Dispose();
-                    secTip = null;
-                    Properties.SetObject(PropSecurityTip, null);
-                }
-            }
-        }
-
         /// <devdoc>
         ///     Resets the TransparencyKey to Color.Empty.
         /// </devdoc>
@@ -5529,34 +5047,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        void RestrictedProcessNcActivate() {
-            Debug.Assert(IsRestrictedWindow, "This should only be called for restricted windows");
-
-            // Ignore if tearing down...
-            //
-            if (IsDisposed || Disposing) {
-                return;
-            }
-
-            // Note that this.Handle does not get called when the handle hasn't been created yet
-            //
-            SecurityToolTip secTip = (SecurityToolTip)Properties.GetObject(PropSecurityTip);
-            if (secTip == null) {
-                if (IsHandleCreated && UnsafeNativeMethods.GetForegroundWindow() == this.Handle) {
-                    secTip = new SecurityToolTip(this);
-                    Properties.SetObject(PropSecurityTip, secTip);
-                }
-            }
-            else if (!IsHandleCreated || UnsafeNativeMethods.GetForegroundWindow() != this.Handle)
-            {
-                secTip.Pop(false /*noLongerFirst*/);
-            }
-            else
-            {
-                secTip.Show();
-            }
-        }
-
         /// <devdoc>
         ///     Decrements updateMenuHandleSuspendCount. If updateMenuHandleSuspendCount
         ///     becomes zero and updateMenuHandlesDeferred is true, updateMenuHandles
@@ -5574,36 +5064,33 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Select"]/*' />
         /// <devdoc>
-        ///     Selects this form, and optionally selects the next/previous control.
+        /// Selects this form, and optionally selects the next/previous control.
         /// </devdoc>
-        protected override void Select(bool directed, bool forward) {
-            SelectInternal(directed, forward);
-        }
-
-        /// <devdoc>
-        ///     Selects this form, and optionally selects the next/previous control.
-        ///     Does the actual work without the security check.
-        /// </devdoc>
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        private void SelectInternal(bool directed, bool forward) {
-            if (directed) {
+        protected override void Select(bool directed, bool forward)
+        {
+            if (directed)
+            {
                 SelectNextControl(null, forward, true, true, false);
             }
 
-            if (TopLevel) {
+            if (TopLevel)
+            {
                 UnsafeNativeMethods.SetActiveWindow(new HandleRef(this, Handle));
             }
-            else if (IsMdiChild) {
+            else if (IsMdiChild)
+            {
                 UnsafeNativeMethods.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
-                MdiParentInternal.MdiClient.SendMessage(NativeMethods.WM_MDIACTIVATE, Handle, 0);
+                MdiParentInternal.MdiClient.SendMessage(Interop.WindowMessages.WM_MDIACTIVATE, Handle, 0);
             }
-            else {
+            else
+            {
                 Form form = ParentFormInternal;
-                if (form != null) form.ActiveControl = this;
+                if (form != null)
+                {
+                    form.ActiveControl = this;
+                }
             }
-            
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ScaleCore"]/*' />
@@ -5681,155 +5168,92 @@ namespace System.Windows.Forms {
             }
         }
 
-
-        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.SetBoundsCore"]/*' />
-        /// <devdoc>
-        /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
-
-            if (WindowState != FormWindowState.Normal) {
+        protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
+        {
+            if (WindowState != FormWindowState.Normal)
+            {
                 // See RestoreWindowBoundsIfNecessary for an explanation of this
                 // Only restore position when x,y is not -1,-1
                 if (x != -1 || y != -1)
                 {
                     restoredWindowBoundsSpecified |= (specified & (BoundsSpecified.X | BoundsSpecified.Y));
                 }
+
                 restoredWindowBoundsSpecified |= (specified & (BoundsSpecified.Width | BoundsSpecified.Height));
 
                 if ((specified & BoundsSpecified.X) != 0)
+                {
                     restoredWindowBounds.X = x;
+                }
                 if ((specified & BoundsSpecified.Y) != 0)
+                {
                     restoredWindowBounds.Y = y;
-                if ((specified & BoundsSpecified.Width) != 0) {
+                }
+                if ((specified & BoundsSpecified.Width) != 0)
+                {
                     restoredWindowBounds.Width = width;
                     formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 0;
                 }
-                if ((specified & BoundsSpecified.Height) != 0) {
+                if ((specified & BoundsSpecified.Height) != 0)
+                {
                     restoredWindowBounds.Height = height;
                     formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 0;
                 }
             }
 
-            //Update RestoreBounds
+            // Update RestoreBounds
             if ((specified & BoundsSpecified.X) != 0)
+            {
                 restoreBounds.X = x;
+            }
             if ((specified & BoundsSpecified.Y) != 0)
+            {
                 restoreBounds.Y = y;
+            }
             if ((specified & BoundsSpecified.Width) != 0 || restoreBounds.Width == -1)
+            {
                 restoreBounds.Width = width;
+            }
             if ((specified & BoundsSpecified.Height) != 0 || restoreBounds.Height == -1)
+            {
                 restoreBounds.Height = height;
+            }
 
             // Enforce maximum size...
-            //
-            if (WindowState == FormWindowState.Normal
-                && (this.Height != height || this.Width != width)) {
-
+            if (WindowState == FormWindowState.Normal && (this.Height != height || this.Width != width))
+            {
                 Size max = SystemInformation.MaxWindowTrackSize;
-                if (height > max.Height) {
+                if (height > max.Height)
+                {
                     height = max.Height;
                 }
-                if (width > max.Width) {
+                if (width > max.Width)
+                {
                     width = max.Width;
                 }
             }
 
             // Only enforce the minimum size if the form has a border and is a top
             // level form.
-            //
             FormBorderStyle borderStyle = FormBorderStyle;
             if (borderStyle != FormBorderStyle.None
                 && borderStyle != FormBorderStyle.FixedToolWindow
                 && borderStyle != FormBorderStyle.SizableToolWindow
-                && ParentInternal == null) {
-
+                && ParentInternal == null)
+            {
                 Size min = SystemInformation.MinWindowTrackSize;
-                if (height < min.Height) {
+                if (height < min.Height)
+                {
                     height = min.Height;
                 }
-                if (width < min.Width) {
+                if (width < min.Width)
+                {
                     width = min.Width;
                 }
             }
 
-            if (IsRestrictedWindow) {
-                // Check to ensure that the title bar, and all corners of the window, are visible on a monitor
-                //
-
-                Rectangle adjustedBounds = ApplyBoundsConstraints(x,y,width,height);
-                if (adjustedBounds != new Rectangle(x,y,width,height)) {
-                    
-                    // 
-
-
-
-
-                    base.SetBoundsCore(adjustedBounds.X, adjustedBounds.Y, adjustedBounds.Width, adjustedBounds.Height, BoundsSpecified.All);
-                    return;
-                }
-            }
-
             base.SetBoundsCore(x, y, width, height, specified);
-        }
-
-        internal override Rectangle ApplyBoundsConstraints(int suggestedX, int suggestedY, int proposedWidth, int proposedHeight) {
-            // apply min/max size constraints
-            Rectangle adjustedBounds = base.ApplyBoundsConstraints(suggestedX, suggestedY, proposedWidth, proposedHeight);
-            // run through size restrictions in Internet.
-            if (IsRestrictedWindow) {
-                // Check to ensure that the title bar, and all corners of the window, are visible on a monitor
-                //
-
-                Screen[] screens = Screen.AllScreens;
-                bool topLeft = false;
-                bool topRight = false;
-                bool bottomLeft = false;
-                bool bottomRight = false;
-
-                for (int i=0; i<screens.Length; i++) {
-                    Rectangle current = screens[i].WorkingArea;
-                    if (current.Contains(suggestedX, suggestedY)) {
-                        topLeft = true;
-                    }
-                    if (current.Contains(suggestedX + proposedWidth, suggestedY)) {
-                        topRight = true;
-                    }
-                    if (current.Contains(suggestedX, suggestedY + proposedHeight)) {
-                        bottomLeft = true;
-                    }
-                    if (current.Contains(suggestedX + proposedWidth, suggestedY + proposedHeight)) {
-                        bottomRight = true;
-                    }
-                }
-
-                // 
-
-
-          
-                if (!(topLeft && topRight && bottomLeft && bottomRight)) {
-                    if (formStateEx[FormStateExInScale] == 1) {
-                        // Constrain to screen working area bounds.  concern here is that
-                        // an autoscale'ed dialog would validly scale itself larger than the 
-                        // screen, but would fail our size/location restrictions - and we'd 
-                        // restore back to the original unscaled sized.
-                        
-                        // Allow AutoScale to expand out to the screen bounds
-                        adjustedBounds = WindowsFormsUtils.ConstrainToScreenWorkingAreaBounds(adjustedBounds);
-                    }
-                    else {
-                        // COMPAT with Everett - ignore the size change.
-                        // possible programatic attempt to scooch off the screen.
-                        // restore the last size/location the user had.
-                        adjustedBounds.X = Left;
-                        adjustedBounds.Y = Top;
-                        adjustedBounds.Width = Width;
-                        adjustedBounds.Height = Height;
-                    }
-                  
-                }
-            }
-            return adjustedBounds;
         }
 
         /// <devdoc>
@@ -5997,7 +5421,7 @@ namespace System.Windows.Forms {
 
             IntPtr hWndCapture = UnsafeNativeMethods.GetCapture();
             if (hWndCapture != IntPtr.Zero) {
-                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), NativeMethods.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndCapture), Interop.WindowMessages.WM_CANCELMODE, IntPtr.Zero, IntPtr.Zero);
                 SafeNativeMethods.ReleaseCapture();
             }
             IntPtr hWndActive = UnsafeNativeMethods.GetActiveWindow();
@@ -6372,13 +5796,13 @@ namespace System.Windows.Forms {
                         dummyMenu.ownerForm = this;
                         Properties.SetObject(PropDummyMenu, dummyMenu);
                     }
-                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), NativeMethods.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, dummyMenu.Handle, IntPtr.Zero);
 
                     if (menu != null) {
 
                         // Microsoft, 5/2/1998 - don't use Win32 native Mdi lists...
                         //
-                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), NativeMethods.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(ctlClient, ctlClient.Handle), Interop.WindowMessages.WM_MDISETMENU, menu.Handle, IntPtr.Zero);
                     }
                 }
                 
@@ -6614,44 +6038,52 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Updates the window icon.
+        /// Updates the window icon.
         /// </devdoc>
-        /// <internalonly/>
-        private void UpdateWindowIcon(bool redrawFrame) {
-            if (IsHandleCreated) {
+        private void UpdateWindowIcon(bool redrawFrame)
+        {
+            if (IsHandleCreated)
+            {
                 Icon icon;
 
                 // Preserve Win32 behavior by keeping the icon we set NULL if
                 // the user hasn't specified an icon and we are a dialog frame.
-                //
-                if ((FormBorderStyle == FormBorderStyle.FixedDialog && formState[FormStateIconSet] == 0 && !IsRestrictedWindow) || !ShowIcon) {
+                if ((FormBorderStyle == FormBorderStyle.FixedDialog && formState[FormStateIconSet] == 0) || !ShowIcon)
+                {
                     icon = null;
                 }
                 else {
                     icon = Icon;
                 }
 
-                if (icon != null) {
-                    if (smallIcon == null) {
-                        try {
+                if (icon != null)
+                {
+                    if (smallIcon == null)
+                    {
+                        try
+                        {
                             smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
                         }
-                        catch {
+                        catch
+                        {
                         }
                     }
 
-                    if (smallIcon != null) {
-                        SendMessage(NativeMethods.WM_SETICON,NativeMethods.ICON_SMALL,smallIcon.Handle);
+                    if (smallIcon != null)
+                    {
+                        SendMessage(Interop.WindowMessages.WM_SETICON,NativeMethods.ICON_SMALL,smallIcon.Handle);
                     }
-                    SendMessage(NativeMethods.WM_SETICON,NativeMethods.ICON_BIG,icon.Handle);
-                }
-                else {
 
-                    SendMessage(NativeMethods.WM_SETICON,NativeMethods.ICON_SMALL,0);
-                    SendMessage(NativeMethods.WM_SETICON,NativeMethods.ICON_BIG,0);
+                    SendMessage(Interop.WindowMessages.WM_SETICON,NativeMethods.ICON_BIG,icon.Handle);
+                }
+                else
+                {
+                    SendMessage(Interop.WindowMessages.WM_SETICON,NativeMethods.ICON_SMALL,0);
+                    SendMessage(Interop.WindowMessages.WM_SETICON,NativeMethods.ICON_BIG,0);
                 }
 
-                if (redrawFrame) {
+                if (redrawFrame)
+                {
                     SafeNativeMethods.RedrawWindow(new HandleRef(this, Handle), null, NativeMethods.NullHandleRef, NativeMethods.RDW_INVALIDATE | NativeMethods.RDW_FRAME);
                 }
             }
@@ -6669,7 +6101,7 @@ namespace System.Windows.Forms {
             if (IsHandleCreated) {
                 FormWindowState oldState = WindowState;
                 NativeMethods.WINDOWPLACEMENT wp = new NativeMethods.WINDOWPLACEMENT();
-                wp.length = Marshal.SizeOf(typeof(NativeMethods.WINDOWPLACEMENT));
+                wp.length = Marshal.SizeOf<NativeMethods.WINDOWPLACEMENT>();
                 UnsafeNativeMethods.GetWindowPlacement(new HandleRef(this, Handle), ref wp);
 
                 switch (wp.showCmd) {
@@ -6823,7 +6255,7 @@ namespace System.Windows.Forms {
 
             // Pass 1 (WM_CLOSE & WM_QUERYENDSESSION)... Closing
             //
-            if (m.Msg != NativeMethods.WM_ENDSESSION) {
+            if (m.Msg != Interop.WindowMessages.WM_ENDSESSION) {
                 if (Modal) {
                     if (dialogResult == DialogResult.None) {
                         dialogResult = DialogResult.Cancel;
@@ -6886,7 +6318,7 @@ namespace System.Windows.Forms {
                     OnFormClosing(e);
                 }
 
-                if (m.Msg == NativeMethods.WM_QUERYENDSESSION) {
+                if (m.Msg == Interop.WindowMessages.WM_QUERYENDSESSION) {
                     m.Result = (IntPtr)(e.Cancel ? 0 : 1);
                 }
                 else if (e.Cancel && (MdiParent != null)) {
@@ -6905,7 +6337,7 @@ namespace System.Windows.Forms {
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
             // event on all mdi children and ourselves
             //
-            if (m.Msg != NativeMethods.WM_QUERYENDSESSION) {
+            if (m.Msg != Interop.WindowMessages.WM_QUERYENDSESSION) {
                 FormClosedEventArgs fc;
                 if (!e.Cancel) {
                     IsClosing = true;
@@ -6968,44 +6400,38 @@ namespace System.Windows.Forms {
             OnMenuComplete(EventArgs.Empty);
             base.WndProc(ref m);
         }
-    
-        /// <devdoc>
-        ///     WM_GETMINMAXINFO handler
-        /// </devdoc>
-        /// <internalonly/>
-        private void WmGetMinMaxInfo(ref Message m) {
 
+        /// <devdoc>
+        /// WM_GETMINMAXINFO handler
+        /// </devdoc>
+        private void WmGetMinMaxInfo(ref Message m)
+        {
             // Form should gracefully stop at the minimum preferred size.
             // When we're set to AutoSize true, we should take a look at minAutoSize - which is snapped in onlayout.
             // as the form contracts, we should not let it size past here as we're just going to readjust the size
             // back to it later.
             Size minTrack = (AutoSize && formStateEx[FormStateExInModalSizingLoop] == 1) ? LayoutUtils.UnionSizes(minAutoSize, MinimumSize) : MinimumSize;
-            
+
             Size maxTrack = MaximumSize;
             Rectangle maximizedBounds = MaximizedBounds;
 
-            if (!minTrack.IsEmpty
-                || !maxTrack.IsEmpty
-                || !maximizedBounds.IsEmpty
-                || IsRestrictedWindow) {
-
+            if (!minTrack.IsEmpty || !maxTrack.IsEmpty || !maximizedBounds.IsEmpty)
+            {
                 WmGetMinMaxInfoHelper(ref m, minTrack, maxTrack, maximizedBounds);
             }
-            if (IsMdiChild) {
+
+            if (IsMdiChild)
+            {
                 base.WndProc(ref m);
-                return;
             }
         }
 
-        // PERFTRACK : Microsoft, 2/22/2000 - Refer to MINMAXINFO in a separate method
-        //           : to avoid loading the class in the common case.
-        //
-        private void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds) {
-
+        private void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
+        {
             NativeMethods.MINMAXINFO mmi = (NativeMethods.MINMAXINFO)m.GetLParam(typeof(NativeMethods.MINMAXINFO));
 
-            if (!minTrack.IsEmpty) {
-
+            if (!minTrack.IsEmpty)
+            {
                 mmi.ptMinTrackSize.x = minTrack.Width;
                 mmi.ptMinTrackSize.y = minTrack.Height;
 
@@ -7017,37 +6443,36 @@ namespace System.Windows.Forms {
                 // So, the workaround to prevent this problem is to set the MaxTrackSize to something
                 // whenever the MinTrackSize is set to a value larger than the respective dimension
                 // of the virtual screen.
-
-                if (maxTrack.IsEmpty) {
-
+                if (maxTrack.IsEmpty)
+                {
                     // Only set the max track size dimensions if the min track size dimensions
                     // are larger than the VirtualScreen dimensions.
                     Size virtualScreen = SystemInformation.VirtualScreen.Size;
-                    if (minTrack.Height > virtualScreen.Height) {
+                    if (minTrack.Height > virtualScreen.Height)
+                    {
                         mmi.ptMaxTrackSize.y = int.MaxValue;
                     }
-                    if (minTrack.Width > virtualScreen.Width) {
+                    if (minTrack.Width > virtualScreen.Width)
+                    {
                         mmi.ptMaxTrackSize.x = int.MaxValue;
                     }
                 }
             }
-            if (!maxTrack.IsEmpty) {
+
+            if (!maxTrack.IsEmpty)
+            {
                 // Is the specified MaxTrackSize smaller than the smallest allowable Window size?
                 Size minTrackWindowSize = SystemInformation.MinWindowTrackSize;
                 mmi.ptMaxTrackSize.x = Math.Max(maxTrack.Width, minTrackWindowSize.Width);
                 mmi.ptMaxTrackSize.y = Math.Max(maxTrack.Height, minTrackWindowSize.Height);
             }
 
-            if (!maximizedBounds.IsEmpty && !IsRestrictedWindow) {
+            if (!maximizedBounds.IsEmpty)
+            {
                 mmi.ptMaxPosition.x = maximizedBounds.X;
                 mmi.ptMaxPosition.y = maximizedBounds.Y;
                 mmi.ptMaxSize.x = maximizedBounds.Width;
                 mmi.ptMaxSize.y = maximizedBounds.Height;
-            }
-
-            if (IsRestrictedWindow) {
-                mmi.ptMinTrackSize.x = Math.Max(mmi.ptMinTrackSize.x, 100);
-                mmi.ptMinTrackSize.y = Math.Max(mmi.ptMinTrackSize.y, SystemInformation.CaptionButtonSize.Height * 3);
             }
 
             Marshal.StructureToPtr(mmi, m.LParam, false);
@@ -7081,7 +6506,7 @@ namespace System.Windows.Forms {
                 
                 Form formMdiParent = (Form)Properties.GetObject(PropFormMdiParent);
                 if (formMdiParent != null && formMdiParent.Menu != null) {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), NativeMethods.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(formMdiParent, formMdiParent.Handle), Interop.WindowMessages.WM_SYSCOMMAND, new IntPtr(NativeMethods.SC_KEYMENU), m.WParam);
                     m.Result = (IntPtr)NativeMethods.Util.MAKELONG(0, 1);
                     return;
                 }
@@ -7115,7 +6540,7 @@ namespace System.Windows.Forms {
                     formMdiParent.DeactivateMdiChild();
                 }
                 else  if (Handle == m.LParam) {
-                    formMdiParent.ActivateMdiChildInternal(this);
+                    formMdiParent.ActivateMdiChild(this);
                 }
             }
         }
@@ -7322,91 +6747,88 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_NCACTIVATE:
-                    if (IsRestrictedWindow) {
-                        BeginInvoke(new MethodInvoker(RestrictedProcessNcActivate));
-                    }
+                case Interop.WindowMessages.WM_NCACTIVATE:
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_NCLBUTTONDOWN:
-                case NativeMethods.WM_NCRBUTTONDOWN:
-                case NativeMethods.WM_NCMBUTTONDOWN:
-                case NativeMethods.WM_NCXBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCLBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCRBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCMBUTTONDOWN:
+                case Interop.WindowMessages.WM_NCXBUTTONDOWN:
                     WmNcButtonDown(ref m);
                     break;
-                case NativeMethods.WM_ACTIVATE:
+                case Interop.WindowMessages.WM_ACTIVATE:
                     WmActivate(ref m);
                     break;
-                case NativeMethods.WM_MDIACTIVATE:
+                case Interop.WindowMessages.WM_MDIACTIVATE:
                     WmMdiActivate(ref m);
                     break;
-                case NativeMethods.WM_CLOSE:
+                case Interop.WindowMessages.WM_CLOSE:
                     if (CloseReason == CloseReason.None) {
                         CloseReason = CloseReason.TaskManagerClosing;
                     }
                     WmClose(ref m);
                     break;
 
-                case NativeMethods.WM_QUERYENDSESSION:
-                case NativeMethods.WM_ENDSESSION:
+                case Interop.WindowMessages.WM_QUERYENDSESSION:
+                case Interop.WindowMessages.WM_ENDSESSION:
                     CloseReason = CloseReason.WindowsShutDown;
                     WmClose(ref m);
                     break;
-                case NativeMethods.WM_ENTERSIZEMOVE:
+                case Interop.WindowMessages.WM_ENTERSIZEMOVE:
                     WmEnterSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case NativeMethods.WM_EXITSIZEMOVE:
+                case Interop.WindowMessages.WM_EXITSIZEMOVE:
                     WmExitSizeMove(ref m);
                     DefWndProc(ref m);
                     break;
-                case NativeMethods.WM_CREATE:
+                case Interop.WindowMessages.WM_CREATE:
                     WmCreate(ref m);
                     break;
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
 
-                case NativeMethods.WM_INITMENUPOPUP:
+                case Interop.WindowMessages.WM_INITMENUPOPUP:
                     WmInitMenuPopup(ref m);
                     break;
-                case NativeMethods.WM_UNINITMENUPOPUP:
+                case Interop.WindowMessages.WM_UNINITMENUPOPUP:
                     WmUnInitMenuPopup(ref m);
                     break;
-                case NativeMethods.WM_MENUCHAR:
+                case Interop.WindowMessages.WM_MENUCHAR:
                     WmMenuChar(ref m);
                     break;
-                case NativeMethods.WM_NCDESTROY:
+                case Interop.WindowMessages.WM_NCDESTROY:
                     WmNCDestroy(ref m);
                     break;
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     WmNCHitTest(ref m);
                     break;
-                case NativeMethods.WM_SHOWWINDOW:
+                case Interop.WindowMessages.WM_SHOWWINDOW:
                     WmShowWindow(ref m);
                     break;
-                case NativeMethods.WM_SIZE:
+                case Interop.WindowMessages.WM_SIZE:
                     WmSize(ref m);
                     break;
-                case NativeMethods.WM_SYSCOMMAND:
+                case Interop.WindowMessages.WM_SYSCOMMAND:
                     WmSysCommand(ref m);
                     break;
-                case NativeMethods.WM_GETMINMAXINFO:
+                case Interop.WindowMessages.WM_GETMINMAXINFO:
                     WmGetMinMaxInfo(ref m);
                     break;
-                case NativeMethods.WM_WINDOWPOSCHANGED:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                     WmWindowPosChanged(ref m);
                     break;
-                //case NativeMethods.WM_WINDOWPOSCHANGING:
+                //case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                 //    WmWindowPosChanging(ref m);
                 //    break;
-                case NativeMethods.WM_ENTERMENULOOP:
+                case Interop.WindowMessages.WM_ENTERMENULOOP:
                     WmEnterMenuLoop(ref m);
                     break;
-                case NativeMethods.WM_EXITMENULOOP:
+                case Interop.WindowMessages.WM_EXITMENULOOP:
                     WmExitMenuLoop(ref m);
                     break;
-                case NativeMethods.WM_CAPTURECHANGED:
+                case Interop.WindowMessages.WM_CAPTURECHANGED:
                     base.WndProc(ref m);
                     // This is a work-around for the Win32 scroll bar; it
                     // doesn't release it's capture in response to a CAPTURECHANGED
@@ -7416,11 +6838,11 @@ namespace System.Windows.Forms {
                         CaptureInternal = false;
                     }
                     break;
-                case NativeMethods.WM_GETDPISCALEDSIZE:
+                case Interop.WindowMessages.WM_GETDPISCALEDSIZE:
                     Debug.Assert(NativeMethods.Util.SignedLOWORD(m.WParam) == NativeMethods.Util.SignedHIWORD(m.WParam), "Non-square pixels!");
                     WmGetDpiScaledSize(ref m);
                     break;
-                case NativeMethods.WM_DPICHANGED:
+                case Interop.WindowMessages.WM_DPICHANGED:
                     WmDpiChanged(ref m);
                     break;
                 default:
@@ -7541,183 +6963,6 @@ namespace System.Windows.Forms {
                     foreach (HandleRef hRef in this.ownedWindows)
                     {
                         UnsafeNativeMethods.SetWindowLong(hRef, NativeMethods.GWL_HWNDPARENT, hRefOwner);
-                    }
-                }
-            }
-        }
-
-        private class SecurityToolTip : IDisposable {
-            Form owner;
-            string toolTipText;
-            bool first = true;
-            ToolTipNativeWindow window;
-
-            internal SecurityToolTip(Form owner) {
-                this.owner = owner;
-                SetupText();
-                window = new ToolTipNativeWindow(this);
-                SetupToolTip();
-                owner.LocationChanged += new EventHandler(FormLocationChanged);
-                owner.HandleCreated += new EventHandler(FormHandleCreated);
-            }
-
-            CreateParams CreateParams {
-                get {
-                    NativeMethods.INITCOMMONCONTROLSEX icc = new NativeMethods.INITCOMMONCONTROLSEX();
-                    icc.dwICC = NativeMethods.ICC_TAB_CLASSES;
-                    SafeNativeMethods.InitCommonControlsEx(icc);
-
-                    CreateParams cp = new CreateParams();
-                    cp.Parent = owner.Handle;
-                    cp.ClassName = NativeMethods.TOOLTIPS_CLASS;
-                    cp.Style |= NativeMethods.TTS_ALWAYSTIP | NativeMethods.TTS_BALLOON;
-                    cp.ExStyle = 0;
-                    cp.Caption = null;
-                    return cp;
-                }
-            }
-
-            internal bool Modal {
-                get {
-                    return first;
-                }
-            }
-
-            public void Dispose() {
-                if (owner != null) {
-                    owner.LocationChanged -= new EventHandler(FormLocationChanged);
-                }
-                if (window.Handle != IntPtr.Zero) {
-                    window.DestroyHandle();
-                    window = null;
-                }
-            }
-
-            private NativeMethods.TOOLINFO_T GetTOOLINFO() {
-                NativeMethods.TOOLINFO_T toolInfo;
-                toolInfo = new NativeMethods.TOOLINFO_T();
-                toolInfo.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
-                toolInfo.uFlags |= NativeMethods.TTF_SUBCLASS;
-                toolInfo.lpszText =  this.toolTipText;
-                if (owner.RightToLeft == RightToLeft.Yes) {
-                    toolInfo.uFlags |= NativeMethods.TTF_RTLREADING;
-                }
-                if (!first) {
-                    toolInfo.uFlags |= NativeMethods.TTF_TRANSPARENT;
-                    toolInfo.hwnd = owner.Handle;
-                    Size s = SystemInformation.CaptionButtonSize;
-                    Rectangle r = new Rectangle(owner.Left, owner.Top, s.Width, SystemInformation.CaptionHeight);
-                    r = owner.RectangleToClient(r);
-                    r.Width -= r.X;
-                    r.Y += 1;
-                    toolInfo.rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
-                    toolInfo.uId = IntPtr.Zero;
-                }
-                else {
-                    toolInfo.uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRACK;
-                    toolInfo.hwnd = IntPtr.Zero;
-                    toolInfo.uId = owner.Handle;
-                }
-                return toolInfo;
-            }
-
-            private void SetupText() {
-                owner.EnsureSecurityInformation();
-                string mainText = SR.SecurityToolTipMainText;
-                string sourceInfo = string.Format(SR.SecurityToolTipSourceInformation, owner.securitySite);
-                this.toolTipText =  string.Format(SR.SecurityToolTipTextFormat, mainText, sourceInfo);
-            }
-
-            private void SetupToolTip() {
-                window.CreateHandle(CreateParams);
-
-                SafeNativeMethods.SetWindowPos(new HandleRef(window, window.Handle), NativeMethods.HWND_TOPMOST,
-                                  0, 0, 0, 0,
-                                  NativeMethods.SWP_NOMOVE | NativeMethods.SWP_NOSIZE |
-                                  NativeMethods.SWP_NOACTIVATE);
-
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, owner.Width);
-
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_SETTITLE, NativeMethods.TTI_WARNING, SR.SecurityToolTipCaption);
-
-                if (0 == (int)UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO())) {
-                    Debug.Fail("TTM_ADDTOOL failed for security tip");
-                }
-
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_ACTIVATE, 1, 0);
-                Show();
-            }
-
-            private void RecreateHandle() {
-                if (window != null)
-                {
-                    if (window.Handle != IntPtr.Zero) {
-                        window.DestroyHandle();
-                    }
-                    SetupToolTip();
-                }
-            }
-
-            private void FormHandleCreated(object sender, EventArgs e) {
-                RecreateHandle();
-            }
-
-            private void FormLocationChanged(object sender, EventArgs e) {
-                if (window != null && first) {
-                    Size s = SystemInformation.CaptionButtonSize;
-
-                    if (owner.WindowState == FormWindowState.Minimized) {
-                        Pop(true /*noLongerFirst*/);
-                    }
-                    else {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_TRACKPOSITION, 0, NativeMethods.Util.MAKELONG(owner.Left + s.Width / 2, owner.Top + SystemInformation.CaptionHeight));
-                    }
-                }
-                else {
-                    Pop(true /*noLongerFirst*/);
-                }
-            }
-
-            internal void Pop(bool noLongerFirst) {
-                if (noLongerFirst) {
-                    first = false;
-                }
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_TRACKACTIVATE, 0, GetTOOLINFO());
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_DELTOOL, 0, GetTOOLINFO());
-                UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_ADDTOOL, 0, GetTOOLINFO());
-            }
-
-            internal void Show() {
-                if (first) {
-                    Size s = SystemInformation.CaptionButtonSize;
-                    UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_TRACKPOSITION, 0, NativeMethods.Util.MAKELONG(owner.Left + s.Width / 2, owner.Top + SystemInformation.CaptionHeight));
-                    UnsafeNativeMethods.SendMessage(new HandleRef(window, window.Handle), NativeMethods.TTM_TRACKACTIVATE, 1, GetTOOLINFO());
-                }
-            }
-
-            private void WndProc(ref Message msg) {
-                if (first) {
-                    if (msg.Msg == NativeMethods.WM_LBUTTONDOWN
-                        || msg.Msg == NativeMethods.WM_RBUTTONDOWN
-                        || msg.Msg == NativeMethods.WM_MBUTTONDOWN
-                        || msg.Msg == NativeMethods.WM_XBUTTONDOWN) {
-
-                        Pop(true /*noLongerFirst*/);
-                    }
-                }
-                window.DefWndProc(ref msg);
-            }
-
-            private sealed class ToolTipNativeWindow : NativeWindow {
-                SecurityToolTip control;
-
-                internal ToolTipNativeWindow(SecurityToolTip control) {
-                    this.control = control;
-                }
-
-                protected override void WndProc(ref Message m) {
-                    if (control != null) {
-                        control.WndProc(ref m);
                     }
                 }
             }

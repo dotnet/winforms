@@ -406,7 +406,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
                 if (imageIndex.Index != value) {
                     if (value != -1) {
@@ -666,22 +666,22 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.TextImageRelation"]/*' />
-        [
-            DefaultValue(TextImageRelation.Overlay),
-            Localizable(true),
-            SRDescription(nameof(SR.ButtonTextImageRelationDescr)),
-            SRCategory(nameof(SR.CatAppearance))
-        ]
-        public TextImageRelation TextImageRelation {
-            get {
-                return textImageRelation;
-            }
-            set {
-                if (!WindowsFormsUtils.EnumValidator.IsValidTextImageRelation(value)) {
+        [DefaultValue(TextImageRelation.Overlay)]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.ButtonTextImageRelationDescr))]
+        [SRCategory(nameof(SR.CatAppearance))]
+        public TextImageRelation TextImageRelation
+        {
+            get => textImageRelation;
+            set
+            {
+                if (!ClientUtils.IsEnumValid(value, (int)value, (int)TextImageRelation.Overlay, (int)TextImageRelation.TextBeforeImage,1))
+                {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(TextImageRelation));
                 }
-                if(value != TextImageRelation) {
+
+                if(value != TextImageRelation)
+                {
                     textImageRelation = value;
                     LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.TextImageRelation);
                     Invalidate();
@@ -1246,9 +1246,9 @@ namespace System.Windows.Forms {
                         // things, even though we are ownerdraw.
                         break;
 
-                    case NativeMethods.WM_KILLFOCUS:
-                    case NativeMethods.WM_CANCELMODE:
-                    case NativeMethods.WM_CAPTURECHANGED:
+                    case Interop.WindowMessages.WM_KILLFOCUS:
+                    case Interop.WindowMessages.WM_CANCELMODE:
+                    case Interop.WindowMessages.WM_CAPTURECHANGED:
                         if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed)) {
                             SetFlag(FlagMousePressed, false);
 
@@ -1260,9 +1260,9 @@ namespace System.Windows.Forms {
                         base.WndProc(ref m);
                         break;
 
-                    case NativeMethods.WM_LBUTTONUP:
-                    case NativeMethods.WM_MBUTTONUP:
-                    case NativeMethods.WM_RBUTTONUP:
+                    case Interop.WindowMessages.WM_LBUTTONUP:
+                    case Interop.WindowMessages.WM_MBUTTONUP:
+                    case Interop.WindowMessages.WM_RBUTTONUP:
                         try {
                             SetFlag(FlagInButtonUp, true);
                             base.WndProc(ref m);
@@ -1279,7 +1279,7 @@ namespace System.Windows.Forms {
             }
             else {
                 switch (m.Msg) {
-                    case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
+                    case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
                         if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.BN_CLICKED && !ValidationCancelled) {
                             OnClick(EventArgs.Empty);
                         }

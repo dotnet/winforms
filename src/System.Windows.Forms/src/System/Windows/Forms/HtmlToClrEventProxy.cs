@@ -9,7 +9,6 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;

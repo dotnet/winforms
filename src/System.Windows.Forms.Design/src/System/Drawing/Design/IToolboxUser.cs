@@ -21,4 +21,3 @@ namespace System.Drawing.Design
         void ToolPicked(ToolboxItem tool);
     }
 }
-

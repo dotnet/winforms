@@ -367,7 +367,7 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var menu = new MainMenu(new MenuItem[] { menuItem });
-            Assert.Throws<ArgumentException>(null, () => menuItem.Checked = true);
+            Assert.Throws<ArgumentException>("value", () => menuItem.Checked = true);
             Assert.False(menuItem.Checked);
 
             menuItem.Checked = false;
@@ -378,7 +378,7 @@ namespace System.Windows.Forms.Tests
         public void MenuItem_Checked_SetWithChildren_ThrowsArgumentException()
         {
             var menuItem = new MenuItem("text", new MenuItem[] { new MenuItem() });
-            Assert.Throws<ArgumentException>(null, () => menuItem.Checked = true);
+            Assert.Throws<ArgumentException>("value", () => menuItem.Checked = true);
             Assert.False(menuItem.Checked);
 
             menuItem.Checked = false;
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Tests
         {
             var menuItem = new MenuItem();
             var menu = new SubMenu(new MenuItem[] { menuItem });
-            Assert.Throws<ArgumentOutOfRangeException>("Index", () => menuItem.Index = value);
+            Assert.Throws<ArgumentOutOfRangeException>("value", () => menuItem.Index = value);
         }
 
         [Theory]

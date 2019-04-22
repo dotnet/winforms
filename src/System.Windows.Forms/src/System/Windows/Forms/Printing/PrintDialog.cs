@@ -327,7 +327,7 @@ namespace System.Windows.Forms {
             data.nPageRanges = 0;
             data.nMaxPageRanges = 1;
             data.pageRanges = UnsafeNativeMethods.GlobalAlloc(NativeMethods.GPTR,
-                                                              data.nMaxPageRanges * Marshal.SizeOf(typeof(NativeMethods.PRINTPAGERANGE)));
+                                                              data.nMaxPageRanges * Marshal.SizeOf<NativeMethods.PRINTPAGERANGE>());
             data.nMinPage = 0;
             data.nMaxPage = 9999;
             data.nCopies = 1;

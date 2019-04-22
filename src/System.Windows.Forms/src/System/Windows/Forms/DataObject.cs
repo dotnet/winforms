@@ -1776,7 +1776,7 @@ namespace System.Windows.Forms
             {
 
                 string[] files = null;
-                StringBuilder sb = new StringBuilder(NativeMethods.MAX_PATH);
+                StringBuilder sb = new StringBuilder(Interop.Kernel32.MAX_PATH);
 
                 int count = UnsafeNativeMethods.DragQueryFile(new HandleRef(null, hdrop), unchecked((int)0xFFFFFFFF), null, 0);
                 if (count > 0)

@@ -113,7 +113,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder name = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.DisplayName, name, name.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.DisplayName, name, name.Capacity);
                     return name.ToString();
                 }
 
@@ -129,7 +129,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder company = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.Company, company, company.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Company, company, company.Capacity);
                     return company.ToString();
                 }
 
@@ -145,7 +145,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder author = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.Author, author, author.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Author, author, author.Capacity);
                     return author.ToString();
                 }
 
@@ -161,7 +161,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder copyright = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.Copyright, copyright, copyright.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Copyright, copyright, copyright.Capacity);
                     return copyright.ToString();
                 }
 
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder url = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.Url, url, url.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Url, url, url.Capacity);
                     return url.ToString();
                 }
 
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder version = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.Version, version, version.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Version, version, version.Capacity);
                     return version.ToString();
                 }
 
@@ -211,7 +211,7 @@ namespace System.Windows.Forms.VisualStyles {
             get {
                 if (IsEnabledByUser) {
                     StringBuilder description = new StringBuilder(512);
-                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, VisualStyleDocProperty.Description, description, description.Capacity);
+                    SafeNativeMethods.GetThemeDocumentationProperty(ThemeFilename, SafeNativeMethods.VisualStyleDocProperty.Description, description, description.Capacity);
                     return description.ToString();
                 }
 
@@ -233,7 +233,7 @@ namespace System.Windows.Forms.VisualStyles {
                         visualStyleRenderer.SetParameters(VisualStyleElement.Window.Caption.Active);
                     }    
 
-                    return (SafeNativeMethods.GetThemeSysBool(new HandleRef(null, visualStyleRenderer.Handle), VisualStyleSystemProperty.SupportsFlatMenus));
+                    return (SafeNativeMethods.GetThemeSysBool(new HandleRef(null, visualStyleRenderer.Handle), SafeNativeMethods.VisualStyleSystemProperty.SupportsFlatMenus));
                 }
 
                 return false;
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.VisualStyles {
                     
                     int mcDepth = 0;
 
-                    SafeNativeMethods.GetThemeSysInt(new HandleRef(null, visualStyleRenderer.Handle), VisualStyleSystemProperty.MinimumColorDepth, ref mcDepth);
+                    SafeNativeMethods.GetThemeSysInt(new HandleRef(null, visualStyleRenderer.Handle), SafeNativeMethods.VisualStyleSystemProperty.MinimumColorDepth, ref mcDepth);
                     return mcDepth;
                 }
 

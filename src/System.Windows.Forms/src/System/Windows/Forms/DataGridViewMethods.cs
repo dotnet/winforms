@@ -325,9 +325,9 @@ namespace System.Windows.Forms
                 this.noAutoSizeCount++;
                 DataGridViewRow dataGridViewRow = this.Rows.SharedRow(rowIndex);
                 int preferredThickness = dataGridViewRow.Cells[dataGridViewColumn.Index].GetPreferredWidth(rowIndex, dataGridViewRow.GetHeight(rowIndex));
-                if (preferredThickness > DataGridViewBand.maxBandThickness)
+                if (preferredThickness > DataGridViewBand.MaxBandThickness)
                 {
-                    preferredThickness = DataGridViewBand.maxBandThickness;
+                    preferredThickness = DataGridViewBand.MaxBandThickness;
                 }
                 if (dataGridViewColumn.Width < preferredThickness)
                 {
@@ -415,9 +415,9 @@ namespace System.Windows.Forms
                 preferredThickness = height;
             }
             Debug.Assert(preferredThickness >= minimumHeight);
-            if (preferredThickness > DataGridViewBand.maxBandThickness)
+            if (preferredThickness > DataGridViewBand.MaxBandThickness)
             {
-                preferredThickness = DataGridViewBand.maxBandThickness;
+                preferredThickness = DataGridViewBand.MaxBandThickness;
             }
             if (height != preferredThickness)
             {
@@ -1883,9 +1883,9 @@ namespace System.Windows.Forms
                 {
                     preferredColumnWidth = dataGridViewColumn.MinimumThickness;
                 }
-                if (preferredColumnWidth > DataGridViewBand.maxBandThickness)
+                if (preferredColumnWidth > DataGridViewBand.MaxBandThickness)
                 {
-                    preferredColumnWidth = DataGridViewBand.maxBandThickness;
+                    preferredColumnWidth = DataGridViewBand.MaxBandThickness;
                 }
                 if (preferredColumnWidth != dataGridViewColumn.Thickness)
                 {
@@ -2315,9 +2315,9 @@ namespace System.Windows.Forms
                 {
                     preferredThickness = minimumHeight;
                 }
-                if (preferredThickness > DataGridViewBand.maxBandThickness)
+                if (preferredThickness > DataGridViewBand.MaxBandThickness)
                 {
-                    preferredThickness = DataGridViewBand.maxBandThickness;
+                    preferredThickness = DataGridViewBand.MaxBandThickness;
                 }
                 if (height != preferredThickness)
                 {
@@ -2561,7 +2561,7 @@ namespace System.Windows.Forms
             {
                 clip.X = this.layout.Data.X - this.mouseBarOffset - 1;
                 clip.Width = leftEdge - this.Columns[columnIndex].MinimumThickness - this.layout.Data.X + 3;
-                int overflowWidth = leftEdge - this.mouseBarOffset - clip.Left - DataGridViewBand.maxBandThickness + 1;
+                int overflowWidth = leftEdge - this.mouseBarOffset - clip.Left - DataGridViewBand.MaxBandThickness + 1;
                 if (overflowWidth > 0)
                 {
                     clip.X += overflowWidth;
@@ -2572,7 +2572,7 @@ namespace System.Windows.Forms
             {
                 clip.X = leftEdge + this.Columns[columnIndex].MinimumThickness - this.mouseBarOffset - 1;
                 clip.Width = this.layout.Data.Right - leftEdge - 1;
-                int overflowWidth = clip.Right + this.mouseBarOffset - leftEdge - DataGridViewBand.maxBandThickness;
+                int overflowWidth = clip.Right + this.mouseBarOffset - leftEdge - DataGridViewBand.MaxBandThickness;
                 if (overflowWidth > 0)
                 {
                     clip.Width -= overflowWidth;
@@ -6139,7 +6139,7 @@ namespace System.Windows.Forms
             {
                 int proposed = this.Columns[this.trackColumn].Thickness + delta;
                 Debug.Assert(proposed >= this.Columns[this.trackColumn].MinimumThickness);
-                Debug.Assert(proposed <= DataGridViewBand.maxBandThickness);
+                Debug.Assert(proposed <= DataGridViewBand.MaxBandThickness);
                 this.Columns[this.trackColumn].Thickness = proposed;
             }
         }
@@ -6424,7 +6424,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Rectangle rectScreen = Screen.FromControl(this).WorkingArea;
-                    int maxDisplayedRows = (int) (rectScreen.Height / DataGridViewBand.minBandThickness);
+                    int maxDisplayedRows = (int) (rectScreen.Height / DataGridViewBand.MinBandThickness);
 
                     // Make sure all displayed scrolling rows have the Displayed state.
                     int rowIndexTmp = this.displayedBandsInfo.FirstDisplayedScrollingRow;
@@ -6891,7 +6891,7 @@ namespace System.Windows.Forms
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                                    DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
             {
-                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, "includeFilter"));
+                throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewElementStateCombination, nameof(includeFilter)));
             }
 
             int cellCount = 0;
@@ -10908,7 +10908,7 @@ namespace System.Windows.Forms
             float weightSum = this.Columns.GetColumnsFillWeight(DataGridViewElementStates.None) + dataGridViewColumn.FillWeight;
             if (weightSum > (float)ushort.MaxValue)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
 
             // check for correctness of frozen state - throws exception if state is incorrect.
@@ -11030,7 +11030,7 @@ namespace System.Windows.Forms
                 weightSum += dataGridViewColumn.FillWeight;
                 if (weightSum > (float)ushort.MaxValue)
                 {
-                    throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                    throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
                 }
             }
 
@@ -13968,7 +13968,7 @@ namespace System.Windows.Forms
             float weightSum = this.Columns.GetColumnsFillWeight(DataGridViewElementStates.None) - dataGridViewColumn.FillWeight + fillWeight;
             if (weightSum > (float)ushort.MaxValue)
             {
-                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, (ushort.MaxValue).ToString(CultureInfo.CurrentCulture)));
+                throw new InvalidOperationException(string.Format(SR.DataGridView_WeightSumCannotExceedLongMaxValue, ushort.MaxValue));
             }
         }
 
@@ -22234,7 +22234,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessKeyEventArgs"]/*' />
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            if (m.Msg == NativeMethods.WM_SYSKEYDOWN || m.Msg == NativeMethods.WM_KEYDOWN)
+            if (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN || m.Msg == Interop.WindowMessages.WM_KEYDOWN)
             {
                 if (this.ptCurrentCell.X != -1)
                 {
@@ -22279,7 +22279,7 @@ namespace System.Windows.Forms
                 }
             }
             else if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] &&
-                     (m.Msg == NativeMethods.WM_SYSCHAR || m.Msg == NativeMethods.WM_CHAR  || m.Msg == NativeMethods.WM_IME_CHAR))
+                     (m.Msg == Interop.WindowMessages.WM_SYSCHAR || m.Msg == Interop.WindowMessages.WM_CHAR  || m.Msg == Interop.WindowMessages.WM_IME_CHAR))
             {
                 this.dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = false;
                 if (this.editingControl != null)
@@ -22302,7 +22302,7 @@ namespace System.Windows.Forms
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
             // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
-            if (m.Msg == NativeMethods.WM_CHAR)
+            if (m.Msg == Interop.WindowMessages.WM_CHAR)
             {
                 switch (ke.KeyCode)
                 {
@@ -22344,7 +22344,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (this.editingControl != null && (m.Msg == NativeMethods.WM_KEYDOWN || m.Msg == NativeMethods.WM_SYSKEYDOWN))
+            if (this.editingControl != null && (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN))
             {
                 this.dataGridViewState2[DATAGRIDVIEWSTATE2_currentCellWantsInputKey] = ((IDataGridViewEditingControl)this.editingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
             }
@@ -22356,7 +22356,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewWantsInputKey)
             {
-                if (m.Msg == NativeMethods.WM_KEYDOWN || m.Msg == NativeMethods.WM_SYSKEYDOWN)
+                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
                 {
                     if (ProcessDataGridViewKey(ke))
                     {
@@ -29847,11 +29847,11 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     return;
-                case NativeMethods.WM_LBUTTONDBLCLK:
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     // If the OnEnter procedure is called, it's because of a mouse down event, and not a TAB key.
                     this.dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = true;
                     try
@@ -29863,7 +29863,7 @@ namespace System.Windows.Forms
                         this.dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = false;
                     }
                     return;
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         // we are done - skip default handling
@@ -29871,8 +29871,8 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
-                case NativeMethods.WM_IME_COMPOSITION:
+                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_COMPOSITION:
                     if (this.editingControl != null)
                     {
                         // Make sure that the first character is forwarded to the editing control.

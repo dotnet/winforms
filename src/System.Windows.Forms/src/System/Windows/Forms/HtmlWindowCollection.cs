@@ -9,7 +9,6 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Windows.Forms;
-using System.Security.Permissions;
 using System.Security;
 using System.Runtime.InteropServices;
 using System.Net;
@@ -38,8 +37,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.this]/*' />
         public HtmlWindow this[int index] {
             get {
-                if (index < 0 || index >= this.Count) {
-                    throw new ArgumentOutOfRangeException(nameof(index), string.Format(SR.InvalidBoundArgument, "index", index, 0, this.Count - 1));
+                if (index < 0 || index >= Count) {
+                    throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidBoundArgument, nameof(index), index, 0, Count - 1));
                 }
 
                 object oIndex = (object)index;
@@ -59,7 +58,7 @@ namespace System.Windows.Forms {
                             as UnsafeNativeMethods.IHTMLWindow2;
                 }
                 catch (COMException) {
-                    throw new ArgumentException(string.Format(SR.InvalidArgument, "windowId", windowId));
+                    throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(windowId), windowId), nameof(windowId));
                 }
                 return (htmlWindow2 != null) ? new HtmlWindow(shimManager, htmlWindow2) : null;
             }

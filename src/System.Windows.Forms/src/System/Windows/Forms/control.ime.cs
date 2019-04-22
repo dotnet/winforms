@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Globalization;
-    using System.Security.Permissions;
     using System.Security;
     using System.IO;
     using System.Reflection;

@@ -71,7 +71,7 @@ namespace System.Windows.Forms.Layout {
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string Image= "Image";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
-        public static readonly string ImageIndex= "ImageIndex";
+        public static readonly string ImageIndex= nameof(ImageIndex);
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]
         public static readonly string ImageScaling= "ImageScaling";
         [SuppressMessage("Microsoft.Performance", "CA1802:UseLiteralsWhereAppropriate")]

@@ -1113,13 +1113,13 @@ namespace System.Drawing.Design
             {
                 switch (msg)
                 {
-                    case NativeMethods.WM_INITDIALOG:
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
-                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, NativeMethods.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                    case Interop.WindowMessages.WM_INITDIALOG:
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_HUE, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_SAT, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_LUM, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_RED, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_GREEN, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
+                        NativeMethods.SendDlgItemMessage(hwnd, COLOR_BLUE, Interop.EditMessages.EM_SETMARGINS, (IntPtr)(NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN), IntPtr.Zero);
                         IntPtr hwndCtl = NativeMethods.GetDlgItem(hwnd, COLOR_MIX);
                         NativeMethods.EnableWindow(hwndCtl, false);
                         NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
@@ -1128,7 +1128,7 @@ namespace System.Drawing.Design
                         NativeMethods.SetWindowPos(hwndCtl, IntPtr.Zero, 0, 0, 0, 0, NativeMethods.SWP_HIDEWINDOW);
                         this.Color = Color.Empty;
                         break;
-                    case NativeMethods.WM_COMMAND:
+                    case Interop.WindowMessages.WM_COMMAND:
                         switch (NativeMethods.Util.LOWORD(unchecked((int)(long)wParam)))
                         {
                             case COLOR_ADD:
@@ -1141,7 +1141,7 @@ namespace System.Drawing.Design
                                 blue = (byte)NativeMethods.GetDlgItemInt(hwnd, COLOR_BLUE, err, false);
                                 Debug.Assert(!err[0], "Couldn't find dialog member COLOR_BLUE");
                                 this.Color = Color.FromArgb(red, green, blue);
-                                NativeMethods.PostMessage(hwnd, NativeMethods.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
+                                NativeMethods.PostMessage(hwnd, Interop.WindowMessages.WM_COMMAND, (IntPtr)NativeMethods.Util.MAKELONG(NativeMethods.IDOK, 0), NativeMethods.GetDlgItem(hwnd, NativeMethods.IDOK));
                                 break;
                         }
                         break;

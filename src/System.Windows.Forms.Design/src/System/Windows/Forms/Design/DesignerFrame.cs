@@ -15,7 +15,7 @@ using Microsoft.Win32;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    /// This class implements our design time document.  This is the outer window that encompases a designer.  It maintains a control hierarchy that looks like this:
+    /// This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
     /// DesignerFrame
     ///     ScrollableControl
     ///         Designer
@@ -39,11 +39,9 @@ namespace System.Windows.Forms.Design
         [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
         public DesignerFrame(ISite site)
         {
-
             Text = "DesignerFrame";
             _designerSite = site;
             _designerRegion = new OverlayControl(site);
-
             _uiService = _designerSite.GetService(typeof(IUIService)) as IUIService;
             if (_uiService != null)
             {
@@ -53,7 +51,6 @@ namespace System.Windows.Forms.Design
                 }
             }
             Controls.Add(_designerRegion);
-
             // Now we must configure our designer to be at the correct location, and setup the autoscrolling for its container.
             _designerRegion.AutoScroll = true;
             _designerRegion.Dock = DockStyle.Fill;
@@ -92,7 +89,6 @@ namespace System.Windows.Forms.Design
                     _designer = null;
                     designerHolder.Visible = false;
                     designerHolder.Parent = null;
-                    SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
                 }
                 if (_splitter != null)
                 {
@@ -106,7 +102,7 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                NativeMethods.SendMessage(_designer.Handle, NativeMethods.WM_NCACTIVATE, focus ? 1 : 0, 0);
+                NativeMethods.SendMessage(_designer.Handle, Interop.WindowMessages.WM_NCACTIVATE, focus ? 1 : 0, 0);
                 SafeNativeMethods.RedrawWindow(_designer.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
@@ -121,16 +117,10 @@ namespace System.Windows.Forms.Design
             {
                 form.TopLevel = false;
             }
-
             _designerRegion.Controls.Add(_designer);
             SyncDesignerUI();
             _designer.Visible = true;
             _designer.Enabled = true;
-
-            // We need to force handle creation here, since setting Visible = true won't if the control is already Visible = true.   (UserControl starts out Visible true, Form does not) This guarantees that as controls are added to the root component their handles will be created correctly, and not the first time they're queried after load.
-            IntPtr handle = _designer.Handle;
-            // Hook the handler here, when we know that the designer object has already been set
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
         /// <summary>
@@ -139,7 +129,6 @@ namespace System.Windows.Forms.Design
         protected override void OnGotFocus(EventArgs e)
         {
             ForceDesignerRedraw(true);
-
             ISelectionService selSvc = (ISelectionService)_designerSite.GetService(typeof(ISelectionService));
             if (selSvc != null)
             {
@@ -193,10 +182,8 @@ namespace System.Windows.Forms.Design
         void SyncDesignerUI()
         {
             Size selectionSize = DesignerUtils.GetAdornmentDimensions(AdornmentType.Maximum);
-
             _designerRegion.AutoScrollMargin = selectionSize;
             _designer.Location = new Point(selectionSize.Width, selectionSize.Height);
-
             if (BehaviorService != null)
             {
                 BehaviorService.SyncSelection();
@@ -211,66 +198,64 @@ namespace System.Windows.Forms.Design
             switch (m.Msg)
             {
                 // Provide MouseWheel access for scrolling
-                case NativeMethods.WM_MOUSEWHEEL:
+                case Interop.WindowMessages.WM_MOUSEWHEEL:
                     // Send a message to ourselves to scroll
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        NativeMethods.SendMessage(_designerRegion.Handle, NativeMethods.WM_MOUSEWHEEL, m.WParam, m.LParam);
+                        NativeMethods.SendMessage(_designerRegion.Handle, Interop.WindowMessages.WM_MOUSEWHEEL, m.WParam, m.LParam);
                         return;
                     }
                     break;
-
                 // Provide keyboard access for scrolling
-                case NativeMethods.WM_KEYDOWN:
+                case Interop.WindowMessages.WM_KEYDOWN:
                     int wScrollNotify = 0;
                     int msg = 0;
-
                     int keycode = unchecked((int)(long)m.WParam) & 0xFFFF;
                     switch ((Keys)keycode)
                     {
                         case Keys.Up:
                             wScrollNotify = NativeMethods.SB_LINEUP;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.Down:
                             wScrollNotify = NativeMethods.SB_LINEDOWN;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.PageUp:
                             wScrollNotify = NativeMethods.SB_PAGEUP;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.PageDown:
                             wScrollNotify = NativeMethods.SB_PAGEDOWN;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.Home:
                             wScrollNotify = NativeMethods.SB_TOP;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.End:
                             wScrollNotify = NativeMethods.SB_BOTTOM;
-                            msg = NativeMethods.WM_VSCROLL;
+                            msg = Interop.WindowMessages.WM_VSCROLL;
                             break;
                         case Keys.Left:
                             wScrollNotify = NativeMethods.SB_LINEUP;
-                            msg = NativeMethods.WM_HSCROLL;
+                            msg = Interop.WindowMessages.WM_HSCROLL;
                             break;
                         case Keys.Right:
                             wScrollNotify = NativeMethods.SB_LINEDOWN;
-                            msg = NativeMethods.WM_HSCROLL;
+                            msg = Interop.WindowMessages.WM_HSCROLL;
                             break;
                     }
-                    if ((msg == NativeMethods.WM_VSCROLL)
-                        || (msg == NativeMethods.WM_HSCROLL))
+                    if ((msg == Interop.WindowMessages.WM_VSCROLL)
+                        || (msg == Interop.WindowMessages.WM_HSCROLL))
                     {
                         // Send a message to ourselves to scroll
                         NativeMethods.SendMessage(_designerRegion.Handle, msg, NativeMethods.Util.MAKELONG(wScrollNotify, 0), 0);
                         return;
                     }
                     break;
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     NativeMethods.SendMessage(_designer.Handle, m.Msg, m.WParam, m.LParam);
                     return;
             }
@@ -280,11 +265,8 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Pushes the given control on top of the overlay list.  This is a "push" operation, meaning that it forces this control to the top of the existing overlay list.
         /// </summary>
-        int IOverlayService.PushOverlay(Control control)
-        {
-            return _designerRegion.PushOverlay(control);
-        }
-
+        int IOverlayService.PushOverlay(Control control) => _designerRegion.PushOverlay(control);
+        
         /// <summary>
         /// Removes the given control from the overlay list.  Unlike pushOverlay, this can remove a control from the middle of the overlay list.
         /// </summary>
@@ -338,17 +320,14 @@ namespace System.Windows.Forms.Design
                 _splitter.Dock = DockStyle.Bottom;
                 _splitter.SplitterMoved += new SplitterEventHandler(OnSplitterMoved);
             }
-
             SuspendLayout();
             window.Dock = DockStyle.Bottom;
-
             // Compute a minimum height for this window.
             int minHeight = 80;
             if (window.Height < minHeight)
             {
                 window.Height = minHeight;
             }
-
             Controls.Add(_splitter);
             Controls.Add(window);
             ResumeLayout();
@@ -366,20 +345,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Returns IEnumerable of all windows which need to be themed when running inside VS
-        /// We don't know how to do theming here but we know which windows need to be themed. 
-        /// The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS.
-        /// As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        /// Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
             ArrayList windows = new ArrayList();
             foreach (Control c in Controls)
             {
-                ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow
-                {
-                    Handle = c.Handle
-                };
+                ThemedScrollbarWindow windowInfo = new ThemedScrollbarWindow { Handle = c.Handle };
                 if (c is OverlayControl)
                 {
                     windowInfo.Mode = ThemedScrollbarMode.OnlyTopLevel;
@@ -388,10 +361,8 @@ namespace System.Windows.Forms.Design
                 {
                     windowInfo.Mode = ThemedScrollbarMode.All;
                 }
-
                 windows.Add(windowInfo);
             }
-
             return windows;
         }
 
@@ -401,7 +372,7 @@ namespace System.Windows.Forms.Design
         private class OverlayControl : ScrollableControl
         {
             private readonly ArrayList _overlayList;
-            private IServiceProvider _provider;
+            private readonly IServiceProvider _provider;
             internal bool _messageMouseWheelProcessed;
             private BehaviorService _behaviorService;
 
@@ -411,8 +382,7 @@ namespace System.Windows.Forms.Design
             [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
             public OverlayControl(IServiceProvider provider)
             {
-                OverlayControl overlayControl = this;
-                overlayControl._provider = provider;
+                _provider = provider;
                 _overlayList = new ArrayList();
                 AutoScroll = true;
                 Text = "OverlayControl";
@@ -560,10 +530,8 @@ namespace System.Windows.Forms.Design
                         overlayControlScreenBounds.Location = overlayControl.PointToScreen(overlayControl.Location);
                         using (Region intersectionRegion = screenRegion.Clone())
                         {
-                            // get the intersection of everything on the screen that's invalidating
-                            // and the overlaycontrol
+                            // get the intersection of everything on the screen that's invalidating and the overlaycontrol
                             intersectionRegion.Intersect(overlayControlScreenBounds);
-
                             // translate this down to overlay control coordinates.
                             intersectionRegion.Translate(-overlayControlScreenBounds.X, -overlayControlScreenBounds.Y);
                             overlayControl.Invalidate(intersectionRegion);
@@ -571,14 +539,13 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
-
             /// <summary>
             /// Need to know when child windows are created so we can properly set the Z-order
             /// </summary>
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.Msg == NativeMethods.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)NativeMethods.WM_CREATE)
+                if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY && NativeMethods.Util.LOWORD(unchecked((int)(long)m.WParam)) == (short)Interop.WindowMessages.WM_CREATE)
                 {
                     if (_overlayList != null)
                     {
@@ -596,17 +563,16 @@ namespace System.Windows.Forms.Design
                         {
                             foreach (Control c in _overlayList)
                             {
-                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0,
-                                                     NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
+                                SafeNativeMethods.SetWindowPos(c.Handle, (IntPtr)NativeMethods.HWND_TOP, 0, 0, 0, 0, NativeMethods.SWP_NOSIZE | NativeMethods.SWP_NOMOVE);
                             }
                         }
                     }
                 }
-                else if ((m.Msg == NativeMethods.WM_VSCROLL || m.Msg == NativeMethods.WM_HSCROLL) && BehaviorService != null)
+                else if ((m.Msg == Interop.WindowMessages.WM_VSCROLL || m.Msg == Interop.WindowMessages.WM_HSCROLL) && BehaviorService != null)
                 {
                     BehaviorService.SyncSelection();
                 }
-                else if ((m.Msg == NativeMethods.WM_MOUSEWHEEL))
+                else if ((m.Msg == Interop.WindowMessages.WM_MOUSEWHEEL))
                 {
                     _messageMouseWheelProcessed = false;
                     if (BehaviorService != null)
@@ -624,7 +590,10 @@ namespace System.Windows.Forms.Design
 
                 public override AccessibleObject HitTest(int x, int y)
                 {
-                    // Since the SelectionUIOverlay in first in the z-order, it normally gets returned from accHitTest. But we'd rather expose the form that is being designed.
+                    // Since the SelectionUIOverlay in first in the z-order, it normally gets
+                    // returned from accHitTest. But we'd rather expose the form that is being
+                    // designed.
+                    //
                     foreach (Control c in Owner.Controls)
                     {
                         AccessibleObject cao = c.AccessibilityObject;

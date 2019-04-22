@@ -13,9 +13,9 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class InheritanceUI
     {
-        private static Bitmap inheritanceGlyph;
-        private static Rectangle inheritanceGlyphRect;
-        private ToolTip tooltip;
+        private static Bitmap s_inheritanceGlyph;
+        private static Rectangle s_inheritanceGlyphRect;
+        private ToolTip _tooltip;
 
         /// <summary>
         /// The bitmap we use to show inheritance.
@@ -24,16 +24,16 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (inheritanceGlyph == null)
+                if (s_inheritanceGlyph == null)
                 {
-                    inheritanceGlyph = new Bitmap(typeof(InheritanceUI), "InheritedGlyph.bmp");
-                    inheritanceGlyph.MakeTransparent();
+                    s_inheritanceGlyph = new Bitmap(typeof(InheritanceUI), "InheritedGlyph.bmp");
+                    s_inheritanceGlyph.MakeTransparent();
                     if (DpiHelper.IsScalingRequired)
                     {
-                        DpiHelper.ScaleBitmapLogicalToDevice(ref inheritanceGlyph);
+                        DpiHelper.ScaleBitmapLogicalToDevice(ref s_inheritanceGlyph);
                     }
                 }
-                return inheritanceGlyph;
+                return s_inheritanceGlyph;
             }
         }
 
@@ -44,12 +44,12 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (inheritanceGlyphRect == Rectangle.Empty)
+                if (s_inheritanceGlyphRect == Rectangle.Empty)
                 {
                     Size size = InheritanceGlyph.Size;
-                    inheritanceGlyphRect = new Rectangle(0, 0, size.Width, size.Height);
+                    s_inheritanceGlyphRect = new Rectangle(0, 0, size.Width, size.Height);
                 }
-                return inheritanceGlyphRect;
+                return s_inheritanceGlyphRect;
             }
         }
 
@@ -58,10 +58,12 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void AddInheritedControl(Control c, InheritanceLevel level)
         {
-            if (tooltip == null)
+            if (_tooltip == null)
             {
-                tooltip = new ToolTip();
-                tooltip.ShowAlways = true;
+                _tooltip = new ToolTip
+                {
+                    ShowAlways = true
+                };
             }
 
             Debug.Assert(level != InheritanceLevel.NotInherited, "This should only be called for inherited components.");
@@ -75,21 +77,23 @@ namespace System.Windows.Forms.Design
                 text = SR.DesignerInherited;
             }
 
-            tooltip.SetToolTip(c, text);
+            _tooltip.SetToolTip(c, text);
+
+            // Also, set all of its non-sited children
             foreach (Control child in c.Controls)
             {
                 if (child.Site == null)
                 {
-                    tooltip.SetToolTip(child, text);
+                    _tooltip.SetToolTip(child, text);
                 }
             }
         }
 
         public void Dispose()
         {
-            if (tooltip != null)
+            if (_tooltip != null)
             {
-                tooltip.Dispose();
+                _tooltip.Dispose();
             }
         }
 
@@ -98,14 +102,15 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void RemoveInheritedControl(Control c)
         {
-            if (tooltip != null && tooltip.GetToolTip(c).Length > 0)
+            if (_tooltip != null && _tooltip.GetToolTip(c).Length > 0)
             {
-                tooltip.SetToolTip(c, null);
+                _tooltip.SetToolTip(c, null);
+                // Also, set all of its non-sited children
                 foreach (Control child in c.Controls)
                 {
                     if (child.Site == null)
                     {
-                        tooltip.SetToolTip(child, null);
+                        _tooltip.SetToolTip(child, null);
                     }
                 }
             }

@@ -131,7 +131,7 @@ namespace System.Windows.Forms {
 
 
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderArrow"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderArrow"]/*' />
         public event ToolStripArrowRenderEventHandler RenderArrow {
             add { 
                 AddHandler(EventRenderArrow, value); 
@@ -259,7 +259,7 @@ namespace System.Windows.Forms {
                 RemoveHandler(EventRenderItemImage, value);
             }
         }        
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemCheck"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemCheck"]/*' />
         /// <devdoc>
         /// Draws the checkmark
         /// </devdoc>
@@ -317,7 +317,7 @@ namespace System.Windows.Forms {
             }
         }   
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderStatusStripPanelBackground"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderStatusStripPanelBackground"]/*' />
         /// <devdoc>
         /// Draws the split button
         /// </devdoc>
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
         }        
       
     
-       /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSeparator"]/*' />
+       /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSeparator"]/*' />
        public event ToolStripSeparatorRenderEventHandler RenderSeparator {
            add { 
                AddHandler(EventRenderSeparator, value); 
@@ -388,7 +388,7 @@ namespace System.Windows.Forms {
             return CreateDisabledImage(normalImage, null);
        }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawArrow"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawArrow"]/*' />
         public void DrawArrow(ToolStripArrowRenderEventArgs e) {            
             OnRenderArrow(e);
             
@@ -534,7 +534,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawItemCheck"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawItemCheck"]/*' />
         /// <devdoc>
         /// Draw image
         /// </devdoc>
@@ -590,7 +590,7 @@ namespace System.Windows.Forms {
                   
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawToolStripStatusLabel"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.DrawToolStripStatusLabel"]/*' />
         /// <devdoc>
         /// Draw the background color
         /// </devdoc>
@@ -681,7 +681,7 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderArrow"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderArrow"]/*' />
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e){
 
             if (RendererOverride != null) {
@@ -740,7 +740,7 @@ namespace System.Windows.Forms {
          
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderToolStripBackground"]/*' />
         /// <devdoc>
-        /// Draw the winbar background.  ToolStrip users should override this if they want to draw differently.
+        /// Draw the ToolStrip background.  ToolStrip users should override this if they want to draw differently.
         /// </devdoc>
         protected virtual void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {         
             if (RendererOverride != null) {
@@ -866,7 +866,7 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItemCheck"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderItemCheck"]/*' />
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)  {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderItemCheck(e);
@@ -977,7 +977,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\WinBarRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderStatusStripPanelBackground"]/*' />
+        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.OnRenderStatusStripPanelBackground"]/*' />
         protected virtual void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 RendererOverride.OnRenderToolStripStatusLabelBackground(e);

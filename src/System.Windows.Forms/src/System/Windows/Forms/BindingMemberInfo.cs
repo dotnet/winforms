@@ -29,9 +29,9 @@ namespace System.Windows.Forms
             }
         }
 
-        public string BindingPath => _dataList != null ? _dataList : string.Empty;
+        public string BindingPath => _dataList ?? string.Empty;
 
-        public string BindingField => _dataField != null ? _dataField : string.Empty;
+        public string BindingField => _dataField ?? string.Empty;
 
         public string BindingMember
         {

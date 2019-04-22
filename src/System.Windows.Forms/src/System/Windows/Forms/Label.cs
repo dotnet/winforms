@@ -511,7 +511,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value < -1) {
-                    throw new ArgumentOutOfRangeException(nameof(ImageIndex), string.Format(SR.InvalidLowBoundArgumentEx, "ImageIndex", (value).ToString(CultureInfo.CurrentCulture), (-1).ToString(CultureInfo.CurrentCulture)));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, -1));
                 }
                 if (ImageIndex != value) {
                     if (value != -1) {
@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //
