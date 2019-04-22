@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         Editor("System.Windows.Forms.Design.DataGridViewComponentEditor, " + AssemblyRef.SystemDesign, typeof(ComponentEditor)),
         SRDescription(nameof(SR.DescriptionDataGridView))
     ]
-    public partial class DataGridView : Control, ISupportInitialize
+    public partial class DataGridView : Control, ISupportInitialize, IKeyboardToolTip
     {
         private static readonly object EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED = new object();
         private static readonly object EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED = new object();
@@ -420,10 +420,13 @@ namespace System.Windows.Forms
         /// </devdoc>
         public DataGridView()
         {
+            this.AllowsKeyboardToolTip();
+            this.AllowsChildrenToShowToolTips();
+            this.ShowCellToolTips = true;
+            
             SetStyle(ControlStyles.UserPaint | 
                      ControlStyles.Opaque | 
                      ControlStyles.UserMouse, true);
-            
             SetStyle(ControlStyles.SupportsTransparentBackColor, false);
 
             // this class overrides GetPreferredSizeCore, let Control automatically cache the result
@@ -6992,6 +6995,61 @@ namespace System.Windows.Forms
                 }
             }
         }
+
+        #region IKeyboardToolTip implementation
+
+        Rectangle IKeyboardToolTip.GetNativeScreenRectangle()
+        {
+            return this.AccessibilityObject.Bounds;
+        }
+
+        bool IKeyboardToolTip.IsHoveredWithMouse()
+        {
+            return ((IKeyboardToolTip)this).GetNativeScreenRectangle().Contains(Control.MousePosition);
+        }
+
+        bool IKeyboardToolTip.AllowsToolTip()
+        {
+            return true;
+        }
+
+        IWin32Window IKeyboardToolTip.GetOwnerWindow()
+        {
+            Debug.Assert(this.ParentInternal != null, "Tool Strip Item Parent is null");
+            return this.ParentInternal;
+        }
+
+        void IKeyboardToolTip.OnHooked(ToolTip toolTip)
+        {
+            this.OnKeyboardToolTipHook(toolTip);
+        }
+
+        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip)
+        {
+            this.OnKeyboardToolTipUnhook(toolTip);
+        }
+
+        bool IKeyboardToolTip.ShowsOwnToolTip()
+        {
+            return true;
+        }
+
+        bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
+        {
+            return true;
+        }
+
+
+        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip)
+        {
+        }
+
+        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip)
+        {
+        }
+
+        #endregion
+
 
         /* INTERNAL ENUMERATIONS */
 
