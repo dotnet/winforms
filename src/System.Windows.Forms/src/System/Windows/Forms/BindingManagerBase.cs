@@ -186,50 +186,26 @@ namespace System.Windows.Forms
 
         public event BindingCompleteEventHandler BindingComplete
         {
-            add
-            {
-                _onBindingCompleteHandler += value;
-            }
-            remove
-            {
-                _onBindingCompleteHandler -= value;
-            }
+            add => _onBindingCompleteHandler += value;
+            remove => _onBindingCompleteHandler -= value;
         }
 
         public event EventHandler CurrentChanged
         {
-            add
-            {
-                onCurrentChangedHandler += value;
-            }
-            remove
-            {
-                onCurrentChangedHandler -= value;
-            }
+            add => onCurrentChangedHandler += value;
+            remove => onCurrentChangedHandler -= value;
         }
 
         public event EventHandler CurrentItemChanged
         {
-            add
-            {
-                _onCurrentItemChangedHandler += value;
-            }
-            remove
-            {
-                _onCurrentItemChangedHandler -= value;
-            }
+            add => _onCurrentItemChangedHandler += value;
+            remove => _onCurrentItemChangedHandler -= value;
         }
 
         public event BindingManagerDataErrorEventHandler DataError
         {
-            add
-            {
-                _onDataErrorHandler += value;
-            }
-            remove
-            {
-                _onDataErrorHandler -= value;
-            }
+            add => _onDataErrorHandler += value;
+            remove => _onDataErrorHandler -= value;
         }
 
         internal abstract string GetListName();
@@ -346,12 +322,14 @@ namespace System.Windows.Forms
 
         private void OnBindingsCollectionChanging(object sender, CollectionChangeEventArgs e)
         {
-            if (e.Action == CollectionChangeAction.Refresh)
+            if (e.Action != CollectionChangeAction.Refresh)
             {
-                foreach (Binding bi in _bindings)
-                {
-                    bi.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
-                }
+                return;
+            }
+
+            foreach (Binding bi in _bindings)
+            {
+                bi.BindingComplete -= new BindingCompleteEventHandler(Binding_BindingComplete);
             }
         }
 
