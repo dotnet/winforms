@@ -772,9 +772,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return GetAllGridEntries();
         }
 
-        internal Rectangle AccessibilityGetGridEntryBounds(GridEntry gridEntry) {
+        internal Rectangle AccessibilityGetGridEntryBounds(GridEntry gridEntry)
+        {
             int row = GetRowFromGridEntry(gridEntry);
-            if (row == -1) {
+
+            if (row < 0)
+            {
                 return new Rectangle(0, 0, 0, 0);
             }
             Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
@@ -784,9 +787,21 @@ namespace System.Windows.Forms.PropertyGridInternal {
             NativeMethods.POINT pt = new NativeMethods.POINT(rect.X, rect.Y);
             UnsafeNativeMethods.ClientToScreen(new HandleRef(this, Handle), pt);
 
+            Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
+
+            if (pt.y > parent.Bottom - 1) // - 1 this is PropertyGridView bottom border 
+            {
+                return new Rectangle(0, 0, 0, 0);
+            }
+
+            if (pt.y + rect.Height > parent.Bottom - 1) // - 1 this is PropertyGridView bottom border 
+            {
+                rect.Height = parent.Bottom - 1 - pt.y; // - 1 this is PropertyGridView bottom border
+            }
+
             return new Rectangle(pt.x, pt.y, rect.Width, rect.Height);
         }
-        
+
         internal int AccessibilityGetGridEntryChildID(GridEntry gridEntry) {
          
             GridEntryCollection ipes = GetAllGridEntries();
