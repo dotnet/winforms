@@ -5,7 +5,6 @@
 using System;
 using System.CodeDom;
 using System.ComponentModel.Design;
-using System.Design;
 using System.Diagnostics;
 using System.Reflection;
 

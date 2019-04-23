@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Design;
 using System.CodeDom;
 using System.Configuration;
 using System.Collections;
