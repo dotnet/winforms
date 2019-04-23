@@ -125,7 +125,7 @@ to:
     </Compile>
     <EmbeddedResource Update="Form1.resx">
         <DependentUpon>Form1.cs</DependentUpon>
-        <! -- the resource generator that I forgot the name of. -->
+        <SubType>Designer</SubType>
     </EmbeddedResource>
 </ItemGroup>
 ```
