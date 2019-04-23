@@ -11,10 +11,9 @@ using System.Diagnostics;
 
 namespace System.ComponentModel.Design.Serialization {
     
-    /// <include file='doc\ComponentTypeCodeDomSerializer.uex' path='docs/doc[@for="ComponentTypeCodeDomSerializer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     This class performs the same tasks as a CodeDomSerializer only serializing an object through this class defines a new type.
-    /// </devdoc>
+    /// </summary>
     internal class ComponentTypeCodeDomSerializer : TypeCodeDomSerializer {
         private static object _initMethodKey = new object();
         private const string _initMethodName = "InitializeComponent";
@@ -30,11 +29,10 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <include file='doc\ComponentTypeCodeDomSerializer.uex' path='docs/doc[@for="ComponentTypeCodeDomSerializer.GetInitializeMethod"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    This method returns the method to emit all of the initialization code to for the given member.  
         ///    The default implementation returns an empty constructor.
-        /// </devdoc>
+        /// </summary>
         protected override CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl, object value) {
             if (manager == null) {
                 throw new ArgumentNullException("manager");
@@ -66,11 +64,10 @@ namespace System.ComponentModel.Design.Serialization {
             return method;
         }
 
-        /// <include file='doc\ComponentTypeCodeDomSerializer.uex' path='docs/doc[@for="ComponentTypeCodeDomSerializer.GetInitializeMethods"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///    This method returns an array of methods that need to be interpreted during deserialization.  
         ///    The default implementation returns a single element array with the constructor in it.
-        /// </devdoc>
+        /// </summary>
         protected override CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl) {
             if (manager == null) {
                 throw new ArgumentNullException("manager");

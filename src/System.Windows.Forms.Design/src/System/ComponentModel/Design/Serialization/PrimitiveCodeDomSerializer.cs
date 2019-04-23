@@ -13,19 +13,17 @@ using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization {
     
-    /// <include file='doc\PrimitiveCodeDomSerializer.uex' path='docs/doc[@for="PrimitiveCodeDomSerializer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     Code model serializer for primitive types.
-    /// </devdoc>
+    /// </summary>
     internal class PrimitiveCodeDomSerializer : CodeDomSerializer {
     
         private static readonly string JSharpFileExtension = ".jsl";
         private static PrimitiveCodeDomSerializer defaultSerializer;
         
-        /// <include file='doc\PrimitiveCodeDomSerializer.uex' path='docs/doc[@for="PrimitiveCodeDomSerializer.Default"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a default static instance of this serializer.
-        /// </devdoc>
+        /// </summary>
         internal new static PrimitiveCodeDomSerializer Default {
             get {
                 if (defaultSerializer == null) {
@@ -35,10 +33,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
         
-        /// <include file='doc\PrimitiveCodeDomSerializer.uex' path='docs/doc[@for="PrimitiveCodeDomSerializer.Serialize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Serializes the given object into a CodeDom object.
-        /// </devdoc>
+        /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value) {
             using (TraceScope("PrimitiveCodeDomSerializer::Serialize")) {
                 Trace("Value: {0}",  (value == null ? "(null)" : value.ToString()));

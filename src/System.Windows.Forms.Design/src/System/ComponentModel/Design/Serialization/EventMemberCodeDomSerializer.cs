@@ -11,9 +11,9 @@ using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization {
 
-    /// <devdoc>
+    /// <summary>
     ///    A MemberCodeDomSerializer for events.
-    /// </devdoc>
+    /// </summary>
     internal sealed class EventMemberCodeDomSerializer : MemberCodeDomSerializer {
 
         private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
@@ -27,10 +27,10 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    This method actually performs the serialization.  When the member is serialized
         ///    the necessary statements will be added to the statements collection.
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements) {
             EventDescriptor eventToSerialize = descriptor as EventDescriptor;
@@ -78,10 +78,10 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    This method returns true if the given member descriptor should be serialized,
         ///    or false if there is no need to serialize the member.
-        /// </devdoc>
+        /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor) {
             return true;
         }

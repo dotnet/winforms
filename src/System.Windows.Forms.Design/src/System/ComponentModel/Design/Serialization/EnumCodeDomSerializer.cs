@@ -12,18 +12,16 @@ using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization {
     
-    /// <include file='doc\EnumCodeDomSerializer.uex' path='docs/doc[@for="EnumCodeDomSerializer"]/*' />
-    /// <devdoc>
+    /// <summary>
     ///     Code model serializer for enum types.
-    /// </devdoc>
+    /// </summary>
     internal class EnumCodeDomSerializer : CodeDomSerializer {
     
         private static EnumCodeDomSerializer defaultSerializer;
         
-        /// <include file='doc\EnumCodeDomSerializer.uex' path='docs/doc[@for="EnumCodeDomSerializer.Default"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a default static instance of this serializer.
-        /// </devdoc>
+        /// </summary>
         internal new static EnumCodeDomSerializer Default {
             get {
                 if (defaultSerializer == null) {
@@ -33,10 +31,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
         
-        /// <include file='doc\EnumCodeDomSerializer.uex' path='docs/doc[@for="EnumCodeDomSerializer.Serialize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Serializes the given object into a CodeDom object.
-        /// </devdoc>
+        /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value) {
             CodeExpression expression = null;
 

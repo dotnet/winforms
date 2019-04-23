@@ -9,14 +9,13 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal sealed class CodeDomSerializationProvider : IDesignerSerializationProvider
     {
-        /// <include file='doc\CodeDomSerializationProvider.uex' path='docs/doc[@for="CodeDomSerializationProvider.IDesignerSerializationProvider.GetSerializer"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This will be called by the serialization manager when it 
         ///     is trying to locate a serialzer for an object type.
         ///     If this serialization provider can provide a serializer
         ///     that is of the correct type, it should return it.
         ///     Otherwise, it should return null.
-        /// </devdoc>
+        /// </summary>
         object IDesignerSerializationProvider.GetSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
 
             if (serializerType == typeof(CodeDomSerializer)) {
@@ -32,9 +31,9 @@ namespace System.ComponentModel.Design.Serialization
             return null; // don't understand this type of serializer.
         }
 
-                /// <devdoc>
+        /// <summary>
         ///    Returns a code dom serializer
-        /// </devdoc>
+        /// </summary>
         private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
         
             // If this isn't a serializer type we recognize, do nothing.  Also, if metadata specified
@@ -92,9 +91,9 @@ namespace System.ComponentModel.Design.Serialization
             return CodeDomSerializer.Default;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns a code dom serializer for members
-        /// </devdoc>
+        /// </summary>
         private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
             
             // Don't provide our serializer if someone else already had one
@@ -113,9 +112,9 @@ namespace System.ComponentModel.Design.Serialization
             return null;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Returns a code dom serializer for types
-        /// </devdoc>
+        /// </summary>
         private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
             // Don't provide our serializer if someone else already had one
             if (currentSerializer != null) {

@@ -12,17 +12,17 @@ using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization {
 
-    /// <devdoc>
+    /// <summary>
     ///    This class is used to serialize things of type "IContainer".  We route all containers
     ///    to the designer host's container.
-    /// </devdoc>
+    /// </summary>
     internal class ContainerCodeDomSerializer : CodeDomSerializer {
         private const string _containerName = "components";
         private static ContainerCodeDomSerializer _defaultSerializer;
         
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a default static instance of this serializer.
-        /// </devdoc>
+        /// </summary>
         internal new static ContainerCodeDomSerializer Default {
             get {
                 if (_defaultSerializer == null) {
@@ -33,9 +33,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     We override this so we can always provide the correct container as a reference.
-        /// </devdoc>
+        /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer) {
             if (typeof(IContainer).IsAssignableFrom(type)) {
                 object obj = manager.GetService(typeof(IContainer));
@@ -51,10 +51,10 @@ namespace System.ComponentModel.Design.Serialization {
             return base.DeserializeInstance(manager, type, parameters, name, addToContainer);
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    Serializes the given object into a CodeDom object.  We serialize an IContainer by
         ///    declaring an IContainer member variable and then assigning a Container into it.
-        /// </devdoc>
+        /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value) {
 
             // See if there is a type declaration on the stack. If there is, create a field representing

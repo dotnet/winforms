@@ -30,10 +30,9 @@ namespace System.ComponentModel.Design.Serialization {
             return _containerConstructor;
          }
 
-        /// <include file='doc\ComponentCodeDomSerializer.uex' path='docs/doc[@for="ComponentCodeDomSerializer.Default"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Retrieves a default static instance of this serializer.
-        /// </devdoc>
+        /// </summary>
         internal new static ComponentCodeDomSerializer Default {
             get {
                 ComponentCodeDomSerializer defaultSerializer;
@@ -50,9 +49,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     Determines if we can cache the results of serializing a component.
-        /// </devdoc>
+        /// </summary>
 		private bool CanCacheComponent(IDesignerSerializationManager manager, object value, PropertyDescriptorCollection props)
 		{
 			IComponent comp = value as IComponent;
@@ -82,11 +81,11 @@ namespace System.ComponentModel.Design.Serialization {
             return true;
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    This method is invoked during deserialization to obtain an instance of an object.  When this is called, an instance
         ///    of the requested type should be returned.  This implementation calls base and then tries to deserialize design
         ///    time properties for the component.
-        /// </devdoc>
+        /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer) {
 
             object instance = base.DeserializeInstance(manager, type, parameters, name, addToContainer);
@@ -99,10 +98,9 @@ namespace System.ComponentModel.Design.Serialization {
             return instance;
         }
 
-        /// <include file='doc\ComponentCodeDomSerializer.uex' path='docs/doc[@for="ComponentCodeDomSerializer.Serialize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     Serializes the given object into a CodeDom object.
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override object Serialize(IDesignerSerializationManager manager, object value) {
             CodeStatementCollection statements = null;
@@ -483,10 +481,9 @@ namespace System.ComponentModel.Design.Serialization {
             return statements;
         }
 
-        /// <include file='doc\ComponentCodeDomSerializer.uex' path='docs/doc[@for="ComponentCodeDomSerializer.SerializeLoadComponentSettings"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This emits a method invoke to IPersistComponentSettings.LoadComponentSettings.
-        /// </devdoc>
+        /// </summary>
         private void SerializeLoadComponentSettings(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value) {
             Trace("Emitting LoadComponentSettings");
 
@@ -503,10 +500,9 @@ namespace System.ComponentModel.Design.Serialization {
             statements.Add(statement);
         }
         
-        /// <include file='doc\ComponentCodeDomSerializer.uex' path='docs/doc[@for="ComponentCodeDomSerializer.SerializeSupportInitialize"]/*' />
-        /// <devdoc>
+        /// <summary>
         ///     This emits a method invoke to ISupportInitialize.
-        /// </devdoc>
+        /// </summary>
         private void SerializeSupportInitialize(IDesignerSerializationManager manager, CodeStatementCollection statements, CodeExpression valueExpression, object value, string methodName) {
             Trace("Emitting {0}", methodName);
 

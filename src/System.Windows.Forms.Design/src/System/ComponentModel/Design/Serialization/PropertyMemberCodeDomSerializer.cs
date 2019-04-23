@@ -11,9 +11,9 @@ using System.Reflection;
 
 namespace System.ComponentModel.Design.Serialization {
 
-    /// <devdoc>
+    /// <summary>
     ///    A MemberCodeDomSerializer for properties.
-    /// </devdoc>
+    /// </summary>
     internal sealed class PropertyMemberCodeDomSerializer : MemberCodeDomSerializer {
         private static PropertyMemberCodeDomSerializer _default;
 
@@ -25,11 +25,11 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This retrieves the value of this property.  If the property returns false
         ///     from ShouldSerializeValue (indicating the ambient value for this property)
         ///     This will look for an AmbientValueAttribute and use it if it can.
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         private object GetPropertyValue(IDesignerSerializationManager manager, PropertyDescriptor property, object value, out bool validValue) {
             object propertyValue = null;
@@ -93,10 +93,10 @@ namespace System.ComponentModel.Design.Serialization {
 
         }
         
-        /// <devdoc>
+        /// <summary>
         ///    This method actually performs the serialization.  When the member is serialized
         ///    the necessary statements will be added to the statements collection.
-        /// </devdoc>
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2102:CatchNonClsCompliantExceptionsInGeneralHandlers")]
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements) {
 
@@ -136,9 +136,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This serializes the given property on this object as a content property.
-        /// </devdoc>
+        /// </summary>
         private void SerializeContentProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, bool isExtender, CodeStatementCollection statements) {
             CodeDomSerializer.Trace("Property is marked as Visibilty.Content.  Recursing.");
 
@@ -244,9 +244,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This serializes the given property on this object.
-        /// </devdoc>
+        /// </summary>
         private void SerializeExtenderProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements) {
             AttributeCollection attributes = property.Attributes;
 
@@ -304,9 +304,9 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///     This serializes the given property on this object.
-        /// </devdoc>
+        /// </summary>
         private void SerializeNormalProperty(IDesignerSerializationManager manager, object value, PropertyDescriptor property, CodeStatementCollection statements) {
 
             using (CodeDomSerializer.TraceScope("CodeDomSerializer::SerializeProperty")) {
@@ -375,10 +375,10 @@ namespace System.ComponentModel.Design.Serialization {
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         ///    This method returns true if the given member descriptor should be serialized,
         ///    or false if there is no need to serialize the member.
-        /// </devdoc>
+        /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor) {
 
             PropertyDescriptor propertyToSerialize = descriptor as PropertyDescriptor;
