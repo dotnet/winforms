@@ -2,15 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.ComponentModel.Design.Serialization {
+using System;
+using System.CodeDom;
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Reflection;
 
-    using System;
-    using System.CodeDom;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Reflection;
+namespace System.ComponentModel.Design.Serialization {
     
     /// <include file='doc\EnumCodeDomSerializer.uex' path='docs/doc[@for="EnumCodeDomSerializer"]/*' />
     /// <devdoc>
