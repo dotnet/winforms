@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
 using System.Drawing;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms.PropertyGridInternal;
 using Xunit;
-using static System.Windows.Forms.PropertyGridInternal.GridEntry;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -23,9 +19,6 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             const int topBorder = 1;
             const int bottomBorder = 1;
             int entriesBorders = form.entriesBorders;
-
-            int a = form.AccRowHeightSum;
-            int b = form.AccPropertyGridViewHeight;
 
             Assert.True(form.AccRowHeightSum == form.AccPropertyGridViewHeight - topBorder - bottomBorder - entriesBorders);
         }
