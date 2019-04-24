@@ -19,15 +19,18 @@ namespace System.ComponentModel.Design.Serialization
         ///     that is of the correct type, it should return it.
         ///     Otherwise, it should return null.
         /// </summary>
-        object IDesignerSerializationProvider.GetSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
-
-            if (serializerType == typeof(CodeDomSerializer)) {
+        object IDesignerSerializationProvider.GetSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) 
+        {
+            if (serializerType == typeof(CodeDomSerializer)) 
+            {
                 return GetCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
             }
-            else if (serializerType == typeof(MemberCodeDomSerializer)) {
+            else if (serializerType == typeof(MemberCodeDomSerializer)) 
+            {
                 return GetMemberCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
             }
-            else if (serializerType == typeof(TypeCodeDomSerializer)) {
+            else if (serializerType == typeof(TypeCodeDomSerializer)) 
+            {
                 return GetTypeCodeDomSerializer(manager, currentSerializer, objectType, serializerType);
             }
 
@@ -37,11 +40,12 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///    Returns a code dom serializer
         /// </summary>
-        private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
-        
+        private object GetCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) 
+        {
             // If this isn't a serializer type we recognize, do nothing.  Also, if metadata specified
             // a custom serializer, then use it.
-            if (currentSerializer != null) {
+            if (currentSerializer != null) 
+            {
                 return null;
             }
 
@@ -49,44 +53,46 @@ namespace System.ComponentModel.Design.Serialization
             // that the value we need to serialize is null, in which case we handle it
             // through the PrimitiveCodeDomSerializer.
             //
-            if (objectType == null) {
+            if (objectType == null) 
+            {
                 return PrimitiveCodeDomSerializer.Default;
             }
 
             // Support for components.
-            //
-            if (typeof(IComponent).IsAssignableFrom(objectType)) {
+            if (typeof(IComponent).IsAssignableFrom(objectType)) 
+            {
                 return ComponentCodeDomSerializer.Default;
             }
 
             // We special case enums.  They do have instance descriptors, but we want
             // better looking code than the instance descriptor can provide for flags,
             // so we do it ourselves.
-            //
-            if (typeof(Enum).IsAssignableFrom(objectType)) {
+            if (typeof(Enum).IsAssignableFrom(objectType)) 
+            {
                 return EnumCodeDomSerializer.Default;
             }
 
             // We will provide a serializer for any intrinsic types.
-            //
-            if (objectType.IsPrimitive || objectType.IsEnum || objectType == typeof(string)) {
+            if (objectType.IsPrimitive || objectType.IsEnum || objectType == typeof(string)) 
+            {
                 return PrimitiveCodeDomSerializer.Default;
             }
 
             // And one for collections.
-            //
-            if (typeof(ICollection).IsAssignableFrom(objectType)) {
+            if (typeof(ICollection).IsAssignableFrom(objectType)) 
+            {
                 return CollectionCodeDomSerializer.Default;
             }
 
             // And one for IContainer
-            if (typeof(IContainer).IsAssignableFrom(objectType)) {
+            if (typeof(IContainer).IsAssignableFrom(objectType)) 
+            {
                 return ContainerCodeDomSerializer.Default;
             }
 
             // And one for resources
-            //
-            if (typeof(ResourceManager).IsAssignableFrom(objectType)) {
+            if (typeof(ResourceManager).IsAssignableFrom(objectType)) 
+            {
                 return ResourceCodeDomSerializer.Default;
             }
 
@@ -97,18 +103,21 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///    Returns a code dom serializer for members
         /// </summary>
-        private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
-            
+        private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) 
+        {
             // Don't provide our serializer if someone else already had one
-            if (currentSerializer != null) {
+            if (currentSerializer != null) 
+            {
                 return null;
             }
 
-            if (typeof(PropertyDescriptor).IsAssignableFrom(objectType)) {
+            if (typeof(PropertyDescriptor).IsAssignableFrom(objectType)) 
+            {
                 return PropertyMemberCodeDomSerializer.Default;
             }
 
-            if (typeof(EventDescriptor).IsAssignableFrom(objectType)) {
+            if (typeof(EventDescriptor).IsAssignableFrom(objectType)) 
+            {
                 return EventMemberCodeDomSerializer.Default;
             }
 
@@ -118,13 +127,16 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///    Returns a code dom serializer for types
         /// </summary>
-        private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType) {
+        private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
+        {
             // Don't provide our serializer if someone else already had one
-            if (currentSerializer != null) {
+            if (currentSerializer != null) 
+            {
                 return null;
             }
 
-            if (typeof(IComponent).IsAssignableFrom(objectType)) {
+            if (typeof(IComponent).IsAssignableFrom(objectType))
+            {
                 return ComponentTypeCodeDomSerializer.Default;
             }
 
