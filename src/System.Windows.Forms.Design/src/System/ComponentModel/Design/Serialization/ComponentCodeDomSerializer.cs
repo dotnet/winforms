@@ -187,13 +187,13 @@ namespace System.ComponentModel.Design.Serialization
                         generateField = false;
                         generateObject = false;
                         
-                         // VSWhidbey 312327: if we have an existing expression and this is not
+                         // if we have an existing expression and this is not
                          // a sited component, do not serialize it.  We need this for Everett / 1.0
                          // backwards compat (even though it's wrong).
                          IComponent comp = value as IComponent;
                          if (comp != null && comp.Site == null) 
                          {
-                             // And, VSWhidbey 445114:  Everett detected when we were in a serialize content
+                             // We were in a serialize content
                              // property and would still serialize it.  This code reverses what the
                              // outer if block does for this specific case.  We also need this
                              // for Everett / 1.0 backwards compat.
@@ -322,7 +322,6 @@ namespace System.ComponentModel.Design.Serialization
                             else 
                             {                                
                                 // For compat reasons we ignore the isCompleteOld value here.  
-                                // See VSWhidbey 415411 for more information.
                                 bool isCompleteOld;
                                 assignRhs = SerializeCreationExpression(manager, value, out isCompleteOld);
                                 Debug.Assert(isCompleteOld == isComplete, "CCDS Differing");
@@ -362,7 +361,7 @@ namespace System.ComponentModel.Design.Serialization
                         // have an unusual component.
                         if (assignLhs != null && !isComplete) 
                         {
-                            // VSWhidbey #111957 -.NET CF needs us to verify that the ISupportInitialize interface exists
+                            // .NET CF needs us to verify that the ISupportInitialize interface exists
                             // (they do not support this interface and will modify their DSM to resolve the type to null).
 
                             bool supportInitialize = (value is ISupportInitialize);
@@ -375,8 +374,7 @@ namespace System.ComponentModel.Design.Serialization
                             if (supportInitialize) 
                             {
                                 // Now verify that this control implements ISupportInitialize in the project target framework
-                                // (see bug Dev10 708363 for details). Don't use operator "is" but rather use IsAssignableFrom 
-                                // on the reflection types.
+                                // Don't use operator "is" but rather use IsAssignableFrom on the reflection types.
                                 // We have other places where we use operator "is", for example "is IComponent" to generate 
                                 // specific CodeDOM objects, however we don't have cases of objects which were not an IComponent 
                                 // in a downlevel framework and became an IComponent in a newer framework, so I'm not replacing 
@@ -438,12 +436,11 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     entry = new ComponentCache.Entry(cache);
 
-                                    // VSWhidbey 410415
                                     // We cache components even if they're not valid so dependencies are
                                     // still tracked correctly (see comment below).  The problem is, we will create a 
                                     // new entry object even if there is still an existing one that is just invalid, and it
-                                    // might have depenendecies that will be lost.  
-                                    // we need to make sure we copy oevr any dependencies that are also tracked.
+                                    // might have dependencies that will be lost.  
+                                    // we need to make sure we copy over any dependencies that are also tracked.
                                     ComponentCache.Entry oldEntry = null;
                                     oldEntry = cache.GetEntryAll(value);
                                     if (oldEntry != null && oldEntry.Dependencies != null && oldEntry.Dependencies.Count > 0) 
