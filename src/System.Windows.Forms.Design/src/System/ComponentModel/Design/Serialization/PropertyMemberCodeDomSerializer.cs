@@ -68,8 +68,9 @@ namespace System.ComponentModel.Design.Serialization {
             catch (Exception e)
             {
                 // something failed -- we don't have a valid value
-                validValue = false;                
-                manager.ReportError(SR.GetString(SR.SerializerPropertyGenFailed, property.Name, e.Message));
+                validValue = false;   
+
+                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, property.Name, e.Message), manager));             
             }
 
             if ((propertyValue != null) && (!propertyValue.GetType().IsValueType) && !(propertyValue is Type))
@@ -130,8 +131,8 @@ namespace System.ComponentModel.Design.Serialization {
                 if (e is TargetInvocationException) {
                     e = e.InnerException;
                 }
-
-                manager.ReportError(SR.GetString(SR.SerializerPropertyGenFailed, propertyToSerialize.Name, e.Message));
+                
+                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, propertyToSerialize.Name, e.Message), manager));             
             }
         }
 
@@ -158,7 +159,7 @@ namespace System.ComponentModel.Design.Serialization {
                     name = value.GetType().FullName;
                 }
 
-                manager.ReportError(SR.GetString(SR.SerializerNullNestedProperty, name, property.Name));
+                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNullNestedProperty, name, property.Name), manager));
             }
             else {
                 serializer = (CodeDomSerializer)manager.GetSerializer(propertyValue.GetType(), typeof(CodeDomSerializer));
@@ -238,7 +239,8 @@ namespace System.ComponentModel.Design.Serialization {
                 }
                 else {
                     CodeDomSerializer.TraceError("Property {0} is marked as Visibilty.Content but there is no serializer for it.", property.Name);
-                    manager.ReportError(SR.GetString(SR.SerializerNoSerializerForComponent, property.PropertyType.FullName));
+
+                    manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, property.PropertyType.FullName), manager));
                 }
             }
         }

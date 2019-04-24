@@ -72,8 +72,8 @@ namespace System.ComponentModel.Design.Serialization {
                 if (e is TargetInvocationException) {
                     e = e.InnerException;
                 }
-
-                manager.ReportError(SR.GetString(SR.SerializerPropertyGenFailed, eventToSerialize.Name, e.Message));
+                
+                manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerPropertyGenFailed, eventToSerialize.Name, e.Message), manager));
             }
         }
 
