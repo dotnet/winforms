@@ -185,12 +185,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level1) {
-                return new MonthCalendarAccessibleObject(this);
-            }
-            else {
-                return base.CreateAccessibilityInstance();
-            }
+            return new MonthCalendarAccessibleObject(this);
         }
 
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
@@ -2197,10 +2192,8 @@ namespace System.Windows.Forms {
             DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
             DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelEnd);
 
-            if (AccessibilityImprovements.Level1) {
-                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-            }
+            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+            AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
             
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
@@ -2241,10 +2234,9 @@ namespace System.Windows.Forms {
             if (mcCurView != (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uNewView) {
                 mcOldView = mcCurView;
                 mcCurView = (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uNewView;
-                if (AccessibilityImprovements.Level1) {
-                    AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                }
+
+                AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             }
         }
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmDateSelected"]/*' />
@@ -2257,10 +2249,8 @@ namespace System.Windows.Forms {
             DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
             DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelEnd);
 
-            if (AccessibilityImprovements.Level1) {
-                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-            }
+            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+            AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
 
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
@@ -2302,9 +2292,7 @@ namespace System.Windows.Forms {
                         WmDateBold(ref m);
                         break;
                     case NativeMethods.MCN_VIEWCHANGE:
-                        if (AccessibilityImprovements.Level1) {
-                            WmCalViewChanged(ref m);
-                        }
+                        WmCalViewChanged(ref m);
                         break;
                 }
             }

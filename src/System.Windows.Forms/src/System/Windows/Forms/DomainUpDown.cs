@@ -741,12 +741,7 @@ namespace System.Windows.Forms {
                         return role;
                     }
                     else {
-                        if (AccessibilityImprovements.Level1) {
-                            return AccessibleRole.SpinButton;
-                        }
-                        else {
-                            return AccessibleRole.ComboBox;
-                        }
+                        return AccessibleRole.SpinButton;
                     }
                 }
             }

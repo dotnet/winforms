@@ -716,9 +716,7 @@ namespace System.Windows.Forms {
             this.CheckNativeToolTip(control);
             this.CheckCompositeControls(control);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Hook(control, this);
-            }
+            KeyboardToolTipStateMachine.Instance.Hook(control, this);
         }
 
         private void CheckNativeToolTip(Control associatedControl) {
@@ -776,9 +774,7 @@ namespace System.Windows.Forms {
             Control control = (Control)sender;
             this.DestroyRegion(control);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Unhook(control, this);
-            }
+            KeyboardToolTipStateMachine.Instance.Unhook(control, this);
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.OnDraw"]/*' />
@@ -1340,9 +1336,7 @@ namespace System.Windows.Forms {
                 regions[i].HandleCreated -= new EventHandler(this.HandleCreated);
                 regions[i].HandleDestroyed -= new EventHandler(this.HandleDestroyed);
 
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
-                }
+                KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
             }
 
             created.Clear();
@@ -1351,9 +1345,7 @@ namespace System.Windows.Forms {
             ClearTopLevelControlEvents();
             this.topLevelControl = null;
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
-            }
+            KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.SetDelayTime"]/*' />
@@ -1956,9 +1948,7 @@ namespace System.Windows.Forms {
         private void BaseFormDeactivate(object sender, System.EventArgs e){
             HideAllToolTips();
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutFormDeactivation(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutFormDeactivation(this);
         }
 
         private void HideAllToolTips() {

@@ -377,13 +377,11 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_TextControlTypeId;
-                    }
-                    else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId) {
-                        return this.State;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_TextControlTypeId;
+                }
+                else if (propertyID == NativeMethods.UIA_LegacyIAccessibleStatePropertyId) {
+                    return this.State;
                 }
 
                 return base.GetPropertyValue(propertyID);

@@ -38,7 +38,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 }
             }
             else {
-                Control.PaintBackground(e, r, IsHighContrastHighlighted2() ? SystemColors.Highlight : Control.BackColor, r.Location);
+                Control.PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : Control.BackColor, r.Location);
             }
 
             if (Control.IsDefault) {
@@ -46,7 +46,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, state != CheckState.Indeterminate && IsHighContrastHighlighted2() ? SystemColors.HighlightText : colors.windowText, true);
+            PaintField(e, layout, colors, state != CheckState.Indeterminate && IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
 
             DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, this.Control.IsDefault);
 
@@ -78,7 +78,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 }
             }
             else {
-                Control.PaintBackground(e, r, IsHighContrastHighlighted2() ? SystemColors.Highlight : Control.BackColor, r.Location);
+                Control.PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : Control.BackColor, r.Location);
             }
 
             if (Control.IsDefault) {
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, IsHighContrastHighlighted2() ? SystemColors.HighlightText : colors.windowText, true);
+            PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, true);
 
             DrawDefaultBorder(g, r, colors.options.highContrast ? colors.windowText : colors.buttonShadow, this.Control.IsDefault);
 

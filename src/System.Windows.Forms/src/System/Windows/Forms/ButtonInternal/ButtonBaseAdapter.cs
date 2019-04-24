@@ -71,21 +71,6 @@ namespace System.Windows.Forms.ButtonInternal {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected bool IsHighContrastHighlighted() {
-            return AccessibilityImprovements.Level1 && IsHighContrastHighlightedInternal();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool IsHighContrastHighlighted2() {
-            return AccessibilityImprovements.Level2 && IsHighContrastHighlightedInternal();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected bool IsHighContrastHighlighted3() {
-            return AccessibilityImprovements.Level3 && IsHighContrastHighlightedInternal();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private bool IsHighContrastHighlightedInternal() {
             return SystemInformation.HighContrast && Application.RenderWithVisualStyles &&
                 (Control.Focused || Control.MouseIsOver || (Control.IsDefault && Control.Enabled));
         }
@@ -169,7 +154,7 @@ namespace System.Windows.Forms.ButtonInternal {
         
         private void Draw3DBorderHighContrastRaised(Graphics g, ref Rectangle bounds, ColorData colors) {
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
-            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast && AccessibilityImprovements.Level1;
+            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
             using ( WindowsGraphics wg = WindowsGraphics.FromGraphics(g) ) {
             
@@ -333,7 +318,7 @@ namespace System.Windows.Forms.ButtonInternal {
         
         private void Draw3DBorderRaised(Graphics g, ref Rectangle bounds, ColorData colors) {
             bool stockColor = colors.buttonFace.ToKnownColor() == SystemColors.Control.ToKnownColor();
-            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast && AccessibilityImprovements.Level1;
+            bool disabledHighContrast = (!Control.Enabled) && SystemInformation.HighContrast;
 
             using( WindowsGraphics wg = WindowsGraphics.FromGraphics(g) ) {
 
@@ -622,8 +607,7 @@ namespace System.Windows.Forms.ButtonInternal {
                         r.X -= 1;
                     }
                     r.Width += 1;
-                    if (disabledText3D && !Control.Enabled && 
-                            (!AccessibilityImprovements.Level1 || (!colors.options.highContrast && AccessibilityImprovements.Level1))) {
+                    if (disabledText3D && !Control.Enabled && !colors.options.highContrast) {
                         using (SolidBrush brush = new SolidBrush(colors.highlight)) {
                             r.Offset(1, 1);
                             g.DrawString(Control.Text, Control.Font, brush, r, stringFormat);
@@ -652,7 +636,7 @@ namespace System.Windows.Forms.ButtonInternal {
             }
             else { // Draw text using GDI (Whidbey+ feature).
                 TextFormatFlags formatFlags = CreateTextFormatFlags();
-                if (disabledText3D && !Control.Enabled && (!AccessibilityImprovements.Level1 || (!colors.options.highContrast && AccessibilityImprovements.Level1))) {
+                if (disabledText3D && !Control.Enabled && !colors.options.highContrast) {
                     if (Application.RenderWithVisualStyles) {
                         //don't draw chiseled text if themed as win32 app does.
                         TextRenderer.DrawText(g, Control.Text, Control.Font, r, colors.buttonShadow, formatFlags);
@@ -760,7 +744,7 @@ namespace System.Windows.Forms.ButtonInternal {
                         colors.highlight = ControlPaint.LightLight(backColor);
                     }
                 }
-                colors.windowDisabled = (highContrast && AccessibilityImprovements.Level1) ? SystemColors.GrayText : colors.buttonShadow;
+                colors.windowDisabled = highContrast ? SystemColors.GrayText : colors.buttonShadow;
 
                 const float lowlight = .1f;
                 float adjust = 1 - lowlight;
@@ -805,7 +789,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 
                 if (!enabled) {
                     colors.windowText = colors.windowDisabled;
-                    if (highContrast && AccessibilityImprovements.Level1) {
+                    if (highContrast) {
                         colors.windowFrame = colors.windowDisabled;
                         colors.buttonShadow = colors.windowDisabled;
                     }

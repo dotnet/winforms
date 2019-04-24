@@ -219,9 +219,7 @@ namespace System.Windows.Forms {
             // when the system menu item shortcut is evaluated - pop the dropdown          
             internal class SystemMenuItem : ToolStripMenuItem {
                    public SystemMenuItem(){
-                       if (AccessibilityImprovements.Level1) {
-                           AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
-                       }
+                       AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
                    }
                    protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
                         if (Visible && ShortcutKeys == keyData) {

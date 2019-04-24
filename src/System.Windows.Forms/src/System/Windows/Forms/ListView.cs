@@ -228,10 +228,6 @@ namespace System.Windows.Forms {
                                      LISTVIEWSTATE_labelWrap |
                                      LISTVIEWSTATE_autoArrange |
                                      LISTVIEWSTATE_showGroups;
-            if (!AccessibilityImprovements.Level3) {
-                // Show grey rectangle around the selected list item if the list view is out of focus.
-                listViewStateFlags |= LISTVIEWSTATE_hideSelection;
-            }
 
             listViewState = new System.Collections.Specialized.BitVector32(listViewStateFlags);
 
@@ -5263,7 +5259,7 @@ namespace System.Windows.Forms {
                     }
                     else {
                         // When a user clicks on the state image, focus the item.
-                        if (AccessibilityImprovements.Level2 && lvhti.Item != null && lvhti.Location == ListViewHitTestLocations.StateImage) {
+                        if (lvhti.Item != null && lvhti.Location == ListViewHitTestLocations.StateImage) {
                             lvhti.Item.Focused = true;
                         }
                         DefWndProc(ref m);
@@ -5723,10 +5719,9 @@ namespace System.Windows.Forms {
                             if (newValue != oldValue) {
                                 ItemCheckedEventArgs e = new ItemCheckedEventArgs(Items[nmlv->iItem]);
                                 OnItemChecked(e);
-                                if (AccessibilityImprovements.Level1) {
-                                    AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
-                                    AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
-                                }
+                                
+                                AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
+                                AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
                             }
 
                             int oldState = nmlv->uOldState & NativeMethods.LVIS_SELECTED;
@@ -8783,11 +8778,7 @@ namespace System.Windows.Forms {
         /// The AccessibleObject for this ListView instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ListViewAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ListViewAccessibleObject(this);
         }
 
         internal class ListViewAccessibleObject : ControlAccessibleObject {

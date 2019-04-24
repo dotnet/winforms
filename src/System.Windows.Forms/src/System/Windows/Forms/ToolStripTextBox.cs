@@ -113,11 +113,7 @@ namespace System.Windows.Forms {
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripTextBoxAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripTextBoxAccessibleObject(this);
         }
 
         [System.Runtime.InteropServices.ComVisible(true)]
@@ -695,7 +691,7 @@ namespace System.Windows.Forms {
                     get { return base.Font; }
                     set { 
                         base.Font = value;
-                        isFontSet = ShouldSerializeFont();    
+                        isFontSet = ShouldSerializeFont();
                     }
                 }
 
@@ -704,11 +700,7 @@ namespace System.Windows.Forms {
                    set { ownerItem = value; }
                 }
 
-                internal override bool SupportsUiaProviders {
-                    get {
-                        return AccessibilityImprovements.Level3;
-                    }
-                }
+                internal override bool SupportsUiaProviders => true;
 
                 private void InvalidateNonClient() {
                     if (!IsPopupTextBox) {
@@ -820,11 +812,7 @@ namespace System.Windows.Forms {
                 }
 
                 protected override AccessibleObject CreateAccessibilityInstance() {
-                    if (AccessibilityImprovements.Level3) {
-                        return new ToolStripTextBoxControlAccessibleObject(this);
-                    }
-
-                    return base.CreateAccessibilityInstance();
+                    return new ToolStripTextBoxControlAccessibleObject(this);
                 }
 
                 protected override void Dispose(bool disposing) {

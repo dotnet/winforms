@@ -815,9 +815,7 @@ namespace System.Windows.Forms {
                     }
                     _inMenuMode = true;
 
-                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        NotifyLastLastFocusedToolAboutFocusLoss();
-                    }
+                    NotifyLastLastFocusedToolAboutFocusLoss();
 
                     // fire timer messages to force our filter to get evaluated.
                     ProcessMessages(true);
@@ -876,13 +874,10 @@ namespace System.Windows.Forms {
                             SafeNativeMethods.ShowCaret(NativeMethods.NullHandleRef);
                         }
 
-                        if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                            IKeyboardToolTip tool;
-                            if(this.lastFocusedTool.TryGetTarget(out tool) && tool != null) {
-                                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
-                            }
+                        IKeyboardToolTip tool;
+                        if(this.lastFocusedTool.TryGetTarget(out tool) && tool != null) {
+                            KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(tool);
                         }
-
                     }
                     finally {
                         _inMenuMode = false;

@@ -34,16 +34,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.CreateAccessibilityInstance"]/*' />
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            if (AccessibilityImprovements.Level3)
-            {
-                return new DataGridViewTextBoxEditingControlAccessibleObject(this);
-            }
-            else if (AccessibilityImprovements.Level2)
-            {
-                 return new DataGridViewEditingControlAccessibleObject(this);
-            }
-
-            return  base.CreateAccessibilityInstance();
+            return new DataGridViewTextBoxEditingControlAccessibleObject(this);
         }
 
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.EditingControlDataGridView"]/*' />
@@ -116,13 +107,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SupportsUiaProviders
-        {
-            get
-            {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.IDataGridViewEditingControl.ApplyCellStyleToEditingControl"]/*' />
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
@@ -258,10 +243,7 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
 
-            if (AccessibilityImprovements.Level3)
-            {
-                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-            }
+            AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
         }
 
         /// <include file='doc\DataGridViewTextBoxEditingControl.uex' path='docs/doc[@for="DataGridViewTextBoxEditingControl.OnMouseWheel"]/*' />
@@ -336,9 +318,6 @@ namespace System.Windows.Forms
     /// <summary>
     /// Defines the DataGridView TextBox EditingControl accessible object.
     /// </summary>
-    /// <remarks>
-    /// This accessible object is only available in AccessibilityImprovements of Level 3.
-    /// </remarks>
     internal class DataGridViewTextBoxEditingControlAccessibleObject : Control.ControlAccessibleObject
     {
         private DataGridViewTextBoxEditingControl ownerControl;

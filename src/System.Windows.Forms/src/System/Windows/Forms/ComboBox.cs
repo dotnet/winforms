@@ -1338,11 +1338,7 @@ namespace System.Windows.Forms {
             this.lastTextChangedValue = text;
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         // Returns true if using System AutoComplete
         private bool SystemAutoCompleteEnabled {
@@ -1525,15 +1521,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ComboBoxUiaProvider(this);
-            }
-            else if (AccessibilityImprovements.Level1) {
-                return new ComboBoxExAccessibleObject(this);
-            }
-            else {
-                return new ComboBoxAccessibleObject(this);
-            }
+            return new ComboBoxAccessibleObject(this);
         }
 
          /// <devdoc>
@@ -1944,7 +1932,7 @@ namespace System.Windows.Forms {
                 NativeWindow childWindow;
                 if (m.HWnd == childEdit.Handle) {
                     childWindow = childEdit;
-                } else if (AccessibilityImprovements.Level3 && m.HWnd == dropDownHandle) {
+                } else if (m.HWnd == dropDownHandle) {
                     childWindow = childDropDown;
                 }
                 else {
@@ -2465,17 +2453,15 @@ namespace System.Windows.Forms {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWN];
             if (handler != null) handler(this, e);
 
-            if (AccessibilityImprovements.Level3) {
-                // Notify collapsed/expanded property change.
-                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                    UnsafeNativeMethods.ExpandCollapseState.Collapsed,
-                    UnsafeNativeMethods.ExpandCollapseState.Expanded);
+            // Notify collapsed/expanded property change.
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                UnsafeNativeMethods.ExpandCollapseState.Collapsed,
+                UnsafeNativeMethods.ExpandCollapseState.Expanded);
 
-                var accessibleObject = AccessibilityObject as ComboBoxUiaProvider;
-                if (accessibleObject != null) {
-                    accessibleObject.SetComboBoxItemFocus();
-                }
+            var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
+            if (accessibleObject != null) {
+                accessibleObject.SetComboBoxItemFocus();
             }
         }
 
@@ -2608,8 +2594,8 @@ namespace System.Windows.Forms {
                 // and reset the state to announce the selections later.
                 dropDownWillBeClosed = false;
             }
-            else if (AccessibilityImprovements.Level3) {
-                var accessibleObject = AccessibilityObject as ComboBoxUiaProvider;
+            else {
+                var accessibleObject = AccessibilityObject as ComboBoxAccessibleObject;
                 if (accessibleObject != null) {
 
                     // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
@@ -2866,23 +2852,21 @@ namespace System.Windows.Forms {
             EventHandler handler = (EventHandler)Events[EVENT_DROPDOWNCLOSED];
             if (handler != null) handler(this, e);
 
-            if (AccessibilityImprovements.Level3) {
-                // Need to announce the focus on combo-box with new selected value on drop-down close.
-                // If do not do this focus in Level 3 stays on list item of unvisible list.
-                // This is necessary for DropDown style as edit should not take focus.
-                if (DropDownStyle == ComboBoxStyle.DropDown) {
-                    AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                }
-
-                // Notify Collapsed/expanded property change.
-                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
-                    UnsafeNativeMethods.ExpandCollapseState.Expanded,
-                    UnsafeNativeMethods.ExpandCollapseState.Collapsed);
-
-                // Collapsing the DropDown, so reset the flag.
-                dropDownWillBeClosed = false;
+            // Need to announce the focus on combo-box with new selected value on drop-down close.
+            // If do not do this focus in Level 3 stays on list item of unvisible list.
+            // This is necessary for DropDown style as edit should not take focus.
+            if (DropDownStyle == ComboBoxStyle.DropDown) {
+                AccessibilityObject.RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
             }
+
+            // Notify Collapsed/expanded property change.
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                NativeMethods.UIA_ExpandCollapseExpandCollapseStatePropertyId,
+                UnsafeNativeMethods.ExpandCollapseState.Expanded,
+                UnsafeNativeMethods.ExpandCollapseState.Collapsed);
+
+            // Collapsing the DropDown, so reset the flag.
+            dropDownWillBeClosed = false;
         }
 
 
@@ -2998,9 +2982,7 @@ namespace System.Windows.Forms {
             if (childListBox != null) {
 
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                if (AccessibilityImprovements.Level3) {
-                    ReleaseUiaProvider(childListBox.Handle);
-                }
+                ReleaseUiaProvider(childListBox.Handle);
 
                 childListBox.ReleaseHandle();
                 childListBox = null;
@@ -3009,9 +2991,7 @@ namespace System.Windows.Forms {
             if (childDropDown != null) {
 
                 // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                if (AccessibilityImprovements.Level3) {
-                    ReleaseUiaProvider(childDropDown.Handle);
-                }
+                ReleaseUiaProvider(childDropDown.Handle);
 
                 childDropDown.ReleaseHandle();
                 childDropDown = null;
@@ -3021,7 +3001,7 @@ namespace System.Windows.Forms {
         internal override void ReleaseUiaProvider(IntPtr handle) {
             base.ReleaseUiaProvider(handle);
 
-            var uiaProvider = AccessibilityObject as ComboBoxUiaProvider;
+            var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
             uiaProvider?.ResetListItemAccessibleObjects();
         }
 
@@ -3376,23 +3356,21 @@ namespace System.Windows.Forms {
             if (unchecked((int)(long)m.WParam) == (Interop.WindowMessages.WM_CREATE | 1000 << 16)) {
                 dropDownHandle = m.LParam;
 
-                if (AccessibilityImprovements.Level3) {
-                    // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
-                    // So release the old references here.
-                    if (childDropDown != null) {
-                        // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
-                        ReleaseUiaProvider(childListBox.Handle);
+                // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
+                // So release the old references here.
+                if (childDropDown != null) {
+                    // Need to notify UI Automation that it can safely remove all map entries that refer to the specified window.
+                    ReleaseUiaProvider(childListBox.Handle);
 
-                        childDropDown.ReleaseHandle();
-                    }
-
-                    childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
-                    childDropDown.AssignHandle(dropDownHandle);
-
-                    // Reset the child list accessible object in case the the DDL is recreated.
-                    // For instance when dialog window containging the ComboBox is reopened.
-                    childListAccessibleObject = null;
+                    childDropDown.ReleaseHandle();
                 }
+
+                childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
+                childDropDown.AssignHandle(dropDownHandle);
+
+                // Reset the child list accessible object in case the the DDL is recreated.
+                // For instance when dialog window containging the ComboBox is reopened.
+                childListAccessibleObject = null;
             }
         }
 
@@ -3782,7 +3760,7 @@ namespace System.Windows.Forms {
                             DefWndProc(ref m);
                             object after = _owner.SelectedItem;
                             if (before != after) {
-                                (_owner.AccessibilityObject as ComboBoxUiaProvider).SetComboBoxItemFocus();
+                                (_owner.AccessibilityObject as ComboBoxAccessibleObject).SetComboBoxItemFocus();
                             }
                         }
                         break;
@@ -3808,7 +3786,7 @@ namespace System.Windows.Forms {
             }
 
             private void WmGetObject(ref Message m) {
-                if (AccessibilityImprovements.Level3 && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId &&
+                if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId &&
                     // Managed UIAutomation providers are supplied for child list windows but not for the child edit window.
                     // Child list accessibility object provides all necessary patterns and UIAutomation notifications,
                     // so there is no need to native provider supplement.
@@ -3846,9 +3824,7 @@ namespace System.Windows.Forms {
                         UnsafeNativeMethods.IAccessibleInternal iacc = null;
 
                         if (_accessibilityObject == null) {
-                            wfAccessibleObject = AccessibilityImprovements.Level3
-                                ? GetChildAccessibleObject(_childWindowType)
-                                : new ChildAccessibleObject(_owner, Handle);
+                            wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
                         iacc = (UnsafeNativeMethods.IAccessibleInternal)_accessibilityObject;
@@ -4312,136 +4288,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <devdoc>
-        /// </devdoc>
-        [System.Runtime.InteropServices.ComVisible(true)]
-        internal class ComboBoxAccessibleObject : ControlAccessibleObject {
-
-            private const int COMBOBOX_ACC_ITEM_INDEX = 1;
-
-            public ComboBoxAccessibleObject(Control ownerControl)
-                : base(ownerControl) {
-            }
-
-            internal override string get_accNameInternal(object childID) {
-                this.ValidateChildID(ref childID);
-
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX) {
-                    return this.Name;
-                }
-                else {
-                    return base.get_accNameInternal(childID);
-                }
-            }
-
-            internal override string get_accKeyboardShortcutInternal(object childID) {
-                this.ValidateChildID(ref childID);
-                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX) {
-                    return this.KeyboardShortcut;
-                } else {
-                    return base.get_accKeyboardShortcutInternal(childID);
-                }
-            }
-        }
-
-        /// <devdoc>
-        /// </devdoc>
-        [ComVisible(true)]
-        internal class ComboBoxExAccessibleObject : ComboBoxAccessibleObject {
-
-            private ComboBox ownerItem = null;
-
-            private void ComboBoxDefaultAction(bool expand) {
-                if (ownerItem.DroppedDown != expand) {
-                    ownerItem.DroppedDown = expand;
-                }
-            }
-
-            public ComboBoxExAccessibleObject(ComboBox ownerControl)
-                : base(ownerControl) {
-                    ownerItem = ownerControl;
-            }
-
-            internal override bool IsIAccessibleExSupported() {
-                if (ownerItem != null) {
-                    return true;
-                }
-                return base.IsIAccessibleExSupported();
-            }
-
-            internal override bool IsPatternSupported(int patternId) {
-                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId) {
-                    if (ownerItem.DropDownStyle == ComboBoxStyle.Simple) {
-                        return false;
-                    }
-                    return true;
-                }
-                else {
-                    if (patternId == NativeMethods.UIA_ValuePatternId) {
-                        if (ownerItem.DropDownStyle == ComboBoxStyle.DropDownList) {
-                            // NOTE: Initially the Value pattern is disabled for DropDownList in managed code,
-                            // but despite of this MSAA provides true (when Level < 3). When UIA mode is enabled,
-                            // Value pattern becomes disabled for the DropDownList and brings inconsistency.
-                            // At this time keeping 'return false;' commented out and preserving Value pattern
-                            // enabled in all cases: Level < 3 (by MSAA) and Level3 (by UIA).
-                            // return false;
-                            return AccessibilityImprovements.Level3;
-                        }
-                        return true;
-                    }
-                }
-                return base.IsPatternSupported(patternId);
-            }
-
-            internal override int[] RuntimeId {
-                get {
-                    if (ownerItem != null) {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a (RuntimeIDFirstItem)
-                        // second item can be anything, but here it is a hash
-
-                        var runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)ownerItem.Handle;
-                        runtimeId[2] = ownerItem.GetHashCode();
-                        return runtimeId;
-                    }
-                    
-                    return base.RuntimeId;
-                }
-            }
-
-            internal override object GetPropertyValue(int propertyID) {
-
-                switch (propertyID) {
-                    case NativeMethods.UIA_NamePropertyId:
-                        return Name;
-                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
-                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
-                        return (object)this.IsPatternSupported(NativeMethods.UIA_ValuePatternId);
-
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-            
-            internal override void Expand() {
-                ComboBoxDefaultAction(true);
-            }
-
-            internal override void Collapse() {
-                ComboBoxDefaultAction(false);
-            }
-
-            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState {
-                get {
-                    return ownerItem.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
-                }
-            }
-        }
-
         /// <summary>
         /// Represents the ComboBox item accessible object.
         /// </summary>
@@ -4709,22 +4555,131 @@ namespace System.Windows.Forms {
         }
 
         /// <summary>
-        /// ComboBox control accessible object for AccessibilityImprovements of Level 3 with UI Automation provider functionality.
-        /// This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject to have all base functionality.
+        /// ComboBox control accessible object with UI Automation provider functionality.
+        /// This inherits from the base ComboBoxExAccessibleObject and ComboBoxAccessibleObject
+        /// to have all base functionality.
         /// </summary>
         [ComVisible(true)]
-        internal class ComboBoxUiaProvider : ComboBoxExAccessibleObject {
+        internal class ComboBoxAccessibleObject : ControlAccessibleObject {
+            private const int COMBOBOX_ACC_ITEM_INDEX = 1;
+
             private ComboBoxChildDropDownButtonUiaProvider _dropDownButtonUiaProvider;
             private ComboBoxItemAccessibleObjectCollection _itemAccessibleObjects;
             private ComboBox _owningComboBox;
 
             /// <summary>
-            /// Initializes new instance of ComboBoxUiaProvider.
+            /// Initializes new instance of ComboBoxAccessibleObject.
             /// </summary>
             /// <param name="owningComboBox">The owning ComboBox control.</param>
-            public ComboBoxUiaProvider(ComboBox owningComboBox) : base(owningComboBox) {
+            public ComboBoxAccessibleObject(ComboBox owningComboBox) : base(owningComboBox)
+            {
                 _owningComboBox = owningComboBox;
                 _itemAccessibleObjects = new ComboBoxItemAccessibleObjectCollection(owningComboBox);
+            }
+
+            private void ComboBoxDefaultAction(bool expand)
+            {
+                if (_owningComboBox.DroppedDown != expand)
+                {
+                    _owningComboBox.DroppedDown = expand;
+                }
+            }
+
+            internal override bool IsIAccessibleExSupported()
+            {
+                if (_owningComboBox != null)
+                {
+                    return true;
+                }
+
+                return base.IsIAccessibleExSupported();
+            }
+
+            internal override bool IsPatternSupported(int patternId)
+            {
+                if (patternId == NativeMethods.UIA_ExpandCollapsePatternId)
+                {
+                    if (_owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                    {
+                        return false;
+                    }
+                    return true;
+                }
+                else
+                {
+                    if (patternId == NativeMethods.UIA_ValuePatternId)
+                    {
+                        return true;
+                    }
+                }
+                return base.IsPatternSupported(patternId);
+            }
+
+            internal override int[] RuntimeId
+            {
+                get
+                {
+                    if (_owningComboBox != null)
+                    {
+                        // we need to provide a unique ID
+                        // others are implementing this in the same manner
+                        // first item is static - 0x2a (RuntimeIDFirstItem)
+                        // second item can be anything, but here it is a hash
+
+                        var runtimeId = new int[3];
+                        runtimeId[0] = RuntimeIDFirstItem;
+                        runtimeId[1] = (int)(long)_owningComboBox.Handle;
+                        runtimeId[2] = _owningComboBox.GetHashCode();
+                        return runtimeId;
+                    }
+
+                    return base.RuntimeId;
+                }
+            }
+
+            internal override void Expand()
+            {
+                ComboBoxDefaultAction(true);
+            }
+
+            internal override void Collapse()
+            {
+                ComboBoxDefaultAction(false);
+            }
+
+            internal override UnsafeNativeMethods.ExpandCollapseState ExpandCollapseState
+            {
+                get
+                {
+                    return _owningComboBox.DroppedDown == true ? UnsafeNativeMethods.ExpandCollapseState.Expanded : UnsafeNativeMethods.ExpandCollapseState.Collapsed;
+                }
+            }
+
+            internal override string get_accNameInternal(object childID)
+            {
+                this.ValidateChildID(ref childID);
+
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                {
+                    return this.Name;
+                }
+                else
+                {
+                    return base.get_accNameInternal(childID);
+                }
+            }
+
+            internal override string get_accKeyboardShortcutInternal(object childID)
+            {
+                this.ValidateChildID(ref childID);
+                if (childID != null && ((int)childID) == COMBOBOX_ACC_ITEM_INDEX)
+                {
+                    return this.KeyboardShortcut;
+                }
+                else
+                {
+                    return base.get_accKeyboardShortcutInternal(childID);
+                }
             }
 
             /// <summary>
@@ -4842,10 +4797,16 @@ namespace System.Windows.Forms {
                 switch (propertyID) {
                     case NativeMethods.UIA_ControlTypePropertyId:
                         return NativeMethods.UIA_ComboBoxControlTypeId;
+                    case NativeMethods.UIA_NamePropertyId:
+                        return Name;
                     case NativeMethods.UIA_HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused;
                     case NativeMethods.UIA_NativeWindowHandlePropertyId:
                         return _owningComboBox.Handle;
+                    case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
+                    case NativeMethods.UIA_IsValuePatternAvailablePropertyId:
+                        return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
 
                     default:
                         return base.GetPropertyValue(propertyID);
@@ -4921,19 +4882,19 @@ namespace System.Windows.Forms {
                             return null;
                         }
 
-                        var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1) { // DropDown button is next;
-                                return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                             }
                         }
 
                         return null;
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            var firstComboBoxChildFragment = comboBoxUiaProvider.GetChildFragment(0);
+                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId) {
                                 return firstComboBoxChildFragment;
                             }
@@ -4995,19 +4956,13 @@ namespace System.Windows.Forms {
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _handle), out provider);
+                    return provider;
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
             /// Gets the runtime ID.
@@ -5050,17 +5005,15 @@ namespace System.Windows.Forms {
             /// <param name="y">Y coordinate.</param>
             /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) {
-                if (AccessibilityImprovements.Level3) {
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    if (systemIAccessible != null) {
-                        object result = systemIAccessible.accHitTest((int)x, (int)y);
-                        if (result is int) {
-                            int childId = (int)result;
-                            return GetChildFragment(childId - 1);
-                        }
-                        else {
-                            return null;
-                        }
+                var systemIAccessible = GetSystemIAccessibleInternal();
+                if (systemIAccessible != null) {
+                    object result = systemIAccessible.accHitTest((int)x, (int)y);
+                    if (result is int) {
+                        int childId = (int)result;
+                        return GetChildFragment(childId - 1);
+                    }
+                    else {
+                        return null;
                     }
                 }
 
@@ -5103,8 +5056,8 @@ namespace System.Windows.Forms {
                 }
 
                 var item = _owningComboBox.Items[index];
-                var comboBoxUiaProvider = _owningComboBox.AccessibilityObject as ComboBoxUiaProvider;
-                return comboBoxUiaProvider.ItemAccessibleObjects[item] as AccessibleObject;
+                var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
+                return comboBoxAccessibleObject.ItemAccessibleObjects[item] as AccessibleObject;
             }
 
             public int GetChildFragmentCount() {
@@ -5207,13 +5160,9 @@ namespace System.Windows.Forms {
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, _childListControlhandle), out provider);
+                    return provider;
                 }
             }
 
@@ -5303,19 +5252,19 @@ namespace System.Windows.Forms {
                     case UnsafeNativeMethods.NavigateDirection.Parent:
                         return _owner.AccessibilityObject;
                     case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                        var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                        var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                             if (comboBoxChildFragmentCount > 1) { // DropDown button is next;
-                                return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                                return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                             }
                         }
 
                         return null;
                     case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                        comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                        if (comboBoxUiaProvider != null) {
-                            var firstComboBoxChildFragment = comboBoxUiaProvider.GetChildFragment(0);
+                        comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                        if (comboBoxAccessibleObject != null) {
+                            var firstComboBoxChildFragment = comboBoxAccessibleObject.GetChildFragment(0);
                             if (RuntimeId != firstComboBoxChildFragment.RuntimeId) {
                                 return firstComboBoxChildFragment;
                             }
@@ -5467,11 +5416,11 @@ namespace System.Windows.Forms {
                     return _owner.AccessibilityObject;
                 }
                 else if (direction == UnsafeNativeMethods.NavigateDirection.PreviousSibling) {
-                    var comboBoxUiaProvider = _owner.AccessibilityObject as ComboBoxUiaProvider;
-                    if (comboBoxUiaProvider != null) {
-                        int comboBoxChildFragmentCount = comboBoxUiaProvider.GetChildFragmentCount();
+                    var comboBoxAccessibleObject = _owner.AccessibilityObject as ComboBoxAccessibleObject;
+                    if (comboBoxAccessibleObject != null) {
+                        int comboBoxChildFragmentCount = comboBoxAccessibleObject.GetChildFragmentCount();
                         if (comboBoxChildFragmentCount > 1) { // Text or edit is previous;
-                            return comboBoxUiaProvider.GetChildFragment(comboBoxChildFragmentCount - 1);
+                            return comboBoxAccessibleObject.GetChildFragment(comboBoxChildFragmentCount - 1);
                         }
                     }
 

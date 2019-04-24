@@ -52,12 +52,7 @@ namespace System.Windows.Forms {
         }
 
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level1) {
-                return new ToolStripDropDownButtonAccessibleObject(this);
-            }
-            else {
-                return base.CreateAccessibilityInstance();
-            }            
+            return new ToolStripDropDownButtonAccessibleObject(this);            
         }
  
         [DefaultValue(true)]
@@ -177,7 +172,7 @@ namespace System.Windows.Forms {
                     Rectangle dropDownArrowRect = (layout != null) ? layout.DropDownArrowRect :Rectangle.Empty;
 
                     Color arrowColor;
-                    if (Selected && !Pressed && AccessibilityImprovements.Level2 && SystemInformation.HighContrast) {
+                    if (Selected && !Pressed && SystemInformation.HighContrast) {
                         arrowColor = Enabled ? SystemColors.HighlightText : SystemColors.ControlDark;
                     }
                     else {

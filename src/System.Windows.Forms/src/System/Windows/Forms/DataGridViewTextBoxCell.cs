@@ -56,12 +56,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            if (AccessibilityImprovements.Level1)
-            {
-                return new DataGridViewTextBoxCellAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new DataGridViewTextBoxCellAccessibleObject(this);
         }
 
         private DataGridViewTextBoxEditingControl EditingTextBox
@@ -831,10 +826,7 @@ namespace System.Windows.Forms
             {
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {

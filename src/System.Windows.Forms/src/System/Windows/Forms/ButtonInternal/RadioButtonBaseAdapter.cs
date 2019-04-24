@@ -62,7 +62,7 @@ namespace System.Windows.Forms.ButtonInternal {
             
             if (!Control.Enabled) {
                 // if we are not in HighContrast mode OR we opted into the legacy behavior
-                if (!SystemInformation.HighContrast || !AccessibilityImprovements.Level1) {
+                if (!SystemInformation.HighContrast) {
                     border = ControlPaint.ContrastControlDark;
                 }
                 // otherwise we are in HighContrast mode 
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.ButtonInternal {
         #endregion
 
         protected void AdjustFocusRectangle(LayoutData layout) {
-            if (AccessibilityImprovements.Level2 && string.IsNullOrEmpty(Control.Text)) {
+            if (string.IsNullOrEmpty(Control.Text)) {
                 // When a RadioButton has no text, AutoSize sets the size to zero 
                 // and thus there's no place around which to draw the focus rectangle.
                 // So, when AutoSize == true we want the focus rectangle to be rendered around the circle area.
