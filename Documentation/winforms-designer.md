@@ -126,6 +126,7 @@ to:
     </Compile>
     <Compile Update="Form1.Designer.cs">
         <DependentUpon>Form1.cs</DependentUpon>
+        <SubType>Designer</SubType>
     </Compile>
     <EmbeddedResource Update="Form1.resx">
         <DependentUpon>Form1.cs</DependentUpon>
