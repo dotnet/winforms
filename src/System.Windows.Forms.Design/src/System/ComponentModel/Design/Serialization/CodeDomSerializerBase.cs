@@ -368,10 +368,10 @@ namespace System.ComponentModel.Design.Serialization
             using (TraceScope("ComponentCodeDomSerializerBase::DeserializePropertiesFromResources"))
             {
                 // It is much faster to dig through the resources first, and then map these resources to properties than it is to filter properties at each turn.  Why?  Because filtering properties requires a separate filter call for each object (because designers get a chance to filter, the cache is per-component), while resources are loaded once per document.
-                IDictionaryEnumerator de = ResourceCodeDomSerializer.GetDefault().GetMetadataEnumerator(manager);
+                IDictionaryEnumerator de = ResourceCodeDomSerializer.Default.GetMetadataEnumerator(manager);
                 if (de == null)
                 {
-                    de = ResourceCodeDomSerializer.GetDefault().GetEnumerator(manager, CultureInfo.InvariantCulture);
+                    de = ResourceCodeDomSerializer.Default.GetEnumerator(manager, CultureInfo.InvariantCulture);
                 }
 
                 if (de != null)
@@ -2651,7 +2651,7 @@ namespace System.ComponentModel.Design.Serialization
                                     }
 
                                     name = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", name, property.Name);
-                                    ResourceCodeDomSerializer.GetDefault().SerializeMetadata(manager, name, property.GetValue(value), property.ShouldSerializeValue(value));
+                                    ResourceCodeDomSerializer.Default.SerializeMetadata(manager, name, property.GetValue(value), property.ShouldSerializeValue(value));
                                 }
                             }
                             finally
@@ -2707,7 +2707,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeResource(IDesignerSerializationManager manager, string resourceName, object value)
         {
-            ResourceCodeDomSerializer.GetDefault().WriteResource(manager, resourceName, value);
+            ResourceCodeDomSerializer.Default.WriteResource(manager, resourceName, value);
         }
 
         /// <summary>
@@ -2716,7 +2716,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeResourceInvariant(IDesignerSerializationManager manager, string resourceName, object value)
         {
-            ResourceCodeDomSerializer.GetDefault().WriteResourceInvariant(manager, resourceName, value);
+            ResourceCodeDomSerializer.Default.WriteResourceInvariant(manager, resourceName, value);
         }
 
         /// <summary>
@@ -2989,7 +2989,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 try
                 {
-                    result = ResourceCodeDomSerializer.GetDefault().Serialize(manager, value, false, ensureInvariant) as CodeExpression;
+                    result = ResourceCodeDomSerializer.Default.Serialize(manager, value, false, ensureInvariant) as CodeExpression;
                 }
                 finally
                 {

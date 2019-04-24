@@ -22,13 +22,16 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         /// Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static CollectionCodeDomSerializer GetDefault()
+        internal new static CollectionCodeDomSerializer Default
         {
-            if (s_defaultSerializer == null)
-            {
-                s_defaultSerializer = new CollectionCodeDomSerializer();
+            get
+            {      
+                if (s_defaultSerializer == null)
+                {
+                    s_defaultSerializer = new CollectionCodeDomSerializer();
+                }
+                return s_defaultSerializer;
             }
-            return s_defaultSerializer;
         }
 
         /// <summary>

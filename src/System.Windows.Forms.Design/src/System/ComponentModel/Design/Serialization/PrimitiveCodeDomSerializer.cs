@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design.Serialization {
         /// <summary>
         ///     Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static PrimitiveCodeDomSerializer Default {
+        internal new static PrimitiveCodeDomSerializer Default {
             get {
                 if (defaultSerializer == null) {
                     defaultSerializer = new PrimitiveCodeDomSerializer();

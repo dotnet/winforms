@@ -23,13 +23,16 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         /// Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static ResourceCodeDomSerializer GetDefault()
+        internal new static ResourceCodeDomSerializer Default
         {
-            if (s_defaultSerializer == null)
+            get
             {
-                s_defaultSerializer = new ResourceCodeDomSerializer();
+                if (s_defaultSerializer == null)
+                {
+                    s_defaultSerializer = new ResourceCodeDomSerializer();
+                }
+                return s_defaultSerializer;
             }
-            return s_defaultSerializer;
         }
 
         public override string GetTargetComponentName(CodeStatement statement, CodeExpression expression, Type type)

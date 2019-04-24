@@ -15,9 +15,20 @@ namespace System.ComponentModel.Design.Serialization
     [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
     public class CodeDomSerializer : CodeDomSerializerBase
     {
+        private static CodeDomSerializer _default;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
         private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+
+        internal static CodeDomSerializer Default {
+            get {
+                if (_default == null) {
+                    _default = new CodeDomSerializer();
+                }
+
+                return _default;
+            }
+        }
 
         /// <summary>
         ///     Determines which statement group the given statement should belong to.  The expression parameter

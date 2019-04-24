@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design.Serialization {
         /// <summary>
         ///     Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static ComponentCodeDomSerializer Default {
+        internal new static ComponentCodeDomSerializer Default {
             get {
                 ComponentCodeDomSerializer defaultSerializer;
                 if (_defaultSerializerRef != null) {

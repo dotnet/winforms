@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design.Serialization {
         /// <summary>
         ///     Retrieves a default static instance of this serializer.
         /// </summary>
-        internal static EnumCodeDomSerializer Default {
+        internal new static EnumCodeDomSerializer Default {
             get {
                 if (defaultSerializer == null) {
                     defaultSerializer = new EnumCodeDomSerializer();
