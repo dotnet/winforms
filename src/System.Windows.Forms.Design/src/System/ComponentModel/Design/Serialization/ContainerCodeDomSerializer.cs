@@ -23,7 +23,7 @@ namespace System.ComponentModel.Design.Serialization {
         /// <summary>
         ///     Retrieves a default static instance of this serializer.
         /// </summary>
-        internal new static ContainerCodeDomSerializer Default {
+        internal static ContainerCodeDomSerializer Default {
             get {
                 if (_defaultSerializer == null) {
                     _defaultSerializer = new ContainerCodeDomSerializer();
