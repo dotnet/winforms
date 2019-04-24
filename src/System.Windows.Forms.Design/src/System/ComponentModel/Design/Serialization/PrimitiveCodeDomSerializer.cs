@@ -18,7 +18,6 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class PrimitiveCodeDomSerializer : CodeDomSerializer 
     {
-        private static readonly string JSharpFileExtension = ".jsl";
         private static PrimitiveCodeDomSerializer s_defaultSerializer;
         
         /// <summary>
