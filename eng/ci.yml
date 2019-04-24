@@ -16,7 +16,7 @@ jobs:
     enablePublishBuildAssets: true
     enablePublishUsingPipelines: $(_PublishUsingPipelines)
     enableTelemetry: true
-    helixRepo: winforms
+    helixRepo: dotnet/winforms
 
     jobs:
     - job: Windows_NT
