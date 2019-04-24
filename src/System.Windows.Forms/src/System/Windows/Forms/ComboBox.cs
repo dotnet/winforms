@@ -26,6 +26,7 @@ namespace System.Windows.Forms {
     using System.Collections.Specialized;
     using System.Text;
     using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.Serialization;
 
     /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox"]/*' />
     /// <devdoc>
@@ -4636,7 +4637,9 @@ namespace System.Windows.Forms {
                     runtimeId[0] = RuntimeIDFirstItem;
                     runtimeId[1] = (int)(long)_owningComboBox.Handle;
                     runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
-                    runtimeId[3] = _owningItem.GetHashCode();
+
+                    var comboBoxUiaProvider = _owningComboBox.AccessibilityObject as ComboBoxUiaProvider;
+                    runtimeId[3] = comboBoxUiaProvider.ItemAccessibleObjects.GetId(_owningItem);
 
                     return runtimeId;
                 }
@@ -4687,6 +4690,7 @@ namespace System.Windows.Forms {
         internal class ComboBoxItemAccessibleObjectCollection : Hashtable {
 
             private ComboBox _owningComboBoxBox;
+            private ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
 
             public ComboBoxItemAccessibleObjectCollection(ComboBox owningComboBoxBox) {
                 _owningComboBoxBox = owningComboBoxBox;
@@ -4694,17 +4698,24 @@ namespace System.Windows.Forms {
 
             public override object this[object key] {
                 get {
-                    if (!ContainsKey(key)) {
+                    int id = GetId(key);
+                    if (!ContainsKey(id)) {
                         var itemAccessibleObject = new ComboBoxItemAccessibleObject(_owningComboBoxBox, key);
-                        base[key] = itemAccessibleObject;
+                        base[id] = itemAccessibleObject;
                     }
 
-                    return base[key];
+                    return base[id];
                 }
 
                 set {
-                    base[key] = value;
+                    int id = GetId(key);
+                    base[id] = value;
                 }
+            }
+
+            public int GetId(object item) {
+                bool firstTime;
+                return unchecked((int)_idGenerator.GetId(item, out firstTime));
             }
         }
 
