@@ -17,18 +17,18 @@ namespace System.Windows.Forms
     public static class SystemInformation
     {
         // Figure out if all the multimon stuff is supported on the OS
-        private static bool checkMultiMonitorSupport = false;
-        private static bool multiMonitorSupport = false;
-        private static bool checkNativeMouseWheelSupport = false;
-        private static bool nativeMouseWheelSupport = true;
-        private static bool highContrast = false;
-        private static bool systemEventsAttached = false;
-        private static bool systemEventsDirty = true;
+        private static bool s_checkMultiMonitorSupport = false;
+        private static bool s_multiMonitorSupport = false;
+        private static bool s_checkNativeMouseWheelSupport = false;
+        private static bool s_nativeMouseWheelSupport = true;
+        private static bool s_highContrast = false;
+        private static bool s_systemEventsAttached = false;
+        private static bool s_systemEventsDirty = true;
 
-        private static IntPtr processWinStation = IntPtr.Zero;
-        private static bool isUserInteractive = false;
+        private static IntPtr s_processWinStation = IntPtr.Zero;
+        private static bool s_isUserInteractive = false;
 
-        private static PowerStatus powerStatus = null;
+        private static PowerStatus s_powerStatus = null;
 
         private const int DefaultMouseWheelScrollLines = 3;
 
@@ -53,7 +53,7 @@ namespace System.Windows.Forms
             get
             {
                 EnsureSystemEvents();
-                if (systemEventsDirty)
+                if (s_systemEventsDirty)
                 {
                     var data = new NativeMethods.HIGHCONTRAST_I();
                     data.cbSize = Marshal.SizeOf<NativeMethods.HIGHCONTRAST_I>();
@@ -63,17 +63,17 @@ namespace System.Windows.Forms
                     // Force it to false if we fail to get the parameter.
                     if (UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0))
                     {
-                        highContrast = (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
+                        s_highContrast = (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
                     }
                     else
                     {
-                        highContrast = false;
+                        s_highContrast = false;
                     }
 
-                    systemEventsDirty = false;
+                    s_systemEventsDirty = false;
                 }
 
-                return highContrast;
+                return s_highContrast;
             }
         }
 
@@ -306,7 +306,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static PowerStatus PowerStatus
         {
-            get => powerStatus ?? (powerStatus = new PowerStatus());
+            get => s_powerStatus ?? (s_powerStatus = new PowerStatus());
         }
 
         /// <summary>
@@ -674,13 +674,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!checkMultiMonitorSupport)
+                if (!s_checkMultiMonitorSupport)
                 {
-                    multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
-                    checkMultiMonitorSupport = true;
+                    s_multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
+                    s_checkMultiMonitorSupport = true;
                 }
 
-                return multiMonitorSupport;
+                return s_multiMonitorSupport;
             }
         }
 
@@ -692,13 +692,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (!checkNativeMouseWheelSupport)
+                if (!s_checkNativeMouseWheelSupport)
                 {
-                    nativeMouseWheelSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
-                    checkNativeMouseWheelSupport = true;
+                    s_nativeMouseWheelSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
+                    s_checkNativeMouseWheelSupport = true;
                 }
 
-                return nativeMouseWheelSupport;
+                return s_nativeMouseWheelSupport;
             }
         }
 
@@ -803,9 +803,9 @@ namespace System.Windows.Forms
                 IntPtr hwinsta = IntPtr.Zero;
 
                 hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
-                if (hwinsta != IntPtr.Zero && processWinStation != hwinsta)
+                if (hwinsta != IntPtr.Zero && s_processWinStation != hwinsta)
                 {
-                    isUserInteractive = true;
+                    s_isUserInteractive = true;
 
                     int lengthNeeded = 0;
                     NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
@@ -814,14 +814,14 @@ namespace System.Windows.Forms
                     {
                         if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)
                         {
-                            isUserInteractive = false;
+                            s_isUserInteractive = false;
                         }
                     }
 
-                    processWinStation = hwinsta;
+                    s_processWinStation = hwinsta;
                 }
 
-                return isUserInteractive;
+                return s_isUserInteractive;
             }
         }
 
@@ -841,16 +841,16 @@ namespace System.Windows.Forms
 
         private static void EnsureSystemEvents()
         {
-            if (!systemEventsAttached)
+            if (!s_systemEventsAttached)
             {
                 SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(SystemInformation.OnUserPreferenceChanged);
-                systemEventsAttached = true;
+                s_systemEventsAttached = true;
             }
         }
 
         private static void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
         {
-            systemEventsDirty = true;
+            s_systemEventsDirty = true;
         }
 
         /// <summary>
