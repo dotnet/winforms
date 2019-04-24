@@ -3009,6 +3009,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         state |= AccessibleStates.Protected;
                     }
 
+                    Rectangle entryBounds = this.BoundingRectangle;
+                    Rectangle propertyGridViewBounds = this.PropertyGridView.GetToolNativeScreenRectangle();
+
+                    if (!entryBounds.IntersectsWith(propertyGridViewBounds))
+                    {
+                        state |= AccessibleStates.Offscreen;
+                    }
+
                     return state;
                 }
             }
