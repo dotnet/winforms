@@ -197,22 +197,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new DocCommentAccessibleObject(this, ownerGrid);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new DocCommentAccessibleObject(this, ownerGrid);
         }
 
         /// <summary>
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         internal void UpdateTextRenderingEngine() {
             m_labelTitle.UseCompatibleTextRendering = this.ownerGrid.UseCompatibleTextRendering;

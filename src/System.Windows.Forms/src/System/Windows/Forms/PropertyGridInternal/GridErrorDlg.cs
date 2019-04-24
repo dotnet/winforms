@@ -123,14 +123,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             details.Visible = !details.Visible;
 
-            if (AccessibilityImprovements.Level1) {
-                AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
-                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                details.TabStop = !details.TabStop;
+            AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
+            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+            details.TabStop = !details.TabStop;
 
-                if (details.Visible) {
-                    details.Focus();
-                }
+            if (details.Visible) {
+                details.Focus();
             }
         }
 
@@ -358,12 +356,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             } 
         }
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level1) {
-                return new DetailsButtonAccessibleObject(this);
-            }
-            else {
-                return base.CreateAccessibilityInstance();
-            }
+            return new DetailsButtonAccessibleObject(this);
         }
     }
 

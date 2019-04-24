@@ -355,13 +355,8 @@ namespace System.Windows.Forms {
            
        }
   
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+       internal override bool SupportsUiaProviders => true;
 
-    
        protected override void SetDisplayedItems() {
            if (state[stateCalledSpringTableLayout]) {
                bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
@@ -636,7 +631,7 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_StatusBarControlTypeId;
                 }
 

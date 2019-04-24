@@ -1019,11 +1019,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// AccessibleObject for this PropertyDescriptorGridEntry instance.
         /// </returns>
         protected override GridEntryAccessibleObject GetAccessibilityObject() {
-            if (AccessibilityImprovements.Level2) {
-                return new PropertyDescriptorGridEntryAccessibleObject(this);
-            }
-
-            return base.GetAccessibilityObject();
+            return new PropertyDescriptorGridEntryAccessibleObject(this);
         }
 
         [ComVisible(true)]
@@ -1035,9 +1031,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 _owningPropertyDescriptorGridEntry = owner;
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <summary>
             /// Returns the element in the specified direction.
@@ -1045,23 +1039,21 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (direction) {
-                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                            var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                            var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                            bool currentGridEntryFound = false;
-                            return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                            propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                            propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                            currentGridEntryFound = false;
-                            return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            return GetFirstChild();
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            return GetLastChild();
-                    }
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                        var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                        bool currentGridEntryFound = false;
+                        return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                        propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
+                        currentGridEntryFound = false;
+                        return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        return GetFirstChild();
+                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        return GetLastChild();
                 }
 
                 return base.FragmentNavigate(direction);
@@ -1105,7 +1097,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             internal override bool IsPatternSupported(int patternId) {
-                if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_ValuePatternId) {
+                if (patternId == NativeMethods.UIA_ValuePatternId) {
                     return true;
                 }
 
@@ -1116,14 +1108,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (propertyID == NativeMethods.UIA_IsEnabledPropertyId) {
                     return !((PropertyDescriptorGridEntry)owner).IsPropertyReadOnly;
                 }
-
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId) {
-                        return string.Empty;
-                    }
-                    else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
-                        return true;
-                    }
+                else if (propertyID == NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId) {
+                    return string.Empty;
+                }
+                else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
+                    return true;
                 }
 
                 return base.GetPropertyValue(propertyID);

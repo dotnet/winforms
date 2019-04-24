@@ -656,7 +656,7 @@ example usage
         ///      Returns a specific AccessibleObbject associated w/ the objectID
         /// </devdoc>
         protected virtual AccessibleObject GetAccessibilityObjectById(int objectId) {
-            if (AccessibilityImprovements.Level3 && this is IAutomationLiveRegion) {
+            if (this is IAutomationLiveRegion) {
                 return this.AccessibilityObject;
             }
 
@@ -4070,8 +4070,7 @@ example usage
                         else {
                             // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
                             //
-                            int actionMask = (NativeMethods.UISF_HIDEACCEL | 
-                                (AccessibilityImprovements.Level1 ? 0 : NativeMethods.UISF_HIDEFOCUS)) << 16;
+                            int actionMask = NativeMethods.UISF_HIDEACCEL << 16;
                             uiCuesState |= UISTATE_KEYBOARD_CUES_HIDDEN;
 
                             // The side effect of this initial state is that adding new controls may clear the accelerator
@@ -8607,9 +8606,7 @@ example usage
         protected void InvokeGotFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
                 toInvoke.OnGotFocus(e);
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
             }
         }
 
@@ -8779,9 +8776,7 @@ example usage
         protected void InvokeLostFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
                 toInvoke.OnLostFocus(e);
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
             }
         }
 
@@ -11103,7 +11098,7 @@ example usage
                         && (!tabStopOnly || ctl.TabStop)
                         && (nested || ctl.parent == this)) {
 
-                        if (AccessibilityImprovements.Level3 && ctl.parent is ToolStrip) {
+                        if (ctl.parent is ToolStrip) {
                             continue;
                         }
                         return ctl;
@@ -12737,9 +12732,7 @@ example usage
         /// <internalonly/>
         private void WmMouseEnter(ref Message m) {
             DefWndProc(ref m);
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
             OnMouseEnter(EventArgs.Empty);
         }
 
@@ -19010,7 +19003,7 @@ example usage
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3 && this.Owner is IAutomationLiveRegion) {
+                if (this.Owner is IAutomationLiveRegion) {
                     return true;
                 }
 
@@ -19018,7 +19011,7 @@ example usage
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion) {
+                if (propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion) {
                     return ((IAutomationLiveRegion)Owner).LiveSetting;
                 }
 
@@ -19032,8 +19025,7 @@ example usage
                         case NativeMethods.UIA_AccessKeyPropertyId:
                             return string.Empty;
                         case NativeMethods.UIA_HelpTextPropertyId:
-                            var help = Help;
-                            return AccessibilityImprovements.Level3 ? (help ?? string.Empty) : help;
+                            return Help ?? string.Empty;
                     }
                 }
 
@@ -19042,13 +19034,9 @@ example usage
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
+                    return provider;
                 }
             }
 

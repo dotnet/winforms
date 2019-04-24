@@ -193,7 +193,7 @@ namespace System.ComponentModel.Design.Serialization
                          IComponent comp = value as IComponent;
                          if (comp != null && comp.Site == null) 
                          {
-                             // And, VSWhidbey 445114:  Everett detected when we were in a serialize content
+                             // We were in a serialize content
                              // property and would still serialize it.  This code reverses what the
                              // outer if block does for this specific case.  We also need this
                              // for Everett / 1.0 backwards compat.

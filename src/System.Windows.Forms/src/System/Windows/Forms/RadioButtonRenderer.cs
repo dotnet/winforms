@@ -279,8 +279,7 @@ using Microsoft.Win32;
         private static void InitializeRenderer(int state) {
             RadioButtonState radioButtonState = (RadioButtonState)state;
             int part = RadioElement.Part;
-            if (AccessibilityImprovements.Level2
-                && SystemInformation.HighContrast 
+            if (SystemInformation.HighContrast 
                 && (radioButtonState == RadioButtonState.CheckedDisabled || radioButtonState == RadioButtonState.UncheckedDisabled)
                 && VisualStyleRenderer.IsCombinationDefined(RadioElement.ClassName, VisualStyleElement.Button.RadioButton.HighContrastDisabledPart)) {
                     part = VisualStyleElement.Button.RadioButton.HighContrastDisabledPart;

@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
 
         internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware) {
             ToolStripItem nextItem = base.GetNextItem(start, direction, rtlAware);
-            if (nextItem is MdiControlStrip.SystemMenuItem && AccessibilityImprovements.Level2) {
+            if (nextItem is MdiControlStrip.SystemMenuItem) {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);
             }
             return nextItem;
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuBarControlTypeId;
                 }
 

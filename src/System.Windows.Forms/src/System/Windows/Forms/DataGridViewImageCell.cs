@@ -1032,18 +1032,13 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.DoDefaultAction"]/*' />
             public override void DoDefaultAction()
             {
-                // do nothing if Level < 3
+                DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)this.Owner;
+                DataGridView dataGridView = dataGridViewCell.DataGridView;
 
-                if (AccessibilityImprovements.Level3)
+                if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
+                    dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
                 {
-                    DataGridViewImageCell dataGridViewCell = (DataGridViewImageCell)this.Owner;
-                    DataGridView dataGridView = dataGridViewCell.DataGridView;
-
-                    if (dataGridView != null && dataGridViewCell.RowIndex != -1 &&
-                        dataGridViewCell.OwningColumn != null && dataGridViewCell.OwningRow != null)
-                    {
-                        dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
-                    }
+                    dataGridView.OnCellContentClickInternal(new DataGridViewCellEventArgs(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex));
                 }
             }
 
@@ -1053,15 +1048,7 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {
@@ -1070,7 +1057,7 @@ namespace System.Windows.Forms
                     return NativeMethods.UIA_ImageControlTypeId;
                 }
 
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
+                if (propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
                 {
                     return true;
                 }
@@ -1080,7 +1067,7 @@ namespace System.Windows.Forms
 
             internal override bool IsPatternSupported(int patternId)
             {
-                if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_InvokePatternId)
+                if (patternId == NativeMethods.UIA_InvokePatternId)
                 {
                     return true;
                 }

@@ -103,12 +103,7 @@ namespace System.Windows.Forms
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            if (AccessibilityImprovements.Level2)
-            {
-                return new DataGridViewComboBoxCellAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new DataGridViewComboBoxCellAccessibleObject(this);
         }
 
         /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.AutoComplete"]/*' />
@@ -2291,7 +2286,7 @@ namespace System.Windows.Forms
                                         DataGridViewComboBoxCellRenderer.DrawDropDownButton(g, dropRect, ComboBoxState.Normal);
                                     }
 
-                                    if (SystemInformation.HighContrast && AccessibilityImprovements.Level1)
+                                    if (SystemInformation.HighContrast)
                                     {
                                         // In the case of ComboBox style, background is not filled in, 
                                         // in the case of DrawReadOnlyButton uses theming API to render CP_READONLY COMBOBOX part that renders the background,
@@ -3233,10 +3228,7 @@ namespace System.Windows.Forms
             {
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                return true;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {

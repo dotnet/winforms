@@ -65,7 +65,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeActiveLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.ActiveLinkColor.Equals(SystemColors.HotTrack);
             }
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.LinkColor.Equals(SystemColors.HotTrack);
             }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeVisitedLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.VisitedLinkColor.Equals(SystemColors.HotTrack);
             }

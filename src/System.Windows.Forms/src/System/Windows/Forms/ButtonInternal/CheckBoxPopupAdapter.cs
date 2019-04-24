@@ -35,7 +35,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 
                 DrawCheckBackground(e, layout.checkBounds, colors.windowText, colors.options.highContrast ? colors.buttonFace : colors.highlight, true, colors);
                 DrawFlatBorder(e.Graphics, layout.checkBounds, 
-                    (colors.options.highContrast && !Control.Enabled && AccessibilityImprovements.Level1) ? colors.windowFrame : colors.buttonShadow);
+                    (colors.options.highContrast && !Control.Enabled) ? colors.windowFrame : colors.buttonShadow);
                 DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
 
                 AdjustFocusRectangle(layout);
@@ -62,7 +62,7 @@ namespace System.Windows.Forms.ButtonInternal {
                 DrawPopupBorder(g, layout.checkBounds, colors);
                 DrawCheckOnly(e, layout, colors, colors.windowText, colors.highlight);
 
-                if (!AccessibilityImprovements.Level2 || !string.IsNullOrEmpty(Control.Text)) {
+                if (!string.IsNullOrEmpty(Control.Text)) {
                     e.Graphics.Clip = original;
                     e.Graphics.ExcludeClip(layout.checkArea);
                 }

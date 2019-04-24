@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms {
                                SystemBrushes.Control :
                                SystemBrushes.Window;
             Color foreground = ((state & ButtonState.Inactive) == ButtonState.Inactive) ?
-                               ((SystemInformation.HighContrast && AccessibilityImprovements.Level1) ? SystemColors.GrayText : SystemColors.ControlDark) :
+                               (SystemInformation.HighContrast ? SystemColors.GrayText : SystemColors.ControlDark) :
                                SystemColors.ControlText;
             DrawFlatCheckBox(graphics, rectangle, foreground, background, state);
         }
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+            if (SystemInformation.HighContrast) {
                 // Ignore the foreground color argument and don't do shading in high contrast, 
                 // as colors should match the OS-defined ones.
                 graphics.DrawString(s, font, SystemBrushes.GrayText, layoutRectangle, format);
@@ -1918,7 +1918,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+            if (SystemInformation.HighContrast) {
                 TextRenderer.DrawText(dc, s, font, layoutRectangle, SystemColors.GrayText, format);
             }
             else {
