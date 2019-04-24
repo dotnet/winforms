@@ -165,7 +165,14 @@ namespace System.ComponentModel.Design.Serialization
         public virtual object Serialize(IDesignerSerializationManager manager, object value)
         {
             object result = null;
-            if (manager == null || value == null) throw new ArgumentNullException(manager == null ? "manager" : "value");
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+            if(value == null) 
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
             using (TraceScope("CodeDomSerializer::" + nameof(Serialize)))
             {

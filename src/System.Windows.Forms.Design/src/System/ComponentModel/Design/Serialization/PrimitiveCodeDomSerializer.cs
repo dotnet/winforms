@@ -50,25 +50,7 @@ namespace System.ComponentModel.Design.Serialization
 
             if (value != null) 
             {
-                if (value is bool || value is char || value is int || value is float || value is double) 
-                {
-                    // Hack for J#, since they don't support auto-boxing of value types yet.
-                    CodeDomProvider codeProvider = manager.GetService(typeof(CodeDomProvider)) as CodeDomProvider;
-                    if (codeProvider != null && String.Equals(codeProvider.FileExtension, JSharpFileExtension)) 
-                    {
-                        // See if we are boxing - if so, insert a cast.
-                        ExpressionContext cxt = manager.Context[typeof(ExpressionContext)] as ExpressionContext;
-                        Debug.Assert(cxt != null, "No expression context on stack - J# boxing cast will not be inserted");
-                        if (cxt != null) 
-                        {
-                            if (cxt.ExpressionType == typeof(object)) {
-                                expression = new CodeCastExpression(value.GetType(), expression);
-                                expression.UserData.Add("CastIsBoxing", true);
-                            }
-                        }
-                    }
-                }
-                else if (value is string) 
+                if (value is string) 
                 {
                     string stringValue = value as string;
                     if (stringValue != null && stringValue.Length > 200) 
