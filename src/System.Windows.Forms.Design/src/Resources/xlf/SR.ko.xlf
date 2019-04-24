@@ -70,7 +70,7 @@
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-	<target state="new">An error occurred while processing this command.
+        <target state="new">An error occurred while processing this command.
       {0}</target>
         <note />
       </trans-unit>
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
         <source>ShowCheckMargin</source>
-	<target state="new">ShowCheckMargin</target>
+        <target state="new">ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
@@ -186,7 +186,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
         <source>ShowImageMargin</source>
-	<target state="new">ShowImageMargin</target>
+        <target state="new">ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
@@ -206,7 +206,7 @@
       {1}
 
       Stack trace:{2}</source>
-	<target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
 
       Exception:
       {1}
@@ -278,7 +278,7 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-	<target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</target>
         <note />
@@ -613,6 +613,16 @@
         <target state="translated">'{0}' 형식에 이름이 '{1}'인 속성이 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="SerializerNullNestedProperty">
+        <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
+        <target state="new">The object '{0}' returned null for the property '{1}' but this is not allowed.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SerializerPropertyGenFailed">
+        <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
+        <target state="new">Code generation for property '{0}' failed.  Error was: '{1}'</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SerializerResourceException">
         <source>Error reading resources from the resource file for the culture {0}: {1}</source>
         <target state="translated">문화권 {0}에 대한 리소스 파일에서 리소스를 읽는 동안 오류가 발생했습니다. {1}</target>
@@ -770,7 +780,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-	<target state="new">Dock:</target>
+        <target state="new">Dock:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
@@ -780,7 +790,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyle">
         <source>GripStyle:</source>
-	<target state="new">GripStyle:</target>
+        <target state="new">GripStyle:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyleDesc">
@@ -795,7 +805,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-	<target state="new">RenderMode:</target>
+        <target state="new">RenderMode:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
@@ -820,7 +830,7 @@
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-	<target state="new">Embed in ToolStripContainer</target>
+        <target state="new">Embed in ToolStripContainer</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">
