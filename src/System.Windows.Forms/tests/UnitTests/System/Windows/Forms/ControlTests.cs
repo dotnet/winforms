@@ -741,14 +741,22 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [MemberData(nameof(AutoSizeGetSetData))]
-        public void Control_AutoSizeGetSet(bool expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_AutoSize_Set_GetReturnsExpected(bool value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                AutoSize = value
+            };
+            Assert.Equal(value, control.AutoSize);
 
-            cont.AutoSize = expected;
+            // Set same.
+            control.AutoSize = value;
+            Assert.Equal(value, control.AutoSize);
 
-            Assert.Equal(expected, cont.AutoSize);
+            // Set different.
+            control.AutoSize = value;
+            Assert.Equal(value, control.AutoSize);
         }
 
         [Fact]
@@ -780,20 +788,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedSize, actualSize);
         }
 
-        /// <summary>
-        /// Data for the ApplySizeConstraintsSize test
-        /// </summary>
-        public static TheoryData<Size> ApplySizeConstraintsSizeData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(ApplySizeConstraintsSizeData))]
-        public void Control_ApplySizeConstraintsSize(Size expectedSize)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_ApplySizeConstraintsSize_Invoke_ReturnsExpected(Size expectedSize)
         {
-            var cont = new Control();
-
-            var actualSize = cont.ApplySizeConstraints(expectedSize);
-
+            var control = new Control();
+            var actualSize = control.ApplySizeConstraints(expectedSize);
             Assert.Equal(expectedSize, actualSize);
         }
 
@@ -821,21 +821,19 @@ namespace System.Windows.Forms.Tests
 
         #endregion
 
-        /// <summary>
-        /// Data for the PaddingGetSet test
-        /// </summary>
-        public static TheoryData<Padding> PaddingGetSetData =>
-            TestHelper.GetPaddingTheoryData();
-
         [Theory]
-        [MemberData(nameof(PaddingGetSetData))]
-        public void Control_PaddingGetSet(Padding expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void Control_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Padding = value
+            };
+            Assert.Equal(expected, control.Padding);
 
-            cont.Padding = expected;
-
-            Assert.Equal(expected, cont.Padding);
+            // Set same.
+            control.Padding = value;
+            Assert.Equal(expected, control.Padding);
         }
 
         /// <summary>
@@ -917,106 +915,98 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.Top);
         }
 
-        /// <summary>
-        /// Data for the IsAccessibleGetSet test
-        /// </summary>
-        public static TheoryData<Point> LocationGetSetData =>
-            TestHelper.GetPointTheoryData();
-
         [Theory]
-        [MemberData(nameof(LocationGetSetData))]
-        public void Control_LocationGetSet(Point expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        public void Control_LocationGetSet(Point value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Location = value
+            };
+            Assert.Equal(value, control.Location);
 
-            cont.Location = expected;
-
-            Assert.Equal(expected, cont.Location);
+            // Set same.
+            control.Location = value;
+            Assert.Equal(value, control.Location);
         }
 
-        /// <summary>
-        /// Data for the MarginGetSet test
-        /// </summary>
-        public static TheoryData<Padding> MarginGetSetData =>
-            TestHelper.GetPaddingTheoryData();
-
         [Theory]
-        [MemberData(nameof(MarginGetSetData))]
-        public void Control_MarginGetSet(Padding expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        public void Control_Margin_Set_GetReturnsExpected(Padding value, Padding expected)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Margin = value
+            };
+            Assert.Equal(expected, control.Margin);
 
-            cont.Margin = expected;
-
-            Assert.Equal(expected, cont.Margin);
+            // Set same.
+            control.Margin = value;
+            Assert.Equal(expected, control.Margin);
         }
 
-        /// <summary>
-        /// Data for the MaximumSizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> MaximumSizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(MaximumSizeGetSetData))]
-        public void Control_MaximumSizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_MaximumSize_Set_GetReturnsExpected(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                MaximumSize = value
+            };
+            Assert.Equal(value, control.MaximumSize);
 
-            cont.MaximumSize = expected;
-
-            Assert.Equal(expected, cont.MaximumSize);
+            // Set same.
+            control.MaximumSize = value;
+            Assert.Equal(value, control.MaximumSize);
         }
 
-        /// <summary>
-        /// Data for the MinimumSizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> MinimumSizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(MinimumSizeGetSetData))]
-        public void Control_MinimumSizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_MinimumSize_Set_GetReturnsExpected(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                MinimumSize = value
+            };
+            Assert.Equal(value, control.MinimumSize);
 
-            cont.MinimumSize = expected;
-
-            Assert.Equal(expected, cont.MinimumSize);
+            // Set same.
+            control.MinimumSize = value;
+            Assert.Equal(value, control.MinimumSize);
         }
 
-        /// <summary>
-        /// Data for the RequiredScaling test
-        /// </summary>
-        public static TheoryData<BoundsSpecified> RequiredScalingData =>
-            CommonTestHelper.GetEnumTheoryData<BoundsSpecified>();
-
         [Theory]
-        [MemberData(nameof(RequiredScalingData))]
-        public void Control_RequiredScaling(BoundsSpecified expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
+        public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                RequiredScaling = value
+            };
+            Assert.Equal(value, control.RequiredScaling);
 
-            cont.RequiredScaling = expected;
-
-            Assert.Equal(expected, cont.RequiredScaling);
+            // Set same.
+            control.RequiredScaling = value;
+            Assert.Equal(value, control.RequiredScaling);
         }
 
-        /// <summary>
-        /// Data for the RequiredScalingEnabled test
-        /// </summary>
-        public static TheoryData<bool> RequiredScalingEnabledData =>
-            CommonTestHelper.GetBoolTheoryData();
-
         [Theory]
-        [MemberData(nameof(RequiredScalingEnabledData))]
-        public void Control_RequiredScalingEnabled(bool expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void Control_RequiredScalingEnabled_Get_ReturnsExpected(bool value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                RequiredScalingEnabled = value
+            };
+            Assert.Equal(value, control.RequiredScalingEnabled);
 
-            cont.RequiredScalingEnabled = expected;
+            // Set same.
+            control.RequiredScalingEnabled = value;
+            Assert.Equal(value, control.RequiredScalingEnabled);
 
-            Assert.Equal(expected, cont.RequiredScalingEnabled);
+            // Set different.
+            control.RequiredScalingEnabled = !value;
+            Assert.Equal(!value, control.RequiredScalingEnabled);
         }
 
         [Theory]
@@ -1052,21 +1042,19 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.RightToLeft = value);
         }
 
-        /// <summary>
-        /// Data for the SizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> SizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(SizeGetSetData))]
-        public void Control_SizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_SizeGetSet(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Size = value
+            };
+            Assert.Equal(value, control.Size);
 
-            cont.Size = expected;
-
-            Assert.Equal(expected, cont.Size);
+            // Set same.
+            control.Size = value;
+            Assert.Equal(value, control.Size);
         }
 
         /// <summary>
@@ -1351,21 +1339,19 @@ namespace System.Windows.Forms.Tests
 
         #region Font
 
-        /// <summary>
-        /// Data for the FontGetSet test
-        /// </summary>
-        public static TheoryData<Font> FontGetSetData =>
-            TestHelper.GetFontTheoryData();
-
         [Theory]
-        [MemberData(nameof(FontGetSetData))]
-        public void Control_FontGetSet(Font expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        public void Control_FontGetSet(Font value)
         {
-            var cont = new Control();
-
-            cont.Font = expected;
-
-            Assert.Equal(expected, cont.Font);
+            var control = new Control
+            {
+                Font = value
+            };
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
+            
+            // Set same.
+            control.Font = value;
+            Assert.Equal(value ?? Control.DefaultFont, control.Font);
         }
 
         [Theory]
@@ -1764,27 +1750,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.AllowDrop);
         }
 
-        /// <summary>
-        /// Data for the AutoSizeGetSet test
-        /// </summary>
-        public static TheoryData<bool> AutoSizeGetSetData =>
-            CommonTestHelper.GetBoolTheoryData();
-
-        /// <summary>
-        /// Data for the AutoScrollOffsetGetSet test
-        /// </summary>
-        public static TheoryData<Point> AutoScrollOffsetGetSetData =>
-            TestHelper.GetPointTheoryData();
-
         [Theory]
-        [MemberData(nameof(AutoScrollOffsetGetSetData))]
-        public void Control_AutoScrollOffsetGetSet(Point expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        public void Control_AutoScrollOffsetGetSet(Point value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                AutoScrollOffset = value
+            };
+            Assert.Equal(value, control.AutoScrollOffset);
 
-            cont.AutoScrollOffset = expected;
-
-            Assert.Equal(expected, cont.AutoScrollOffset);
+            // Set same.
+            control.AutoScrollOffset = value;
+            Assert.Equal(value, control.AutoScrollOffset);
         }
 
         public static IEnumerable<object[]> BindingContext_Set_TestData()
@@ -1896,21 +1874,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.CacheTextInternal);
         }
 
-        /// <summary>
-        /// Data for the ClientSizeGetSet test
-        /// </summary>
-        public static TheoryData<Size> ClientSizeGetSetData =>
-            TestHelper.GetSizeTheoryData();
-
         [Theory]
-        [MemberData(nameof(ClientSizeGetSetData))]
-        public void Control_ClientSizeGetSet(Size expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        public void Control_ClientSize_Set_GetReturnsExpected(Size value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                ClientSize = value
+            };
+            Assert.Equal(value, control.ClientSize);
 
-            cont.ClientSize = expected;
-
-            Assert.Equal(expected, cont.ClientSize);
+            // Set same.
+            control.ClientSize = value;
+            Assert.Equal(value, control.ClientSize);
         }
 
         [Fact]
@@ -1969,21 +1945,19 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, cont.IsTopMdiWindowClosing);
         }
 
-        /// <summary>
-        /// Data for the CursorGetSet test
-        /// </summary>
-        public static TheoryData<Cursor> CursorGetSetData =>
-            TestHelper.GetCursorTheoryData();
-
         [Theory]
-        [MemberData(nameof(CursorGetSetData))]
-        public void Control_CursorGetSet(Cursor expected)
+        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        public void Control_Cursor_Set_GetReturnsExpected(Cursor value)
         {
-            var cont = new Control();
+            var control = new Control
+            {
+                Cursor = value
+            };
+            Assert.Same(value ?? Cursors.Default, control.Cursor);
 
-            cont.Cursor = expected;
-
-            Assert.Equal(expected, cont.Cursor);
+            // Set same.
+            control.Cursor = value;
+            Assert.Same(value ?? Cursors.Default, control.Cursor);
         }
 
         /// <summary>

@@ -684,7 +684,7 @@ namespace System.Windows.Forms {
                 return false;
             }
             NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-            info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T_RW));
+            info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
             info.fMask = NativeMethods.MIIM_STATE;
             info.fType = NativeMethods.MIIM_STATE;
             info.wID = nativeMenuCommandID;
@@ -831,9 +831,9 @@ namespace System.Windows.Forms {
         internal void HandleAutoExpansion() {
             if (Enabled && ParentInternal != null && ParentInternal.MenuAutoExpand && HasDropDownItems) {
                 ShowDropDown();
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                }
+
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
                 DropDown.SelectNextToolStripItem(null, /*forward=*/true);
             }
         }
@@ -852,13 +852,13 @@ namespace System.Windows.Forms {
                     // use PostMessage instead of SendMessage so that the DefWndProc can appropriately handle
                     // the system message... if we use SendMessage the dismissal of our window
                     // breaks things like the modal sizing loop.
-                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), NativeMethods.WM_SYSCOMMAND,nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_SYSCOMMAND,nativeMenuCommandID, 0);
                 }
                 else {
                     // These are user added items like ".Net Window..."
                      
                     // be consistent with sending a WM_SYSCOMMAND, use POST not SEND.
-                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), NativeMethods.WM_COMMAND, nativeMenuCommandID, 0);
+                    UnsafeNativeMethods.PostMessage( new HandleRef(this, targetWindowHandle), Interop.WindowMessages.WM_COMMAND, nativeMenuCommandID, 0);
                 }
                 this.Invalidate();
             }
@@ -1141,9 +1141,7 @@ namespace System.Windows.Forms {
 				 Select();
                  ShowDropDown();
 
-                 if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                 }
+                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
                  DropDown.SelectNextToolStripItem(null, /*forward=*/true);
                  return true;
@@ -1240,7 +1238,7 @@ namespace System.Windows.Forms {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuItemControlTypeId;
                 }
-                else if (AccessibilityImprovements.Level2 && propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
+                else if (propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
                     return ownerItem.GetShortcutText();
                 }
                 else {

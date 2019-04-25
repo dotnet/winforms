@@ -571,21 +571,21 @@ namespace System.Windows.Forms {
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGPEN lp);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGPEN lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGPEN)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGPEN>(), lp);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGBRUSH lb);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGBRUSH lb) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGBRUSH)), lb);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGBRUSH>(), lb);
         }
         
         [DllImport(ExternDll.Gdi32, SetLastError=true, CharSet=CharSet.Auto)]
         
         public static extern int GetObject(HandleRef hObject, int nSize, [In, Out] NativeMethods.LOGFONT lf);
         public static int GetObject(HandleRef hObject, NativeMethods.LOGFONT lp) {
-            return GetObject(hObject, Marshal.SizeOf(typeof(NativeMethods.LOGFONT)), lp);
+            return GetObject(hObject, Marshal.SizeOf<NativeMethods.LOGFONT>(), lp);
         }
         
         //HPALETTE
@@ -1588,13 +1588,13 @@ namespace System.Windows.Forms {
                             regionRects = new NativeMethods.RECT[pRgnDataHeader->nCount];
 
                             Debug.Assert(regionDataSize == pRgnDataHeader->cbSizeOfStruct + pRgnDataHeader->nCount * pRgnDataHeader->nRgnSize);
-                            Debug.Assert(Marshal.SizeOf(typeof(NativeMethods.RECT)) == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
+                            Debug.Assert(Marshal.SizeOf<NativeMethods.RECT>() == pRgnDataHeader->nRgnSize || pRgnDataHeader->nRgnSize == 0);
 
                             // use the header size as the offset, and cast each rect in.
                             int rectStart = pRgnDataHeader->cbSizeOfStruct;
                             for (int i = 0; i < pRgnDataHeader->nCount; i++) {
                                 // use some fancy pointer math to just copy the rect bits directly into the array.
-                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf(typeof(NativeMethods.RECT)) * i)));
+                                regionRects[i] = *((NativeMethods.RECT*)((byte*)pBytes + rectStart + (Marshal.SizeOf<NativeMethods.RECT>() * i)));
                             }
                         }
                     }
@@ -7183,7 +7183,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTAINER
     {
       [MarshalAs(UnmanagedType.U4)]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTAINER));
+      public int cbSize = Marshal.SizeOf<tagQACONTAINER>();
 
       public UnsafeNativeMethods.IOleClientSite pClientSite;
 
@@ -7235,7 +7235,7 @@ namespace System.Windows.Forms {
     public sealed class tagQACONTROL
     {
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=0, cbSize)*/]
-      public int cbSize = Marshal.SizeOf(typeof(tagQACONTROL));
+      public int cbSize = Marshal.SizeOf<tagQACONTROL>();
 
       [MarshalAs(UnmanagedType.U4)/*leftover(offset=4, dwMiscStatus)*/]
       public int dwMiscStatus = 0;
@@ -7290,104 +7290,57 @@ namespace System.Windows.Forms {
         string DefaultAction { get; }
     }
 
-    [ComImport(), Guid("0000000A-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
-    public interface ILockBytes {
-
-        
-         void ReadAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-                [Out] 
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbRead);
-
-        
-         void WriteAt(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long ulOffset,
-
-                 IntPtr pv,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int cb,
-                [Out, MarshalAs(UnmanagedType.LPArray)] 
-                 int[] pcbWritten);
-
-        
-         void Flush();
-
-        
-         void SetSize(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb);
-
-        
-         void LockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void UnlockRegion(
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long libOffset,
-                [In, MarshalAs(UnmanagedType.U8)] 
-                 long cb,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int dwLockType);
-
-        
-         void Stat(
-                [Out] 
-                  NativeMethods.STATSTG pstatstg,
-                [In, MarshalAs(UnmanagedType.U4)] 
-                 int grfStatFlag);
-
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    public class OFNOTIFY
-    {
-        // hdr was a by-value NMHDR structure
-        public IntPtr hdr_hwndFrom = IntPtr.Zero;
-        public IntPtr hdr_idFrom = IntPtr.Zero;
-        public int  hdr_code = 0;
-    
-        public IntPtr lpOFN = IntPtr.Zero;
-        public IntPtr pszFile = IntPtr.Zero;
-    }
-
-    internal static bool IsComObject(object o)
-    {
-        return Marshal.IsComObject(o);
-    }
-
-    internal static int ReleaseComObject(object objToRelease)
-    {
-        return Marshal.ReleaseComObject(objToRelease);
-    }
-            
-    public static object PtrToStructure(IntPtr lparam, Type cls) {
-        return Marshal.PtrToStructure(lparam, cls);
-    }
-    
-    public static void PtrToStructure(IntPtr lparam, object data) {
-        Marshal.PtrToStructure(lparam, data);
-    }
-
-        internal static int SizeOf(Type t)
+        [ComImport]
+        [Guid("0000000A-0000-0000-C000-000000000046")]
+        [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+        public interface ILockBytes
         {
-            return Marshal.SizeOf(t);
+            void ReadAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                [Out] IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbRead
+            );
+
+            void WriteAt(
+                [In, MarshalAs(UnmanagedType.U8)] long ulOffset,
+                IntPtr pv,
+                [In, MarshalAs(UnmanagedType.U4)] int cb,
+                [Out, MarshalAs(UnmanagedType.LPArray)] int[] pcbWritten
+            );
+
+            void Flush();
+
+            void SetSize([In, MarshalAs(UnmanagedType.U8)] long cb);
+
+            void LockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void UnlockRegion(
+                [In, MarshalAs(UnmanagedType.U8)] long libOffset,
+                [In, MarshalAs(UnmanagedType.U8)] long cb,
+                [In, MarshalAs(UnmanagedType.U4)] int dwLockType
+            );
+
+            void Stat(
+                [Out] NativeMethods.STATSTG pstatstg,
+                [In, MarshalAs(UnmanagedType.U4)] int grfStatFlag
+            );
         }
 
-        internal static void ThrowExceptionForHR(int errorCode)
+        [StructLayout(LayoutKind.Sequential)]
+        public class OFNOTIFY
         {
-            Marshal.ThrowExceptionForHR(errorCode);
+            // hdr was a by-value NMHDR structure
+            public IntPtr hdr_hwndFrom = IntPtr.Zero;
+            public IntPtr hdr_idFrom = IntPtr.Zero;
+            public int hdr_code = 0;
+
+            public IntPtr lpOFN = IntPtr.Zero;
+            public IntPtr pszFile = IntPtr.Zero;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
@@ -7889,7 +7842,7 @@ namespace System.Windows.Forms {
 
                         enableThemingActivationContext = new ACTCTX();
 
-                        enableThemingActivationContext.cbSize = Marshal.SizeOf(typeof(ACTCTX));
+                        enableThemingActivationContext.cbSize = Marshal.SizeOf<ACTCTX>();
                         enableThemingActivationContext.lpSource = dllPath;
                         enableThemingActivationContext.lpResourceName = (IntPtr)nativeResourceManifestID;
                         enableThemingActivationContext.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
@@ -8175,16 +8128,10 @@ namespace System.Windows.Forms {
             IRawElementProviderSimple GetOverrideProviderForHwnd(IntPtr hwnd);
         }
 
-        /// <SecurityNote>
-        ///     Critical:Elevates to Unmanaged code permission
-        /// </SecurityNote>
         [ComImport()]
         [Guid("6D5140C1-7436-11CE-8034-00AA006009FA")]
         [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
         internal interface IServiceProvider {
-            ///<SecurityNote>
-            /// Critical elevates via a SUC.
-            ///</SecurityNote>
             [PreserveSig]
             int QueryService(ref Guid service, ref Guid riid, out IntPtr ppvObj);
         }

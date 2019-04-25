@@ -57,10 +57,7 @@ namespace System.Windows.Forms
             {
                 this.AccessibilityNotifyClients(AccessibleEvents.Focus, objectID, childID);
 
-                if (AccessibilityImprovements.Level3)
-                {
-                    CurrentCell?.AccessibilityObject.SetFocus();
-                }
+                CurrentCell?.AccessibilityObject.SetFocus();
             }
             this.AccessibilityNotifyClients(AccessibleEvents.Selection, objectID, childID);
         }
@@ -3454,8 +3451,7 @@ namespace System.Windows.Forms
                         
                         // Force repainting of the current collumn's header cell to remove highlighting
                         if (this.ptCurrentCell.X != -1 && 
-                            this.SelectionMode == DataGridViewSelectionMode.FullRowSelect && 
-                            AccessibilityImprovements.Level2)
+                            this.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                         { 
                             InvalidateCellPrivate(this.ptCurrentCell.X, -1);
                         }
@@ -15512,7 +15508,7 @@ namespace System.Windows.Forms
                 OnCellEnter(ref dataGridViewCell, this.ptCurrentCell.X, this.ptCurrentCell.Y);
 
                 // Force repainting of the current collumn's header cell to highlight it
-                if (this.SelectionMode == DataGridViewSelectionMode.FullRowSelect && AccessibilityImprovements.Level2)
+                if (this.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                 {
                     InvalidateCellPrivate(this.ptCurrentCell.X, -1);
                 }
@@ -16197,7 +16193,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (this.dataGridViewOper[DATAGRIDVIEWOPER_trackKeyboardColResize] && (e.KeyData & Keys.Alt) != Keys.Alt && AccessibilityImprovements.Level2)
+            if (this.dataGridViewOper[DATAGRIDVIEWOPER_trackKeyboardColResize] && (e.KeyData & Keys.Alt) != Keys.Alt)
             {
                 this.EndColumnResize(this.currentColSplitBar);
                 this.ResetKeyboardTrackingState();
@@ -17153,7 +17149,7 @@ namespace System.Windows.Forms
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsGridFocusRectangleEnabled()
         {
-            return this.ShowFocusCues && this.CurrentCell == null && AccessibilityImprovements.Level2;
+            return this.ShowFocusCues && this.CurrentCell == null;
         }
 
         // Creates a rectangle by merging row headers, column headers 
@@ -21922,7 +21918,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected bool ProcessF3Key(Keys keyData)
         {
-            if (this.ptCurrentCell.X != -1 && AccessibilityImprovements.Level2)
+            if (this.ptCurrentCell.X != -1)
             {
                 DataGridViewColumn dataGridViewColumn = Columns[this.ptCurrentCell.X];
                 if (dataGridViewColumn != null && CanSort(dataGridViewColumn))
@@ -22234,7 +22230,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ProcessKeyEventArgs"]/*' />
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            if (m.Msg == NativeMethods.WM_SYSKEYDOWN || m.Msg == NativeMethods.WM_KEYDOWN)
+            if (m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN || m.Msg == Interop.WindowMessages.WM_KEYDOWN)
             {
                 if (this.ptCurrentCell.X != -1)
                 {
@@ -22279,7 +22275,7 @@ namespace System.Windows.Forms
                 }
             }
             else if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] &&
-                     (m.Msg == NativeMethods.WM_SYSCHAR || m.Msg == NativeMethods.WM_CHAR  || m.Msg == NativeMethods.WM_IME_CHAR))
+                     (m.Msg == Interop.WindowMessages.WM_SYSCHAR || m.Msg == Interop.WindowMessages.WM_CHAR  || m.Msg == Interop.WindowMessages.WM_IME_CHAR))
             {
                 this.dataGridViewState1[DATAGRIDVIEWSTATE1_forwardCharMessage] = false;
                 if (this.editingControl != null)
@@ -22302,7 +22298,7 @@ namespace System.Windows.Forms
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
             // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
-            if (m.Msg == NativeMethods.WM_CHAR)
+            if (m.Msg == Interop.WindowMessages.WM_CHAR)
             {
                 switch (ke.KeyCode)
                 {
@@ -22344,7 +22340,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (this.editingControl != null && (m.Msg == NativeMethods.WM_KEYDOWN || m.Msg == NativeMethods.WM_SYSKEYDOWN))
+            if (this.editingControl != null && (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN))
             {
                 this.dataGridViewState2[DATAGRIDVIEWSTATE2_currentCellWantsInputKey] = ((IDataGridViewEditingControl)this.editingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
             }
@@ -22356,7 +22352,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewWantsInputKey)
             {
-                if (m.Msg == NativeMethods.WM_KEYDOWN || m.Msg == NativeMethods.WM_SYSKEYDOWN)
+                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN || m.Msg == Interop.WindowMessages.WM_SYSKEYDOWN)
                 {
                     if (ProcessDataGridViewKey(ke))
                     {
@@ -22378,7 +22374,7 @@ namespace System.Windows.Forms
 
         private bool? ProcessColumnResize(Keys keyData, int step)
         {
-            if (AccessibilityImprovements.Level2 && (keyData & Keys.Alt) == Keys.Alt && this.AllowUserToResizeColumns && this.ptCurrentCell.X != -1)
+            if ((keyData & Keys.Alt) == Keys.Alt && this.AllowUserToResizeColumns && this.ptCurrentCell.X != -1)
             {
                 if (this.currentColSplitBar == -1)
                 {
@@ -26854,8 +26850,7 @@ namespace System.Windows.Forms
 
                             // Force repainting of the current and previous collumns` header cells to update highlighting
                             if (oldCurrentCellX != columnIndex &&
-                                this.SelectionMode == DataGridViewSelectionMode.FullRowSelect &&
-                                AccessibilityImprovements.Level2)
+                                this.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
                                 if (oldCurrentCellX >= 0)
                                 {
@@ -28227,11 +28222,8 @@ namespace System.Windows.Forms
             ResetUIState(false /*useRowShortcut*/, false /*computeVisibleRows*/);
             OnSorted(EventArgs.Empty);
 
-            if (AccessibilityImprovements.Level3)
-            {
-                // RS4 narrator does not catch this event even though event is indeed raised.
-                AccessibilityNotifyClients(AccessibleEvents.Reorder, NativeMethods.OBJID_CLIENT, 0);
-            }
+            // RS4 narrator does not catch this event even though event is indeed raised.
+            AccessibilityNotifyClients(AccessibleEvents.Reorder, NativeMethods.OBJID_CLIENT, 0);
         }
 
         internal void SwapSortedRows(int rowIndex1, int rowIndex2)
@@ -29847,11 +29839,11 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     return;
-                case NativeMethods.WM_LBUTTONDBLCLK:
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     // If the OnEnter procedure is called, it's because of a mouse down event, and not a TAB key.
                     this.dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = true;
                     try
@@ -29863,7 +29855,7 @@ namespace System.Windows.Forms
                         this.dataGridViewOper[DATAGRIDVIEWOPER_inMouseDown] = false;
                     }
                     return;
-                case NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_NOTIFY:
                     if (WmNotify(ref m))
                     {
                         // we are done - skip default handling
@@ -29871,8 +29863,8 @@ namespace System.Windows.Forms
                     }
                     break;
 
-                case NativeMethods.WM_IME_STARTCOMPOSITION:
-                case NativeMethods.WM_IME_COMPOSITION:
+                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case Interop.WindowMessages.WM_IME_COMPOSITION:
                     if (this.editingControl != null)
                     {
                         // Make sure that the first character is forwarded to the editing control.

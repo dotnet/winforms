@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System;
-using System.Security.Permissions;
 using System.Drawing;
 using System.Windows.Forms;    
 using System.ComponentModel.Design;

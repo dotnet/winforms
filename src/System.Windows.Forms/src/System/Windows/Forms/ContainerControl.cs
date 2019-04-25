@@ -85,7 +85,7 @@ namespace System.Windows.Forms {
             ]
             set {
                 if (value.Width < 0 || value.Height < 0) {
-                    throw new ArgumentOutOfRangeException(SR.ContainerControlInvalidAutoScaleDimensions, "value");
+                    throw new ArgumentOutOfRangeException(nameof(value), value, SR.ContainerControlInvalidAutoScaleDimensions);
                 }
                 autoScaleDimensions = value;
                 if (!autoScaleDimensions.IsEmpty) {
@@ -197,7 +197,7 @@ namespace System.Windows.Forms {
                     case AutoValidate.Inherit:
                         break;
                     default:
-                        throw new InvalidEnumArgumentException(nameof(AutoValidate), (int) value, typeof(AutoValidate));
+                        throw new InvalidEnumArgumentException(nameof(value), (int) value, typeof(AutoValidate));
                 }
 
                 if (autoValidate != value) {
@@ -1331,13 +1331,13 @@ namespace System.Windows.Forms {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::SetActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + this.Name);
             if (activeControl != value || (value != null && !value.Focused)) {
                 if (value != null && !Contains(value)) {
-                    throw new ArgumentException(SR.CannotActivateControl);
+                    throw new ArgumentException(SR.CannotActivateControl, nameof(value));
                 }
 
                 bool ret;
                 ContainerControl cc = this;
 
-                if (value != null && value.ParentInternal != null)
+                if (value != null)
                 {
                     cc = (value.ParentInternal.GetContainerControlInternal()) as ContainerControl;
                 }
@@ -1875,7 +1875,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                 default:

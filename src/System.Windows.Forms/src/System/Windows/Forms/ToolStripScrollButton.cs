@@ -176,7 +176,7 @@ namespace System.Windows.Forms {
 
             protected override void WndProc(ref Message m) {
 
-                if (m.Msg >= NativeMethods.WM_KEYFIRST && m.Msg <= NativeMethods.WM_KEYLAST) {
+                if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                     // 
 
                     DefWndProc(ref m);

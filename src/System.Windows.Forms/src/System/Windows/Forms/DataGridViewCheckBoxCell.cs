@@ -1884,14 +1884,7 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level1) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override int[] RuntimeId {
                 get {
@@ -1909,8 +1902,7 @@ namespace System.Windows.Forms
                 if (propertyID == NativeMethods.UIA_IsTogglePatternAvailablePropertyId) {
                     return (object)IsPatternSupported(NativeMethods.UIA_TogglePatternId);
                 }
-                else if (propertyID == NativeMethods.UIA_ControlTypePropertyId && AccessibilityImprovements.Level2)
-                {
+                else if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_CheckBoxControlTypeId;
                 }
 

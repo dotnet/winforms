@@ -288,9 +288,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     typeAttr = new NativeMethods.tagTYPEATTR();
                 }
                 else {
-                    typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));
+                    typeAttr = structCache.GetStruct<NativeMethods.tagTYPEATTR>();
                 }
-                UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+                Marshal.PtrToStructure(pTypeAttr, typeAttr);
                 g = typeAttr.guid;
                 if (versions != null) {
                     versions[0] = typeAttr.wMajorVerNum;
@@ -339,13 +339,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             case NativeMethods.tagVT.VT_PTR:
                 // we'll need to recurse into a user defined reference typeinfo
                 Debug.Assert(typeDesc.unionMember != IntPtr.Zero, "typeDesc doesn't contain an refTypeDesc!");
-                NativeMethods.tagTYPEDESC refTypeDesc = (NativeMethods.tagTYPEDESC)structCache.GetStruct(typeof(NativeMethods.tagTYPEDESC));
+                NativeMethods.tagTYPEDESC refTypeDesc = structCache.GetStruct<NativeMethods.tagTYPEDESC>();
                 
                 try {
 
                     try {
-                        //(tagTYPEDESC)Marshal.PtrToStructure(typeDesc.unionMember, typeof(tagTYPEDESC));
-                        UnsafeNativeMethods.PtrToStructure(typeDesc.unionMember, refTypeDesc);
+                        Marshal.PtrToStructure(typeDesc.unionMember, refTypeDesc);
                     }
                     catch {
                         // above is failing, why?
@@ -387,8 +386,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                     }
 
-                    NativeMethods.tagTYPEATTR refTypeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pRefTypeAttr, typeof(tagTYPEATTR));
-                    UnsafeNativeMethods.PtrToStructure(pRefTypeAttr, refTypeAttr);
+                    NativeMethods.tagTYPEATTR refTypeAttr = structCache.GetStruct<NativeMethods.tagTYPEATTR>();
+                    Marshal.PtrToStructure(pRefTypeAttr, refTypeAttr);
                     try {
                         Guid g = refTypeAttr.guid;
 
@@ -618,17 +617,17 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagTYPEATTR         typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-            UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+            NativeMethods.tagTYPEATTR typeAttr = structCache.GetStruct<NativeMethods.tagTYPEATTR>();
+            Marshal.PtrToStructure(pTypeAttr, typeAttr);
             if (typeAttr == null) {
                 return;
             }
-            NativeMethods.tagFUNCDESC         funcDesc = null;
-            NativeMethods.tagELEMDESC         ed = null;
+            NativeMethods.tagFUNCDESC funcDesc = null;
+            NativeMethods.tagELEMDESC ed = null;
             try {
                 
-                funcDesc = (NativeMethods.tagFUNCDESC)structCache.GetStruct(typeof(NativeMethods.tagFUNCDESC));
-                ed = (NativeMethods.tagELEMDESC)structCache.GetStruct(typeof(NativeMethods.tagELEMDESC));
+                funcDesc = structCache.GetStruct<NativeMethods.tagFUNCDESC>();
+                ed = structCache.GetStruct<NativeMethods.tagELEMDESC>();
                 
                 bool              isPropGet;
                 PropInfo          pi;
@@ -642,8 +641,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    //funcDesc = (tagFUNCDESC)Marshal.PtrToStructure(pFuncDesc, typeof(tagFUNCDESC));
-                    UnsafeNativeMethods.PtrToStructure(pFuncDesc, funcDesc);
+                    Marshal.PtrToStructure(pFuncDesc, funcDesc);
                     try {
                         if (funcDesc.invkind == (int)NativeMethods.tagINVOKEKIND.INVOKE_FUNC ||
                             (dispidToGet != NativeMethods.MEMBERID_NIL && funcDesc.memid != dispidToGet)) {
@@ -723,8 +721,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
                 }
 
-                NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-                UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+                NativeMethods.tagTYPEATTR typeAttr = structCache.GetStruct<NativeMethods.tagTYPEATTR>();
+                Marshal.PtrToStructure(pTypeAttr, typeAttr);
 
                 if (pTypeAttr == IntPtr.Zero) {
                     Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: failed to get a typeAttr");
@@ -740,7 +738,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     ArrayList strs = new ArrayList();
                     ArrayList vars = new ArrayList();
 
-                    NativeMethods.tagVARDESC varDesc = (NativeMethods.tagVARDESC)structCache.GetStruct(typeof(NativeMethods.tagVARDESC));
+                    NativeMethods.tagVARDESC varDesc = structCache.GetStruct<NativeMethods.tagVARDESC>();
                     object varValue = null;
                     string enumName = null;
                     string name = null;
@@ -761,8 +759,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         }
 
                         try {
-                            //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
-                            UnsafeNativeMethods.PtrToStructure(pVarDesc, varDesc);
+                            Marshal.PtrToStructure(pVarDesc, varDesc);
 
                             if (varDesc == null ||
                                 varDesc.varkind != (int)NativeMethods.tagVARKIND.VAR_CONST ||
@@ -787,19 +784,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
                             // get the value
                             try {
-                                //varValue = (VARIANT)Marshal.PtrToStructure(varDesc.unionMember, typeof(VARIANT));
                                 varValue = Marshal.GetObjectForNativeVariant(varDesc.unionMember);
                             }
                             catch (Exception ex) {
                                 Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: PtrtoStructFailed " + ex.GetType().Name + "," + ex.Message);
                             }
 
-                            /*if (varValue == null) {
-                                Debug.Fail("Couldn't get VARIANT from VARIANTDESC");
-                                continue;
-                            }*/
-
-                            //variant v = varValue.ToVariant();
                             Debug.WriteLineIf(DbgTypeInfoProcessorSwitch.TraceVerbose, "ProcessTypeInfoEnum: adding variable value=" + Convert.ToString(varValue, CultureInfo.InvariantCulture));
                             vars.Add(varValue);
 
@@ -881,14 +871,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 throw new ExternalException(string.Format(SR.TYPEINFOPROCESSORGetTypeAttrFailed, hr), hr);
             }
 
-            NativeMethods.tagTYPEATTR typeAttr = (NativeMethods.tagTYPEATTR)structCache.GetStruct(typeof(NativeMethods.tagTYPEATTR));//(tagTYPEATTR)Marshal.PtrToStructure(pTypeAttr, typeof(tagTYPEATTR));
-            UnsafeNativeMethods.PtrToStructure(pTypeAttr, typeAttr);
+            NativeMethods.tagTYPEATTR typeAttr = structCache.GetStruct<NativeMethods.tagTYPEATTR>();
+            Marshal.PtrToStructure(pTypeAttr, typeAttr);
 
             try {
                 if (typeAttr == null) {
                     return;
                 }
-                NativeMethods.tagVARDESC        varDesc = (NativeMethods.tagVARDESC)structCache.GetStruct(typeof(NativeMethods.tagVARDESC));
+                NativeMethods.tagVARDESC varDesc = structCache.GetStruct<NativeMethods.tagVARDESC>();
 
                 for (int i = 0; i < typeAttr.cVars; i++) {
                     IntPtr pVarDesc = IntPtr.Zero;
@@ -899,8 +889,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                         continue;
                     }
 
-                    //varDesc = (tagVARDESC)Marshal.PtrToStructure(pVarDesc, typeof(tagVARDESC));
-                    UnsafeNativeMethods.PtrToStructure(pVarDesc, varDesc);
+                    Marshal.PtrToStructure(pVarDesc, varDesc);
 
                     try {
 
@@ -1064,81 +1053,84 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                 return retProps;
             }
         }
-        
-        /// <include file='doc\COM2TypeInfoProcessor.uex' path='docs/doc[@for="Com2TypeInfoProcessor.StructCache"]/*' />
-        /// <devdoc>
-        /// This class manages a cache of structures that we can use
-        /// for passing into native so we don't have to create them every time.
-        /// for many objects, these can be used thousands of times.
-        /// </devdoc>
-        public class StructCache {
-           
-           private Hashtable queuedTypes = new Hashtable();
-           
+
+        /// <summary>
+        /// This class manages a cache of structures that we can use for passing into
+        /// native so we don't have to create them every time. For many objects, these
+        /// can be used thousands of times.
+        /// </summary>
+        public class StructCache
+        {
+            private static readonly Hashtable s_queuedTypes = new Hashtable();
+
 #if DEBUG
-           private Hashtable releaseCheck = new Hashtable();
+            private static readonly Hashtable s_releaseCheck = new Hashtable();
 
-           ~StructCache() {
-                IEnumerator enumRelease = releaseCheck.Keys.GetEnumerator();
-                
-                while (enumRelease.MoveNext()) {
+            ~StructCache()
+            {
+                IEnumerator enumRelease = s_releaseCheck.Keys.GetEnumerator();
+                while (enumRelease.MoveNext())
+                {
                     Type t = (Type)enumRelease.Current;
-                    if ((int)releaseCheck[t] != 0) {
-                        Debug.Assert(false, "Failed to release struct of type " + t.Name);
-                    }
-                }      
-           }
-           
+                    Debug.Assert((int)s_releaseCheck[t] == 0, "Failed to release struct of type " + t.Name);
+                }
+            }
 #endif
-           
-           private Queue GetQueue(Type t, bool create) {
-                object queue = queuedTypes[t];
-               
-               if (queue == null && create){
-                  queue = new Queue();
-                  queuedTypes[t] = queue;
-                  #if DEBUG
-                    releaseCheck[t] = 0;
-                  #endif
-               }
-               
-               return (Queue)queue;
-           }
-           
-           public object GetStruct(Type t) {
-               Queue queue = GetQueue(t, true);
 
-                object str = null;
-               
-               if (queue.Count == 0) {
-                  str = Activator.CreateInstance(t);
-               }
-               else {
-                  str = queue.Dequeue();
-               }
-               
-               #if DEBUG
-                    int count = (int)releaseCheck[t];
-                    releaseCheck[t] = ++count;
-               #endif
-               
-               return str;
-           }
-           
-           public void ReleaseStruct(object str) {
-               Type t = str.GetType();
-               Queue queue = GetQueue(t, false);
-               
-               if (queue != null) {
-                  queue.Enqueue(str);
-                  
-                  #if DEBUG
-                    int count = (int)releaseCheck[t];
-                    releaseCheck[t] = --count;
-                  #endif
-               } 
-           }
-            
+            private Queue GetQueue(Type t, bool create)
+            {
+                object queue = s_queuedTypes[t];
+
+                if (queue == null && create)
+                {
+                    queue = new Queue();
+                    s_queuedTypes[t] = queue;
+#if DEBUG
+                    s_releaseCheck[t] = 0;
+#endif
+                }
+
+                return (Queue)queue;
+            }
+
+            public T GetStruct<T>()
+            {
+                Type t = typeof(T);
+                Queue queue = GetQueue(t, true);
+
+                object str;
+                if (queue.Count == 0)
+                {
+                    str = Activator.CreateInstance(t);
+                }
+                else
+                {
+                    str = queue.Dequeue();
+                }
+
+#if DEBUG
+                int count = (int)s_releaseCheck[t];
+                s_releaseCheck[t] = ++count;
+#endif
+
+                return (T)str;
+            }
+
+            public void ReleaseStruct(object str)
+            {
+                Type t = str.GetType();
+                Queue queue = GetQueue(t, false);
+
+                if (queue != null)
+                {
+                    queue.Enqueue(str);
+
+#if DEBUG
+                    int count = (int)s_releaseCheck[t];
+                    s_releaseCheck[t] = --count;
+#endif
+                }
+            }
         }
 
         private class PropInfo {

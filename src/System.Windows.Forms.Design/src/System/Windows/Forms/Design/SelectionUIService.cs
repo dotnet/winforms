@@ -841,14 +841,14 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     if (_mouseDragAnchor != s_invalidPoint)
                     {
                         _ignoreCaptureChanged = true;
                     }
                     break;
-                case NativeMethods.WM_CAPTURECHANGED:
+                case Interop.WindowMessages.WM_CAPTURECHANGED:
                     if (!_ignoreCaptureChanged && _mouseDragAnchor != s_invalidPoint)
                     {
                         EndMouseDrag(MousePosition);

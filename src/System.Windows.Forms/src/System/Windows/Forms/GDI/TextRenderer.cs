@@ -335,7 +335,7 @@ namespace System.Windows.Forms
 
 
         internal static Color DisabledTextColor(Color backColor) {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+            if (SystemInformation.HighContrast) {
                 return SystemColors.GrayText;
             }
 

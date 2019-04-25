@@ -15,9 +15,23 @@ namespace System.ComponentModel.Design.Serialization
     [DefaultSerializationProvider(typeof(CodeDomSerializationProvider))]
     public class CodeDomSerializer : CodeDomSerializerBase
     {
+        private static CodeDomSerializer s_default;
         private static readonly Attribute[] _runTimeFilter = new Attribute[] { DesignOnlyAttribute.No };
         private static readonly Attribute[] _designTimeFilter = new Attribute[] { DesignOnlyAttribute.Yes };
         private static CodeThisReferenceExpression _thisRef = new CodeThisReferenceExpression();
+
+        internal static CodeDomSerializer Default 
+        {
+            get 
+            {
+                if (s_default == null) 
+                {
+                    s_default = new CodeDomSerializer();
+                }
+
+                return s_default;
+            }
+        }
 
         /// <summary>
         ///     Determines which statement group the given statement should belong to.  The expression parameter
@@ -151,9 +165,16 @@ namespace System.ComponentModel.Design.Serialization
         public virtual object Serialize(IDesignerSerializationManager manager, object value)
         {
             object result = null;
-            if (manager == null || value == null) throw new ArgumentNullException(manager == null ? "manager" : "value");
+            if (manager == null)
+            {
+                throw new ArgumentNullException(nameof(manager));
+            }
+            if(value == null) 
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
 
-            using (TraceScope("CodeDomSerializer::Serialize"))
+            using (TraceScope("CodeDomSerializer::" + nameof(Serialize)))
             {
                 Trace("Type: {0}", value.GetType().Name);
 
@@ -318,7 +339,7 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeToReferenceExpression(IDesignerSerializationManager manager, object value)
         {
             CodeExpression expression = null;
-            using (TraceScope("CodeDomSerializer::SerializeToReferenceExpression"))
+            using (TraceScope("CodeDomSerializer::" + nameof(SerializeToReferenceExpression)))
             {
                 // First - try GetExpression
                 expression = GetExpression(manager, value);

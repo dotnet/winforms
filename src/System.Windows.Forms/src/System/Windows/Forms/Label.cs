@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms {
                 Invalidate();
             }
 
-            if (AccessibilityImprovements.Level3 && LiveSetting != AutomationLiveSetting.Off) {
+            if (LiveSetting != AutomationLiveSetting.Off) {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
         }
@@ -1488,7 +1488,7 @@ namespace System.Windows.Forms {
             }
 
             Color color;
-            if (AccessibilityImprovements.Level3 && Enabled && SystemInformation.HighContrast) {
+            if (Enabled && SystemInformation.HighContrast) {
                 color = SystemColors.WindowText;
             }
             else {
@@ -1658,11 +1658,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ToString"]/*' />
         /// <devdoc>
@@ -1684,7 +1680,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_NCHITTEST:
+                case Interop.WindowMessages.WM_NCHITTEST:
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //
@@ -1715,13 +1711,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {

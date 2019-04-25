@@ -1190,8 +1190,7 @@ namespace System.Windows.Forms
         {
             return this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect && 
                 this.DataGridView.CurrentCell != null && this.DataGridView.CurrentCell.Selected &&
-                this.DataGridView.CurrentCell.OwningColumn == this.OwningColumn &&
-                AccessibilityImprovements.Level2;
+                this.DataGridView.CurrentCell.OwningColumn == this.OwningColumn;
         }
 
         /// <include file='doc\DataGridViewColumnHeaderCell.uex' path='docs/doc[@for="DataGridViewColumnHeaderCell.SetValue"]/*' />
@@ -1578,28 +1577,25 @@ namespace System.Windows.Forms
 
             internal override object GetPropertyValue(int propertyId)
             {
-                if (AccessibilityImprovements.Level3)
+                switch (propertyId)
                 {
-                    switch (propertyId)
-                    {
-                        case NativeMethods.UIA_NamePropertyId:
-                            return this.Name;
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_HeaderControlTypeId;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return Owner.DataGridView.Enabled;
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return this.Help ?? string.Empty;
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return (this.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                            return string.Empty;
-                    }
+                    case NativeMethods.UIA_NamePropertyId:
+                        return this.Name;
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_HeaderControlTypeId;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return Owner.DataGridView.Enabled;
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return this.Help ?? string.Empty;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return (this.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyId);

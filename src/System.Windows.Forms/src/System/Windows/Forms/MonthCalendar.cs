@@ -185,12 +185,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level1) {
-                return new MonthCalendarAccessibleObject(this);
-            }
-            else {
-                return base.CreateAccessibilityInstance();
-            }
+            return new MonthCalendarAccessibleObject(this);
         }
 
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) {
@@ -1489,7 +1484,7 @@ namespace System.Windows.Forms {
             NativeMethods.MCHITTESTINFO mchi = new NativeMethods.MCHITTESTINFO();
             mchi.pt_x = x;
             mchi.pt_y = y;
-            mchi.cbSize = Marshal.SizeOf(typeof(NativeMethods.MCHITTESTINFO));
+            mchi.cbSize = Marshal.SizeOf<NativeMethods.MCHITTESTINFO>();
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.MCM_HITTEST, 0, mchi);
 
             // If the hit area has an associated valid date, get it
@@ -2197,10 +2192,8 @@ namespace System.Windows.Forms {
             DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
             DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelEnd);
 
-            if (AccessibilityImprovements.Level1) {
-                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-            }
+            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+            AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
             
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
@@ -2241,10 +2234,9 @@ namespace System.Windows.Forms {
             if (mcCurView != (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uNewView) {
                 mcOldView = mcCurView;
                 mcCurView = (NativeMethods.MONTCALENDAR_VIEW_MODE)nmmcvm.uNewView;
-                if (AccessibilityImprovements.Level1) {
-                    AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                }
+
+                AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             }
         }
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.WmDateSelected"]/*' />
@@ -2257,10 +2249,8 @@ namespace System.Windows.Forms {
             DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
             DateTime end = selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelEnd);
 
-            if (AccessibilityImprovements.Level1) {
-                AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
-                AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-            }
+            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+            AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
 
             //subhag
             if (start.Ticks < minDate.Ticks || end.Ticks < minDate.Ticks)
@@ -2302,9 +2292,7 @@ namespace System.Windows.Forms {
                         WmDateBold(ref m);
                         break;
                     case NativeMethods.MCN_VIEWCHANGE:
-                        if (AccessibilityImprovements.Level1) {
-                            WmCalViewChanged(ref m);
-                        }
+                        WmCalViewChanged(ref m);
                         break;
                 }
             }
@@ -2317,20 +2305,20 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
                     FocusInternal();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
                     break;
-                case NativeMethods.WM_GETDLGCODE:
+                case Interop.WindowMessages.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
                     base.WndProc(ref m);
                     break;
                 default:

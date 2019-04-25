@@ -9,7 +9,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Diagnostics;
     using System.Windows.Forms.ButtonInternal;
-    using System.Security.Permissions;
     using System.Security;
     using System.Windows.Forms.Layout; 
     using System.Windows.Forms.Design; 
@@ -66,11 +65,7 @@ namespace System.Windows.Forms {
         /// AccessibleObject for this ToolStripStatusLabel instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripStatusLabelAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripStatusLabelAccessibleObject(this);
         }
 
         /// <devdoc>
@@ -206,7 +201,7 @@ namespace System.Windows.Forms {
 
         protected override void OnTextChanged(EventArgs e) {
             base.OnTextChanged(e);
-            if (AccessibilityImprovements.Level3 && LiveSetting != AutomationLiveSetting.Off) {
+            if (LiveSetting != AutomationLiveSetting.Off) {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
         }

@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 {
                     return (Color)this.Properties.GetObject(PropLinkCellActiveLinkColor);
                 }
-                else if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+                else if (SystemInformation.HighContrast)
                 {
                     return this.HighContrastLinkColor;
                 }
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeActiveLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.ActiveLinkColor.Equals(SystemColors.HotTrack);
             }
@@ -194,7 +194,7 @@ namespace System.Windows.Forms
                 {
                     return (Color)this.Properties.GetObject(PropLinkCellLinkColor);
                 }
-                else if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+                else if (SystemInformation.HighContrast)
                 {
                     return this.HighContrastLinkColor;
                 }
@@ -237,7 +237,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.LinkColor.Equals(SystemColors.HotTrack);
             }
@@ -398,7 +398,7 @@ namespace System.Windows.Forms
                 {
                     return (Color)this.Properties.GetObject(PropLinkCellVisitedLinkColor);
                 }
-                else if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+                else if (SystemInformation.HighContrast)
                 {
                     return this.Selected ? SystemColors.HighlightText : LinkUtilities.GetVisitedLinkColor();
                 }
@@ -441,7 +441,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeVisitedLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.VisitedLinkColor.Equals(SystemColors.HotTrack);
             }
@@ -1207,15 +1207,7 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {

@@ -1617,11 +1617,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>
@@ -1755,16 +1751,14 @@ namespace System.Windows.Forms {
                         UpdateToolTip(null);
                     }
 
-                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        ToolTip internalToolTip = this.ToolTip;
-                        foreach (ToolStripItem item in this.Items) {
-                            if (showItemToolTips) {
-                                KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
-                            }
-                            else {
-                                KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
-                            }
-                        } 
+                    ToolTip internalToolTip = this.ToolTip;
+                    foreach (ToolStripItem item in this.Items) {
+                        if (showItemToolTips) {
+                            KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
+                        }
+                        else {
+                            KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
+                        }
                     }
 
                     // If the overflow button has not been created, don't check its properties
@@ -2213,11 +2207,10 @@ namespace System.Windows.Forms {
 
             if (start == null)  {
                 // The navigation should be consisstent when navigating in forward and
-                // backward direction entering the toolstrip, it means that for AI.Level3
-                // the first toolstrip item should be selected irrespectively TAB or SHIFT+TAB
+                // backward direction entering the toolstrip, it means that the first
+                // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
                 // is pressed.
-                start = (forward) ? DisplayedItems[DisplayedItems.Count -1] :
-                    (AccessibilityImprovements.Level3 ? DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0] : DisplayedItems[0]);
+                start = (forward) ? DisplayedItems[DisplayedItems.Count -1] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
             }
 
             int current = DisplayedItems.IndexOf(start);
@@ -2782,7 +2775,7 @@ namespace System.Windows.Forms {
             using (Graphics g = Graphics.FromImage(image)) {
                 IntPtr imageHdc = g.GetHdc();
                 //send the actual wm_print message
-                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.WM_PRINT, (IntPtr)imageHdc,
+                UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), Interop.WindowMessages.WM_PRINT, (IntPtr)imageHdc,
                     (IntPtr)(NativeMethods.PRF_CHILDREN | NativeMethods.PRF_CLIENT | NativeMethods.PRF_ERASEBKGND | NativeMethods.PRF_NONCLIENT));
 
                 //now BLT the result to the destination bitmap.
@@ -4489,10 +4482,6 @@ namespace System.Windows.Forms {
 
                     ToolTip.Hide(this);
 
-                    if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        ToolTip.Active = false;
-                    }
-
                     currentlyActiveTooltipItem = item;
 
 
@@ -4500,10 +4489,6 @@ namespace System.Windows.Forms {
                         Cursor currentCursor = Cursor.CurrentInternal;
 
                         if (currentCursor != null) {
-                            if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                                ToolTip.Active = true;
-                            }
-
                             Point cursorLocation = Cursor.Position;
                             cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
 
@@ -4589,10 +4574,10 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 
-            if (m.Msg == NativeMethods.WM_SETFOCUS) {
+            if (m.Msg == Interop.WindowMessages.WM_SETFOCUS) {
                 SnapFocus(m.WParam);
             }
-            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE) {
+            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE) {
                     // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                     // itself.  the mouse message will still go through, but focus wont be taken.
                     // if someone clicks on a child control (combobox, textbox, etc) focus will
@@ -4639,7 +4624,7 @@ namespace System.Windows.Forms {
 
             base.WndProc(ref m);
 
-            if (m.Msg == NativeMethods.WM_NCDESTROY) {
+            if (m.Msg == Interop.WindowMessages.WM_NCDESTROY) {
                 // Destroy the owner window, if we created one.  We
                 // cannot do this in OnHandleDestroyed, because at
                 // that point our handle is not actually destroyed so
@@ -4682,17 +4667,13 @@ namespace System.Windows.Forms {
 
 
         internal void OnItemAddedInternal(ToolStripItem item) {
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                if (this.ShowItemToolTips) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
-                }
+            if (this.ShowItemToolTips) {
+                KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
             }
         }
 
         internal void OnItemRemovedInternal(ToolStripItem item) {
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
-            }
+            KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
         }
 
         internal override bool AllowsChildrenToShowToolTips() {
@@ -4965,31 +4946,27 @@ namespace System.Windows.Forms {
             }
 
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (direction) {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            int childCount = GetChildFragmentCount();
-                            if (childCount > 0) {
-                                return this.GetChildFragment(0);
-                            }
-                            break;
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            childCount = GetChildFragmentCount();
-                            if (childCount > 0) {
-                                return this.GetChildFragment(childCount - 1);
-                            }
-                            break;
-                    }
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        int childCount = GetChildFragmentCount();
+                        if (childCount > 0) {
+                            return this.GetChildFragment(0);
+                        }
+                        break;
+                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        childCount = GetChildFragmentCount();
+                        if (childCount > 0) {
+                            return this.GetChildFragment(childCount - 1);
+                        }
+                        break;
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_ToolBarControlTypeId;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_ToolBarControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -5029,12 +5006,12 @@ namespace System.Windows.Forms {
                  
                   switch (m.Msg) {
                   
-                       case NativeMethods.WM_LBUTTONDOWN:
-                       case NativeMethods.WM_RBUTTONDOWN:
-                       case NativeMethods.WM_MBUTTONDOWN:
-                       case NativeMethods.WM_NCLBUTTONDOWN:
-                       case NativeMethods.WM_NCRBUTTONDOWN:
-                       case NativeMethods.WM_NCMBUTTONDOWN:
+                       case Interop.WindowMessages.WM_LBUTTONDOWN:
+                       case Interop.WindowMessages.WM_RBUTTONDOWN:
+                       case Interop.WindowMessages.WM_MBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCLBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCRBUTTONDOWN:
+                       case Interop.WindowMessages.WM_NCMBUTTONDOWN:
                             if (ownerToolStrip.ContainsFocus) {
                                 // if we've clicked on something that's not a child of the toolstrip and we 
                                 // currently have focus, restore it.

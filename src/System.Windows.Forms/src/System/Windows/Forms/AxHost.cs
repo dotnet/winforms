@@ -1976,7 +1976,7 @@ namespace System.Windows.Forms {
                     // A bit of ugliness here (a bit?  more like a bucket...)
                     // The message we are faking is a WM_SYSKEYDOWN w/ the right alt key setting...
                     msg.hwnd = (ContainingControl == null) ? IntPtr.Zero : ContainingControl.Handle;
-                    msg.message = NativeMethods.WM_SYSKEYDOWN;
+                    msg.message = Interop.WindowMessages.WM_SYSKEYDOWN;
                     msg.wParam = (IntPtr)char.ToUpper(charCode, CultureInfo.CurrentCulture);
                     msg.lParam = (IntPtr) 0x20180001;
                     msg.time = SafeNativeMethods.GetTickCount();
@@ -3232,38 +3232,38 @@ namespace System.Windows.Forms {
 
             switch (m.Msg) {
                 // Things we explicitly ignore and pass to the ocx's windproc
-                case NativeMethods.WM_ERASEBKGND:
+                case Interop.WindowMessages.WM_ERASEBKGND:
                 
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFYFORMAT:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFYFORMAT:
 
-                case NativeMethods.WM_SETCURSOR:
-                case NativeMethods.WM_SYSCOLORCHANGE:
+                case Interop.WindowMessages.WM_SETCURSOR:
+                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
 
                 // Some of the MSComCtl controls respond to this message
                 // to do some custom painting. So, we should just pass this message
                 // through.
                 //
-                case NativeMethods.WM_DRAWITEM:
+                case Interop.WindowMessages.WM_DRAWITEM:
                 
-                case NativeMethods.WM_LBUTTONDBLCLK:
-                case NativeMethods.WM_LBUTTONUP:
-                case NativeMethods.WM_MBUTTONDBLCLK:
-                case NativeMethods.WM_MBUTTONUP:
-                case NativeMethods.WM_RBUTTONDBLCLK:
-                case NativeMethods.WM_RBUTTONUP:
+                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_LBUTTONUP:
+                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_MBUTTONUP:
+                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case Interop.WindowMessages.WM_RBUTTONUP:
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_LBUTTONDOWN:
-                case NativeMethods.WM_MBUTTONDOWN:
-                case NativeMethods.WM_RBUTTONDOWN:
+                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case Interop.WindowMessages.WM_RBUTTONDOWN:
                     if (IsUserMode()) {
                         Focus();
                     }
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                 {
                     hwndFocus = m.WParam;
                     try {
@@ -3275,16 +3275,16 @@ namespace System.Windows.Forms {
                     break;    
                 }
 
-                case NativeMethods.WM_COMMAND:
+                case Interop.WindowMessages.WM_COMMAND:
                     if (!ReflectMessageInternal(m.LParam, ref m))
                         DefWndProc(ref m);
                     break;
                 
-                case NativeMethods.WM_CONTEXTMENU:
+                case Interop.WindowMessages.WM_CONTEXTMENU:
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_DESTROY:
+                case Interop.WindowMessages.WM_DESTROY:
 #if DEBUG
                     if (!OwnWindow()) {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "WM_DESTROY naughty control is destroying the window from under us..." + GetType().ToString());
@@ -3315,13 +3315,13 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case NativeMethods.WM_HELP:
+                case Interop.WindowMessages.WM_HELP:
                     // We want to both fire the event, and let the ocx have the message...
                     base.WndProc(ref m);
                     DefWndProc(ref m);
                     break;
 
-                case NativeMethods.WM_KEYUP:
+                case Interop.WindowMessages.WM_KEYUP:
                     if (axState[processingKeyUp])
                         break;
                     
@@ -3336,7 +3336,7 @@ namespace System.Windows.Forms {
 
                     break;
 
-                case NativeMethods.WM_NCDESTROY:
+                case Interop.WindowMessages.WM_NCDESTROY:
 #if DEBUG
                     if (!OwnWindow()) {
                         Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "WM_NCDESTROY naughty control is destroying the window from under us..." + GetType().ToString());
@@ -4044,7 +4044,7 @@ namespace System.Windows.Forms {
                 FillInRect(lprcPosRect, host.Bounds);
                 host.GetClipRect(lprcClipRect);
                 if (lpFrameInfo != null) {
-                    lpFrameInfo.cb = Marshal.SizeOf(typeof(NativeMethods.tagOIFI));
+                    lpFrameInfo.cb = Marshal.SizeOf<NativeMethods.tagOIFI>();
                     lpFrameInfo.fMDIApp = false;
                     lpFrameInfo.hAccel = IntPtr.Zero;
                     lpFrameInfo.cAccelEntries = 0;

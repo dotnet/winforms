@@ -716,9 +716,7 @@ namespace System.Windows.Forms {
             this.CheckNativeToolTip(control);
             this.CheckCompositeControls(control);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Hook(control, this);
-            }
+            KeyboardToolTipStateMachine.Instance.Hook(control, this);
         }
 
         private void CheckNativeToolTip(Control associatedControl) {
@@ -776,9 +774,7 @@ namespace System.Windows.Forms {
             Control control = (Control)sender;
             this.DestroyRegion(control);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Unhook(control, this);
-            }
+            KeyboardToolTipStateMachine.Instance.Unhook(control, this);
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.OnDraw"]/*' />
@@ -1116,7 +1112,7 @@ namespace System.Windows.Forms {
 
         private NativeMethods.TOOLINFO_TOOLTIP GetMinToolInfoForHandle(IntPtr handle) {
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.hwnd = handle;
             ti.uFlags |= NativeMethods.TTF_IDISHWND;
             ti.uId = handle;
@@ -1134,7 +1130,7 @@ namespace System.Windows.Forms {
         private NativeMethods.TOOLINFO_TOOLTIP GetTOOLINFO(Control ctl, string caption, out bool allocatedString) {
             allocatedString = false;
             NativeMethods.TOOLINFO_TOOLTIP ti = GetMinTOOLINFO(ctl);
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.uFlags |= NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
 
             // RightToLeft reading order
@@ -1173,7 +1169,7 @@ namespace System.Windows.Forms {
 
         private NativeMethods.TOOLINFO_TOOLTIP GetWinTOOLINFO(IntPtr hWnd) {
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             ti.hwnd = hWnd;
             ti.uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
                     
@@ -1340,9 +1336,7 @@ namespace System.Windows.Forms {
                 regions[i].HandleCreated -= new EventHandler(this.HandleCreated);
                 regions[i].HandleDestroyed -= new EventHandler(this.HandleDestroyed);
 
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
-                }
+                KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
             }
 
             created.Clear();
@@ -1351,9 +1345,7 @@ namespace System.Windows.Forms {
             ClearTopLevelControlEvents();
             this.topLevelControl = null;
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
-            }
+            KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.SetDelayTime"]/*' />
@@ -1956,9 +1948,7 @@ namespace System.Windows.Forms {
         private void BaseFormDeactivate(object sender, System.EventArgs e){
             HideAllToolTips();
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutFormDeactivation(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutFormDeactivation(this);
         }
 
         private void HideAllToolTips() {
@@ -1976,7 +1966,7 @@ namespace System.Windows.Forms {
                 bool allocatedString = false;
                 NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
                 try {
-                    ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+                    ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
                     ti.hwnd = tool.Handle;
                     ti.uId = tool.Handle;
                     int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETTOOLINFO, 0, ti);
@@ -2149,7 +2139,7 @@ namespace System.Windows.Forms {
             NativeMethods.RECT r = new NativeMethods.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             if (ret != 0)
             {
@@ -2193,7 +2183,7 @@ namespace System.Windows.Forms {
         private void WmMouseActivate(ref Message msg) {
             
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             
             if (ret != 0) {
@@ -2249,7 +2239,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             
             if (ret != 0) {
@@ -2359,7 +2349,7 @@ namespace System.Windows.Forms {
 			
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             if (ret != 0) {
 
@@ -2446,7 +2436,7 @@ namespace System.Windows.Forms {
         private void WmPop() {
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-            ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+            ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
             int ret = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti);
             if (ret != 0) {
 
@@ -2508,7 +2498,7 @@ namespace System.Windows.Forms {
 
             switch (msg.Msg) {
 
-            case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
+            case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
                  NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR) msg.GetLParam(typeof(NativeMethods.NMHDR));
                  if (nmhdr.code == NativeMethods.TTN_SHOW && !trackPosition) {
                      WmShow();
@@ -2521,22 +2511,22 @@ namespace System.Windows.Forms {
                  } 
                  break;                
             
-            case NativeMethods.WM_WINDOWPOSCHANGING:
+            case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                  WmWindowPosChanging(ref msg);
                  break;
 			
-            case NativeMethods.WM_WINDOWPOSCHANGED:
+            case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
                  if (!WmWindowPosChanged() && window != null)
                  {
                     window.DefWndProc(ref msg);
                  }
                  break;
 					 
-            case NativeMethods.WM_MOUSEACTIVATE:
+            case Interop.WindowMessages.WM_MOUSEACTIVATE:
                  WmMouseActivate(ref msg);
                  break;
 
-            case NativeMethods.WM_MOVE:
+            case Interop.WindowMessages.WM_MOVE:
                  WmMove();
                  break;
             
@@ -2544,10 +2534,10 @@ namespace System.Windows.Forms {
                 WmWindowFromPoint(ref msg);
                 break;
    
-            case NativeMethods.WM_PRINTCLIENT:
-                goto case NativeMethods.WM_PAINT;
+            case Interop.WindowMessages.WM_PRINTCLIENT:
+                goto case Interop.WindowMessages.WM_PAINT;
                 
-            case NativeMethods.WM_PAINT:
+            case Interop.WindowMessages.WM_PAINT:
                 if (ownerDraw && !isBalloon && !trackPosition)
                 {
                     NativeMethods.PAINTSTRUCT ps = new NativeMethods.PAINTSTRUCT();
@@ -2561,7 +2551,7 @@ namespace System.Windows.Forms {
                             return;
                         }
                         NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
-                        ti.cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_TOOLTIP));
+                        ti.cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_TOOLTIP>();
                         int ret = unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti));
                         if (ret != 0) {
                             IWin32Window win = (IWin32Window)owners[ti.hwnd];
@@ -2571,7 +2561,7 @@ namespace System.Windows.Forms {
                             }
                             Font font;
                             try {
-                                font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_GETFONT, 0, 0));
+                                font = Font.FromHfont(UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_GETFONT, 0, 0));
                             }
                             catch (ArgumentException) {
                                 // If the current default tooltip font is a non-TrueType font, then

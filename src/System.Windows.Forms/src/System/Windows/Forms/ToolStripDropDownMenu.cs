@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Security;
-    using System.Security.Permissions;    
     using System.Windows.Forms.Internal;
     using System.Collections.Specialized;
     using System.Diagnostics.CodeAnalysis;
@@ -287,7 +286,7 @@ namespace System.Windows.Forms {
                 for (int i = 0; i < count; i++) {
                     // peek at the i'th item.
                     NativeMethods.MENUITEMINFO_T_RW info = new NativeMethods.MENUITEMINFO_T_RW();
-                    info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T_RW));
+                    info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
                     info.fMask = NativeMethods.MIIM_FTYPE;
                     info.fType = NativeMethods.MIIM_FTYPE;
                     UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
@@ -299,7 +298,7 @@ namespace System.Windows.Forms {
                     else {
                         // its a menu item... lets fish out the command id
                      	info = new NativeMethods.MENUITEMINFO_T_RW();
-                    	info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T_RW));
+                    	info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
                     	info.fMask = NativeMethods.MIIM_ID;
                     	info.fType = NativeMethods.MIIM_ID;
                     	UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);
@@ -310,7 +309,7 @@ namespace System.Windows.Forms {
 
                     	// if there is a submenu fetch it.
                     	info = new NativeMethods.MENUITEMINFO_T_RW();
-                    	info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T_RW));
+                    	info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T_RW>();
                     	info.fMask = NativeMethods.MIIM_SUBMENU;
                     	info.fType = NativeMethods.MIIM_SUBMENU;
                     	UnsafeNativeMethods.GetMenuItemInfo(menuHandle, i, /*fByPosition=*/ true, info);

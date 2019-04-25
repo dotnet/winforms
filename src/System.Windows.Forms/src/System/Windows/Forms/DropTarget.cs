@@ -6,7 +6,6 @@ namespace System.Windows.Forms
 {
         using System;
         using System.Diagnostics;
-        using System.Security.Permissions;
         using System.Security;
         using System.ComponentModel;
         

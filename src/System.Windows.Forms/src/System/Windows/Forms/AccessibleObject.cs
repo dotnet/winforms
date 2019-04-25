@@ -528,7 +528,7 @@ namespace System.Windows.Forms
         internal virtual bool IsPatternSupported(int patternId)
         {
             // Override this, in your derived class, if you implement UIAutomation patterns
-            if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_InvokePatternId)
+            if (patternId == NativeMethods.UIA_InvokePatternId)
             {
                 return IsInvokePatternAvailable;
             }
@@ -550,7 +550,7 @@ namespace System.Windows.Forms
 
         internal virtual object GetPropertyValue(int propertyID)
         {
-            if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
+            if (propertyID == NativeMethods.UIA_IsInvokePatternAvailablePropertyId)
             {
                 return IsInvokePatternAvailable;
             }
@@ -2381,8 +2381,7 @@ namespace System.Windows.Forms
         /// </returns>
         public bool RaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
         {
-
-            if (!AccessibilityImprovements.Level3 || !notificationEventAvailable)
+            if (!notificationEventAvailable)
             {
                 return false;
             }
@@ -2703,7 +2702,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
-        /// Create a new wrapper. Protect this with UnmanagedCode Permission
+        /// Create a new wrapper.
         /// </summary>
         internal InternalAccessibleObject(AccessibleObject accessibleImplemention)
         {
@@ -3016,7 +3015,7 @@ namespace System.Windows.Forms
                 {
                     return (UnsafeNativeMethods.IValueProvider)this;
                 }
-                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_RangeValuePatternId)
+                else if (patternId == NativeMethods.UIA_RangeValuePatternId)
                 {
                     return (UnsafeNativeMethods.IRangeValueProvider)this;
                 }
@@ -3040,19 +3039,19 @@ namespace System.Windows.Forms
                 {
                     return (UnsafeNativeMethods.IGridItemProvider)this;
                 }
-                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_InvokePatternId)
+                else if (patternId == NativeMethods.UIA_InvokePatternId)
                 {
                     return (UnsafeNativeMethods.IInvokeProvider)this;
                 }
-                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
+                else if (patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)
                 {
                     return (UnsafeNativeMethods.ILegacyIAccessibleProvider)this;
                 }
-                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_SelectionPatternId)
+                else if (patternId == NativeMethods.UIA_SelectionPatternId)
                 {
                     return (UnsafeNativeMethods.ISelectionProvider)this;
                 }
-                else if (AccessibilityImprovements.Level3 && patternId == NativeMethods.UIA_SelectionItemPatternId)
+                else if (patternId == NativeMethods.UIA_SelectionItemPatternId)
                 {
                     return (UnsafeNativeMethods.ISelectionItemProvider)this;
                 }
@@ -3099,15 +3098,7 @@ namespace System.Windows.Forms
 
         UnsafeNativeMethods.IRawElementProviderFragmentRoot UnsafeNativeMethods.IRawElementProviderFragment.FragmentRoot
         {
-            get
-            {
-                if (AccessibilityImprovements.Level3)
-                {
-                    return publicIRawElementProviderFragment.FragmentRoot;
-                }
-
-                return AsNativeAccessible(publicIRawElementProviderFragment.FragmentRoot) as UnsafeNativeMethods.IRawElementProviderFragmentRoot;
-            }
+            get => publicIRawElementProviderFragment.FragmentRoot;
         }
 
         object UnsafeNativeMethods.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y)
@@ -3290,16 +3281,7 @@ namespace System.Windows.Forms
 
         UnsafeNativeMethods.IRawElementProviderSimple UnsafeNativeMethods.IGridItemProvider.ContainingGrid
         {
-            get
-            {
-                // Do not wrap returned UIA provider by InternalAccessibleObject in Level 3.
-                if (AccessibilityImprovements.Level3)
-                {
-                    return publicIGridItemProvider.ContainingGrid;
-                }
-
-                return AsNativeAccessible(publicIGridItemProvider.ContainingGrid) as UnsafeNativeMethods.IRawElementProviderSimple;
-            }
+            get => publicIGridItemProvider.ContainingGrid;
         }
 
         /// <summary>

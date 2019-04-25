@@ -397,7 +397,7 @@ namespace System.Windows.Forms.Design
                     {
                         menuEditorService.SetMenu(Menu);
                     }
-                    NativeMethods.SendMessage(Control.Handle, NativeMethods.WM_NCACTIVATE, 1, 0);
+                    NativeMethods.SendMessage(Control.Handle, Interop.WindowMessages.WM_NCACTIVATE, 1, 0);
                 }
             }
         }
@@ -560,7 +560,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, NativeMethods.WM_NCACTIVATE, 1, 0);
+                NativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_NCACTIVATE, 1, 0);
                 SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
@@ -573,7 +573,7 @@ namespace System.Windows.Forms.Design
             Control control = Control;
             if (control != null && control.IsHandleCreated)
             {
-                NativeMethods.SendMessage(control.Handle, NativeMethods.WM_NCACTIVATE, 0, 0);
+                NativeMethods.SendMessage(control.Handle, Interop.WindowMessages.WM_NCACTIVATE, 0, 0);
                 SafeNativeMethods.RedrawWindow(control.Handle, null, IntPtr.Zero, NativeMethods.RDW_FRAME);
             }
         }
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Design
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_WINDOWPOSCHANGING:
+                case Interop.WindowMessages.WM_WINDOWPOSCHANGING:
                     WmWindowPosChanging(ref m);
                     break;
             }

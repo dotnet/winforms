@@ -16,15 +16,7 @@ namespace System.Windows.Forms.Design
     {
         private const int MinGridSize = 2;
         private const int MaxGridSize = 200;
-        private bool _showGrid = true;
-        private bool _snapToGrid = true;
         private Size _gridSize = new Size(8, 8);
-
-        private bool _useSnapLines = false;
-        private bool _useSmartTags = false;
-        private bool _objectBoundSmartTagAutoShow = true;
-        private bool _enableComponentCache = false;
-        private bool _enableInSituEditing = true;
 
         /// <summary>
         /// Public GridSize property.
@@ -38,10 +30,23 @@ namespace System.Windows.Forms.Design
             set
             {
                 //do some validation checking here
-                if (value.Width < MinGridSize) value.Width = MinGridSize;
-                if (value.Height < MinGridSize) value.Height = MinGridSize;
-                if (value.Width > MaxGridSize) value.Width = MaxGridSize;
-                if (value.Height > MaxGridSize) value.Height = MaxGridSize;
+                if (value.Width < MinGridSize)
+                {
+                    value.Width = MinGridSize;
+                }
+                if (value.Height < MinGridSize)
+                {
+                    value.Height = MinGridSize;
+                }
+                if (value.Width > MaxGridSize)
+                {
+                    value.Width = MaxGridSize;
+                }
+                if (value.Height > MaxGridSize)
+                {
+                    value.Height = MaxGridSize;
+                }
+
                 _gridSize = value;
             }
         }
@@ -52,11 +57,7 @@ namespace System.Windows.Forms.Design
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDisplayName(nameof(SR.DesignerOptions_ShowGridDisplayName))]
         [SRDescription(nameof(SR.DesignerOptions_ShowGridDesc))]
-        public virtual bool ShowGrid
-        {
-            get => _showGrid;
-            set => _showGrid = value;
-        }
+        public virtual bool ShowGrid { get; set; } = true;
 
         /// <summary>
         /// Public SnapToGrid property.
@@ -64,33 +65,21 @@ namespace System.Windows.Forms.Design
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDisplayName(nameof(SR.DesignerOptions_SnapToGridDisplayName))]
         [SRDescription(nameof(SR.DesignerOptions_SnapToGridDesc))]
-        public virtual bool SnapToGrid
-        {
-            get => _snapToGrid;
-            set => _snapToGrid = value;
-        }
+        public virtual bool SnapToGrid { get; set; } = true;
 
         /// <summary>
         /// This property enables or disables snaplines in the designer.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDescription(nameof(SR.DesignerOptions_UseSnapLines))]
-        public virtual bool UseSnapLines
-        {
-            get => _useSnapLines;
-            set => _useSnapLines = value;
-        }
+        public virtual bool UseSnapLines { get; set; }
 
         /// <summary>
         /// This property enables or disables smart tags in the designer.
         /// </summary>
         [SRCategory(nameof(SR.DesignerOptions_LayoutSettings))]
         [SRDescription(nameof(SR.DesignerOptions_UseSmartTags))]
-        public virtual bool UseSmartTags
-        {
-            get => _useSmartTags;
-            set => _useSmartTags = value;
-        }
+        public virtual bool UseSmartTags { get; set; }
 
         /// <summary>
         /// This property enables or disables smart tags in the designer.
@@ -98,11 +87,7 @@ namespace System.Windows.Forms.Design
         [SRDisplayName(nameof(SR.DesignerOptions_ObjectBoundSmartTagAutoShowDisplayName))]
         [SRCategory(nameof(SR.DesignerOptions_ObjectBoundSmartTagSettings))]
         [SRDescription(nameof(SR.DesignerOptions_ObjectBoundSmartTagAutoShow))]
-        public virtual bool ObjectBoundSmartTagAutoShow
-        {
-            get => _objectBoundSmartTagAutoShow;
-            set => _objectBoundSmartTagAutoShow = value;
-        }
+        public virtual bool ObjectBoundSmartTagAutoShow { get; set; } = true;
 
         /// <summary>
         /// This property enables or disables the component cache
@@ -110,11 +95,7 @@ namespace System.Windows.Forms.Design
         [SRDisplayName(nameof(SR.DesignerOptions_CodeGenDisplay))]
         [SRCategory(nameof(SR.DesignerOptions_CodeGenSettings))]
         [SRDescription(nameof(SR.DesignerOptions_OptimizedCodeGen))]
-        public virtual bool UseOptimizedCodeGeneration
-        {
-            get => _enableComponentCache;
-            set => _enableComponentCache = value;
-        }
+        public virtual bool UseOptimizedCodeGeneration { get; set; }
 
         /// <summary>
         /// This property enables or disables the InSitu Editing for ToolStrips
@@ -123,10 +104,6 @@ namespace System.Windows.Forms.Design
         [SRCategory(nameof(SR.DesignerOptions_EnableInSituEditingCat))]
         [SRDescription(nameof(SR.DesignerOptions_EnableInSituEditingDesc))]
         [Browsable(false)]
-        public virtual bool EnableInSituEditing
-        {
-            get => _enableInSituEditing;
-            set => _enableInSituEditing = value;
-        }
+        public virtual bool EnableInSituEditing { get; set; } = true;
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -716,20 +716,15 @@ namespace System.Windows.Forms {
             }
         }
 #endif
-        internal static string WindowsFormsVersion {
-            get {
-                // Notice   : Don't never ever change this name, since window class of Winforms control is dependent on this.
-                //            And lots of partner team are related to window class of Winforms control. Changing this will introduce breaking.
-                //            If there is some reason need to change this, should take the accountability to notify partner team.
-                return "WindowsForms10";
-            }
-        }
 
-        internal static string WindowMessagesVersion {
-            get {
-                return "WindowsForms12";
-            }
-        }
+        /// <remarks>
+        /// Don't never ever change this name, since the window class and partner teams
+        /// dependent on this. Changing this will introduce breaking changes.
+        /// If there is some reason need to change this, notify any partner teams affected.
+        /// </remarks>
+        internal static string WindowsFormsVersion => "WindowsForms10";
+
+        internal static string WindowMessagesVersion => "WindowsForms12";
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.VisualStyleState"]/*' />
         /// <devdoc>
@@ -802,7 +797,7 @@ namespace System.Windows.Forms {
                 NativeMethods.NullHandleRef);
 
             //then do myself.
-            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), NativeMethods.WM_THEMECHANGED, 0, 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(null, handle), Interop.WindowMessages.WM_THEMECHANGED, 0, 0);
 
             return true;
         }
@@ -2033,7 +2028,7 @@ namespace System.Windows.Forms {
                                     UnsafeNativeMethods.GetMessageA(ref msg, NativeMethods.NullHandleRef, 0, 0);
                                 }
 
-                                if (msg.message == NativeMethods.WM_QUIT) {
+                                if (msg.message == Interop.WindowMessages.WM_QUIT) {
                                     Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "ComponentManager : Normal message loop termination");
 
                                     Application.ThreadContext.FromCurrent().DisposeThreadWindows();
@@ -2453,7 +2448,7 @@ namespace System.Windows.Forms {
                                 //
                                 Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Registering MSO component with the component manager");
                                 NativeMethods.MSOCRINFOSTRUCT info = new NativeMethods.MSOCRINFOSTRUCT();
-                                info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MSOCRINFOSTRUCT));
+                                info.cbSize = Marshal.SizeOf<NativeMethods.MSOCRINFOSTRUCT>();
                                 info.uIdleTimeInterval = 0;
                                 info.grfcrf = NativeMethods.MSOCM.msocrfPreTranslateAll | NativeMethods.MSOCM.msocrfNeedIdleTime;
                                 info.grfcadvf = NativeMethods.MSOCM.msocadvfModal;
@@ -2501,8 +2496,6 @@ namespace System.Windows.Forms {
                     var parkingWindow = GetParkingWindowForContext(context);
                     if (parkingWindow == null) {
 #if DEBUG
-                        // if we use Debug.WriteLine instead of "if", we need extra security permissions
-                        // to get the stack trace!
                         if (CoreSwitches.PerfTrack.Enabled) {
                             Debug.WriteLine("Creating parking form!");
                             Debug.WriteLine(CoreSwitches.PerfTrack.Enabled, Environment.StackTrace);
@@ -2578,8 +2571,6 @@ namespace System.Windows.Forms {
                     lock (this) {
                         if (marshalingControl == null) {
 #if DEBUG
-                            // if we use Debug.WriteLine instead of "if", we need extra security permissions
-                            // to get the stack trace!
                             if (CoreSwitches.PerfTrack.Enabled) {
                                 Debug.WriteLine("Creating marshalling control!");
                                 Debug.WriteLine(CoreSwitches.PerfTrack.Enabled, Environment.StackTrace);
@@ -3180,7 +3171,7 @@ namespace System.Windows.Forms {
                 // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
                 // to.
                 //
-                UnsafeNativeMethods.PostThreadMessage(id, NativeMethods.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
+                UnsafeNativeMethods.PostThreadMessage(id, Interop.WindowMessages.WM_QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
             }
 
@@ -3262,8 +3253,6 @@ namespace System.Windows.Forms {
                     }
 
                     DpiHelper.InitializeDpiHelperForWinforms();
-
-                    AccessibilityImprovements.ValidateLevels();
                 }
 
                 Form oldForm = currentForm;
@@ -3511,9 +3500,9 @@ namespace System.Windows.Forms {
                     return true;
                 }
                 
-                if (msg.message >= NativeMethods.WM_KEYFIRST
-                        && msg.message <= NativeMethods.WM_KEYLAST) {
-                    if (msg.message == NativeMethods.WM_CHAR) {
+                if (msg.message >= Interop.WindowMessages.WM_KEYFIRST
+                        && msg.message <= Interop.WindowMessages.WM_KEYLAST) {
+                    if (msg.message == Interop.WindowMessages.WM_CHAR) {
                         int breakLParamMask = 0x1460000; // 1 = extended keyboard, 46 = scan code
                         if (unchecked( (int) (long)msg.wParam) == 3 && ( unchecked( (int) (long)msg.lParam) & breakLParamMask) == breakLParamMask) { // ctrl-brk
                             // wParam is the key character, which for ctrl-brk is the same as ctrl-C.
@@ -3954,7 +3943,7 @@ namespace System.Windows.Forms {
             //   in whidbey we now aggressively tear down the parking window
             //   when the last control has been removed off of it.  
 
-            private const int WM_CHECKDESTROY = NativeMethods.WM_USER + 0x01;
+            private const int WM_CHECKDESTROY = Interop.WindowMessages.WM_USER + 0x01;
 
             private int childCount = 0;
 
@@ -4064,10 +4053,10 @@ namespace System.Windows.Forms {
             void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty) {}
 
             protected override void WndProc(ref Message m) {
-                if (m.Msg != NativeMethods.WM_SHOWWINDOW) {
+                if (m.Msg != Interop.WindowMessages.WM_SHOWWINDOW) {
                     base.WndProc(ref m);
-                    if (m.Msg == NativeMethods.WM_PARENTNOTIFY) {
-                        if (NativeMethods.Util.LOWORD(unchecked( (int) (long)m.WParam)) == NativeMethods.WM_DESTROY) {
+                    if (m.Msg == Interop.WindowMessages.WM_PARENTNOTIFY) {
+                        if (NativeMethods.Util.LOWORD(unchecked( (int) (long)m.WParam)) == Interop.WindowMessages.WM_DESTROY) {
                             UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), WM_CHECKDESTROY, IntPtr.Zero, IntPtr.Zero);
                         }
                     }

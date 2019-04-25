@@ -81,8 +81,7 @@ namespace System.Windows.Forms {
         private object[]   currentObjects;
         
         private int                                 paintFrozen;
-        private Color                               lineColor = SystemInformation.HighContrast ? (AccessibilityImprovements.Level1 ? SystemColors.ControlDarkDark : SystemColors.ControlDark )
-                                                                : SystemColors.InactiveBorder;
+        private Color                               lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
         internal bool                               developerOverride = false;
         internal Brush                              lineBrush = null;
         private Color                               categoryForeColor = SystemColors.ControlText;
@@ -202,7 +201,7 @@ namespace System.Windows.Forms {
                 separator1 = CreateSeparatorButton();
                 separator2 = CreateSeparatorButton();
 
-                toolStrip = AccessibilityImprovements.Level3 ? new PropertyGridToolStrip(this) : new ToolStrip();
+                toolStrip = new PropertyGridToolStrip(this);
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
                 toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
@@ -699,7 +698,7 @@ namespace System.Windows.Forms {
                     SetToolStripRenderer();
                 }
 
-                SetHotCommandColors(value && !AccessibilityImprovements.Level2);
+                SetHotCommandColors(false);
             }
         }
 
@@ -734,7 +733,7 @@ namespace System.Windows.Forms {
                
                if (value && IsHandleCreated && this.Visible) {
                   if (0 == paintFrozen++) {
-                     SendMessage(NativeMethods.WM_SETREDRAW, 0, 0);
+                     SendMessage(Interop.WindowMessages.WM_SETREDRAW, 0, 0);
                   }
                }
                if (!value) {
@@ -743,7 +742,7 @@ namespace System.Windows.Forms {
                   }
                
                   if (0 == --paintFrozen) {
-                     SendMessage(NativeMethods.WM_SETREDRAW, 1, 0);
+                     SendMessage(Interop.WindowMessages.WM_SETREDRAW, 1, 0);
                      Invalidate(true);
                   }
                   
@@ -1920,11 +1919,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new PropertyGridAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new PropertyGridAccessibleObject(this);
         }
 
         private /*protected virtual*/ PropertyGridView CreateGridView(IServiceProvider sp) {
@@ -2029,10 +2024,8 @@ namespace System.Windows.Forms {
             button.Click += eventHandler;
             button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 
-            if (AccessibilityImprovements.Level1) {
-                if (useCheckButtonRole) {
-                    button.AccessibleRole = AccessibleRole.CheckButton;
-                }
+            if (useCheckButtonRole) {
+                button.AccessibleRole = AccessibleRole.CheckButton;
             }
 
             return button;
@@ -3236,27 +3229,25 @@ namespace System.Windows.Forms {
         internal void OnPropertyValueSet(GridItem changedItem, object oldValue) {
             OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
 
-            // In Level 3 announce the property value change like standalone combobox control do: "[something] selected".
-            if (AccessibilityImprovements.Level3) {
-                bool dropDown = false;
-                Type propertyType = changedItem.PropertyDescriptor.PropertyType;
-                UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-                if (editor != null) {
-                    dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
+            // Announce the property value change like standalone combobox control do: "[something] selected".
+            bool dropDown = false;
+            Type propertyType = changedItem.PropertyDescriptor.PropertyType;
+            UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
+            if (editor != null) {
+                dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
+            }
+            else {
+                var gridEntry = changedItem as GridEntry;
+                if (gridEntry != null && gridEntry.Enumerable) {
+                    dropDown = true;
                 }
-                else {
-                    var gridEntry = changedItem as GridEntry;
-                    if (gridEntry != null && gridEntry.Enumerable) {
-                        dropDown = true;
-                    }
-                }
+            }
 
-                if (dropDown && !gridView.DropDownVisible) {
-                    this.AccessibilityObject.RaiseAutomationNotification(
-                        Automation.AutomationNotificationKind.ActionCompleted,
-                        Automation.AutomationNotificationProcessing.All,
-                        string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
-                }
+            if (dropDown && !gridView.DropDownVisible) {
+                this.AccessibilityObject.RaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionCompleted,
+                    Automation.AutomationNotificationProcessing.All,
+                    string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
             }
         }
         
@@ -3618,11 +3609,10 @@ namespace System.Windows.Forms {
                         else if (gridView.FocusInside) {
                             if (toolStrip.Visible) {
                                 toolStrip.FocusInternal();
-                                if (AccessibilityImprovements.Level1) {
-                                    // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
-                                    if (toolStrip.Items.Count > 0) {
-                                        toolStrip.SelectNextToolStripItem(null, /*forward =*/ true);
-                                    }
+
+                                // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
+                                if (toolStrip.Items.Count > 0) {
+                                    toolStrip.SelectNextToolStripItem(null, /*forward =*/ true);
                                 }
                             }
                             else {
@@ -4199,7 +4189,7 @@ namespace System.Windows.Forms {
         }
 
         private void SetToolStripRenderer() {
-            if (DrawFlatToolbar || (SystemInformation.HighContrast && AccessibilityImprovements.Level1)) {
+            if (DrawFlatToolbar || SystemInformation.HighContrast) {
                 // use an office look and feel with system colors 
                 ProfessionalColorTable colorTable = new ProfessionalColorTable();
                 colorTable.UseSystemColors = true;
@@ -4620,11 +4610,7 @@ namespace System.Windows.Forms {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <devdoc>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
@@ -4656,7 +4642,7 @@ namespace System.Windows.Forms {
         private int    dwMsg;
 
         private void GetDataFromCopyData(IntPtr lparam) {
-            NativeMethods.COPYDATASTRUCT cds = (NativeMethods.COPYDATASTRUCT)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.COPYDATASTRUCT));
+            NativeMethods.COPYDATASTRUCT cds = Marshal.PtrToStructure<NativeMethods.COPYDATASTRUCT>(lparam);
 
             if (cds != null && cds.lpData != IntPtr.Zero) {
                 propName = Marshal.PtrToStringAuto(cds.lpData);
@@ -4712,7 +4698,7 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_UNDO:
+                case Interop.WindowMessages.WM_UNDO:
                     if ((long)m.LParam == 0) {
                         gridView.DoUndoCommand();
                     }
@@ -4720,7 +4706,7 @@ namespace System.Windows.Forms {
                         m.Result = CanUndo ? (IntPtr)1 : (IntPtr)0;
                     }
                     return;
-                case NativeMethods.WM_CUT:
+                case Interop.WindowMessages.WM_CUT:
                     if ((long)m.LParam == 0) {
                         gridView.DoCutCommand();
                     }
@@ -4729,7 +4715,7 @@ namespace System.Windows.Forms {
                     }
                     return;
 
-                case NativeMethods.WM_COPY:
+                case Interop.WindowMessages.WM_COPY:
                     if ((long)m.LParam == 0) {
                         gridView.DoCopyCommand();
                     }
@@ -4738,7 +4724,7 @@ namespace System.Windows.Forms {
                     }
                     return;
 
-                case NativeMethods.WM_PASTE:
+                case Interop.WindowMessages.WM_PASTE:
                     if ((long)m.LParam == 0) {
                         gridView.DoPasteCommand();
                     }
@@ -4747,7 +4733,7 @@ namespace System.Windows.Forms {
                     }
                     return;
                 
-                case NativeMethods.WM_COPYDATA:
+                case Interop.WindowMessages.WM_COPYDATA:
                     GetDataFromCopyData(m.LParam);
                     m.Result = (IntPtr)1;
                     return;
@@ -5125,17 +5111,16 @@ namespace System.Windows.Forms {
     }
 
     internal static class AutomationMessages {
-        private const int WM_USER = NativeMethods.WM_USER;
-        internal const int PGM_GETBUTTONCOUNT = WM_USER + 0x50;
-        internal const int PGM_GETBUTTONSTATE = WM_USER + 0x52;
-        internal const int PGM_SETBUTTONSTATE = WM_USER + 0x51;
-        internal const int PGM_GETBUTTONTEXT = WM_USER + 0x53;
-        internal const int PGM_GETBUTTONTOOLTIPTEXT = WM_USER + 0x54;
-        internal const int PGM_GETROWCOORDS = WM_USER + 0x55;
-        internal const int PGM_GETVISIBLEROWCOUNT = WM_USER + 0x56;
-        internal const int PGM_GETSELECTEDROW = WM_USER + 0x57;
-        internal const int PGM_SETSELECTEDTAB = WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
-        internal const int PGM_GETTESTINGINFO = WM_USER + 0x59;
+        internal const int PGM_GETBUTTONCOUNT = Interop.WindowMessages.WM_USER + 0x50;
+        internal const int PGM_GETBUTTONSTATE = Interop.WindowMessages.WM_USER + 0x52;
+        internal const int PGM_SETBUTTONSTATE = Interop.WindowMessages.WM_USER + 0x51;
+        internal const int PGM_GETBUTTONTEXT = Interop.WindowMessages.WM_USER + 0x53;
+        internal const int PGM_GETBUTTONTOOLTIPTEXT = Interop.WindowMessages.WM_USER + 0x54;
+        internal const int PGM_GETROWCOORDS = Interop.WindowMessages.WM_USER + 0x55;
+        internal const int PGM_GETVISIBLEROWCOUNT = Interop.WindowMessages.WM_USER + 0x56;
+        internal const int PGM_GETSELECTEDROW = Interop.WindowMessages.WM_USER + 0x57;
+        internal const int PGM_SETSELECTEDTAB = Interop.WindowMessages.WM_USER + 0x58; // DO NOT CHANGE THIS : VC uses it!
+        internal const int PGM_GETTESTINGINFO = Interop.WindowMessages.WM_USER + 0x59;
 
         /// <summary>
         ///     Writes the specified text into a temporary file of the form %TEMP%\"Maui.[file id].log", where 
@@ -5448,11 +5433,7 @@ namespace System.Windows.Forms {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         /// Constructs the new instance of the accessibility object for this control.

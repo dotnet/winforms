@@ -726,12 +726,7 @@ namespace System.Windows.Forms {
         /// <returns>The accessible name.</returns>
         internal string GetAccessibleName(string baseName) {
             if (baseName == null) {
-                if (AccessibilityImprovements.Level3) {
-                    return SR.SpinnerAccessibleName;
-                }
-                else if (AccessibilityImprovements.Level1) {
-                    return this.GetType().Name;
-                }
+                return SR.SpinnerAccessibleName;
             }
 
             return baseName;
@@ -1206,7 +1201,7 @@ namespace System.Windows.Forms {
         {
             switch (m.Msg)
             {
-                case NativeMethods.WM_SETFOCUS:
+                case Interop.WindowMessages.WM_SETFOCUS:
                     if (!HostedInWin32DialogManager) {
                         if (ActiveControl == null) {
                             SetActiveControlInternal(TextBox);
@@ -1222,7 +1217,7 @@ namespace System.Windows.Forms {
                         base.WndProc(ref m);
                     }
                     break;
-                case NativeMethods.WM_KILLFOCUS:
+                case Interop.WindowMessages.WM_KILLFOCUS:
                     DefWndProc(ref m);
                     break;
                 default:
@@ -1273,8 +1268,8 @@ namespace System.Windows.Forms {
                 set {
                     bool valueChanged = (value != base.Text);
                     base.Text = value;      
-                    if (valueChanged && AccessibilityImprovements.Level1) {
-                            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+                    if (valueChanged) {
+                        AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
                     }
                 }
             }
@@ -1816,12 +1811,10 @@ namespace System.Windows.Forms {
                     get {
                         string baseName = base.Name;
                         if (baseName == null || baseName.Length == 0) {
-                            if (AccessibilityImprovements.Level3) {
-                                // For AI.Level3 spinner is already announced so use type name.
-                                return Owner.ParentInternal.GetType().Name;
-                            }
-                            return SR.SpinnerAccessibleName;
+                            // Spinner is already announced so use type name.
+                            return Owner.ParentInternal.GetType().Name;
                         }
+
                         return baseName;
                     }
                     set {

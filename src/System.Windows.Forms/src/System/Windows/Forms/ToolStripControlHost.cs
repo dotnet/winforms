@@ -54,9 +54,7 @@ namespace System.Windows.Forms {
             Rectangle bounds = this.Bounds;
             CommonProperties.UpdateSpecifiedBounds(c, bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                c.ToolStripControlHost = this;
-            }
+            c.ToolStripControlHost = this;
 
             OnSubscribeControlEvents(c);
         }

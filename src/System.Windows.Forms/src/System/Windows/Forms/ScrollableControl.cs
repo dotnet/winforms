@@ -890,7 +890,13 @@ namespace System.Windows.Forms {
         ///    Scrolls the currently active control into view if we are an AutoScroll
         ///    Form that has the Horiz or Vert scrollbar displayed...
         /// </devdoc>
-        public void ScrollControlIntoView(Control activeControl) {
+        public void ScrollControlIntoView(Control activeControl)
+        {
+            if (activeControl == null)
+            {
+                return;
+            }
+
             Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "ScrollControlIntoView(" + activeControl.GetType().FullName + ")");
             Debug.Indent();
 
@@ -899,7 +905,6 @@ namespace System.Windows.Forms {
             if (IsDescendant(activeControl)
                 && AutoScroll
                 && (HScroll || VScroll)
-                && activeControl != null
                 && (client.Width > 0 && client.Height > 0)) {
 
                 Debug.WriteLineIf(ScrollableControl.AutoScrolling.TraceVerbose, "Calculating...");
@@ -1269,7 +1274,7 @@ namespace System.Windows.Forms {
 
         private void OnSetScrollPosition(object sender, EventArgs e) {
             if (!IsMirrored) {
-                SendMessage(NativeMethods.WM_HSCROLL, 
+                SendMessage(Interop.WindowMessages.WM_HSCROLL, 
                             NativeMethods.Util.MAKELPARAM((RightToLeft == RightToLeft.Yes) ? NativeMethods.SB_RIGHT : NativeMethods.SB_LEFT,0), 0);
             }
         }
@@ -1464,13 +1469,13 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case NativeMethods.WM_VSCROLL:
+                case Interop.WindowMessages.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case NativeMethods.WM_HSCROLL:
+                case Interop.WindowMessages.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
-                case NativeMethods.WM_SETTINGCHANGE:
+                case Interop.WindowMessages.WM_SETTINGCHANGE:
                     WmSettingChange(ref m);
                     break;
                 default:

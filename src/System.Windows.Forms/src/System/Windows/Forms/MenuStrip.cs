@@ -178,7 +178,7 @@ namespace System.Windows.Forms {
 
         internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware) {
             ToolStripItem nextItem = base.GetNextItem(start, direction, rtlAware);
-            if (nextItem is MdiControlStrip.SystemMenuItem && AccessibilityImprovements.Level2) {
+            if (nextItem is MdiControlStrip.SystemMenuItem) {
                 nextItem = base.GetNextItem(nextItem, direction, rtlAware);
             }
             return nextItem;
@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
-                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), NativeMethods.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
+                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), Interop.WindowMessages.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
                         return true;
                     }
                 }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 
-            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
+            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
                 ToolStripItem item = GetItemAt(pt);
@@ -284,7 +284,7 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuBarControlTypeId;
                 }
 

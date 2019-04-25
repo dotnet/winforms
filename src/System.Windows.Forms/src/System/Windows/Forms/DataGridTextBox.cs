@@ -47,7 +47,7 @@ namespace System.Windows.Forms{
         protected override void WndProc(ref Message m) {
             // but what if we get a CtrlV?
             // what about deleting from the menu?
-            if (m.Msg == NativeMethods.WM_PASTE || m.Msg == NativeMethods.WM_CUT || m.Msg == NativeMethods.WM_CLEAR) {
+            if (m.Msg == Interop.WindowMessages.WM_PASTE || m.Msg == Interop.WindowMessages.WM_CUT || m.Msg == Interop.WindowMessages.WM_CLEAR) {
                 IsInEditOrNavigateMode = false;
                 dataGrid.ColumnStartedEditing(Bounds);
             }
@@ -97,12 +97,12 @@ namespace System.Windows.Forms{
                 // enter and escape keys are sent directly to the DataGrid
                 // for those keys, eat the WM_CHAR part of the KeyMessage
                 //
-                if (m.Msg == NativeMethods.WM_CHAR)
+                if (m.Msg == Interop.WindowMessages.WM_CHAR)
                     return true;
                 return ProcessKeyPreview(ref m);
             }
 
-            if (m.Msg == NativeMethods.WM_CHAR) {
+            if (m.Msg == Interop.WindowMessages.WM_CHAR) {
                 if (key == Keys.LineFeed)           // eat the LineFeed we get when the user presses Ctrl-Enter in a gridTextBox
                     return true;
                 return ProcessKeyEventArgs(ref m);
@@ -111,7 +111,7 @@ namespace System.Windows.Forms{
             // now the edit control will be always on top of the grid
             // we only want to process the WM_KEYUP message ( the same way the grid was doing when the grid was getting all
             // the keys )
-            if (m.Msg == NativeMethods.WM_KEYUP)
+            if (m.Msg == Interop.WindowMessages.WM_KEYUP)
                 return true;
 
             Keys keyData = key & Keys.KeyCode;
@@ -180,7 +180,7 @@ namespace System.Windows.Forms{
                     if (IsInEditOrNavigateMode && (Control.ModifierKeys & Keys.Shift) == Keys.Shift)
                     {
                             // when we get a SHIFT-SPACEBAR message, disregard the WM_CHAR part of the message
-                            if (m.Msg == NativeMethods.WM_CHAR) return true;
+                            if (m.Msg == Interop.WindowMessages.WM_CHAR) return true;
 
                             // if the user pressed the SHIFT key at the same time with 
                             // the space key, send the key message to the DataGrid
@@ -191,7 +191,7 @@ namespace System.Windows.Forms{
                     if (IsInEditOrNavigateMode && (Control.ModifierKeys & Keys.Control) == Keys.Control)
                     {
                             // when we get a Control-A message, disregard the WM_CHAR part of the message
-                            if (m.Msg == NativeMethods.WM_CHAR) return true;
+                            if (m.Msg == Interop.WindowMessages.WM_CHAR) return true;
 
                             // if the user pressed the Control key at the same time with 
                             // the space key, send the key message to the DataGrid

@@ -69,14 +69,14 @@ namespace System.Windows.Forms.ButtonInternal {
                 }
             }
 
-            PaintBackground(e, r, IsHighContrastHighlighted2() ? SystemColors.Highlight : backColor);
+            PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
             if (Control.IsDefault) {
                 r.Inflate(-1, -1);
             }
 
             PaintImage(e, layout);
-            PaintField(e, layout, colors, IsHighContrastHighlighted2() ? SystemColors.HighlightText : colors.windowText, false);
+            PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, false);
 
             if (Control.Focused && Control.ShowFocusCues) {
                 DrawFlatFocus(g, layout.focus, colors.options.highContrast ? colors.windowText : colors.constrastButtonShadow);
@@ -228,14 +228,14 @@ namespace System.Windows.Forms.ButtonInternal {
                     }
                 }
 
-                PaintBackground(e, r, IsHighContrastHighlighted2() ? SystemColors.Highlight : backColor);
+                PaintBackground(e, r, IsHighContrastHighlighted() ? SystemColors.Highlight : backColor);
 
                 if (Control.IsDefault) {
                     r.Inflate(-1, -1);
                 }
 
                 PaintImage(e, layout);
-                PaintField(e, layout, colors, IsHighContrastHighlighted2() ? SystemColors.HighlightText : colors.windowText, false);
+                PaintField(e, layout, colors, IsHighContrastHighlighted() ? SystemColors.HighlightText : colors.windowText, false);
 
                 if (Control.Focused && Control.ShowFocusCues) {
                     DrawFlatFocus(g, layout.focus, colors.constrastButtonShadow);

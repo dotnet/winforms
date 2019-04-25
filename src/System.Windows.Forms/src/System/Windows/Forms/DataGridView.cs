@@ -2832,7 +2832,7 @@ namespace System.Windows.Forms
             {
                 if (this.editingPanel == null)
                 {
-                    this.editingPanel = AccessibilityImprovements.Level3 ? new DataGridViewEditingPanel(this) : new Panel();
+                    this.editingPanel = new DataGridViewEditingPanel(this);
                     this.editingPanel.AccessibleName = string.Format(SR.DataGridView_AccEditingPanelAccName);
                 }
                 return this.editingPanel;
@@ -5025,13 +5025,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SupportsUiaProviders
-        {
-            get
-            {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Text"]/*' />
         [
@@ -7056,22 +7050,11 @@ namespace System.Windows.Forms
                 this.owningDataGridView = owningDataGridView;
             }
 
-            internal override bool SupportsUiaProviders
-            {
-                get
-                {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             protected override AccessibleObject CreateAccessibilityInstance()
             {
-                if (AccessibilityImprovements.Level3)
-                {
-                    return new DataGridViewEditingPanelAccessibleObject(owningDataGridView, this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new DataGridViewEditingPanelAccessibleObject(owningDataGridView, this);
             }
         }
     }

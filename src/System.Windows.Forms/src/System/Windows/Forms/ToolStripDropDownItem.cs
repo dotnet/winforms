@@ -414,10 +414,9 @@ namespace System.Windows.Forms {
         
            if (this.dropDown != null && this.dropDown.Visible) {
                DropDown.Visible = false;
-               if (AccessibilityImprovements.Level1) {
-                   AccessibilityNotifyClients(AccessibleEvents.StateChange);
-                   AccessibilityNotifyClients(AccessibleEvents.NameChange);
-               }
+
+               AccessibilityNotifyClients(AccessibleEvents.StateChange);
+               AccessibilityNotifyClients(AccessibleEvents.NameChange);
            }
         }
 
@@ -552,9 +551,7 @@ namespace System.Windows.Forms {
                     if (Enabled || DesignMode) {
                          // |__[ * File ]_____|  * is where you are.  Up or down arrow hit should expand menu
                          this.ShowDropDown();
-                         if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                         }
+                         KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                          this.DropDown.SelectNextToolStripItem(null, true);
                     }// else eat the key
                     return true;
@@ -574,9 +571,7 @@ namespace System.Windows.Forms {
                                             
                         if (Enabled || DesignMode) {
                             this.ShowDropDown();
-                            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                            }
+                            KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                             this.DropDown.SelectNextToolStripItem(null, true);
                         } // else eat the key
                         return true;
@@ -602,9 +597,7 @@ namespace System.Windows.Forms {
                    if (parent != null && !parent.IsFirstDropDown) {
                       // we're walking back up the dropdown chain.
                       parent.SetCloseReason(ToolStripDropDownCloseReason.Keyboard);
-                      if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                          KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                      }
+                      KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
                       parent.SelectPreviousToolStrip();
                       return true;
                    }
@@ -693,10 +686,8 @@ namespace System.Windows.Forms {
                 this.dropDown.Show();
                 this.Invalidate();
 
-                if (AccessibilityImprovements.Level1) {
-                    AccessibilityNotifyClients(AccessibleEvents.StateChange);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange);
-                }
+                AccessibilityNotifyClients(AccessibleEvents.StateChange);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange);
             }
         }
 
@@ -756,7 +747,7 @@ namespace System.Windows.Forms {
         }
 
         internal override bool IsIAccessibleExSupported() {
-            if (owner!= null && AccessibilityImprovements.Level1 ) {
+            if (owner != null) {
                 return true;
             }
             else {
@@ -774,7 +765,7 @@ namespace System.Windows.Forms {
         }
 
         internal override object GetPropertyValue(int propertyID) {
-            if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown) {
+            if (propertyID == NativeMethods.UIA_IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown) {
                 return !((ToolStripDropDown)owner.Owner).Visible;
             }
 
@@ -812,7 +803,7 @@ namespace System.Windows.Forms {
             // Do not expose child items when the submenu is collapsed to prevent Narrator from announcing
             // invisible menu items when Narrator is in item's mode (CAPSLOCK + Arrow Left/Right) or
             // in scan mode (CAPSLOCK + Space)
-            if (AccessibilityImprovements.Level3 && ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
+            if (ExpandCollapseState == UnsafeNativeMethods.ExpandCollapseState.Collapsed) {
                 return 0;
             }
 

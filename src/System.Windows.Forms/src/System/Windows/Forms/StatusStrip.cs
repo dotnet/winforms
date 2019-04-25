@@ -355,13 +355,8 @@ namespace System.Windows.Forms {
            
        }
   
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+       internal override bool SupportsUiaProviders => true;
 
-    
        protected override void SetDisplayedItems() {
            if (state[stateCalledSpringTableLayout]) {
                bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
@@ -544,7 +539,7 @@ namespace System.Windows.Forms {
       }
 
       protected override void  WndProc(ref Message m)            {                
-          if ((m.Msg == NativeMethods.WM_NCHITTEST) && SizingGrip) {
+          if ((m.Msg == Interop.WindowMessages.WM_NCHITTEST) && SizingGrip) {
             // if we're within the grip bounds tell windows
             // that we're the bottom right of the window.  
             Rectangle sizeGripBounds = SizeGripBounds;
@@ -605,7 +600,7 @@ namespace System.Windows.Forms {
                 }
             }
             protected override void WndProc(ref Message m) {
-                 if (m.Msg == NativeMethods.WM_NCHITTEST) {
+                 if (m.Msg == Interop.WindowMessages.WM_NCHITTEST) {
                     int x = NativeMethods.Util.LOWORD(m.LParam);
                     int y = NativeMethods.Util.HIWORD(m.LParam);
 
@@ -636,7 +631,7 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_StatusBarControlTypeId;
                 }
 

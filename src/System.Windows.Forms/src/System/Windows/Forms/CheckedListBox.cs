@@ -574,10 +574,8 @@ namespace System.Windows.Forms {
                 CheckedItems.SetCheckedState(index, itemCheckEvent.NewValue);
 
                 // Send accessibility notifications for state change
-                if (AccessibilityImprovements.Level1) {
-                    AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
-                    AccessibilityNotifyClients(AccessibleEvents.NameChange, index);
-                }
+                AccessibilityNotifyClients(AccessibleEvents.StateChange, index);
+                AccessibilityNotifyClients(AccessibleEvents.NameChange, index);
             }
 
             lastSelected = index;
@@ -819,7 +817,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            if (Items.Count == 0 && AccessibilityImprovements.Level3 &&
+            if (Items.Count == 0 &&
                 e.Bounds.Width > 2 * BORDER_SIZE && e.Bounds.Height > 2 * BORDER_SIZE) {
                 Color backColor = (SelectionMode != SelectionMode.None) ? e.BackColor : BackColor;
                 Rectangle bounds = e.Bounds;
@@ -1048,10 +1046,10 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_CHARTOITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CHARTOITEM:
                     m.Result = NativeMethods.InvalidIntPtr;
                     break;
-                case NativeMethods.WM_REFLECT + NativeMethods.WM_VKEYTOITEM:
+                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
             default:
@@ -1659,7 +1657,7 @@ namespace System.Windows.Forms {
                         state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
-                    if (AccessibilityImprovements.Level3 && ParentCheckedListBox.Focused && ParentCheckedListBox.SelectedIndex == -1) {
+                    if (ParentCheckedListBox.Focused && ParentCheckedListBox.SelectedIndex == -1) {
                         state |= AccessibleStates.Focused;
                     }
 

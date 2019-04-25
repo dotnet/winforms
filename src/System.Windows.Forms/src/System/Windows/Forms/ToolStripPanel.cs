@@ -377,9 +377,8 @@ namespace System.Windows.Forms {
                 return base.TabStop;
             }
             set {
-                if (AccessibilityImprovements.Level2) {
-                    SetStyle(ControlStyles.Selectable, value);
-                }
+                SetStyle(ControlStyles.Selectable, value);
+
                 base.TabStop = value;
             }
         }
@@ -850,7 +849,7 @@ namespace System.Windows.Forms {
                             try {
                                 NativeMethods.MSG msg = new NativeMethods.MSG();
                                 while (UnsafeNativeMethods.PeekMessage(ref msg, new HandleRef(this, IntPtr.Zero),
-                                                           NativeMethods.WM_PAINT, NativeMethods.WM_PAINT,
+                                                           Interop.WindowMessages.WM_PAINT, Interop.WindowMessages.WM_PAINT,
                                                            NativeMethods.PM_REMOVE)) {
                                     SafeNativeMethods.UpdateWindow(new HandleRef(null, msg.hwnd));    
 
@@ -888,7 +887,7 @@ namespace System.Windows.Forms {
                 }
 
                 protected override void WndProc(ref Message m){                
-                    if (m.Msg == NativeMethods.WM_NCHITTEST){
+                    if (m.Msg == Interop.WindowMessages.WM_NCHITTEST){
                         m.Result = (IntPtr)NativeMethods.HTTRANSPARENT;
                     }
                     base.WndProc(ref m);

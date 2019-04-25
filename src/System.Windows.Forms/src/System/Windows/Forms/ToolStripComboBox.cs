@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Drawing2D;
     using System.Windows.Forms.Design; 
     using System.Security;
-    using System.Security.Permissions;
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Internal;     
     using System.Globalization;
@@ -61,11 +60,7 @@ namespace System.Windows.Forms {
         ///     The new instance of the accessibility object for this ToolStripComboBox ToolStrip item
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripComboBoxAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripComboBoxAccessibleObject(this);
         }
 
         /// <summary>
@@ -652,11 +647,7 @@ namespace System.Windows.Forms {
             ///     The new instance of the accessibility object for this ToolStripComboBoxControl item
             /// </returns>
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new ToolStripComboBoxControlAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new ToolStripComboBoxControlAccessibleObject(this);
             }
 
             internal override FlatComboAdapter CreateFlatComboAdapterInstance() {
@@ -741,7 +732,7 @@ namespace System.Windows.Forms {
 
                     Brush brush;
                     if (comboBox.Enabled) {
-                        if (AccessibilityImprovements.Level2 && SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled) {
+                        if (SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled) {
                             brush = SystemBrushes.HighlightText;
                         }
                         else {
@@ -779,13 +770,9 @@ namespace System.Windows.Forms {
                 Update(); 
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
-            internal class ToolStripComboBoxControlAccessibleObject : ComboBoxUiaProvider {
+            internal class ToolStripComboBoxControlAccessibleObject : ComboBox.ComboBoxAccessibleObject {
 
                 private ComboBox.ChildAccessibleObject childAccessibleObject;
 
