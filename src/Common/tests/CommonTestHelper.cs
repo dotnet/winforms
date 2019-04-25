@@ -8,6 +8,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
+using System.Security;
 using System.Windows.Forms;
 using Xunit;
 
@@ -326,6 +327,22 @@ namespace WinForms.Common.Tests
             var data = new TheoryData<Cursor>();
             data.Add(null);
             data.Add(new Cursor((IntPtr)1));
+            return data;
+        }
+
+        public static TheoryData<EventArgs> GetEventArgsTheoryData()
+        {
+            var data = new TheoryData<EventArgs>();
+            data.Add(null);
+            data.Add(new EventArgs());
+            return data;
+        }
+
+        public static TheoryData<Exception> GetSecurityOrCriticalException()
+        {
+            var data = new TheoryData<Exception>();
+            data.Add(new NullReferenceException());
+            data.Add(new SecurityException());
             return data;
         }
 
