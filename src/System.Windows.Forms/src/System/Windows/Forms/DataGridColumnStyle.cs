@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
-    [DefaultProperty("Header")]
+    [DefaultProperty(nameof(HeaderText))]
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Fixing this would be a breaking change")]
     public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
     {
