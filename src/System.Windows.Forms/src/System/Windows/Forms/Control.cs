@@ -6787,26 +6787,26 @@ example usage
             return ctl == this? null: ctl;
         }
 
-        /// <devdoc>
-        ///     Return ((Control) window).Handle if window is a Control.
-        ///     Otherwise, returns window.Handle
-        /// </devdoc>
+        /// <summary>
+        /// Return ((Control) window).Handle if window is a Control.
+        /// Otherwise, returns window.Handle
+        /// </summary>
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
             Debug.Assert(window != null, "window is null in Control.GetSafeHandle");
-            IntPtr hWnd = IntPtr.Zero;
-            Control control = window as Control;
-            if (control != null) {
-                hWnd = control.Handle;
-                Debug.Assert(hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)));
-                return hWnd;
+            if (window is Control control)
+            {
+                return control.Handle;
             }
-            else {
-                hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) {
+            else
+            {
+                IntPtr hWnd = window.Handle;
+                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                {
                     return hWnd;
                 }
-                else {
+                else
+                {
                     throw new Win32Exception(NativeMethods.ERROR_INVALID_HANDLE);
                 }
             }
