@@ -245,17 +245,27 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DefaultCellStyle_Set_TestData()
         {
-            yield return new object[] { new DataGridViewRow(), null, new DataGridViewCellStyle() };
-
             var style = new DataGridViewCellStyle { Alignment = DataGridViewContentAlignment.BottomRight };
-            var dataGridView = new DataGridView { ColumnCount = 1 };
-            dataGridView.Rows.Add(new DataGridViewRow());
-            yield return new object[] { dataGridView.Rows[0], style, style };
+
+            yield return new object[] { new DataGridViewRow(), null, new DataGridViewCellStyle() };
+            yield return new object[] { new DataGridViewRow(), style, style };
+
+            var dataGridView1 = new DataGridView { ColumnCount = 1 };
+            dataGridView1.Rows.Add(new DataGridViewRow());
+            var dataGridView2 = new DataGridView { ColumnCount = 1 };
+            dataGridView2.Rows.Add(new DataGridViewRow());
+            yield return new object[] { dataGridView1.Rows[0], null, new DataGridViewCellStyle() };
+            yield return new object[] { dataGridView2.Rows[0], style, style };
+
+            var templateDataGridView1 = new DataGridView();
+            var templateDataGridView2 = new DataGridView();
+            yield return new object[] { templateDataGridView1.RowTemplate, null, new DataGridViewCellStyle() };
+            yield return new object[] { templateDataGridView2.RowTemplate, style, style };
         }
 
         [Theory]
         [MemberData(nameof(DefaultCellStyle_Set_TestData))]
-        public void DataGridViewRow_DefaultCellStyle_Set_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
+        public void DataGridViewRow_DefaultCellStyle_SetWithNullOldValue_GetReturnsExpected(DataGridViewRow row, DataGridViewCellStyle value, DataGridViewCellStyle expected)
         {
             row.DefaultCellStyle = value;
             Assert.Equal(expected, row.DefaultCellStyle);
