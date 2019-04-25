@@ -295,7 +295,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Creating bitmap from Icon resource
         /// </summary>
-        public static Bitmap GetBitMapFromIcon(Type t, string name)
+        public static Bitmap GetBitmapFromIcon(Type t, string name)
         {
             Icon b = new Icon(t, name);
             Bitmap bitmap = b.ToBitmap();

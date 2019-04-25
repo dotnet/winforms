@@ -381,7 +381,7 @@ namespace System.Windows.Forms {
 
         private Bitmap GetBitmap(string bitmapName) {
             try {
-                return DpiHelper.GetBitMapFromIcon(typeof(DataGridCaption), bitmapName);
+                return DpiHelper.GetBitmapFromIcon(typeof(DataGridCaption), bitmapName);
             }
             catch (Exception e) {
                 Debug.Fail("Failed to load bitmap: " + bitmapName, e.ToString());
