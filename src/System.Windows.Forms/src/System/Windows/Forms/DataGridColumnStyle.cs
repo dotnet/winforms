@@ -20,27 +20,27 @@ namespace System.Windows.Forms
     [SuppressMessage("Microsoft.Design", "CA1012:AbstractTypesShouldNotHaveConstructors", Justification = "Fixing this would be a breaking change")]
     public abstract class DataGridColumnStyle : Component, IDataGridColumnStyleEditingNotificationService
     {
-        private HorizontalAlignment alignment = HorizontalAlignment.Left;
-        private PropertyDescriptor propertyDescriptor = null;
-        private DataGridTableStyle dataGridTableStyle = null;
-        private Font font = null;
-        private int fontHeight = -1;
-        private string mappingName = string.Empty;
-        private string headerName = string.Empty;
-        private bool invalid = false;
-        private string nullText = SR.DataGridNullText;
-        private bool readOnly = false;
-        private bool updating = false;
-        internal int width = -1;
-        private AccessibleObject headerAccessibleObject = null;
+        private HorizontalAlignment _alignment = HorizontalAlignment.Left;
+        private PropertyDescriptor _propertyDescriptor = null;
+        private DataGridTableStyle _dataGridTableStyle = null;
+        private Font _font = null;
+        private int _fontHeight = -1;
+        private string _mappingName = string.Empty;
+        private string _headerName = string.Empty;
+        private bool _invalid = false;
+        private string _nullText = SR.DataGridNullText;
+        private bool _readOnly = false;
+        private bool _updating = false;
+        internal int _width = -1;
+        private AccessibleObject _headerAccessibleObject = null;
 
-        private static readonly object EventAlignment = new object();
-        private static readonly object EventPropertyDescriptor = new object();
-        private static readonly object EventHeaderText = new object();
-        private static readonly object EventMappingName = new object();
-        private static readonly object EventNullText = new object();
-        private static readonly object EventReadOnly = new object();
-        private static readonly object EventWidth = new object();
+        private static readonly object s_alignmentEvent = new object();
+        private static readonly object s_propertyDescriptorEvent = new object();
+        private static readonly object s_headerTextEvent = new object();
+        private static readonly object s_mappingNameEvent = new object();
+        private static readonly object s_nullTextEvent = new object();
+        private static readonly object s_readOnlyEvent = new object();
+        private static readonly object s_widthEvent = new object();
 
         /// <summary>
         /// In a derived class, initializes a new instance of the
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             PropertyDescriptor = prop;
             if (prop != null)
             {
-                readOnly = prop.IsReadOnly;
+                _readOnly = prop.IsReadOnly;
             }
         }
 
@@ -72,8 +72,8 @@ namespace System.Windows.Forms
             if (isDefault)
             {
                 // take the header name from the property name
-                headerName = prop.Name;
-                mappingName = prop.Name;
+                _headerName = prop.Name;
+                _mappingName = prop.Name;
             }
         }
 
@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         [DefaultValue(HorizontalAlignment.Left)]
         public virtual HorizontalAlignment Alignment
         {
-            get => alignment;
+            get => _alignment;
             set
             {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
@@ -98,9 +98,9 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(DataGridLineStyle));
                 }
 
-                if (alignment != value)
+                if (_alignment != value)
                 {
-                    alignment = value;
+                    _alignment = value;
                     OnAlignmentChanged(EventArgs.Empty);
                     Invalidate();
                 }
@@ -109,8 +109,8 @@ namespace System.Windows.Forms
 
         public event EventHandler AlignmentChanged
         {
-            add => Events.AddHandler(EventAlignment, value);
-            remove => Events.RemoveHandler(EventAlignment, value);
+            add => Events.AddHandler(s_alignmentEvent, value);
+            remove => Events.RemoveHandler(s_alignmentEvent, value);
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public AccessibleObject HeaderAccessibleObject
         {
-            get => headerAccessibleObject ?? (headerAccessibleObject = CreateHeaderAccessibleObject());
+            get => _headerAccessibleObject ?? (_headerAccessibleObject = CreateHeaderAccessibleObject());
         }
 
         /// <summary>
@@ -140,12 +140,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual PropertyDescriptor PropertyDescriptor
         {
-            get => propertyDescriptor;
+            get => _propertyDescriptor;
             set
             {
-                if (propertyDescriptor != value)
+                if (_propertyDescriptor != value)
                 {
-                    propertyDescriptor = value;
+                    _propertyDescriptor = value;
                     OnPropertyDescriptorChanged(EventArgs.Empty);
                 }
             }
@@ -154,8 +154,8 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler PropertyDescriptorChanged
         {
-            add => Events.AddHandler(EventPropertyDescriptor, value);
-            remove => Events.RemoveHandler(EventPropertyDescriptor, value);
+            add => Events.AddHandler(s_propertyDescriptorEvent, value);
+            remove => Events.RemoveHandler(s_propertyDescriptorEvent, value);
         }
 
         protected virtual AccessibleObject CreateHeaderAccessibleObject()
@@ -211,11 +211,11 @@ namespace System.Windows.Forms
         /// Gets the System.Windows.Forms.DataGridTableStyle for the column.
         /// </summary>
         [Browsable(false)]
-        public virtual DataGridTableStyle DataGridTableStyle => dataGridTableStyle;
+        public virtual DataGridTableStyle DataGridTableStyle => _dataGridTableStyle;
 
         internal void SetDataGridTableInColumn(DataGridTableStyle value, bool force)
         {
-            if (dataGridTableStyle != null && dataGridTableStyle.Equals(value) && !force)
+            if (_dataGridTableStyle != null && _dataGridTableStyle.Equals(value) && !force)
             {
                 return;
             }
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
                 SetDataGridInColumn(value.DataGrid);
             }
 
-            dataGridTableStyle = value;
+            _dataGridTableStyle = value;
         }
 
         /// <summary>
@@ -235,9 +235,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (fontHeight != -1)
+                if (_fontHeight != -1)
                 {
-                    return fontHeight;
+                    return _fontHeight;
                 }
                 else if (DataGridTableStyle != null)
                 {
@@ -253,7 +253,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Indicates whether the Font property should be persisted.
         /// </summary>
-        private bool ShouldSerializeFont() => font != null;
+        private bool ShouldSerializeFont() => _font != null;
 
         public event EventHandler FontChanged
         {
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatDisplay))]
         public virtual string HeaderText
         {
-            get => headerName;
+            get => _headerName;
             set
             {
                 if (value == null)
@@ -276,9 +276,9 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (!headerName.Equals(value))
+                if (!_headerName.Equals(value))
                 {
-                    headerName = value;
+                    _headerName = value;
                     OnHeaderTextChanged(EventArgs.Empty);
                     // we only invalidate columns that are visible ( ie, their propertyDescriptor is not null)
                     if (PropertyDescriptor != null)
@@ -291,8 +291,8 @@ namespace System.Windows.Forms
 
         public event EventHandler HeaderTextChanged
         {
-            add => Events.AddHandler(EventHeaderText, value);
-            remove => Events.RemoveHandler(EventHeaderText, value);
+            add => Events.AddHandler(s_headerTextEvent, value);
+            remove => Events.RemoveHandler(s_headerTextEvent, value);
         }
 
         [Editor("System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         public string MappingName
         {
-            get => mappingName;
+            get => _mappingName;
             set
             {
                 if (value == null)
@@ -308,17 +308,17 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (!mappingName.Equals(value))
+                if (!_mappingName.Equals(value))
                 {
-                    string originalMappingName = mappingName;
-                    mappingName = value;
+                    string originalMappingName = _mappingName;
+                    _mappingName = value;
                     try
                     {
-                        dataGridTableStyle?.GridColumnStyles.CheckForMappingNameDuplicates(this);
+                        _dataGridTableStyle?.GridColumnStyles.CheckForMappingNameDuplicates(this);
                     }
                     catch
                     {
-                        mappingName = originalMappingName;
+                        _mappingName = originalMappingName;
                         throw;
                     }
 
@@ -329,8 +329,8 @@ namespace System.Windows.Forms
 
         public event EventHandler MappingNameChanged
         {
-            add => Events.AddHandler(EventMappingName, value);
-            remove => Events.RemoveHandler(EventMappingName, value);
+            add => Events.AddHandler(s_mappingNameEvent, value);
+            remove => Events.RemoveHandler(s_mappingNameEvent, value);
         }
 
         /// <summary>
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeHeaderText()
         {
-            return (headerName.Length != 0);
+            return (_headerName.Length != 0);
         }
 
         /// <summary>
@@ -355,12 +355,12 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatDisplay))]
         public virtual string NullText
         {
-            get => nullText;
+            get => _nullText;
             set
             {
-                if (nullText == null || nullText.Equals(value))
+                if (_nullText == null || _nullText.Equals(value))
                 {
-                    nullText = value;
+                    _nullText = value;
                     OnNullTextChanged(EventArgs.Empty);
                     Invalidate();
                 }
@@ -369,8 +369,8 @@ namespace System.Windows.Forms
 
         public event EventHandler NullTextChanged
         {
-            add => Events.AddHandler(EventNullText, value);
-            remove => Events.RemoveHandler(EventNullText, value);
+            add => Events.AddHandler(s_nullTextEvent, value);
+            remove => Events.RemoveHandler(s_nullTextEvent, value);
         }
 
         /// <summary>
@@ -379,12 +379,12 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         public virtual bool ReadOnly
         {
-            get => readOnly;
+            get => _readOnly;
             set
             {
-                if (readOnly != value)
+                if (_readOnly != value)
                 {
-                    readOnly = value;
+                    _readOnly = value;
                     OnReadOnlyChanged(EventArgs.Empty);
                 }
             }
@@ -392,8 +392,8 @@ namespace System.Windows.Forms
 
         public event EventHandler ReadOnlyChanged
         {
-            add => Events.AddHandler(EventReadOnly, value);
-            remove => Events.RemoveHandler(EventReadOnly, value);
+            add => Events.AddHandler(s_readOnlyEvent, value);
+            remove => Events.RemoveHandler(s_readOnlyEvent, value);
         }
 
         /// <summary>
@@ -404,12 +404,12 @@ namespace System.Windows.Forms
         [DefaultValue(100)]
         public virtual int Width
         {
-            get => width;
+            get => _width;
             set
             {
-                if (width != value)
+                if (_width != value)
                 {
-                    width = value;
+                    _width = value;
                     DataGrid grid = DataGridTableStyle == null ? null : DataGridTableStyle.DataGrid;
                     if (grid != null)
                     {
@@ -427,15 +427,15 @@ namespace System.Windows.Forms
 
         public event EventHandler WidthChanged
         {
-            add => Events.AddHandler(EventWidth, value);
-            remove => Events.RemoveHandler(EventWidth, value);
+            add => Events.AddHandler(s_widthEvent, value);
+            remove => Events.RemoveHandler(s_widthEvent, value);
         }
 
         /// <summary>
         /// Suspends the painting of the column until the <see cref='System.Windows.Forms.DataGridColumnStyle.EndUpdate'/>
         /// method is called.
         /// </summary>
-        protected void BeginUpdate() => updating = true;
+        protected void BeginUpdate() => _updating = true;
 
         /// <summary>
         /// Resumes the painting of columns suspended by calling the
@@ -443,10 +443,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected void EndUpdate()
         {
-            updating = false;
-            if (invalid)
+            _updating = false;
+            if (_invalid)
             {
-                invalid = false;
+                _invalid = false;
                 Invalidate();
             }
         }
@@ -455,7 +455,7 @@ namespace System.Windows.Forms
 
         private void ResetNullText() => NullText = SR.DataGridNullText;
 
-        private bool ShouldSerializeNullText() => !SR.DataGridNullText.Equals(nullText);
+        private bool ShouldSerializeNullText() => !SR.DataGridNullText.Equals(_nullText);
 
         /// <summary>
         /// When overridden in a derived class, gets the optimum width and height of the
@@ -494,9 +494,9 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void Invalidate()
         {
-            if (updating)
+            if (_updating)
             {
-                invalid = true;
+                _invalid = true;
                 return;
             }
 
@@ -637,37 +637,37 @@ namespace System.Windows.Forms
 
         private void OnPropertyDescriptorChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventPropertyDescriptor] as EventHandler;
+            EventHandler eh = Events[s_propertyDescriptorEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
         private void OnAlignmentChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventAlignment] as EventHandler;
+            EventHandler eh = Events[s_alignmentEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
         private void OnHeaderTextChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventHeaderText] as EventHandler;
+            EventHandler eh = Events[s_headerTextEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
         private void OnMappingNameChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventMappingName] as EventHandler;
+            EventHandler eh = Events[s_mappingNameEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
         private void OnReadOnlyChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventReadOnly] as EventHandler;
+            EventHandler eh = Events[s_readOnlyEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
         private void OnNullTextChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventNullText] as EventHandler;
+            EventHandler eh = Events[s_nullTextEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
         private void OnWidthChanged(EventArgs e)
         {
-            EventHandler eh = Events[EventWidth] as EventHandler;
+            EventHandler eh = Events[s_widthEvent] as EventHandler;
             eh?.Invoke(this, e);
         }
 
@@ -754,7 +754,7 @@ namespace System.Windows.Forms
                     }
 
                     // We need to find this column's offset in the gridColumnCollection.
-                    GridColumnStylesCollection cols = Owner.dataGridTableStyle.GridColumnStyles;
+                    GridColumnStylesCollection cols = Owner._dataGridTableStyle.GridColumnStyles;
                     int offset = -1;
                     for (int i = 0; i < cols.Count; i++)
                     {
@@ -774,13 +774,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Name => Owner.headerName;
+            public override string Name => Owner._headerName;
 
             protected DataGridColumnStyle Owner { get; }
 
             public override AccessibleObject Parent => DataGrid.AccessibilityObject;
 
-            private DataGrid DataGrid => Owner.dataGridTableStyle.dataGrid;
+            private DataGrid DataGrid => Owner._dataGridTableStyle.dataGrid;
 
             public override AccessibleRole Role => AccessibleRole.ColumnHeader;
 
@@ -791,11 +791,11 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Right:
                     case AccessibleNavigation.Next:
                     case AccessibleNavigation.Down:
-                        return Parent.GetChild(1 + Owner.dataGridTableStyle.GridColumnStyles.IndexOf(Owner) + 1);
+                        return Parent.GetChild(1 + Owner._dataGridTableStyle.GridColumnStyles.IndexOf(Owner) + 1);
                     case AccessibleNavigation.Up:
                     case AccessibleNavigation.Left:
                     case AccessibleNavigation.Previous:
-                        return Parent.GetChild(1 + Owner.dataGridTableStyle.GridColumnStyles.IndexOf(Owner) - 1);
+                        return Parent.GetChild(1 + Owner._dataGridTableStyle.GridColumnStyles.IndexOf(Owner) - 1);
 
                 }
 
