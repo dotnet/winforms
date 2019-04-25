@@ -290,7 +290,7 @@ namespace System.Windows.Forms
                 // Fire a message across threads to destroy the timer and HWND on the thread that created it.
                 if (GetInvokeRequired(hWnd))
                 {
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, hWnd), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, hWnd), NativeMethods.WM_CLOSE, 0, 0);
                     return;
                 }
 
@@ -352,7 +352,7 @@ namespace System.Windows.Forms
                 Debug.Assert(m.HWnd == Handle && Handle != IntPtr.Zero, "Timer getting messages for other windows?");
 
                 // For timer messages call the timer event.
-                if (m.Msg == Interop.WindowMessages.WM_TIMER)
+                if (m.Msg == NativeMethods.WM_TIMER)
                 {
                     if (unchecked((int)(long)m.WParam) == _timerID)
                     {
@@ -360,7 +360,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
-                else if (m.Msg == Interop.WindowMessages.WM_CLOSE)
+                else if (m.Msg == NativeMethods.WM_CLOSE)
                 {
                     // This is a posted method from another thread that tells us we need
                     // to kill the timer. The handle may already be gone, so we specify it here.

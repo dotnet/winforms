@@ -420,9 +420,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         public DataGridView()
         {
-            this.AllowsKeyboardToolTip();
-            this.AllowsChildrenToShowToolTips();
-            
             SetStyle(ControlStyles.UserPaint | 
                      ControlStyles.Opaque | 
                      ControlStyles.UserMouse, true);
@@ -2299,7 +2296,7 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Assert(this.ptCurrentCell.Y != -1);
-
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus((IKeyboardToolTip)CurrentCell);
                 return this.editingControl != null &&
                        GetCellCount(DataGridViewElementStates.Selected) == 1 &&
                        this.CurrentCellInternal.Selected;
@@ -6999,7 +6996,7 @@ namespace System.Windows.Forms
 
         bool IKeyboardToolTip.CanShowToolTipsNow()
         {
-            return this.Visible && this.DataGridView != null && ((IKeyboardToolTip)this.DataGridView).AllowsChildrenToShowToolTips();
+            return true;
         }
 
         Rectangle IKeyboardToolTip.GetNativeScreenRectangle()
@@ -7007,19 +7004,20 @@ namespace System.Windows.Forms
             return this.AccessibilityObject.Bounds;
         }
 
-        public IList<Rectangle> GetNeighboringToolsRectangles()
-        {
-            return new Rectangle[0];
-        }
+        //public IList<Rectangle> GetNeighboringToolsRectangles()
+        //{
+        //    return new Rectangle[0];
+        //}
 
         bool IKeyboardToolTip.IsHoveredWithMouse()
         {
-            return ((IKeyboardToolTip)this).GetNativeScreenRectangle().Contains(Control.MousePosition);
+            return ((IKeyboardToolTip)this.CurrentCell)
+                .GetNativeScreenRectangle().Contains(Control.MousePosition);
         }
 
         bool IKeyboardToolTip.HasRtlModeEnabled()
         {
-            return this.DataGridView != null && ((IKeyboardToolTip)this.DataGridView).HasRtlModeEnabled();
+            return this != null && ((IKeyboardToolTip)this).HasRtlModeEnabled();
         }
 
         bool IKeyboardToolTip.AllowsToolTip()
@@ -7029,8 +7027,8 @@ namespace System.Windows.Forms
 
         IWin32Window IKeyboardToolTip.GetOwnerWindow()
         {
-            Debug.Assert(this.DataGridView != null, "Cell DataGridView is null");
-            return this.DataGridView;
+            Debug.Assert(this != null, "Cell DataGridView is null");
+            return this;
         }
 
         void IKeyboardToolTip.OnHooked(ToolTip toolTip)
@@ -7045,12 +7043,12 @@ namespace System.Windows.Forms
 
         string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
         {
-            return this.ToolTipText;
+            return this.CurrentCell.ToolTipText;
         }
 
         bool IKeyboardToolTip.ShowsOwnToolTip()
         {
-            return true;
+            return false;
         }
 
         bool IKeyboardToolTip.IsBeingTabbedTo()
@@ -7078,7 +7076,6 @@ namespace System.Windows.Forms
 
 
         #endregion
-
 
         /* INTERNAL ENUMERATIONS */
 

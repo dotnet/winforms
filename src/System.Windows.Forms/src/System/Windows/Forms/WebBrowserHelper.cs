@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System;
 using System.Reflection;
 using System.Globalization;
+using System.Security.Permissions;
 using Microsoft.Win32;
 using System.Collections;
 using System.Collections.Specialized;

@@ -15,6 +15,7 @@ namespace System.Windows.Forms
     using System.Drawing.Design;
     using System.Diagnostics;
     using System.Runtime.InteropServices;
+    using System.Security.Permissions;
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32.SafeHandles;
 

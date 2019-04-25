@@ -1767,7 +1767,7 @@ namespace System.Windows.Forms {
             get {
                 ScreenOrientation so = ScreenOrientation.Angle0;
                 NativeMethods.DEVMODE dm = new NativeMethods.DEVMODE();
-                dm.dmSize = (short) Marshal.SizeOf<NativeMethods.DEVMODE>();
+                dm.dmSize = (short) Marshal.SizeOf(typeof(NativeMethods.DEVMODE));
                 dm.dmDriverExtra = 0;
                 try {
                     SafeNativeMethods.EnumDisplaySettings(null, -1 /*ENUM_CURRENT_SETTINGS*/, ref dm);

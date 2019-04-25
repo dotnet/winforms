@@ -26,7 +26,7 @@ namespace System.Windows.Forms
     [
         TypeConverterAttribute(typeof(DataGridViewCellConverter))
     ]
-    public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable, IKeyboardToolTip
+    public abstract class DataGridViewCell : DataGridViewElement, ICloneable, IDisposable
     {
         private const TextFormatFlags textFormatSupportedFlags = TextFormatFlags.SingleLine | /*TextFormatFlags.NoFullWidthCharacterBreak |*/ TextFormatFlags.WordBreak | TextFormatFlags.NoPrefix;
         private const int DATAGRIDVIEWCELL_constrastThreshold = 1000;
@@ -4721,90 +4721,6 @@ namespace System.Windows.Forms
             }
         }
 
-        #region IKeyboardToolTip implementation
-
-        bool IKeyboardToolTip.CanShowToolTipsNow()
-        {
-            return this.Visible && this.DataGridView != null && ((IKeyboardToolTip)this.DataGridView).AllowsChildrenToShowToolTips();
-        }
-
-        Rectangle IKeyboardToolTip.GetNativeScreenRectangle()
-        {
-            return this.AccessibilityObject.Bounds;
-        }
-
-        public IList<Rectangle> GetNeighboringToolsRectangles()
-        {
-            return new Rectangle[0];
-        }
-
-        bool IKeyboardToolTip.IsHoveredWithMouse()
-        {
-            return ((IKeyboardToolTip)this).GetNativeScreenRectangle().Contains(Control.MousePosition);
-        }
-
-        bool IKeyboardToolTip.HasRtlModeEnabled()
-        {
-            return this.DataGridView != null && ((IKeyboardToolTip)this.DataGridView).HasRtlModeEnabled();
-        }
-
-        bool IKeyboardToolTip.AllowsToolTip()
-        {
-            return true;
-        }
-
-        IWin32Window IKeyboardToolTip.GetOwnerWindow()
-        {
-            Debug.Assert(this.DataGridView != null, "Cell DataGridView is null");
-            return this.DataGridView;
-        }
-
-        void IKeyboardToolTip.OnHooked(ToolTip toolTip)
-        {
-            this.OnKeyboardToolTipHook(toolTip);
-        }
-
-        void IKeyboardToolTip.OnUnhooked(ToolTip toolTip)
-        {
-            this.OnKeyboardToolTipUnhook(toolTip);
-        }
-
-        string IKeyboardToolTip.GetCaptionForTool(ToolTip toolTip)
-        {
-            return this.ToolTipText;
-        }
-
-        bool IKeyboardToolTip.ShowsOwnToolTip()
-        {
-            return true;
-        }
-
-        bool IKeyboardToolTip.IsBeingTabbedTo()
-        {
-            return this.IsBeingTabbedTo();
-        }
-
-        bool IKeyboardToolTip.AllowsChildrenToShowToolTips()
-        {
-            return true;
-        }
-
-        internal virtual void OnKeyboardToolTipHook(ToolTip toolTip)
-        {
-        }
-
-        internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip)
-        {
-        }
-
-        internal virtual bool IsBeingTabbedTo()
-        {
-            return DataGridView.AreCommonNavigationalKeysDown();
-        }
-
-
-        #endregion
-
         /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject"]/*' />
         [
             System.Runtime.InteropServices.ComVisible(true)
@@ -4983,6 +4899,7 @@ namespace System.Windows.Forms
                     if (this.owner.Selected)
                     {
                         state |= AccessibleStates.Selected;
+                        
                     }
 
                     if (AccessibilityImprovements.Level1 && this.owner.ReadOnly)

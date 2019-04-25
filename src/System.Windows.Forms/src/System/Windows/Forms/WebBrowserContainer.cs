@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System;
 using System.Reflection;
 using System.Globalization;
+using System.Security.Permissions;
 using System.Collections;
 using System.Drawing;    
 using System.Windows.Forms.Design;

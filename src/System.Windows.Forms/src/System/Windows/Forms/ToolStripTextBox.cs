@@ -13,6 +13,7 @@ namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Design; 
     using System.Security;
+    using System.Security.Permissions;
     using Microsoft.Win32;
     
     /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox"]/*' />
@@ -887,7 +888,7 @@ namespace System.Windows.Forms {
 
                 }
                 protected override void WndProc(ref Message m) {
-                    if (m.Msg == Interop.WindowMessages.WM_NCPAINT) {
+                    if (m.Msg == NativeMethods.WM_NCPAINT) {
                         WmNCPaint(ref m);
                         return;
                     }

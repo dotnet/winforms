@@ -72,10 +72,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\..\..\Common\src\Interop\Interop.WindowMessages.cs" Link="Interop\Interop.WindowMessages.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -95,6 +91,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="2.4.0-prerelease-63123-06" />
     <PackageReference Include="System.Management" Version="4.5.0-preview1-25914-04" />
   </ItemGroup>
 

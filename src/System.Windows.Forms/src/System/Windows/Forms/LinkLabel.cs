@@ -400,7 +400,7 @@ namespace System.Windows.Forms {
 
                         // 
                         if ((r.left <= p.x && p.x < r.right && r.top <= p.y && p.y < r.bottom) || UnsafeNativeMethods.GetCapture() == Handle)
-                            SendMessage(Interop.WindowMessages.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
+                            SendMessage(NativeMethods.WM_SETCURSOR, Handle, NativeMethods.HTCLIENT);
                     }
                 }
             }
@@ -1909,7 +1909,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case NativeMethods.WM_SETCURSOR:
                     WmSetCursor(ref msg);
                     break;
                 default:

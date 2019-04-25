@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case NativeMethods.WM_SETFOCUS:
                     WmSetFocus(ref m);
                     break;
                 default:

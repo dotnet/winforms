@@ -1124,7 +1124,7 @@ namespace System.Windows.Forms {
                 for (int x = 0; x < buttonCount; x++) {
 
                     NativeMethods.TBBUTTONINFO tbbi = new NativeMethods.TBBUTTONINFO();
-                    tbbi.cbSize = Marshal.SizeOf<NativeMethods.TBBUTTONINFO>();
+                    tbbi.cbSize = Marshal.SizeOf(typeof(NativeMethods.TBBUTTONINFO));
                     tbbi.cx = buttons[x].Width;
 
                     if (tbbi.cx > maxWidth) {
@@ -1273,7 +1273,7 @@ namespace System.Windows.Forms {
 
             // we have to set the button struct size, because they don't.
             //
-            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf<NativeMethods.TBBUTTON>(), 0);
+            SendMessage(NativeMethods.TB_BUTTONSTRUCTSIZE, Marshal.SizeOf(typeof(NativeMethods.TBBUTTON)), 0);
 
             // set up some extra goo
             //
@@ -1358,7 +1358,7 @@ namespace System.Windows.Forms {
 
                     // insert the buttons and set their parent pointers
                     //
-                    int cb = Marshal.SizeOf<NativeMethods.TBBUTTON>();
+                    int cb = Marshal.SizeOf(typeof(NativeMethods.TBBUTTON));
                     int count = buttonCount;
                     ptbbuttons = Marshal.AllocHGlobal(checked(cb * count));
 
@@ -1630,12 +1630,12 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
+                case NativeMethods.WM_COMMAND + NativeMethods.WM_REFLECT:
                     WmReflectCommand(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
-                case Interop.WindowMessages.WM_NOTIFY + Interop.WindowMessages.WM_REFLECT:
+                case NativeMethods.WM_NOTIFY:
+                case NativeMethods.WM_NOTIFY + NativeMethods.WM_REFLECT:
                     NativeMethods.NMHDR note = (NativeMethods.NMHDR) m.GetLParam(typeof(NativeMethods.NMHDR));
                     switch (note.code) {
                         case NativeMethods.TTN_NEEDTEXT:

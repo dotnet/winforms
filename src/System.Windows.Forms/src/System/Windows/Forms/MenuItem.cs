@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                 }
 
                 var info = new NativeMethods.MENUITEMINFO_T();
-                info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+                info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 info.fMask = NativeMethods.MIIM_STATE;
                 UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 
@@ -413,7 +413,7 @@ namespace System.Windows.Forms
                 int count = UnsafeNativeMethods.GetMenuItemCount(new HandleRef(Parent, Parent.Handle));
                 int id = MenuID;
                 NativeMethods.MENUITEMINFO_T info = new NativeMethods.MENUITEMINFO_T();
-                info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+                info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 info.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_SUBMENU;
 
                 for (int i = 0; i < count; i++)
@@ -764,7 +764,7 @@ namespace System.Windows.Forms
 
 #if DEBUG
                 NativeMethods.MENUITEMINFO_T infoVerify = new NativeMethods.MENUITEMINFO_T();
-                infoVerify.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+                infoVerify.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
                 UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);
@@ -926,14 +926,14 @@ namespace System.Windows.Forms
             {
                 if (uniqueID < FirstUniqueID)
                 {
-                    MsaaMenuInfoWithId msaaMenuInfo = Marshal.PtrToStructure<MsaaMenuInfoWithId>(itemData);
+                    MsaaMenuInfoWithId msaaMenuInfo = (MsaaMenuInfoWithId)Marshal.PtrToStructure(itemData, typeof(MsaaMenuInfoWithId));
                     uniqueID = msaaMenuInfo._uniqueID;
                 }
             }
             else
             {
                 // Its always a pointer on Win64 (see CreateMenuItemInfo)
-                MsaaMenuInfoWithId msaaMenuInfo = Marshal.PtrToStructure<MsaaMenuInfoWithId>(itemData);
+                MsaaMenuInfoWithId msaaMenuInfo = (MsaaMenuInfoWithId)Marshal.PtrToStructure(itemData, typeof(MsaaMenuInfoWithId));
                 uniqueID = msaaMenuInfo._uniqueID;
             }
 
@@ -967,7 +967,7 @@ namespace System.Windows.Forms
         private IntPtr AllocMsaaMenuInfo()
         {
             FreeMsaaMenuInfo();
-            _msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf<MsaaMenuInfoWithId>());
+            _msaaMenuInfoPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(MsaaMenuInfoWithId)));
 
             if (IntPtr.Size == 4)
             {
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
             var info = new NativeMethods.MENUITEMINFO_T();
             info.fMask = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU;
             info.dwTypeData = new string('\0', Text.Length + 2);
-            info.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+            info.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
             info.cch = info.dwTypeData.Length - 1;
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             if (setRightToLeftBit)
@@ -1380,7 +1380,7 @@ namespace System.Windows.Forms
 
             info.fMask          = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU;
             info.dwTypeData     = new string('\0', 256);
-            info.cbSize         = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+            info.cbSize         = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
             info.cch            = info.dwTypeData.Length - 1;
             UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
             Debug.Assert(((info.fType & NativeMethods.MFT_RIGHTORDER) != 0) == setRightToLeftBit, "Failed to set bit!");
@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
 #if DEBUG
                 var infoVerify = new NativeMethods.MENUITEMINFO_T();
-                infoVerify.cbSize = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
+                infoVerify.cbSize = Marshal.SizeOf(typeof(NativeMethods.MENUITEMINFO_T));
                 infoVerify.fMask = NativeMethods.MIIM_ID | NativeMethods.MIIM_STATE |
                                    NativeMethods.MIIM_SUBMENU | NativeMethods.MIIM_TYPE;
                 UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, infoVerify);

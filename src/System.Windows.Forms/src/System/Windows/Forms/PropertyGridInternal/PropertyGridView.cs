@@ -260,7 +260,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (!Edit.Visible || !Edit.Focused) {
                     return false;
                 }
-                return (0 != (int)Edit.SendMessage(Interop.EditMessages.EM_CANUNDO, 0, 0));
+                return (0 != (int)Edit.SendMessage(NativeMethods.EM_CANUNDO, 0, 0));
             }
         }
 
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         public void DoUndoCommand() {
             if (this.CanUndo && Edit.Visible) {
-               Edit.SendMessage(Interop.WindowMessages.WM_UNDO, 0, 0);
+               Edit.SendMessage(NativeMethods.WM_UNDO, 0, 0);
             }
         }
         
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         private bool FilterEditWndProc(ref Message m) {
             // if it's the TAB key, we keep it since we'll give them focus with it.
-            if (dropDownHolder != null && dropDownHolder.Visible && m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam != (int)Keys.Tab) {
+            if (dropDownHolder != null && dropDownHolder.Visible && m.Msg == NativeMethods.WM_KEYDOWN && (int)m.WParam != (int)Keys.Tab) {
                 Control ctl = dropDownHolder.Component;
                 if (ctl != null) {
                     m.Result = ctl.SendMessage(m.Msg, m.WParam, m.LParam);
@@ -2718,7 +2718,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (Math.Abs(screenPoint.X - rowSelectPos.X) < SystemInformation.DoubleClickSize.Width &&
                     Math.Abs(screenPoint.Y - rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height) {
                     DoubleClickRow(selectedRow,false, ROWVALUE);
-                    Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONUP, 0, (int)(me.Y << 16 | (me.X & 0xFFFF)));
+                    Edit.SendMessage(NativeMethods.WM_LBUTTONUP, 0, (int)(me.Y << 16 | (me.X & 0xFFFF)));
                     Edit.SelectAll();                
                 }
                 rowSelectPos = Point.Empty;
@@ -3544,8 +3544,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
                
                Point editPoint = PointToScreen(lastMouseDown);
                editPoint = Edit.PointToClientInternal(editPoint);
-               Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
-               Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
+               Edit.SendMessage(NativeMethods.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
+               Edit.SendMessage(NativeMethods.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
             }
             
             if (setSelectTime) {
@@ -4902,8 +4902,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
             while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
                                                    NativeMethods.NullHandleRef,
-                                                   Interop.WindowMessages.WM_MOUSEFIRST,
-                                                   Interop.WindowMessages.WM_MOUSELAST,
+                                                   NativeMethods.WM_MOUSEFIRST,
+                                                   NativeMethods.WM_MOUSELAST,
                                                    NativeMethods.PM_REMOVE))
                 ;
 
@@ -4985,8 +4985,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             NativeMethods.MSG mouseMsg = new NativeMethods.MSG();
             while (UnsafeNativeMethods.PeekMessage(ref mouseMsg,
                                                    NativeMethods.NullHandleRef,
-                                                   Interop.WindowMessages.WM_MOUSEFIRST,
-                                                   Interop.WindowMessages.WM_MOUSELAST,
+                                                   NativeMethods.WM_MOUSEFIRST,
+                                                   NativeMethods.WM_MOUSELAST,
                                                    NativeMethods.PM_REMOVE))
                 ;
 
@@ -5254,7 +5254,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 
-                case Interop.WindowMessages.WM_SYSCOLORCHANGE:
+                case NativeMethods.WM_SYSCOLORCHANGE:
                     Invalidate();
                     break;
 
@@ -5263,7 +5263,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     // Edit or bad bad things can happen with
                     // our state...
                     //
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case NativeMethods.WM_SETFOCUS:
                     if (!GetInPropertySet() && Edit.Visible && (errorState != ERROR_NONE || !Commit())) {
                         base.WndProc(ref m);
                         Edit.FocusInternal();
@@ -5271,18 +5271,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                     break;
                     
-                case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
+                case NativeMethods.WM_IME_STARTCOMPOSITION:
                     Edit.FocusInternal();
                     Edit.Clear();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0); 
+                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), NativeMethods.WM_IME_STARTCOMPOSITION, 0, 0); 
                     return;
                     
-                case Interop.WindowMessages.WM_IME_COMPOSITION:
+                case NativeMethods.WM_IME_COMPOSITION:
                     Edit.FocusInternal();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), NativeMethods.WM_IME_COMPOSITION, m.WParam, m.LParam);
                     return;
                     
-            case Interop.WindowMessages.WM_GETDLGCODE:
+            case NativeMethods.WM_GETDLGCODE:
 
                     int flags = NativeMethods.DLGC_WANTCHARS |  NativeMethods.DLGC_WANTARROWS;
                     
@@ -5300,7 +5300,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     m.Result = (IntPtr)(flags);
                     return;
                     
-                case Interop.WindowMessages.WM_MOUSEMOVE: 
+                case NativeMethods.WM_MOUSEMOVE: 
                     
                     // check if it's the same position, of so eat the message
                     if (unchecked( (int) (long)m.LParam) == lastMouseMove) {
@@ -5309,7 +5309,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     lastMouseMove = unchecked( (int) (long)m.LParam);
                     break;
 
-                case Interop.WindowMessages.WM_NOTIFY:
+                case NativeMethods.WM_NOTIFY:
                     if (WmNotify(ref m))
                         return;
                     break;
@@ -5992,7 +5992,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             protected override void WndProc(ref Message m) {
 
-                if (m.Msg == Interop.WindowMessages.WM_ACTIVATE) {
+                if (m.Msg == NativeMethods.WM_ACTIVATE) {
                     SetState(STATE_MODAL, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
                     IntPtr activatedWindow = (IntPtr)m.LParam;
@@ -6005,7 +6005,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     //Active = ((int)m.WParam & 0x0000FFFF) != NativeMethods.WA_INACTIVE;
                     //return;
                 }
-                else if (m.Msg == Interop.WindowMessages.WM_CLOSE) {
+                else if (m.Msg == NativeMethods.WM_CLOSE) {
                     // don't let an ALT-F4 get you down
                     //
                     if (Visible) {
@@ -6013,7 +6013,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                     return;
                 }
-                else if (m.Msg == Interop.WindowMessages.WM_DPICHANGED) {
+                else if (m.Msg == NativeMethods.WM_DPICHANGED) {
                     // Dropdownholder in PropertyGridView is already scaled based on parent font and other properties that were already set for new DPI
                     // This case is to avoid rescaling(double scaling) of this form
                     m.Result = IntPtr.Zero;
@@ -6538,7 +6538,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (IsInputChar(keyChar)) {
                     this.FocusInternal();
                     this.SelectAll();
-                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
+                    UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
                 }
             }
     
@@ -6762,26 +6762,26 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 }
 
                 switch (m.Msg) {
-                    case Interop.WindowMessages.WM_STYLECHANGED:
+                    case NativeMethods.WM_STYLECHANGED:
                         if ((unchecked( (int) (long)m.WParam) & NativeMethods.GWL_EXSTYLE) != 0) {
                             psheet.Invalidate();
                         }
                         break;
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case NativeMethods.WM_MOUSEMOVE:
                         if (unchecked( (int) (long)m.LParam) == lastMove) {
                             return;
                         }
                         lastMove = unchecked( (int) (long)m.LParam);
                         break;
-                    case Interop.WindowMessages.WM_DESTROY:
+                    case NativeMethods.WM_DESTROY:
                         mouseHook.HookMouseDown = false;
                         break;
-                    case Interop.WindowMessages.WM_SHOWWINDOW:
+                    case NativeMethods.WM_SHOWWINDOW:
                         if (IntPtr.Zero == m.WParam) {
                             mouseHook.HookMouseDown = false;
                         }
                         break;
-                    case Interop.WindowMessages.WM_PASTE:
+                    case NativeMethods.WM_PASTE:
                         /*if (!this.ReadOnly) {
                             IDataObject dataObject = Clipboard.GetDataObject();
                             Debug.Assert(dataObject != null, "Failed to get dataObject from clipboard");
@@ -6800,7 +6800,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         }
                         break;
                                                             
-                    case Interop.WindowMessages.WM_GETDLGCODE:
+                    case NativeMethods.WM_GETDLGCODE:
 
                         m.Result = (IntPtr)((long)m.Result | NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTCHARS);
                         if (psheet.NeedsCommit || this.WantsTab((ModifierKeys & Keys.Shift) == 0)) {
@@ -6808,7 +6808,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         }
                         return;
                         
-                    case Interop.WindowMessages.WM_NOTIFY:
+                    case NativeMethods.WM_NOTIFY:
                         if (WmNotify(ref m))
                             return;
                         break;                                                              
@@ -7061,16 +7061,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
             private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
                 GC.KeepAlive(this);
                 if (nCode == NativeMethods.HC_ACTION) {
-                    NativeMethods.MOUSEHOOKSTRUCT mhs = Marshal.PtrToStructure<NativeMethods.MOUSEHOOKSTRUCT>(lparam);
+                    NativeMethods.MOUSEHOOKSTRUCT mhs = (NativeMethods.MOUSEHOOKSTRUCT)UnsafeNativeMethods.PtrToStructure(lparam, typeof(NativeMethods.MOUSEHOOKSTRUCT));
                     if (mhs != null) {
                         switch (unchecked( (int) (long)wparam)) {
-                            case Interop.WindowMessages.WM_LBUTTONDOWN:
-                            case Interop.WindowMessages.WM_MBUTTONDOWN:
-                            case Interop.WindowMessages.WM_RBUTTONDOWN:
-                            case Interop.WindowMessages.WM_NCLBUTTONDOWN:
-                            case Interop.WindowMessages.WM_NCMBUTTONDOWN:
-                            case Interop.WindowMessages.WM_NCRBUTTONDOWN:
-                            case Interop.WindowMessages.WM_MOUSEACTIVATE:
+                            case NativeMethods.WM_LBUTTONDOWN:
+                            case NativeMethods.WM_MBUTTONDOWN:
+                            case NativeMethods.WM_RBUTTONDOWN:
+                            case NativeMethods.WM_NCLBUTTONDOWN:
+                            case NativeMethods.WM_NCMBUTTONDOWN:
+                            case NativeMethods.WM_NCRBUTTONDOWN:
+                            case NativeMethods.WM_MOUSEACTIVATE:
                                 if (ProcessMouseDown(mhs.hWnd, mhs.pt_x, mhs.pt_y)) {
                                     return (IntPtr)1;
                                 }

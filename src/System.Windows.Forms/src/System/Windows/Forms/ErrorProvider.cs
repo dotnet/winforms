@@ -1253,16 +1253,16 @@ namespace System.Windows.Forms {
             /// </devdoc>
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
-                    case Interop.WindowMessages.WM_NOTIFY:
+                    case NativeMethods.WM_NOTIFY:
                         NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
                         if (nmhdr.code == NativeMethods.TTN_SHOW || nmhdr.code == NativeMethods.TTN_POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr.idFrom, nmhdr.code == NativeMethods.TTN_SHOW);
                         }
                         break;
-                    case Interop.WindowMessages.WM_ERASEBKGND:
+                    case NativeMethods.WM_ERASEBKGND:
                         break;
-                    case Interop.WindowMessages.WM_PAINT:
+                    case NativeMethods.WM_PAINT:
                         OnPaint(ref m);
                         break;
                     default:

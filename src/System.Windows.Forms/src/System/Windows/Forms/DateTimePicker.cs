@@ -1645,17 +1645,17 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case NativeMethods.WM_LBUTTONDOWN:
                     FocusInternal();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
                     WmReflectCommand(ref m);
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case NativeMethods.WM_WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     UpdateUpDown();
                     break;

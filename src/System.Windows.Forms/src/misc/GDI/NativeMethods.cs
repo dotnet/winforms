@@ -241,7 +241,7 @@ namespace System.Experimental.Gdi
         [StructLayout(LayoutKind.Sequential)]
         public class DRAWTEXTPARAMS 
         { 
-            private int cbSize = Marshal.SizeOf<DRAWTEXTPARAMS>();
+            private int cbSize = Marshal.SizeOf(typeof(DRAWTEXTPARAMS));
             public int iTabLength;
             public int iLeftMargin;
             public int iRightMargin;

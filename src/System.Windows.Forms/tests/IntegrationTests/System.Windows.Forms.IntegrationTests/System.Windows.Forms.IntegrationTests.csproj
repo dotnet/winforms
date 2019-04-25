@@ -9,6 +9,7 @@
     <PackageReference Include="$(MoqPackage)" Version="$(MoqPackageVersion)" />
     <PackageReference Include="$(XUnitStaFactPackage)" Version="$(XUnitStaFactPackageVersion)" />
     <PackageReference Include="coverlet.msbuild" Version="$(CoverletMSBuildPackageVersion)" />
+    <PackageReference Include="Microsoft.DotNet.XUnitExtensions" Version="2.4.0-prerelease-63123-06" />
   </ItemGroup>
 
   <ItemGroup>

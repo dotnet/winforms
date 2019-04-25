@@ -270,7 +270,7 @@ namespace System.Windows.Forms
             if (_parent.IsHandleCreated && _visible)
             {
                 var si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
+                si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
                 si.fMask = NativeMethods.SIF_ALL;
                 si.nMin = _minimum;
                 si.nMax = _maximum;

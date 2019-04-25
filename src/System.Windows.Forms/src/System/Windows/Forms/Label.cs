@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_NCHITTEST:
+                case NativeMethods.WM_NCHITTEST:
                     // label returns HT_TRANSPARENT for everything, so all messages get
                     // routed to the parent.  Change this so we can tell what's going on.
                     //

@@ -114,7 +114,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             
             if (toolInfos[index] == null){
                toolInfos[index] = new NativeMethods.TOOLINFO_T();
-               toolInfos[index].cbSize = Marshal.SizeOf<NativeMethods.TOOLINFO_T>();
+               toolInfos[index].cbSize = Marshal.SizeOf(typeof(NativeMethods.TOOLINFO_T));
                toolInfos[index].uFlags |= NativeMethods.TTF_IDISHWND | NativeMethods.TTF_TRANSPARENT | NativeMethods.TTF_SUBCLASS;
             }
             toolInfos[index].lpszText = this.toolTipText;
@@ -196,12 +196,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void WndProc(ref Message msg) {
             switch (msg.Msg) {
-               case Interop.WindowMessages.WM_SHOWWINDOW:
+               case NativeMethods.WM_SHOWWINDOW:
                   if (unchecked( (int) (long)msg.WParam) != 0 && dontShow){
                      msg.WParam = IntPtr.Zero;
                   }
                   break;
-               case Interop.WindowMessages.WM_NCHITTEST:
+               case NativeMethods.WM_NCHITTEST:
                   // When using v6 common controls, the native
                   // tooltip does not end up returning HTTRANSPARENT all the time, so its TTF_TRANSPARENT
                   // behavior does not work, ie. mouse events do not fall thru to controls underneath. This

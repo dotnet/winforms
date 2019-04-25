@@ -481,7 +481,7 @@ namespace System.Windows.Forms {
             // but since we have disabled this thread main window the message is lost. So we have to send it again after
             // we enable the main window.
             //
-            UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), Interop.WindowMessages.WM_SETFOCUS, 0, 0);
+            UnsafeNativeMethods.SendMessage(new HandleRef(owner, handle), NativeMethods.WM_SETFOCUS, 0, 0);
             return result;
         }
 

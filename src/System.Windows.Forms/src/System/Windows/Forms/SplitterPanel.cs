@@ -10,6 +10,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Security;
+    using System.Security.Permissions;
     using System.Windows.Forms;
     using System.Drawing;
     using System.Drawing.Design;

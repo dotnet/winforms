@@ -33,11 +33,11 @@ namespace System.Windows.Forms.Tests
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
            
             //Cover the Placeholder draw code path 
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, NativeMethods.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Center;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, NativeMethods.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Right;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, NativeMethods.WM_PAINT, false, 0);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
@@ -52,11 +52,11 @@ namespace System.Windows.Forms.Tests
             System.Runtime.InteropServices.HandleRef refHandle = new System.Runtime.InteropServices.HandleRef(tb, tb.Handle);
 
             //Cover the Placeholder draw code path in RightToLeft scenario
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, NativeMethods.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Center;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, NativeMethods.WM_PAINT, false, 0);
             tb.TextAlign = HorizontalAlignment.Right;
-            UnsafeNativeMethods.SendMessage(refHandle, Interop.WindowMessages.WM_PAINT, false, 0);
+            UnsafeNativeMethods.SendMessage(refHandle, NativeMethods.WM_PAINT, false, 0);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }

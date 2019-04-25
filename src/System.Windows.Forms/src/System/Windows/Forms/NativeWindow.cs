@@ -192,7 +192,7 @@ namespace System.Windows.Forms
                 // If we owned the handle, post a 
                 // WM_CLOSE to get rid of it.
                 //
-                UnsafeNativeMethods.PostMessage(new HandleRef(this, h), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                UnsafeNativeMethods.PostMessage(new HandleRef(this, h), NativeMethods.WM_CLOSE, 0, 0);
             }
         }
 
@@ -643,7 +643,7 @@ namespace System.Windows.Forms
                 OnThreadException(e);
             }
             finally {
-                if (msg == Interop.WindowMessages.WM_NCDESTROY) ReleaseHandle(false);
+                if (msg == NativeMethods.WM_NCDESTROY) ReleaseHandle(false);
                 if (msg == NativeMethods.WM_UIUNSUBCLASS) ReleaseHandle(true);
             }
 
@@ -759,7 +759,7 @@ namespace System.Windows.Forms
                 }
             }
             finally {
-                if (msg == Interop.WindowMessages.WM_NCDESTROY) ReleaseHandle(false);
+                if (msg == NativeMethods.WM_NCDESTROY) ReleaseHandle(false);
                 if (msg == NativeMethods.WM_UIUNSUBCLASS) ReleaseHandle(true);
             }
 
@@ -807,7 +807,7 @@ namespace System.Windows.Forms
                     if (!UnsafeNativeMethods.DestroyWindow(new HandleRef(this, handle))) {
                         UnSubclass();
                         //then post a close and let it do whatever it needs to do on its own.
-                        UnsafeNativeMethods.PostMessage(new HandleRef(this, handle), Interop.WindowMessages.WM_CLOSE, 0, 0);
+                        UnsafeNativeMethods.PostMessage(new HandleRef(this, handle), NativeMethods.WM_CLOSE, 0, 0);
                     }
                     handle = IntPtr.Zero;
                     ownHandle = false;
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms
                             HandleRef href = new HandleRef(b, b.handle);
                             UnsafeNativeMethods.SetWindowLong(href, NativeMethods.GWL_WNDPROC, new HandleRef(null, userDefWindowProc));
                             UnsafeNativeMethods.SetClassLong(href, NativeMethods.GCL_WNDPROC, userDefWindowProc);
-                            UnsafeNativeMethods.PostMessage(href, Interop.WindowMessages.WM_CLOSE, 0, 0);
+                            UnsafeNativeMethods.PostMessage(href, NativeMethods.WM_CLOSE, 0, 0);
 
                             // Fish out the Window object, if it is valid, and NULL the handle pointer.  This
                             // way the rest of WinForms won't think the handle is still valid here.

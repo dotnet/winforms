@@ -7,6 +7,7 @@
 namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Security;
+    using System.Security.Permissions;
     
     internal class DisplayInformation {
         

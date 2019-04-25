@@ -356,7 +356,7 @@ namespace System.Windows.Forms {
                 case NativeMethods.SB_THUMBPOSITION:
                 case NativeMethods.SB_THUMBTRACK:
                     NativeMethods.SCROLLINFO si = new NativeMethods.SCROLLINFO();
-                    si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
+                    si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
                     si.fMask = NativeMethods.SIF_TRACKPOS;
                     int direction = horizontal ? NativeMethods.SB_HORZ : NativeMethods.SB_VERT;
                     if (SafeNativeMethods.GetScrollInfo(new HandleRef(this, m.HWnd), direction, si))
@@ -451,6 +451,7 @@ namespace System.Windows.Forms {
                 document.PrintController = new PrintControllerWithStatusDialog(previewController, 
                                                                                string.Format(SR.PrintControllerWithStatusDialog_DialogTitlePreview));
 
+                // Want to make sure we've reverted any security asserts before we call Print -- that calls into user code
                 document.Print();
                 pageInfo = previewController.GetPreviewPageInfo();
                 Debug.Assert(pageInfo != null, "ReviewPrintController did not give us preview info");
@@ -905,15 +906,15 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_VSCROLL:
+                case NativeMethods.WM_VSCROLL:
                     WmVScroll(ref m);
                     break;
-                case Interop.WindowMessages.WM_HSCROLL:
+                case NativeMethods.WM_HSCROLL:
                     WmHScroll(ref m);
                     break;
                 //added case to handle keyboard events
                 //
-                case Interop.WindowMessages.WM_KEYDOWN:
+                case NativeMethods.WM_KEYDOWN:
                     WmKeyDown(ref m);
                     break;
                 default:

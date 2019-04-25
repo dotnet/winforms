@@ -236,7 +236,7 @@ namespace System.Windows.Forms {
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[MenuStrip.ProcessCmdKey] Rolling up the menu and invoking the system menu");
                         ToolStripManager.ModalMenuFilter.ExitMenuMode();
                         // send a WM_SYSCOMMAND SC_KEYMENU + Space to activate the system menu.
-                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), Interop.WindowMessages.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
+                        UnsafeNativeMethods.PostMessage(WindowsFormsUtils.GetRootHWnd(this), NativeMethods.WM_SYSCOMMAND, NativeMethods.SC_KEYMENU, (int)Keys.Space);
                         return true;
                     }
                 }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms {
         /// <param name=m></param>
         protected override void WndProc(ref Message m) {
 
-            if (m.Msg == Interop.WindowMessages.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
+            if (m.Msg == NativeMethods.WM_MOUSEACTIVATE && (ActiveDropDowns.Count == 0)) {
                 // call menu activate before we actually take focus.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
                 ToolStripItem item = GetItemAt(pt);

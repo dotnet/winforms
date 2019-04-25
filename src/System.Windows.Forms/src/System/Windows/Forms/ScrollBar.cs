@@ -712,7 +712,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated && Enabled)
             {
                 var si = new NativeMethods.SCROLLINFO();
-                si.cbSize = Marshal.SizeOf<NativeMethods.SCROLLINFO>();
+                si.cbSize = Marshal.SizeOf(typeof(NativeMethods.SCROLLINFO));
                 si.fMask = NativeMethods.SIF_ALL;
                 si.nMin = _minimum;
                 si.nMax = _maximum;
@@ -832,21 +832,20 @@ namespace System.Windows.Forms
         {
             switch (m.Msg)
             {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_HSCROLL:
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VSCROLL:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_HSCROLL:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_VSCROLL:
                     WmReflectScroll(ref m);
                     break;
-
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case NativeMethods.WM_ERASEBKGND:
                     break;
 
-                case Interop.WindowMessages.WM_SIZE:
+                case NativeMethods.WM_SIZE:
                     // Fixes the scrollbar focus rect
                     if (UnsafeNativeMethods.GetFocus() == Handle)
                     {
                         DefWndProc(ref m);
-                        SendMessage(Interop.WindowMessages.WM_KILLFOCUS, 0, 0);
-                        SendMessage(Interop.WindowMessages.WM_SETFOCUS, 0, 0);
+                        SendMessage(NativeMethods.WM_KILLFOCUS, 0, 0);
+                        SendMessage(NativeMethods.WM_SETFOCUS, 0, 0);
                     }
                     break;
 

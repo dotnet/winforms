@@ -51,6 +51,102 @@ namespace System.Windows.Forms {
         internal const string WC_RICHEDITW_41       = RICHEDIT_CLASS41W;
 
         /* RichTextBox messages */
+        internal const int WM_CONTEXTMENU          = 0x007B;
+
+        internal const int WM_PRINTCLIENT          = 0x0318;
+
+        internal const int EM_GETLIMITTEXT         = (NativeMethods.WM_USER + 37);
+
+        internal const int EM_POSFROMCHAR          = (NativeMethods.WM_USER + 38);
+        internal const int EM_CHARFROMPOS          = (NativeMethods.WM_USER + 39);
+
+        internal const int EM_SCROLLCARET          = (NativeMethods.WM_USER + 49);
+        internal const int EM_CANPASTE             = (NativeMethods.WM_USER + 50);
+        internal const int EM_DISPLAYBAND          = (NativeMethods.WM_USER + 51);
+        internal const int EM_EXGETSEL             = (NativeMethods.WM_USER + 52);
+        internal const int EM_EXLIMITTEXT          = (NativeMethods.WM_USER + 53);
+        internal const int EM_EXLINEFROMCHAR       = (NativeMethods.WM_USER + 54);
+        internal const int EM_EXSETSEL             = (NativeMethods.WM_USER + 55);
+        internal const int EM_FINDTEXT             = (NativeMethods.WM_USER + 56);
+        internal const int EM_FORMATRANGE          = (NativeMethods.WM_USER + 57);
+        internal const int EM_GETCHARFORMAT        = (NativeMethods.WM_USER + 58);
+        internal const int EM_GETEVENTMASK         = (NativeMethods.WM_USER + 59);
+        internal const int EM_GETOLEINTERFACE      = (NativeMethods.WM_USER + 60);
+        internal const int EM_GETPARAFORMAT        = (NativeMethods.WM_USER + 61);
+        internal const int EM_GETSELTEXT           = (NativeMethods.WM_USER + 62);
+        internal const int EM_HIDESELECTION        = (NativeMethods.WM_USER + 63);
+        internal const int EM_PASTESPECIAL         = (NativeMethods.WM_USER + 64);
+        internal const int EM_REQUESTRESIZE        = (NativeMethods.WM_USER + 65);
+        internal const int EM_SELECTIONTYPE        = (NativeMethods.WM_USER + 66);
+        internal const int EM_SETBKGNDCOLOR        = (NativeMethods.WM_USER + 67);
+        internal const int EM_SETCHARFORMAT        = (NativeMethods.WM_USER + 68);
+        internal const int EM_SETEVENTMASK         = (NativeMethods.WM_USER + 69);
+        internal const int EM_SETOLECALLBACK       = (NativeMethods.WM_USER + 70);
+        internal const int EM_SETPARAFORMAT        = (NativeMethods.WM_USER + 71);
+        internal const int EM_SETTARGETDEVICE      = (NativeMethods.WM_USER + 72);
+        internal const int EM_STREAMIN             = (NativeMethods.WM_USER + 73);
+        internal const int EM_STREAMOUT            = (NativeMethods.WM_USER + 74);
+        internal const int EM_GETTEXTRANGE         = (NativeMethods.WM_USER + 75);
+        internal const int EM_FINDWORDBREAK        = (NativeMethods.WM_USER + 76);
+        internal const int EM_SETOPTIONS           = (NativeMethods.WM_USER + 77);
+        internal const int EM_GETOPTIONS           = (NativeMethods.WM_USER + 78);
+        internal const int EM_FINDTEXTEX           = (NativeMethods.WM_USER + 79);
+        internal const int EM_GETWORDBREAKPROCEX   = (NativeMethods.WM_USER + 80);
+        internal const int EM_SETWORDBREAKPROCEX   = (NativeMethods.WM_USER + 81);
+
+        // Richedit v2.0 messages
+        internal const int EM_SETUNDOLIMIT         = (NativeMethods.WM_USER + 82);
+        internal const int EM_REDO                 = (NativeMethods.WM_USER + 84);
+        internal const int EM_CANREDO              = (NativeMethods.WM_USER + 85);
+        internal const int EM_GETUNDONAME          = (NativeMethods.WM_USER + 86);
+        internal const int EM_GETREDONAME          = (NativeMethods.WM_USER + 87);
+        internal const int EM_STOPGROUPTYPING      = (NativeMethods.WM_USER + 88);
+
+        internal const int EM_SETTEXTMODE          = (NativeMethods.WM_USER + 89);
+        internal const int EM_GETTEXTMODE          = (NativeMethods.WM_USER + 90);
+
+        internal const int EM_AUTOURLDETECT        = (NativeMethods.WM_USER + 91);
+        internal const int EM_GETAUTOURLDETECT     = (NativeMethods.WM_USER + 92);
+        internal const int EM_SETPALETTE           = (NativeMethods.WM_USER + 93);
+        internal const int EM_GETTEXTEX            = (NativeMethods.WM_USER + 94);
+        internal const int EM_GETTEXTLENGTHEX      = (NativeMethods.WM_USER + 95);
+
+        // Asia specific messages
+        internal const int EM_SETPUNCTUATION       = (NativeMethods.WM_USER + 100);
+        internal const int EM_GETPUNCTUATION       = (NativeMethods.WM_USER + 101);
+        internal const int EM_SETWORDWRAPMODE      = (NativeMethods.WM_USER + 102);
+        internal const int EM_GETWORDWRAPMODE      = (NativeMethods.WM_USER + 103);
+        internal const int EM_SETIMECOLOR          = (NativeMethods.WM_USER + 104);
+        internal const int EM_GETIMECOLOR          = (NativeMethods.WM_USER + 105);
+        internal const int EM_SETIMEOPTIONS        = (NativeMethods.WM_USER + 106);
+        internal const int EM_GETIMEOPTIONS        = (NativeMethods.WM_USER + 107);
+        internal const int EM_CONVPOSITION         = (NativeMethods.WM_USER + 108);
+
+        internal const int EM_SETLANGOPTIONS       = (NativeMethods.WM_USER + 120);
+        internal const int EM_GETLANGOPTIONS       = (NativeMethods.WM_USER + 121);
+        internal const int EM_GETIMECOMPMODE       = (NativeMethods.WM_USER + 122);
+
+        internal const int EM_FINDTEXTW            = (NativeMethods.WM_USER + 123);
+        internal const int EM_FINDTEXTEXW          = (NativeMethods.WM_USER + 124);
+
+        //Rich TextBox 3.0 Asia msgs
+        internal const int EM_RECONVERSION         = (NativeMethods.WM_USER + 125);
+        internal const int EM_SETIMEMODEBIAS       = (NativeMethods.WM_USER + 126);
+        internal const int EM_GETIMEMODEBIAS       = (NativeMethods.WM_USER + 127);
+
+        // BiDi Specific messages
+        internal const int EM_SETBIDIOPTIONS       = (NativeMethods.WM_USER + 200);
+        internal const int EM_GETBIDIOPTIONS       = (NativeMethods.WM_USER + 201);
+
+        internal const int EM_SETTYPOGRAPHYOPTIONS = (NativeMethods.WM_USER + 202);
+        internal const int EM_GETTYPOGRAPHYOPTIONS = (NativeMethods.WM_USER + 203);
+
+        // Extended TextBox style specific messages
+        internal const int EM_SETEDITSTYLE         = (NativeMethods.WM_USER + 204);
+        internal const int EM_GETEDITSTYLE         = (NativeMethods.WM_USER + 205);
+
+        // Ole Objects Disabling message
+        internal const int EM_SETQUERYRTFOBJ       = (NativeMethods.WM_USER + 270);
 
         // Extended edit style masks
         internal const int SES_EMULATESYSEDIT      = 1;
@@ -84,6 +180,20 @@ namespace System.Windows.Forms {
         internal const int ICM_LEVEL2              = 0x0002;
         internal const int ICM_LEVEL2_5            = 0x0003;
         internal const int ICM_LEVEL2_SUI          = 0x0004;
+
+        // Pegasus outline mode messages (RE 3.0)
+
+        // Outline mode message
+        internal const int EM_OUTLINE              = NativeMethods.WM_USER + 220;
+
+        // Message for getting and restoring scroll pos
+        internal const int EM_GETSCROLLPOS         = NativeMethods.WM_USER + 221;
+        internal const int EM_SETSCROLLPOS         = NativeMethods.WM_USER + 222;
+
+        // Change fontsize in current selection by wparam
+        internal const int EM_SETFONTSIZE          = NativeMethods.WM_USER + 223;
+        internal const int EM_GETZOOM              = NativeMethods.WM_USER + 224;
+        internal const int EM_SETZOOM              = NativeMethods.WM_USER + 225;
 
         // Outline mode wparam values
         internal const int EMO_EXIT    = 0; // enter normal mode,  lparam ignored

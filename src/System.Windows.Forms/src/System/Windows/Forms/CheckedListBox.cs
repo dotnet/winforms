@@ -1048,10 +1048,10 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_CHARTOITEM:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_CHARTOITEM:
                     m.Result = NativeMethods.InvalidIntPtr;
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_VKEYTOITEM:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
             default:

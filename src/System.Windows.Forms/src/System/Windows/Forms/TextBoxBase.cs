@@ -455,7 +455,7 @@ namespace System.Windows.Forms {
             get {
                 if (IsHandleCreated) {
                     bool b;
-                    b = unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_CANUNDO, 0, 0)) != 0;
+                    b = unchecked( (int) (long)SendMessage(NativeMethods.EM_CANUNDO, 0, 0)) != 0;
 
                     return b;
                 }
@@ -758,7 +758,7 @@ namespace System.Windows.Forms {
         public bool Modified {
             get {
                 if (IsHandleCreated) {
-                    bool curState = (0 != unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_GETMODIFY, 0, 0)));
+                    bool curState = (0 != unchecked( (int) (long)SendMessage(NativeMethods.EM_GETMODIFY, 0, 0)));
                     if (textBoxFlags[modified] != curState) {
                         // Raise ModifiedChanged event.  See WmReflectCommand for more info.
                         textBoxFlags[modified] = curState;
@@ -775,7 +775,7 @@ namespace System.Windows.Forms {
             set {
                 if (Modified != value) {
                     if (IsHandleCreated) {
-                        SendMessage(Interop.EditMessages.EM_SETMODIFY, value ? 1 : 0, 0);
+                        SendMessage(NativeMethods.EM_SETMODIFY, value ? 1 : 0, 0);
                         // Must maintain this state always in order for the
                         // test in the Get method to work properly.
                     }
@@ -974,7 +974,7 @@ namespace System.Windows.Forms {
             }
             else {
                 start = 0;
-                UnsafeNativeMethods.SendMessage( new HandleRef( this, Handle ), Interop.EditMessages.EM_GETSEL, ref start, ref end );
+                UnsafeNativeMethods.SendMessage( new HandleRef( this, Handle ), NativeMethods.EM_GETSEL, ref start, ref end );
 
                 //Here, we return the max of either 0 or the # returned by
                 //the windows call.  This eliminates a problem on nt4 where
@@ -1027,7 +1027,7 @@ namespace System.Windows.Forms {
                 if (textBoxFlags[readOnly] != value) {
                     textBoxFlags[readOnly] = value;
                     if (IsHandleCreated) {
-                        SendMessage(Interop.EditMessages.EM_SETREADONLY, value? -1: 0, 0);
+                        SendMessage(NativeMethods.EM_SETREADONLY, value? -1: 0, 0);
                     }
 
                     OnReadOnlyChanged(EventArgs.Empty);
@@ -1086,20 +1086,20 @@ namespace System.Windows.Forms {
             // The EM_LIMITTEXT message limits only the text the user can enter. It does not affect any text
             // already in the edit control when the message is sent, nor does it affect the length of the text
             // copied to the edit control by the WM_SETTEXT message.
-            SendMessage(Interop.EditMessages.EM_LIMITTEXT, 0, 0);
+            SendMessage(NativeMethods.EM_LIMITTEXT, 0, 0);
 
             if( clearUndo ){
-                SendMessage(Interop.EditMessages.EM_REPLACESEL, 0, text);
+                SendMessage(NativeMethods.EM_REPLACESEL, 0, text);
                 // For consistency with Text, we clear the modified flag
-                SendMessage(Interop.EditMessages.EM_SETMODIFY, 0, 0);
+                SendMessage(NativeMethods.EM_SETMODIFY, 0, 0);
                 ClearUndo();
             }
             else{
-                SendMessage(Interop.EditMessages.EM_REPLACESEL, /*undoable*/ -1, text);
+                SendMessage(NativeMethods.EM_REPLACESEL, /*undoable*/ -1, text);
             }
 
             // Re-enable user input.
-            SendMessage(Interop.EditMessages.EM_LIMITTEXT, maxLength, 0);
+            SendMessage(NativeMethods.EM_LIMITTEXT, maxLength, 0);
         }
 
 
@@ -1196,7 +1196,7 @@ namespace System.Windows.Forms {
                     base.Text = value;
                     if (IsHandleCreated) {
                         // clear the modified flag
-                        SendMessage(Interop.EditMessages.EM_SETMODIFY, 0, 0);
+                        SendMessage(NativeMethods.EM_SETMODIFY, 0, 0);
                     }
                 }
             }
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public void ClearUndo() {
             if (IsHandleCreated) {
-                SendMessage(Interop.EditMessages.EM_EMPTYUNDOBUFFER, 0, 0);
+                SendMessage(NativeMethods.EM_EMPTYUNDOBUFFER, 0, 0);
             }
         }
 
@@ -1402,7 +1402,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public void Copy() {
-            SendMessage(Interop.WindowMessages.WM_COPY, 0, 0);
+            SendMessage(NativeMethods.WM_COPY, 0, 0);
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.CreateHandle"]/*' />
@@ -1434,7 +1434,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public void Cut() {
-            SendMessage(Interop.WindowMessages.WM_CUT, 0, 0);
+            SendMessage(NativeMethods.WM_CUT, 0, 0);
         }
 
         /// <devdoc>
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms {
 
             UpdateMaxLength();
             if (textBoxFlags[modified]){
-                SendMessage(Interop.EditMessages.EM_SETMODIFY, 1, 0);
+                SendMessage(NativeMethods.EM_SETMODIFY, 1, 0);
             }
             if (textBoxFlags[scrollToCaretOnHandleCreated]) {
                 ScrollToCaret();
@@ -1519,7 +1519,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public void Paste() {
-            SendMessage(Interop.WindowMessages.WM_PASTE, 0, 0);
+            SendMessage(NativeMethods.WM_PASTE, 0, 0);
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.ProcessDialogKey"]/*' />
@@ -1659,7 +1659,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public virtual int GetCharIndexFromPosition(Point pt) {
             int longPoint = NativeMethods.Util.MAKELONG(pt.X, pt.Y);
-            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_CHARFROMPOS, 0, longPoint);
+            int index = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.EM_CHARFROMPOS, 0, longPoint);
             index = NativeMethods.Util.LOWORD(index);
 
             if (index < 0) {
@@ -1687,7 +1687,7 @@ namespace System.Windows.Forms {
         ///     return 1 and not 0.
         /// </devdoc>
         public virtual int GetLineFromCharIndex(int index) {
-            return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_LINEFROMCHAR, index, 0));
+            return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEFROMCHAR, index, 0));
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetPositionFromCharIndex"]/*' />
@@ -1698,7 +1698,7 @@ namespace System.Windows.Forms {
             if (index < 0 || index >= Text.Length)
                 return Point.Empty;
 
-            int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_POSFROMCHAR, index, 0);
+            int i = (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.EM_POSFROMCHAR, index, 0);
             return new Point(NativeMethods.Util.SignedLOWORD(i), NativeMethods.Util.SignedHIWORD(i));
         }
 
@@ -1710,7 +1710,7 @@ namespace System.Windows.Forms {
             if (lineNumber < 0) {
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
-            return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_LINEINDEX, lineNumber, 0));
+            return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEINDEX, lineNumber, 0));
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.GetFirstCharIndexofCurrentLine"]/*' />
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms {
         ///     Returns the index of the first character of the line where the caret is.
         /// </devdoc>
         public int GetFirstCharIndexOfCurrentLine() {
-            return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_LINEINDEX, -1, 0));
+            return unchecked( (int) (long)SendMessage(NativeMethods.EM_LINEINDEX, -1, 0));
         }
 
 
@@ -1739,7 +1739,7 @@ namespace System.Windows.Forms {
                 object editOle = null;
                 IntPtr editOlePtr = IntPtr.Zero;
                 try {
-                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_GETOLEINTERFACE, 0, out editOle) != 0) {
+                    if (UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), RichTextBoxConstants.EM_GETOLEINTERFACE, 0, out editOle) != 0) {
 
                         editOlePtr = Marshal.GetIUnknownForObject(editOle);
 
@@ -1771,7 +1771,7 @@ namespace System.Windows.Forms {
                                     textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                                     // 2. Get the first visible line.
-                                    int firstVisibleLine = unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_GETFIRSTVISIBLELINE, 0, 0));
+                                    int firstVisibleLine = unchecked( (int) (long)SendMessage(NativeMethods.EM_GETFIRSTVISIBLELINE, 0, 0));
 
                                     // 3. If the first visible line is smaller than the start of the selection, we are done;
                                     if (firstVisibleLine <= selStartLine) {
@@ -1798,7 +1798,7 @@ namespace System.Windows.Forms {
                 }
 
                 if (!scrolled) {
-                    SendMessage(Interop.EditMessages.EM_SCROLLCARET, 0, 0);
+                    SendMessage(NativeMethods.EM_SCROLLCARET, 0, 0);
                 }
             }
             else {
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms {
                 int s, e;
                 AdjustSelectionStartAndEnd(start, length, out s, out e, textLen);
 
-                SendMessage(Interop.EditMessages.EM_SETSEL, s, e);
+                SendMessage(NativeMethods.EM_SETSEL, s, e);
                 // 
 
             }
@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
                 int start, end;
                 AdjustSelectionStartAndEnd(this.selectionStart, this.selectionLength, out start, out end, -1);
-                SendMessage(Interop.EditMessages.EM_SETSEL, start, end);
+                SendMessage(NativeMethods.EM_SETSEL, start, end);
             }
         }
  
@@ -2070,19 +2070,19 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public void Undo() {
-            SendMessage(Interop.EditMessages.EM_UNDO, 0, 0);
+            SendMessage(NativeMethods.EM_UNDO, 0, 0);
         }
 
         internal virtual void UpdateMaxLength() {
             if (IsHandleCreated) {
-                SendMessage(Interop.EditMessages.EM_LIMITTEXT, maxLength, 0);
+                SendMessage(NativeMethods.EM_LIMITTEXT, maxLength, 0);
             }
         }
 
 
         internal override IntPtr InitializeDCForWmCtlColor (IntPtr dc, int msg)
         {
-            if ((msg == Interop.WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
+            if ((msg == NativeMethods.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
@@ -2117,7 +2117,7 @@ namespace System.Windows.Forms {
         void WmSetFont(ref Message m) {
             base.WndProc(ref m);
             if (!textBoxFlags[multiline]) {
-                SendMessage(Interop.EditMessages.EM_SETMARGINS, NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
+                SendMessage(NativeMethods.EM_SETMARGINS, NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
             }
         }
 
@@ -2186,20 +2186,20 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case NativeMethods.WM_LBUTTONDBLCLK:
                     this.doubleClickFired = true;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_GETDLGCODE:
+                case NativeMethods.WM_GETDLGCODE:
                     WmGetDlgCode(ref m);
                     break;
-                case Interop.WindowMessages.WM_SETFONT:
+                case NativeMethods.WM_SETFONT:
                     WmSetFont(ref m);
                     break;
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case NativeMethods.WM_CONTEXTMENU:
                     if (ShortcutsEnabled) {
                         //calling base will find ContextMenus in this order:
                         // 1) ContextMenu 2) ContextMenuStrip 3) SystemMenu

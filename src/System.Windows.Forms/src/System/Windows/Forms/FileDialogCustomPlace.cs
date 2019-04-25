@@ -5,6 +5,7 @@
 using System;
 using System.IO;
 using System.Security;
+using System.Security.Permissions;
 using System.Text;
 
 namespace System.Windows.Forms

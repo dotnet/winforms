@@ -2771,6 +2771,8 @@ namespace System.Windows.Forms {
 
         private void DeleteFileName(string fileName) {
             if (!string.IsNullOrEmpty(fileName)) {
+                // the list view needs the FileIOPermission when the app runs on an UNC share
+                // and the list view creates / destroys temporary files for its background image
                 
                 System.IO.FileInfo fi = new System.IO.FileInfo(fileName);
                 if (fi.Exists) {
@@ -2863,7 +2865,9 @@ namespace System.Windows.Forms {
                 }
 
                 if (!string.IsNullOrEmpty(this.backgroundImageFileName) || this.bkImgFileNames != null) {
-
+                    // we need the fileIoPermission when the app runs on an UNC share and
+                    // the list view creates/deletes temporary files for its background image
+                    
                     System.IO.FileInfo fi;
                     if (!string.IsNullOrEmpty(this.backgroundImageFileName)) {
                         fi = new System.IO.FileInfo(this.backgroundImageFileName);
@@ -3777,7 +3781,7 @@ namespace System.Windows.Forms {
                         if (hGlobalColumns != IntPtr.Zero) {
                             Marshal.FreeHGlobal(hGlobalColumns);
                         }
-                        hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * sizeof(int));
+                        hGlobalColumns = Marshal.AllocHGlobal(lvItem.cColumns * Marshal.SizeOf(typeof(int)));
                         maxColumns = lvItem.cColumns;
                     }
 
@@ -4421,13 +4425,13 @@ namespace System.Windows.Forms {
                 IntPtr prc   = IntPtr.Zero;
                 IntPtr pwpos = IntPtr.Zero;
 
-                prc = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.RECT>());
+                prc = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(NativeMethods.RECT)));
                 if (prc == IntPtr.Zero) {
                     return;
                 }
 
                 try {
-                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf<NativeMethods.WINDOWPOS>());
+                    pwpos = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(NativeMethods.WINDOWPOS)));
 
                     if (prc == IntPtr.Zero) {
                         // we could not allocate memory.
@@ -4445,7 +4449,7 @@ namespace System.Windows.Forms {
                     UnsafeNativeMethods.SendMessage(new HandleRef(this, hdrHWND), NativeMethods.HDM_LAYOUT, 0, ref hd);
 
                     // now take the information from the native wpos struct and put it into a managed WINDOWPOS
-                    NativeMethods.WINDOWPOS wpos = Marshal.PtrToStructure<NativeMethods.WINDOWPOS>(pwpos);
+                    NativeMethods.WINDOWPOS wpos = (NativeMethods.WINDOWPOS) Marshal.PtrToStructure(pwpos, typeof(NativeMethods.WINDOWPOS));
 
                     // position the header control
                     SafeNativeMethods.SetWindowPos(new HandleRef(this, hdrHWND),
@@ -4633,6 +4637,9 @@ namespace System.Windows.Forms {
             string fileNameToDelete = this.backgroundImageFileName;
 
             if (this.BackgroundImage != null) {
+
+                // the list view needs these permissions when the app runs on an UNC share
+                // and the list view creates / destroys temporary files for its background image
 
                 // save the image to a temporary file name
                 string tempDirName = System.IO.Path.GetTempPath();
@@ -5375,7 +5382,7 @@ namespace System.Windows.Forms {
 
 
 
-                    NativeMethods.HDITEM2 hdItem = Marshal.PtrToStructure<NativeMethods.HDITEM2>((IntPtr) nmheader.pItem);
+                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) UnsafeNativeMethods.PtrToStructure((IntPtr) nmheader.pItem, typeof(NativeMethods.HDITEM2));
                     int newColumnWidth = ((hdItem.mask & NativeMethods.HDI_WIDTH) != 0) ? hdItem.cxy : -1;
                     ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader.iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
@@ -5473,7 +5480,7 @@ namespace System.Windows.Forms {
                 NativeMethods.NMHEADER header = (NativeMethods.NMHEADER) m.GetLParam(typeof(NativeMethods.NMHEADER));
                 if (header.pItem != IntPtr.Zero) {
 
-                    NativeMethods.HDITEM2 hdItem = Marshal.PtrToStructure<NativeMethods.HDITEM2>((IntPtr) header.pItem);
+                    NativeMethods.HDITEM2 hdItem = (NativeMethods.HDITEM2) UnsafeNativeMethods.PtrToStructure((IntPtr) header.pItem, typeof(NativeMethods.HDITEM2));
                     if ((hdItem.mask & NativeMethods.HDI_ORDER) == NativeMethods.HDI_ORDER) {
 
                         int from = this.Columns[header.iItem].DisplayIndex;
@@ -5590,7 +5597,7 @@ namespace System.Windows.Forms {
 
         private Font GetListHeaderFont(){
             IntPtr hwndHdr = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_GETHEADER, 0, 0);
-            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), Interop.WindowMessages.WM_GETFONT, 0, 0);
+            IntPtr hFont = UnsafeNativeMethods.SendMessage(new HandleRef(this, hwndHdr), NativeMethods.WM_GETFONT, 0, 0);
             return Font.FromHfont(hFont);
         }
 
@@ -5890,6 +5897,35 @@ namespace System.Windows.Forms {
                                 dispInfo.item.iIndent = lvItem.IndentCount;
                             }
 
+                            /* Microsoft: Couldn't make this work. The dispInfo.item.iSubItem received for the subitems' text
+                                       are invalid
+                            if ((dispInfo.item.mask & NativeMethods.LVIF_COLUMNS) != 0) {
+                                int cColumns = this.columnHeaders != null ? this.columnHeaders.Length : 0;
+                                dispInfo.item.cColumns = cColumns;
+                                if (cColumns > 0) {
+                                    dispInfo.item.puColumns = Marshal.AllocHGlobal(cColumns * Marshal.SizeOf(typeof(int)));
+                                    int[] columns = new int[cColumns];
+                                    for (int c = 0; c < cColumns; c++) {
+                                        columns[c] = c + 1;
+                                    }
+                                    Marshal.Copy(columns, 0, dispInfo.item.puColumns, cColumns);
+                                }
+                            }
+                            */
+
+                            /* Microsoft: VirtualMode and grouping seem to be incompatible.
+                                       dispInfo.item.mask never includes NativeMethods.LVIF_GROUPID.
+                                       Besides, trying to send LVM_ENABLEGROUPVIEW to the listview fails in virtual mode.
+                            if (this.GroupsEnabled && (dispInfo.item.mask & NativeMethods.LVIF_GROUPID) != 0)
+                            {
+                                dispInfo.item.iGroupId = GetNativeGroupId(lvItem);
+                                #if DEBUG
+                                    Debug.Assert(SendMessage(NativeMethods.LVM_ISGROUPVIEWENABLED, 0, 0) != IntPtr.Zero, "Groups not enabled");
+                                    Debug.Assert(SendMessage(NativeMethods.LVM_HASGROUP, dispInfo.item.iGroupId, 0) != IntPtr.Zero, "Doesn't contain group id: " + dispInfo.item.iGroupId.ToString(CultureInfo.InvariantCulture));
+                                #endif
+                            }
+                            */
+
                             if ((dispInfo.item.stateMask & NativeMethods.LVIS_STATEIMAGEMASK) != 0) {
                                 dispInfo.item.state |= lvItem.RawStateImageIndex;
                             }
@@ -6013,10 +6049,10 @@ namespace System.Windows.Forms {
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case NativeMethods.WM_LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.  
@@ -6025,7 +6061,7 @@ namespace System.Windows.Forms {
                     WmMouseDown(ref m, MouseButtons.Left, 2);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case NativeMethods.WM_LBUTTONDOWN:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.  
@@ -6034,9 +6070,9 @@ namespace System.Windows.Forms {
                     downButton = MouseButtons.Left;
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONUP:
-                case Interop.WindowMessages.WM_RBUTTONUP:
-                case Interop.WindowMessages.WM_MBUTTONUP:
+                case NativeMethods.WM_LBUTTONUP:
+                case NativeMethods.WM_RBUTTONUP:
+                case NativeMethods.WM_MBUTTONUP:
 
                     // see the mouse is on item
                     //
@@ -6059,21 +6095,21 @@ namespace System.Windows.Forms {
                     listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     CaptureInternal = false;
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case NativeMethods.WM_MBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Middle, 2);
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case NativeMethods.WM_MBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Middle, 1);
                     downButton = MouseButtons.Middle;
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case NativeMethods.WM_RBUTTONDBLCLK:
                     WmMouseDown(ref m, MouseButtons.Right, 2);
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case NativeMethods.WM_RBUTTONDOWN:
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;
                     break;
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case NativeMethods.WM_MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
                         OnMouseUp(new MouseEventArgs(downButton, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
@@ -6082,14 +6118,14 @@ namespace System.Windows.Forms {
                     CaptureInternal = false;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_MOUSEHOVER:
+                case NativeMethods.WM_MOUSEHOVER:
                     if (HoverSelection) {
                         base.WndProc(ref m);
                     }
                     else
                         OnMouseHover(EventArgs.Empty);
                     break;
-                case Interop.WindowMessages.WM_NOTIFY:
+                case NativeMethods.WM_NOTIFY:
                     if(WmNotify(ref m))
                     {
                         break; // we are done - skip default handling
@@ -6098,7 +6134,7 @@ namespace System.Windows.Forms {
                     {
                         goto default;  //default handling needed
                     }
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case NativeMethods.WM_SETFOCUS:
                     base.WndProc(ref m);
 
                     if (!this.RecreatingHandle && !this.ListViewHandleDestroyed) {
@@ -6114,23 +6150,23 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case NativeMethods.WM_MOUSELEAVE:
                     // if the mouse leaves and then re-enters the ListView
                     // ItemHovered events should be raised.
                     prevHoveredItem = null;
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case NativeMethods.WM_PAINT:
                     base.WndProc(ref m);
 
                     // win32 ListView 
                     BeginInvoke(new MethodInvoker(this.CleanPreviousBackgroundImageFiles));
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case NativeMethods.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case Interop.WindowMessages.WM_TIMER:
+                case NativeMethods.WM_TIMER:
                     if (unchecked( (int) (long)m.WParam) != LVTOOLTIPTRACKING || !ComctlSupportsVisualStyles) {
                         base.WndProc(ref m);
                     }

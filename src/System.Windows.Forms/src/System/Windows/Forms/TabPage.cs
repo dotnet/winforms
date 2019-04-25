@@ -12,6 +12,7 @@ namespace System.Windows.Forms {
     using System.ComponentModel.Design;
     using System.Text;
     using System.Windows.Forms;
+    using System.Security.Permissions;
     using Microsoft.Win32;
     using System.Windows.Forms.VisualStyles;
     using System.Runtime.InteropServices;

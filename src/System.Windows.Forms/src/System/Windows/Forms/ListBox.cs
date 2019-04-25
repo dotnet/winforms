@@ -2292,25 +2292,25 @@ namespace System.Windows.Forms {
         /// </devdoc>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINT:
+                case NativeMethods.WM_PRINT:
                     WmPrint(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case NativeMethods.WM_LBUTTONDOWN:
                     if (selectedItems != null) {
                         selectedItems.Dirty();
                     }
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case NativeMethods.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     int x = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2357,7 +2357,7 @@ namespace System.Windows.Forms {
                     doubleClickFired = false;
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case NativeMethods.WM_RBUTTONUP:
                     // Get the mouse location
                     //
                     int rx = NativeMethods.Util.SignedLOWORD(m.LParam);
@@ -2373,7 +2373,7 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case NativeMethods.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //the first WM_LBUTTONUP, resets the flag for Doubleclick
@@ -2382,7 +2382,7 @@ namespace System.Windows.Forms {
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case NativeMethods.WM_WINDOWPOSCHANGED:
                     base.WndProc(ref m);
                     if (integralHeight && fontIsChanged) {
                         Height = Math.Max(Height,ItemHeight);

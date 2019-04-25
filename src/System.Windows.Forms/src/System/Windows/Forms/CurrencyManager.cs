@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        private protected override void SetDataSource(object dataSource) {
+        internal override void SetDataSource(object dataSource) {
             if (this.dataSource != dataSource) {
                 Release();
                 this.dataSource = dataSource;
@@ -795,10 +795,14 @@ namespace System.Windows.Forms {
                     //      a. FindGoodRow actually found a good row, so it can't be the one before the user changed the position: fire the onCurrentChanged
                     //      b. FindGoodRow did not find a good row: we should have gotten an exception so we should not even execute this code
                     if (!positionChanged ||(positionChanged && curLastGoodKnownRow != -1)) {
-                        onCurrentChangedHandler?.Invoke(this, e);
+                        if (onCurrentChangedHandler != null) {
+                            onCurrentChangedHandler(this, e);
+                        }
 
                         // we fire OnCurrentItemChanged event every time we fire the CurrentChanged + when a property of the Current item changed
-                        _onCurrentItemChangedHandler?.Invoke(this, e);
+                        if (onCurrentItemChangedHandler != null) {
+                            onCurrentItemChangedHandler(this, e);
+                        }
                     }
                 }
                 catch (Exception ex) {
@@ -810,8 +814,10 @@ namespace System.Windows.Forms {
         // this method should only be called when the currency manager receives the ListChangedType.ItemChanged event
         // and when the index of the ListChangedEventArgs == the position in the currency manager
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentItemChanged"]/*' />
-        protected internal override void OnCurrentItemChanged(EventArgs e) {
-            _onCurrentItemChangedHandler?.Invoke(this, e);
+        internal protected override void OnCurrentItemChanged(EventArgs e) {
+            if (onCurrentItemChangedHandler != null) {
+                onCurrentItemChangedHandler(this, e);
+            }
         }
         
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnItemChanged"]/*' />

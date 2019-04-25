@@ -313,6 +313,7 @@ namespace System.Windows.Forms {
 
         private static void UpdateSettings(NativeMethods.PAGESETUPDLG data, PageSettings pageSettings,
                                            PrinterSettings printerSettings) {
+            // SetHDevMode demands AllPrintingAndUnmanagedCode Permission : Since we are calling that function we should Assert the permision,
             pageSettings.SetHdevmode(data.hDevMode);
             if (printerSettings != null) {
                 printerSettings.SetHdevmode(data.hDevMode);

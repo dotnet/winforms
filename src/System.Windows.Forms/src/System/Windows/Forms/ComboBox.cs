@@ -1100,7 +1100,7 @@ namespace System.Windows.Forms {
                     if (IsHandleCreated) {
                         Debug.Assert(childEdit != null);
                         if (childEdit != null) {
-                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
+                            UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_REPLACESEL, NativeMethods.InvalidIntPtr, str);
                         }
                     }
                 }
@@ -1579,7 +1579,7 @@ namespace System.Windows.Forms {
         private void ChildWndProc(ref Message m) {
 
             switch (m.Msg) {
-                case Interop.WindowMessages.WM_CHAR:
+                case NativeMethods.WM_CHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1592,7 +1592,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_SYSCHAR:
+                case NativeMethods.WM_SYSCHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1605,8 +1605,8 @@ namespace System.Windows.Forms {
                         }
                     }
                     break;
-                case Interop.WindowMessages.WM_KEYDOWN:
-                case Interop.WindowMessages.WM_SYSKEYDOWN:
+                case NativeMethods.WM_KEYDOWN:
+                case NativeMethods.WM_SYSKEYDOWN:
                     if (SystemAutoCompleteEnabled && !ACNativeWindow.AutoCompleteActive) {
                         finder.FindDropDowns(false);
                     }
@@ -1636,12 +1636,12 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case Interop.WindowMessages.WM_INPUTLANGCHANGE:
+                case NativeMethods.WM_INPUTLANGCHANGE:
                     DefChildWndProc( ref m ); 
                     break;
 
-                case Interop.WindowMessages.WM_KEYUP:
-                case Interop.WindowMessages.WM_SYSKEYUP:
+                case NativeMethods.WM_KEYUP:
+                case NativeMethods.WM_SYSKEYUP:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == childListBox.Handle) {
                         DefChildWndProc(ref m);
                     }
@@ -1658,7 +1658,7 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case NativeMethods.WM_KILLFOCUS:
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode) {
@@ -1677,7 +1677,7 @@ namespace System.Windows.Forms {
                     }
 
                     break;
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case NativeMethods.WM_SETFOCUS:
 
                     // Consider - If we dont' have a childwndproc, then we don't get here, so we don't 
                     // set the status. Do we need to? This happens when we have a DropDownList.
@@ -1710,14 +1710,14 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case Interop.WindowMessages.WM_SETFONT:
+                case NativeMethods.WM_SETFONT:
                     DefChildWndProc(ref m);
                     if (childEdit != null && m.HWnd == childEdit.Handle) {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_SETMARGINS,
                                                   NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                     }
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDBLCLK:
+                case NativeMethods.WM_LBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptlc.X, Ptlc.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_MBUTTONDBLCLK:
+                case NativeMethods.WM_MBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1749,7 +1749,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, Ptmc.X, Ptmc.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_RBUTTONDBLCLK:
+                case NativeMethods.WM_RBUTTONDBLCLK:
                     //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
                     //sequence for doubleclick...
                     //Set MouseEvents...
@@ -1765,7 +1765,7 @@ namespace System.Windows.Forms {
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Ptrc.X, Ptrc.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case NativeMethods.WM_LBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1778,7 +1778,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case NativeMethods.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     NativeMethods.RECT r = new NativeMethods.RECT();
@@ -1816,7 +1816,7 @@ namespace System.Windows.Forms {
 
                     OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_MBUTTONDOWN:
+                case NativeMethods.WM_MBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1829,7 +1829,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Middle, 1, P.X, P.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_RBUTTONDOWN:
+                case NativeMethods.WM_RBUTTONDOWN:
                     mousePressed = true;
                     mouseEvents = true;
 
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms {
 
                     OnMouseDown(new MouseEventArgs(MouseButtons.Right, 1, Pt.X, Pt.Y, 0));
                     break;
-                case Interop.WindowMessages.WM_MBUTTONUP:
+                case NativeMethods.WM_MBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1856,7 +1856,7 @@ namespace System.Windows.Forms {
                     DefChildWndProc(ref m);
                     OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam), 0));
                     break;
-                case Interop.WindowMessages.WM_RBUTTONUP:
+                case NativeMethods.WM_RBUTTONUP:
                     mousePressed = false;
                     mouseEvents = false;
                     //set the mouse capture .. this is the Child Wndproc..
@@ -1871,17 +1871,17 @@ namespace System.Windows.Forms {
                     OnMouseUp(new MouseEventArgs(MouseButtons.Right, 1, ptRBtnUp.X, ptRBtnUp.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_CONTEXTMENU:
+                case NativeMethods.WM_CONTEXTMENU:
                     // Forward context menu messages to the parent control
                     if (this.ContextMenu != null || this.ContextMenuStrip != null) {
-                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CONTEXTMENU, m.WParam, m.LParam);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.WM_CONTEXTMENU, m.WParam, m.LParam);
                     }
                     else {
                         DefChildWndProc(ref m);
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSEMOVE:
+                case NativeMethods.WM_MOUSEMOVE:
                     Point point = EditToComboboxMapping(m);
                     //Call the DefWndProc() so that mousemove messages get to the windows edit
                     //
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms {
                     OnMouseMove(new MouseEventArgs(MouseButtons, 0, point.X, point.Y, 0));
                     break;
 
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case NativeMethods.WM_SETCURSOR:
                     if (Cursor != DefaultCursor && childEdit != null && m.HWnd == childEdit.Handle && NativeMethods.Util.LOWORD(m.LParam) == NativeMethods.HTCLIENT) {
                         Cursor.CurrentInternal = Cursor;
                     }
@@ -1899,7 +1899,7 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case NativeMethods.WM_MOUSELEAVE:
                     DefChildWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
@@ -2109,13 +2109,13 @@ namespace System.Windows.Forms {
         }
 
         internal override IntPtr InitializeDCForWmCtlColor(IntPtr dc, int msg) {
-            if ((msg == Interop.WindowMessages.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
+            if ((msg == NativeMethods.WM_CTLCOLORSTATIC) && !ShouldSerializeBackColor()) {
                 // Let the Win32 Edit control handle background colors itself.
                 // This is necessary because a disabled edit control will display a different
                 // BackColor than when enabled.
                 return IntPtr.Zero;
             }
-            else if ((msg == Interop.WindowMessages.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
+            else if ((msg == NativeMethods.WM_CTLCOLORLISTBOX) && GetStyle(ControlStyles.UserPaint)) {
                 // Base class returns hollow brush when UserPaint style is set, to avoid flicker in
                 // main control. But when returning colors for child dropdown list, return normal ForeColor/BackColor,
                 // since hollow brush leaves the list background unpainted.
@@ -2131,7 +2131,7 @@ namespace System.Windows.Forms {
         // Returns true when the key processing needs to be intercepted to allow
         // auto-completion in DropDownList style.
         private bool InterceptAutoCompleteKeystroke(Message m) {
-            if (m.Msg == Interop.WindowMessages.WM_KEYDOWN) {
+            if (m.Msg == NativeMethods.WM_KEYDOWN) {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
                 if ((Keys)unchecked( (int) (long)m.WParam) == Keys.Delete) {
@@ -2144,7 +2144,7 @@ namespace System.Windows.Forms {
                     return false;
                 }
             }
-            else if (m.Msg == Interop.WindowMessages.WM_CHAR) {
+            else if (m.Msg == NativeMethods.WM_CHAR) {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 char keyChar = unchecked((char)(long)m.WParam);
                 if (keyChar == (char)Keys.Back) {
@@ -2367,7 +2367,7 @@ namespace System.Windows.Forms {
 
                     // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
                     //
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.EditMessages.EM_SETMARGINS,
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.EM_SETMARGINS,
                                               NativeMethods.EC_LEFTMARGIN | NativeMethods.EC_RIGHTMARGIN, 0);
                 }
             }
@@ -3337,7 +3337,7 @@ namespace System.Windows.Forms {
 
             if (DropDownStyle == ComboBoxStyle.DropDown) {
                 if (childEdit != null && childEdit.Handle != IntPtr.Zero) {
-                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), Interop.WindowMessages.WM_SETTEXT, IntPtr.Zero, s);
+                    UnsafeNativeMethods.SendMessage(new HandleRef(this, childEdit.Handle), NativeMethods.WM_SETTEXT, IntPtr.Zero, s);
                 }
             }
         }
@@ -3373,7 +3373,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private void WmParentNotify(ref Message m) {
             base.WndProc(ref m);
-            if (unchecked((int)(long)m.WParam) == (Interop.WindowMessages.WM_CREATE | 1000 << 16)) {
+            if (unchecked((int)(long)m.WParam) == (NativeMethods.WM_CREATE | 1000 << 16)) {
                 dropDownHandle = m.LParam;
 
                 if (AccessibilityImprovements.Level3) {
@@ -3554,7 +3554,7 @@ namespace System.Windows.Forms {
             switch (m.Msg) {
                 // We don't want to fire the focus events twice -
                 // once in the combobox and once in the ChildWndProc.
-                case Interop.WindowMessages.WM_SETFOCUS:
+                case NativeMethods.WM_SETFOCUS:
                     try {
                         fireSetFocus = false;
                         base.WndProc(ref m);
@@ -3564,7 +3564,7 @@ namespace System.Windows.Forms {
                         fireSetFocus = true;
                     }
                     break;
-                case Interop.WindowMessages.WM_KILLFOCUS:
+                case NativeMethods.WM_KILLFOCUS:
                     try {
                         fireLostFocus = false;
                         base.WndProc(ref m);
@@ -3580,7 +3580,7 @@ namespace System.Windows.Forms {
                         // as with Theming on.
                         
                         if (!Application.RenderWithVisualStyles && GetStyle(ControlStyles.UserPaint) == false && this.DropDownStyle == ComboBoxStyle.DropDownList && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
-                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_MOUSELEAVE, 0, 0);                            
+                            UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), NativeMethods.WM_MOUSELEAVE, 0, 0);                            
                         }
                     }
 
@@ -3588,30 +3588,30 @@ namespace System.Windows.Forms {
                         fireLostFocus = true;
                     }
                     break;
-                case Interop.WindowMessages.WM_CTLCOLOREDIT:
-                case Interop.WindowMessages.WM_CTLCOLORLISTBOX:
+                case NativeMethods.WM_CTLCOLOREDIT:
+                case NativeMethods.WM_CTLCOLORLISTBOX:
                     m.Result = InitializeDCForWmCtlColor(m.WParam, m.Msg);
                     break;
-                case Interop.WindowMessages.WM_ERASEBKGND:
+                case NativeMethods.WM_ERASEBKGND:
                     WmEraseBkgnd(ref m);
                     break;
-                case Interop.WindowMessages.WM_PARENTNOTIFY:
+                case NativeMethods.WM_PARENTNOTIFY:
                     WmParentNotify(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_COMMAND:
                     WmReflectCommand(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_DRAWITEM:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_DRAWITEM:
                     WmReflectDrawItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_MEASUREITEM:
+                case NativeMethods.WM_REFLECT + NativeMethods.WM_MEASUREITEM:
                     WmReflectMeasureItem(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONDOWN:
+                case NativeMethods.WM_LBUTTONDOWN:
                     mouseEvents = true;
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_LBUTTONUP:
+                case NativeMethods.WM_LBUTTONUP:
                     // Get the mouse location
                     //
                     NativeMethods.RECT r = new NativeMethods.RECT();
@@ -3642,12 +3642,12 @@ namespace System.Windows.Forms {
                     }
                     break;
 
-                case Interop.WindowMessages.WM_MOUSELEAVE:
+                case NativeMethods.WM_MOUSELEAVE:
                     DefWndProc(ref m);
                     OnMouseLeaveInternal(EventArgs.Empty);
                     break;
 
-                case Interop.WindowMessages.WM_PAINT:
+                case NativeMethods.WM_PAINT:
                     if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)) {
 
                         using (WindowsRegion dr = new WindowsRegion(FlatComboBoxAdapter.dropDownRect)) {
@@ -3700,7 +3700,7 @@ namespace System.Windows.Forms {
                     
                     base.WndProc(ref m);
                     break;
-                case Interop.WindowMessages.WM_PRINTCLIENT: 
+                case NativeMethods.WM_PRINTCLIENT: 
                     // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (GetStyle(ControlStyles.UserPaint) == false && FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) {
                         DefWndProc(ref m);
@@ -3716,11 +3716,11 @@ namespace System.Windows.Forms {
                     }
                     base.WndProc(ref m);
                     return;                    
-                case Interop.WindowMessages.WM_SETCURSOR:
+                case NativeMethods.WM_SETCURSOR:
                     base.WndProc(ref m);
                     break;
 
-                case Interop.WindowMessages.WM_SETFONT:
+                case NativeMethods.WM_SETFONT:
                     //(
                     if (Width == 0) {
                         suppressNextWindosPos = true;
@@ -3729,14 +3729,14 @@ namespace System.Windows.Forms {
                     break;
 
 
-                case Interop.WindowMessages.WM_WINDOWPOSCHANGED:
+                case NativeMethods.WM_WINDOWPOSCHANGED:
                     if (!suppressNextWindosPos) {
                         base.WndProc(ref m);
                     }
                     suppressNextWindosPos = false;
                     break;
 
-                case Interop.WindowMessages.WM_NCDESTROY:
+                case NativeMethods.WM_NCDESTROY:
                     base.WndProc(ref m);
                     ReleaseChildWindow();
                     break;
@@ -3768,10 +3768,10 @@ namespace System.Windows.Forms {
 
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
-                    case Interop.WindowMessages.WM_GETOBJECT:
+                    case NativeMethods.WM_GETOBJECT:
                         WmGetObject(ref m);
                         return;
-                    case Interop.WindowMessages.WM_MOUSEMOVE:
+                    case NativeMethods.WM_MOUSEMOVE:
                         if (_childWindowType == ChildWindowType.DropDownList) {
 
                             // Need to track the selection change via mouse over to
@@ -5664,7 +5664,7 @@ namespace System.Windows.Forms {
                     inWndProcCnt--;
                 }
 
-                if (m.Msg == Interop.WindowMessages.WM_NCDESTROY) {
+                if (m.Msg == NativeMethods.WM_NCDESTROY) {
                     Debug.Assert(ACWindows.ContainsKey(this.Handle));
                     ACWindows.Remove(this.Handle);   //so we do not leak ac windows.
                 }

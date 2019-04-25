@@ -8023,7 +8023,7 @@ namespace System.Windows.Forms {
             ///       consumed.</para>
             /// </devdoc>
             protected override bool ProcessKeyPreview(ref Message m) {
-                if (m.Msg == Interop.WindowMessages.WM_KEYDOWN) {
+                if (m.Msg == NativeMethods.WM_KEYDOWN) {
                     KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
                     switch (ke.KeyCode) {
                         case Keys.Up:
@@ -8049,7 +8049,7 @@ namespace System.Windows.Forms {
                     }
                 // Ctrl-Tab will be sent as a tab paired w/ a control on the KeyUp message
                 //
-                } else if (m.Msg == Interop.WindowMessages.WM_KEYUP) {
+                } else if (m.Msg == NativeMethods.WM_KEYUP) {
                     KeyEventArgs ke = new KeyEventArgs((Keys)(unchecked((int)(long)m.WParam)) | ModifierKeys);
                     if (ke.KeyCode == Keys.Tab)
                         return ProcessGridKey(ke);

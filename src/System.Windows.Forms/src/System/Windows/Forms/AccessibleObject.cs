@@ -2703,7 +2703,7 @@ namespace System.Windows.Forms
         private UnsafeNativeMethods.IRawElementProviderHwndOverride publicIRawElementProviderHwndOverride; // AccessibleObject as IRawElementProviderHwndOverride
 
         /// <summary>
-        /// Create a new wrapper.
+        /// Create a new wrapper. Protect this with UnmanagedCode Permission
         /// </summary>
         internal InternalAccessibleObject(AccessibleObject accessibleImplemention)
         {

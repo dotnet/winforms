@@ -13,6 +13,7 @@ namespace System.Windows.Forms {
     using System.Drawing.Drawing2D;
     using System.Windows.Forms.Design; 
     using System.Security;
+    using System.Security.Permissions;
     using System.Runtime.InteropServices;
     using System.Windows.Forms.Internal;     
     using System.Globalization;
