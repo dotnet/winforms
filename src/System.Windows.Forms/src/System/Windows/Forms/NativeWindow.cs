@@ -730,7 +730,7 @@ namespace System.Windows.Forms
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
                     ownHandle = true;
-                    System.Internal.HandleCollector.Add(createResult, NativeMethods.CommonHandles.Window);
+                    Interop.HandleCollector.Add(createResult, Interop.CommonHandles.Window);
                 }
             }
         }
@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms
                         RemoveWindowFromTable(handle, this);
 
                         if (ownHandle) {
-                            System.Internal.HandleCollector.Remove(handle, NativeMethods.CommonHandles.Window);
+                            Interop.HandleCollector.Remove(handle, Interop.CommonHandles.Window);
                             ownHandle = false;
                         }
 

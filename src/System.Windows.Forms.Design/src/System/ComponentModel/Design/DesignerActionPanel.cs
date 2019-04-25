@@ -1963,7 +1963,7 @@ namespace System.ComponentModel.Design
                     // The listbox draws with GDI, not GDI+.  So, we use a normal DC here.
                     IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(listBox, listBox.Handle));
                     IntPtr hFont = listBox.Font.ToHfont();
-                    NativeMethods.CommonHandles.GdiHandleCollector.Add();
+                    Interop.HandleCollector.Add(hFont, Interop.CommonHandles.GDI);
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     try
                     {
@@ -2532,12 +2532,6 @@ namespace System.ComponentModel.Design
                     public static int LOWORD(int n) => n & 0xffff;
                 }
 
-                public static class CommonHandles
-                {
-                    public static HandleCollector GdiHandleCollector = new HandleCollector("GDI", 500);
-                    public static HandleCollector HdcHandleCollector = new HandleCollector("HDC", 2);
-                }
-
                 [StructLayout(LayoutKind.Sequential)]
                 public class SIZE
                 {
@@ -2605,7 +2599,7 @@ namespace System.ComponentModel.Design
                 private static extern bool IntDeleteObject(HandleRef hObject);
                 public static bool DeleteObject(HandleRef hObject)
                 {
-                    NativeMethods.CommonHandles.GdiHandleCollector.Remove();
+                    Interop.HandleCollector.Remove((IntPtr)hObject, Interop.CommonHandles.GDI);
                     return IntDeleteObject(hObject);
                 }
 
@@ -2685,15 +2679,14 @@ namespace System.ComponentModel.Design
                 private static extern IntPtr IntGetDC(HandleRef hWnd);
                 public static IntPtr GetDC(HandleRef hWnd)
                 {
-                    NativeMethods.CommonHandles.HdcHandleCollector.Add();
-                    return IntGetDC(hWnd);
+                    return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
                 }
 
                 [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
                 private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
                 public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
                 {
-                    NativeMethods.CommonHandles.HdcHandleCollector.Remove();
+                    Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
                     return IntReleaseDC(hWnd, hDC);
                 }
             }

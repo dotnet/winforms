@@ -3765,7 +3765,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     //
                     IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
                     IntPtr hFont = Font.ToHfont();
-                    System.Internal.HandleCollector.Add(hFont, NativeMethods.CommonHandles.GDI);
+                    Interop.HandleCollector.Add(hFont, Interop.CommonHandles.GDI);
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     int iSel = -1;
                     try {
