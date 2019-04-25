@@ -9,11 +9,11 @@ namespace System.Windows.Forms.Tests
     public class DataGridViewTests
     {
         [Fact]
-        public void DataGridView_Constructor()
+        public void DataGridView_Ctor_Default()
         {
-            var dgv = new DataGridView();
-
-            Assert.NotNull(dgv);
+            var dataGridView = new DataGridView();
+            Assert.NotNull(dataGridView.RowTemplate);
+            Assert.Same(dataGridView.RowTemplate, dataGridView.RowTemplate);
         }
     }
 }
