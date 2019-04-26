@@ -23,13 +23,13 @@ namespace System.Windows.Forms
     public sealed class FolderBrowserDialog : CommonDialog
     {
         // Root node of the tree view.
-        private Environment.SpecialFolder rootFolder;
+        private Environment.SpecialFolder _rootFolder;
 
         // Description text to show.
-        private string descriptionText;
+        private string _descriptionText;
 
         // Folder picked by the user.
-        private string selectedPath;
+        private string _selectedPath;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.FolderBrowserDialog'/> class.
@@ -76,8 +76,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FolderBrowserDialogSelectedPath))]
         public string SelectedPath
         {
-            get => selectedPath;
-            set => selectedPath = value ?? string.Empty;
+            get => _selectedPath;
+            set => _selectedPath = value ?? string.Empty;
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(SpecialFolderEnumConverter))]
         public Environment.SpecialFolder RootFolder
         {
-            get => rootFolder;
+            get => _rootFolder;
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]
             set
             {
@@ -100,7 +100,7 @@ namespace System.Windows.Forms
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(Environment.SpecialFolder));
                 }
 
-                rootFolder = value;
+                _rootFolder = value;
             }
         }
 
@@ -115,8 +115,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FolderBrowserDialogDescription))]
         public string Description
         {
-            get => descriptionText;
-            set => descriptionText = value ?? string.Empty;
+            get => _descriptionText;
+            set => _descriptionText = value ?? string.Empty;
         }
 
         /// <summary>
@@ -142,9 +142,9 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Reset()
         {
-            rootFolder = Environment.SpecialFolder.Desktop;
-            descriptionText = string.Empty;
-            selectedPath = string.Empty;
+            _rootFolder = Environment.SpecialFolder.Desktop;
+            _descriptionText = string.Empty;
+            _selectedPath = string.Empty;
             ShowNewFolderButton = true;
         }
 
@@ -190,31 +190,31 @@ namespace System.Windows.Forms
         private void SetDialogProperties(FileDialogNative.IFileDialog dialog)
         {
             // Description
-            if (!string.IsNullOrEmpty(descriptionText))
+            if (!string.IsNullOrEmpty(_descriptionText))
             {
                 if (UseDescriptionForTitle)
                 {
-                    dialog.SetTitle(descriptionText);
+                    dialog.SetTitle(_descriptionText);
                 }
                 else
                 {
                     FileDialogNative.IFileDialogCustomize customize = (FileDialogNative.IFileDialogCustomize)dialog;
-                    customize.AddText(0, descriptionText);
+                    customize.AddText(0, _descriptionText);
                 }
             }
 
             dialog.SetOptions(FileDialogNative.FOS.FOS_PICKFOLDERS | FileDialogNative.FOS.FOS_FORCEFILESYSTEM | FileDialogNative.FOS.FOS_FILEMUSTEXIST);
 
-            if (!string.IsNullOrEmpty(selectedPath))
+            if (!string.IsNullOrEmpty(_selectedPath))
             {
-                string parent = Path.GetDirectoryName(selectedPath);
+                string parent = Path.GetDirectoryName(_selectedPath);
                 if (parent == null || !Directory.Exists(parent))
                 {
-                    dialog.SetFileName(selectedPath);
+                    dialog.SetFileName(_selectedPath);
                 }
                 else
                 {
-                    string folder = Path.GetFileName(selectedPath);
+                    string folder = Path.GetFileName(_selectedPath);
                     dialog.SetFolder(FileDialogNative.CreateItemFromParsingName(parent));
                     dialog.SetFileName(folder);
                 }
@@ -224,14 +224,14 @@ namespace System.Windows.Forms
         private void GetResult(FileDialogNative.IFileDialog dialog)
         {
             dialog.GetResult(out FileDialogNative.IShellItem item);
-            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out selectedPath);
+            item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_FILESYSPATH, out _selectedPath);
         }
 
         private unsafe bool RunDialogOld(IntPtr hWndOwner)
         {
             CoTaskMemSafeHandle listHandle;
 
-            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)rootFolder, out listHandle);
+            Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)_rootFolder, out listHandle);
             if (listHandle.IsInvalid)
             {
                 Interop.Shell32.SHGetSpecialFolderLocation(hWndOwner, (int)Environment.SpecialFolder.Desktop, out listHandle);
@@ -268,7 +268,7 @@ namespace System.Windows.Forms
                         bi.pidlRoot = listHandle;
                         bi.hwndOwner = hWndOwner;
                         bi.pszDisplayName = pDisplayName;
-                        bi.lpszTitle = descriptionText;
+                        bi.lpszTitle = _descriptionText;
                         bi.ulFlags = mergedOptions;
                         bi.lpfn = callback;
                         bi.lParam = IntPtr.Zero;
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
                             }
 
                             // Retrieve the path from the IDList.
-                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out selectedPath);
+                            Interop.Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out _selectedPath);
                             GC.KeepAlive(callback);
                             return true;
                         }
@@ -306,10 +306,10 @@ namespace System.Windows.Forms
             {
                 case NativeMethods.BFFM_INITIALIZED:
                     // Indicates the browse dialog box has finished initializing. The lpData value is zero.
-                    if (selectedPath.Length != 0)
+                    if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_SETSELECTION, 1, selectedPath);
+                        UnsafeNativeMethods.SendMessage(new HandleRef(null, hwnd), (int)NativeMethods.BFFM_SETSELECTION, 1, _selectedPath);
                     }
                     break;
                 case NativeMethods.BFFM_SELCHANGED:
