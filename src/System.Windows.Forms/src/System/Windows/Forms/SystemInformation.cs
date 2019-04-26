@@ -20,9 +20,9 @@ namespace System.Windows.Forms
     using System.ComponentModel;
     using System.Runtime.Versioning;
 
-    /// <devdoc>
-    ///    <para>Provides information about the operating system.</para>
-    /// </devdoc>
+    /// <summary>
+    /// Provides information about the operating system.
+    /// </summary>
     public class SystemInformation
     {
 
@@ -49,15 +49,9 @@ namespace System.Windows.Forms
 
         private const int DefaultMouseWheelScrollLines = 3;
 
-        ////////////////////////////////////////////////////////////////////////////
-        // SystemParametersInfo
-        //
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user has enabled full window drag.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the user has enabled full window drag.
+        /// </summary>
         public static bool DragFullWindows
         {
             get
@@ -68,12 +62,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user has selected to run in high contrast
-        ///       mode.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the user has selected to run in high contrast.
+        /// </summary>
         public static bool HighContrast
         {
             get
@@ -106,11 +97,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the number of lines to scroll when the mouse wheel is rotated.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the number of lines to scroll when the mouse wheel is rotated.
+        /// </summary>
         public static int MouseWheelScrollLines
         {
             get
@@ -154,15 +143,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////
-        // SystemMetrics
-        //
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions of the primary display monitor in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions of the primary display monitor in pixels.
+        /// </summary>
         public static Size PrimaryMonitorSize
         {
             get
@@ -172,11 +155,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width of the vertical scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width of the vertical scroll bar in pixels.
+        /// </summary>
         public static int VerticalScrollBarWidth
         {
             get
@@ -185,11 +166,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width of the vertical scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width of the vertical scroll bar in pixels.
+        /// </summary>
         public static int GetVerticalScrollBarWidthForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
@@ -202,11 +181,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the horizontal scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of the horizontal scroll bar in pixels.
+        /// </summary>
         public static int HorizontalScrollBarHeight
         {
             get
@@ -215,11 +192,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the horizontal scroll bar in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of the horizontal scroll bar in pixels.
+        /// </summary>
         public static int GetHorizontalScrollBarHeightForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
@@ -232,11 +207,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the normal caption area of a window in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of the normal caption area of a window in pixels.
+        /// </summary>
         public static int CaptionHeight
         {
             get
@@ -245,12 +218,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width and
-        ///       height of a window border in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width and height of a window border in pixels.
+        /// </summary>
         public static Size BorderSize
         {
             get
@@ -260,12 +230,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width and
-        ///       height of a window border in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width andheight of a window border in pixels.
+        /// </summary>
         public static Size GetBorderSizeForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
@@ -279,12 +246,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the thickness in pixels, of the border for a window that has a caption
-        ///       and is not resizable.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the thickness in pixels, of the border for a window that has a caption
+        /// and is not resizable.
+        /// </summary>
         public static Size FixedFrameBorderSize
         {
             get
@@ -294,9 +259,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>Gets the height of the scroll box in a vertical scroll bar in pixels.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of the scroll box in a vertical scroll bar in pixels.
+        /// </summary>
         public static int VerticalScrollBarThumbHeight
         {
             get
@@ -305,9 +270,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>Gets the width of the scroll box in a horizontal scroll bar in pixels.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width of the scroll box in a horizontal scroll bar in pixels.
+        /// </summary>
         public static int HorizontalScrollBarThumbWidth
         {
             get
@@ -316,11 +281,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the default dimensions of an icon in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the default dimensions of an icon in pixels.
+        /// </summary>
         public static Size IconSize
         {
             get
@@ -330,11 +293,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions of a cursor in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions of a cursor in pixels.
+        /// </summary>
         public static Size CursorSize
         {
             get
@@ -344,11 +305,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the system's font for menus.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the system's font for menus.
+        /// </summary>
         public static Font MenuFont
         {
 
@@ -359,11 +318,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
-        ///    </para>
-        /// </devdoc>
+
+        /// <summary>
+        /// Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
+        /// </summary>
         public static Font GetMenuFontForDpi(int dpi)
         {
             return GetMenuFontHelper((uint)dpi, DpiHelper.IsPerMonitorV2Awareness);
@@ -402,11 +360,9 @@ namespace System.Windows.Forms
             return menuFont;
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of a one line of a menu in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of a one line of a menu in pixels.
+        /// </summary>
         public static int MenuHeight
         {
             get
@@ -415,12 +371,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///       Returns the current system power status.        
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Returns the current system power status.
+        /// </summary>
         public static PowerStatus PowerStatus
         {
             get
@@ -433,12 +386,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the size of the working area in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the size of the working area in pixels.
+        /// </summary>
         public static Rectangle WorkingArea
         {
             get
@@ -449,13 +399,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the height, in pixels, of the Kanji window at the bottom
-        ///       of the screen for double-byte (DBCS) character set versions of Windows.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height, in pixels, of the Kanji window at the bottom of the screen
+        /// for double-byte (DBCS) character set versions of Windows.
+        /// </summary>
         public static int KanjiWindowHeight
         {
             get
@@ -464,11 +411,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the system has a mouse installed.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the system has a mouse installed.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool MousePresent
         {
@@ -478,11 +423,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height in pixels, of the arrow bitmap on the vertical scroll bar.
+        /// </summary>
         public static int VerticalScrollBarArrowHeight
         {
             get
@@ -494,18 +437,14 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets the height of the vertical scroll bar arrow bitmap in pixels.
         /// </summary>
-        /// <param name="dpi"></param>
-        /// <returns></returns>
         public static int VerticalScrollBarArrowHeightForDpi(int dpi)
         {
             return UnsafeNativeMethods.TryGetSystemMetricsForDpi(NativeMethods.SM_CYVSCROLL, (uint)dpi);
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
+        /// </summary>
         public static int HorizontalScrollBarArrowWidth
         {
             get
@@ -514,11 +453,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the width of the horizontal scroll bar arrow bitmap in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the width of the horizontal scroll bar arrow bitmap in pixels.
+        /// </summary>
         public static int GetHorizontalScrollBarArrowWidthForDpi(int dpi)
         {
             if (DpiHelper.IsPerMonitorV2Awareness)
@@ -531,12 +468,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether this is a debug version of the operating
-        ///       system.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether this is a debug version of the operating system.
+        /// </summary>
         public static bool DebugOS
         {
             get
@@ -545,12 +479,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the functions of the left and right mouse
-        ///       buttons have been swapped.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the functions of the left and right mouse
+        /// buttons have been swapped.
+        /// </summary>
         public static bool MouseButtonsSwapped
         {
             get
@@ -559,11 +491,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the minimum allowable dimensions of a window in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the minimum allowable dimensions of a window in pixels.
+        /// </summary>
         public static Size MinimumWindowSize
         {
             get
@@ -573,12 +503,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of a caption bar or title bar
-        ///       button.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of a caption bar or title bar button.
+        /// </summary>
         public static Size CaptionButtonSize
         {
             get
@@ -588,11 +515,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the thickness in pixels, of the border for a window that can be resized.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the thickness in pixels, of the border for a window that can be resized.
+        /// </summary>
         public static Size FrameBorderSize
         {
             get
@@ -602,12 +527,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the system's default
-        ///       minimum tracking dimensions of a window in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the system's default minimum tracking dimensions of a window in pixels.
+        /// </summary>
         public static Size MinWindowTrackSize
         {
             get
@@ -617,13 +539,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of the area that the user must click within
-        ///       for the system to consider the two clicks a double-click. The rectangle is
-        ///       centered around the first click.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of the area that the user must click within
+        /// for the system to consider the two clicks a double-click. The rectangle is
+        /// centered around the first click.
+        /// </summary>
         public static Size DoubleClickSize
         {
             get
@@ -633,12 +553,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the maximum number of milliseconds allowed between mouse clicks for a
-        ///       double-click.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the maximum number of milliseconds allowed between mouse clicks for a
+        /// double-click.
+        /// </summary>
         public static int DoubleClickTime
         {
             get
@@ -647,13 +565,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the dimensions in pixels, of the grid used
-        ///       to arrange icons in a large icon view.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of the grid used to arrange icons in a large
+        /// icon view.
+        /// </summary>
         public static Size IconSpacingSize
         {
             get
@@ -663,12 +578,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether drop down menus should be right-aligned with
-        ///       the corresponding menu bar item.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether drop down menus should be right-aligned with
+        /// the corresponding menu bar item.
+        /// </summary>
         public static bool RightAlignedMenus
         {
             get
@@ -677,12 +590,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the Microsoft Windows for Pen computing
-        ///       extensions are installed.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the Microsoft Windows for Pen computing
+        /// extensions are installed.
+        /// </summary>
         public static bool PenWindows
         {
             get
@@ -691,12 +602,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the operating system is capable of handling
-        ///       double-byte (DBCS) characters.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the operating system is capable of handling
+        /// double-byte (DBCS) characters.
+        /// </summary>
         public static bool DbcsEnabled
         {
             get
@@ -705,11 +614,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the number of buttons on mouse.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the number of buttons on mouse.
+        /// </summary>
         public static int MouseButtons
         {
             get
@@ -718,11 +625,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether security is present on this operating system.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether security is present on this operating system.
+        /// </summary>
         public static bool Secure
         {
             get
@@ -731,12 +636,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of a 3-D
-        ///       border.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of a 3-D border.
+        /// </summary>
         public static Size Border3DSize
         {
             get
@@ -746,11 +648,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>Gets the dimensions
-        ///       in pixels, of
-        ///       the grid into which minimized windows will be placed.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of the grid into which minimized windows will
+        /// be placed.
+        /// </summary>
         public static Size MinimizedWindowSpacingSize
         {
             get
@@ -760,12 +661,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the recommended dimensions of a small icon in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the recommended dimensions of a small icon in pixels.
+        /// </summary>
         public static Size SmallIconSize
         {
             get
@@ -775,12 +673,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of
-        ///       a small caption in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of a small caption in pixels.
+        /// </summary>
         public static int ToolWindowCaptionHeight
         {
             get
@@ -789,12 +684,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       dimensions of small caption buttons in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions of small caption buttons in pixels.
+        /// </summary>
         public static Size ToolWindowCaptionButtonSize
         {
             get
@@ -804,12 +696,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       the dimensions in pixels, of menu bar buttons.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of menu bar buttons.
+        /// </summary>
         public static Size MenuButtonSize
         {
             get
@@ -819,9 +708,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>Gets flags specifying how the system arranges minimized windows.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets flags specifying how the system arranges minimized windows.
+        /// </summary>
         public static ArrangeStartingPosition ArrangeStartingPosition
         {
             get
@@ -832,11 +721,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets flags specifying how the system arranges minimized windows.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets flags specifying how the system arranges minimized windows.
+        /// </summary>
         public static ArrangeDirection ArrangeDirection
         {
             get
@@ -847,11 +734,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of a normal minimized window.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of a normal minimized window.
+        /// </summary>
         public static Size MinimizedWindowSize
         {
             get
@@ -861,12 +746,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the default maximum dimensions in pixels, of a
-        ///       window that has a caption and sizing borders.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the default maximum dimensions in pixels, of a window that has a
+        /// caption and sizing borders.
+        /// </summary>
         public static Size MaxWindowTrackSize
         {
             get
@@ -876,12 +759,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the default dimensions, in pixels, of a maximized top-left window on the
-        ///       primary monitor.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the default dimensions, in pixels, of a maximized top-left window on the
+        /// primary monitor.
+        /// </summary>
         public static Size PrimaryMonitorMaximizedWindowSize
         {
             get
@@ -891,11 +772,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether this computer is connected to a network.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether this computer is connected to a network.
+        /// </summary>
         public static bool Network
         {
             get
@@ -912,13 +791,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value that specifies how the system was started.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value that specifies how the system was started.
+        /// </summary>
         public static BootMode BootMode
         {
             get
@@ -927,13 +802,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the dimensions in pixels, of the rectangle that a drag operation
-        ///       must extend to be considered a drag. The rectangle is centered on a drag
-        ///       point.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions in pixels, of the rectangle that a drag operation must
+        /// extend to be considered a drag. The rectangle is centered on a drag point.
+        /// </summary>
         public static Size DragSize
         {
             get
@@ -943,13 +815,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the user requires an application to present
-        ///       information visually in situations where it would otherwise present the
-        ///       information in audible form.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the user requires an application to present
+        /// information visually in situations where it would otherwise present the
+        /// information in audible form.
+        /// </summary>
         public static bool ShowSounds
         {
             get
@@ -958,12 +828,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       dimensions of the default size of a menu checkmark in pixels.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the dimensions of the default size of a menu checkmark in pixels.
+        /// </summary>
         public static Size MenuCheckSize
         {
             get
@@ -973,12 +840,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value
-        ///       indicating whether the system is enabled for Hebrew and Arabic languages.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the system is enabled for Hebrew and Arabic
+        /// languages.
+        /// </summary>
         public static bool MidEastEnabled
         {
             get
@@ -1000,12 +865,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the system natively supports the mouse wheel
-        ///       in newer mice.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the system natively supports the mouse wheel
+        /// in newer mice.
+        /// </summary>
         public static bool NativeMouseWheelSupport
         {
             get
@@ -1019,13 +882,10 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether there is a mouse with a mouse wheel
-        ///       installed on this machine.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether there is a mouse with a mouse wheel
+        /// installed on this machine.
+        /// </summary>
         public static bool MouseWheelPresent
         {
             get
@@ -1056,13 +916,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the
-        ///       bounds of the virtual screen.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the bounds of the virtual screen.
+        /// </summary>
         public static Rectangle VirtualScreen
         {
             get
@@ -1082,12 +938,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the number of display monitors on the desktop.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the number of display monitors on the desktop.
+        /// </summary>
         public static int MonitorCount
         {
             get
@@ -1103,13 +956,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether all the display monitors have the
-        ///       same color format.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether all the display monitors have the same color format.
+        /// </summary>
         public static bool MonitorsSameDisplayFormat
         {
             get
@@ -1125,16 +974,9 @@ namespace System.Windows.Forms
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////
-        // Misc
-        //
-
-
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the computer name of the current system.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the computer name of the current system.
+        /// </summary>
         public static string ComputerName
         {
             get
@@ -1145,10 +987,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    Gets the user's domain name.
-        /// </devdoc>
+        /// <summary>
+        /// Gets the user's domain name.
+        /// </summary>
         public static string UserDomainName
         {
             get
@@ -1157,10 +998,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Gets a value indicating whether the current process is running in user 
+        /// <summary>
+        /// Gets a value indicating whether the current process is running in user
         /// interactive mode.
-        /// </devdoc>
+        /// </summary>
         public static bool UserInteractive
         {
             get
@@ -1190,12 +1031,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the user name for the current thread, that is, the name of the
-        ///       user currently logged onto the system.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the user name for the current thread, that is, the name of the user
+        /// currently logged onto the system.
+        /// </summary>
         public static string UserName
         {
             get
@@ -1220,10 +1059,10 @@ namespace System.Windows.Forms
             systemEventsDirty = true;
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Gets a value indicating whether the drop shadow effect in enabled.
         /// Defaults to false downlevel.
-        /// </devdoc>
+        /// </summary>
         public static bool IsDropShadowEnabled
         {
             get
@@ -1234,10 +1073,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Gets a value indicating whether the native user menus have a flat menu appearance.
-        /// Defaults to false downlevel.
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the native user menus have a flat menu
+        /// appearance. Defaults to false downlevel.
+        /// </summary>
         public static bool IsFlatMenuEnabled
         {
             get
@@ -1248,11 +1087,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled. 
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the Font Smoothing OSFeature.Feature is enabled.
+        /// </summary>
         public static bool IsFontSmoothingEnabled
         {
             get
@@ -1263,9 +1100,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a contrast value that is ClearType smoothing.
-        /// </devdoc>
+        /// </summary>
         public static int FontSmoothingContrast
         {
             get
@@ -1276,9 +1113,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Returns a type of Font smoothing.
-        /// </devdoc>
+        /// </summary>
         public static int FontSmoothingType
         {
             get
@@ -1289,11 +1126,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the width in pixels of an icon cell.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Retrieves the width in pixels of an icon cell.
+        /// </summary>
         public static int IconHorizontalSpacing
         {
             get
@@ -1304,11 +1139,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the height in pixels of an icon cell.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Retrieves the height in pixels of an icon cell.
+        /// </summary>
         public static int IconVerticalSpacing
         {
             get
@@ -1319,11 +1152,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Gets a value indicating whether the Icon title wrapping is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the Icon title wrapping is enabled.
+        /// </summary>
         public static bool IsIconTitleWrappingEnabled
         {
             get
@@ -1334,11 +1165,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Gets a value indicating whether the menu access keys are always underlined.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the menu access keys are always underlined.
+        /// </summary>
         public static bool MenuAccessKeysUnderlined
         {
             get
@@ -1349,13 +1178,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the Keyboard repeat delay setting, which is a value in the 
-        ///       range from 0 through 3. The Actual Delay Associated with each value may vary depending on the 
-        ///       hardware.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Retrieves the Keyboard repeat delay setting, which is a value in the range
+        /// from 0 through 3. The Actual Delay Associated with each value may vary
+        /// depending on the hardware.
+        /// </summary>
         public static int KeyboardDelay
         {
             get
@@ -1366,12 +1193,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Gets a value indicating whether the user relies on Keyboard instead of mouse and wants 
-        ///      applications to display keyboard interfaces that would be otherwise hidden.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets a value indicating whether the user relies on Keyboard instead of mouse and wants
+        /// applications to display keyboard interfaces that would be otherwise hidden.
+        /// </summary>
         public static bool IsKeyboardPreferred
         {
             get
@@ -1382,13 +1207,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the Keyboard repeat speed setting, which is a value in the 
-        ///       range from 0 through 31. The actual rate may vary depending on the 
-        ///       hardware.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Retrieves the Keyboard repeat speed setting, which is a value in the range
+        /// from 0 through 31. The actual rate may vary depending on the hardware.
+        /// </summary>
         public static int KeyboardSpeed
         {
             get
@@ -1399,11 +1221,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the Size in pixels of the rectangle within which the mouse pointer has to stay.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the Size in pixels of the rectangle within which the mouse pointer has to stay.
+        /// </summary>
         public static Size MouseHoverSize
         {
             get
@@ -1416,11 +1236,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the time, in milliseconds, that the mouse pointer has to stay in the hover rectangle.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the time, in milliseconds, that the mouse pointer has to stay in the hover rectangle.
+        /// </summary>
         public static int MouseHoverTime
         {
             get
@@ -1432,11 +1250,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the current mouse speed.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the current mouse speed.
+        /// </summary>
         public static int MouseSpeed
         {
             get
@@ -1448,12 +1264,9 @@ namespace System.Windows.Forms
 
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///      Determines whether the snap-to-default-button feature is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Determines whether the snap-to-default-button feature is enabled.
+        /// </summary>
         public static bool IsSnapToDefaultEnabled
         {
             get
@@ -1464,12 +1277,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///      Determines whether the Popup Menus are left Aligned or Right Aligned.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Determines whether the Popup Menus are left Aligned or Right Aligned.
+        /// </summary>
         public static LeftRightAlignment PopupMenuAlignment
         {
             get
@@ -1488,10 +1298,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Determines whether the maenu fade animation feature is enabled.
-        /// Defaults to false downlevel.
-        /// </devdoc>
+        /// <summary>
+        /// Determines whether the maenu fade animation feature is enabled. Defaults to false
+        /// downlevel.
+        /// </summary>
         public static bool IsMenuFadeEnabled
         {
             get
@@ -1502,11 +1312,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates the time, in milliseconds, that the system waits before displaying a shortcut menu.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates the time, in milliseconds, that the system waits before displaying
+        /// a shortcut menu.
+        /// </summary>
         public static int MenuShowDelay
         {
             get
@@ -1518,11 +1327,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the slide open effect for combo boxes is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the slide open effect for combo boxes is enabled.
+        /// </summary>
         public static bool IsComboBoxAnimationEnabled
         {
             get
@@ -1533,11 +1340,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the gradient effect for windows title bars is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the gradient effect for windows title bars is enabled.
+        /// </summary>
         public static bool IsTitleBarGradientEnabled
         {
             get
@@ -1548,12 +1353,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the hot tracking of user interface elements is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the hot tracking of user interface elements is enabled.
+        /// </summary>
         public static bool IsHotTrackingEnabled
         {
             get
@@ -1564,11 +1366,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the smooth scrolling effect for listbox is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the smooth scrolling effect for listbox is enabled.
+        /// </summary>
         public static bool IsListBoxSmoothScrollingEnabled
         {
             get
@@ -1579,11 +1379,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the menu animation feature is enabled.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the menu animation feature is enabled.
+        /// </summary>
         public static bool IsMenuAnimationEnabled
         {
             get
@@ -1594,9 +1392,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Indicates whether the selection fade effect is enabled. Defaults to false downlevel.
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the selection fade effect is enabled. Defaults to false
+        /// downlevel.
+        /// </summary>
         public static bool IsSelectionFadeEnabled
         {
             get
@@ -1607,9 +1406,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Indicates whether the tool tip animation is enabled. Defaults to false downlevel.
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the tool tip animation is enabled. Defaults to false
+        /// downlevel.
+        /// </summary>
         public static bool IsToolTipAnimationEnabled
         {
             get
@@ -1620,9 +1420,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        /// Indicates whether all the UI Effects are enabled. Defaults to false downlevel.
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether all the UI Effects are enabled. Defaults to false
+        /// downlevel.
+        /// </summary>
         public static bool UIEffectsEnabled
         {
             get
@@ -1633,12 +1434,9 @@ namespace System.Windows.Forms
             }
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
+        /// </summary>
         public static bool IsActiveWindowTrackingEnabled
         {
             get
@@ -1649,11 +1447,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the active window tracking delay, in milliseconds.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Retrieves the active window tracking delay, in milliseconds.
+        /// </summary>
         public static int ActiveWindowTrackingDelay
         {
             get
@@ -1665,12 +1461,9 @@ namespace System.Windows.Forms
 
         }
 
-
-        /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the active windows tracking (activating the window the mouse in on) is ON or OFF.
+        /// </summary>
         public static bool IsMinimizeRestoreAnimationEnabled
         {
             get
@@ -1681,11 +1474,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Retrieves the border multiplier factor that determines the width of a windo's sizing border.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Retrieves the border multiplier factor that determines the width of a windo's sizing border.
+        /// </summary>
         public static int BorderMultiplierFactor
         {
             get
@@ -1697,11 +1488,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates the caret blink time.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates the caret blink time.
+        /// </summary>
         public static int CaretBlinkTime
         {
             get
@@ -1711,9 +1500,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// Indicates the caret width in edit controls.
-        /// </devdoc>
+        /// </summary>
         public static int CaretWidth
         {
             get
@@ -1724,11 +1513,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       None.
-        ///    </para>
-        /// </devdoc>
         public static int MouseWheelScrollDelta
         {
             get
@@ -1738,27 +1522,25 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The width of the left and right edges of the focus rectangle.
-        /// </devdoc>
+        /// </summary>
         public static int VerticalFocusThickness
         {
             get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFOCUSBORDER);
         }
 
-        /// <devdoc>
+        /// <summary>
         /// The width of the top and bottom edges of the focus rectangle.
-        /// </devdoc>
+        /// </summary>
         public static int HorizontalFocusThickness
         {
             get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFOCUSBORDER);
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       The height of the vertical sizing border around the perimeter of the window that can be resized.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// The height of the vertical sizing border around the perimeter of the window that can be resized.
+        /// </summary>
         public static int VerticalResizeBorderThickness
         {
             get
@@ -1768,11 +1550,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       The width of the horizontal sizing border around the perimeter of the window that can be resized.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// The width of the horizontal sizing border around the perimeter of the window that can be resized.
+        /// </summary>
         public static int HorizontalResizeBorderThickness
         {
             get
@@ -1782,11 +1562,9 @@ namespace System.Windows.Forms
 
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       The orientation of the screen in degrees.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// The orientation of the screen in degrees.
+        /// </summary>
         public static ScreenOrientation ScreenOrientation
         {
             get
@@ -1812,11 +1590,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Specifies the thikness, in pixels, of the Sizing Border.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Specifies the thikness, in pixels, of the Sizing Border.
+        /// </summary>
         public static int SizingBorderWidth
         {
             get
@@ -1836,11 +1612,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the Size, in pixels, of the small caption buttons.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Specified the Size, in pixels, of the small caption buttons.
+        /// </summary>
         public static Size SmallCaptionButtonSize
         {
             get
@@ -1863,11 +1637,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the Size, in pixels, of the menu bar buttons.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Specified the Size, in pixels, of the menu bar buttons.
+        /// </summary>
         public static Size MenuBarButtonSize
         {
             get
@@ -1890,12 +1662,12 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///     Checks whether the current Winforms app is running on a secure desktop under a terminal
-        ///     server session.  This is the case when the TS session has been locked.
-        ///     This method is useful when calling into GDI+ Graphics methods that modify the object's
-        ///     state, these methods fail under a locked terminal session.
-        /// </devdoc>
+        /// <summary>
+        /// Checks whether the current Winforms app is running on a secure desktop under a terminal
+        /// server session. This is the case when the TS session has been locked.
+        /// This method is useful when calling into GDI+ Graphics methods that modify the object's
+        /// state, these methods fail under a locked terminal session.
+        /// </summary>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal static bool InLockedTerminalSession()
         {
