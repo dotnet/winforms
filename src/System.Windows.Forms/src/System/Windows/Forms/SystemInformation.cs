@@ -2,30 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices;
+using System.Text;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
-    using System.Text;
-    using System.Configuration.Assemblies;
-    using System.Threading;
-    using System.Runtime.InteropServices;
-
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using Microsoft.Win32;
-    using System.IO;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Runtime.Versioning;
-
     /// <summary>
     /// Provides information about the operating system.
     /// </summary>
     public class SystemInformation
     {
-
         // private constructor to prevent creation
         //
         private SystemInformation()
@@ -33,7 +23,6 @@ namespace System.Windows.Forms
         }
 
         // Figure out if all the multimon stuff is supported on the OS
-        //
         private static bool checkMultiMonitorSupport = false;
         private static bool multiMonitorSupport = false;
         private static bool checkNativeMouseWheelSupport = false;
@@ -77,12 +66,8 @@ namespace System.Windows.Forms
                     data.dwFlags = 0;
                     data.lpszDefaultScheme = IntPtr.Zero;
 
-                    bool b = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0);
-
-                    // NT4 does not support this parameter, so we always force
-                    // it to false if we fail to get the parameter.
-                    //
-                    if (b)
+                    // Force it to false if we fail to get the parameter.
+                    if (UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETHIGHCONTRAST, data.cbSize, ref data, 0))
                     {
                         highContrast = (data.dwFlags & NativeMethods.HCF_HIGHCONTRASTON) != 0;
                     }
@@ -90,6 +75,7 @@ namespace System.Windows.Forms
                     {
                         highContrast = false;
                     }
+
                     systemEventsDirty = false;
                 }
 
@@ -110,32 +96,25 @@ namespace System.Windows.Forms
                     UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETWHEELSCROLLLINES, 0, ref data, 0);
                     return data;
                 }
-                else
+
+                IntPtr hWndMouseWheel = IntPtr.Zero;
+
+                // Check for the MouseZ "service". This is a little app that generated the
+                // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
+                // found, then there is no support for MouseWheels on the system.
+                hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
+
+                if (hWndMouseWheel != IntPtr.Zero)
                 {
-                    IntPtr hWndMouseWheel = IntPtr.Zero;
+                    // Register the MSH_SCROLL_LINES message...
+                    int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_SCROLL_LINES);
+                    int lines = (int)UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndMouseWheel), message, 0, 0);
 
-                    // Check for the MouseZ "service". This is a little app that generated the
-                    // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
-                    // found, then there is no support for MouseWheels on the system.
-                    //
-                    hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-
-                    if (hWndMouseWheel != IntPtr.Zero)
+                    // This fails under terminal server, so we default to 3, which is the Windows
+                    // default. Nobody seems to pay attention to this value anyways.
+                    if (lines != 0)
                     {
-
-                        // Register the MSH_SCROLL_LINES message...
-                        //
-                        int message = SafeNativeMethods.RegisterWindowMessage(NativeMethods.MSH_SCROLL_LINES);
-
-
-                        int lines = (int)UnsafeNativeMethods.SendMessage(new HandleRef(null, hWndMouseWheel), message, 0, 0);
-
-                        // this fails under terminal server, so we default to 3, which is the windows
-                        // default.  Nobody seems to pay attention to this value anyways...
-                        if (lines != 0)
-                        {
-                            return lines;
-                        }
+                        return lines;
                     }
                 }
 
@@ -148,11 +127,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size PrimaryMonitorSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN));
         }
 
         /// <summary>
@@ -160,10 +136,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int VerticalScrollBarWidth
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVSCROLL);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVSCROLL);
         }
 
         /// <summary>
@@ -186,10 +159,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int HorizontalScrollBarHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
         }
 
         /// <summary>
@@ -212,10 +182,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int CaptionHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCAPTION);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCAPTION);
         }
 
         /// <summary>
@@ -223,11 +190,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size BorderSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXBORDER),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYBORDER));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXBORDER),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYBORDER));
         }
 
         /// <summary>
@@ -252,11 +216,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size FixedFrameBorderSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFIXEDFRAME),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFIXEDFRAME));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFIXEDFRAME),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFIXEDFRAME));
         }
 
         /// <summary>
@@ -264,10 +225,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int VerticalScrollBarThumbHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVTHUMB);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVTHUMB);
         }
 
         /// <summary>
@@ -275,10 +233,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int HorizontalScrollBarThumbWidth
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHTHUMB);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHTHUMB);
         }
 
         /// <summary>
@@ -286,11 +241,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size IconSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICON),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICON));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICON),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICON));
         }
 
         /// <summary>
@@ -298,26 +250,14 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size CursorSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXCURSOR),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCURSOR));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXCURSOR),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYCURSOR));
         }
 
         /// <summary>
         /// Gets the system's font for menus.
         /// </summary>
-        public static Font MenuFont
-        {
-
-
-            get
-            {
-                return GetMenuFontHelper(0, false);
-            }
-        }
-
+        public static Font MenuFont => GetMenuFontHelper(0, useDpi: false);
 
         /// <summary>
         /// Gets the system's font for menus, scaled accordingly to an arbitrary DPI you provide.
@@ -331,9 +271,9 @@ namespace System.Windows.Forms
         {
             Font menuFont = null;
 
-            //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-            //
-            NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
+            // We can get the system's menu font through the NONCLIENTMETRICS structure
+            // via SystemParametersInfo
+            var data = new NativeMethods.NONCLIENTMETRICS();
             bool result;
             if (useDpi)
             {
@@ -352,8 +292,7 @@ namespace System.Windows.Forms
                 }
                 catch
                 {
-                    // menu font is not true type.  Default to standard control font.
-                    //
+                    // Menu font is not true type. Default to standard control font.
                     menuFont = Control.DefaultFont;
                 }
             }
@@ -365,10 +304,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int MenuHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENU);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENU);
         }
 
         /// <summary>
@@ -376,14 +312,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static PowerStatus PowerStatus
         {
-            get
-            {
-                if (powerStatus == null)
-                {
-                    powerStatus = new PowerStatus();
-                }
-                return powerStatus;
-            }
+            get => powerStatus ?? (powerStatus = new PowerStatus());
         }
 
         /// <summary>
@@ -393,7 +322,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                NativeMethods.RECT rc = new NativeMethods.RECT();
+                var rc = new NativeMethods.RECT();
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETWORKAREA, 0, ref rc, 0);
                 return Rectangle.FromLTRB(rc.left, rc.top, rc.right, rc.bottom);
             }
@@ -405,10 +334,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int KanjiWindowHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYKANJIWINDOW);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYKANJIWINDOW);
         }
 
         /// <summary>
@@ -417,10 +343,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static bool MousePresent
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEPRESENT) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEPRESENT) != 0;
         }
 
         /// <summary>
@@ -428,10 +351,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int VerticalScrollBarArrowHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVSCROLL);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVSCROLL);
         }
 
         /// <summary>
@@ -447,10 +367,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int HorizontalScrollBarArrowWidth
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHSCROLL);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHSCROLL);
         }
 
         /// <summary>
@@ -473,10 +390,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool DebugOS
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DEBUG) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DEBUG) != 0;
         }
 
         /// <summary>
@@ -485,10 +399,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool MouseButtonsSwapped
         {
-            get
-            {
-                return (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SWAPBUTTON) != 0);
-            }
+            get => (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SWAPBUTTON) != 0);
         }
 
         /// <summary>
@@ -496,11 +407,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MinimumWindowSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMIN),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMIN));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMIN),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMIN));
         }
 
         /// <summary>
@@ -508,11 +416,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size CaptionButtonSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZE));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZE),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZE));
         }
 
         /// <summary>
@@ -520,11 +425,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size FrameBorderSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFRAME),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFRAME));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFRAME),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFRAME));
         }
 
         /// <summary>
@@ -532,11 +434,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MinWindowTrackSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINTRACK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINTRACK));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINTRACK),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINTRACK));
         }
 
         /// <summary>
@@ -546,24 +445,15 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size DoubleClickSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDOUBLECLK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDOUBLECLK));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDOUBLECLK),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDOUBLECLK));
         }
 
         /// <summary>
         /// Gets the maximum number of milliseconds allowed between mouse clicks for a
         /// double-click.
         /// </summary>
-        public static int DoubleClickTime
-        {
-            get
-            {
-                return SafeNativeMethods.GetDoubleClickTime();
-            }
-        }
+        public static int DoubleClickTime => SafeNativeMethods.GetDoubleClickTime();
 
         /// <summary>
         /// Gets the dimensions in pixels, of the grid used to arrange icons in a large
@@ -571,11 +461,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size IconSpacingSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICONSPACING),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICONSPACING));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXICONSPACING),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYICONSPACING));
         }
 
         /// <summary>
@@ -584,10 +471,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool RightAlignedMenus
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MENUDROPALIGNMENT) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MENUDROPALIGNMENT) != 0;
         }
 
         /// <summary>
@@ -596,10 +480,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool PenWindows
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_PENWINDOWS) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_PENWINDOWS) != 0;
         }
 
         /// <summary>
@@ -608,10 +489,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool DbcsEnabled
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DBCSENABLED) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_DBCSENABLED) != 0;
         }
 
         /// <summary>
@@ -619,10 +497,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int MouseButtons
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMOUSEBUTTONS);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMOUSEBUTTONS);
         }
 
         /// <summary>
@@ -630,10 +505,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool Secure
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SECURE) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SECURE) != 0;
         }
 
         /// <summary>
@@ -641,11 +513,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size Border3DSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXEDGE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYEDGE));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXEDGE),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYEDGE));
         }
 
         /// <summary>
@@ -654,11 +523,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MinimizedWindowSpacingSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINSPACING),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINSPACING));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINSPACING),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINSPACING));
         }
 
         /// <summary>
@@ -666,11 +532,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size SmallIconSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMICON),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMICON));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMICON),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMICON));
         }
 
         /// <summary>
@@ -678,10 +541,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int ToolWindowCaptionHeight
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMCAPTION);
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMCAPTION);
         }
 
         /// <summary>
@@ -689,11 +549,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size ToolWindowCaptionButtonSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMSIZE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMSIZE));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSMSIZE),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSMSIZE));
         }
 
         /// <summary>
@@ -701,11 +558,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MenuButtonSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUSIZE),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUSIZE));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUSIZE),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUSIZE));
         }
 
         /// <summary>
@@ -739,11 +593,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MinimizedWindowSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINIMIZED),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINIMIZED));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMINIMIZED),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMINIMIZED));
         }
 
         /// <summary>
@@ -752,11 +603,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MaxWindowTrackSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXTRACK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXTRACK));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXTRACK),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXTRACK));
         }
 
         /// <summary>
@@ -765,11 +613,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size PrimaryMonitorMaximizedWindowSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXIMIZED),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXIMIZED));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMAXIMIZED),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMAXIMIZED));
         }
 
         /// <summary>
@@ -777,18 +622,12 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool Network
         {
-            get
-            {
-                return (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_NETWORK) & 0x00000001) != 0;
-            }
+            get => (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_NETWORK) & 0x00000001) != 0;
         }
 
         public static bool TerminalServerSession
         {
-            get
-            {
-                return (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0;
-            }
+            get => (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_REMOTESESSION) & 0x00000001) != 0;
         }
 
         /// <summary>
@@ -796,10 +635,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static BootMode BootMode
         {
-            get
-            {
-                return (BootMode)UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CLEANBOOT);
-            }
+            get => (BootMode)UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CLEANBOOT);
         }
 
         /// <summary>
@@ -808,11 +644,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size DragSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDRAG),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDRAG));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXDRAG),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYDRAG));
         }
 
         /// <summary>
@@ -822,10 +655,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool ShowSounds
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SHOWSOUNDS) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SHOWSOUNDS) != 0;
         }
 
         /// <summary>
@@ -833,11 +663,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static Size MenuCheckSize
         {
-            get
-            {
-                return new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUCHECK),
-                                UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUCHECK));
-            }
+            get => new Size(UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXMENUCHECK),
+                            UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYMENUCHECK));
         }
 
         /// <summary>
@@ -846,10 +673,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool MidEastEnabled
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MIDEASTENABLED) != 0;
-            }
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MIDEASTENABLED) != 0;
         }
 
         private static bool MultiMonitorSupport
@@ -861,6 +685,7 @@ namespace System.Windows.Forms
                     multiMonitorSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS) != 0);
                     checkMultiMonitorSupport = true;
                 }
+
                 return multiMonitorSupport;
             }
         }
@@ -878,6 +703,7 @@ namespace System.Windows.Forms
                     nativeMouseWheelSupport = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
                     checkNativeMouseWheelSupport = true;
                 }
+
                 return nativeMouseWheelSupport;
             }
         }
@@ -890,29 +716,15 @@ namespace System.Windows.Forms
         {
             get
             {
-
-                bool mouseWheelPresent = false;
-
                 if (!NativeMouseWheelSupport)
                 {
-                    IntPtr hWndMouseWheel = IntPtr.Zero;
-
                     // Check for the MouseZ "service". This is a little app that generated the
                     // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
                     // found, then there is no support for MouseWheels on the system.
-                    //
-                    hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
+                    return UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE) != IntPtr.Zero;
+                }
 
-                    if (hWndMouseWheel != IntPtr.Zero)
-                    {
-                        mouseWheelPresent = true;
-                    }
-                }
-                else
-                {
-                    mouseWheelPresent = (UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0);
-                }
-                return mouseWheelPresent;
+                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_MOUSEWHEELPRESENT) != 0;
             }
         }
 
@@ -930,11 +742,9 @@ namespace System.Windows.Forms
                                          UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXVIRTUALSCREEN),
                                          UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYVIRTUALSCREEN));
                 }
-                else
-                {
-                    Size size = PrimaryMonitorSize;
-                    return new Rectangle(0, 0, size.Width, size.Height);
-                }
+
+                Size size = PrimaryMonitorSize;
+                return new Rectangle(0, 0, size.Width, size.Height);
             }
         }
 
@@ -949,10 +759,8 @@ namespace System.Windows.Forms
                 {
                     return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CMONITORS);
                 }
-                else
-                {
-                    return 1;
-                }
+
+                return 1;
             }
         }
 
@@ -967,10 +775,8 @@ namespace System.Windows.Forms
                 {
                     return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_SAMEDISPLAYFORMAT) != 0;
                 }
-                else
-                {
-                    return true;
-                }
+
+                return true;
             }
         }
 
@@ -990,13 +796,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets the user's domain name.
         /// </summary>
-        public static string UserDomainName
-        {
-            get
-            {
-                return Environment.UserDomainName;
-            }
-        }
+        public static string UserDomainName => Environment.UserDomainName;
 
         /// <summary>
         /// Gets a value indicating whether the current process is running in user
@@ -1247,7 +1047,6 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSEHOVERTIME, 0, ref data, 0);
                 return data;
             }
-
         }
 
         /// <summary>
@@ -1261,7 +1060,6 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMOUSESPEED, 0, ref data, 0);
                 return data;
             }
-
         }
 
         /// <summary>
@@ -1294,7 +1092,6 @@ namespace System.Windows.Forms
                 {
                     return LeftRightAlignment.Right;
                 }
-
             }
         }
 
@@ -1324,7 +1121,6 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUSHOWDELAY, 0, ref data, 0);
                 return data;
             }
-
         }
 
         /// <summary>
@@ -1458,7 +1254,6 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETACTIVEWNDTRKTIMEOUT, 0, ref data, 0);
                 return data;
             }
-
         }
 
         /// <summary>
@@ -1485,7 +1280,6 @@ namespace System.Windows.Forms
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETBORDER, 0, ref data, 0);
                 return data;
             }
-
         }
 
         /// <summary>
@@ -1493,11 +1287,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int CaretBlinkTime
         {
-            get
-            {
-                return unchecked((int)SafeNativeMethods.GetCaretBlinkTime());
-            }
-
+            get => unchecked((int)SafeNativeMethods.GetCaretBlinkTime());
         }
 
         /// <summary>
@@ -1513,14 +1303,7 @@ namespace System.Windows.Forms
             }
         }
 
-        public static int MouseWheelScrollDelta
-        {
-            get
-            {
-                return NativeMethods.WHEEL_DELTA;
-            }
-
-        }
+        public static int MouseWheelScrollDelta => NativeMethods.WHEEL_DELTA;
 
         /// <summary>
         /// The width of the left and right edges of the focus rectangle.
@@ -1543,11 +1326,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int VerticalResizeBorderThickness
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZEFRAME);
-            }
-
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYSIZEFRAME);
         }
 
         /// <summary>
@@ -1555,11 +1334,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static int HorizontalResizeBorderThickness
         {
-            get
-            {
-                return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZEFRAME);
-            }
-
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXSIZEFRAME);
         }
 
         /// <summary>
@@ -1597,9 +1372,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
+                // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
+                var data = new NativeMethods.NONCLIENTMETRICS();
                 bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
                 if (result && data.iBorderWidth > 0)
                 {
@@ -1619,10 +1393,8 @@ namespace System.Windows.Forms
         {
             get
             {
-
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
+                // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
+                var data = new NativeMethods.NONCLIENTMETRICS();
                 bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
                 if (result && data.iSmCaptionHeight > 0 && data.iSmCaptionWidth > 0)
                 {
@@ -1632,8 +1404,6 @@ namespace System.Windows.Forms
                 {
                     return Size.Empty;
                 }
-
-
             }
         }
 
@@ -1644,10 +1414,8 @@ namespace System.Windows.Forms
         {
             get
             {
-
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
+                // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
+                var data = new NativeMethods.NONCLIENTMETRICS();
                 bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
                 if (result && data.iMenuHeight > 0 && data.iMenuWidth > 0)
                 {
@@ -1657,8 +1425,6 @@ namespace System.Windows.Forms
                 {
                     return Size.Empty;
                 }
-
-
             }
         }
 
@@ -1675,7 +1441,7 @@ namespace System.Windows.Forms
 
             if (SystemInformation.TerminalServerSession)
             {
-                // Let's try to open the input desktop, it it fails with access denied assume
+                // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
                 IntPtr hDsk = SafeNativeMethods.OpenInputDesktop(0, false, NativeMethods.DESKTOP_SWITCHDESKTOP);
 
@@ -1695,4 +1461,3 @@ namespace System.Windows.Forms
         }
     }
 }
-
