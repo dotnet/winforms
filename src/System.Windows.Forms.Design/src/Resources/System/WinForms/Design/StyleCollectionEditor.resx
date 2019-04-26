@@ -1,0 +1,1026 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="addRemoveInsertTableLayoutPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="addRemoveInsertTableLayoutPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="addRemoveInsertTableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="addButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="addButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="addButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="addButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="addButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="addButton.Text">
+    <value xml:space="preserve">&amp;Add</value>
+  </data>
+  <data name="&gt;&gt;addButton.Name">
+    <value xml:space="preserve">addButton</value>
+  </data>
+  <data name="&gt;&gt;addButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addButton.Parent">
+    <value xml:space="preserve">addRemoveInsertTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;addButton.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="removeButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="removeButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="removeButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>81, 0</value>
+  </data>
+  <data name="removeButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="removeButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="removeButton.Text">
+    <value xml:space="preserve">&amp;Delete</value>
+  </data>
+  <data name="&gt;&gt;removeButton.Name">
+    <value xml:space="preserve">removeButton</value>
+  </data>
+  <data name="&gt;&gt;removeButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;removeButton.Parent">
+    <value xml:space="preserve">addRemoveInsertTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;removeButton.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="insertButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="insertButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="insertButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>162, 0</value>
+  </data>
+  <data name="insertButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="insertButton.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="insertButton.Text">
+    <value xml:space="preserve">&amp;Insert</value>
+  </data>
+  <data name="&gt;&gt;insertButton.Name">
+    <value xml:space="preserve">insertButton</value>
+  </data>
+  <data name="&gt;&gt;insertButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;insertButton.Parent">
+    <value xml:space="preserve">addRemoveInsertTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;insertButton.ZOrder">
+    <value xml:space="preserve">2</value>
+  </data>
+  <data name="addRemoveInsertTableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 304</value>
+  </data>
+  <data name="addRemoveInsertTableLayoutPanel.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="addRemoveInsertTableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>237, 23</value>
+  </data>
+  <data name="addRemoveInsertTableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;addRemoveInsertTableLayoutPanel.Name">
+    <value xml:space="preserve">addRemoveInsertTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;addRemoveInsertTableLayoutPanel.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addRemoveInsertTableLayoutPanel.Parent">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;addRemoveInsertTableLayoutPanel.ZOrder">
+    <value xml:space="preserve">3</value>
+  </data>
+  <data name="addRemoveInsertTableLayoutPanel.LayoutSettings">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="addButton" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="removeButton" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="insertButton" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,33,Percent,33,Percent,33" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="sizeTypeGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Bottom</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>  
+  <data name="sizeTypeGroupBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>      
+  <data name="absoluteNumericUpDown.AccessibleName">
+    <value xml:space="preserve">Absolute</value>
+  </data>
+  <data name="absoluteNumericUpDown.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="absoluteNumericUpDown.Location" type="System.Drawing.Point, System.Drawing">
+    <value>69, 3</value>
+  </data>
+  <data name="absoluteNumericUpDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 20</value>
+  </data>
+  <data name="absoluteNumericUpDown.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="absoluteNumericUpDown.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;absoluteNumericUpDown.Name">
+    <value xml:space="preserve">absoluteNumericUpDown</value>
+  </data>
+  <data name="&gt;&gt;absoluteNumericUpDown.Type">
+    <value xml:space="preserve">System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;absoluteNumericUpDown.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;absoluteNumericUpDown.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="absoluteRadioButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="absoluteRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="absoluteRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 6</value>
+  </data>
+  <data name="absoluteRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 17</value>
+  </data>
+  <data name="absoluteRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="absoluteRadioButton.Text">
+    <value xml:space="preserve">A&amp;bsolute</value>
+  </data>
+  <data name="&gt;&gt;absoluteRadioButton.Name">
+    <value xml:space="preserve">absoluteRadioButton</value>
+  </data>
+  <data name="&gt;&gt;absoluteRadioButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;absoluteRadioButton.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;absoluteRadioButton.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="pixelsLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="pixelsLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="pixelsLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>209, 6</value>
+  </data>
+  <data name="pixelsLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>32, 13</value>
+  </data>
+  <data name="pixelsLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="pixelsLabel.Text">
+    <value xml:space="preserve">pixels</value>
+  </data>
+  <data name="&gt;&gt;pixelsLabel.Name">
+    <value xml:space="preserve">pixelsLabel</value>
+  </data>
+  <data name="&gt;&gt;pixelsLabel.Type">
+    <value xml:space="preserve">System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pixelsLabel.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;pixelsLabel.ZOrder">
+    <value xml:space="preserve">2</value>
+  </data>
+  <data name="percentLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="percentLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="percentLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>209, 32</value>
+  </data>
+  <data name="percentLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>14, 13</value>
+  </data>
+  <data name="percentLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="percentLabel.Text">
+    <value xml:space="preserve">%</value>
+  </data>
+  <data name="&gt;&gt;percentLabel.Name">
+    <value xml:space="preserve">percentLabel</value>
+  </data>
+  <data name="&gt;&gt;percentLabel.Type">
+    <value xml:space="preserve">System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;percentLabel.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;percentLabel.ZOrder">
+    <value xml:space="preserve">3</value>
+  </data>
+  <data name="percentRadioButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="percentRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="percentRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 32</value>
+  </data>
+  <data name="percentRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 17</value>
+  </data>
+  <data name="percentRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="percentRadioButton.Text">
+    <value xml:space="preserve">&amp;Percent</value>
+  </data>
+  <data name="&gt;&gt;percentRadioButton.Name">
+    <value xml:space="preserve">percentRadioButton</value>
+  </data>
+  <data name="&gt;&gt;percentRadioButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;percentRadioButton.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;percentRadioButton.ZOrder">
+    <value xml:space="preserve">4</value>
+  </data>
+  <data name="autoSizedRadioButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="autoSizedRadioButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="autoSizedRadioButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 55</value>
+  </data>
+  <data name="autoSizedRadioButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 17</value>
+  </data>
+  <data name="autoSizedRadioButton.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="autoSizedRadioButton.Text">
+    <value xml:space="preserve">A&amp;utoSize</value>
+  </data>
+  <data name="&gt;&gt;autoSizedRadioButton.Name">
+    <value xml:space="preserve">autoSizedRadioButton</value>
+  </data>
+  <data name="&gt;&gt;autoSizedRadioButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;autoSizedRadioButton.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;autoSizedRadioButton.ZOrder">
+    <value xml:space="preserve">5</value>
+  </data>
+  <data name="percentNumericUpDown.AccessibleName">
+    <value xml:space="preserve">Percent</value>
+  </data>
+  <data name="percentNumericUpDown.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="percentNumericUpDown.Location" type="System.Drawing.Point, System.Drawing">
+    <value>69, 29</value>
+  </data>
+  <data name="percentNumericUpDown.Size" type="System.Drawing.Size, System.Drawing">
+    <value>134, 20</value>
+  </data>
+  <data name="percentNumericUpDown.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="percentNumericUpDown.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;percentNumericUpDown.Name">
+    <value xml:space="preserve">percentNumericUpDown</value>
+  </data>
+  <data name="&gt;&gt;percentNumericUpDown.Type">
+    <value xml:space="preserve">System.Windows.Forms.NumericUpDown, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;percentNumericUpDown.Parent">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;percentNumericUpDown.ZOrder">
+    <value xml:space="preserve">6</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 22</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.RowCount" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>244, 74</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeTableLayoutPanel.Name">
+    <value xml:space="preserve">sizeTypeTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeTableLayoutPanel.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeTableLayoutPanel.Parent">
+    <value xml:space="preserve">sizeTypeGroupBox</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeTableLayoutPanel.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="sizeTypeTableLayoutPanel.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="absoluteNumericUpDown" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="absoluteRadioButton" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="pixelsLabel" Row="0" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="percentLabel" Row="1" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="percentRadioButton" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="autoSizedRadioButton" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="percentNumericUpDown" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Absolute,134,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="sizeTypeGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>326, 0</value>
+  </data>
+  <data name="sizeTypeGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>262, 103</value>
+  </data>
+  <data name="sizeTypeGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="sizeTypeGroupBox.Text">
+    <value xml:space="preserve">Size Type</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeGroupBox.Name">
+    <value xml:space="preserve">sizeTypeGroupBox</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeGroupBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeGroupBox.Parent">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeGroupBox.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="showTableLayoutPanel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="showTableLayoutPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="showTableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="memberTypeLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="memberTypeLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="memberTypeLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 4</value>
+  </data>
+  <data name="memberTypeLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>36, 13</value>
+  </data>
+  <data name="memberTypeLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="memberTypeLabel.Text">
+    <value xml:space="preserve">&amp;Show:</value>
+  </data>
+  <data name="&gt;&gt;memberTypeLabel.Name">
+    <value xml:space="preserve">memberTypeLabel</value>
+  </data>
+  <data name="&gt;&gt;memberTypeLabel.Type">
+    <value xml:space="preserve">System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;memberTypeLabel.Parent">
+    <value xml:space="preserve">showTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;memberTypeLabel.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="columnsOrRowsComboBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="columnsOrRowsComboBox.Items">
+    <value xml:space="preserve">Columns</value>
+  </data>
+  <data name="columnsOrRowsComboBox.Items1">
+    <value xml:space="preserve">Rows</value>
+  </data>
+  <data name="columnsOrRowsComboBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>42, 0</value>
+  </data>
+  <data name="columnsOrRowsComboBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>275, 21</value>
+  </data>
+  <data name="columnsOrRowsComboBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;columnsOrRowsComboBox.Name">
+    <value xml:space="preserve">columnsOrRowsComboBox</value>
+  </data>
+  <data name="&gt;&gt;columnsOrRowsComboBox.Type">
+    <value xml:space="preserve">System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnsOrRowsComboBox.Parent">
+    <value xml:space="preserve">showTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;columnsOrRowsComboBox.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="showTableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="showTableLayoutPanel.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="showTableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>317, 21</value>
+  </data>
+  <data name="showTableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;showTableLayoutPanel.Name">
+    <value xml:space="preserve">showTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;showTableLayoutPanel.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;showTableLayoutPanel.Parent">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;showTableLayoutPanel.ZOrder">
+    <value xml:space="preserve">2</value>
+  </data>
+  <data name="showTableLayoutPanel.LayoutSettings">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="memberTypeLabel" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="columnsOrRowsComboBox" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="columnsAndRowsListView.AccessibleName">
+    <value xml:space="preserve">Columns and Rows List</value>
+  </data>
+  <data name="columnsAndRowsListView.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="columnsAndRowsListView.Columns">
+    <value />
+  </data>
+  <data name="membersColumnHeader.Text">
+    <value xml:space="preserve">Member</value>
+  </data>
+  <data name="membersColumnHeader.Width" type="System.Int32, mscorlib">
+    <value>75</value>
+  </data>
+  <data name="columnsAndRowsListView.Columns1">
+    <value />
+  </data>
+  <data name="sizeTypeColumnHeader.Text">
+    <value xml:space="preserve">Size Type</value>
+  </data>
+  <data name="sizeTypeColumnHeader.Width" type="System.Int32, mscorlib">
+    <value>75</value>
+  </data>
+  <data name="columnsAndRowsListView.Columns2">
+    <value />
+  </data>
+  <data name="valueColumnHeader.Text">
+    <value xml:space="preserve">Value</value>
+  </data>
+  <data name="valueColumnHeader.Width" type="System.Int32, mscorlib">
+    <value>75</value>
+  </data>
+  <data name="columnsAndRowsListView.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 27</value>
+  </data>
+  <data name="columnsAndRowsListView.Size" type="System.Drawing.Size, System.Drawing">
+    <value>317, 271</value>
+  </data>
+  <data name="columnsAndRowsListView.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;columnsAndRowsListView.Name">
+    <value xml:space="preserve">columnsAndRowsListView</value>
+  </data>
+  <data name="&gt;&gt;columnsAndRowsListView.Type">
+    <value xml:space="preserve">System.Windows.Forms.ListView, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;columnsAndRowsListView.Parent">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;columnsAndRowsListView.ZOrder">
+    <value xml:space="preserve">4</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="infoPictureBox2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="infoPictureBox2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAARJJREFUOE+tk7ER
+        wjAMRTMPSzBFakbxKOkovERScyldcscK9BRGT1g62wmhwXe6JIr0pf8lD8O/T3rkvK45X29PN77xH9bK
+        ciyR4NqW+6JgcY6EbYFwWkWNeD310bwLKDEhCIj8b7qhGj/rRHynS1RzvyTGKeYg1gCQTEJTWT7DhH3a
+        rs8oXUBLQeC9FwSY6dDTIRkqCqDi7FTBT/tU6zVJc1b/IQCdmQZKrxK16eAbBZJGOqhFLBMCwDsgcKNB
+        4a8UxFI9UolPsg8OAA800DFWRymcZYxiNiF7kkyOj9K7qBZIRQRAOvAdKXvQVDcU08L3AbDOWGUo+Q70
+        l8NAmDFBBkAiPuznpVJNikg2BQPcu41vTqCLc6qWWUUAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="infoPictureBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 58</value>
+  </data>
+  <data name="infoPictureBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="infoPictureBox2.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>AutoSize</value>
+  </data>
+  <data name="infoPictureBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox2.Name">
+    <value xml:space="preserve">infoPictureBox2</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox2.Type">
+    <value xml:space="preserve">System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox2.Parent">
+    <value xml:space="preserve">helperTextTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox2.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="infoPictureBox1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="infoPictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAARJJREFUOE+tk7ER
+        wjAMRTMPSzBFakbxKOkovERScyldcscK9BRGT1g62wmhwXe6JIr0pf8lD8O/T3rkvK45X29PN77xH9bK
+        ciyR4NqW+6JgcY6EbYFwWkWNeD310bwLKDEhCIj8b7qhGj/rRHynS1RzvyTGKeYg1gCQTEJTWT7DhH3a
+        rs8oXUBLQeC9FwSY6dDTIRkqCqDi7FTBT/tU6zVJc1b/IQCdmQZKrxK16eAbBZJGOqhFLBMCwDsgcKNB
+        4a8UxFI9UolPsg8OAA800DFWRymcZYxiNiF7kkyOj9K7qBZIRQRAOvAdKXvQVDcU08L3AbDOWGUo+Q70
+        l8NAmDFBBkAiPuznpVJNikg2BQPcu41vTqCLc6qWWUUAAAAASUVORK5CYII=
+</value>
+  </data>
+  <data name="infoPictureBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="infoPictureBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>16, 16</value>
+  </data>
+  <data name="infoPictureBox1.SizeMode" type="System.Windows.Forms.PictureBoxSizeMode, System.Windows.Forms">
+    <value>AutoSize</value>
+  </data>
+  <data name="infoPictureBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox1.Name">
+    <value xml:space="preserve">infoPictureBox1</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox1.Type">
+    <value xml:space="preserve">System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox1.Parent">
+    <value xml:space="preserve">helperTextTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;infoPictureBox1.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="helperLinkLabel1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="helperLinkLabel1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="helperLinkLabel1.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>237,0</value>
+  </data>
+  <data name="helperLinkLabel1.LinkArea" type="System.Windows.Forms.LinkArea, System.Windows.Forms">
+    <value>51, 29</value>
+  </data>
+  <data name="helperLinkLabel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>25, 0</value>
+  </data>
+  <data name="helperLinkLabel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>229, 52</value>
+  </data>
+  <data name="helperLinkLabel1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="helperLinkLabel1.Text">
+    <value xml:space="preserve">Column and row spanning:
+If you want a control to span multiple rows or columns, set the RowSpan and ColumnSpan properties on the control.</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel1.Name">
+    <value xml:space="preserve">helperLinkLabel1</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel1.Type">
+    <value xml:space="preserve">System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel1.Parent">
+    <value xml:space="preserve">helperTextTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel1.ZOrder">
+    <value xml:space="preserve">2</value>
+  </data>
+  <data name="helperLinkLabel2.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="helperLinkLabel2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="helperLinkLabel2.LinkArea" type="System.Windows.Forms.LinkArea, System.Windows.Forms">
+    <value>42, 15</value>
+  </data>
+  <data name="helperLinkLabel2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>25, 58</value>
+  </data>
+  <data name="helperLinkLabel2.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>237,0</value>
+  </data>  
+  <data name="helperLinkLabel2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>231, 52</value>
+  </data>
+  <data name="helperLinkLabel2.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="helperLinkLabel2.Text">
+    <value xml:space="preserve">Alignment and stretching:
+If you want to align a control within a cell, or if you want a control to stretch within a cell, use the control's Anchor property.</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel2.Name">
+    <value xml:space="preserve">helperLinkLabel2</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel2.Type">
+    <value xml:space="preserve">System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel2.Parent">
+    <value xml:space="preserve">helperTextTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;helperLinkLabel2.ZOrder">
+    <value xml:space="preserve">3</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>326, 112</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.RowCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>262, 110</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;helperTextTableLayoutPanel.Name">
+    <value xml:space="preserve">helperTextTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;helperTextTableLayoutPanel.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;helperTextTableLayoutPanel.Parent">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;helperTextTableLayoutPanel.ZOrder">
+    <value xml:space="preserve">5</value>
+  </data>
+  <data name="helperTextTableLayoutPanel.LayoutSettings">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="infoPictureBox2" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="infoPictureBox1" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="helperLinkLabel1" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="helperLinkLabel2" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,Percent,100" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>588, 359</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;overarchingTableLayoutPanel.Name">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;overarchingTableLayoutPanel.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;overarchingTableLayoutPanel.Parent">
+    <value xml:space="preserve">$this</value>
+  </data>
+  <data name="&gt;&gt;overarchingTableLayoutPanel.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="overarchingTableLayoutPanel.LayoutSettings">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="sizeTypeGroupBox" Row="0" RowSpan="2" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="okCancelTableLayoutPanel" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="showTableLayoutPanel" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="addRemoveInsertTableLayoutPanel" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="columnsAndRowsListView" Row="1" RowSpan="2" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="helperTextTableLayoutPanel" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,100,AutoSize,0" /&gt;&lt;Rows Styles="AutoSize,0,AutoSize,0,Percent,50,AutoSize,0,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <data name="okButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="okButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="okButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="okButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="okButton.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="okButton.Text">
+    <value xml:space="preserve">OK</value>
+  </data>
+  <data name="&gt;&gt;okButton.Name">
+    <value xml:space="preserve">okButton</value>
+  </data>
+  <data name="&gt;&gt;okButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;okButton.Parent">
+    <value xml:space="preserve">okCancelTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;okButton.ZOrder">
+    <value xml:space="preserve">0</value>
+  </data>
+  <data name="cancelButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Left, Right</value>
+  </data>
+  <data name="cancelButton.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="cancelButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>81, 0</value>
+  </data>
+  <data name="cancelButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="cancelButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="cancelButton.Text">
+    <value xml:space="preserve">Cancel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Name">
+    <value xml:space="preserve">cancelButton</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Type">
+    <value xml:space="preserve">System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.Parent">
+    <value xml:space="preserve">okCancelTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;cancelButton.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>432, 336</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.RowCount" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>156, 23</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;okCancelTableLayoutPanel.Name">
+    <value xml:space="preserve">okCancelTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;okCancelTableLayoutPanel.Type">
+    <value xml:space="preserve">System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;okCancelTableLayoutPanel.Parent">
+    <value xml:space="preserve">overarchingTableLayoutPanel</value>
+  </data>
+  <data name="&gt;&gt;okCancelTableLayoutPanel.ZOrder">
+    <value xml:space="preserve">1</value>
+  </data>
+  <data name="okCancelTableLayoutPanel.LayoutSettings">
+    <value xml:space="preserve">&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="okButton" Row="0" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="cancelButton" Row="0" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Percent,50,Percent,50" /&gt;&lt;Rows Styles="AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>612, 383</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>620,350</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
+  </data>
+  <data name="$this.Text">
+    <value xml:space="preserve">Column and Row Styles</value>
+  </data>
+  <data name="&gt;&gt;membersColumnHeader.Name">
+    <value xml:space="preserve">membersColumnHeader</value>
+  </data>
+  <data name="&gt;&gt;membersColumnHeader.Type">
+    <value xml:space="preserve">System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeColumnHeader.Name">
+    <value xml:space="preserve">sizeTypeColumnHeader</value>
+  </data>
+  <data name="&gt;&gt;sizeTypeColumnHeader.Type">
+    <value xml:space="preserve">System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;valueColumnHeader.Name">
+    <value xml:space="preserve">valueColumnHeader</value>
+  </data>
+  <data name="&gt;&gt;valueColumnHeader.Type">
+    <value xml:space="preserve">System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name">
+    <value xml:space="preserve">StyleCollectionEditor</value>
+  </data>
+  <data name="&gt;&gt;$this.Type">
+    <value xml:space="preserve">System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+</root>
