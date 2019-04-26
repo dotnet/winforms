@@ -17,7 +17,6 @@ namespace System.Experimental.Gdi
 {
     using System;
     using System.Collections.Generic;
-    using System.Internal;
     using System.Diagnostics;
     using System.Drawing;
     using System.Threading;

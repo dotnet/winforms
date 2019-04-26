@@ -1624,7 +1624,7 @@ namespace System.Windows.Forms
 
                         //This bitmap is created by the com object which originally copied the bitmap to tbe 
                         //clipboard. We call Add here, since DeleteObject calls Remove.
-                        System.Internal.HandleCollector.Add(medium.unionmember, NativeMethods.CommonHandles.GDI);
+                        Interop.HandleCollector.Add(medium.unionmember, Interop.CommonHandles.GDI);
                         Image clipboardImage = Image.FromHbitmap(medium.unionmember);
                         if (clipboardImage != null)
                         {

@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design
         
         public static IntPtr GetDC(HandleRef hWnd)
         {
-            return System.Internal.HandleCollector.Add(IntGetDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "ReleaseDC", CharSet = CharSet.Auto)]
@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Design
 
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC)
         {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntReleaseDC(hWnd, hDC);
         }
 

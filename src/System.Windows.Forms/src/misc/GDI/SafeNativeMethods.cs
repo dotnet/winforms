@@ -11,7 +11,6 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;   
-    using System.Internal;
     using System.Text;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
@@ -29,27 +28,6 @@ namespace System.Experimental.Gdi
 #endif
     static partial class IntSafeNativeMethods 
     {
-        public sealed class CommonHandles 
-        {
-            static CommonHandles(){}
-            
-            /// <devdoc>
-            ///     Handle type for enhanced metafiles.
-            /// </devdoc>
-            public static readonly int EMF = System.Internal.HandleCollector.RegisterType("EnhancedMetaFile", 20, 500);
-
-            /// <devdoc>
-            ///     Handle type for GDI objects.
-            /// </devdoc>
-            public static readonly int GDI = System.Internal.HandleCollector.RegisterType("GDI", 90, 50);
-
-            /// <devdoc>
-            ///     Handle type for HDC's that count against the Win98 limit of five DC's.  HDC's
-            ///     which are not scarce, such as HDC's for bitmaps, are counted as GDIHANDLE's.
-            /// </devdoc>
-            public static readonly int HDC = System.Internal.HandleCollector.RegisterType("HDC", 100, 2); // wait for 2 dc's before collecting
-        }
-       
         // Brush.
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling = true, EntryPoint = "CreateSolidBrush", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
@@ -59,7 +37,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreateSolidBrush(int crColor) 
         {
-            IntPtr hBrush = System.Internal.HandleCollector.Add(IntCreateSolidBrush(crColor), IntSafeNativeMethods.CommonHandles.GDI);
+            IntPtr hBrush = Interop.HandleCollector.Add(IntCreateSolidBrush(crColor), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(hBrush != IntPtr.Zero, "IntCreateSolidBrush(color={0}) failed.", crColor);
             return hBrush;
         }
@@ -73,7 +51,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreatePen(int fnStyle, int nWidth, int crColor)
         {
-            IntPtr hPen = System.Internal.HandleCollector.Add(IntCreatePen(fnStyle, nWidth, crColor), IntSafeNativeMethods.CommonHandles.GDI);
+            IntPtr hPen = Interop.HandleCollector.Add(IntCreatePen(fnStyle, nWidth, crColor), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(hPen != IntPtr.Zero, "IntCreatePen(style={0}, width={1}, color=[{2}]) failed.", fnStyle, nWidth, crColor);
             return hPen;
         }
@@ -85,7 +63,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr ExtCreatePen(int fnStyle, int dwWidth, IntNativeMethods.LOGBRUSH lplb, int dwStyleCount, int[] lpStyle)
         {
-            IntPtr hPen = System.Internal.HandleCollector.Add(IntExtCreatePen(fnStyle, dwWidth, lplb, dwStyleCount, lpStyle), IntSafeNativeMethods.CommonHandles.GDI);
+            IntPtr hPen = Interop.HandleCollector.Add(IntExtCreatePen(fnStyle, dwWidth, lplb, dwStyleCount, lpStyle), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(hPen != IntPtr.Zero, "IntExtCreatePen(style={0}, width={1}, brush={2}, styleCount={3}, styles={4}) failed.", fnStyle, dwWidth, lplb, dwStyleCount, lpStyle);
             return hPen;
         }
@@ -99,7 +77,7 @@ namespace System.Experimental.Gdi
         
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2) 
         {
-            IntPtr hRgn = System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), IntSafeNativeMethods.CommonHandles.GDI);
+            IntPtr hRgn = Interop.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), Interop.CommonHandles.GDI);
             DbgUtil.AssertWin32(hRgn != IntPtr.Zero, "IntCreateRectRgn([x1={0}, y1={1}, x2={2}, y2={3}]) failed.", x1, y1, x2, y2);
             return hRgn;
         }

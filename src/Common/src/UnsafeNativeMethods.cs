@@ -337,7 +337,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateMenu() {
-            return System.Internal.HandleCollector.Add(IntCreateMenu(), NativeMethods.CommonHandles.Menu);
+            return Interop.HandleCollector.Add(IntCreateMenu(), Interop.CommonHandles.Menu);
         }
         
         [DllImport(ExternDll.Comdlg32, SetLastError=true, CharSet=CharSet.Auto)]
@@ -386,7 +386,7 @@ namespace System.Windows.Forms {
         public static IntPtr DuplicateHandle(HandleRef processSource, HandleRef handleSource, HandleRef processTarget, ref IntPtr handleTarget, int desiredAccess, bool inheritHandle, int options) {
             IntPtr ret = IntDuplicateHandle(processSource, handleSource, processTarget, ref handleTarget,
                                          desiredAccess, inheritHandle, options);
-            System.Internal.HandleCollector.Add(handleTarget, NativeMethods.CommonHandles.Kernel);
+            Interop.HandleCollector.Add(handleTarget, Interop.CommonHandles.Kernel);
             return ret;
         }
         
@@ -495,7 +495,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntCloseHandle(HandleRef handle);
         public static bool CloseHandle(HandleRef handle) {
-            System.Internal.HandleCollector.Remove((IntPtr)handle, NativeMethods.CommonHandles.Kernel);
+            Interop.HandleCollector.Remove((IntPtr)handle, Interop.CommonHandles.Kernel);
             return IntCloseHandle(handle);
         }
         
@@ -505,7 +505,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateCompatibleDC(HandleRef hDC) {
-            return System.Internal.HandleCollector.Add(IntCreateCompatibleDC(hDC), NativeMethods.CommonHandles.CompatibleHDC);
+            return Interop.HandleCollector.Add(IntCreateCompatibleDC(hDC), Interop.CommonHandles.CompatibleHDC);
         }
 
         #region SendKeys SendInput functionality
@@ -525,13 +525,13 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.Kernel32, EntryPoint = "CreateFileMapping", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr IntCreateFileMapping(HandleRef hFile, IntPtr lpAttributes, int flProtect, int dwMaxSizeHi, int dwMaxSizeLow, string lpName);
         public static IntPtr CreateFileMapping(HandleRef hFile, IntPtr lpAttributes, int flProtect, int dwMaxSizeHi, int dwMaxSizeLow, string lpName) {
-            return System.Internal.HandleCollector.Add(IntCreateFileMapping(hFile, lpAttributes, flProtect, dwMaxSizeHi, dwMaxSizeLow, lpName), NativeMethods.CommonHandles.Kernel);
+            return Interop.HandleCollector.Add(IntCreateFileMapping(hFile, lpAttributes, flProtect, dwMaxSizeHi, dwMaxSizeLow, lpName), Interop.CommonHandles.Kernel);
         }
 
         [DllImport(ExternDll.Kernel32, EntryPoint = "OpenFileMapping", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr IntOpenFileMapping(int dwDesiredAccess, bool bInheritHandle, string lpName);
         public static IntPtr OpenFileMapping(int dwDesiredAccess, bool bInheritHandle, string lpName) {
-            return System.Internal.HandleCollector.Add(IntOpenFileMapping(dwDesiredAccess, bInheritHandle, lpName), NativeMethods.CommonHandles.Kernel);
+            return Interop.HandleCollector.Add(IntOpenFileMapping(dwDesiredAccess, bInheritHandle, lpName), Interop.CommonHandles.Kernel);
         }
 */
 
@@ -542,14 +542,14 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr MapViewOfFile(HandleRef hFileMapping, int dwDesiredAccess, int dwFileOffsetHigh, int dwFileOffsetLow, int dwNumberOfBytesToMap) {
-            return System.Internal.HandleCollector.Add(IntMapViewOfFile(hFileMapping, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap), NativeMethods.CommonHandles.Kernel);
+            return Interop.HandleCollector.Add(IntMapViewOfFile(hFileMapping, dwDesiredAccess, dwFileOffsetHigh, dwFileOffsetLow, dwNumberOfBytesToMap), Interop.CommonHandles.Kernel);
         }
 
         [DllImport(ExternDll.Kernel32, EntryPoint = "UnmapViewOfFile", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
         
         private static extern bool IntUnmapViewOfFile(HandleRef pvBaseAddress);
         public static bool UnmapViewOfFile(HandleRef pvBaseAddress) {
-            System.Internal.HandleCollector.Remove((IntPtr)pvBaseAddress, NativeMethods.CommonHandles.Kernel);
+            Interop.HandleCollector.Remove((IntPtr)pvBaseAddress, Interop.CommonHandles.Kernel);
             return IntUnmapViewOfFile(pvBaseAddress);
         }
 
@@ -559,7 +559,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr GetDCEx(HandleRef hWnd, HandleRef hrgnClip, int flags) {
-            return System.Internal.HandleCollector.Add(IntGetDCEx(hWnd, hrgnClip, flags), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDCEx(hWnd, hrgnClip, flags), Interop.CommonHandles.HDC);
         }
         
         // GetObject stuff
@@ -605,13 +605,13 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateAcceleratorTable(/*ACCEL*/ HandleRef pentries, int cCount) {
-            return System.Internal.HandleCollector.Add(IntCreateAcceleratorTable(pentries, cCount), NativeMethods.CommonHandles.Accelerator);
+            return Interop.HandleCollector.Add(IntCreateAcceleratorTable(pentries, cCount), Interop.CommonHandles.Accelerator);
         }
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="DestroyAcceleratorTable", CharSet=CharSet.Auto)]
         
         private static extern bool IntDestroyAcceleratorTable(HandleRef hAccel);
         public static bool DestroyAcceleratorTable(HandleRef hAccel) {
-            System.Internal.HandleCollector.Remove((IntPtr)hAccel, NativeMethods.CommonHandles.Accelerator);
+            Interop.HandleCollector.Remove((IntPtr)hAccel, Interop.CommonHandles.Accelerator);
             return IntDestroyAcceleratorTable(hAccel);
         }
 
@@ -646,7 +646,7 @@ namespace System.Windows.Forms {
                 // we do this because after a SetWindowRgn call, the system owns the region
                 // so we don't need to bother cleaning it up.
                 //
-                System.Internal.HandleCollector.Remove((IntPtr)hrgn, NativeMethods.CommonHandles.GDI);
+                Interop.HandleCollector.Remove((IntPtr)hrgn, Interop.CommonHandles.GDI);
             }
             return retval;
         }
@@ -1181,7 +1181,7 @@ namespace System.Windows.Forms {
         
         private static extern IntPtr IntBeginPaint(HandleRef hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
         public static IntPtr BeginPaint(HandleRef hWnd, [In, Out, MarshalAs(UnmanagedType.LPStruct)] ref NativeMethods.PAINTSTRUCT lpPaint) {
-            return System.Internal.HandleCollector.Add(IntBeginPaint(hWnd, ref lpPaint), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntBeginPaint(hWnd, ref lpPaint), Interop.CommonHandles.HDC);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "BeginPaint", CharSet = CharSet.Auto)]
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntEndPaint(HandleRef hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
         public static bool EndPaint(HandleRef hWnd, [In, MarshalAs(UnmanagedType.LPStruct)] ref NativeMethods.PAINTSTRUCT lpPaint) {
-            System.Internal.HandleCollector.Remove(lpPaint.hdc, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove(lpPaint.hdc, Interop.CommonHandles.HDC);
             return IntEndPaint(hWnd, ref lpPaint);
         }
 
@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr GetDC(HandleRef hWnd) {
-            return System.Internal.HandleCollector.Add(IntGetDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetDC(hWnd), Interop.CommonHandles.HDC);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="GetWindowDC", CharSet=CharSet.Auto)]
@@ -1215,14 +1215,14 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr GetWindowDC(HandleRef hWnd) {
-            return System.Internal.HandleCollector.Add(IntGetWindowDC(hWnd), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntGetWindowDC(hWnd), Interop.CommonHandles.HDC);
         }
         
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="ReleaseDC", CharSet=CharSet.Auto)]
         
         private static extern int IntReleaseDC(HandleRef hWnd, HandleRef hDC);
         public static int ReleaseDC(HandleRef hWnd, HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntReleaseDC(hWnd, hDC);
         }
 
@@ -1233,12 +1233,12 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateDC(string lpszDriver) {
-            return System.Internal.HandleCollector.Add(IntCreateDC(lpszDriver, null, null, NativeMethods.NullHandleRef), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntCreateDC(lpszDriver, null, null, NativeMethods.NullHandleRef), Interop.CommonHandles.HDC);
         }
         
         
         public static IntPtr CreateDC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) {
-            return System.Internal.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntCreateDC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
         }
         
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
@@ -1351,7 +1351,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreatePopupMenu() {
-            return System.Internal.HandleCollector.Add(IntCreatePopupMenu(), NativeMethods.CommonHandles.Menu);
+            return Interop.HandleCollector.Add(IntCreatePopupMenu(), Interop.CommonHandles.Menu);
         }
         
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntDestroyMenu(HandleRef hMenu);
         public static bool DestroyMenu(HandleRef hMenu) {
-            System.Internal.HandleCollector.Remove((IntPtr)hMenu, NativeMethods.CommonHandles.Menu);
+            Interop.HandleCollector.Remove((IntPtr)hMenu, Interop.CommonHandles.Menu);
             return IntDestroyMenu(hMenu);
         }
         
@@ -1417,7 +1417,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateIC(string lpszDriverName, string lpszDeviceName, string lpszOutput, HandleRef /*DEVMODE*/ lpInitData) {
-            return System.Internal.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), NativeMethods.CommonHandles.HDC);
+            return Interop.HandleCollector.Add(IntCreateIC(lpszDriverName, lpszDeviceName, lpszOutput, lpInitData), Interop.CommonHandles.HDC);
         }
         
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms {
         
         private static extern bool IntDestroyCursor(HandleRef hCurs);
         public static bool DestroyCursor(HandleRef hCurs) {
-            System.Internal.HandleCollector.Remove((IntPtr)hCurs, NativeMethods.CommonHandles.Cursor);
+            Interop.HandleCollector.Remove((IntPtr)hCurs, Interop.CommonHandles.Cursor);
             return IntDestroyCursor(hCurs);
         }
         
@@ -1456,13 +1456,13 @@ namespace System.Windows.Forms {
         
         private static extern bool IntDeleteDC(HandleRef hDC);
         public static bool DeleteDC(HandleRef hDC) {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.HDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.HDC);
             return IntDeleteDC(hDC);
         }
 
         public static bool DeleteCompatibleDC(HandleRef hDC)
         {
-            System.Internal.HandleCollector.Remove((IntPtr)hDC, NativeMethods.CommonHandles.CompatibleHDC);
+            Interop.HandleCollector.Remove((IntPtr)hDC, Interop.CommonHandles.CompatibleHDC);
             return IntDeleteDC(hDC);
         }
 

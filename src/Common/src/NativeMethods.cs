@@ -5096,94 +5096,7 @@ namespace System.Windows.Forms {
             [MarshalAs(UnmanagedType.U2)]
             public   short wParamFlags;
         }
-    
-        public sealed class CommonHandles {
-            static CommonHandles() {
-#if DEBUG
-                // Setup the DebugHandleTracker
-                System.Internal.DebugHandleTracker.Initialize();
-                AppDomain.CurrentDomain.DomainUnload += new EventHandler(CurrentDomain_DomainUnload);
-                AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
-#endif
-            }
 
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Accelerator"]/*' />
-            /// <devdoc>
-            ///     Handle type for accelerator tables.
-            /// </devdoc>
-            public static readonly int Accelerator  = System.Internal.HandleCollector.RegisterType("Accelerator", 80, 50);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Cursor"]/*' />
-            /// <devdoc>
-            ///     handle type for cursors.
-            /// </devdoc>
-            public static readonly int Cursor       = System.Internal.HandleCollector.RegisterType("Cursor", 20, 500);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.EMF"]/*' />
-            /// <devdoc>
-            ///     Handle type for enhanced metafiles.
-            /// </devdoc>
-            public static readonly int EMF          = System.Internal.HandleCollector.RegisterType("EnhancedMetaFile", 20, 500);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Find"]/*' />
-            /// <devdoc>
-            ///     Handle type for file find handles.
-            /// </devdoc>
-            public static readonly int Find         = System.Internal.HandleCollector.RegisterType("Find", 0, 1000);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.GDI"]/*' />
-            /// <devdoc>
-            ///     Handle type for GDI objects.
-            /// </devdoc>
-            public static readonly int GDI          = System.Internal.HandleCollector.RegisterType("GDI", 50, 500);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.HDC"]/*' />
-            /// <devdoc>
-            ///     Handle type for HDC's that count against the Win98 limit of five DC's.  HDC's
-            ///     which are not scarce, such as HDC's for bitmaps, are counted as GDIHANDLE's.
-            /// </devdoc>
-            public static readonly int HDC          = System.Internal.HandleCollector.RegisterType("HDC", 100, 2); // wait for 2 dc's before collecting
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.HDC"]/*' />
-            /// <devdoc>
-            ///     Handle type for Compatible HDC's used for ToolStrips
-            /// </devdoc>
-            public static readonly int CompatibleHDC = System.Internal.HandleCollector.RegisterType("ComptibleHDC", 50, 50); // wait for 2 dc's before collecting
-
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Icon"]/*' />
-            /// <devdoc>
-            ///     Handle type for icons.
-            /// </devdoc>
-            public static readonly int Icon         = System.Internal.HandleCollector.RegisterType("Icon", 20, 500);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Kernel"]/*' />
-            /// <devdoc>
-            ///     Handle type for kernel objects.
-            /// </devdoc>
-            public static readonly int Kernel       = System.Internal.HandleCollector.RegisterType("Kernel", 0, 1000);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Menu"]/*' />
-            /// <devdoc>
-            ///     Handle type for files.
-            /// </devdoc>
-            public static readonly int Menu         = System.Internal.HandleCollector.RegisterType("Menu", 30, 1000);
-    
-            /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.CommonHandles.Window"]/*' />
-            /// <devdoc>
-            ///     Handle type for windows.
-            /// </devdoc>
-            public static readonly int Window       = System.Internal.HandleCollector.RegisterType("Window", 5, 1000);
-
-#if DEBUG
-            private static void CurrentDomain_DomainUnload(object sender, EventArgs e) {
-                System.Internal.DebugHandleTracker.CheckLeaks();
-            }
-
-            private static void CurrentDomain_ProcessExit(object sender, EventArgs e) {
-                System.Internal.DebugHandleTracker.CheckLeaks();
-            }
-#endif
-        }
     
         public enum  tagSYSKIND {
             SYS_WIN16 = 0,
@@ -5795,7 +5708,7 @@ namespace System.Windows.Forms {
         private static extern bool IntDeleteObject(IntPtr hObject);
         public static bool DeleteObject(IntPtr hObject)
         {
-            System.Internal.HandleCollector.Remove(hObject, CommonHandles.GDI);
+            Interop.HandleCollector.Remove(hObject, Interop.CommonHandles.GDI);
             return IntDeleteObject(hObject);
         }
 
@@ -5814,7 +5727,7 @@ namespace System.Windows.Forms {
         [ResourceConsumption(ResourceScope.Process)]
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2)
         {
-            return System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), Interop.CommonHandles.GDI);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]

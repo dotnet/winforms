@@ -15,7 +15,6 @@ namespace System.Experimental.Gdi
 {
     using System;
     using System.Collections;
-    using System.Internal;
     using System.Security;
     using System.Runtime.InteropServices;
     using System.Diagnostics;

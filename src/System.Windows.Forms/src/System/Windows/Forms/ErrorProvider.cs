@@ -555,7 +555,7 @@ namespace System.Windows.Forms {
                 if (defaultIcon == null) {
                     lock (typeof(ErrorProvider)) {
                         if (defaultIcon == null) {
-                            defaultIcon = new Icon(typeof(ErrorProvider), "Error.ico");
+                            defaultIcon = new Icon(typeof(ErrorProvider), "Error");
                         }
                     }
                 }
@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms {
                         Graphics graphics = Graphics.FromHdcInternal(mirrordc.Hdc);
                         try {
                             windowRegionHandle = windowRegion.GetHrgn(graphics);
-                            System.Internal.HandleCollector.Add(windowRegionHandle, NativeMethods.CommonHandles.GDI);
+                            Interop.HandleCollector.Add(windowRegionHandle, Interop.CommonHandles.GDI);
                         }
                         finally {
                             graphics.Dispose();
@@ -1662,7 +1662,6 @@ namespace System.Windows.Forms {
                         try {
                             Size size = icon.Size;
                             Bitmap bitmap = icon.ToBitmap();
-                            bitmap.MakeTransparent();
                             mask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                             bitmap.Dispose();
 
