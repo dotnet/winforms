@@ -14,14 +14,8 @@ namespace System.Windows.Forms
     /// <summary>
     /// Provides information about the operating system.
     /// </summary>
-    public class SystemInformation
+    public static class SystemInformation
     {
-        // private constructor to prevent creation
-        //
-        private SystemInformation()
-        {
-        }
-
         // Figure out if all the multimon stuff is supported on the OS
         private static bool checkMultiMonitorSupport = false;
         private static bool multiMonitorSupport = false;
@@ -61,8 +55,8 @@ namespace System.Windows.Forms
                 EnsureSystemEvents();
                 if (systemEventsDirty)
                 {
-                    NativeMethods.HIGHCONTRAST_I data = new NativeMethods.HIGHCONTRAST_I();
-                    data.cbSize = Marshal.SizeOf(data);
+                    var data = new NativeMethods.HIGHCONTRAST_I();
+                    data.cbSize = Marshal.SizeOf<NativeMethods.HIGHCONTRAST_I>();
                     data.dwFlags = 0;
                     data.lpszDefaultScheme = IntPtr.Zero;
 
