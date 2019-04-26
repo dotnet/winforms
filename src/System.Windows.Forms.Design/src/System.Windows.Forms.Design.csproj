@@ -48,5 +48,145 @@
     <Compile Include="..\..\Common\src\Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" Link="Interop\Kernel32\Interop.MAX_UNICODESTRING_LEN.cs" />
     <Compile Include="..\..\Common\src\Interop\User32\Interop.GetWindowText.cs" Link="Interop\User32\Interop.GetWindowText.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\Arrow.ico">
+      <LogicalName>System.ComponentModel.Design.Arrow</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\ComponentEditorPage.ico">
+      <LogicalName>System.ComponentModel.Design.ComponentEditorPage</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\DateTimeFormat.ico">
+      <LogicalName>System.ComponentModel.Design.DateTimeFormat</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\DefaultComponent.ico">
+      <LogicalName>System.ComponentModel.Design.DefaultComponent</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\NumericFormat.ico">
+      <LogicalName>System.ComponentModel.Design.NumericFormat</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\OrderImages.ico">
+      <LogicalName>System.ComponentModel.Design.OrderImages</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\SortDown.ico">
+      <LogicalName>System.ComponentModel.Design.SortDown</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\SortUp.ico">
+      <LogicalName>System.ComponentModel.Design.SortUp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\ComponentModel\Design\UncheckedBox.ico">
+      <LogicalName>System.ComponentModel.Design.UncheckedBox</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\UserControlToolboxItem.ico">
+      <LogicalName>System.Windows.Forms.Design.UserControlToolboxItem</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\InheritedGlyph.ico">
+      <LogicalName>System.Windows.Forms.Design.InheritedGlyph</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\MoverGlyph.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.MoverGlyph</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\ImageEditor.ico">
+      <LogicalName>System.Windows.Forms.Design.ImageEditor</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\ToolStripTemplateNode.ico">
+      <LogicalName>System.Windows.Forms.Design.ToolStripTemplateNode</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\DataPickerImages.ico">
+      <LogicalName>System.Windows.Forms.Design.DataPickerImages</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\AddNewDataSource.ico">
+      <LogicalName>System.Windows.Forms.Design.AddNewDataSource</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\ChildFolder.ico">
+      <LogicalName>System.Windows.Forms.Design.ChildFolder</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Delete.ico">
+      <LogicalName>System.Windows.Forms.Design.Delete</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Folder.ico">
+      <LogicalName>System.Windows.Forms.Design.Folder</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\default.ico">
+      <LogicalName>System.Windows.Forms.Design.default</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\professional1.ico">
+      <LogicalName>System.Windows.Forms.Design.professional1</LogicalName>
+      <Link>System.Windows.Forms.Design.professional1.bmp</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\professional2.ico">
+      <LogicalName>System.Windows.Forms.Design.professional2</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\classic.ico">
+      <LogicalName>System.Windows.Forms.Design.classic</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\colorful1.ico">
+      <LogicalName>System.Windows.Forms.Design.colorful1</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\256_1.ico">
+      <LogicalName>System.Windows.Forms.Design.256_1</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\256_2.ico">
+      <LogicalName>System.Windows.Forms.Design.256_2</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\BoundProperty.ico">
+      <LogicalName>System.Windows.Forms.Design.BoundProperty</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\InsertableObject.ico">
+      <LogicalName>System.Windows.Forms.Design.InsertableObject</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\Close_left.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.Close_left</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\Open_left.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.Open_left</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\DesignerShortcutBox.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.DesignerShortcutBox</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\leftopen.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.leftopen</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\leftclose.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.leftclose</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\rightopen.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.rightopen</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\rightclose.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.rightclose</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\topopen.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.topopen</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\topclose.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.topclose</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\bottomopen.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.bottomopen</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\Behavior\bottomclose.ico">
+      <LogicalName>System.Windows.Forms.Design.Behavior.bottomclose</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\DataGridViewColumnsDialog.delete.ico">
+      <LogicalName>System.Windows.Forms.Design.DataGridViewColumnsDialog.delete</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\DataGridViewColumnsDialog.moveUp.ico">
+      <LogicalName>System.Windows.Forms.Design.DataGridViewColumnsDialog.moveUp</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\DataGridViewColumnsDialog.moveDown.ico">
+      <LogicalName>System.Windows.Forms.Design.DataGridViewColumnsDialog.moveDown</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\DataGridViewColumnsDialog.selectedColumns.ico">
+      <LogicalName>System.Windows.Forms.Design.DataGridViewColumnsDialog.selectedColumns</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\BindingFormattingDialog.Bound.ico">
+      <LogicalName>System.Windows.Forms.Design.BindingFormattingDialog.Bound</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\BindingFormattingDialog.Unbound.ico">
+      <LogicalName>System.Windows.Forms.Design.BindingFormattingDialog.Unbound</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\WinForms\Design\BindingFormattingDialog.Arrow.ico">
+      <LogicalName>System.Windows.Forms.Design.BindingFormattingDialog.Arrow</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
