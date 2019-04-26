@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     
     /// <include file='doc\DataGridViewTextBoxColumn.uex' path='docs/doc[@for="DataGridViewTextBoxColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewTextBoxColumn), "DataGridViewTextBoxColumn")]
     public class DataGridViewTextBoxColumn : DataGridViewColumn
     {
         private const int DATAGRIDVIEWTEXTBOXCOLUMN_maxInputLength = 32767;

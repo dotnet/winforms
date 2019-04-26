@@ -73,13 +73,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
         ]
         public GridErrorDlg(PropertyGrid owner) {
             ownerGrid = owner;
-            expandImage = new Bitmap(typeof(ThreadExceptionDialog), "down.bmp");
-            expandImage.MakeTransparent();
+            expandImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "down");
             if (DpiHelper.IsScalingRequired) {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref expandImage);
             }
-            collapseImage = new Bitmap(typeof(ThreadExceptionDialog), "up.bmp");
-            collapseImage.MakeTransparent();
+            collapseImage = DpiHelper.GetBitmapFromIcon(typeof(ThreadExceptionDialog), "up");
             if (DpiHelper.IsScalingRequired) {
                 DpiHelper.ScaleBitmapLogicalToDevice(ref collapseImage);
             }
