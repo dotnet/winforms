@@ -4690,7 +4690,7 @@ namespace System.Windows.Forms {
         internal class ComboBoxItemAccessibleObjectCollection : Hashtable {
 
             private ComboBox _owningComboBoxBox;
-            private ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
+            private readonly ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
 
             public ComboBoxItemAccessibleObjectCollection(ComboBox owningComboBoxBox) {
                 _owningComboBoxBox = owningComboBoxBox;
