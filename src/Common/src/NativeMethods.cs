@@ -3988,10 +3988,10 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagFUNCDESC {
-            public   int memid = 0;
+        public struct tagFUNCDESC {
+            public   int memid;
             
-            public IntPtr lprgscode = IntPtr.Zero;
+            public IntPtr lprgscode;
 
             // This is marked as NATIVE_TYPE_PTR,
             // but the EE doesn't look for that, tries to handle it as
@@ -3999,43 +3999,37 @@ namespace System.Windows.Forms
             // isn't a NATIVE_TYPE_NESTEDSTRUCT
             /*[MarshalAs(UnmanagedType.PTR)]*/
             
-            public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam = IntPtr.Zero;
+            public    /*NativeMethods.tagELEMDESC*/ IntPtr lprgelemdescParam;
 
             // cpb, Microsoft, the EE chokes on Enums in structs
             
-            public    /*NativeMethods.tagFUNCKIND*/ int funckind = 0;
+            public    /*NativeMethods.tagFUNCKIND*/ int funckind;
             
-            public    /*NativeMethods.tagINVOKEKIND*/ int invkind = 0;
+            public    /*NativeMethods.tagINVOKEKIND*/ int invkind;
             
-            public    /*NativeMethods.tagCALLCONV*/ int callconv = 0;
+            public    /*NativeMethods.tagCALLCONV*/ int callconv;
             [MarshalAs(UnmanagedType.I2)]
-            public   short cParams = 0;
+            public   short cParams;
             [MarshalAs(UnmanagedType.I2)]
-            public   short cParamsOpt =  0;
+            public   short cParamsOpt;
             [MarshalAs(UnmanagedType.I2)]
-            public   short oVft = 0;
+            public   short oVft;
             [MarshalAs(UnmanagedType.I2)]
-            public   short cScodesi = 0;
-            public   NativeMethods.value_tagELEMDESC elemdescFunc;
+            public   short cScodesi;
+            public   NativeMethods.tagELEMDESC elemdescFunc;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wFuncFlags = 0;
+            public   short wFuncFlags;
         }
         
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagVARDESC {
-            public   int memid = 0;
-            public   IntPtr lpstrSchema = IntPtr.Zero;
-            public   IntPtr unionMember = IntPtr.Zero;
-            public   NativeMethods.value_tagELEMDESC elemdescVar;
+        public struct tagVARDESC {
+            public   int memid;
+            public   IntPtr lpstrSchema;
+            public   IntPtr unionMember;
+            public   NativeMethods.tagELEMDESC elemdescVar;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wVarFlags = 0;
-            public    /*NativeMethods.tagVARKIND*/ int varkind = 0;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct  value_tagELEMDESC {
-            public    NativeMethods.tagTYPEDESC tdesc;
-            public    NativeMethods.tagPARAMDESC paramdesc;
+            public   short wVarFlags;
+            public    /*NativeMethods.tagVARKIND*/ int varkind;
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -5077,7 +5071,7 @@ namespace System.Windows.Forms
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        public  class  tagTYPEDESC {
+        public  struct  tagTYPEDESC {
             public   IntPtr unionMember;
             public   short vt;
         }
@@ -5144,53 +5138,53 @@ namespace System.Windows.Forms
         }
     
         [StructLayout(LayoutKind.Sequential)]
-        public  sealed class  tagTYPEATTR {
+        public  struct  tagTYPEATTR {
             public Guid guid;
             [MarshalAs(UnmanagedType.U4)]
-            public   int lcid = 0;
+            public   int lcid;
             [MarshalAs(UnmanagedType.U4)]
-            public   int dwReserved = 0;
-            public   int memidConstructor = 0;
-            public   int memidDestructor = 0;
-            public   IntPtr lpstrSchema = IntPtr.Zero;
+            public   int dwReserved;
+            public   int memidConstructor;
+            public   int memidDestructor;
+            public   IntPtr lpstrSchema;
             [MarshalAs(UnmanagedType.U4)]
-            public   int cbSizeInstance = 0;
-            public    /*NativeMethods.tagTYPEKIND*/ int typekind = 0;
+            public   int cbSizeInstance;
+            public    /*NativeMethods.tagTYPEKIND*/ int typekind;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cFuncs = 0;
+            public   short cFuncs;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cVars = 0;
+            public   short cVars;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cImplTypes = 0;
+            public   short cImplTypes;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cbSizeVft = 0;
+            public   short cbSizeVft;
             [MarshalAs(UnmanagedType.U2)]
-            public   short cbAlignment = 0;
+            public   short cbAlignment;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wTypeFlags = 0;
+            public   short wTypeFlags;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wMajorVerNum = 0;
+            public   short wMajorVerNum;
             [MarshalAs(UnmanagedType.U2)]
-            public   short wMinorVerNum = 0;
+            public   short wMinorVerNum;
             
             //these are inline too
             //public    NativeMethods.tagTYPEDESC tdescAlias;
             [MarshalAs(UnmanagedType.U4)]
-            public   int tdescAlias_unionMember = 0;
+            public   int tdescAlias_unionMember;
             
             [MarshalAs(UnmanagedType.U2)]
-            public   short tdescAlias_vt = 0;
+            public   short tdescAlias_vt;
             
             //public    NativeMethods.tagIDLDESC idldescType;
             [MarshalAs(UnmanagedType.U4)]
-            public   int idldescType_dwReserved = 0;
+            public   int idldescType_dwReserved;
             
             [MarshalAs(UnmanagedType.U2)]
-            public   short idldescType_wIDLFlags = 0;
+            public   short idldescType_wIDLFlags;
             
             
             public tagTYPEDESC Get_tdescAlias(){
-                tagTYPEDESC td = new tagTYPEDESC();
+                tagTYPEDESC td;
                 td.unionMember = (IntPtr)this.tdescAlias_unionMember;
                 td.vt = this.tdescAlias_vt;
                 return td;
@@ -5220,8 +5214,8 @@ namespace System.Windows.Forms
        }
    
         [StructLayout(LayoutKind.Sequential)]
-        public sealed class tagELEMDESC {
-            public    NativeMethods.tagTYPEDESC tdesc = null;
+        public unsafe struct tagELEMDESC {
+            public    NativeMethods.tagTYPEDESC* tdesc;
             public    NativeMethods.tagPARAMDESC paramdesc;
         }
         

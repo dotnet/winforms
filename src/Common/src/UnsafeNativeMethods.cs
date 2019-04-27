@@ -1589,6 +1589,15 @@ namespace System.Windows.Forms {
             return regionRects;
         }
 
+        public static ref T PtrToRef<T>(IntPtr ptr)
+            where T : unmanaged
+        {
+            unsafe
+            {
+                return ref *(T*)ptr;
+            }
+        }
+
         /* Unused
         // for GetUserNameEx
         public enum EXTENDED_NAME_FORMAT {
@@ -7002,7 +7011,7 @@ namespace System.Windows.Forms {
     }
     [ComImport(), Guid("00020403-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface  ITypeComp {
-         void RemoteBind(
+         unsafe void RemoteBind(
                 [In, MarshalAs(UnmanagedType.LPWStr)] 
                  string szName,
                 [In, MarshalAs(UnmanagedType.U4)] 
@@ -7014,9 +7023,9 @@ namespace System.Windows.Forms {
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                   NativeMethods.tagDESCKIND[] pDescKind,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagFUNCDESC[] ppFuncDesc,
+                   NativeMethods.tagFUNCDESC*[] ppFuncDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagVARDESC[] ppVarDesc,
+                   NativeMethods.tagVARDESC*[] ppVarDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                    UnsafeNativeMethods.ITypeComp[] ppTypeComp,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
