@@ -162,7 +162,7 @@ namespace System.Windows.Forms
         ///     Displays a file open dialog.
         /// </devdoc>
         /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);
             if (!result)
@@ -185,7 +185,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileOpenDialog openDialog = (FileDialogNative.IFileOpenDialog)dialog;
             if (Multiselect)
@@ -211,7 +211,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
+        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
         {
             return new FileDialogNative.NativeFileOpenDialog();
         }
@@ -257,12 +257,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SettingsSupportVistaDialog
+        private protected override bool SettingsSupportVistaDialog
         { 
-            get
-            {
-                return base.SettingsSupportVistaDialog && !this.ShowReadOnly;
-            }
+            get => base.SettingsSupportVistaDialog && !ShowReadOnly;
         }
     }
 }

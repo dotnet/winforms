@@ -128,7 +128,7 @@ namespace System.Windows.Forms {
         // If it's necessary to throw up a "This file exists, are you sure?" kind of
         // MessageBox, here's where we do it.
         // Return value is whether or not the user hit "okay".
-        internal override bool PromptUserIfAppropriate(string fileName) {
+        private protected override bool PromptUserIfAppropriate(string fileName) {
             if (!base.PromptUserIfAppropriate(fileName)) {
                 return false;
             }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 
             if (!result) {
@@ -179,17 +179,18 @@ namespace System.Windows.Forms {
             }
             
             return result;
-         }
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        }
+
+        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileSaveDialog saveDialog = (FileDialogNative.IFileSaveDialog)dialog;
-            FileDialogNative.IShellItem item;
-            dialog.GetResult(out item);
+            dialog.GetResult(out FileDialogNative.IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
-        { return new FileDialogNative.NativeFileSaveDialog(); }
 
-
+        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
+        {
+            return new FileDialogNative.NativeFileSaveDialog();
+        }
     }
 }

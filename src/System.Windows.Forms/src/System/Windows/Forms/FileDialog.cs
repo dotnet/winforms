@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 
         internal const int OPTION_ADDEXTENSION = unchecked(unchecked((int)0x80000000));
 
-        internal int options;
+        private protected int options;
 
         private string title;
         private string initialDir;
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal string DialogCaption
+        private protected string DialogCaption
         {
             get
             {
@@ -588,7 +588,7 @@ namespace System.Windows.Forms
         }
 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        internal static bool FileExists(string fileName)
+        private protected static bool FileExists(string fileName)
         {
             bool fileExists = false;
             try
@@ -634,11 +634,7 @@ namespace System.Windows.Forms
         /// <summary>
         /// Returns the state of the given option flag.
         /// </summary>
-
-        internal bool GetOption(int option)
-        {
-            return (options & option) != 0;
-        }
+        private protected bool GetOption(int option) => (options & option) != 0;
 
         /// <summary>
         /// Defines the common dialog box hook procedure that is overridden to add
@@ -820,7 +816,7 @@ namespace System.Windows.Forms
         /// given parameters. It also ensures that the focus is set back on the window that
         /// had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
-        internal bool MessageBoxWithFocusRestore(string message, string caption,
+        private protected bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
             bool ret;
@@ -852,7 +848,7 @@ namespace System.Windows.Forms
         // MessageBox, here's where we do it
         // Return value is whether or not the user hit "okay".
         /// </summary>
-        internal virtual bool PromptUserIfAppropriate(string fileName)
+        private protected virtual bool PromptUserIfAppropriate(string fileName)
         {
             if ((options & NativeMethods.OFN_FILEMUSTEXIST) != 0)
             {
@@ -945,12 +941,12 @@ namespace System.Windows.Forms
         /// <summary>
         /// Implements the actual call to GetOPENFILENAME_I or GetSaveFileName.
         /// </summary>
-        internal abstract bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn);
+        private protected abstract bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn);
 
         /// <summary>
         /// Sets the given option to the given boolean value.
         /// </summary>
-        internal void SetOption(int option, bool value)
+        private protected void SetOption(int option, bool value)
         {
             if (value)
             {

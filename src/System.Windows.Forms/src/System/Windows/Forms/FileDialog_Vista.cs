@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal abstract FileDialogNative.IFileDialog CreateVistaDialog();
+        private protected abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
         [
             SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        internal abstract string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog);
+        private protected abstract string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog);
 
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private bool HandleVistaFileOk(FileDialogNative.IFileDialog dialog)
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             throw new System.IO.FileNotFoundException();
         }
 
-        internal static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
+        private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
         {
             string filename;
             item.GetDisplayName(FileDialogNative.SIGDN.SIGDN_DESKTOPABSOLUTEPARSING, out filename);
