@@ -148,13 +148,6 @@ namespace System.Windows.Forms {
             _proxy = null;
         }
 
-        /// <devdoc>
-        ///     Keep the object alive forever.
-        /// </devdoc>
-        public override object InitializeLifetimeService() {
-            return null;
-        }
-
         #region Instance API only callable from a proxied object
         
         /// <devdoc>
@@ -273,13 +266,6 @@ namespace System.Windows.Forms {
                 _refCount = 0;
                 _broker.ClearComponentManager();
             }
-        }
-
-        /// <devdoc>
-        ///     Keep the object alive forever.
-        /// </devdoc>
-        public override object InitializeLifetimeService() {
-            return null;
         }
 
         private bool RevokeComponent() {

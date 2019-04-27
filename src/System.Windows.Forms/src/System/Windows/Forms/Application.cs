@@ -2909,13 +2909,6 @@ namespace System.Windows.Forms {
                 return(threadState & bit) != 0;
             }
 
-            /// <devdoc>
-            ///     Keep the object alive forever.
-            /// </devdoc>
-            public override object InitializeLifetimeService() {
-                return null;
-            }
-
             /// <summary>
             /// A method of determining whether we are handling messages that does not demand register
             /// the componentmanager
