@@ -204,29 +204,12 @@ namespace System.Windows.Forms {
                     if (domain == AppDomain.CurrentDomain) {
                         _broker = new ComponentManagerBroker();
                     }
-                    else {
-                        _broker = GetRemotedComponentManagerBroker(domain);
-                    }
                 }
             }
 
             // However we got here, we got here.  What's important is that we have a proxied instance to the broker object
             // and we can now call on it.
             return _broker.GetProxy((long)pOriginal);
-        }
-
-        /// <devdoc>
-        ///     This method is factored out of GetComponentManager so we can prevent System.Runtime.Remoting from being
-        ///     loaded into the process if we are using a single domain.
-        /// </devdoc>
-        private static ComponentManagerBroker GetRemotedComponentManagerBroker(AppDomain domain) {
-#if REMOTING
-            Type ourType = typeof(ComponentManagerBroker);
-            ComponentManagerBroker broker = (ComponentManagerBroker)domain.CreateInstanceAndUnwrap(ourType.Assembly.FullName, ourType.FullName);
-            return broker.Singleton;
-#else
-            return _broker;
-#endif
         }
         #endregion
     }
