@@ -15,19 +15,19 @@
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <!-- Core Setup for coherency -->
   <PropertyGroup>
-    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview6-27626-12</MicrosoftNETCoreAppPackageVersion>
+    <MicrosoftNETCoreAppPackageVersion>3.0.0-preview6-27626-13</MicrosoftNETCoreAppPackageVersion>
   </PropertyGroup>
   <!-- CoreFX via Core Setup -->
   <PropertyGroup>
-    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview6.19226.6</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview6.19226.6</MicrosoftWin32RegistryPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview6.19226.6</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>4.6.0-preview6.19226.6</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview6.19226.6</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>4.6.0-preview6.19226.6</SystemDrawingCommonPackageVersion>
-    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview6.19226.6</SystemSecurityCryptographyCngPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>4.6.0-preview6.19226.6</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>4.6.0-preview6.19226.6</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>3.0.0-preview6.19226.7</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32RegistryPackageVersion>4.6.0-preview6.19226.7</MicrosoftWin32RegistryPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>4.6.0-preview6.19226.7</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>4.6.0-preview6.19226.7</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>4.6.0-preview6.19226.7</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>4.6.0-preview6.19226.7</SystemDrawingCommonPackageVersion>
+    <SystemSecurityCryptographyCngPackageVersion>4.6.0-preview6.19226.7</SystemSecurityCryptographyCngPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>4.6.0-preview6.19226.7</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>4.6.0-preview6.19226.7</SystemWindowsExtensionsPackageVersion>
   </PropertyGroup>
   <!-- CoreCLR via Core Setup -->
   <PropertyGroup>
