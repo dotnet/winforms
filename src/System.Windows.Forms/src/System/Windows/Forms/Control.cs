@@ -6904,9 +6904,8 @@ example usage
         /// <internalonly/>
         private void InitMouseWheelSupport() {
             if (!mouseWheelInit) {
-                // If we are running on less than NT4 or less that Win98 then we must use
-                // the manual mousewheel stuff...
-                //
+                // If we are running on a system without a mouse wheel then we must use
+                // manual mousewheel routines.
                 mouseWheelRoutingNeeded = !SystemInformation.NativeMouseWheelSupport;
 
                 if (mouseWheelRoutingNeeded) {
@@ -8137,9 +8136,8 @@ example usage
             Contract.EndContractBlock();
 
             if (GetStyle(ControlStyles.UserPaint)) {
-                // Theme support on Windows XP requires that we paint the background
+                // Theme support requires that we paint the background
                 // and foreground to support semi-transparent children
-                //
                 PaintWithErrorHandling(e, PaintLayerBackground);
                 e.ResetGraphics();
                 PaintWithErrorHandling(e, PaintLayerForeground);

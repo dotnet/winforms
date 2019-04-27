@@ -742,9 +742,7 @@ namespace System.Windows.Forms {
         private static string MakeFilterString(string s, bool dereferenceLinks) {
             if (s == null || s.Length == 0)
             {
-                // Workaround for Whidbey 
-
-                if (dereferenceLinks && System.Environment.OSVersion.Version.Major >= 5)
+                if (dereferenceLinks)
                 {
                     s = " |*.*";
                 }
@@ -917,13 +915,6 @@ namespace System.Windows.Forms {
                     charBuffer.PutString(fileNames[0]);
                 }
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
-                // Degrade to the older style dialog if we're not on Win2K.
-                // We do this by setting the struct size to a different value
-                //
-                if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                    Environment.OSVersion.Version.Major < 5) {
-                    ofn.lStructSize = 0x4C;
-                }
                 ofn.hwndOwner = hWndOwner;
                 ofn.hInstance = Instance;
                 ofn.lpstrFilter = MakeFilterString(filter, this.DereferenceLinks);
@@ -938,7 +929,7 @@ namespace System.Windows.Forms {
                 if (defaultExt != null && AddExtension) {
                     ofn.lpstrDefExt = defaultExt;
                 }
-                //Security checks happen here
+
                 return RunFileDialog(ofn);
             }
             finally {

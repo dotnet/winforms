@@ -152,25 +152,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        // We need this for Vista specific features/fixes
-        private static readonly Version VistaOSVersion = new Version(6, 0);
-
-        /// <summary>
-        /// Used to tell if Vista API's are supported
-        /// </summary>
-        internal static bool IsVista
-        {
-            get
-            {
-                OperatingSystem os = Environment.OSVersion;
-                if (os == null)
-                    return false;
-
-                return (os.Platform == PlatformID.Win32NT) &&
-                       (os.Version.CompareTo(VistaOSVersion) >= 0);
-            }
-        }
-
         [DllImport(ExternDll.Kernel32, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern int GetLocaleInfo(int Locale,int LCType,StringBuilder lpLCData,int cchData) ;

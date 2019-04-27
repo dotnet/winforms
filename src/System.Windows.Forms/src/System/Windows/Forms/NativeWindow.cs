@@ -678,13 +678,10 @@ namespace System.Windows.Forms
                 CheckReleased();
                 WindowClass windowClass = WindowClass.Create(cp.ClassName, cp.ClassStyle);
                 lock (createWindowSyncObject) {
-                    
-                    // Why are we checking the handle again after calling CheckReleased()?  It turns                     
-                    // out the CLR will sometimes pump messages while we're waiting on the lock.  If
-                    // a message comes through (say a WM_ACTIVATE for the parent) which causes the 
-                    // handle to be created, we can try to create the handle twice for the same 
-                    // NativeWindow object. See 
-
+                    // The CLR will sometimes pump messages while we're waiting on the lock.
+                    // If a message comes through (say a WM_ACTIVATE for the parent) which
+                    // causes the handle to be created, we can try to create the handle twice
+                    // for NativeWindow. Check the handle again t avoid this.
                     if (this.handle != IntPtr.Zero) {
                         return;
                     }
@@ -697,18 +694,15 @@ namespace System.Windows.Forms
                     using (DpiHelper.EnterDpiAwarenessScope(this.windowDpiAwarenessContext)) {
                         IntPtr modHandle = UnsafeNativeMethods.GetModuleHandle(null);
 
-                        // Win98 apparently doesn't believe in returning E_OUTOFMEMORY.  They'd much
-                        // rather just AV.  So we catch this and then we re-throw an out of memory error.
-                        //
-                        try {
-                            //CreateWindowEx() is throwing because we're passing the WindowText arg with a string of length  > 32767.  
-                            //It looks like the Windows call (CreateWindowEx) will only work 
-                            //for string lengths no greater than the max length of a 16 bit int (32767).
-
-                            //We need to check the length of the string we're passing into CreateWindowEx().  
-                            //If it exceeds the max, we should take the substring....
-
-                            if (cp.Caption != null && cp.Caption.Length > short.MaxValue) {
+                        // Older versions of Windows AV rather than returning E_OUTOFMEMORY.
+                        // Catch this and then we re-throw an out of memory error.
+                        try
+                        {
+                            // CreateWindowEx throws if WindowText is greater than the max
+                            // length of a 16 bit int (32767).
+                            // If it exceeds the max, we should take the substring....
+                            if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
+                            {
                                 cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                             }
 

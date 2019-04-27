@@ -567,15 +567,7 @@ namespace System.Experimental.Gdi
             switch (g.TextRenderingHint)
             {
                 case TextRenderingHint.ClearTypeGridFit:
-                    // See WindowsFontQuality enum for the flags supported in the different OS systems.
-                    if (Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor >= 1)
-                    {
-                        return WindowsFontQuality.ClearTypeNatural;
-                    }
-                    else
-                    {
-                        return WindowsFontQuality.ClearType;
-                    }
+                    return WindowsFontQuality.ClearType;
 
                 case TextRenderingHint.AntiAliasGridFit:
                     return WindowsFontQuality.AntiAliased;

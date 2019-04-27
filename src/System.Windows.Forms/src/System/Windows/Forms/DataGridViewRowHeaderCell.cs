@@ -652,7 +652,7 @@ namespace System.Windows.Forms
 
             if (this.DataGridView.ApplyVisualStylesToHeaderCells)
             {
-                // Add the XP theming margins to the borders.
+                // Add the theming margins to the borders.
                 Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(graphics);
                 borderAndPaddingWidths += rectThemeMargins.Y;
                 borderAndPaddingWidths += rectThemeMargins.Height;
@@ -793,7 +793,7 @@ namespace System.Windows.Forms
                 {
                     if (paint && DataGridViewCell.PaintBackground(paintParts))
                     {
-                        // XP Theming
+                        // Theming
                         int state = (int)HeaderItemState.Normal;
                         if (this.DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect ||
                             this.DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)

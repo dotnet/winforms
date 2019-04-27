@@ -4524,7 +4524,7 @@ namespace System.Windows.Forms {
             layoutOptions.gdiTextFormatFlags = ContentAlignToTextFormat(Owner.TextAlign, Owner.RightToLeft == RightToLeft.Yes); 
             
             
-            // in 2K and XP++ hide underlined &File unless ALT is pressed
+            // Hide underlined &File unless ALT is pressed
             layoutOptions.gdiTextFormatFlags = (Owner.ShowKeyboardCues) ? layoutOptions.gdiTextFormatFlags : layoutOptions.gdiTextFormatFlags | TextFormatFlags.HidePrefix;
             
             return layoutOptions;

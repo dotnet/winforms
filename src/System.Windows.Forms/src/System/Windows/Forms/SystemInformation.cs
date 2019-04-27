@@ -290,37 +290,6 @@ namespace System.Windows.Forms {
                 return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXHTHUMB);
             }
         }
-/*
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconFont"]/*' />
-        public static Font IconFont {
-            get {
-                Font iconFont = IconFontInternal;
-                return iconFont != null ? iconFont : Control.DefaultFont;
-            }
-        }
-
-        // IconFontInternal is the same as IconFont, only it does not fall back to Control.DefaultFont
-        // if the icon font can not be retrieved.  It returns null instead.
-        internal static Font IconFontInternal {
-            get {
-                Font iconFont = null;
-
-                NativeMethods.ICONMETRICS data = new NativeMethods.ICONMETRICS();
-                bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETICONMETRICS, data.cbSize, data, 0);
-
-                Debug.Assert(!result || data.iHorzSpacing == IconHorizontalSpacing, "Spacing in ICONMETRICS does not match IconHorizontalSpacing.");
-                Debug.Assert(!result || data.iVertSpacing == IconVerticalSpacing, "Spacing in ICONMETRICS does not match IconVerticalSpacing.");
-
-                if (result && data.lfFont != null) {
-                    try {
-                        iconFont = Font.FromLogFont(data.lfFont);
-                    }
-                    catch {}
-                }
-                return iconFont;
-            }
-        }
-*/
 
         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IconSize"]/*' />
         /// <devdoc>
@@ -1092,36 +1061,35 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UserInteractive"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the current process is running in user
-        ///       interactive mode.
-        ///    </para>
+        /// Gets a value indicating whether the current process is running in user 
+        /// interactive mode.
         /// </devdoc>
-        public static bool UserInteractive {
-            get {
-                if (Environment.OSVersion.Platform == System.PlatformID.Win32NT) {
-                    IntPtr hwinsta = IntPtr.Zero;
+        public static bool UserInteractive
+        {
+            get
+            {
+                IntPtr hwinsta = IntPtr.Zero;
 
-                    hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
-                    if (hwinsta != IntPtr.Zero && processWinStation != hwinsta) {
-                        isUserInteractive = true;
-
-                        int lengthNeeded = 0;
-                        NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
-
-                        if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, flags, Marshal.SizeOf(flags), ref lengthNeeded)) {
-                            if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0) {
-                                isUserInteractive = false;
-                            }
-                        }
-                        processWinStation = hwinsta;
-                    }
-                }
-                else {
+                hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
+                if (hwinsta != IntPtr.Zero && processWinStation != hwinsta)
+                {
                     isUserInteractive = true;
+
+                    int lengthNeeded = 0;
+                    NativeMethods.USEROBJECTFLAGS flags = new NativeMethods.USEROBJECTFLAGS();
+
+                    if (UnsafeNativeMethods.GetUserObjectInformation(new HandleRef(null, hwinsta), NativeMethods.UOI_FLAGS, flags, Marshal.SizeOf(flags), ref lengthNeeded))
+                    {
+                        if ((flags.dwFlags & NativeMethods.WSF_VISIBLE) == 0)
+                        {
+                            isUserInteractive = false;
+                        }
+                    }
+
+                    processWinStation = hwinsta;
                 }
+
                 return isUserInteractive;
             }
         }
@@ -1152,43 +1120,31 @@ namespace System.Windows.Forms {
             systemEventsDirty = true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // NEW ADDITIONS FOR WHIDBEY                                                                            //
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsDropShadowEnabled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the drop shadow effect in enabled. Defaults to false 
-        ///       downlevel.
-        ///    </para>
+        /// Gets a value indicating whether the drop shadow effect in enabled.
+        /// Defaults to false downlevel.
         /// </devdoc>
-        public static bool IsDropShadowEnabled {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDROPSHADOW, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
-           }
+        public static bool IsDropShadowEnabled
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETDROPSHADOW, 0, ref data, 0);
+                return data != 0;
+            }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsFlatMenuEnabled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Gets a value indicating whether the native user menus have a flat menu appearance. Defaults to false 
-        ///       downlevel.
-        ///    </para>
+        /// Gets a value indicating whether the native user menus have a flat menu appearance.
+        /// Defaults to false downlevel.
         /// </devdoc>
-        public static bool IsFlatMenuEnabled {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFLATMENU, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
+        public static bool IsFlatMenuEnabled
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFLATMENU, 0, ref data, 0);
+                return data != 0;
             }
         }
 
@@ -1206,41 +1162,29 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FontSmoothingContrast"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Returns a contrast value that is ClearType smoothing.
-        ///    </para>
+        /// Returns a contrast value that is ClearType smoothing.
         /// </devdoc>
-        public static int FontSmoothingContrast {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGCONTRAST, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
+        public static int FontSmoothingContrast
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGCONTRAST, 0, ref data, 0);
+                return data;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.FontSmoothingType"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Returns a type of Font smoothing.
-        ///    </para>
+        /// Returns a type of Font smoothing.
         /// </devdoc>
-        public static int FontSmoothingType {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGTYPE, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
+        public static int FontSmoothingType
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETFONTSMOOTHINGTYPE, 0, ref data, 0);
+                return data;
             }
         }
 
@@ -1429,21 +1373,17 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsMenuFadeEnabled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///      Determines whether the maenu fade animation feature is enabled. Defaults to false 
-        ///       downlevel.
-        ///    </para>
+        /// Determines whether the maenu fade animation feature is enabled.
+        /// Defaults to false downlevel.
         /// </devdoc>
-        public static bool IsMenuFadeEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUFADE, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
+        public static bool IsMenuFadeEnabled
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUFADE, 0, ref data, 0);
+                return data != 0;
             }
         }
 
@@ -1533,58 +1473,42 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsSelectionFadeEnabled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the selection fade effect is enabled. Defaults to false 
-        ///       downlevel.
-        ///    </para>
+        /// Indicates whether the selection fade effect is enabled. Defaults to false downlevel.
         /// </devdoc>
-        public static bool IsSelectionFadeEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSELECTIONFADE, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
+        public static bool IsSelectionFadeEnabled
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETSELECTIONFADE, 0, ref data, 0);
+                return data != 0;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.IsToolTipAnimationEnabled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///      Indicates whether the tool tip animation is enabled. Defaults to false 
-        ///      downlevel.
-        ///    </para>
+        /// Indicates whether the tool tip animation is enabled. Defaults to false downlevel.
         /// </devdoc>
-        public static bool IsToolTipAnimationEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETTOOLTIPANIMATION, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
-
+        public static bool IsToolTipAnimationEnabled
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETTOOLTIPANIMATION, 0, ref data, 0);
+                return data != 0;
             }
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.UIEffectsEnabled"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///      Indicates whether all the UI Effects are enabled. Defaults to false 
-        ///      downlevel.
-        ///    </para>
+        /// Indicates whether all the UI Effects are enabled. Defaults to false downlevel.
         /// </devdoc>
-        public static bool UIEffectsEnabled {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETUIEFFECTS, 0, ref data, 0);
-                    return data != 0;
-                }
-                return false;
+        public static bool UIEffectsEnabled
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETUIEFFECTS, 0, ref data, 0);
+                return data != 0;
             }
         }
 
@@ -1661,24 +1585,17 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaretWidth"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Indicates the caret width in edit controls.
-        ///    </para>
+        /// Indicates the caret width in edit controls.
         /// </devdoc>
-        public static int CaretWidth {
-            get {
-                if (OSFeature.Feature.OnXp || OSFeature.Feature.OnWin2k) {
-                    int data = 0;
-                    UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETCARETWIDTH, 0, ref data, 0);
-                    return data;
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
+        public static int CaretWidth
+        {
+            get
+            {
+                int data = 0;
+                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETCARETWIDTH, 0, ref data, 0);
+                return data;
             }
-
         }
 
         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.MouseWheelScrollDelta"]/*' />
@@ -1694,41 +1611,20 @@ namespace System.Windows.Forms {
 
         }
 
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalFocusThickness"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The width of the left and right edges of the focus rectangle.
-        ///    </para>
+        /// The width of the left and right edges of the focus rectangle.
         /// </devdoc>
-        public static int VerticalFocusThickness {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFOCUSBORDER);
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
-
+        public static int VerticalFocusThickness
+        {
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYFOCUSBORDER);
         }
 
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalFocusThickness"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       The width of the top and bottom edges of the focus rectangle.
-        ///    </para>
+        /// The width of the top and bottom edges of the focus rectangle.
         /// </devdoc>
-        public static int HorizontalFocusThickness {
-            get {
-                if (OSFeature.Feature.OnXp) {
-                    return UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFOCUSBORDER);
-                }
-                else {
-                    throw new NotSupportedException(SR.SystemInformationFeatureNotSupported);
-                }
-            }
-
+        public static int HorizontalFocusThickness
+        {
+            get => UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CXFOCUSBORDER);
         }
 
         /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalResizeBorderThickness"]/*' />
@@ -1803,79 +1699,6 @@ namespace System.Windows.Forms {
                 }
             }
         }
-
-        /*
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.VerticalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the width, in pixels, of a standard vertical scrollbar.
-        ///    </para>
-        /// </devdoc>
-        public static int VerticalScrollBarWidth {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iScrollWidth > 0) {
-                    return data.iScrollWidth;
-                }
-                else {
-                    return 0;
-                }
-                
-
-            }
-        }
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.HorizontalScrollBarWidth"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the height, in pixels, of a standard horizontal scrollbar.
-        ///    </para>
-        /// </devdoc>
-        public static int HorizontalScrollBarWidth {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iScrollHeight > 0) {
-                    return data.iScrollHeight;
-                }
-                else {
-                    return 0;
-                }
-            }
-        }
-        
-
-        /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.CaptionButtonSize"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///      Specified the Size, in pixels, of the caption buttons.
-        ///    </para>
-        /// </devdoc>
-        public static Size CaptionButtonSize {
-            get {
-                
-                //we can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
-                //
-                NativeMethods.NONCLIENTMETRICS data = new NativeMethods.NONCLIENTMETRICS();
-                UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iCaptionHeight > 0 && data.iCaptionWidth > 0) {
-                    return new Size(data.iCaptionWidth, data.iCaptionHeight);
-                }
-                else {
-                    return return new Size(0, 0);
-                }
-                
-
-            }
-        }
-        */
         
          /// <include file='doc\SystemInformation.uex' path='docs/doc[@for="SystemInformation.SmallCaptionButtonSize"]/*' />
         /// <devdoc>
@@ -1924,11 +1747,6 @@ namespace System.Windows.Forms {
 
             }
         }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // End ADDITIONS FOR WHIDBEY                                                                            //
-        //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
         /// <devdoc>
         ///     Checks whether the current Winforms app is running on a secure desktop under a terminal

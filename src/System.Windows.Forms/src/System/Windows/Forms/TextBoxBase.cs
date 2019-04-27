@@ -70,11 +70,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.maxLength"]/*' />
         /// <devdoc>
-        ///     Controls the maximum length of text in the edit control.
+        /// Controls the maximum length of text in the edit control.
+        /// Matches the Windows limit.
         /// </devdoc>
-        private int maxLength = 32767; // Win9X default, used for consistency
+        private int maxLength = 32767;
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.requestedHeight"]/*' />
         /// <devdoc>
@@ -1972,8 +1972,6 @@ namespace System.Windows.Forms {
         static void ToUnicodeOffsets(string str, ref int start, ref int end) {
             Encoding e = Encoding.Default;
 
-            // Acutally, we may get away with this call if we can get the bytes from Win9x.  Dont know if it is possible.
-            // This can be expensive since start/end could be small, but str.Length can be quite big.
             byte[] bytes = e.GetBytes(str);
 
             bool swap = start > end;

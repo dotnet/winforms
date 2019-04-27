@@ -3564,7 +3564,7 @@ namespace System.Windows.Forms {
                   // The idea here is to let items pretend they are controls.
                   // they should get paint events at 0,0 and have proper clipping regions
                   // set up for them.  We cannot use g.TranslateTransform as that does
-                  // not translate the GDI world, and things like XP Visual Styles and the
+                  // not translate the GDI world, and things like Visual Styles and the
                   // TextRenderer only know how to speak GDI.
                   //
                   // The previous appropach was to set up the GDI clipping region and allocate a graphics
@@ -5134,18 +5134,11 @@ namespace System.Windows.Forms {
     internal class MouseHoverTimer : IDisposable {
 
            private System.Windows.Forms.Timer mouseHoverTimer = new System.Windows.Forms.Timer();
-           private const int SPI_GETMOUSEHOVERTIME_WIN9X = 400;  // in Win9x this is not supported so lets use the default from a more modern OS.
-
            // consider - weak reference?
            private ToolStripItem currentItem = null;
 
            public MouseHoverTimer() {
-               int interval = SystemInformation.MouseHoverTime;
-               if (interval == 0) {
-                   interval = SPI_GETMOUSEHOVERTIME_WIN9X;
-               }
-
-               mouseHoverTimer.Interval = interval;
+               mouseHoverTimer.Interval = SystemInformation.MouseHoverTime;
                mouseHoverTimer.Tick    += new EventHandler(OnTick);
            }
 

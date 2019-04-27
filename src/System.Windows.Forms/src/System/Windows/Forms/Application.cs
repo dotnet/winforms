@@ -213,11 +213,14 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the path for the application data that is shared among all users.</para>
         /// </devdoc>
-        public static string CommonAppDataPath {
-            // NOTE   : Don't obsolete these. GetDataPath isn't on SystemInformation, and it
-            //        : provides the Win2K logo required adornments to the directory (Company\Product\Version)
-            //
-            get {
+        /// <remarks>
+        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        // the Windows logo required adornments to the directory (Company\Product\Version)
+        /// </remarks>
+        public static string CommonAppDataPath
+        {
+            get
+            {
 #if CLICKONCE
                 try {
                     if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) {
@@ -392,12 +395,14 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the path for the application data specific to a local, non-roaming user.</para>
         /// </devdoc>
-        public static string LocalUserAppDataPath {
-            // NOTE   : Don't obsolete these. GetDataPath isn't on SystemInformation, and it
-            //        : provides the Win2K logo required adornments to the directory (Company\Product\Version)
-            //
-            
-            get {
+        /// <remarks>
+        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        /// the Windows logo required adornments to the directory (Company\Product\Version)
+        /// </remarks>
+        public static string LocalUserAppDataPath
+        {
+            get
+            {
 #if CLICKONCE
                 try {
                     if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) {
@@ -672,12 +677,14 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    <para>Gets the path for the application data specific to the roaming user.</para>
         /// </devdoc>
-        public static string UserAppDataPath {
-            // NOTE   : Don't obsolete these. GetDataPath isn't on SystemInformation, and it
-            //        : provides the Win2K logo required adornments to the directory (Company\Product\Version)
-            //
-            
-            get {
+        /// <remarks>
+        /// Don't obsolete these. GetDataPath isn't on SystemInformation, and it provides
+        /// the Windows logo required adornments to the directory (Company\Product\Version)
+        /// </remarks>
+        public static string UserAppDataPath
+        {
+            get
+            {
 #if CLICKONCE
                 try {
                     if (System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed) {
@@ -3908,16 +3915,14 @@ namespace System.Windows.Forms {
                 CreateHandle();
             }
 
-            protected override CreateParams CreateParams {
-                get {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
                     CreateParams cp = base.CreateParams;
-
                     // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.  But, they are only supported
-                    // on NT.
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-                        cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
-                    }
+                    // full blown invisible windows.
+                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
                     return cp;
                 }
             }
@@ -3959,16 +3964,15 @@ namespace System.Windows.Forms {
                 DpiHelper.FirstParkingWindowCreated = true;
             }
 
-            protected override CreateParams CreateParams {
-                get {
+            protected override CreateParams CreateParams
+            {
+                get
+                {
                     CreateParams cp = base.CreateParams;
 
                     // Message only windows are cheaper and have fewer issues than
-                    // full blown invisible windows.  But, they are only supported
-                    // on NT.
-                    if (Environment.OSVersion.Platform == PlatformID.Win32NT) {
-                        cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
-                    }
+                    // full blown invisible windows.
+                    cp.Parent = (IntPtr)NativeMethods.HWND_MESSAGE;
                     return cp;
                 }
             }

@@ -19,9 +19,6 @@ namespace System.Windows.Forms
         // Minimum supported framework version for this feature.
         private static readonly Version featureSupportedMinimumFrameworkVersion = new Version(4, 7);
 
-        // Current OS version
-        internal static Version OSVersion = Environment.OSVersion.Version;
-           
         // RS2 build number - we may need to change once we know RTM version. below is pre-RTM RS2 version.
         internal static readonly Version RS2Version = new Version(10, 0, 14933, 0); 
 

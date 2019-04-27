@@ -5901,9 +5901,6 @@ namespace System.Windows.Forms {
                                 // 
                                 // 
                                 int iTo = odStateChange.iTo;
-                                if (!UnsafeNativeMethods.IsVista) {
-                                    iTo--;
-                                }
                                 ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }

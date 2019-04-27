@@ -1526,14 +1526,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return InternalLabelWidth;
         }
 
-        internal bool IsExplorerTreeSupported {
-            get {
-                if (ownerGrid.CanShowVisualStyleGlyphs && UnsafeNativeMethods.IsVista && VisualStyleRenderer.IsSupported) {
-                    return true;
-                }
-
-                return false;
-            }
+        internal bool IsExplorerTreeSupported
+        {
+            get => ownerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
         }
 
         public virtual int GetOutlineIconSize() {

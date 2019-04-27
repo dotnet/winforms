@@ -3164,7 +3164,7 @@ namespace System.Windows.Forms
                 ComboBoxRenderer.DrawDropDownButton(g, bounds, state);
             }
 
-            // Post XP theming functions
+            // Post theming functions
             public static void DrawBorder(Graphics g, Rectangle bounds)
             {
                 if (visualStyleRenderer == null)

@@ -1361,10 +1361,12 @@ namespace System.Windows.Forms
                     return base.TextLength;
                 }
 
-                // In Win9x systems TextBoxBase.TextLength calls Text.Length directly and does not query the window for the actual text length.  
-                // If TextMaskFormat is set to a anything different from IncludePromptAndLiterals or HidePromptOnLeave is true the return value 
-                // may be incorrect because the Text property value and the display text may be different.  We need to handle this here.
-
+                // On older platforms TextBoxBase.TextLength calls Text.Length directly and
+                // does not query the window for the actual text length.  
+                // If TextMaskFormat is set to a anything different from IncludePromptAndLiterals
+                // or HidePromptOnLeave is true the return value may be incorrect because the
+                // Text property value and the display text may be different.
+                // We need to handle this here.
                 return GetFormattedDisplayString().Length;
             }
         }
