@@ -186,6 +186,14 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Guid> GetGuidTheoryData()
+        {
+            var data = new TheoryData<Guid>();
+            data.Add(Guid.Empty);
+            data.Add(Guid.NewGuid());
+            return data;
+        }
+
         public static TheoryData<Color> GetColorTheoryData()
         {
             var data = new TheoryData<Color>();
