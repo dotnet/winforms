@@ -2,19 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 namespace System.Windows.Forms
 {
-    using System.Runtime.Remoting;
-    using System.ComponentModel;
-    using System;
-    using System.Collections;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using Microsoft.Win32;
-    using System.Runtime.InteropServices;
-
     /// <summary>
     /// Specifies the appearance and text formatting and behavior of a <see cref='System.Windows.Forms.DataGrid'/>
     /// control column.
@@ -29,9 +25,6 @@ namespace System.Windows.Forms
     {
 
         private HorizontalAlignment alignment = HorizontalAlignment.Left;
-        // private SolidBrush         alternatingBackBrush = null;
-        // private SolidBrush     backBrush            = null;
-        // SolidBrush    foreBrush            = null;
         private PropertyDescriptor propertyDescriptor = null;
         private DataGridTableStyle dataGridTableStyle = null;
         private Font font = null;
@@ -42,7 +35,6 @@ namespace System.Windows.Forms
         private string nullText = SR.DataGridNullText;
         private bool readOnly = false;
         private bool updating = false;
-        //private bool        visible              = true;
         internal int width = -1;
         private bool isDefault = false;
         AccessibleObject headerAccessibleObject = null;
@@ -134,127 +126,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /*
-        /// <summary>
-        /// Gets or sets the background color of alternating rows for a ledger
-        /// appearance.
-        /// </summary>
-        /// <value>
-        /// A <see cref='System.Drawing.Color'/> that represents the alternating background
-        ///    color. The default is the <see cref='System.Windows.Forms.DataGrid.AlternatingBackColor'/> of the
-        ///    control.
-        /// </value>
-        /// <remarks>
-        /// Use this property to set a custom alternating color for each column displayed
-        /// in the <see cref='System.Drawing.DataGrid'/> control.
-        /// </remarks>
-        /// <example>
-        /// The following example sets the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/> property of a specific <see cref='System.Windows.Forms.DataGridColumnStyle'/>
-        /// to yellow.
-        /// <code lang='VB'>Private Sub SetColumnAlternatingBackColor()
-        ///    ' Create a color object.
-        ///    Dim c As System.Drawing.Color
-        ///    c = System.Drawing.Color.Yellow
-        ///    ' Declare an object variable for the DataGridColumnStyle.
-        ///    Dim myGridColumn As DataGridColumnStyle
-        ///    myGridColumn = DataGrid1.GridColumns(0)
-        ///    ' Set the AlternatingBackColor to the color object.
-        ///    myGridColumn.AlternatingBackColor = c
-        /// End Sub
-        /// </code>
-        /// </example>
-        /// <seealso cref='System.Windows.Forms.DataGrid.AlternatingBackColor'/>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
-        [SRCategory(nameof(SR.CatColors))]
-        public virtual Color AlternatingBackColor {
-            get {
-                if (alternatingBackBrush != null) {
-                    return alternatingBackBrush.Color;
-                }
-                DataGrid grid = DataGrid;
-                if (grid != null) {
-                    return this.DataGridTableStyle.AlternatingBackColor;
-                }
-                return System.Windows.Forms.DataGridTableStyle.defaultAlternatingBackBrush.Color;
-            }
-            set {
-                if (value != Color.Empty && alternatingBackBrush != null && value.Equals(alternatingBackBrush.Color)) {
-                    return;
-                }
-                this.alternatingBackBrush = new SolidBrush(value);
-                RaisePropertyChanged(EventArgs.Empty"AlternatingBackColor");
-                Invalidate();
-            }
-        }
-        */
-
-        /*
-        /// <summary>
-        /// Indicates whether the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
-        /// property should be persisted.
-        /// </summary>
-        /// <returns>
-        /// <see langword='true '/>if the property
-        ///    value has been changed from its default; otherwise,
-        /// <see langword='false'/>.
-        /// </returns>
-        /// <remarks>
-        /// You typically use this method only if you are either
-        /// creating a designer for the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control
-        /// incorporating the <see cref='System.Windows.Forms.DataGrid'/>.
-        /// You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeAlternatingBackColor'/> method to
-        ///    determine whether the property value has changed from its default.
-        /// </remarks>
-        /// <seealso cref='System.Drawing.DataGridColumnStyle.AlternatingBackColor'/>
-        internal bool ShouldSerializeAlternatingBackColor() {
-            return alternatingBackBrush != null;
-        }
-        */
-
-        /*
-        /// <summary>
-        /// Resets the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
-        /// property to its default value.
-        /// </summary>
-        /// <remarks>
-        /// You typically use this method only if you are either creating a designer for
-        /// the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
-        ///    <see cref='System.Windows.Forms.DataGrid'/>.
-        /// You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeAlternatingBackColor'/>
-        /// method to determine whether the property value has changed from its default.
-        /// The OnPropertyChanged
-        /// event occurs when the property value changes.
-        /// </remarks>
-        public void ResetAlternatingBackColor() {
-            if (alternatingBackBrush != null) {
-                this.alternatingBackBrush = null;
-                RaisePropertyChanged(EventArgs.Empty"AlternatingBackColor");
-                Invalidate();
-            }
-        }
-        */
-
-        /*
-        /// <summary>
-        /// Gets either the <see cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/> or the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/> of
-        /// a specified row.
-        /// </summary>
-        /// <returns>
-        /// A <see cref='System.Drawing.Color'/> that represents the background color.
-        /// </returns>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.GetBackColor'/>
-        /// <keyword term=''/>
-        public Color GetBackColor(int rowNum) {
-            DataGrid grid = DataGrid;
-            if (rowNum % 2 == 1 && (grid != null && grid.LedgerStyle))
-                return AlternatingBackColor;
-            else
-                return BackColor;
-        }
-        */
-
         /// <summary>
         /// When overridden in a derived class, updates the value of a specified row with
         /// the given text.
@@ -298,11 +169,6 @@ namespace System.Windows.Forms
                 {
                     propertyDescriptor = value;
                     OnPropertyDescriptorChanged(EventArgs.Empty);
-                    /*
-                    //
-
-
-*/
                 }
             }
         }
@@ -319,20 +185,6 @@ namespace System.Windows.Forms
                 Events.RemoveHandler(EventPropertyDescriptor, value);
             }
         }
-
-        /// <summary>
-        /// Gets the <see cref='System.Windows.Forms.DataGrid'/> control that the <see cref='System.Windows.Forms.DataGridColumnStyle'/> belongs to.
-        /// </summary>
-        /*
-        protected virtual DataGrid DataGrid {
-            get {
-                DataGridTableStyle gridTable = DataGridTableStyle;
-                if (gridTable == null)
-                    return null;
-                return gridTable.DataGrid;
-            }
-        }
-        */
 
         protected virtual AccessibleObject CreateHeaderAccessibleObject()
         {
@@ -445,110 +297,6 @@ namespace System.Windows.Forms
             {
             }
         }
-
-
-        /*
-        /// <summary>
-        /// Gets or sets the foreground color of the column.
-        /// </summary>
-        /// <value>
-        /// A <see cref='System.Drawing.Color'/> that represents the foreground color. The
-        /// default is the foreground color of the <see cref='System.Windows.Forms.DataGrid'/> control.
-        /// </value>
-        /// <remarks>
-        /// The OnPropertyChanged event occurs when the property value
-        /// changes.
-        /// </remarks>
-        /// <example>
-        /// The following example sets the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property of
-        /// a given <see cref='System.Windows.Forms.DataGridColumnStyle'/>.
-        ///    <code lang='VB'>
-        /// Dim c As System.Drawing.Color
-        /// Dim dgCol As DataGridColumnStyle
-        /// c = System.Drawing.CadetBlue
-        /// Set dgCol = DataGrid1.GridColumns(0)
-        /// dgCol.ForeColor = c
-        /// </code>
-        /// </example>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
-        /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.GetBackColor'/>
-        /// <keyword term=''/>
-        public virtual Color ForeColor {
-            get {
-                if (foreBrush != null) {
-                    return foreBrush.Color;
-                }
-                DataGrid grid = DataGrid;
-                if (grid != null) {
-                    return grid.ForeColor;
-                }
-                return DataGrid.defaultForeBrush.Color;
-            }
-            set {
-                if (value != Color.Empty && foreBrush != null && value.Equals(foreBrush.Color))
-                    return;
-                this.foreBrush = new SolidBrush(value);
-                RaisePropertyChanged(EventArgs.Empty"ForeColor");
-                Invalidate();
-            }
-        }
-
-        // used by the DataGridRow
-        internal SolidBrush ForeBrush {
-            get {
-                if (foreBrush != null) {
-                    return foreBrush;
-                }
-                DataGrid grid = DataGrid;
-                if (grid != null) {
-                    return grid.ForeBrush;
-                }
-                return DataGrid.defaultForeBrush;
-            }
-        }
-        */
-
-        /*
-        /// <summary>
-        /// Indicates if the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property should be
-        /// persisted.
-        /// </summary>
-        /// <returns>
-        ///    <see langword='true '/>if the property value has been changed from its
-        /// default; otherwise, <see langword='false'/> .
-        /// </returns>
-        /// <remarks>
-        /// You typically use this method only if you are either creating a designer for
-        /// the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
-        ///    <see cref='System.Windows.Forms.DataGrid'/>.
-        /// </remarks>
-        internal bool ShouldSerializeForeColor() {
-            return foreBrush != null;
-        }
-        */
-
-        /*
-        /// <summary>
-        /// Resets the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property to its default value.
-        /// </summary>
-        /// <remarks>
-        /// You typically use this method if you are either creating a designer for
-        /// the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
-        ///    <see cref='System.Windows.Forms.DataGrid'/>.
-        /// You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeForeColor'/> method to
-        /// determine whether the property value has changed from its default.
-        /// The OnPropertyChanged event occurs when the property
-        /// value changes.
-        /// </remarks>
-        public void ResetForeColor() {
-            if (foreBrush != null) {
-                foreBrush = null;
-                RaisePropertyChanged(EventArgs.Empty"ForeColor");
-                Invalidate();
-            }
-        }
-        */
 
         /// <summary>
         /// Gets or sets the text of the column header.
@@ -722,25 +470,6 @@ namespace System.Windows.Forms
             }
         }
 
-#if false
-        /// <summary>
-        /// Gets or sets a value indicating whether the column is visible.
-        /// </summary>
-        [DefaultValue(true)]
-        public virtual bool Visible {
-            get {
-                return visible;
-            }
-            set {
-                if (visible == value)
-                    return;
-                visible = value;
-                RaisePropertyChanged(EventArgs.Empty"Visible");
-                Invalidate();
-            }
-        }
-#endif
-
         /// <summary>
         /// Gets or sets the width of the column.
         /// </summary>
@@ -808,15 +537,6 @@ namespace System.Windows.Forms
                 Invalidate();
             }
         }
-
-        internal virtual bool WantArrows
-        {
-            get
-            {
-                return false;
-            }
-        }
-
 
         internal virtual string GetDisplayText(object value)
         {
@@ -901,24 +621,6 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridColumnUnbound, HeaderText));
             }
-
-#if false
-            DataTable myDataTable = myTable.DataTable;
-            if (myDataColumn.Table != myDataTable) {
-                throw new InvalidOperationException(string.Format(SR.DataGridColumnDataSourceMismatch, Header));
-            }
-
-            /* FOR DEMO: Microsoft: DataGridColumnStyle::CheckValidDataSource: make the check better */
-            if (((DataView) value.DataSource).Table == null) {
-                throw new InvalidOperationException(string.Format(SR.DataGridColumnNoDataTable, Header));
-            }
-            else {
-                /* FOR DEMO: Microsoft: DataGridColumnStyle::CheckValidDataSource: make the check better */
-                if (!myTable.DataTable.Equals(((DataView) value.DataSource).Table)) {
-                    throw new InvalidOperationException(string.Format(SR.DataGridColumnNoDataSource, Header, myTable.DataTable.TableName));
-                }
-            }
-#endif // false
         }
 
         /// <summary>
