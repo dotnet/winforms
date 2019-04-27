@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
         internal bool UseVistaDialogInternal
         {
-            get 
+            get
             {
                 if (_autoUpgradeEnabled && SettingsSupportVistaDialog)
                 {
@@ -88,15 +88,15 @@ namespace System.Windows.Forms
             dialog.SetTitle(this.Title);
 
             dialog.SetOptions(GetOptions());
-            
+
             SetFileTypes(dialog);
 
             this._customPlaces.Apply(dialog);
         }
-        
+
         private FileDialogNative.FOS GetOptions()
         {
-            const FileDialogNative.FOS BlittableOptions = 
+            const FileDialogNative.FOS BlittableOptions =
                 FileDialogNative.FOS.FOS_OVERWRITEPROMPT
               | FileDialogNative.FOS.FOS_NOCHANGEDIR
               | FileDialogNative.FOS.FOS_NOVALIDATE
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
               | FileDialogNative.FOS.FOS_CREATEPROMPT
               | FileDialogNative.FOS.FOS_NODEREFERENCELINKS
             ;
-            const int UnexpectedOptions = 
+            const int UnexpectedOptions =
                 NativeMethods.OFN_USESHELLITEM //This is totally bogus (only used in FileDialog by accident to ensure that places are shown
               | NativeMethods.OFN_SHOWHELP //If ShowHelp is true, we don't use the Vista Dialog
               | NativeMethods.OFN_ENABLEHOOK //These shouldn't be set in options (only set in the flags for the legacy dialog)
@@ -201,7 +201,7 @@ namespace System.Windows.Forms
             private FileDialog _dialog;
 
             public VistaDialogEvents(FileDialog dialog)
-            { 
+            {
                 this._dialog = dialog;
             }
 
@@ -258,7 +258,7 @@ namespace System.Windows.Forms
 
         private static FileDialogNative.COMDLG_FILTERSPEC[] GetFilterItems(string filter)
         {
-            //Expected input types 
+            //Expected input types
             //"Text files (*.txt)|*.txt|All files (*.*)|*.*"
             //"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
             List<FileDialogNative.COMDLG_FILTERSPEC> extensions = new List<FileDialogNative.COMDLG_FILTERSPEC>();
