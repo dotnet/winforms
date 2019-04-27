@@ -27,7 +27,6 @@ namespace System.Windows.Forms
         }
 
 
-        [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
         internal bool UseVistaDialogInternal
         {
             get 

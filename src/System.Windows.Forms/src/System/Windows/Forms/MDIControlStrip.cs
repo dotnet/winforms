@@ -119,9 +119,6 @@ namespace System.Windows.Forms {
 #endregion
 */
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
-            
-            
             private Image GetTargetWindowIcon() {
                 Image systemIcon = null;
                 IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), Interop.WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);

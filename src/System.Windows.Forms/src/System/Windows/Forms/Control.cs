@@ -7976,15 +7976,14 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnNotifyMessage"]/*' />
         /// <devdoc>
-        ///    OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage
-        ///    bit is set. This allows for semi-trusted controls to listen to
-        ///    window messages, without allowing them to actually modify the
-        ///    message.
+        /// OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage bit is set.
+        /// This allows for controls to listen to window messages, without allowing them to
+        /// actually modify the message.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnNotifyMessage(Message m) {
+        protected virtual void OnNotifyMessage(Message m)
+        {
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
@@ -17875,7 +17874,6 @@ example usage
             /// <devdoc>
             ///      Notifies that the accelerator table needs to be updated due to a change in a control mnemonic.
             /// </devdoc>
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             internal void UpdateAccelTable(){
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
                 this.accelCount = -1;
@@ -17887,7 +17885,6 @@ example usage
             }
 
             // Since this method is used by Reflection .. dont change the "signature"
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             internal void ViewChangedInternal()
             {
                 ViewChanged();
@@ -17898,7 +17895,6 @@ example usage
             ///      changed.
             /// </devdoc>
             /// <internalonly/>
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             private void ViewChanged() {
                 // send the view change notification to anybody listening.
                 //
@@ -18055,8 +18051,6 @@ example usage
                             shimManager = new HtmlShimManager();
                         }
 
-                        // Security note: There is a demand for FullTrust on HtmlDocument that should apply
-                        // to this call. So we don't need to demand here.
                         retVal = new HtmlDocument(shimManager, iOlecontainer as UnsafeNativeMethods.IHTMLDocument);
                     }
 

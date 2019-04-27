@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     The value of the Edit control default password char.
+        /// The value of the Edit control default password char.
         /// </devdoc>
         private char SystemPasswordChar
         {

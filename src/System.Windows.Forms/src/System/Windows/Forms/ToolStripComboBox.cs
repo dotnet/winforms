@@ -2,28 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing.Design;
-    using System.Collections.Specialized;
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms.Design; 
-    using System.Security;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Internal;     
-    using System.Globalization;
-    
-    /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox"]/*' />
-    /// <devdoc/>
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Windows.Forms.Design;
+
+namespace System.Windows.Forms
+{
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DefaultProperty(nameof(Items))]
-    public class ToolStripComboBox : ToolStripControlHost {
-
-
+    public class ToolStripComboBox : ToolStripControlHost
+    {
         internal static readonly object EventDropDown                                    = new object();
         internal static readonly object EventDropDownClosed                              = new object();
         internal static readonly object EventDropDownStyleChanged                        = new object();

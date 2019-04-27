@@ -2,64 +2,41 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms {
-    using Accessibility;
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-    using System.Configuration.Assemblies;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Globalization;
-    using System.Security;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Runtime.InteropServices.ComTypes;
-    using System.Runtime.Remoting;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Text;
-    using System.Threading;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.Internal;
-    using Encoding = System.Text.Encoding;
-    using System.Drawing.Imaging;
-    using System.Windows.Forms.Layout;
-
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     Control's IME feature.
+    /// Control's IME feature.
     /// </devdoc>
     public partial class Control :
-    Component,
-    UnsafeNativeMethods.IOleControl,
-    UnsafeNativeMethods.IOleObject,
-    UnsafeNativeMethods.IOleInPlaceObject,
-    UnsafeNativeMethods.IOleInPlaceActiveObject,
-    UnsafeNativeMethods.IOleWindow,
-    UnsafeNativeMethods.IViewObject,
-    UnsafeNativeMethods.IViewObject2,
-    UnsafeNativeMethods.IPersist,
-    UnsafeNativeMethods.IPersistStreamInit,
-    UnsafeNativeMethods.IPersistPropertyBag,
-    UnsafeNativeMethods.IPersistStorage,
-    UnsafeNativeMethods.IQuickActivate,
-    ISupportOleDropSource,
-    IDropTarget,
-    ISynchronizeInvoke,
-    IWin32Window,
-    IArrangedElement,
-    IBindableComponent {
-
+        Component,
+        UnsafeNativeMethods.IOleControl,
+        UnsafeNativeMethods.IOleObject,
+        UnsafeNativeMethods.IOleInPlaceObject,
+        UnsafeNativeMethods.IOleInPlaceActiveObject,
+        UnsafeNativeMethods.IOleWindow,
+        UnsafeNativeMethods.IViewObject,
+        UnsafeNativeMethods.IViewObject2,
+        UnsafeNativeMethods.IPersist,
+        UnsafeNativeMethods.IPersistStreamInit,
+        UnsafeNativeMethods.IPersistPropertyBag,
+        UnsafeNativeMethods.IPersistStorage,
+        UnsafeNativeMethods.IQuickActivate,
+        ISupportOleDropSource,
+        IDropTarget,
+        ISynchronizeInvoke,
+        IWin32Window,
+        IArrangedElement,
+        IBindableComponent
+    {
         /// <devdoc>
         ///     Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.
         /// </devdoc>

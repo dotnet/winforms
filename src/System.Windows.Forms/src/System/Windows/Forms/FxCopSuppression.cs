@@ -630,8 +630,6 @@ using System.Diagnostics.CodeAnalysis;
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#CreateHandle()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#DrawToBitmap(System.Drawing.Bitmap,System.Drawing.Rectangle)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#EndInvoke(System.IAsyncResult)")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#FocusInternal()")]
-[module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#FromChildHandleInternal(System.IntPtr)")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#GetChildWindowsTabOrderList()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#GetDefaultFontHandleWrapper()")]
 [module: SuppressMessage("Microsoft.SideBySide", "CA710:ExposedResourcesMustBeConsumed", Scope = "member", Target = "System.Windows.Forms.Control.#GetHRgn(System.Drawing.Region)")]

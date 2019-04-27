@@ -4691,11 +4691,6 @@ namespace System.Windows.Forms {
             SetupToolbar(true);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.WndProc"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {

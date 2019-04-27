@@ -216,11 +216,8 @@ namespace System.Windows.Forms
             return new FileDialogNative.NativeFileOpenDialog();
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SafeFileName
         {
             get
@@ -241,12 +238,9 @@ namespace System.Windows.Forms
             return System.IO.Path.GetFileName(fullPath);
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays"),
-            SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public string[] SafeFileNames
         {
             get

@@ -2,41 +2,25 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System.Text;
-    using System.Threading;
-    using System.Runtime.Remoting;
-    using System.Runtime.InteropServices;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Text;
+using System.Threading;
+using System.Runtime.InteropServices;
+using CharBuffer = System.Windows.Forms.UnsafeNativeMethods.CharBuffer;
 
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-
-    using System;
-    using System.Drawing;
-    using System.ComponentModel;
-    using System.Windows.Forms;
-    using System.IO;
-    using ArrayList = System.Collections.ArrayList;
-
-    using Encoding = System.Text.Encoding;
-    using Microsoft.Win32;
-    using System.Security;
-    using System.Runtime.Versioning;
-
-    using CharBuffer = System.Windows.Forms.UnsafeNativeMethods.CharBuffer;
-
-    /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///    <para>
-    ///       Displays a dialog window from which the user can select a file.
-    ///    </para>
+    /// Displays a dialog window from which the user can select a file.
     /// </devdoc>
-    [
-    DefaultEvent(nameof(FileOk)),
-    DefaultProperty(nameof(FileName))
-    ]
-    public abstract partial class FileDialog : CommonDialog {
-
+    [DefaultEvent(nameof(FileOk))]
+    [DefaultProperty(nameof(FileName))]
+    public abstract partial class FileDialog : CommonDialog
+    {
         private const int FILEBUFSIZE = 8192;
 
         /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.EventFileOk"]/*' />
