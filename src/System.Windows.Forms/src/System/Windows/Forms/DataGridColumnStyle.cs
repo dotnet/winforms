@@ -15,11 +15,10 @@ namespace System.Windows.Forms
     using Microsoft.Win32;
     using System.Runtime.InteropServices;
 
-    /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle"]/*' />
-    /// <devdoc>
-    ///    <para>Specifies the appearance and text formatting and behavior of
-    ///       a <see cref='System.Windows.Forms.DataGrid'/> control column.</para>
-    /// </devdoc>
+    /// <summary>
+    /// Specifies the appearance and text formatting and behavior of a <see cref='System.Windows.Forms.DataGrid'/>
+    /// control column.
+    /// </summary>
     [
     ToolboxItem(false),
     DesignTimeVisible(false),
@@ -56,20 +55,19 @@ namespace System.Windows.Forms
         private static readonly object EventReadOnly = new object();
         private static readonly object EventWidth = new object();
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnStyle"]/*' />
-        /// <devdoc>
-        ///    <para>In a derived class,
-        ///       initializes a new instance of the <see cref='System.Windows.Forms.DataGridColumnStyle'/> class.</para>
-        /// </devdoc>
+        /// <summary>
+        /// In a derived class, initializes a new instance of the
+        /// <see cref='System.Windows.Forms.DataGridColumnStyle'/> class.
+        /// </summary>
         public DataGridColumnStyle()
         {
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnStyle1"]/*' />
-        /// <devdoc>
-        /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridColumnStyle'/> class with the specified <see cref='T:System.ComponentModel.PropertyDescriptor'/>.</para>
-        /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")] // Shipped like this in Everett.
+        /// <summary>
+        /// Initializes a new instance of the <see cref='System.Windows.Forms.DataGridColumnStyle'/>
+        /// class with the specified <see cref='T:System.ComponentModel.PropertyDescriptor'/>.
+        /// </summary>
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Changing this would be a breaking change.")]
         public DataGridColumnStyle(PropertyDescriptor prop) : this()
         {
             this.PropertyDescriptor = prop;
@@ -96,13 +94,9 @@ namespace System.Windows.Forms
         }
 #endif // debug
 
-        // =------------------------------------------------------------------
-        // =        Properties
-        // =------------------------------------------------------------------
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Alignment"]/*' />
-        /// <devdoc>
-        ///       Gets or sets the alignment of text in a column.
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the alignment of text in a column.
+        /// </summary>
         [SRCategory(nameof(SR.CatDisplay)),
         Localizable(true),
         DefaultValue(HorizontalAlignment.Left)]
@@ -128,7 +122,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.AlignmentChanged"]/*' />
         public event EventHandler AlignmentChanged
         {
             add
@@ -143,21 +136,21 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        ///    <para>Gets or sets the background color of alternating rows for a ledger
-        ///       appearance.</para>
+        /// Gets or sets the background color of alternating rows for a ledger
+        /// appearance.
         /// </summary>
         /// <value>
-        /// <para>A <see cref='System.Drawing.Color'/> that represents the alternating background
+        /// A <see cref='System.Drawing.Color'/> that represents the alternating background
         ///    color. The default is the <see cref='System.Windows.Forms.DataGrid.AlternatingBackColor'/> of the
-        ///    control.</para>
+        ///    control.
         /// </value>
         /// <remarks>
-        ///    <para>Use this property to set a custom alternating color for each column displayed
-        ///       in the <see cref='System.Drawing.DataGrid'/> control.</para>
+        /// Use this property to set a custom alternating color for each column displayed
+        /// in the <see cref='System.Drawing.DataGrid'/> control.
         /// </remarks>
         /// <example>
-        /// <para>The following example sets the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/> property of a specific <see cref='System.Windows.Forms.DataGridColumnStyle'/>
-        /// to yellow.</para>
+        /// The following example sets the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/> property of a specific <see cref='System.Windows.Forms.DataGridColumnStyle'/>
+        /// to yellow.
         /// <code lang='VB'>Private Sub SetColumnAlternatingBackColor()
         ///    ' Create a color object.
         ///    Dim c As System.Drawing.Color
@@ -197,20 +190,20 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        /// <para>Indicates whether the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
-        /// property should be persisted.</para>
+        /// Indicates whether the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
+        /// property should be persisted.
         /// </summary>
         /// <returns>
-        /// <para><see langword='true '/>if the property
+        /// <see langword='true '/>if the property
         ///    value has been changed from its default; otherwise,
-        /// <see langword='false'/>.</para>
+        /// <see langword='false'/>.
         /// </returns>
         /// <remarks>
-        ///    <para>You typically use this method only if you are either
-        ///       creating a designer for the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control
-        ///       incorporating the <see cref='System.Windows.Forms.DataGrid'/>.</para>
-        /// <para>You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeAlternatingBackColor'/> method to
-        ///    determine whether the property value has changed from its default.</para>
+        /// You typically use this method only if you are either
+        /// creating a designer for the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control
+        /// incorporating the <see cref='System.Windows.Forms.DataGrid'/>.
+        /// You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeAlternatingBackColor'/> method to
+        ///    determine whether the property value has changed from its default.
         /// </remarks>
         /// <seealso cref='System.Drawing.DataGridColumnStyle.AlternatingBackColor'/>
         internal bool ShouldSerializeAlternatingBackColor() {
@@ -220,25 +213,17 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        ///    <para>
-        ///       Resets the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
-        ///       property to its default value.
-        ///    </para>
+        /// Resets the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
+        /// property to its default value.
         /// </summary>
         /// <remarks>
-        ///    <para>
-        ///       You typically use this method only if you are either creating a designer for
-        ///       the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
+        /// You typically use this method only if you are either creating a designer for
+        /// the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
         ///    <see cref='System.Windows.Forms.DataGrid'/>.
-        ///    </para>
-        ///    <para>
-        ///       You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeAlternatingBackColor'/>
-        ///       method to determine whether the property value has changed from its default.
-        ///    </para>
-        ///    <para>
-        ///       The OnPropertyChanged
-        ///       event occurs when the property value changes.
-        ///    </para>
+        /// You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeAlternatingBackColor'/>
+        /// method to determine whether the property value has changed from its default.
+        /// The OnPropertyChanged
+        /// event occurs when the property value changes.
         /// </remarks>
         public void ResetAlternatingBackColor() {
             if (alternatingBackBrush != null) {
@@ -251,15 +236,11 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        ///    <para>
-        ///       Gets either the <see cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/> or the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/> of
-        ///       a specified row.
-        ///    </para>
+        /// Gets either the <see cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/> or the <see cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/> of
+        /// a specified row.
         /// </summary>
         /// <returns>
-        ///    <para>
-        ///       A <see cref='System.Drawing.Color'/> that represents the background color.
-        ///    </para>
+        /// A <see cref='System.Drawing.Color'/> that represents the background color.
         /// </returns>
         /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
         /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
@@ -274,27 +255,19 @@ namespace System.Windows.Forms
         }
         */
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.UpdateUI"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a derived class, updates the value of a specified row with
-        ///       the given text.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When overridden in a derived class, updates the value of a specified row with
+        /// the given text.
+        /// </summary>
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected internal virtual void UpdateUI(CurrencyManager source, int rowNum, string displayText)
         {
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.HeaderAccessibleObject"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       [To Editor: I think this is going away.]
-        ///    </para>
-        ///    <para>
-        ///       Gets or sets the background color of the column.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the background color of the column.
+        /// </summary>
         [Browsable(false)]
         public AccessibleObject HeaderAccessibleObject
         {
@@ -308,11 +281,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.PropertyDescriptor"]/*' />
-        /// <devdoc>
-        /// <para>Gets or sets the <see cref='System.Data.DataColumn'/> that determines the
-        ///    attributes of data displayed by the <see cref='System.Windows.Forms.DataGridColumnStyle'/>.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the <see cref='System.Data.DataColumn'/> that determines the
+        /// attributes of data displayed by the <see cref='System.Windows.Forms.DataGridColumnStyle'/>.
+        /// </summary>
         [DefaultValue(null), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual PropertyDescriptor PropertyDescriptor
         {
@@ -335,7 +307,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.PropertyDescriptorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler PropertyDescriptorChanged
         {
@@ -349,10 +320,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.CreateHeaderAccessibleObject"]/*' />
-        /// <devdoc>
-        /// <para>Gets the <see cref='System.Windows.Forms.DataGrid'/> control that the <see cref='System.Windows.Forms.DataGridColumnStyle'/> belongs to.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the <see cref='System.Windows.Forms.DataGrid'/> control that the <see cref='System.Windows.Forms.DataGridColumnStyle'/> belongs to.
+        /// </summary>
         /*
         protected virtual DataGrid DataGrid {
             get {
@@ -369,23 +339,19 @@ namespace System.Windows.Forms
             return new DataGridColumnHeaderAccessibleObject(this);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.SetDataGrid"]/*' />
-        /// <devdoc>
-        /// <para>When overridden in a derived class, sets the <see cref='System.Windows.Forms.DataGrid'/> control that this column
-        ///    belongs to.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When overridden in a derived class, sets the <see cref='System.Windows.Forms.DataGrid'/>
+        /// control that this column belongs to.
+        /// </summary>
         protected virtual void SetDataGrid(DataGrid value)
         {
             SetDataGridInColumn(value);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.SetDataGridInColumn"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       When overridden in a derived class,
-        ///       sets the <see cref='System.Windows.Forms.DataGrid'/> for the column.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// When overridden in a derived class, sets the <see cref='System.Windows.Forms.DataGrid'/>
+        /// for the column.
+        /// </summary>
         protected virtual void SetDataGridInColumn(DataGrid value)
         {
             // we need to set up the PropertyDescriptor
@@ -414,12 +380,9 @@ namespace System.Windows.Forms
             SetDataGridInColumn(value);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridTableStyle"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the System.Windows.Forms.DataGridTableStyle for the column.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the System.Windows.Forms.DataGridTableStyle for the column.
+        /// </summary>
         [Browsable(false)]
         public virtual DataGridTableStyle DataGridTableStyle
         {
@@ -443,12 +406,9 @@ namespace System.Windows.Forms
             dataGridTableStyle = value;
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.FontHeight"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the height of the column's font.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the height of the column's font.
+        /// </summary>
         protected int FontHeight
         {
             get
@@ -468,17 +428,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates whether the Font property should be persisted.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the Font property should be persisted.
+        /// </summary>
         private bool ShouldSerializeFont()
         {
             return font != null;
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.FontChanged"]/*' />
         public event EventHandler FontChanged
         {
             add
@@ -492,34 +449,26 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        ///    <para>
-        ///       Gets or sets the foreground color of the column.
-        ///    </para>
+        /// Gets or sets the foreground color of the column.
         /// </summary>
         /// <value>
-        ///    <para>
-        ///       A <see cref='System.Drawing.Color'/> that represents the foreground color. The
-        ///       default is the foreground color of the <see cref='System.Windows.Forms.DataGrid'/> control.
-        ///    </para>
+        /// A <see cref='System.Drawing.Color'/> that represents the foreground color. The
+        /// default is the foreground color of the <see cref='System.Windows.Forms.DataGrid'/> control.
         /// </value>
         /// <remarks>
-        ///    <para>
-        ///       The OnPropertyChanged event occurs when the property value
-        ///       changes.
-        ///    </para>
+        /// The OnPropertyChanged event occurs when the property value
+        /// changes.
         /// </remarks>
         /// <example>
-        ///    <para>
-        ///       The following example sets the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property of
-        ///       a given <see cref='System.Windows.Forms.DataGridColumnStyle'/>.
-        ///    </para>
+        /// The following example sets the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property of
+        /// a given <see cref='System.Windows.Forms.DataGridColumnStyle'/>.
         ///    <code lang='VB'>
         /// Dim c As System.Drawing.Color
         /// Dim dgCol As DataGridColumnStyle
         /// c = System.Drawing.CadetBlue
         /// Set dgCol = DataGrid1.GridColumns(0)
         /// dgCol.ForeColor = c
-        ///       </code>
+        /// </code>
         /// </example>
         /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.AlternatingBackColor'/>
         /// <seealso cref='System.Windows.Forms.DataGridColumnStyle.BackColor'/>
@@ -562,23 +511,17 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        ///    <para>
-        ///       Indicates if the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property should be
-        ///       persisted.
-        ///    </para>
+        /// Indicates if the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property should be
+        /// persisted.
         /// </summary>
         /// <returns>
-        ///    <para>
         ///    <see langword='true '/>if the property value has been changed from its
-        ///       default; otherwise, <see langword='false'/> .
-        ///    </para>
+        /// default; otherwise, <see langword='false'/> .
         /// </returns>
         /// <remarks>
-        ///    <para>
-        ///       You typically use this method only if you are either creating a designer for
-        ///       the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
+        /// You typically use this method only if you are either creating a designer for
+        /// the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
         ///    <see cref='System.Windows.Forms.DataGrid'/>.
-        ///    </para>
         /// </remarks>
         internal bool ShouldSerializeForeColor() {
             return foreBrush != null;
@@ -587,24 +530,16 @@ namespace System.Windows.Forms
 
         /*
         /// <summary>
-        ///    <para>
-        ///       Resets the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property to its default value.
-        ///    </para>
+        /// Resets the <see cref='System.Windows.Forms.DataGridColumnStyle.ForeColor'/> property to its default value.
         /// </summary>
         /// <remarks>
-        ///    <para>
-        ///       You typically use this method if you are either creating a designer for
-        ///       the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
+        /// You typically use this method if you are either creating a designer for
+        /// the <see cref='System.Windows.Forms.DataGrid'/>, or creating your own control incorporating the
         ///    <see cref='System.Windows.Forms.DataGrid'/>.
-        ///    </para>
-        ///    <para>
-        ///       You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeForeColor'/> method to
-        ///       determine whether the property value has changed from its default.
-        ///    </para>
-        ///    <para>
-        ///       The OnPropertyChanged event occurs when the property
-        ///       value changes.
-        ///    </para>
+        /// You can use the <see cref='System.Windows.Forms.DataGridColumnStyle.ShouldSerializeForeColor'/> method to
+        /// determine whether the property value has changed from its default.
+        /// The OnPropertyChanged event occurs when the property
+        /// value changes.
         /// </remarks>
         public void ResetForeColor() {
             if (foreBrush != null) {
@@ -615,13 +550,9 @@ namespace System.Windows.Forms
         }
         */
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.HeaderText"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets
-        ///       the text of the column header.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the text of the column header.
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatDisplay))
@@ -648,7 +579,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.HeaderTextChanged"]/*' />
         public event EventHandler HeaderTextChanged
         {
             add
@@ -661,7 +591,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.MappingName"]/*' />
         [
         Editor("System.Windows.Forms.Design.DataGridColumnStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)),
         Localizable(true),
@@ -696,7 +625,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.MappingNameChanged"]/*' />
         public event EventHandler MappingNameChanged
         {
             add
@@ -709,34 +637,27 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <devdoc>
-        ///    <para>
-        ///       Indicates whether the System.Windows.Forms.DataGridColumnStyle.Header property should be
-        ///       persisted.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the System.Windows.Forms.DataGridColumnStyle.HeaderText property
+        /// should be persisted.
+        /// </summary>
         private bool ShouldSerializeHeaderText()
         {
             return (headerName.Length != 0);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.ResetHeader"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Resets the System.Windows.Forms.DataGridColumnStyle.Header to its default value
-        ///       (<see langword='null'/> ).
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Resets the System.Windows.Forms.DataGridColumnStyle.HeaderText to its default value.
+        /// </summary>
         public void ResetHeaderText()
         {
             HeaderText = "";
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.NullText"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets the text that is displayed when the column contains a null
-        ///       value.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the text that is displayed when the column contains a null
+        /// value.
+        /// </summary>
         [
         Localizable(true),
         SRCategory(nameof(SR.CatDisplay))
@@ -757,7 +678,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.NullTextChanged"]/*' />
         public event EventHandler NullTextChanged
         {
             add
@@ -770,10 +690,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.ReadOnly"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets a value indicating whether the data in the column cannot be edited.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the data in the column cannot be edited.
+        /// </summary>
         [DefaultValue(false)]
         public virtual bool ReadOnly
         {
@@ -791,7 +710,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.ReadOnlyChanged"]/*' />
         public event EventHandler ReadOnlyChanged
         {
             add
@@ -805,12 +723,9 @@ namespace System.Windows.Forms
         }
 
 #if false
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Visible"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the column is visible.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the column is visible.
+        /// </summary>
         [DefaultValue(true)]
         public virtual bool Visible {
             get {
@@ -826,12 +741,9 @@ namespace System.Windows.Forms
         }
 #endif
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Width"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the width of the column.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the width of the column.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatLayout)),
         Localizable(true),
@@ -862,7 +774,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.WidthChanged"]/*' />
         public event EventHandler WidthChanged
         {
             add
@@ -875,30 +786,19 @@ namespace System.Windows.Forms
             }
         }
 
-        // =------------------------------------------------------------------
-        // =        Methods
-        // =------------------------------------------------------------------
-
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.BeginUpdate"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Suspends the painting of the column until the <see cref='System.Windows.Forms.DataGridColumnStyle.EndUpdate'/>
-        ///       method is called.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Suspends the painting of the column until the <see cref='System.Windows.Forms.DataGridColumnStyle.EndUpdate'/>
+        /// method is called.
+        /// </summary>
         protected void BeginUpdate()
         {
             updating = true;
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.EndUpdate"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Resumes the painting of columns suspended by calling the
-        ///    <see cref='System.Windows.Forms.DataGridColumnStyle.BeginUpdate'/>
-        ///    method.
-        /// </para>
-        /// </devdoc>
+        /// <summary>
+        /// Resumes the painting of columns suspended by calling the
+        /// <see cref='System.Windows.Forms.DataGridColumnStyle.BeginUpdate'/> method.
+        /// </summary>
         protected void EndUpdate()
         {
             updating = false;
@@ -934,33 +834,27 @@ namespace System.Windows.Forms
             return (!SR.DataGridNullText.Equals(nullText));
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.GetPreferredSize"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a derived class,
-        ///       gets the optimum width and height of the specified value.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When overridden in a derived class, gets the optimum width and height of the
+        /// specified value.
+        /// </summary>
         protected internal abstract Size GetPreferredSize(Graphics g, object value);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.GetMinimumHeight"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the minimum height of a row.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the minimum height of a row.
+        /// </summary>
         protected internal abstract int GetMinimumHeight();
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.GetPreferredHeight"]/*' />
-        /// <devdoc>
-        ///    <para>When
-        ///       overridden in a derived class, gets the height to be used in for automatically resizing columns.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When overridden in a derived class, gets the height to be used in for
+        /// automatically resizing columns.
+        /// </summary>
         protected internal abstract int GetPreferredHeight(Graphics g, object value);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.GetColumnValueAtRow"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the value in the specified row from the specified
-        ///    System.Windows.Forms.ListManager.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// Gets the value in the specified row from the specified System.Windows.Forms.ListManager.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual object GetColumnValueAtRow(CurrencyManager source, int rowNum)
         {
             CheckValidDataSource(source);
@@ -972,11 +866,9 @@ namespace System.Windows.Forms
             return value;
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Invalidate"]/*' />
-        /// <devdoc>
-        ///    <para>Redraws the column and causes a paint
-        ///       message to be sent to the control.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Redraws the column and causes a paint message to be sent to the control.
+        /// </summary>
         protected virtual void Invalidate()
         {
             if (updating)
@@ -989,10 +881,9 @@ namespace System.Windows.Forms
                 table.InvalidateColumn(this);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.CheckValidDataSource"]/*' />
-        /// <devdoc>
-        /// <para>Checks if the specified DataView is valid.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Checks if the specified DataView is valid.
+        /// </summary>
         protected void CheckValidDataSource(CurrencyManager value)
         {
             if (value == null)
@@ -1030,31 +921,23 @@ namespace System.Windows.Forms
 #endif // false
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Abort"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       When overridden in a derived class, initiates a
-        ///       request to interrrupt an edit procedure.
-        ///    </para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// When overridden in a derived class, initiates a request to interrrupt an edit
+        /// procedure.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal abstract void Abort(int rowNum);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Commit"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a derived class, inititates a request to complete an
-        ///       editing procedure.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// When overridden in a derived class, inititates a request to complete an
+        /// editing procedure.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal abstract bool Commit(CurrencyManager dataSource, int rowNum);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Edit"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a deriving class, prepares a cell for editing.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
+        /// <summary>
+        /// When overridden in a deriving class, prepares a cell for editing.
+        /// </summary>
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         protected internal virtual void Edit(CurrencyManager source,
                                              int rowNum,
@@ -1064,15 +947,12 @@ namespace System.Windows.Forms
             Edit(source, rowNum, bounds, readOnly, null, true);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Edit1"]/*' />
-        /// <devdoc>
-        ///    <para>Prepares the
-        ///       cell for editing, passing the specified <see cref='System.Data.DataView'/>, row number, <see cref='System.Drawing.Rectangle'/>, argument
-        ///       indicating whether the column is read-only, and the
-        ///       text to display in the new control.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// Prepares the cell for editing, passing the specified <see cref='System.Data.DataView'/>,
+        /// row number, <see cref='System.Drawing.Rectangle'/>, argument indicating whether
+        /// the column is read-only, and the text to display in the new control.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal virtual void Edit(CurrencyManager source,
                                    int rowNum,
                                    Rectangle bounds,
@@ -1082,12 +962,10 @@ namespace System.Windows.Forms
             Edit(source, rowNum, bounds, readOnly, displayText, true);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Edit2"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a deriving class, prepares a cell for editing.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// When overridden in a deriving class, prepares a cell for editing.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change.")]
         protected internal abstract void Edit(CurrencyManager source,
                                     int rowNum,
                                     Rectangle bounds,
@@ -1095,34 +973,27 @@ namespace System.Windows.Forms
                                     string displayText,
                                     bool cellIsVisible);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.MouseDown"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>Indicates whether the a mouse down event occurred at the specified row, at
-        ///       the specified x and y coordinates.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Indicates whether the a mouse down event occurred at the specified row, at
+        /// the specified x and y coordinates.
+        /// </summary>
         internal virtual bool MouseDown(int rowNum, int x, int y)
         {
             return false;
         }
 
-        // this function mainly serves Alt0 functionality
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.EnterNullValue"]/*' />
-        /// <devdoc>
-        /// <para>When overriden in a derived class, enters a <see cref='T:System.DBNull.Value' qualify='true'/>
-        /// into the column.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When overriden in a derived class, enters a <see cref='T:System.DBNull.Value' qualify='true'/>
+        /// into the column.
+        /// </summary>
         protected internal virtual void EnterNullValue()
         {
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.KeyPress"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Provides a handler for determining which key was pressed,
-        ///       and whether to process it.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Provides a handler for determining which key was pressed, and whether to
+        /// process it.
+        /// </summary>
         internal virtual bool KeyPress(int rowNum, Keys keyData)
         {
             // if this is read only then do not do anything
@@ -1136,43 +1007,34 @@ namespace System.Windows.Forms
             return false;
         }
 
-        // will cause the edit control to become invisible when
-        // the user navigates to a focused relation child
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.ConcedeFocus"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a derived class, directs the column to concede focus with an appropriate action.</para>
-        /// </devdoc>
+        /// <summary>
+        /// When overridden in a derived class, directs the column to concede focus with
+        /// an appropriate action.
+        /// </summary>
         protected internal virtual void ConcedeFocus()
         {
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Paint"]/*' />
-        /// <devdoc>
-        /// <para>Paints the a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified <see cref='System.Drawing.Graphics'/>,
-        /// <see cref='System.Drawing.Rectangle'/>, System.Windows.Forms.CurrencyManager, and row number.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// Paints the a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified
+        /// <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
+        /// System.Windows.Forms.CurrencyManager, and row number.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Paint1"]/*' />
-        /// <devdoc>
-        ///    <para>When overridden in a derived class,
-        ///       paints a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>, see Rectangle, row number, and
-        ///       alignment.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// When overridden in a derived class, paints a <see cref='System.Windows.Forms.DataGridColumnStyle'/>
+        /// with the specified <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
+        /// see Rectangle, row number, and alignment.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal abstract void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum, bool alignToRight);
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.Paint2"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Paints a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>, see System.Data.DataView, row number, background color, foreground color, and alignment.
-        ///    </para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// Paints a <see cref='System.Windows.Forms.DataGridColumnStyle'/> with the specified <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>, see System.Data.DataView, row number, background color, foreground color, and alignment.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual void Paint(Graphics g, Rectangle bounds, CurrencyManager source, int rowNum,
                                     Brush backBrush, Brush foreBrush, bool alignToRight)
         {
@@ -1222,14 +1084,10 @@ namespace System.Windows.Forms
                 eh(this, e);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.SetColumnValueAtRow"]/*' />
-        /// <devdoc>
-        ///    <para>Sets
-        ///       the value in a specified row
-        ///       with the value from a specified see DataView.</para>
-        /// </devdoc>
-        // PM team has reviewed and decided on naming changes already
-        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+        /// <summary>
+        /// Sets the value in a specified row with the value from a specified see DataView.
+        /// </summary>
+        [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Justification = "Fixing this would be a breaking change")]
         protected internal virtual void SetColumnValueAtRow(CurrencyManager source, int rowNum, object value)
         {
             CheckValidDataSource(source);
@@ -1241,32 +1099,25 @@ namespace System.Windows.Forms
             this.PropertyDescriptor.SetValue(source[rowNum], value);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.ColumnStartedEditing"]/*' />
         internal protected virtual void ColumnStartedEditing(Control editingControl)
         {
             this.DataGridTableStyle.DataGrid.ColumnStartedEditing(editingControl);
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing"]/*' />
-        /// <internalonly/>
         void IDataGridColumnStyleEditingNotificationService.ColumnStartedEditing(Control editingControl)
         {
             this.ColumnStartedEditing(editingControl);
         }
 
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.ReleaseHostedControl"]/*' />
         protected internal virtual void ReleaseHostedControl()
         {
         }
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.CompModSwitches"]/*' />
-        /// <internalonly/>
         protected class CompModSwitches
         {
             private static TraceSwitch dgEditColumnEditing;
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.CompModSwitches.DGEditColumnEditing"]/*' />
             public static TraceSwitch DGEditColumnEditing
             {
                 get
@@ -1281,13 +1132,11 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject"]/*' />
         [System.Runtime.InteropServices.ComVisible(true)]
         protected class DataGridColumnHeaderAccessibleObject : AccessibleObject
         {
             DataGridColumnStyle owner = null;
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.DataGridColumnHeaderAccessibleObject"]/*' />
             public DataGridColumnHeaderAccessibleObject(DataGridColumnStyle owner) : this()
             {
                 Debug.Assert(owner != null, "DataGridColumnHeaderAccessibleObject must have a valid owner DataGridColumn");
@@ -1295,12 +1144,10 @@ namespace System.Windows.Forms
 
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.DataGridColumnHeaderAccessibleObject1"]/*' />
             public DataGridColumnHeaderAccessibleObject() : base()
             {
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Bounds"]/*' />
             public override Rectangle Bounds
             {
                 get
@@ -1332,7 +1179,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Name"]/*' />
             public override string Name
             {
                 get
@@ -1341,7 +1187,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Owner"]/*' />
             protected DataGridColumnStyle Owner
             {
                 get
@@ -1350,7 +1195,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Parent"]/*' />
             public override AccessibleObject Parent
             {
                 get
@@ -1367,7 +1211,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Role"]/*' />
             public override AccessibleRole Role
             {
                 get
@@ -1376,7 +1219,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            /// <include file='doc\DataGridColumn.uex' path='docs/doc[@for="DataGridColumnStyle.DataGridColumnHeaderAccessibleObject.Navigate"]/*' />
             public override AccessibleObject Navigate(AccessibleNavigation navdir)
             {
                 switch (navdir)
