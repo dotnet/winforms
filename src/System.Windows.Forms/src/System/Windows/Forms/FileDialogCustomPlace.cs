@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Text;
-
 namespace System.Windows.Forms
 {
     /// <remarks>
@@ -15,52 +13,42 @@ namespace System.Windows.Forms
     /// </remarks>
     public class FileDialogCustomPlace
     {
-        private string _path = "";
-        private Guid   _knownFolderGuid = Guid.Empty;
+        private string _path = string.Empty;
+        private Guid _knownFolderGuid = Guid.Empty;
 
         public FileDialogCustomPlace(string path)
         {
-            this.Path = path;
+            Path = path;
         }
 
         public FileDialogCustomPlace(Guid knownFolderGuid)
         {
-            this.KnownFolderGuid = knownFolderGuid; 
+            KnownFolderGuid = knownFolderGuid; 
         }
 
         public string Path
         {
-            get
-            {
-                if (string.IsNullOrEmpty(this._path))
-                {
-                    return string.Empty;
-                }
-                return this._path;
-            }
+            get => _path ?? string.Empty;
             set
             {
-                this._path = value ?? "";
-                this._knownFolderGuid = Guid.Empty;
+                _path = value ?? string.Empty;
+                _knownFolderGuid = Guid.Empty;
             }
         }
 
         public Guid KnownFolderGuid
         {
-            get
-            {
-                return this._knownFolderGuid;
-            }
+            get => _knownFolderGuid;
             set
             {
-                this._path = string.Empty;
-                this._knownFolderGuid = value;
+                _path = string.Empty;
+                _knownFolderGuid = value;
             }
         }
 
         public override string ToString()
         {
-            return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} Path: {1} KnownFolderGuid: {2}", base.ToString(), this.Path, this.KnownFolderGuid);
+            return $"{base.ToString()} Path: {Path} KnownFolderGuid: {KnownFolderGuid}";
         }
 
         /// <remarks>
@@ -70,9 +58,6 @@ namespace System.Windows.Forms
         /// </remarks>
         internal FileDialogNative.IShellItem GetNativePath()
         {
-            // This can throw in a multitude of ways if the path or Guid doesn't correspond
-            // to an actual filesystem directory.
-            // The Caller is responsible for handling these situations.
             string filePathString;
             if (!string.IsNullOrEmpty(_path))
             {

@@ -2,36 +2,27 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Threading;
+
 namespace System.Windows.Forms
 {
-    using System;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Threading;
-    using System.Diagnostics.CodeAnalysis;
-
     public partial class FileDialog
     {
-        private bool _autoUpgradeEnabled = true;
-
-        internal virtual bool SettingsSupportVistaDialog
+        private protected virtual bool SettingsSupportVistaDialog
         {
-            get
-            {
-                return !this.ShowHelp &&
-                        ((Application.VisualStyleState & VisualStyles.VisualStyleState.ClientAreaEnabled) == VisualStyles.VisualStyleState.ClientAreaEnabled );
-            }
+            get => !ShowHelp && ((Application.VisualStyleState & VisualStyles.VisualStyleState.ClientAreaEnabled) == VisualStyles.VisualStyleState.ClientAreaEnabled);
         }
-
 
         internal bool UseVistaDialogInternal
         {
             get
             {
-                if (_autoUpgradeEnabled && SettingsSupportVistaDialog)
+                if (AutoUpgradeEnabled && SettingsSupportVistaDialog)
                 {
                     return SystemInformation.BootMode == BootMode.Normal;
                 }
@@ -42,40 +33,35 @@ namespace System.Windows.Forms
 
         private protected abstract FileDialogNative.IFileDialog CreateVistaDialog();
 
-        [
-            SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")
-        ]
+        [SuppressMessage("Microsoft.Reliability", "CA2004:RemoveCallsToGCKeepAlive")]
         private bool RunDialogVista(IntPtr hWndOwner)
         {
             FileDialogNative.IFileDialog dialog = CreateVistaDialog();
             OnBeforeVistaDialog(dialog);
-            VistaDialogEvents events = new VistaDialogEvents(this);
-            uint eventCookie;
-            dialog.Advise(events, out eventCookie);
+            var events = new VistaDialogEvents(this);
+            dialog.Advise(events, out uint eventCookie);
             try
             {
-                int result = dialog.Show(hWndOwner);
-                return 0 == result;
+                return dialog.Show(hWndOwner) == 0;
             }
             finally
             {
                 dialog.Unadvise(eventCookie);
-                //Make sure that the event interface doesn't get collected
+                // Make sure that the event interface doesn't get collected
                 GC.KeepAlive(events);
             }
         }
 
-        internal virtual void OnBeforeVistaDialog(FileDialogNative.IFileDialog dialog)
+        private void OnBeforeVistaDialog(FileDialogNative.IFileDialog dialog)
         {
-            dialog.SetDefaultExtension(this.DefaultExt);
+            dialog.SetDefaultExtension(DefaultExt);
+            dialog.SetFileName(FileName);
 
-            dialog.SetFileName(this.FileName);
-
-            if (!string.IsNullOrEmpty(this.InitialDirectory))
+            if (!string.IsNullOrEmpty(InitialDirectory))
             {
                 try
                 {
-                    FileDialogNative.IShellItem initialDirectory = GetShellItemForPath(this.InitialDirectory);
+                    FileDialogNative.IShellItem initialDirectory = GetShellItemForPath(InitialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);
@@ -85,13 +71,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            dialog.SetTitle(this.Title);
-
+            dialog.SetTitle(Title);
             dialog.SetOptions(GetOptions());
-
             SetFileTypes(dialog);
 
-            this._customPlaces.Apply(dialog);
+            _customPlaces.Apply(dialog);
         }
 
         private FileDialogNative.FOS GetOptions()
@@ -107,17 +91,17 @@ namespace System.Windows.Forms
               | FileDialogNative.FOS.FOS_NODEREFERENCELINKS
             ;
             const int UnexpectedOptions =
-                NativeMethods.OFN_USESHELLITEM //This is totally bogus (only used in FileDialog by accident to ensure that places are shown
-              | NativeMethods.OFN_SHOWHELP //If ShowHelp is true, we don't use the Vista Dialog
-              | NativeMethods.OFN_ENABLEHOOK //These shouldn't be set in options (only set in the flags for the legacy dialog)
-              | NativeMethods.OFN_ENABLESIZING //These shouldn't be set in options (only set in the flags for the legacy dialog)
-              | NativeMethods.OFN_EXPLORER //These shouldn't be set in options (only set in the flags for the legacy dialog)
+                NativeMethods.OFN_USESHELLITEM // This is totally bogus (only used in FileDialog by accident to ensure that places are shown
+              | NativeMethods.OFN_SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
+              | NativeMethods.OFN_ENABLEHOOK // These shouldn't be set in options (only set in the flags for the legacy dialog)
+              | NativeMethods.OFN_ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
+              | NativeMethods.OFN_EXPLORER // These shouldn't be set in options (only set in the flags for the legacy dialog)
             ;
-            System.Diagnostics.Debug.Assert(0==(UnexpectedOptions & options), "Unexpected FileDialog options");
+            Debug.Assert((UnexpectedOptions & options) == 0, "Unexpected FileDialog options");
 
             FileDialogNative.FOS ret = (FileDialogNative.FOS)options & BlittableOptions;
 
-            //Force no mini mode for the SaveFileDialog
+            // Force no mini mode for the SaveFileDialog
             ret |= FileDialogNative.FOS.FOS_DEFAULTNOMINIMODE;
 
             // Make sure that the Open dialog allows the user to specify
@@ -138,7 +122,7 @@ namespace System.Windows.Forms
         private bool HandleVistaFileOk(FileDialogNative.IFileDialog dialog)
         {
             int saveOptions = options;
-            int saveFilterIndex = filterIndex;
+            int saveFilterIndex = FilterIndex;
             string[] saveFileNames = fileNames;
             bool ok = false;
 
@@ -147,7 +131,7 @@ namespace System.Windows.Forms
                 Thread.MemoryBarrier();
                 uint filterIndexTemp;
                 dialog.GetFileTypeIndex(out filterIndexTemp);
-                filterIndex = unchecked((int)filterIndexTemp);
+                FilterIndex = unchecked((int)filterIndexTemp);
                 fileNames = ProcessVistaFiles(dialog);
                 if (ProcessFileNames())
                 {
@@ -179,16 +163,15 @@ namespace System.Windows.Forms
                     fileNames = saveFileNames;
 
                     options = saveOptions;
-                    filterIndex = saveFilterIndex;
+                    FilterIndex = saveFilterIndex;
                 }
                 else
                 {
-                    if (0 != (options & NativeMethods.OFN_HIDEREADONLY))
+                    if ((options & NativeMethods.OFN_HIDEREADONLY) != 0)
                     {
-                        //When the dialog is dismissed OK, the Readonly bit can't
+                        // When the dialog is dismissed OK, the Readonly bit can't
                         // be left on if ShowReadOnly was false
                         // Downlevel this happens automatically, on Vista mode, we need to watch out for it.
-
                         options &= ~ NativeMethods.OFN_READONLY;
                     }
                 }
@@ -198,16 +181,16 @@ namespace System.Windows.Forms
 
         private class VistaDialogEvents : FileDialogNative.IFileDialogEvents
         {
-            private FileDialog _dialog;
+            private readonly FileDialog _dialog;
 
             public VistaDialogEvents(FileDialog dialog)
             {
-                this._dialog = dialog;
+                _dialog = dialog;
             }
 
             public int OnFileOk(FileDialogNative.IFileDialog pfd)
             {
-                return this._dialog.HandleVistaFileOk(pfd) ? NativeMethods.S_OK : NativeMethods.S_FALSE;
+                return _dialog.HandleVistaFileOk(pfd) ? NativeMethods.S_OK : NativeMethods.S_FALSE;
             }
 
             public int OnFolderChanging(FileDialogNative.IFileDialog pfd, FileDialogNative.IShellItem psiFolder)
@@ -244,35 +227,29 @@ namespace System.Windows.Forms
             dialog.SetFileTypes((uint)filterItems.Length, filterItems);
             if (filterItems.Length > 0)
             {
-                dialog.SetFileTypeIndex(unchecked((uint)filterIndex));
+                dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
             }
         }
 
-        private FileDialogNative.COMDLG_FILTERSPEC[] FilterItems
-        {
-            get
-            {
-                return GetFilterItems(this.filter);
-            }
-        }
+        private FileDialogNative.COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(filter);
 
         private static FileDialogNative.COMDLG_FILTERSPEC[] GetFilterItems(string filter)
         {
-            //Expected input types
-            //"Text files (*.txt)|*.txt|All files (*.*)|*.*"
-            //"Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
-            List<FileDialogNative.COMDLG_FILTERSPEC> extensions = new List<FileDialogNative.COMDLG_FILTERSPEC>();
+            // Expected input types
+            // "Text files (*.txt)|*.txt|All files (*.*)|*.*"
+            // "Image Files(*.BMP;*.JPG;*.GIF)|*.BMP;*.JPG;*.GIF|All files (*.*)|*.*"
+            var extensions = new List<FileDialogNative.COMDLG_FILTERSPEC>();
             if (!string.IsNullOrEmpty(filter))
             {
                 string[] tokens = filter.Split('|');
                 if (0 == tokens.Length % 2)
                 {
-                    //All even numbered tokens should be labels
-                    //Odd numbered tokens are the associated extensions
+                    // All even numbered tokens should be labels
+                    // Odd numbered tokens are the associated extensions
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
                         FileDialogNative.COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = tokens[i];//This may be a semicolon delimeted list of extensions (that's ok)
+                        extension.pszSpec = tokens[i];// This may be a semicolon delimeted list of extensions (that's ok)
                         extension.pszName = tokens[i - 1];
                         extensions.Add(extension);
                     }
@@ -286,18 +263,19 @@ namespace System.Windows.Forms
             FileDialogNative.IShellItem ret = null;
             IntPtr pidl = IntPtr.Zero;
             uint zero = 0;
-            if (0 <= UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero))
+            if (UnsafeNativeMethods.Shell32.SHILCreateFromPath(path, out pidl, ref zero) >= 0)
             {
-                if (0 <= UnsafeNativeMethods.Shell32.SHCreateShellItem(
-                    IntPtr.Zero, //No parent specified
+                if (UnsafeNativeMethods.Shell32.SHCreateShellItem(
+                    IntPtr.Zero, // No parent specified
                     IntPtr.Zero,
                     pidl,
-                    out ret))
+                    out ret) >= 0)
                 {
                     return ret;
                 }
             }
-            throw new System.IO.FileNotFoundException();
+
+            throw new FileNotFoundException();
         }
 
         private protected static string GetFilePathFromShellItem(FileDialogNative.IShellItem item)
@@ -307,36 +285,16 @@ namespace System.Windows.Forms
             return filename;
         }
 
-        private FileDialogCustomPlacesCollection _customPlaces = new FileDialogCustomPlacesCollection();
+        private readonly FileDialogCustomPlacesCollection _customPlaces = new FileDialogCustomPlacesCollection();
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
-        ]
-        public FileDialogCustomPlacesCollection CustomPlaces
-        {
-            get
-            {
-                return this._customPlaces;
-            }
-        }
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public FileDialogCustomPlacesCollection CustomPlaces => _customPlaces;
 
         /// <summary>
-        /// Gets or Sets whether the dialog will be automatically upgraded to enable new features.
+        /// Gets or sets whether the dialog will be automatically upgraded to enable new features.
         /// </summary>
-        [
-            DefaultValue(true)
-        ]
-        public bool AutoUpgradeEnabled
-        {
-            get
-            {
-                return this._autoUpgradeEnabled;
-            }
-            set
-            {
-                this._autoUpgradeEnabled = value;
-            }
-        }
+        [DefaultValue(true)]
+        public bool AutoUpgradeEnabled { get; set; } = true;
     }
 }

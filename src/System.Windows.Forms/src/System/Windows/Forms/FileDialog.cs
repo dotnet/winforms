@@ -7,10 +7,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Text;
-using System.Threading;
 using System.Runtime.InteropServices;
-using CharBuffer = System.Windows.Forms.UnsafeNativeMethods.CharBuffer;
+using System.Threading;
+using System.Text;
 
 namespace System.Windows.Forms
 {
@@ -25,7 +24,7 @@ namespace System.Windows.Forms
 
         protected static readonly object EventFileOk = new object();
 
-        internal const int OPTION_ADDEXTENSION = unchecked(unchecked((int)0x80000000));
+        private const int OPTION_ADDEXTENSION = unchecked(unchecked((int)0x80000000));
 
         private protected int options;
 
@@ -34,11 +33,9 @@ namespace System.Windows.Forms
         private string defaultExt;
         private string[] fileNames;
         private string filter;
-        private int filterIndex;
-        private bool supportMultiDottedExtensions;
         private bool ignoreSecondFileOkNotification;
         private int okNotificationCount;
-        private CharBuffer charBuffer;
+        private UnsafeNativeMethods.CharBuffer charBuffer;
         private IntPtr dialogHWnd;
 
         /// <summary>
@@ -55,92 +52,64 @@ namespace System.Windows.Forms
         /// Gets or sets a value indicating whether the dialog box automatically adds an
         /// extension to a file name if the user omits the extension.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FDaddExtensionDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FDaddExtensionDescr))]
         public bool AddExtension
         {
-            get
-            {
-                return GetOption(OPTION_ADDEXTENSION);
-            }
-
-            set
-            {
-                SetOption(OPTION_ADDEXTENSION, value);
-            }
+            get => GetOption(OPTION_ADDEXTENSION);
+            set => SetOption(OPTION_ADDEXTENSION, value);
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether the dialog box displays a warning
         /// if the user specifies a file name that does not exist.</para>
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FDcheckFileExistsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FDcheckFileExistsDescr))]
         public virtual bool CheckFileExists
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_FILEMUSTEXIST);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.OFN_FILEMUSTEXIST, value);
-            }
+            get => GetOption(NativeMethods.OFN_FILEMUSTEXIST);
+            set => SetOption(NativeMethods.OFN_FILEMUSTEXIST, value);
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether the dialog box displays a warning if
         /// the user specifies a path that does not exist.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FDcheckPathExistsDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FDcheckPathExistsDescr))]
         public bool CheckPathExists
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_PATHMUSTEXIST);
-            }
-
-            set
-            {
-                SetOption(NativeMethods.OFN_PATHMUSTEXIST, value);
-            }
+            get => GetOption(NativeMethods.OFN_PATHMUSTEXIST);
+            set => SetOption(NativeMethods.OFN_PATHMUSTEXIST, value);
         }
 
         /// <summary>
         /// Gets or sets the default file extension.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(""),
-        SRDescription(nameof(SR.FDdefaultExtDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.FDdefaultExtDescr))]
         public string DefaultExt
         {
-            get
-            {
-                return defaultExt == null ? "" : defaultExt;
-            }
-
+            get => defaultExt ?? string.Empty;
             set
             {
                 if (value != null)
                 {
                     if (value.StartsWith("."))
+                    {
                         value = value.Substring(1);
+                    }
                     else if (value.Length == 0)
+                    {
                         value = null;
+                    }
                 }
+
                 defaultExt = value;
             }
         }
@@ -150,21 +119,13 @@ namespace System.Windows.Forms
         /// of the file referenced by the shortcut or whether it returns the location
         /// of the shortcut (.lnk).
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FDdereferenceLinksDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FDdereferenceLinksDescr))]
         public bool DereferenceLinks
         {
-            get
-            {
-                return !GetOption(NativeMethods.OFN_NODEREFERENCELINKS);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
-            }
+            get => !GetOption(NativeMethods.OFN_NODEREFERENCELINKS);
+            set => SetOption(NativeMethods.OFN_NODEREFERENCELINKS, !value);
         }
 
         private protected string DialogCaption
@@ -181,110 +142,62 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets a string containing the file name selected in the file dialog box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(""),
-        SRDescription(nameof(SR.FDfileNameDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.FDfileNameDescr))]
         public string FileName
         {
             get
             {
-                if (fileNames == null)
+                if (fileNames == null || fileNames[0].Length == 0)
                 {
-                    return "";
+                    return string.Empty;
                 }
-                else
-                {
-                    if (fileNames[0].Length > 0)
-                    {
-                        return fileNames[0];
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
+                
+                return fileNames[0];
             }
-            set
-            {
-                if (value == null)
-                {
-                    fileNames = null;
-                }
-                else
-                {
-                    fileNames = new string[] { value };
-                }
-            }
+            set => fileNames = value != null ? new string[] { value } : null;
         }
 
         /// <summary>
         /// Gets the file names of all selected files in the dialog box.
         /// </summary>
-        [
-        Browsable(false),
-        DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-        SRDescription(nameof(SR.FDFileNamesDescr))
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SRDescription(nameof(SR.FDFileNamesDescr))]
         public string[] FileNames
         {
-            get
-            {
-                return FileNamesInternal;
-            }
+            get => fileNames != null ? (string[])fileNames.Clone() : Array.Empty<string>();
         }
-
-        internal string[] FileNamesInternal
-        {
-            get
-            {
-
-                if (fileNames == null)
-                {
-                    return new string[0];
-                }
-                else
-                {
-                    return (string[])fileNames.Clone();
-                }
-            }
-        }
-
 
         /// <summary>
         /// Gets or sets the current file name filter string, which determines the choices
         /// that appear in the "Save as file type" or "Files of type" box in the dialog box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(""),
-        Localizable(true),
-        SRDescription(nameof(SR.FDfilterDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.FDfilterDescr))]
         public string Filter
         {
-            get
-            {
-                return filter == null ? "" : filter;
-            }
-
+            get => filter ?? string.Empty;
             set
             {
                 if (value != filter)
                 {
-                    if (value != null && value.Length > 0)
+                    if (!string.IsNullOrEmpty(value))
                     {
                         string[] formats = value.Split('|');
                         if (formats == null || formats.Length % 2 != 0)
                         {
-                            throw new ArgumentException(SR.FileDialogInvalidFilter);
+                            throw new ArgumentException(SR.FileDialogInvalidFilter, nameof(value));
                         }
                     }
                     else
                     {
                         value = null;
                     }
+
                     filter = value;
                 }
             }
@@ -302,26 +215,28 @@ namespace System.Windows.Forms
                 string filter = this.filter;
                 ArrayList extensions = new ArrayList();
 
-                // First extension is the default one.  It's a little strange if DefaultExt
-                // is not in the filters list, but I guess it's legal.
+                // First extension is the default one. It's not expected that DefaultExt
+                // is not in the filters list, but this is legal.
                 if (defaultExt != null)
+                {
                     extensions.Add(defaultExt);
+                }
 
                 if (filter != null)
                 {
                     string[] tokens = filter.Split('|');
 
-                    if ((filterIndex * 2) - 1 >= tokens.Length)
+                    if ((FilterIndex * 2) - 1 >= tokens.Length)
                     {
                         throw new InvalidOperationException(SR.FileDialogInvalidFilterIndex);
                     }
 
-                    if (filterIndex > 0)
+                    if (FilterIndex > 0)
                     {
-                        string[] exts = tokens[(filterIndex * 2) - 1].Split(';');
+                        string[] exts = tokens[(FilterIndex * 2) - 1].Split(';');
                         foreach (string ext in exts)
                         {
-                            int i = this.supportMultiDottedExtensions ? ext.IndexOf('.') : ext.LastIndexOf('.');
+                            int i = SupportMultiDottedExtensions ? ext.IndexOf('.') : ext.LastIndexOf('.');
                             if (i >= 0)
                             {
                                 extensions.Add(ext.Substring(i + 1, ext.Length - (i + 1)));
@@ -329,6 +244,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 string[] temp = new string[extensions.Count];
                 extensions.CopyTo(temp, 0);
                 return temp;
@@ -338,51 +254,27 @@ namespace System.Windows.Forms
         /// <summary>
         /// Gets or sets the index of the filter currently selected in the file dialog box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(1),
-        SRDescription(nameof(SR.FDfilterIndexDescr))
-        ]
-        public int FilterIndex
-        {
-            get
-            {
-                return filterIndex;
-            }
-
-            set
-            {
-                filterIndex = value;
-            }
-        }
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(1)]
+        [SRDescription(nameof(SR.FDfilterIndexDescr))]
+        public int FilterIndex { get; set; }
 
         /// <summary>
         /// Gets or sets the initial directory displayed by the file dialog box.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatData)),
-        DefaultValue(""),
-        SRDescription(nameof(SR.FDinitialDirDescr))
-        ]
+        [SRCategory(nameof(SR.CatData))]
+        [DefaultValue("")]
+        [SRDescription(nameof(SR.FDinitialDirDescr))]
         public string InitialDirectory
         {
-            get
-            {
-                return initialDir == null ? "" : initialDir;
-            }
-            set
-            {
-                initialDir = value;
-            }
+            get => initialDir ?? string.Empty;
+            set => initialDir = value;
         }
 
         /// <summary>
         /// Gets the Win32 instance handle for the application.
         /// </summary>
-        protected virtual IntPtr Instance
-        {
-            get { return UnsafeNativeMethods.GetModuleHandle(null); }
-        }
+        protected virtual IntPtr Instance => UnsafeNativeMethods.GetModuleHandle(null);
 
         /// <summary>
         /// Gets the Win32 common Open File Dialog OFN_* option flags.
@@ -402,105 +294,60 @@ namespace System.Windows.Forms
         /// Gets or sets a value indicating whether the dialog box restores the current
         /// directory before closing.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FDrestoreDirectoryDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FDrestoreDirectoryDescr))]
         public bool RestoreDirectory
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_NOCHANGEDIR);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_NOCHANGEDIR, value);
-            }
+            get => GetOption(NativeMethods.OFN_NOCHANGEDIR);
+            set => SetOption(NativeMethods.OFN_NOCHANGEDIR, value);
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether whether the Help button is displayed
         /// in the file dialog.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FDshowHelpDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FDshowHelpDescr))]
         public bool ShowHelp
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_SHOWHELP);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_SHOWHELP, value);
-            }
+            get => GetOption(NativeMethods.OFN_SHOWHELP);
+            set => SetOption(NativeMethods.OFN_SHOWHELP, value);
         }
 
         /// <summary>
         /// Gets or sets whether def or abc.def is the extension of the file filename.abc.def
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(false),
-        SRDescription(nameof(SR.FDsupportMultiDottedExtensionsDescr))
-        ]
-        public bool SupportMultiDottedExtensions
-        {
-            get
-            {
-                return this.supportMultiDottedExtensions;
-            }
-            set
-            {
-                this.supportMultiDottedExtensions = value;
-            }
-        }
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FDsupportMultiDottedExtensionsDescr))]
+        public bool SupportMultiDottedExtensions { get; set; }
 
         /// <summary>
         /// Gets or sets the file dialog box title.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatAppearance)),
-        DefaultValue(""),
-        Localizable(true),
-        SRDescription(nameof(SR.FDtitleDescr))
-        ]
+        [SRCategory(nameof(SR.CatAppearance))]
+        [DefaultValue("")]
+        [Localizable(true)]
+        [SRDescription(nameof(SR.FDtitleDescr))]
         public string Title
         {
-            get
-            {
-                return title == null ? "" : title;
-            }
-            set
-            {
-                title = value;
-            }
+            get => title ?? string.Empty;
+            set => title = value;
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether the dialog box accepts only valid
         /// Win32 file names.
         /// </summary>
-        [
-        SRCategory(nameof(SR.CatBehavior)),
-        DefaultValue(true),
-        SRDescription(nameof(SR.FDvalidateNamesDescr))
-        ]
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FDvalidateNamesDescr))]
         public bool ValidateNames
         {
-            get
-            {
-                return !GetOption(NativeMethods.OFN_NOVALIDATE);
-            }
-            set
-            {
-                SetOption(NativeMethods.OFN_NOVALIDATE, !value);
-            }
+            get => !GetOption(NativeMethods.OFN_NOVALIDATE);
+            set => SetOption(NativeMethods.OFN_NOVALIDATE, !value);
         }
 
         /// <summary>
@@ -513,14 +360,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.FDfileOkDescr))]
         public event CancelEventHandler FileOk
         {
-            add
-            {
-                Events.AddHandler(EventFileOk, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventFileOk, value);
-            }
+            add => Events.AddHandler(EventFileOk, value);
+            remove => Events.RemoveHandler(EventFileOk, value);
         }
 
         /// <summary>
@@ -530,14 +371,14 @@ namespace System.Windows.Forms
         {
             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN);
             int saveOptions = options;
-            int saveFilterIndex = filterIndex;
+            int saveFilterIndex = FilterIndex;
             string[] saveFileNames = fileNames;
             bool ok = false;
             try
             {
                 options = options & ~NativeMethods.OFN_READONLY |
                           ofn.Flags & NativeMethods.OFN_READONLY;
-                filterIndex = ofn.nFilterIndex;
+                FilterIndex = ofn.nFilterIndex;
                 charBuffer.PutCoTaskMem(ofn.lpstrFile);
 
                 Thread.MemoryBarrier();
@@ -581,36 +422,38 @@ namespace System.Windows.Forms
                     fileNames = saveFileNames;
 
                     options = saveOptions;
-                    filterIndex = saveFilterIndex;
+                    FilterIndex = saveFilterIndex;
                 }
             }
+
             return ok;
         }
 
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
         private protected static bool FileExists(string fileName)
         {
-            bool fileExists = false;
             try
             {
-                fileExists = File.Exists(fileName);
+                return File.Exists(fileName);
             }
-            catch (System.IO.PathTooLongException)
+            catch (PathTooLongException)
             {
+                return false;
             }
-            return fileExists;
         }
 
         /// <summary>
         /// Extracts the filename(s) returned by the file dialog.
         /// </summary>
-        private string[] GetMultiselectFiles(CharBuffer charBuffer)
+        private string[] GetMultiselectFiles(UnsafeNativeMethods.CharBuffer charBuffer)
         {
             string directory = charBuffer.GetString();
             string fileName = charBuffer.GetString();
-            if (fileName.Length == 0) return new string[] {
-                    directory
-                };
+            if (fileName.Length == 0)
+            {
+                return new string[] { directory };
+            }
+
             if (directory[directory.Length - 1] != '\\')
             {
                 directory = directory + "\\";
@@ -623,9 +466,11 @@ namespace System.Windows.Forms
                 {
                     fileName = directory + fileName;
                 }
+
                 names.Add(fileName);
                 fileName = charBuffer.GetString();
             } while (fileName.Length > 0);
+
             string[] temp = new string[names.Count];
             names.CopyTo(temp, 0);
             return temp;
@@ -665,7 +510,7 @@ namespace System.Windows.Forms
                                 {
                                     int newBufferSize = sizeNeeded + (FILEBUFSIZE / 4);
                                     // Allocate new buffer
-                                    CharBuffer charBufferTmp = CharBuffer.CreateBuffer(newBufferSize);
+                                    UnsafeNativeMethods.CharBuffer charBufferTmp = UnsafeNativeMethods.CharBuffer.CreateBuffer(newBufferSize);
                                     IntPtr newBuffer = charBufferTmp.AllocCoTaskMem();
                                     // Free old buffer
                                     Marshal.FreeCoTaskMem(ofn.lpstrFile);
@@ -681,21 +526,22 @@ namespace System.Windows.Forms
                                     // intentionaly not throwing here.
                                 }
                             }
-                            this.ignoreSecondFileOkNotification = false;
+                            ignoreSecondFileOkNotification = false;
                             break;
                         case -604: /* CDN_SHAREVIOLATION */
                             // When the selected file is locked for writing,
                             // we get this notification followed by *two* CDN_FILEOK notifications.
-                            this.ignoreSecondFileOkNotification = true;  // We want to ignore the second CDN_FILEOK
-                            this.okNotificationCount = 0;                // to avoid a second prompt by PromptFileOverwrite.
+                            ignoreSecondFileOkNotification = true;  // We want to ignore the second CDN_FILEOK
+                            okNotificationCount = 0;                // to avoid a second prompt by PromptFileOverwrite.
                             break;
                         case -606: /* CDN_FILEOK */
-                            if (this.ignoreSecondFileOkNotification)
+                            if (ignoreSecondFileOkNotification)
                             {
                                 // We got a CDN_SHAREVIOLATION notification and want to ignore the second CDN_FILEOK notification
-                                if (this.okNotificationCount == 0)
+                                if (okNotificationCount == 0)
                                 {
-                                    this.okNotificationCount = 1;   // This one is the first and is all right.
+                                    // This one is the first and is all right.
+                                    okNotificationCount = 1;
                                 }
                                 else
                                 {
@@ -719,9 +565,11 @@ namespace System.Windows.Forms
                     {
                         UnsafeNativeMethods.EndDialog(new HandleRef(this, dialogHWnd), IntPtr.Zero);
                     }
+
                     throw;
                 }
             }
+
             return IntPtr.Zero;
         }
 
@@ -731,7 +579,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string MakeFilterString(string s, bool dereferenceLinks)
         {
-            if (s == null || s.Length == 0)
+            if (string.IsNullOrEmpty(s))
             {
                 if (dereferenceLinks)
                 {
@@ -742,14 +590,19 @@ namespace System.Windows.Forms
                     return null;
                 }
             }
+
             int length = s.Length;
             char[] filter = new char[length + 2];
             s.CopyTo(0, filter, 0, length);
             for (int i = 0; i < length; i++)
             {
-                if (filter[i] == '|') filter[i] = (char)0;
+                if (filter[i] == '|')
+                {
+                    filter[i] = '\0';
+                }
             }
-            filter[length + 1] = (char)0;
+
+            filter[length + 1] = '\0';
             return new string(filter);
         }
 
@@ -759,7 +612,7 @@ namespace System.Windows.Forms
         protected void OnFileOk(CancelEventArgs e)
         {
             CancelEventHandler handler = (CancelEventHandler)Events[EventFileOk];
-            if (handler != null) handler(this, e);
+            handler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -802,12 +655,16 @@ namespace System.Windows.Forms
                                 break;
                             }
                         }
+
                         fileNames[i] = fileName;
                     }
                     if (!PromptUserIfAppropriate(fileName))
+                    {
                         return false;
+                    }
                 }
             }
+
             return true;
         }
 
@@ -819,18 +676,16 @@ namespace System.Windows.Forms
         private protected bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
-            bool ret;
             IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
             try
             {
-                ret = RTLAwareMessageBox.Show(null, message, caption, buttons, icon,
+                return RTLAwareMessageBox.Show(null, message, caption, buttons, icon,
                         MessageBoxDefaultButton.Button1, 0) == DialogResult.Yes;
             }
             finally
             {
                 UnsafeNativeMethods.SetFocus(new HandleRef(null, focusHandle));
             }
-            return ret;
         }
 
         /// <summary>
@@ -858,6 +713,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -873,9 +729,9 @@ namespace System.Windows.Forms
             defaultExt = null;
             fileNames = null;
             filter = null;
-            filterIndex = 1;
-            supportMultiDottedExtensions = false;
-            this._customPlaces.Clear();
+            FilterIndex = 1;
+            SupportMultiDottedExtensions = false;
+            _customPlaces.Clear();
         }
 
         /// <summary>
@@ -883,12 +739,12 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner)
         {
-            if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA)
+            if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != ApartmentState.STA)
             {
-                throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
+                throw new ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
             }
 
-            if (this.UseVistaDialogInternal)
+            if (UseVistaDialogInternal)
             {
                 return RunDialogVista(hWndOwner);
             }
@@ -900,11 +756,11 @@ namespace System.Windows.Forms
 
         private bool RunDialogOld(IntPtr hWndOwner)
         {
-            NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
-            NativeMethods.OPENFILENAME_I ofn = new NativeMethods.OPENFILENAME_I();
+            var hookProcPtr = new NativeMethods.WndProc(this.HookProc);
+            var ofn = new NativeMethods.OPENFILENAME_I();
             try
             {
-                charBuffer = CharBuffer.CreateBuffer(FILEBUFSIZE);
+                charBuffer = UnsafeNativeMethods.CharBuffer.CreateBuffer(FILEBUFSIZE);
                 if (fileNames != null)
                 {
                     charBuffer.PutString(fileNames[0]);
@@ -912,8 +768,8 @@ namespace System.Windows.Forms
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 ofn.hwndOwner = hWndOwner;
                 ofn.hInstance = Instance;
-                ofn.lpstrFilter = MakeFilterString(filter, this.DereferenceLinks);
-                ofn.nFilterIndex = filterIndex;
+                ofn.lpstrFilter = MakeFilterString(filter, DereferenceLinks);
+                ofn.nFilterIndex = FilterIndex;
                 ofn.lpstrFile = charBuffer.AllocCoTaskMem();
                 ofn.nMaxFile = FILEBUFSIZE;
                 ofn.lpstrInitialDir = initialDir;
@@ -963,7 +819,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder(base.ToString() + ": Title: " + Title + ", FileName: ");
+            var sb = new StringBuilder(base.ToString() + ": Title: " + Title + ", FileName: ");
             try
             {
                 sb.Append(FileName);
@@ -974,11 +830,8 @@ namespace System.Windows.Forms
                 sb.Append(e.GetType().FullName);
                 sb.Append(">");
             }
+
             return sb.ToString();
         }
-
-
     }
 }
-
-

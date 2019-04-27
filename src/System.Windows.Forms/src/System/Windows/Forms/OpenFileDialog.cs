@@ -129,18 +129,13 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>        
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
         public Stream OpenFile()
         {
-            string filename = FileNamesInternal[0];
-
-            if (filename == null || (filename.Length == 0))
+            string filename = FileNames[0];
+            if (string.IsNullOrEmpty(filename))
+            {
                 throw new ArgumentNullException(nameof(FileName));
+            }
 
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
