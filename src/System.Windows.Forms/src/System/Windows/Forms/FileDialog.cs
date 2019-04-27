@@ -14,17 +14,15 @@ using CharBuffer = System.Windows.Forms.UnsafeNativeMethods.CharBuffer;
 
 namespace System.Windows.Forms
 {
-    /// <devdoc>
+    /// <summary>
     /// Displays a dialog window from which the user can select a file.
-    /// </devdoc>
+    /// </summary>
     [DefaultEvent(nameof(FileOk))]
     [DefaultProperty(nameof(FileName))]
     public abstract partial class FileDialog : CommonDialog
     {
         private const int FILEBUFSIZE = 8192;
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.EventFileOk"]/*' />
-        /// <internalonly/>
         protected static readonly object EventFileOk = new object();
 
         internal const int OPTION_ADDEXTENSION = unchecked(unchecked((int)0x80000000));
@@ -43,30 +41,19 @@ namespace System.Windows.Forms
         private CharBuffer charBuffer;
         private IntPtr dialogHWnd;
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileDialog"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       In an inherited class,
-        ///       initializes a new instance of the <see cref='System.Windows.Forms.FileDialog'/>
-        ///       class.
-        ///    </para>
-        /// </devdoc>
-        [
-            SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")  // If the constructor does not call Reset
-                                                                                                    // it would be a breaking change.
-        ]
+        /// <summary>
+        /// In an inherited class, initializes a new instance of the <see cref='System.Windows.Forms.FileDialog'/>
+        /// class.
+        /// </summary>
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "Fixing this would be a breaking change")]
         internal FileDialog() {
             Reset();
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.AddExtension"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the
-        ///       dialog box automatically adds an extension to a
-        ///       file name if the user omits the extension.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box automatically adds an
+        /// extension to a file name if the user omits the extension.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -82,11 +69,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.CheckFileExists"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets a value indicating whether
-        ///       the dialog box displays a warning if the user specifies a file name that does not exist.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box displays a warning
+        /// if the user specifies a file name that does not exist.</para>
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -102,13 +88,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.CheckPathExists"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the
-        ///       dialog box displays a warning if the user specifies a path that does not exist.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box displays a warning if
+        /// the user specifies a path that does not exist.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -124,13 +107,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.DefaultExt"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the default file extension.
-        ///       
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the default file extension.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(""),
@@ -152,14 +131,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.DereferenceLinks"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value
-        ///       indicating whether the dialog box returns the location of the file referenced by the shortcut or
-        ///       whether it returns the location of the shortcut (.lnk).
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box returns the location
+        /// of the file referenced by the shortcut or whether it returns the location
+        /// of the shortcut (.lnk).
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -183,14 +159,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileName"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       or sets a string containing
-        ///       the file name selected in the file dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a string containing the file name selected in the file dialog box.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(""),
@@ -220,13 +191,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileNames"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the file
-        ///       names of all selected files in the dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the file names of all selected files in the dialog box.
+        /// </summary>
         [
         Browsable(false),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
@@ -251,15 +218,10 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Filter"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets
-        ///       or sets the current file name filter string,
-        ///       which determines the choices that appear in the "Save as file type" or
-        ///       "Files of type" box in the dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the current file name filter string, which determines the choices
+        /// that appear in the "Save as file type" or "Files of type" box in the dialog box.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(""),
@@ -287,12 +249,11 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FilterExtensions"]/*' />
-        /// <devdoc>
-        ///     Extracts the file extensions specified by the current file filter into
-        ///     an array of strings.  None of the extensions contain .'s, and the 
-        ///     default extension is first.
-        /// </devdoc>
+        /// <summary>
+        /// Extracts the file extensions specified by the current file filter into an
+        /// array of strings.  None of the extensions contain .'s, and the  default
+        /// extension is first.
+        /// </summary>
         private string[] FilterExtensions {
             get {
                 string filter = this.filter;
@@ -326,12 +287,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FilterIndex"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the index of the filter currently selected in the file dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the index of the filter currently selected in the file dialog box.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(1),
@@ -347,13 +305,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.InitialDirectory"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the initial directory displayed by the file dialog
-        ///       box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the initial directory displayed by the file dialog box.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatData)), 
         DefaultValue(""),
@@ -368,24 +322,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Instance"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the Win32 instance handle for the application.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the Win32 instance handle for the application.
+        /// </summary>
         protected virtual IntPtr Instance {
             get { return UnsafeNativeMethods.GetModuleHandle(null); }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Options"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       Gets the Win32 common Open File Dialog OFN_* option flags.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the Win32 common Open File Dialog OFN_* option flags.
+        /// </summary>
         protected int Options {
             get {
                 return options & (NativeMethods.OFN_READONLY | NativeMethods.OFN_HIDEREADONLY |
@@ -395,13 +341,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.RestoreDirectory"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog box restores the current directory before
-        ///       closing.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box restores the current
+        /// directory before closing.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -417,14 +360,10 @@ namespace System.Windows.Forms
         }
 
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ShowHelp"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating
-        ///       whether whether the Help button is displayed in the file dialog.
-        ///       
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether whether the Help button is displayed
+        /// in the file dialog.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -439,12 +378,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.SupportMultipleExtensions"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets whether def or abc.def is the extension of the file filename.abc.def
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets whether def or abc.def is the extension of the file filename.abc.def
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(false),
@@ -462,12 +398,9 @@ namespace System.Windows.Forms
             }
         } 
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Title"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets the file dialog box title.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets the file dialog box title.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatAppearance)), 
         DefaultValue(""),
@@ -483,13 +416,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ValidateNames"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Gets or sets a value indicating whether the dialog box accepts only valid
-        ///       Win32 file names.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets or sets a value indicating whether the dialog box accepts only valid
+        /// Win32 file names.
+        /// </summary>
         [
         SRCategory(nameof(SR.CatBehavior)), 
         DefaultValue(true),
@@ -504,18 +434,13 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.FileOk"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Occurs when the user clicks on the Open or Save button on a file dialog
-        ///       box.
-        ///    </para>
+        /// <summary>
+        /// Occurs when the user clicks on the Open or Save button on a file dialog
+        /// box.
         /// <remarks>
-        ///    <para>
-        ///       For information about handling events, see <see topic='cpconEventsOverview'/>.
-        ///    </para>
+        /// For information about handling events, see <see topic='cpconEventsOverview'/>.
         /// </remarks>
-        /// </devdoc>
+        /// </summary>
         [SRDescription(nameof(SR.FDfileOkDescr))]
         public event CancelEventHandler FileOk {
             add {
@@ -526,10 +451,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.DoFileOk"]/*' />
-        /// <devdoc>
-        ///     Processes the CDN_FILEOK notification.
-        /// </devdoc>
+        /// <summary>
+        /// Processes the CDN_FILEOK notification.
+        /// </summary>
         private bool DoFileOk(IntPtr lpOFN) {
             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN);
             int saveOptions = options;
@@ -582,12 +506,7 @@ namespace System.Windows.Forms
             return ok;
         }
 
-        /// 
-
-
         [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
         internal static bool FileExists(string fileName)
         {
             bool fileExists = false;
@@ -599,10 +518,9 @@ namespace System.Windows.Forms
             return fileExists;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.GetMultiselectFiles"]/*' />
-        /// <devdoc>
-        ///     Extracts the filename(s) returned by the file dialog.
-        /// </devdoc>
+        /// <summary>
+        /// Extracts the filename(s) returned by the file dialog.
+        /// </summary>
         private string[] GetMultiselectFiles(CharBuffer charBuffer) {
             string directory = charBuffer.GetString();
             string fileName = charBuffer.GetString();
@@ -626,23 +544,18 @@ namespace System.Windows.Forms
             return temp;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.GetOption"]/*' />
-        /// <devdoc>
-        ///     Returns the state of the given option flag.
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// Returns the state of the given option flag.
+        /// </summary>
 
         internal bool GetOption(int option) {
             return(options & option) != 0;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.HookProc"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Defines the common dialog box hook procedure that is overridden to add
-        ///       specific functionality to the file dialog box.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Defines the common dialog box hook procedure that is overridden to add
+        /// specific functionality to the file dialog box.
+        /// </summary>
         protected override IntPtr HookProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
             if (msg == Interop.WindowMessages.WM_NOTIFY) {
                 dialogHWnd = UnsafeNativeMethods.GetParent(new HandleRef(null, hWnd));
@@ -718,11 +631,10 @@ namespace System.Windows.Forms
             return IntPtr.Zero;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.MakeFilterString"]/*' />
-        /// <devdoc>
-        ///     Converts the given filter string to the format required in an OPENFILENAME_I
-        ///     structure.
-        /// </devdoc>
+        /// <summary>
+        /// Converts the given filter string to the format required in an OPENFILENAME_I
+        /// structure.
+        /// </summary>
         private static string MakeFilterString(string s, bool dereferenceLinks) {
             if (s == null || s.Length == 0)
             {
@@ -745,23 +657,19 @@ namespace System.Windows.Forms
             return new string(filter);
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.OnFileOk"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Raises the <see cref='System.Windows.Forms.FileDialog.FileOk'/> event.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Raises the <see cref='System.Windows.Forms.FileDialog.FileOk'/> event.
+        /// </summary>
         protected void OnFileOk(CancelEventArgs e) {
             CancelEventHandler handler = (CancelEventHandler)Events[EventFileOk];
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ProcessFileNames"]/*' />
-        /// <devdoc>
-        ///     Processes the filenames entered in the dialog according to the settings
-        ///     of the "addExtension", "checkFileExists", "createPrompt", and
-        ///     "overwritePrompt" properties.
-        /// </devdoc>
+        /// <summary>
+        /// Processes the filenames entered in the dialog according to the settings
+        /// of the "addExtension", "checkFileExists", "createPrompt", and
+        /// "overwritePrompt" properties.
+        /// </summary>
         private bool ProcessFileNames() {
             if ((options & NativeMethods.OFN_NOVALIDATE) == 0) {
                 string[] extensions = FilterExtensions;
@@ -799,16 +707,11 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.MessageBoxWithFocusRestore"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
-        ///       with the given parameters. It also ensures that
-        ///       the focus is set back on the window that had
-        ///       the focus to begin with (before we displayed
-        ///       the MessageBox).
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/> with the
+        /// given parameters. It also ensures that the focus is set back on the window that
+        /// had the focus to begin with (before we displayed the MessageBox).
+        /// </summary>
         internal bool MessageBoxWithFocusRestore(string message, string caption,
                 MessageBoxButtons buttons, MessageBoxIcon icon)
         {
@@ -824,22 +727,20 @@ namespace System.Windows.Forms
             return ret;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.PromptFileNotFound"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/>
-        ///       when a file
-        ///       does not exist.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Prompts the user with a <see cref='System.Windows.Forms.MessageBox'/> when a
+        /// file does not exist.
+        /// </summary>
         private void PromptFileNotFound(string fileName) {
             MessageBoxWithFocusRestore(string.Format(SR.FileDialogFileNotFound, fileName), DialogCaption,
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
+        /// <summary>
         // If it's necessary to throw up a "This file exists, are you sure?" kind of
         // MessageBox, here's where we do it
         // Return value is whether or not the user hit "okay".
+        /// </summary>
         internal virtual bool PromptUserIfAppropriate(string fileName) {
             if ((options & NativeMethods.OFN_FILEMUSTEXIST) != 0) {
                 if (!FileExists(fileName)) {
@@ -850,12 +751,9 @@ namespace System.Windows.Forms
             return true;
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.Reset"]/*' />
-        /// <devdoc>
-        ///    <para>
-        ///       Resets all properties to their default values.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Resets all properties to their default values.
+        /// </summary>
         public override void Reset() {
             options = NativeMethods.OFN_HIDEREADONLY | NativeMethods.OFN_PATHMUSTEXIST |
                       OPTION_ADDEXTENSION;
@@ -869,11 +767,9 @@ namespace System.Windows.Forms
             this._customPlaces.Clear();
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.RunDialog"]/*' />
-        /// <devdoc>
-        ///    Implements running of a file dialog.
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// Implements running of a file dialog.
+        /// </summary>
         protected override bool RunDialog(IntPtr hWndOwner) {
             if (Control.CheckForIllegalCrossThreadCalls && Application.OleRequired() != System.Threading.ApartmentState.STA) {
                 throw new System.Threading.ThreadStateException(string.Format(SR.DebuggingExceptionOnly, SR.ThreadMustBeSTA));
@@ -924,18 +820,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.RunFileDialog"]/*' />
-        /// <devdoc>
-        ///     Implements the actual call to GetOPENFILENAME_I or GetSaveFileName.
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// Implements the actual call to GetOPENFILENAME_I or GetSaveFileName.
+        /// </summary>
         internal abstract bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn);
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.SetOption"]/*' />
-        /// <devdoc>
-        ///     Sets the given option to the given boolean value.
-        /// </devdoc>
-        /// <internalonly/>
+        /// <summary>
+        /// Sets the given option to the given boolean value.
+        /// </summary>
         internal void SetOption(int option, bool value) {
             if (value) {
                 options |= option;
@@ -945,13 +837,9 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FileDialog.uex' path='docs/doc[@for="FileDialog.ToString"]/*' />
-        /// <internalonly/>
-        /// <devdoc>
-        ///    <para>
-        ///       Provides a string version of this Object.
-        ///    </para>
-        /// </devdoc>
+        /// <summary>
+        /// Provides a string version of this Object.
+        /// </summary>
         public override string ToString() {
             StringBuilder sb = new StringBuilder(base.ToString() + ": Title: " + Title + ", FileName: ");
             try

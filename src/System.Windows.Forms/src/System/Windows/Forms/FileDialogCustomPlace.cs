@@ -6,12 +6,13 @@ using System.Text;
 
 namespace System.Windows.Forms
 {
-//Sample Guids
-//          internal const string ComputerFolder = "0AC0837C-BBF8-452A-850D-79D08E667CA7";
-//          internal const string Favorites = "1777F761-68AD-4D8A-87BD-30B759FA33DD";
-//          internal const string Documents = "FDD39AD0-238F-46AF-ADB4-6C85480369C7";
-//          internal const string Profile = "5E6C858F-0E22-4760-9AFE-EA3317B67173";
-
+    /// <remarks>
+    /// Sample Guids
+    /// ComputerFolder: "0AC0837C-BBF8-452A-850D-79D08E667CA7"
+    /// Favorites: "1777F761-68AD-4D8A-87BD-30B759FA33DD"
+    /// Documents: "FDD39AD0-238F-46AF-ADB4-6C85480369C7"
+    /// Profile: "5E6C858F-0E22-4760-9AFE-EA3317B67173"
+    /// </remarks>
     public class FileDialogCustomPlace
     {
         private string _path = "";
@@ -62,6 +63,11 @@ namespace System.Windows.Forms
             return string.Format(System.Globalization.CultureInfo.CurrentCulture, "{0} Path: {1} KnownFolderGuid: {2}", base.ToString(), this.Path, this.KnownFolderGuid);
         }
 
+        /// <remarks>
+        /// This can throw in a multitude of ways if the path or Guid doesn't correspond
+        /// to an actual filesystem directory.
+        /// The caller is responsible for handling these situations.
+        /// </remarks>
         internal FileDialogNative.IShellItem GetNativePath()
         {
             // This can throw in a multitude of ways if the path or Guid doesn't correspond
