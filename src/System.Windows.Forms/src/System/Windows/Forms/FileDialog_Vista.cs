@@ -97,9 +97,9 @@ namespace System.Windows.Forms
               | NativeMethods.OFN_ENABLESIZING // These shouldn't be set in options (only set in the flags for the legacy dialog)
               | NativeMethods.OFN_EXPLORER // These shouldn't be set in options (only set in the flags for the legacy dialog)
             ;
-            Debug.Assert((UnexpectedOptions & options) == 0, "Unexpected FileDialog options");
+            Debug.Assert((UnexpectedOptions & _options) == 0, "Unexpected FileDialog options");
 
-            FileDialogNative.FOS ret = (FileDialogNative.FOS)options & BlittableOptions;
+            FileDialogNative.FOS ret = (FileDialogNative.FOS)_options & BlittableOptions;
 
             // Force no mini mode for the SaveFileDialog
             ret |= FileDialogNative.FOS.FOS_DEFAULTNOMINIMODE;
@@ -121,9 +121,9 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         private bool HandleVistaFileOk(FileDialogNative.IFileDialog dialog)
         {
-            int saveOptions = options;
+            int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
-            string[] saveFileNames = fileNames;
+            string[] saveFileNames = _fileNames;
             bool ok = false;
 
             try
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
                 uint filterIndexTemp;
                 dialog.GetFileTypeIndex(out filterIndexTemp);
                 FilterIndex = unchecked((int)filterIndexTemp);
-                fileNames = ProcessVistaFiles(dialog);
+                _fileNames = ProcessVistaFiles(dialog);
                 if (ProcessFileNames())
                 {
                     CancelEventArgs ceevent = new CancelEventArgs();
@@ -160,19 +160,19 @@ namespace System.Windows.Forms
                 if (!ok)
                 {
                     Thread.MemoryBarrier();
-                    fileNames = saveFileNames;
+                    _fileNames = saveFileNames;
 
-                    options = saveOptions;
+                    _options = saveOptions;
                     FilterIndex = saveFilterIndex;
                 }
                 else
                 {
-                    if ((options & NativeMethods.OFN_HIDEREADONLY) != 0)
+                    if ((_options & NativeMethods.OFN_HIDEREADONLY) != 0)
                     {
                         // When the dialog is dismissed OK, the Readonly bit can't
                         // be left on if ShowReadOnly was false
                         // Downlevel this happens automatically, on Vista mode, we need to watch out for it.
-                        options &= ~ NativeMethods.OFN_READONLY;
+                        _options &= ~ NativeMethods.OFN_READONLY;
                     }
                 }
             }
@@ -231,7 +231,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private FileDialogNative.COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(filter);
+        private FileDialogNative.COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(_filter);
 
         private static FileDialogNative.COMDLG_FILTERSPEC[] GetFilterItems(string filter)
         {
