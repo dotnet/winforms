@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_fileNames == null || _fileNames[0].Length == 0)
+                if (_fileNames == null || string.IsNullOrEmpty(_fileNames[0]))
                 {
                     return string.Empty;
                 }
@@ -819,19 +819,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            var sb = new StringBuilder(base.ToString() + ": Title: " + Title + ", FileName: ");
-            try
-            {
-                sb.Append(FileName);
-            }
-            catch (Exception e)
-            {
-                sb.Append("<");
-                sb.Append(e.GetType().FullName);
-                sb.Append(">");
-            }
-
-            return sb.ToString();
+            return $"{base.ToString()}: Title: {Title}, FileName: {FileName}";
         }
     }
 }
