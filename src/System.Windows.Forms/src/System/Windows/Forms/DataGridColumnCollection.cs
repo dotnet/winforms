@@ -281,7 +281,7 @@ namespace System.Windows.Forms {
             // columns which are not the default should have a default
             // width of DataGrid.PreferredColumnWidth
             if (this.DataGridTableStyle != null && column.Width == -1)
-                column.width = this.DataGridTableStyle.PreferredColumnWidth;
+                column._width = this.DataGridTableStyle.PreferredColumnWidth;
 #if false
             column.AddOnPropertyChanged(owner.OnColumnChanged);
 #endif
