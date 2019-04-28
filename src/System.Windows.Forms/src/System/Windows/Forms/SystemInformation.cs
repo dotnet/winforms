@@ -17,18 +17,18 @@ namespace System.Windows.Forms
     public static class SystemInformation
     {
         // Figure out if all the multimon stuff is supported on the OS
-        private static bool s_checkMultiMonitorSupport = false;
-        private static bool s_multiMonitorSupport = false;
-        private static bool s_checkNativeMouseWheelSupport = false;
+        private static bool s_checkMultiMonitorSupport;
+        private static bool s_multiMonitorSupport;
+        private static bool s_checkNativeMouseWheelSupport;
         private static bool s_nativeMouseWheelSupport = true;
-        private static bool s_highContrast = false;
-        private static bool s_systemEventsAttached = false;
+        private static bool s_highContrast;
+        private static bool s_systemEventsAttached;
         private static bool s_systemEventsDirty = true;
 
         private static IntPtr s_processWinStation = IntPtr.Zero;
-        private static bool s_isUserInteractive = false;
+        private static bool s_isUserInteractive;
 
-        private static PowerStatus s_powerStatus = null;
+        private static PowerStatus s_powerStatus;
 
         private const int DefaultMouseWheelScrollLines = 3;
 
@@ -91,13 +91,10 @@ namespace System.Windows.Forms
                     return data;
                 }
 
-                IntPtr hWndMouseWheel = IntPtr.Zero;
-
                 // Check for the MouseZ "service". This is a little app that generated the
                 // MSH_MOUSEWHEEL messages by monitoring the hardware. If this app isn't
                 // found, then there is no support for MouseWheels on the system.
-                hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
-
+                IntPtr hWndMouseWheel = UnsafeNativeMethods.FindWindow(NativeMethods.MOUSEZ_CLASSNAME, NativeMethods.MOUSEZ_TITLE);
                 if (hWndMouseWheel != IntPtr.Zero)
                 {
                     // Register the MSH_SCROLL_LINES message...
@@ -781,7 +778,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                StringBuilder sb = new StringBuilder(256);
+                var sb = new StringBuilder(256);
                 UnsafeNativeMethods.GetComputerName(sb, new int[] { sb.Capacity });
                 return sb.ToString();
             }
@@ -800,9 +797,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                IntPtr hwinsta = IntPtr.Zero;
-
-                hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
+                IntPtr hwinsta = UnsafeNativeMethods.GetProcessWindowStation();
                 if (hwinsta != IntPtr.Zero && s_processWinStation != hwinsta)
                 {
                     s_isUserInteractive = true;
@@ -833,7 +828,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                StringBuilder sb = new StringBuilder(256);
+                var sb = new StringBuilder(256);
                 UnsafeNativeMethods.GetUserName(sb, new int[] { sb.Capacity });
                 return sb.ToString();
             }
@@ -843,7 +838,7 @@ namespace System.Windows.Forms
         {
             if (!s_systemEventsAttached)
             {
-                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(SystemInformation.OnUserPreferenceChanged);
+                SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
                 s_systemEventsAttached = true;
             }
         }
@@ -1078,14 +1073,7 @@ namespace System.Windows.Forms
             {
                 bool data = false;
                 UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETMENUDROPALIGNMENT, 0, ref data, 0);
-                if (data)
-                {
-                    return LeftRightAlignment.Left;
-                }
-                else
-                {
-                    return LeftRightAlignment.Right;
-                }
+                return data ? LeftRightAlignment.Left : LeftRightAlignment.Right;
             }
         }
 
@@ -1369,14 +1357,7 @@ namespace System.Windows.Forms
                 // We can get the system's menu font through the NONCLIENTMETRICS structure via SystemParametersInfo
                 var data = new NativeMethods.NONCLIENTMETRICS();
                 bool result = UnsafeNativeMethods.SystemParametersInfo(NativeMethods.SPI_GETNONCLIENTMETRICS, data.cbSize, data, 0);
-                if (result && data.iBorderWidth > 0)
-                {
-                    return data.iBorderWidth;
-                }
-                else
-                {
-                    return 0;
-                }
+                return result && data.iBorderWidth > 0 ? data.iBorderWidth : 0;
             }
         }
 
@@ -1431,27 +1412,23 @@ namespace System.Windows.Forms
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal static bool InLockedTerminalSession()
         {
-            bool retVal = false;
-
-            if (SystemInformation.TerminalServerSession)
+            if (TerminalServerSession)
             {
                 // Try to open the input desktop. If it fails with access denied assume
                 // the app is running on a secure desktop.
                 IntPtr hDsk = SafeNativeMethods.OpenInputDesktop(0, false, NativeMethods.DESKTOP_SWITCHDESKTOP);
-
                 if (hDsk == IntPtr.Zero)
                 {
                     int error = Marshal.GetLastWin32Error();
-                    retVal = error == NativeMethods.ERROR_ACCESS_DENIED;
+                    return error == NativeMethods.ERROR_ACCESS_DENIED;
                 }
-
-                if (hDsk != IntPtr.Zero)
+                else
                 {
                     SafeNativeMethods.CloseDesktop(hDsk);
                 }
             }
 
-            return retVal;
+            return false;
         }
     }
 }
