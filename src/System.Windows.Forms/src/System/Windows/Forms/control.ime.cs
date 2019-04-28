@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                             ctl = this;
                         }
                         else if( ContainsFocus ) {
-                            ctl = FromChildHandleInternal( UnsafeNativeMethods.GetFocus() );
+                            ctl = FromChildHandle(UnsafeNativeMethods.GetFocus());
                         }
 
                         if( ctl != null && ctl.CanEnableIme ) {
@@ -645,7 +645,7 @@ namespace System.Windows.Forms
                 IgnoreWmImeNotify = false;
             }
 
-            Form form = FindFormInternal();
+            Form form = FindForm();
 
             if( form != null ) {
                 InputLanguageChangedEventArgs e = InputLanguage.CreateInputLanguageChangedEventArgs( m );
@@ -669,7 +669,7 @@ namespace System.Windows.Forms
             Debug.Indent();
 
             InputLanguageChangingEventArgs e = InputLanguage.CreateInputLanguageChangingEventArgs( m );
-            Form form = FindFormInternal();
+            Form form = FindForm();
 
             if( form != null ) {
                 Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Culture=" + e.Culture );

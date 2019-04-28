@@ -2584,27 +2584,12 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Paste"]/*' />
         /// <devdoc>
-        ///     Pastes the contents of the clipboard in the given clipboard format.
+        /// Pastes the contents of the clipboard in the given clipboard format.
         /// </devdoc>
-        public void Paste(DataFormats.Format clipFormat) {
-            PasteUnsafe(clipFormat, 0);
-        }
-
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Paste1"]/*' />
-        /// <devdoc>
-        /// Note that this doesn't make a security demand: functions that call this should.
-        /// </devdoc>
-        private void PasteUnsafe(DataFormats.Format clipFormat, int hIcon) {
-            NativeMethods.REPASTESPECIAL rps = null;
-
-            if (hIcon != 0) {
-                rps = new NativeMethods.REPASTESPECIAL();
-                rps.dwAspect = DVASPECT_ICON;
-                rps.dwParam = hIcon;
-            }
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_PASTESPECIAL, clipFormat.Id, rps);
+        public void Paste(DataFormats.Format clipFormat)
+        {
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_PASTESPECIAL, clipFormat.Id, 0);
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ProcessCmdKey"]/*' />

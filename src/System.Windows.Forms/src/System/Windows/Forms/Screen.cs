@@ -324,35 +324,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromControl"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
-        ///       for the monitor that contains the largest
-        ///       region of the window of the control.
-        ///    </para>
+        /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
+        /// the largest region of the window of the control.
         /// </devdoc>
-        public static Screen FromControl(Control control) {
-            return FromHandleInternal(control.Handle);
-        }
+        public static Screen FromControl(Control control) => FromHandle(control.Handle);
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromHandle"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
-        ///       for the monitor that
-        ///       contains the largest region of the window.
-        ///    </para>
+        /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
+        /// the largest region of the window.
         /// </devdoc>
-        public static Screen FromHandle(IntPtr hwnd) {
-            return FromHandleInternal(hwnd);
-        }
-
-        internal static Screen FromHandleInternal(IntPtr hwnd) {
-            if (multiMonitorSupport) {
+        public static Screen FromHandle(IntPtr hwnd)
+        {
+            if (multiMonitorSupport)
+            {
                 return new Screen(SafeNativeMethods.MonitorFromWindow(new HandleRef(null, hwnd), MONITOR_DEFAULTTONEAREST));
             }
-            else {
+            else
+            {
                 return new Screen((IntPtr)PRIMARY_MONITOR, IntPtr.Zero);
             }
         }

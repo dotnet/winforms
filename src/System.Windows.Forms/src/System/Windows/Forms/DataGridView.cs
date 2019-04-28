@@ -183,8 +183,6 @@ namespace System.Windows.Forms
         private const int DATAGRIDVIEWSTATE1_ambientFont                  = 0x02000000;
         private const int DATAGRIDVIEWSTATE1_ambientColumnHeadersFont     = 0x04000000;
         private const int DATAGRIDVIEWSTATE1_ambientRowHeadersFont        = 0x08000000;
-        private const int DATAGRIDVIEWSTATE1_isRestrictedChecked          = 0x10000000;
-        private const int DATAGRIDVIEWSTATE1_isRestricted                 = 0x20000000;
         private const int DATAGRIDVIEWSTATE1_isAutoSized                  = 0x40000000;
 
         // DATAGRIDVIEWSTATE2_
@@ -3698,19 +3696,6 @@ namespace System.Windows.Forms
             {
                 Form parentForm = this.TopLevelControlInternal as Form;
                 return parentForm != null && parentForm.WindowState == FormWindowState.Minimized;
-            }
-        }
-
-        internal bool IsRestricted
-        {
-            get
-            {
-                if (!this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked])
-                {
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted] = false;
-                    this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestrictedChecked] = true;
-                }
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_isRestricted];
             }
         }
 

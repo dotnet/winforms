@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms {
                     }
 
                     if (!HostedInWin32DialogManager) {
-                        IContainerControl c = GetContainerControlInternal();
+                        IContainerControl c = GetContainerControl();
                         if (c != null) {
                             ContainerControl container = c as ContainerControl;
                             if (container != null) {

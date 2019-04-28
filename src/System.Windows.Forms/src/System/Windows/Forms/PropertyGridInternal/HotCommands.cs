@@ -128,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         protected override void OnGotFocus(EventArgs e) {
-            Label.FocusInternal();
+            Label.Focus();
             Label.Invalidate();
         } 
 
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public void Select(bool forward) {
-            Label.FocusInternal();
+            Label.Focus();
         }
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs) {

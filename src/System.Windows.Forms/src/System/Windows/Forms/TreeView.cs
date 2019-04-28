@@ -2090,7 +2090,7 @@ namespace System.Windows.Forms {
 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2825,7 +2825,7 @@ namespace System.Windows.Forms {
                 
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2860,7 +2860,7 @@ namespace System.Windows.Forms {
             
             NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             tvhip.pt_x = pos.X;
             tvhip.pt_y = pos.Y;
             IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -2931,7 +2931,7 @@ namespace System.Windows.Forms {
 
                         NativeMethods.TV_HITTESTINFO tvhip = new NativeMethods.TV_HITTESTINFO();
                         Point pos = Cursor.Position;
-                        pos = PointToClientInternal(pos);
+                        pos = PointToClient(pos);
                         tvhip.pt_x = pos.X;
                         tvhip.pt_y = pos.Y;
                         IntPtr hnode = UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TVM_HITTEST, 0, tvhip);
@@ -3146,7 +3146,7 @@ namespace System.Windows.Forms {
                     try
                     {
                         treeViewState[TREEVIEWSTATE_ignoreSelects] = true;
-                        FocusInternal();
+                        Focus();
                     }
                     finally
                     {

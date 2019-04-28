@@ -804,7 +804,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal void AccessibilitySelect(GridEntry entry) {
             SelectGridEntry(entry, true);            
-            FocusInternal();
+            Focus();
         }
 
         private void AddGridEntryEvents(GridEntryCollection ipeArray, int startIndex, int count) {
@@ -932,16 +932,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     // so put it onto one of our children first.
                     if (resetFocus) {
                         if (DialogButton.Visible) {
-                            DialogButton.FocusInternal();
+                            DialogButton.Focus();
                         }
                         else if (DropDownButton.Visible) {
-                            DropDownButton.FocusInternal();
+                            DropDownButton.Focus();
                         }
                         else if (Edit.Visible) {
-                            Edit.FocusInternal();
+                            Edit.Focus();
                         }
                         else {
-                            FocusInternal();
+                            Focus();
                         }
                     
                         if (selectedRow != -1) {
@@ -985,7 +985,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                // when the dropdown closes.
                Edit.DontFocus = true;
                if (Edit.Focused && !gotfocus) {
-                 gotfocus = this.FocusInternal();
+                 gotfocus = this.Focus();
                }
                Edit.Visible = false;
                
@@ -993,12 +993,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                Edit.SelectionLength = 0;
                
                if (DialogButton.Focused && !gotfocus) {
-                  gotfocus = this.FocusInternal();
+                  gotfocus = this.Focus();
                }
                DialogButton.Visible = false;
                
                if (DropDownButton.Focused && !gotfocus) {
-                   gotfocus = this.FocusInternal();
+                   gotfocus = this.Focus();
                }
                DropDownButton.Visible = false;
                currentEditor = null;
@@ -1190,7 +1190,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                    if (dataObj != null) {
                       string data = (string)dataObj.GetData(typeof(string));
                       if (data != null) {
-                         Edit.FocusInternal();
+                         Edit.Focus();
                          Edit.Text = data;
                          SetCommitError(ERROR_NONE, true);
                       }   
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             // if we are in an errorState, just put the focus back on the Edit
             if (errorState != ERROR_NONE && Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 return;
             }
 
@@ -1359,11 +1359,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     PopupDialog(selectedRow);
                 }
                 else {
-                    DialogButton.FocusInternal();
+                    DialogButton.Focus();
                 }
             }
             else if (Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
             }
             return;
@@ -1425,7 +1425,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         
             if (Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
                 return;
             }
@@ -1662,7 +1662,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (selectedRow != -1) {
-                FocusInternal();
+                Focus();
                 SelectRow(selectedRow);
             }
         }
@@ -1832,7 +1832,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public virtual void Flush() {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView::Flush()");
             if (Commit() && Edit.Focused) {
-                this.FocusInternal();
+                this.Focus();
             }
         }
 
@@ -2316,7 +2316,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             if (e != null && !GetInPropertySet()) {
                 if (!Commit()) {
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     return;
                 }
             }
@@ -2402,7 +2402,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             if (!DropDownListBox.InSetSelectedIndex()) {
                 GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
                 Edit.Text = gridEntry.GetPropertyTextValue(DropDownListBox.SelectedItem);
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
             }
             SetFlag(FlagDropDownCommit, true);
@@ -2524,7 +2524,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView:OnEditGotFocus");
 
             if (!Edit.Visible) {
-                this.FocusInternal();
+                this.Focus();
                 return;
             }
 
@@ -2669,7 +2669,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             // if the focus isn't goint to a child of the view
             if (!Commit()) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 return;
             }
             // change our focus state.
@@ -2739,7 +2739,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // if we aren't in an error state, just quit
                 if (errorState == ERROR_NONE) {
                    Edit.Text = originalTextValue;
-                   FocusInternal();
+                   Focus();
                    return true;
                 }
             
@@ -2767,19 +2767,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                     // this would be an odd thing to happen, but...
                     if (!success) {
-                        Edit.FocusInternal();
+                        Edit.Focus();
                         SelectEdit(false);
                         return true;
                     }
                 }
 
                 SetCommitError(ERROR_NONE);
-                FocusInternal();
+                Focus();
                 return true;
             }
             else if (sender != this) {
                 CloseDropDown();
-                FocusInternal();
+                Focus();
             }
             return false;
         }
@@ -2987,7 +2987,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         break;
                     case Keys.A:
                         if (fControl && !fAlt && !fShift && Edit.Visible) {
-                           Edit.FocusInternal();
+                           Edit.Focus();
                            Edit.SelectAll();       
                         }
                         break;
@@ -3239,7 +3239,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                      CommitValue(values[index]);
                      SelectGridEntry(selectedGridEntry, true);
-                     Edit.FocusInternal();
+                     Edit.Focus();
                      return;
                   }
             }
@@ -3521,7 +3521,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.lastClickedEntry = (GridEntry)s;
             bool setSelectTime = s != selectedGridEntry;
             SelectGridEntry(lastClickedEntry, true);
-            Edit.FocusInternal();
+            Edit.Focus();
             
             if (lastMouseDown != InvalidPosition) {
             
@@ -3530,7 +3530,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                rowSelectTime = 0;    
                
                Point editPoint = PointToScreen(lastMouseDown);
-               editPoint = Edit.PointToClientInternal(editPoint);
+               editPoint = Edit.PointToClient(editPoint);
                Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
                Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
             }
@@ -3886,12 +3886,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                        Control focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
 
                         if (focusedControl == null || !IsMyChild(focusedControl)) {
                             if (forward) {
                                 TabSelection();
-                                focusedControl = Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                                focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
                                 // make sure the value actually took the focus
                                 if (IsMyChild(focusedControl)) {
                                     return true;
@@ -3911,11 +3911,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             if (Edit.Focused) {
                                 if (forward) {
                                     if (DropDownButton.Visible) {
-                                        DropDownButton.FocusInternal();
+                                        DropDownButton.Focus();
                                         return true;
                                     }
                                     else if (DialogButton.Visible) {
-                                        DialogButton.FocusInternal();
+                                        DialogButton.Focus();
                                         return true;
                                     }
                                     // fall through
@@ -3927,7 +3927,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             }
                             else if (DialogButton.Focused || DropDownButton.Focused) {
                                 if (!forward && Edit.Visible) {
-                                    Edit.FocusInternal();
+                                    Edit.Focus();
                                     return true;
                                 }
                                 // fall through
@@ -4276,7 +4276,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
                 else {
-                    FocusInternal();
+                    Focus();
                 }
             }
 
@@ -4415,7 +4415,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (!GetFlag(FlagIsNewSelection)) {
-                FocusInternal();
+                Focus();
             }
             
             // 
@@ -4526,7 +4526,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // or the offsets will be wrong
                 if (selectedRow != -1 && row < selectedRow && Edit.Visible) {
                     // this will cause the commit
-                    FocusInternal();
+                    Focus();
 
                 }
 
@@ -4620,7 +4620,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             finally { 
     
                 if (!success) {
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     SelectEdit(false);
                 }
                 else {
@@ -4768,20 +4768,20 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         internal void ReverseFocus() {
             if (selectedGridEntry == null) {
-               FocusInternal();
+               Focus();
             }
             else {
                SelectGridEntry(selectedGridEntry, true);
                
                if (DialogButton.Visible) {
-                  DialogButton.FocusInternal();
+                  DialogButton.Focus();
                }
                else if (DropDownButton.Visible) {
-                  DropDownButton.FocusInternal();
+                  DropDownButton.Focus();
                }
                else if (Edit.Visible) {
                   Edit.SelectAll();
-                  Edit.FocusInternal();
+                  Edit.Focus();
                }
             }
         }
@@ -5033,7 +5033,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return;
 
             if (Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
             }
             else if (dropDownHolder != null && dropDownHolder.Visible) {
@@ -5041,7 +5041,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return;
             }
             else if (currentEditor != null) {
-                currentEditor.FocusInternal();
+                currentEditor.Focus();
             }
 
             return;
@@ -5137,7 +5137,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             bool commit = Commit();
             
             if (commit && this.FocusInside) {
-                FocusInternal();
+                Focus();
             }
             return commit;
         }
@@ -5194,7 +5194,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             Point mouseLoc = Cursor.Position;
     
                             // convert to window coords
-                            mouseLoc = this.PointToClientInternal(mouseLoc);
+                            mouseLoc = this.PointToClient(mouseLoc);
     
                             // figure out where we are and apply the offset
                             mouseLoc = FindPosition(mouseLoc.X, mouseLoc.Y);
@@ -5253,19 +5253,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 case Interop.WindowMessages.WM_SETFOCUS:
                     if (!GetInPropertySet() && Edit.Visible && (errorState != ERROR_NONE || !Commit())) {
                         base.WndProc(ref m);
-                        Edit.FocusInternal();
+                        Edit.Focus();
                         return;
                     }
                     break;
                     
                 case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     Edit.Clear();
                     UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0); 
                     return;
                     
                 case Interop.WindowMessages.WM_IME_COMPOSITION:
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
                     return;
                     
@@ -5585,7 +5585,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             public virtual void FocusComponent() {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "DropDownHolder:FocusComponent()");
                 if (currentControl != null && Visible) {
-                    currentControl.FocusInternal();
+                    currentControl.Focus();
                 }
             }
             
@@ -6468,7 +6468,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 set{
                     mouseHook.HookMouseDown = value;
                     if (value) {
-                        this.FocusInternal();
+                        this.Focus();
                     }
                 }
             }
@@ -6507,7 +6507,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             public void FilterKeyPress(char keyChar) {
             
                 if (IsInputChar(keyChar)) {
-                    this.FocusInternal();
+                    this.Focus();
                     this.SelectAll();
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
                 }
@@ -7073,7 +7073,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                
                 IntPtr hWndAtPoint = hWnd;
                 IntPtr handle = control.Handle;
-                Control ctrlAtPoint = Control.FromHandleInternal(hWndAtPoint);
+                Control ctrlAtPoint = Control.FromHandle(hWndAtPoint);
 
                 // if it's us or one of our children, just process as normal
                 //

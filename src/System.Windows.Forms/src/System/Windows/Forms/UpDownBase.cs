@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_SETFOCUS:
                     if (!HostedInWin32DialogManager) {
                         if (ActiveControl == null) {
-                            SetActiveControlInternal(TextBox);
+                            SetActiveControl(TextBox);
                         }
                         else {
                             FocusActiveControlInternal();
@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms {
             }
 
             protected override void OnGotFocus(EventArgs e) {
-                parent.SetActiveControlInternal(this);
+                parent.SetActiveControl(this);
                 parent.InvokeGotFocus(parent, e);
             }
 
@@ -1523,7 +1523,7 @@ namespace System.Windows.Forms {
 
                 // Focus the parent
                 //
-                this.parent.FocusInternal();
+                this.parent.Focus();
 
                 if (!parent.ValidationCancelled && e.Button == MouseButtons.Left) {
                     BeginButtonPress(e);

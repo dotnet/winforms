@@ -363,7 +363,7 @@ namespace System.Windows.Forms
                         msg.pt_y = p.y;
                         if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null)) {
                             this.axOleControl.OnMnemonic(ref msg);
-                            FocusInternal();
+                            Focus();
                             processed = true;
                         }
                     }
@@ -407,7 +407,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Interop.WindowMessages.WM_COMMAND:
-                    if (!ReflectMessageInternal(m.LParam, ref m))
+                    if (!ReflectMessage(m.LParam, ref m))
                         DefWndProc(ref m);
                     break;
                 
@@ -423,7 +423,7 @@ namespace System.Windows.Forms
                 case Interop.WindowMessages.WM_MOUSEACTIVATE:
                     if (!DesignMode) {
                         if (containingControl != null && containingControl.ActiveControl != this) {
-                            FocusInternal();
+                            Focus();
                         } 
                     }
                     DefWndProc(ref m);
@@ -991,7 +991,7 @@ namespace System.Windows.Forms
                 // before we InPlaceDeactivate.
                 ContainerControl f = ContainingControl;
                 if (f != null && f.ActiveControl == this) {
-                    f.SetActiveControlInternal(null);
+                    f.SetActiveControl(null);
                 }
 
                 //

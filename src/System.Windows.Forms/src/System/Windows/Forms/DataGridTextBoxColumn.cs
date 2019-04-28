@@ -279,7 +279,7 @@ namespace System.Windows.Forms {
             // however, in that situation, we are left w/ the editColumn which is not parented.
             // the grid will call Edit to reset the EditColumn
             if (wasFocused && this.DataGridTableStyle != null && this.DataGridTableStyle.DataGrid != null && this.DataGridTableStyle.DataGrid.CanFocus) {
-                this.DataGridTableStyle.DataGrid.FocusInternal();
+                this.DataGridTableStyle.DataGrid.Focus();
                 Debug.Assert(!edit.Focused, "the edit control just conceeded focus to the dataGrid");
             }
         }
@@ -480,7 +480,7 @@ namespace System.Windows.Forms {
 
             edit.RightToLeft = this.DataGridTableStyle.DataGrid.RightToLeft;
 
-            edit.FocusInternal();
+            edit.Focus();
 
             editRow = rowNum;
 

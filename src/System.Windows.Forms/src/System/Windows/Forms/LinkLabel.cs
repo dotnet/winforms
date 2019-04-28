@@ -987,7 +987,7 @@ namespace System.Windows.Forms {
                 if ((((Link)links[i]).State & LinkState.Hover) == LinkState.Hover) {
                     ((Link)links[i]).State |= LinkState.Active;
 
-                    FocusInternal();
+                    Focus();
                     if (((Link)links[i]).Enabled) {
                         FocusLink = (Link)links[i];
                         InvalidateLink(FocusLink);
