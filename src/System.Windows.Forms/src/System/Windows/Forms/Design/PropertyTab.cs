@@ -13,8 +13,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public abstract class PropertyTab : IExtenderProvider
     {
-        private Bitmap bitmap;
-        private bool checkedBmp;
+        private Bitmap _bitmap;
+        private bool _checkedBmp;
 
         ~PropertyTab() => Dispose(false);
 
@@ -25,22 +25,22 @@ namespace System.Windows.Forms.Design
         {
             get
             {
-                if (!checkedBmp && bitmap == null)
+                if (!_checkedBmp && _bitmap == null)
                 {
                     string bmpName = GetType().Name;
                     try
                     {
-                        bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bmpName);
+                        _bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bmpName);
                     }
                     catch (Exception ex)
                     {
                         Debug.Fail("Failed to find bitmap '" + bmpName + "' for class " + GetType().FullName, ex.ToString());
                     }
 
-                    checkedBmp = true;
+                    _checkedBmp = true;
                 }
 
-                return bitmap;
+                return _bitmap;
             }
         }
 
@@ -75,10 +75,10 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (bitmap != null)
+                if (_bitmap != null)
                 {
-                    bitmap.Dispose();
-                    bitmap = null;
+                    _bitmap.Dispose();
+                    _bitmap = null;
                 }
             }
         }
