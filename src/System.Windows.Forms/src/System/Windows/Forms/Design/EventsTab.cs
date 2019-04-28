@@ -14,16 +14,16 @@ namespace System.Windows.Forms.Design
     /// </summary>
     public class EventsTab : PropertyTab
     {
-        private IServiceProvider sp;
-        private IDesignerHost currentHost;
-        private bool sunkEvent;
+        private readonly IServiceProvider _sp;
+        private IDesignerHost _currentHost;
+        private bool _sunkEvent;
 
         /// <summary>
         /// Initializes a new instance of the <see cref='System.Windows.Forms.Design.EventsTab'/> class.
         /// </summary>
         public EventsTab(IServiceProvider sp)
         {
-            this.sp = sp;
+            _sp = sp;
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
 
         private void OnActiveDesignerChanged(object sender, ActiveDesignerEventArgs adevent)
         {
-            currentHost = adevent.NewDesigner;
+            _currentHost = adevent.NewDesigner;
         }
 
         /// <summary>
@@ -72,20 +72,20 @@ namespace System.Windows.Forms.Design
         private IEventBindingService GetEventPropertyService(object obj, ITypeDescriptorContext context)
         {
             IEventBindingService eventPropertySvc = null;
-            if (!sunkEvent)
+            if (!_sunkEvent)
             {
-                IDesignerEventService des = (IDesignerEventService)sp.GetService(typeof(IDesignerEventService));
+                IDesignerEventService des = (IDesignerEventService)_sp.GetService(typeof(IDesignerEventService));
                 if (des != null)
                 {
                     des.ActiveDesignerChanged += new ActiveDesignerEventHandler(this.OnActiveDesignerChanged);
                 }
 
-                sunkEvent = true;
+                _sunkEvent = true;
             }
 
-            if (eventPropertySvc == null && currentHost != null)
+            if (eventPropertySvc == null && _currentHost != null)
             {
-                eventPropertySvc = (IEventBindingService)currentHost.GetService(typeof(IEventBindingService));
+                eventPropertySvc = (IEventBindingService)_currentHost.GetService(typeof(IEventBindingService));
             }
 
             if (eventPropertySvc == null && obj is IComponent component)
