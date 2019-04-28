@@ -33,12 +33,12 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void UndoUnit_Ctor_UndoEngine_String(string name)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void UndoUnit_Ctor_UndoEngine_String(string name, string expectedName)
         {
             var unit = new SubUndoUnit(this, name);
             Assert.Same(this, unit.UndoEngine);
-            Assert.Equal(name ?? string.Empty, unit.Name);
+            Assert.Same(expectedName, unit.Name);
             Assert.True(unit.IsEmpty);
         }
 

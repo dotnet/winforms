@@ -65,11 +65,11 @@ namespace System.Windows.Forms.Tests
             {
                 Tag = value
             };
-            Assert.Equal(value, provider.Tag);
+            Assert.Same(value, provider.Tag);
 
             // Set same.
             provider.Tag = value;
-            Assert.Equal(value, provider.Tag);
+            Assert.Same(value, provider.Tag);
         }
 
         public static IEnumerable<object[]> CanExtend_TestData()

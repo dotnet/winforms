@@ -254,26 +254,26 @@ namespace System.Windows.Forms.Tests
             {
                 FormatInfo = value
             };
-            Assert.Equal(value, binding.FormatInfo);
+            Assert.Same(value, binding.FormatInfo);
 
             // Set same.
             binding.FormatInfo = value;
-            Assert.Equal(value, binding.FormatInfo);
+            Assert.Same(value, binding.FormatInfo);
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
-        public void Binding_FormatString_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void Binding_FormatString_Set_GetReturnsExpected(string value, string expected)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
             {
                 FormatString = value
             };
-            Assert.Equal(value ?? string.Empty, binding.FormatString);
+            Assert.Same(expected, binding.FormatString);
 
             // Set same.
             binding.FormatString = value;
-            Assert.Equal(value ?? string.Empty, binding.FormatString);
+            Assert.Same(expected, binding.FormatString);
         }
 
         [Theory]
@@ -310,11 +310,11 @@ namespace System.Windows.Forms.Tests
             {
                 NullValue = value
             };
-            Assert.Equal(value, binding.NullValue);
+            Assert.Same(value, binding.NullValue);
 
             // Set same.
             binding.NullValue = value;
-            Assert.Equal(value, binding.NullValue);
+            Assert.Same(value, binding.NullValue);
         }
 
         public static IEnumerable<object[]> BindingCompleteEventArgs_TestData()
@@ -428,26 +428,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        public static IEnumerable<object[]> ConvertEventArgs_FormattingDisabled_TestData()
+        public static IEnumerable<object[]> ConvertEventArgs_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { new ConvertEventArgs(null, typeof(int)), null };
-            yield return new object[] { new ConvertEventArgs("1", null), "1" };
-            yield return new object[] { new ConvertEventArgs("1", typeof(string)), "1" };
-            yield return new object[] { new ConvertEventArgs("1", typeof(int)), 1 };
-            yield return new object[] { new ConvertEventArgs(1.1.ToString(CultureInfo.CurrentCulture), typeof(double)), 1.1 };
-            yield return new object[] { new ConvertEventArgs(DBNull.Value, typeof(int)), DBNull.Value };
+            yield return new object[] { false, null, null };
+            yield return new object[] { false, new ConvertEventArgs(null, typeof(int)), null };
+            yield return new object[] { false, new ConvertEventArgs("1", null), "1" };
+            yield return new object[] { false, new ConvertEventArgs("1", typeof(string)), "1" };
+            yield return new object[] { false, new ConvertEventArgs("1", typeof(int)), 1 };
+            yield return new object[] { false, new ConvertEventArgs(1.1.ToString(CultureInfo.CurrentCulture), typeof(double)), 1.1 };
+            yield return new object[] { false, new ConvertEventArgs(DBNull.Value, typeof(int)), DBNull.Value };
 
             var o = new object();
-            yield return new object[] { new ConvertEventArgs(o, typeof(object)), o };
-            yield return new object[] { new ConvertEventArgs(o, typeof(int)), o };
+            yield return new object[] { false, new ConvertEventArgs(o, typeof(object)), o };
+            yield return new object[] { false, new ConvertEventArgs(o, typeof(int)), o };
+
+            yield return new object[] { true, null, null };
+            yield return new object[] { true, new ConvertEventArgs("1", typeof(int)), "1" };
         }
 
         [Theory]
-        [MemberData(nameof(ConvertEventArgs_FormattingDisabled_TestData))]
-        public void Binding_OnFormat_InvokeFormattingDisabled_CallsFormat(ConvertEventArgs eventArgs, object expectedValue)
+        [MemberData(nameof(ConvertEventArgs_TestData))]
+        public void Binding_OnFormat_Invoke_CallsFormat(bool formattingEnabled, ConvertEventArgs eventArgs, object expectedValue)
         {
-            var binding = new SubBinding("propertyName", new object(), "dataMember");
+            var binding = new SubBinding("propertyName", new object(), "dataMember")
+            {
+                FormattingEnabled = formattingEnabled
+            };
 
             // No handler.
             object oldValue = eventArgs?.Value;
@@ -483,49 +489,14 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        public static IEnumerable<object[]> ConvertEventArgs_FormattingEnabled_TestData()
-        {
-            yield return new object[] { null, null };
-            yield return new object[] { new ConvertEventArgs("1", typeof(int)), "1" };
-        }
-
         [Theory]
-        [MemberData(nameof(ConvertEventArgs_FormattingEnabled_TestData))]
-        public void Binding_OnFormat_InvokeFormattingEnabled_CallsFormat(ConvertEventArgs eventArgs, object expectedValue)
+        [MemberData(nameof(ConvertEventArgs_TestData))]
+        public void Binding_OnParse_Invoke_CallsParse(bool formattingEnabled, ConvertEventArgs eventArgs, object expectedValue)
         {
             var binding = new SubBinding("propertyName", new object(), "dataMember")
             {
-                FormattingEnabled = true
+                FormattingEnabled = formattingEnabled
             };
-
-            // No handler.
-            binding.OnFormat(eventArgs);
-
-            // Handler.
-            int callCount = 0;
-            ConvertEventHandler handler = (sender, e) =>
-            {
-                Assert.Equal(binding, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            binding.Format += handler;
-            binding.OnFormat(eventArgs);
-            Assert.Equal(expectedValue, eventArgs?.Value);
-            Assert.Equal(1, callCount);
-
-            // Should not call if the handler is removed.
-            binding.Format -= handler;
-            binding.OnFormat(eventArgs);
-            Assert.Equal(1, callCount);
-        }
-
-        [Theory]
-        [MemberData(nameof(ConvertEventArgs_FormattingDisabled_TestData))]
-        public void Binding_OnParse_InvokeFormattingDisabled_CallsParse(ConvertEventArgs eventArgs, object expectedValue)
-        {
-            var binding = new SubBinding("propertyName", new object(), "dataMember");
 
             // No handler.
             object oldValue = eventArgs?.Value;
@@ -561,72 +532,23 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
-        [Theory]
-        [MemberData(nameof(ConvertEventArgs_FormattingEnabled_TestData))]
-        public void Binding_OnParse_InvokeFormattingEnabled_CallsParse(ConvertEventArgs eventArgs, object expectedValue)
+        public static IEnumerable<object[]> ReadValue_TestData()
         {
-            var binding = new SubBinding("propertyName", new object(), "dataMember")
+            foreach (ControlUpdateMode controlUpdateMode in Enum.GetValues(typeof(ControlUpdateMode)))
             {
-                FormattingEnabled = true
-            };
-
-            // No handler.
-            binding.OnParse(eventArgs);
-
-            // Handler.
-            int callCount = 0;
-            ConvertEventHandler handler = (sender, e) =>
-            {
-                Assert.Equal(binding, sender);
-                Assert.Same(eventArgs, e);
-                callCount++;
-            };
-
-            binding.Parse += handler;
-            binding.OnParse(eventArgs);
-            Assert.Equal(expectedValue, eventArgs?.Value);
-            Assert.Equal(1, callCount);
-
-            // Should not call if the handler is removed.
-            binding.Parse -= handler;
-            binding.OnParse(eventArgs);
-            Assert.Equal(1, callCount);
+                yield return new object[] { controlUpdateMode, true, 1 };
+                yield return new object[] { controlUpdateMode, false, 0 };
+            }
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
-        public void Binding_ReadValue_InvokeFormattingDisabled_DoesNotCallBindingComplete(ControlUpdateMode controlUpdateMode)
-        {
-            var binding = new Binding("propertyName", new object(), "dataMember")
-            {
-                ControlUpdateMode = controlUpdateMode
-            };
-
-            // No handler.
-            binding.ReadValue();
-
-            // Handler.
-            int callCount = 0;
-            BindingCompleteEventHandler handler = (sender, e) => callCount++;
-
-            binding.BindingComplete += handler;
-            binding.ReadValue();
-            Assert.Equal(0, callCount);
-
-            // Should not call if the handler is removed.
-            binding.BindingComplete -= handler;
-            binding.ReadValue();
-            Assert.Equal(0, callCount);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
-        public void Binding_ReadValue_InvokeFormattingEnabled_CallsBindingComplete(ControlUpdateMode controlUpdateMode)
+        [MemberData(nameof(ReadValue_TestData))]
+        public void Binding_ReadValue_Invoke_CallsBindingCompleteIfFormattingEnabled(ControlUpdateMode controlUpdateMode, bool formattingEnabled, int expectedCallCount)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
             {
                 ControlUpdateMode = controlUpdateMode,
-                FormattingEnabled = true
+                FormattingEnabled = formattingEnabled
             };
 
             // No handler.
@@ -648,21 +570,31 @@ namespace System.Windows.Forms.Tests
 
             binding.BindingComplete += handler;
             binding.ReadValue();
-            Assert.Equal(1, callCount);
+            Assert.Equal(expectedCallCount, callCount);
 
             // Should not call if the handler is removed.
             binding.BindingComplete -= handler;
             binding.ReadValue();
-            Assert.Equal(1, callCount);
+            Assert.Equal(expectedCallCount, callCount);
+        }
+
+        public static IEnumerable<object[]> WriteValue_TestData()
+        {
+            foreach (ControlUpdateMode controlUpdateMode in Enum.GetValues(typeof(ControlUpdateMode)))
+            {
+                yield return new object[] { controlUpdateMode, true };
+                yield return new object[] { controlUpdateMode, false };
+            }
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
-        public void Binding_WriteValue_InvokeFormattingDisabled_DoesNotCallBindingComplete(ControlUpdateMode controlUpdateMode)
+        [MemberData(nameof(WriteValue_TestData))]
+        public void Binding_WriteValue_Invoke_DoesNotCallBindingComplete(ControlUpdateMode controlUpdateMode, bool formattingEnabled)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
             {
-                ControlUpdateMode = controlUpdateMode
+                ControlUpdateMode = controlUpdateMode,
+                FormattingEnabled = formattingEnabled
             };
 
             // No handler.
@@ -671,43 +603,6 @@ namespace System.Windows.Forms.Tests
             // Handler.
             int callCount = 0;
             BindingCompleteEventHandler handler = (sender, e) => callCount++;
-
-            binding.BindingComplete += handler;
-            binding.WriteValue();
-            Assert.Equal(0, callCount);
-
-            // Should not call if the handler is removed.
-            binding.BindingComplete -= handler;
-            binding.WriteValue();
-            Assert.Equal(0, callCount);
-        }
-
-        [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
-        public void Binding_WriteValue_InvokeFormattingEnabled_DoesNotCallBindingComplete(ControlUpdateMode controlUpdateMode)
-        {
-            var binding = new Binding("propertyName", new object(), "dataMember")
-            {
-                ControlUpdateMode = controlUpdateMode,
-                FormattingEnabled = true
-            };
-
-            // No handler.
-            binding.WriteValue();
-
-            // Handler.
-            int callCount = 0;
-            BindingCompleteEventHandler handler = (sender, e) =>
-            {
-                Assert.Same(binding, sender);
-                Assert.Same(binding, e.Binding);
-                Assert.Equal(BindingCompleteContext.ControlUpdate, e.BindingCompleteContext);
-                Assert.Equal(BindingCompleteState.Success, e.BindingCompleteState);
-                Assert.False(e.Cancel);
-                Assert.Empty(e.ErrorText);
-                Assert.Null(e.Exception);
-                callCount++;
-            };
 
             binding.BindingComplete += handler;
             binding.WriteValue();

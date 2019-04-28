@@ -169,6 +169,15 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<string, string> GetStringNormalizedTheoryData()
+        {
+            var data = new TheoryData<string, string>();
+            data.Add(null, string.Empty);
+            data.Add(string.Empty, string.Empty);
+            data.Add("reasonable", "reasonable");
+            return data;
+        }
+
         public static TheoryData<char> GetCharTheoryData()
         {
             var data = new TheoryData<char>();
@@ -327,22 +336,6 @@ namespace WinForms.Common.Tests
             var data = new TheoryData<Cursor>();
             data.Add(null);
             data.Add(new Cursor((IntPtr)1));
-            return data;
-        }
-
-        public static TheoryData<EventArgs> GetEventArgsTheoryData()
-        {
-            var data = new TheoryData<EventArgs>();
-            data.Add(null);
-            data.Add(new EventArgs());
-            return data;
-        }
-
-        public static TheoryData<Exception> GetSecurityOrCriticalException()
-        {
-            var data = new TheoryData<Exception>();
-            data.Add(new NullReferenceException());
-            data.Add(new SecurityException());
             return data;
         }
 
