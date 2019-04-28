@@ -970,7 +970,8 @@ namespace System.Windows.Forms {
             string assemblyLoc = typeof(Application).Assembly.Location;
             if (assemblyLoc != null)
             {
-                s_useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, 2);
+                // CSC embeds DLL manifests as resource ID 2
+                s_useVisualStyles = UnsafeNativeMethods.ThemingScope.CreateActivationContext(assemblyLoc, nativeResourceManifestID: 2);
                 Debug.Assert(s_useVisualStyles, "Enable Visual Styles failed");
             }
         }
