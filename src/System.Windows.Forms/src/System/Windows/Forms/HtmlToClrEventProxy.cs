@@ -2,31 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
-using System.Security;
-using System.Runtime.InteropServices;
-using System.Net;
-using System.Globalization;
-using System.Collections;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-
-
+namespace System.Windows.Forms
+{
     /// <devdoc>
     ///  This class is here for IHTML*3.AttachHandler style eventing.
     ///  We need a way of routing requests for DISPID(0) to a particular CLR event without creating
     ///  a public class.  In order to accomplish this we implement IReflect and handle InvokeMethod
     ///  to call back on a CLR event handler.
     /// </devdoc>
-
-    internal class HtmlToClrEventProxy : IReflect {
+    internal class HtmlToClrEventProxy : IReflect
+    {
         private EventHandler eventHandler;
         private IReflect typeIReflectImplementation;
         private object sender = null;

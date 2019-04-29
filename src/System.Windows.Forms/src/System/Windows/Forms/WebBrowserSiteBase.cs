@@ -2,35 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Configuration.Assemblies;
-using System.Runtime.Remoting;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
 using System.ComponentModel;
-using System.Diagnostics;
-using System;
-using System.Reflection;
-using System.Globalization;
-using Microsoft.Win32;
-using System.Collections;
-using System.Collections.Specialized;
-using System.IO;
-using System.Drawing;    
-using System.Windows.Forms.Design;
-using System.Windows.Forms.ComponentModel;
-using System.Windows.Forms.ComponentModel.Com2Interop;
 using System.ComponentModel.Design;
-using System.Windows.Forms;
-using System.Drawing.Imaging;
-using System.Drawing.Design;
-using System.Security;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\WebBrowserSiteBase.uex' path='docs/doc[@for="WebBrowserSiteBase"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     <para>
     /// This class implements the necessary interfaces required for an ActiveX site.
     ///
     /// This class is public, but has an internal constructor so that external
@@ -41,11 +20,10 @@ namespace System.Windows.Forms {
     /// All implementations of the site interface methods are private, which
     /// means that inheritors who want to override even a single method of one
     /// of these interfaces will have to implement the whole interface.
-    ///     </para>
     /// </devdoc>
     public class WebBrowserSiteBase
-        : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable {
-
+        : UnsafeNativeMethods.IOleControlSite, UnsafeNativeMethods.IOleClientSite, UnsafeNativeMethods.IOleInPlaceSite, UnsafeNativeMethods.ISimpleFrameSite, UnsafeNativeMethods.IPropertyNotifySink, IDisposable
+    {
         private WebBrowserBase host;
         private AxHost.ConnectionPointCookie connectionPoint;
 

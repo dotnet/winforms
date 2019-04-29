@@ -2,24 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Runtime.Versioning;
-    using System.Security;
-    using System.Windows.Forms.Layout;
-    
-    /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost"]/*' />
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
+namespace System.Windows.Forms
+{
     /// <devdoc>
     /// ToolStripItem that can host Controls.
     /// </devdoc>
-    public class ToolStripControlHost : ToolStripItem {
- 
+    public class ToolStripControlHost : ToolStripItem
+    {
         private Control control;
         private int suspendSyncSizeCount = 0;
         private ContentAlignment controlAlign = ContentAlignment.MiddleCenter;
@@ -54,9 +51,7 @@ namespace System.Windows.Forms {
             Rectangle bounds = this.Bounds;
             CommonProperties.UpdateSpecifiedBounds(c, bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                c.ToolStripControlHost = this;
-            }
+            c.ToolStripControlHost = this;
 
             OnSubscribeControlEvents(c);
         }
@@ -985,15 +980,7 @@ namespace System.Windows.Forms {
             this.Size = Control.Size;
         }
     
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessCmdKey"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -1003,12 +990,7 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic( charCode );
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessDialogKey(Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessDialogKey(Keys keyData) => false;
 
         protected override void SetVisibleCore(bool visible) {
             // This is needed, because if you try and set set visible to true before the parent is visible,

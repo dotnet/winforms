@@ -136,7 +136,7 @@ namespace System.Windows.Forms {
                     return tool;
                 }
 
-                return Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                return Control.FromHandle(UnsafeNativeMethods.GetFocus());
             }
         }
 

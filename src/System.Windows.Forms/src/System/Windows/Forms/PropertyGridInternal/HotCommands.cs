@@ -52,11 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new HotCommandsAccessibleObject(this, ownerGrid);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new HotCommandsAccessibleObject(this, ownerGrid);
         }
 
         public override Rectangle DisplayRectangle {
@@ -108,11 +104,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         private void LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) {
             try
@@ -136,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         protected override void OnGotFocus(EventArgs e) {
-            Label.FocusInternal();
+            Label.Focus();
             Label.Invalidate();
         } 
 
@@ -155,7 +147,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public void Select(bool forward) {
-            Label.FocusInternal();
+            Label.Focus();
         }
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs) {

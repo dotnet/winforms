@@ -318,8 +318,7 @@ using Microsoft.Win32;
 
         private static void InitializeRenderer(int state) {
             int part = GroupBoxElement.Part;
-            if (AccessibilityImprovements.Level2
-                && SystemInformation.HighContrast
+            if (SystemInformation.HighContrast
                 && ((GroupBoxState)state == GroupBoxState.Disabled)
                 && VisualStyleRenderer.IsCombinationDefined(GroupBoxElement.ClassName, VisualStyleElement.Button.GroupBox.HighContrastDisabledPart)) {
                     part = VisualStyleElement.Button.GroupBox.HighContrastDisabledPart;

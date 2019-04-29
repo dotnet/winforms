@@ -23,8 +23,8 @@ namespace System.Windows.Forms {
         ClassInterface(ClassInterfaceType.AutoDispatch)]
     public class ThreadExceptionDialog : Form {
 
-        private const string DownBitmapName = "down.bmp";
-        private const string UpBitmapName = "up.bmp";
+        private const string DownBitmapName = "down";
+        private const string UpBitmapName = "up";
 
         private const int MAXWIDTH = 440;
         private const int MAXHEIGHT = 325;
@@ -280,10 +280,8 @@ namespace System.Windows.Forms {
             if (detailAnchor) {
                 b = detailsButton;
 
-                expandImage = new Bitmap(GetType(), DownBitmapName);
-                expandImage.MakeTransparent();
-                collapseImage = new Bitmap(GetType(), UpBitmapName);
-                collapseImage.MakeTransparent();
+                expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
+                collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
                 if (DpiHelper.IsScalingRequirementMet)
                 {
@@ -327,14 +325,12 @@ namespace System.Windows.Forms {
             if (expandImage != null) {
                 expandImage.Dispose();
             }
-            expandImage = new Bitmap(GetType(), DownBitmapName);
-            expandImage.MakeTransparent();
+            expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
             if (collapseImage != null) {
                 collapseImage.Dispose();
             }
-            collapseImage = new Bitmap(GetType(), UpBitmapName);
-            collapseImage.MakeTransparent();
+            collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
             ScaleBitmapLogicalToDevice(ref expandImage);
             ScaleBitmapLogicalToDevice(ref collapseImage);
@@ -342,25 +338,16 @@ namespace System.Windows.Forms {
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSize"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Hide the property
-        ///    </para>
+        /// Hide the property
         /// </devdoc>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-            get
-            {
-                return base.AutoSize;
-            }
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSizeChanged"]/*' />

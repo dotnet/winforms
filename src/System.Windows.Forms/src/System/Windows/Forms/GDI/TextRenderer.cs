@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms
 {
-    using System.Internal;
     using System;
     using System.Drawing;
     using System.Windows.Forms.Internal;
@@ -335,7 +334,7 @@ namespace System.Windows.Forms
 
 
         internal static Color DisabledTextColor(Color backColor) {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+            if (SystemInformation.HighContrast) {
                 return SystemColors.GrayText;
             }
 

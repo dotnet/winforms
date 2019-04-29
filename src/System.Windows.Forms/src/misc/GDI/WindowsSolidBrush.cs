@@ -11,7 +11,6 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;
-    using System.Internal;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;

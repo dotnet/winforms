@@ -23,7 +23,7 @@ namespace System.Windows.Forms {
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
     [Designer("System.Windows.Forms.Design.ToolStripPanelDesigner, " + AssemblyRef.SystemDesign)]
-    [ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripPanel_standalone.bmp")]
+    [ToolboxBitmapAttribute(typeof(ToolStripPanel), "ToolStripPanel_standalone")]
     public class ToolStripPanel : ContainerControl, IArrangedElement {
 
 
@@ -377,9 +377,8 @@ namespace System.Windows.Forms {
                 return base.TabStop;
             }
             set {
-                if (AccessibilityImprovements.Level2) {
-                    SetStyle(ControlStyles.Selectable, value);
-                }
+                SetStyle(ControlStyles.Selectable, value);
+
                 base.TabStop = value;
             }
         }

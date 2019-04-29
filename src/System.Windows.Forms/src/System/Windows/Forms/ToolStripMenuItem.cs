@@ -274,13 +274,11 @@ namespace System.Windows.Forms {
                 if (checkedState == CheckState.Indeterminate) {
                     if (indeterminateCheckedImage == null) {
                         if (DpiHelper.IsScalingRequirementMet) {
-                            indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked.ico", scaledCheckMarkBitmapSize);
+                            indeterminateCheckedImage = GetBitmapFromIcon("IndeterminateChecked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap indeterminateCheckedBmp = new Bitmap(typeof(ToolStripMenuItem), "IndeterminateChecked.bmp");
+                            Bitmap indeterminateCheckedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "IndeterminateChecked");
                             if (indeterminateCheckedBmp != null) {
-                                // 
-                                indeterminateCheckedBmp.MakeTransparent(indeterminateCheckedBmp.GetPixel(1, 1));
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref indeterminateCheckedBmp);
                                 }
@@ -293,13 +291,11 @@ namespace System.Windows.Forms {
                 else if (checkedState == CheckState.Checked) {
                     if (checkedImage == null) {
                         if (DpiHelper.IsScalingRequirementMet) {
-                            checkedImage = GetBitmapFromIcon("Checked.ico", scaledCheckMarkBitmapSize);
+                            checkedImage = GetBitmapFromIcon("Checked", scaledCheckMarkBitmapSize);
                         }
                         else {
-                            Bitmap checkedBmp = new Bitmap(typeof(ToolStripMenuItem), "Checked.bmp");
+                            Bitmap checkedBmp = DpiHelper.GetBitmapFromIcon(typeof(ToolStripMenuItem), "Checked");
                             if (checkedBmp != null) {
-                                // 
-                                checkedBmp.MakeTransparent(checkedBmp.GetPixel(1, 1));
                                 if (DpiHelper.IsScalingRequired) {
                                     DpiHelper.ScaleBitmapLogicalToDevice(ref checkedBmp);
                                 }
@@ -330,7 +326,6 @@ namespace System.Windows.Forms {
 
                         if (b != null)
                         {
-                            b.MakeTransparent(b.GetPixel(1, 1));
                             if (DpiHelper.IsScalingRequired && (b.Size.Width != desiredIconSize.Width || b.Size.Height != desiredIconSize.Height))
                             {
                                 Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredIconSize);
@@ -831,9 +826,9 @@ namespace System.Windows.Forms {
         internal void HandleAutoExpansion() {
             if (Enabled && ParentInternal != null && ParentInternal.MenuAutoExpand && HasDropDownItems) {
                 ShowDropDown();
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                }
+
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
+
                 DropDown.SelectNextToolStripItem(null, /*forward=*/true);
             }
         }
@@ -1141,9 +1136,7 @@ namespace System.Windows.Forms {
 				 Select();
                  ShowDropDown();
 
-                 if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
-                 }
+                 KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(this);
 
                  DropDown.SelectNextToolStripItem(null, /*forward=*/true);
                  return true;
@@ -1240,7 +1233,7 @@ namespace System.Windows.Forms {
                 if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
                     return NativeMethods.UIA_MenuItemControlTypeId;
                 }
-                else if (AccessibilityImprovements.Level2 && propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
+                else if (propertyID == NativeMethods.UIA_AcceleratorKeyPropertyId) {
                     return ownerItem.GetShortcutText();
                 }
                 else {

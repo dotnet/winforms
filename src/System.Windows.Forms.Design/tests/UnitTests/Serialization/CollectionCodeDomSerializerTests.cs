@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Design.Serialization.Tests
         [Fact]
         public void CollectionCodeDomSerializer_Constructor()
         {
-            var underTest = CollectionCodeDomSerializer.GetDefault();
+            var underTest = CollectionCodeDomSerializer.Default;
             Assert.NotNull(underTest);
         }
     }

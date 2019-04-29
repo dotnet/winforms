@@ -119,9 +119,6 @@ namespace System.Windows.Forms {
 #endregion
 */
 
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
-            
-            
             private Image GetTargetWindowIcon() {
                 Image systemIcon = null;
                 IntPtr hIcon = UnsafeNativeMethods.SendMessage(new HandleRef(this, Control.GetSafeHandle(target)), Interop.WindowMessages.WM_GETICON, NativeMethods.ICON_SMALL, 0);
@@ -219,9 +216,7 @@ namespace System.Windows.Forms {
             // when the system menu item shortcut is evaluated - pop the dropdown          
             internal class SystemMenuItem : ToolStripMenuItem {
                    public SystemMenuItem(){
-                       if (AccessibilityImprovements.Level1) {
-                           AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
-                       }
+                       AccessibleName = SR.MDIChildSystemMenuItemAccessibleName;
                    }
                    protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
                         if (Visible && ShortcutKeys == keyData) {

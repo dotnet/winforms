@@ -36,10 +36,8 @@ namespace System.ComponentModel.Design
         }
         
         /// <summary>
-        ///     Edits the given object value using the editor style
-        ///     provided by ObjectSelectorEditor.GetEditStyle.
+        /// Edits the given object value using the editor style provided by ObjectSelectorEditor.GetEditStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (null != provider)
@@ -101,7 +99,6 @@ namespace System.ComponentModel.Design
             NativeMethods.SendMessage(handle, NativeMethods.TVM_SETEXTENDEDSTYLE, new IntPtr(mask), new IntPtr(extendedStyle));
         }
         
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
@@ -309,7 +306,6 @@ namespace System.ComponentModel.Design
                 _edSvc = null;
             }
             
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
             protected override void WndProc(ref Message m)
             {
                 switch (m.Msg)

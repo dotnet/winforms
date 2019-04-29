@@ -2,6 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
@@ -10,16 +14,6 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    using System;
-    using System.Internal;
-    using System.Security;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
     /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext"]/*' />
     /// <devdoc>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties

@@ -11,7 +11,6 @@ namespace System.Experimental.Gdi
 #endif
 {
     using System;
-    using System.Internal;
 
     [Flags]
 #if WINFORMS_PUBLIC_GRAPHICS_LIBRARY

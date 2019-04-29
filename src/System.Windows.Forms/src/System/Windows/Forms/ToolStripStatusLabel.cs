@@ -2,27 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Diagnostics;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Security;
-    using System.Windows.Forms.Layout; 
-    using System.Windows.Forms.Design; 
-    using System.Runtime.InteropServices;
-    using Automation;
-   
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Automation;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.Layout;
 
-    /// <include file='doc\ToolStripStatusLabel.uex' path='docs/doc[@for="ToolStripStatusLabel"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
     /// A non selectable ToolStrip item
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.StatusStrip)]
-    public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion {
-
+    public class ToolStripStatusLabel : ToolStripLabel, IAutomationLiveRegion
+    {
         private static readonly Padding defaultMargin = new Padding(0, 3, 0, 2);
         private Padding scaledDefaultMargin = defaultMargin;
 
@@ -65,11 +59,7 @@ namespace System.Windows.Forms {
         /// AccessibleObject for this ToolStripStatusLabel instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripStatusLabelAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripStatusLabelAccessibleObject(this);
         }
 
         /// <devdoc>
@@ -205,7 +195,7 @@ namespace System.Windows.Forms {
 
         protected override void OnTextChanged(EventArgs e) {
             base.OnTextChanged(e);
-            if (AccessibilityImprovements.Level3 && LiveSetting != AutomationLiveSetting.Off) {
+            if (LiveSetting != AutomationLiveSetting.Off) {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
         }

@@ -656,7 +656,7 @@ example usage
         ///      Returns a specific AccessibleObbject associated w/ the objectID
         /// </devdoc>
         protected virtual AccessibleObject GetAccessibilityObjectById(int objectId) {
-            if (AccessibilityImprovements.Level3 && this is IAutomationLiveRegion) {
+            if (this is IAutomationLiveRegion) {
                 return this.AccessibilityObject;
             }
 
@@ -1863,7 +1863,7 @@ example usage
         internal bool ValidateActiveControl(out bool validatedControlAllowsFocusChange) {
             bool valid = true;
             validatedControlAllowsFocusChange = false;
-            IContainerControl c = GetContainerControlInternal();
+            IContainerControl c = GetContainerControl();
             if (c != null && this.CausesValidation) {
                 ContainerControl container = c as ContainerControl;
                 if (container != null) {
@@ -1871,7 +1871,7 @@ example usage
                         ContainerControl cc;
                         Control parent = container.ParentInternal;
                         if (parent != null) {
-                            cc = parent.GetContainerControlInternal() as ContainerControl;
+                            cc = parent.GetContainerControl() as ContainerControl;
                             if (cc != null) {
                                 container = cc;
                             }
@@ -3262,20 +3262,14 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MousePosition"]/*' />
         /// <devdoc>
-        ///     The current position of the mouse in screen coordinates.
+        /// The current position of the mouse in screen coordinates.
         /// </devdoc>
-        public static Point MousePosition {
-            get {
-                // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-                // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-                // going to keep it this way.
-                //
-                // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-                // IntSecurity.ScreenLocationOfThings.Demand();
-
-                NativeMethods.POINT pt = new NativeMethods.POINT();
+        public static Point MousePosition
+        {
+            get
+            {
+                var pt = new NativeMethods.POINT();
                 UnsafeNativeMethods.GetCursorPos(pt);
                 return new Point(pt.x, pt.y);
             }
@@ -4070,8 +4064,7 @@ example usage
                         else {
                             // if we're in the hidden state, we need to manufacture an update message so everyone knows it.
                             //
-                            int actionMask = (NativeMethods.UISF_HIDEACCEL | 
-                                (AccessibilityImprovements.Level1 ? 0 : NativeMethods.UISF_HIDEFOCUS)) << 16;
+                            int actionMask = NativeMethods.UISF_HIDEACCEL << 16;
                             uiCuesState |= UISTATE_KEYBOARD_CUES_HIDDEN;
 
                             // The side effect of this initial state is that adding new controls may clear the accelerator
@@ -5368,25 +5361,23 @@ example usage
             return BeginInvoke(method, null);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BeginInvoke1"]/*' />
         /// <devdoc>
-        ///     Executes the given delegate on the thread that owns this Control's
-        ///     underlying window handle.  The delegate is called asynchronously and this
-        ///     method returns immediately.  You may call this from any thread, even the
-        ///     thread that owns the control's handle.  If the control's handle doesn't
-        ///     exist yet, this will follow up the control's parent chain until it finds a
-        ///     control or form that does have a window handle.  If no appropriate handle
-        ///     can be found, BeginInvoke will throw an exception.  Exceptions within the
-        ///     delegate method are considered untrapped and will be sent to the
-        ///     application's untrapped exception handler.
+        /// Executes the given delegate on the thread that owns this Control's
+        /// underlying window handle.  The delegate is called asynchronously and this
+        /// method returns immediately.  You may call this from any thread, even the
+        /// thread that owns the control's handle.  If the control's handle doesn't
+        /// exist yet, this will follow up the control's parent chain until it finds a
+        /// control or form that does have a window handle.  If no appropriate handle
+        /// can be found, BeginInvoke will throw an exception.  Exceptions within the
+        /// delegate method are considered untrapped and will be sent to the
+        /// application's untrapped exception handler.
         ///
-        ///     There are five functions on a control that are safe to call from any
-        ///     thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
-        ///     For all other method calls, you should use one of the invoke methods to marshal
-        ///     the call to the control's thread.
+        /// There are five functions on a control that are safe to call from any
+        /// thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
+        /// For all other method calls, you should use one of the invoke methods to marshal
+        /// the call to the control's thread.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]        
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public IAsyncResult BeginInvoke(Delegate method, params object[] args) {
             using (new MultithreadSafeCallScope()) {
                 Control marshaler = FindMarshalingControl();
@@ -6038,21 +6029,18 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FindForm"]/*' />
         /// <devdoc>
-        ///     Retrieves the form that this control is on. The control's parent
-        ///     may not be the same as the form.
+        /// Retrieves the form that this control is on. The control's parent may not be
+        /// the same as the form.
         /// </devdoc>
-        public Form FindForm() {
-            return FindFormInternal();
-        }
-
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal Form FindFormInternal() {
+        public Form FindForm()
+        {
             Control cur = this;
-            while (cur != null && !(cur is Form) ) {
+            while (cur != null && !(cur is Form))
+            {
                 cur = cur.ParentInternal;
             }
+
             return (Form)cur;
         }
 
@@ -6125,38 +6113,34 @@ example usage
             if (handler != null) handler(this, e);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Focus"]/*' />
         /// <devdoc>
-        ///    <para> Sets focus to the control.</para>
-        ///    <para>Attempts to set focus to this control.</para>
+        /// Attempts to set focus to this control.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool Focus() {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::Focus - " + this.Name);
+        public bool Focus()
+        {
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::Focus - " + Name);
 
-            //here, we call our internal method (which form overrides)
-            //see comments in FocusInternal
-            //
+            // Call the internal method (which form overrides)
             return FocusInternal();
         }
 
         /// <devdoc>
-        ///    Internal method for setting focus to the control.
-        ///    Form overrides this method - because MDI child forms
-        ///    need to be focused by calling the MDIACTIVATE message.
+        /// Internal method for setting focus to the control.
+        /// Form overrides this method - because MDI child forms
+        /// need to be focused by calling the MDIACTIVATE message.
         /// </devdoc>
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal virtual bool FocusInternal() {
+        private protected virtual bool FocusInternal() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::FocusInternal - " + this.Name);
             if (CanFocus){
                 UnsafeNativeMethods.SetFocus(new HandleRef(this, Handle));
             }
             if (Focused && this.ParentInternal != null) {
-                IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                IContainerControl c = this.ParentInternal.GetContainerControl();
 
                 if (c != null) {
                     if (c is ContainerControl) {
-                        ((ContainerControl)c).SetActiveControlInternal(this);
+                        ((ContainerControl)c).SetActiveControl(this);
                     }
                     else {
                         c.ActiveControl = this;
@@ -6167,48 +6151,46 @@ example usage
             return Focused;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FromChildHandle"]/*' />
         /// <devdoc>
-        ///     Returns the control that is currently associated with handle.
-        ///     This method will search up the HWND parent chain until it finds some
-        ///     handle that is associated with with a control. This method is more
-        ///     robust that fromHandle because it will correctly return controls
-        ///     that own more than one handle.
+        /// Returns the control that is currently associated with handle.
+        /// This method will search up the HWND parent chain until it finds some
+        /// handle that is associated with with a control. This method is more
+        /// robust that fromHandle because it will correctly return controls
+        /// that own more than one handle.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromChildHandle(IntPtr handle) {
-            return FromChildHandleInternal(handle);
-        }
+        public static Control FromChildHandle(IntPtr handle)
+        {
+            while (handle != IntPtr.Zero)
+            {
+                Control ctl = FromHandle(handle);
+                if (ctl != null)
+                {
+                    return ctl;
+                }
 
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal static Control FromChildHandleInternal(IntPtr handle) {
-            while (handle != IntPtr.Zero) {
-                Control ctl = FromHandleInternal(handle);
-                if (ctl != null) return ctl;
                 handle = UnsafeNativeMethods.GetAncestor(new HandleRef(null, handle), NativeMethods.GA_PARENT);
             }
             return null;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FromHandle"]/*' />
         /// <devdoc>
-        ///     Returns the control that is currently associated with handle.
+        /// Returns the control that is currently associated with handle.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public static Control FromHandle(IntPtr handle) {
-            return FromHandleInternal(handle);
-        }
-
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal static Control FromHandleInternal(IntPtr handle) {
+        public static Control FromHandle(IntPtr handle)
+        {
             NativeWindow w = NativeWindow.FromHandle(handle);
-            while (w != null && !(w is ControlNativeWindow)) {
+            while (w != null && !(w is ControlNativeWindow))
+            {
                 w = w.PreviousWindow;
             }
 
-            if (w is ControlNativeWindow) {
-                return((ControlNativeWindow)w).GetControl();
+            if (w is ControlNativeWindow controlNativeWindow)
+            {
+                return controlNativeWindow.GetControl();
             }
+
             return null;
         }
 
@@ -6257,8 +6239,7 @@ example usage
             }
 
             IntPtr hwnd = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, Handle), pt.X, pt.Y, value);
-
-            Control ctl = FromChildHandleInternal(hwnd);
+            Control ctl = FromChildHandle(hwnd);
 
             return(ctl == this) ? null : ctl;
         }
@@ -6272,13 +6253,25 @@ example usage
             return GetChildAtPoint(pt, GetChildAtPointSkip.None);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GetContainerControl"]/*' />
         /// <devdoc>
-        ///     Returns the closest ContainerControl in the control's chain of
-        ///     parent controls and forms.
+        /// Returns the closest ContainerControl in the control's chain of parent controls
+        /// and forms.
         /// </devdoc>
-        public IContainerControl GetContainerControl() {
-            return GetContainerControlInternal();
+        public IContainerControl GetContainerControl()
+        {
+            Control c = this;
+            
+            // Refer to IsContainerControl property for more details.            
+            if (c != null && IsContainerControl) 
+            {
+                c = c.ParentInternal;
+            }
+            while (c != null && !IsFocusManagingContainerControl(c))
+            {
+                c = c.ParentInternal;
+            }
+
+            return (IContainerControl)c;
         }
 
         private static bool IsFocusManagingContainerControl(Control ctl) {
@@ -6295,21 +6288,6 @@ example usage
             return (updateCount > 0);
         }
 
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal IContainerControl GetContainerControlInternal() {
-            Control c = this;
-            
-            // Refer to IsContainerControl property for more details.            
-            if (c != null && IsContainerControl) 
-            {
-                c = c.ParentInternal;
-            }
-            while (c != null && (!IsFocusManagingContainerControl(c))) {
-                c = c.ParentInternal;
-            }
-            return (IContainerControl)c;
-        }
-
         // Essentially an Hfont; see inner class for details.
         private static FontHandleWrapper GetDefaultFontHandleWrapper() {
             if (defaultFontHandleWrapper == null) {
@@ -6322,7 +6300,7 @@ example usage
         internal IntPtr GetHRgn(Region region) {
             Graphics graphics = CreateGraphicsInternal();
             IntPtr handle = region.GetHrgn(graphics);
-            System.Internal.HandleCollector.Add(handle, NativeMethods.CommonHandles.GDI);
+            Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             graphics.Dispose();
             return handle;
         }
@@ -6577,7 +6555,7 @@ example usage
             ArrayList windows = GetChildWindows(this.Handle);
 
             foreach (IntPtr hWnd in windows) {
-                Control ctl = FromHandleInternal(hWnd);
+                Control ctl = FromHandle(hWnd);
                 int tabIndex = (ctl == null) ? -1 : ctl.TabIndex;
                 holders.Add(new ControlTabOrderHolder(holders.Count, tabIndex, ctl));
             }
@@ -6788,26 +6766,26 @@ example usage
             return ctl == this? null: ctl;
         }
 
-        /// <devdoc>
-        ///     Return ((Control) window).Handle if window is a Control.
-        ///     Otherwise, returns window.Handle
-        /// </devdoc>
+        /// <summary>
+        /// Return ((Control) window).Handle if window is a Control.
+        /// Otherwise, returns window.Handle
+        /// </summary>
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
             Debug.Assert(window != null, "window is null in Control.GetSafeHandle");
-            IntPtr hWnd = IntPtr.Zero;
-            Control control = window as Control;
-            if (control != null) {
-                hWnd = control.Handle;
-                Debug.Assert(hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)));
-                return hWnd;
+            if (window is Control control)
+            {
+                return control.Handle;
             }
-            else {
-                hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd))) {
+            else
+            {
+                IntPtr hWnd = window.Handle;
+                if (hWnd == IntPtr.Zero || UnsafeNativeMethods.IsWindow(new HandleRef(null, hWnd)))
+                {
                     return hWnd;
                 }
-                else {
+                else
+                {
                     throw new Win32Exception(NativeMethods.ERROR_INVALID_HANDLE);
                 }
             }
@@ -6905,9 +6883,8 @@ example usage
         /// <internalonly/>
         private void InitMouseWheelSupport() {
             if (!mouseWheelInit) {
-                // If we are running on less than NT4 or less that Win98 then we must use
-                // the manual mousewheel stuff...
-                //
+                // If we are running on a system without a mouse wheel then we must use
+                // manual mousewheel routines.
                 mouseWheelRoutingNeeded = !SystemInformation.NativeMouseWheelSupport;
 
                 if (mouseWheelRoutingNeeded) {
@@ -7978,15 +7955,14 @@ example usage
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnNotifyMessage"]/*' />
         /// <devdoc>
-        ///    OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage
-        ///    bit is set. This allows for semi-trusted controls to listen to
-        ///    window messages, without allowing them to actually modify the
-        ///    message.
+        /// OnNotifyMessage is called if the ControlStyles.EnableNotifyMessage bit is set.
+        /// This allows for controls to listen to window messages, without allowing them to
+        /// actually modify the message.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected virtual void OnNotifyMessage(Message m) {
+        protected virtual void OnNotifyMessage(Message m)
+        {
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.OnParentBackColorChanged"]/*' />
@@ -8138,9 +8114,8 @@ example usage
             Contract.EndContractBlock();
 
             if (GetStyle(ControlStyles.UserPaint)) {
-                // Theme support on Windows XP requires that we paint the background
+                // Theme support requires that we paint the background
                 // and foreground to support semi-transparent children
-                //
                 PaintWithErrorHandling(e, PaintLayerBackground);
                 e.ResetGraphics();
                 PaintWithErrorHandling(e, PaintLayerForeground);
@@ -8607,9 +8582,7 @@ example usage
         protected void InvokeGotFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
                 toInvoke.OnGotFocus(e);
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(toInvoke);
             }
         }
 
@@ -8779,9 +8752,7 @@ example usage
         protected void InvokeLostFocus(Control toInvoke, EventArgs e) {
             if (toInvoke != null) {
                 toInvoke.OnLostFocus(e);
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
-                }
+                KeyboardToolTipStateMachine.Instance.NotifyAboutLostFocus(toInvoke);
             }
         }
 
@@ -9645,41 +9616,21 @@ example usage
             return failed;
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PointToClient"]/*' />
         /// <devdoc>
-        ///     Computes the location of the screen point p in client coords.
+        /// Computes the location of the screen point p in client coords.
         /// </devdoc>
-        public Point PointToClient(Point p) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way.
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-            return PointToClientInternal(p);
-        }
-        internal Point PointToClientInternal(Point p) {            
-            // Win9x reports incorrect values if you go outside the 16-bit range.
-            // We're not going to do anything about it, though -- it's esoteric, it clutters up the code,
-            // and potentially causes problems on systems that do support 32-bit coordinates.
-
-            NativeMethods.POINT point = new NativeMethods.POINT(p.X, p.Y);
+        public Point PointToClient(Point p)
+        {
+            var point = new NativeMethods.POINT(p.X, p.Y);
             UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), point, 1);
             return new Point(point.x, point.y);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PointToScreen"]/*' />
         /// <devdoc>
-        ///     Computes the location of the client point p in screen coords.
+        /// Computes the location of the client point p in screen coords.
         /// </devdoc>
-        public Point PointToScreen(Point p) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way. .
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-
+        public Point PointToScreen(Point p)
+        {
             NativeMethods.POINT point = new NativeMethods.POINT(p.X, p.Y);
             UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, point, 1);
             return new Point(point.x, point.y);
@@ -9790,7 +9741,7 @@ example usage
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal static PreProcessControlState PreProcessControlMessageInternal(Control target, ref Message msg) {
             if (target == null) {
-                target = Control.FromChildHandleInternal(msg.HWnd);
+                target = Control.FromChildHandle(msg.HWnd);
             }
 
             if (target == null) {
@@ -10468,7 +10419,7 @@ example usage
                     }
                     finally {
                         if (parentHandle.Handle != IntPtr.Zero                               // the parent was not null
-                            && (Control.FromHandleInternal(parentHandle.Handle) == null || this.parent == null) // but wasnt a windows forms window
+                            && (Control.FromHandle(parentHandle.Handle) == null || this.parent == null) // but wasnt a windows forms window
                             && UnsafeNativeMethods.IsWindow(parentHandle)) {                 // and still is a window
                             // correctly parent back up to where we were before.
                             // if we were parented to a proper windows forms control, CreateControl would have properly parented
@@ -10479,59 +10430,44 @@ example usage
                     
                     // Restore control focus
                     if (focused) {
-                        FocusInternal();
+                        Focus();
                     }
                 }
             }
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RectangleToClient"]/*' />
         /// <devdoc>
-        ///     Computes the location of the screen rectangle r in client coords.
+        /// Computes the location of the screen rectangle r in client coords.
         /// </devdoc>
-        public Rectangle RectangleToClient(Rectangle r) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way.
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-
+        public Rectangle RectangleToClient(Rectangle r)
+        {
             NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
             UnsafeNativeMethods.MapWindowPoints(NativeMethods.NullHandleRef, new HandleRef(this, Handle), ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RectangleToScreen"]/*' />
         /// <devdoc>
-        ///     Computes the location of the client rectangle r in screen coords.
+        /// Computes the location of the client rectangle r in screen coords.
         /// </devdoc>
-        public Rectangle RectangleToScreen(Rectangle r) {
-            // Reviewed: The following demand has always been commented out since v1.0. In Whidbey, we have
-            // re-reviewed this method to see if it needs protection, but haven't found any threats, so are
-            // going to keep it this way.
-            //
-            // Debug.WriteLineIf(IntSecurity.SecurityDemand.TraceVerbose, "ScreenLocationOfThings Demanded");
-            // IntSecurity.ScreenLocationOfThings.Demand();
-
+        public Rectangle RectangleToScreen(Rectangle r)
+        {
             NativeMethods.RECT rect = NativeMethods.RECT.FromXYWH(r.X, r.Y, r.Width, r.Height);
             UnsafeNativeMethods.MapWindowPoints(new HandleRef(this, Handle), NativeMethods.NullHandleRef, ref rect, 2);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
-        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ReflectMessage"]/*' />
         /// <devdoc>
-        ///     Reflects the specified message to the control that is bound to hWnd.
+        /// Reflects the specified message to the control that is bound to hWnd.
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        protected static bool ReflectMessage(IntPtr hWnd, ref Message m) {
-            return ReflectMessageInternal(hWnd, ref m);
-        }
-        
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal static bool ReflectMessageInternal(IntPtr hWnd, ref Message m) {
-            Control control = Control.FromHandleInternal(hWnd);
-            if (control == null) return false;
+        protected static bool ReflectMessage(IntPtr hWnd, ref Message m)
+        {
+            Control control = Control.FromHandle(hWnd);
+            if (control == null)
+            {
+                return false;
+            }
+
             m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
             return true;
         }
@@ -11062,7 +10998,7 @@ example usage
         // used by Form
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Select1"]/*' />
         protected virtual void Select(bool directed, bool forward) {
-            IContainerControl c = GetContainerControlInternal();
+            IContainerControl c = GetContainerControl();
 
             if (c != null) {
                 c.ActiveControl = this;
@@ -11103,7 +11039,7 @@ example usage
                         && (!tabStopOnly || ctl.TabStop)
                         && (nested || ctl.parent == this)) {
 
-                        if (AccessibilityImprovements.Level3 && ctl.parent is ToolStrip) {
+                        if (ctl.parent is ToolStrip) {
                             continue;
                         }
                         return ctl;
@@ -11111,13 +11047,6 @@ example usage
                 }
             } while (ctl != start);
             return null;
-        }
-
-        /// <devdoc>
-        ///     Unsafe internal version of SelectNextControl - Use with caution!
-        /// </devdoc>
-        internal bool SelectNextControlInternal(Control ctl, bool forward, bool tabStopOnly, bool nested, bool wrap) {
-            return SelectNextControl(ctl, forward, tabStopOnly, nested, wrap);
         }
 
         /// <devdoc>
@@ -11129,10 +11058,10 @@ example usage
             //           function was added.
             //
             if (ContainsFocus && ParentInternal != null) {
-                IContainerControl c = ParentInternal.GetContainerControlInternal();
+                IContainerControl c = ParentInternal.GetContainerControl();
 
                 if (c != null) {
-                    ((Control)c).SelectNextControlInternal(this, true, true, true, true);
+                    ((Control)c).SelectNextControl(this, true, true, true, true);
                 }
             }
         }
@@ -11476,9 +11405,8 @@ example usage
             }
         }
 
-        // SECURITY WARNING: This method bypasses a security demand. Use with caution!
-        internal void SetTopLevelInternal(bool value) {
-
+        private protected void SetTopLevelInternal(bool value)
+        {
             if (GetTopLevel() != value) {
                 if (parent != null) {
                     throw new ArgumentException(SR.TopLevelParentedControl, "value");
@@ -11501,7 +11429,7 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SetVisibleCore"]/*' />
         protected virtual void SetVisibleCore(bool value) {
             try {
-                System.Internal.HandleCollector.SuspendCollect();
+                Interop.HandleCollector.SuspendCollect();
 
                 if (GetVisibleCore() != value) {
                     if (!value) {
@@ -11590,7 +11518,7 @@ example usage
                 }
             }
             finally {
-                System.Internal.HandleCollector.ResumeCollect();
+                Interop.HandleCollector.ResumeCollect();
             }
         }
 
@@ -12008,7 +11936,7 @@ example usage
             int curIndex = this.Controls.GetChildIndex(ctl);
             IntPtr hWnd = ctl.InternalHandle;
             while ((hWnd = UnsafeNativeMethods.GetWindow(new HandleRef(null, hWnd), NativeMethods.GW_HWNDPREV)) != IntPtr.Zero) {
-                Control c = FromHandleInternal(hWnd);
+                Control c = FromHandle(hWnd);
                 if (c != null) {
                     newIndex = this.Controls.GetChildIndex(c, false) + 1;
                     break;
@@ -12037,7 +11965,7 @@ example usage
             if (!Disposing && findNewParent && IsHandleCreated) {
                 IntPtr parentHandle = UnsafeNativeMethods.GetParent(new HandleRef(this, Handle));
                 if (parentHandle != IntPtr.Zero) {
-                    ReflectParent = Control.FromHandleInternal(parentHandle);
+                    ReflectParent = Control.FromHandle(parentHandle);
                     return;
                 }
             }
@@ -12197,7 +12125,8 @@ example usage
                 if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam))) return;
             }
             else {
-                if (ReflectMessageInternal(m.LParam, ref m)) {
+                if (ReflectMessage(m.LParam, ref m))
+                {
                     return;
                 }
             }
@@ -12231,7 +12160,7 @@ example usage
                     client = new Point(Width/2, Height/2);
                 }
                 else {
-                    client = PointToClientInternal(new Point(x, y));
+                    client = PointToClient(new Point(x, y));
                 }
 
                 // VisualStudio7 # 156, only show the context menu when clicked in the client area
@@ -12262,7 +12191,7 @@ example usage
         /// <internalonly/>
         private void WmCtlColorControl(ref Message m) {
             // We could simply reflect the message, but it's faster to handle it here if possible.
-            Control control = Control.FromHandleInternal(m.LParam);
+            Control control = Control.FromHandle(m.LParam);
             if (control != null) {
                 m.Result = control.InitializeDCForWmCtlColor(m.WParam, m.Msg);
                 if (m.Result != IntPtr.Zero) {
@@ -12707,7 +12636,7 @@ example usage
                 // DefWndProc would normally set the focus to this control, but
                 // since we're skipping DefWndProc, we need to do it ourselves.
                 if (button == MouseButtons.Left && GetStyle(ControlStyles.Selectable)) {
-                    FocusInternal();
+                    Focus();
                 }
             }
 
@@ -12737,9 +12666,7 @@ example usage
         /// <internalonly/>
         private void WmMouseEnter(ref Message m) {
             DefWndProc(ref m);
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
             OnMouseEnter(EventArgs.Empty);
         }
 
@@ -12917,7 +12844,7 @@ example usage
         /// <internalonly/>
         private unsafe void WmNotify(ref Message m) {
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
-            if (!ReflectMessageInternal(nmhdr->hwndFrom,ref m)) {
+            if (!ReflectMessage(nmhdr->hwndFrom,ref m)) {
                 if(nmhdr->code == NativeMethods.TTN_SHOW) {
                     m.Result = UnsafeNativeMethods.SendMessage(new HandleRef(null, nmhdr->hwndFrom), Interop.WindowMessages.WM_REFLECT + m.Msg, m.WParam, m.LParam);
                     return;
@@ -12935,7 +12862,7 @@ example usage
         /// </devdoc>
         /// <internalonly/>
         private void WmNotifyFormat(ref Message m) {
-            if (!ReflectMessageInternal(m.WParam, ref m)) {
+            if (!ReflectMessage(m.WParam, ref m)) {
                 DefWndProc(ref m);
             }
         }
@@ -12956,11 +12883,11 @@ example usage
                 // treating it as signed
                 p = (IntPtr)(long)ctrlId;
             }
-            if (!ReflectMessageInternal(p, ref m)) {
+            if (!ReflectMessage(p, ref m)) {
                 //Additional Check For Control .... TabControl truncates the Hwnd value...
                 IntPtr handle = window.GetHandleFromID((short)NativeMethods.Util.LOWORD(m.WParam));
                 if (handle != IntPtr.Zero) {
-                    Control control = Control.FromHandleInternal(handle);
+                    Control control = Control.FromHandle(handle);
                     if (control != null) {
                         m.Result = control.SendMessage(Interop.WindowMessages.WM_REFLECT + m.Msg, handle, m.LParam);
                         reflectCalled = true;
@@ -13207,7 +13134,7 @@ example usage
                     hWnd = UnsafeNativeMethods.GetDlgItem(new HandleRef(this, Handle), NativeMethods.Util.HIWORD(m.WParam));
                     break;
             }
-            if (hWnd == IntPtr.Zero || !ReflectMessageInternal(hWnd, ref m)) {
+            if (hWnd == IntPtr.Zero || !ReflectMessage(hWnd, ref m)) {
                 DefWndProc(ref m);
             }
         }
@@ -13221,7 +13148,7 @@ example usage
             WmImeSetFocus();
 
             if (!HostedInWin32DialogManager) {
-                IContainerControl c = GetContainerControlInternal();
+                IContainerControl c = GetContainerControl();
                 if (c != null) {
                     bool activateSucceed;
 
@@ -13593,7 +13520,7 @@ example usage
                 case Interop.WindowMessages.WM_VKEYTOITEM:
                 case Interop.WindowMessages.WM_CHARTOITEM:
                 case Interop.WindowMessages.WM_COMPAREITEM:
-                    if (!ReflectMessageInternal(m.LParam, ref m)) {
+                    if (!ReflectMessage(m.LParam, ref m)) {
                         DefWndProc(ref m);
                     }
                     break;
@@ -14388,7 +14315,7 @@ example usage
                     owner.OnControlRemoved(new ControlEventArgs(value));
 
                     // ContainerControl needs to see it needs to find a new ActiveControl.
-                    ContainerControl cc = owner.GetContainerControlInternal() as ContainerControl;
+                    ContainerControl cc = owner.GetContainerControl() as ContainerControl;
                     if (cc != null)
                     {
                         cc.AfterControlRemoved(value, owner);
@@ -16446,7 +16373,7 @@ example usage
 
                     // take the focus  [which is what UI Activation is all about !]
                     //
-                    if (!control.ContainsFocus) control.FocusInternal();
+                    if (!control.ContainsFocus) control.Focus();
 
                     // set ourselves up in the host.
                     //
@@ -17730,7 +17657,7 @@ example usage
                 Message msg = Message.Create(lpmsg.hwnd, lpmsg.message, lpmsg.wParam, lpmsg.lParam);
 
                 if (needPreProcess) {
-                    Control target = Control.FromChildHandleInternal(lpmsg.hwnd);
+                    Control target = Control.FromChildHandle(lpmsg.hwnd);
                     if (target != null && (control == target || control.Contains(target))) {
                         PreProcessControlState messageState = PreProcessControlMessageInternal(target, ref msg);
                         switch (messageState) {
@@ -17884,7 +17811,6 @@ example usage
             /// <devdoc>
             ///      Notifies that the accelerator table needs to be updated due to a change in a control mnemonic.
             /// </devdoc>
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             internal void UpdateAccelTable(){
                 // Setting the count to -1 will recreate the table on demand (when GetControlInfo is called).
                 this.accelCount = -1;
@@ -17896,7 +17822,6 @@ example usage
             }
 
             // Since this method is used by Reflection .. dont change the "signature"
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             internal void ViewChangedInternal()
             {
                 ViewChanged();
@@ -17907,7 +17832,6 @@ example usage
             ///      changed.
             /// </devdoc>
             /// <internalonly/>
-            [SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
             private void ViewChanged() {
                 // send the view change notification to anybody listening.
                 //
@@ -18064,8 +17988,6 @@ example usage
                             shimManager = new HtmlShimManager();
                         }
 
-                        // Security note: There is a demand for FullTrust on HtmlDocument that should apply
-                        // to this call. So we don't need to demand here.
                         retVal = new HtmlDocument(shimManager, iOlecontainer as UnsafeNativeMethods.IHTMLDocument);
                     }
 
@@ -18243,7 +18165,7 @@ example usage
             }
         }
 
-        #if ACTIVEX_SOURCING
+#if ACTIVEX_SOURCING
 
         //
         // This has been cut from the product.
@@ -18273,10 +18195,7 @@ example usage
                     form.ControlBox = true;
                     form.SizeGripStyle = SizeGripStyle.Show;
                     form.DockPadding.Bottom = 16; // size grip size
-
-                    Bitmap bitmap = new Bitmap(grid.GetType(), "PropertyGrid.bmp");
-                    bitmap.MakeTransparent();
-                    form.Icon = Icon.FromHandle(bitmap.GetHicon());
+                    form.Icon = new Icon(grid.GetType(), "PropertyGrid");
 
                     grid.Dock = DockStyle.Fill;
 
@@ -18295,7 +18214,7 @@ example usage
             }
         }
 
-        #endif
+#endif
 
         /// <devdoc>
         ///      Contains a single ambient property, including DISPID, name and value.
@@ -18897,7 +18816,7 @@ example usage
                     }
 
                     // Find this control's containing control
-                    ContainerControl container = parent.GetContainerControlInternal() as ContainerControl;
+                    ContainerControl container = parent.GetContainerControl() as ContainerControl;
                     if (container == null) {
                         return null;
                     }
@@ -19010,7 +18929,7 @@ example usage
             }
 
             internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3 && this.Owner is IAutomationLiveRegion) {
+                if (this.Owner is IAutomationLiveRegion) {
                     return true;
                 }
 
@@ -19018,7 +18937,7 @@ example usage
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3 && propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion) {
+                if (propertyID == NativeMethods.UIA_LiveSettingPropertyId && Owner is IAutomationLiveRegion) {
                     return ((IAutomationLiveRegion)Owner).LiveSetting;
                 }
 
@@ -19032,8 +18951,7 @@ example usage
                         case NativeMethods.UIA_AccessKeyPropertyId:
                             return string.Empty;
                         case NativeMethods.UIA_HelpTextPropertyId:
-                            var help = Help;
-                            return AccessibilityImprovements.Level3 ? (help ?? string.Empty) : help;
+                            return Help ?? string.Empty;
                     }
                 }
 
@@ -19042,13 +18960,9 @@ example usage
 
             internal override UnsafeNativeMethods.IRawElementProviderSimple HostRawElementProvider {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        UnsafeNativeMethods.IRawElementProviderSimple provider;
-                        UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
-                        return provider;
-                    }
-
-                    return base.HostRawElementProvider;
+                    UnsafeNativeMethods.IRawElementProviderSimple provider;
+                    UnsafeNativeMethods.UiaHostProviderFromHwnd(new HandleRef(this, Handle), out provider);
+                    return provider;
                 }
             }
 
@@ -19079,7 +18993,7 @@ example usage
                 if (CompModSwitches.LifetimeTracing.Enabled) stackOnCreate = new System.Diagnostics.StackTrace().ToString();
 #endif
                 handle = font.ToHfont();
-                System.Internal.HandleCollector.Add(handle, NativeMethods.CommonHandles.GDI);
+                Interop.HandleCollector.Add(handle, Interop.CommonHandles.GDI);
             }
 
             internal IntPtr Handle {

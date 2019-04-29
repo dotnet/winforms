@@ -4,8 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
+using System.Security;
 using System.Windows.Forms;
 using Xunit;
 
@@ -183,6 +186,14 @@ namespace WinForms.Common.Tests
             return data;
         }
 
+        public static TheoryData<Guid> GetGuidTheoryData()
+        {
+            var data = new TheoryData<Guid>();
+            data.Add(Guid.Empty);
+            data.Add(Guid.NewGuid());
+            return data;
+        }
+
         public static TheoryData<Color> GetColorTheoryData()
         {
             var data = new TheoryData<Color>();
@@ -233,12 +244,49 @@ namespace WinForms.Common.Tests
             return data;
         }
 
-        public static TheoryData<Size> GetSizeTheoryData()
+        public static TheoryData<Point> GetPointTheoryData() => GetPointTheoryData(TestIncludeType.All);
+        
+        public static TheoryData<Point> GetPointTheoryData(TestIncludeType includeType)
+        {
+            var data = new TheoryData<Point>();
+            if (!includeType.HasFlag(TestIncludeType.NoPositives))
+            {
+                data.Add(new Point());
+                data.Add(new Point(10));
+                data.Add(new Point(1, 2));
+            }
+            if (!includeType.HasFlag(TestIncludeType.NoNegatives))
+            {
+                data.Add(new Point(int.MaxValue, int.MinValue));
+                data.Add(new Point(-1, -2));
+            }
+            return data;
+        }
+
+        public static TheoryData<Size> GetSizeTheoryData() => GetSizeTheoryData(TestIncludeType.All);
+
+        public static TheoryData<Size> GetSizeTheoryData(TestIncludeType includeType)
+        {
+            var data = new TheoryData<Size>();
+            if (!includeType.HasFlag(TestIncludeType.NoPositives))
+            {
+                data.Add(new Size());
+                data.Add(new Size(new Point(1,1)));
+                data.Add(new Size(1, 2));
+            }
+            if (!includeType.HasFlag(TestIncludeType.NoNegatives))
+            {
+                data.Add(new Size(-1, 1));
+                data.Add(new Size(1, -1));
+            }
+            return data;
+        }
+
+        public static TheoryData<Size> GetPositiveSizeTheoryData()
         {
             var data = new TheoryData<Size>();
             data.Add(new Size());
             data.Add(new Size(1, 2));
-            data.Add(new Size(-1, -2));
             return data;
         }
 
@@ -275,13 +323,45 @@ namespace WinForms.Common.Tests
         {
             var data = new TheoryData<Type, bool>();
             data.Add(typeof(bool), false);
-            data.Add(typeof(System.ComponentModel.Design.Serialization.InstanceDescriptor), true);
+            data.Add(typeof(InstanceDescriptor), true);
             data.Add(typeof(int), false);
             data.Add(typeof(double), false);
             data.Add(null, false);
             return data;
         }
 
+        public static TheoryData<Cursor> GetCursorTheoryData()
+        {
+            var data = new TheoryData<Cursor>();
+            data.Add(null);
+            data.Add(new Cursor((IntPtr)1));
+            return data;
+        }
+
+        public static TheoryData<EventArgs> GetEventArgsTheoryData()
+        {
+            var data = new TheoryData<EventArgs>();
+            data.Add(null);
+            data.Add(new EventArgs());
+            return data;
+        }
+
+        public static TheoryData<Exception> GetSecurityOrCriticalException()
+        {
+            var data = new TheoryData<Exception>();
+            data.Add(new NullReferenceException());
+            data.Add(new SecurityException());
+            return data;
+        }
+
         #endregion        
+    }
+
+    [Flags]
+    public enum TestIncludeType
+    {
+        All,
+        NoPositives,
+        NoNegatives
     }
 }

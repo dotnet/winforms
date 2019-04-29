@@ -726,12 +726,7 @@ namespace System.Windows.Forms {
         /// <returns>The accessible name.</returns>
         internal string GetAccessibleName(string baseName) {
             if (baseName == null) {
-                if (AccessibilityImprovements.Level3) {
-                    return SR.SpinnerAccessibleName;
-                }
-                else if (AccessibilityImprovements.Level1) {
-                    return this.GetType().Name;
-                }
+                return SR.SpinnerAccessibleName;
             }
 
             return baseName;
@@ -1209,7 +1204,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_SETFOCUS:
                     if (!HostedInWin32DialogManager) {
                         if (ActiveControl == null) {
-                            SetActiveControlInternal(TextBox);
+                            SetActiveControl(TextBox);
                         }
                         else {
                             FocusActiveControlInternal();
@@ -1273,8 +1268,8 @@ namespace System.Windows.Forms {
                 set {
                     bool valueChanged = (value != base.Text);
                     base.Text = value;      
-                    if (valueChanged && AccessibilityImprovements.Level1) {
-                            AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
+                    if (valueChanged) {
+                        AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
                     }
                 }
             }
@@ -1341,7 +1336,7 @@ namespace System.Windows.Forms {
             }
 
             protected override void OnGotFocus(EventArgs e) {
-                parent.SetActiveControlInternal(this);
+                parent.SetActiveControl(this);
                 parent.InvokeGotFocus(parent, e);
             }
 
@@ -1528,7 +1523,7 @@ namespace System.Windows.Forms {
 
                 // Focus the parent
                 //
-                this.parent.FocusInternal();
+                this.parent.Focus();
 
                 if (!parent.ValidationCancelled && e.Button == MouseButtons.Left) {
                     BeginButtonPress(e);
@@ -1816,12 +1811,10 @@ namespace System.Windows.Forms {
                     get {
                         string baseName = base.Name;
                         if (baseName == null || baseName.Length == 0) {
-                            if (AccessibilityImprovements.Level3) {
-                                // For AI.Level3 spinner is already announced so use type name.
-                                return Owner.ParentInternal.GetType().Name;
-                            }
-                            return SR.SpinnerAccessibleName;
+                            // Spinner is already announced so use type name.
+                            return Owner.ParentInternal.GetType().Name;
                         }
+
                         return baseName;
                     }
                     set {

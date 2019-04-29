@@ -115,8 +115,8 @@ namespace System.Windows.Forms
                 }
 
                 if (DataGridView != null &&
-                   (style != null ^ value != null) ||
-                   (style != null && value != null && !style.Equals(DefaultCellStyle)))
+                   ((style != null ^ value != null) ||
+                   (style != null && value != null && !style.Equals(DefaultCellStyle))))
                 {
                     DataGridView.OnBandDefaultCellStyleChanged(this);
                 }

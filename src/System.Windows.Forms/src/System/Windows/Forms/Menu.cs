@@ -2,31 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System;
-    using System.Collections;
-    using System.Windows.Forms.Design;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Security;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-    
-    /// <include file='doc\Menu.uex' path='docs/doc[@for="Menu"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).
+    /// This is the base class for all menu components (MainMenu, MenuItem, and ContextMenu).
     /// </devdoc>
-    [
-    ToolboxItemFilter("System.Windows.Forms"),
-    ListBindable(false)
-    ]
-    public abstract class Menu : Component {
+    [ToolboxItemFilter("System.Windows.Forms")]
+    [ListBindable(false)]
+    public abstract class Menu : Component
+    {
         internal const int CHANGE_ITEMS     = 0; // item(s) added or removed
         internal const int CHANGE_VISIBLE   = 1; // item(s) hidden or shown
         internal const int CHANGE_MDI       = 2; // mdi item changed

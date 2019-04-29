@@ -1038,11 +1038,9 @@ namespace System.Windows.Forms
             Marshal.Copy(structData, 0, currentPtr, structData.Length);
             currentPtr = (IntPtr)((long)currentPtr + baseStructSize);
 
-            // Write out the strings...
-            //
+            // Write out the strings.
             for (int i = 0; i < files.Length; i++)
             {
-                // NOTE: DllLib.copy(char[]...) converts to ANSI on Windows 95...
                 UnsafeNativeMethods.CopyMemoryW(currentPtr, files[i], files[i].Length * 2);
                 currentPtr = (IntPtr)((long)currentPtr + (files[i].Length * 2));
                 Marshal.Copy(new byte[] { 0, 0 }, 0, currentPtr, 2);
@@ -1086,7 +1084,7 @@ namespace System.Windows.Forms
                 {
                     return (NativeMethods.E_OUTOFMEMORY);
                 }
-                // NOTE: DllLib.copy(char[]...) converts to ANSI on Windows 95...
+
                 char[] chars = str.ToCharArray(0, str.Length);
                 UnsafeNativeMethods.CopyMemoryW(ptr, chars, chars.Length * 2);
             }
@@ -1624,7 +1622,7 @@ namespace System.Windows.Forms
 
                         //This bitmap is created by the com object which originally copied the bitmap to tbe 
                         //clipboard. We call Add here, since DeleteObject calls Remove.
-                        System.Internal.HandleCollector.Add(medium.unionmember, NativeMethods.CommonHandles.GDI);
+                        Interop.HandleCollector.Add(medium.unionmember, Interop.CommonHandles.GDI);
                         Image clipboardImage = Image.FromHbitmap(medium.unionmember);
                         if (clipboardImage != null)
                         {

@@ -1228,7 +1228,7 @@ namespace System.Windows.Forms
         }
 
         /// <devdoc>
-        ///     The value of the Edit control default password char.
+        /// The value of the Edit control default password char.
         /// </devdoc>
         private char SystemPasswordChar
         {
@@ -1236,37 +1236,6 @@ namespace System.Windows.Forms
             {
                 if (MaskedTextBox.systemPwdChar == '\0')
                 {
-                    // This is the hard way to get the password char - left here for information.
-                    // It is picked up from Comctl32.dll. If VisualStyles is enabled it will get the dot char. 
-                    /*                
-                    StringBuilder charVal = new StringBuilder(20);  // it could be 0x0000000000009999 format.
-                    bool foundRsc         = false;
-                    int IDS_PASSWORDCHAR  = 0x1076; // %ntsdx%\shell\comctrl32\v6\rcids.h
-                                                    // defined in en.rc as: IDS_PASSWORDCHAR "9679" // 0x25cf - Black Circle
-
-                    IntSecurity.UnmanagedCode.Assert();
-
-                    try
-                    {   
-                        // The GetModuleHandle function returns a handle to a mapped module without incrementing its reference count. 
-                        // @"C:\windows\winsxs\x86_Microsoft.Windows.Common-Controls_6595b64144ccf1df_6.0.10.0_x-ww_f7fb5805\comctl32.dll if VisulaStyles enabled.
-
-                        IntPtr hModule = UnsafeNativeMethods.GetModuleHandle("comctl32.dll");
-                        Debug.Assert(hModule != IntPtr.Zero, String.Format("Could not get a handle to comctl32.dll - Error: 0x{0:X8}", Marshal.GetLastWin32Error()));
-
-                        foundRsc = UnsafeNativeMethods.LoadString(new HandleRef(null, hModule), IDS_PASSWORDCHAR, charVal, charVal.Capacity);
-                    }
-                    catch( Exception ex )
-                    {
-                        if( ClientUtils.IsSecurityOrCriticalException( ex ) )
-                        {
-                            throw;
-                        }
-                    }
-
-                    MaskedTextBox.systemPwdChar = foundRsc ? (char) int.Parse(charVal.ToString()) : MaskedTextProvider.DefaultPasswordChar;
-                    */
-
                     // We need to temporarily create an edit control to get the default password character.  
                     // We cannot use this control because we would have to reset the native control's password char to use
                     // the defult one so we can get it; this would change the text displayed in the box (even for a short time)
@@ -1361,10 +1330,12 @@ namespace System.Windows.Forms
                     return base.TextLength;
                 }
 
-                // In Win9x systems TextBoxBase.TextLength calls Text.Length directly and does not query the window for the actual text length.  
-                // If TextMaskFormat is set to a anything different from IncludePromptAndLiterals or HidePromptOnLeave is true the return value 
-                // may be incorrect because the Text property value and the display text may be different.  We need to handle this here.
-
+                // On older platforms TextBoxBase.TextLength calls Text.Length directly and
+                // does not query the window for the actual text length.  
+                // If TextMaskFormat is set to a anything different from IncludePromptAndLiterals
+                // or HidePromptOnLeave is true the return value may be incorrect because the
+                // Text property value and the display text may be different.
+                // We need to handle this here.
                 return GetFormattedDisplayString().Length;
             }
         }

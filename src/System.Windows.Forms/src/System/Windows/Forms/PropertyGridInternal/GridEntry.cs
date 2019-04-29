@@ -172,7 +172,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         private bool colorInversionNeededInHC {
             get {
-                 return SystemInformation.HighContrast && !OwnerGrid.developerOverride && AccessibilityImprovements.Level1;
+                 return SystemInformation.HighContrast && !OwnerGrid.developerOverride;
             }
         }
 
@@ -450,20 +450,18 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
 
-                if (AccessibilityImprovements.Level1) {
-                    // Notify accessibility clients of expanded state change
-                    // StateChange requires NameChange, too - accessible clients won't see this, unless both events are raised
+                // Notify accessibility clients of expanded state change
+                // StateChange requires NameChange, too - accessible clients won't see this, unless both events are raised
 
-                    // Root item is hidden and should not raise events
-                    if (GridItemType != GridItemType.Root) {
-                        int id = ((PropertyGridView)GridEntryHost).AccessibilityGetGridEntryChildID(this);
-                        if (id >= 0) {
-                            PropertyGridView.PropertyGridViewAccessibleObject gridAccObj =
-                                (PropertyGridView.PropertyGridViewAccessibleObject)((PropertyGridView)GridEntryHost).AccessibilityObject;
+                // Root item is hidden and should not raise events
+                if (GridItemType != GridItemType.Root) {
+                    int id = ((PropertyGridView)GridEntryHost).AccessibilityGetGridEntryChildID(this);
+                    if (id >= 0) {
+                        PropertyGridView.PropertyGridViewAccessibleObject gridAccObj =
+                            (PropertyGridView.PropertyGridViewAccessibleObject)((PropertyGridView)GridEntryHost).AccessibilityObject;
 
-                            gridAccObj.NotifyClients(AccessibleEvents.StateChange, id);
-                            gridAccObj.NotifyClients(AccessibleEvents.NameChange, id);
-                        }
+                        gridAccObj.NotifyClients(AccessibleEvents.StateChange, id);
+                        gridAccObj.NotifyClients(AccessibleEvents.NameChange, id);
                     }
                 }
             }
@@ -586,9 +584,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             gridAccObj.NotifyClients(AccessibleEvents.Focus, id);
                             gridAccObj.NotifyClients(AccessibleEvents.Selection, id);
 
-                            if (AccessibilityImprovements.Level3) {
-                                AccessibilityObject.SetFocus();
-                            }
+                            AccessibilityObject.SetFocus();
                         }
                     }
                 }
@@ -2206,16 +2202,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         format |= IntNativeMethods.DT_RIGHT | IntNativeMethods.DT_RTLREADING;
                     }
 
-                    // For password mode, Replace the string value either with * or a bullet, depending on the OS platform
-                    if (ShouldRenderPassword) {
-
-                        if (passwordReplaceChar == (char)0) {
-                            if (Environment.OSVersion.Version.Major > 4) {
-                                passwordReplaceChar = (char)0x25CF; // Bullet is 2022, but edit box uses round circle 25CF
-                            }
-                            else {
-                                passwordReplaceChar = '*';
-                            }
+                    // For password mode, replace the string value with a bullet.
+                    if (ShouldRenderPassword)
+                    {
+                        if (passwordReplaceChar == '\0')
+                        {
+                            // Bullet is 2022, but edit box uses round circle 25CF
+                            passwordReplaceChar = '\u25CF';
                         }
 
                         strValue = new string(passwordReplaceChar, strValue.Length);
@@ -2757,12 +2750,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             public override string Help {
                 get {
-                    if (AccessibilityImprovements.Level1) {
-                        return owner.PropertyDescription;
-                    }
-                    else {
-                        return base.Help;
-                    }
+                    return owner.PropertyDescription;
                 }
             }
 
@@ -2772,25 +2760,23 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    switch(direction) {
-                        case UnsafeNativeMethods.NavigateDirection.Parent:
-                            var parentGridEntry = owner.ParentGridEntry;
-                            if (parentGridEntry != null) {
-                                if (parentGridEntry is SingleSelectRootGridEntry) {
-                                    return owner.OwnerGrid.GridViewAccessibleObject;
-                                }
-                                else {
-                                    return parentGridEntry.AccessibilityObject;
-                                }
+                switch(direction) {
+                    case UnsafeNativeMethods.NavigateDirection.Parent:
+                        var parentGridEntry = owner.ParentGridEntry;
+                        if (parentGridEntry != null) {
+                            if (parentGridEntry is SingleSelectRootGridEntry) {
+                                return owner.OwnerGrid.GridViewAccessibleObject;
                             }
+                            else {
+                                return parentGridEntry.AccessibilityObject;
+                            }
+                        }
 
-                            return Parent;
-                        case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
-                            return Navigate(AccessibleNavigation.Previous);
-                        case UnsafeNativeMethods.NavigateDirection.NextSibling:
-                            return Navigate(AccessibleNavigation.Next);
-                    }
+                        return Parent;
+                    case UnsafeNativeMethods.NavigateDirection.PreviousSibling:
+                        return Navigate(AccessibleNavigation.Previous);
+                    case UnsafeNativeMethods.NavigateDirection.NextSibling:
+                        return Navigate(AccessibleNavigation.Next);
                 }
 
                 return base.FragmentNavigate(direction);
@@ -2801,18 +2787,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        return (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
-                    }
-
-                    return base.FragmentRoot;
+                    return (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
                 }
             }
 
             #region IAccessibleEx - patterns and properties
 
             internal override bool IsIAccessibleExSupported() {
-                if (owner.Expandable && AccessibilityImprovements.Level1) {
+                if (owner.Expandable) {
                     return true;
                 }
                 else {
@@ -2845,47 +2827,39 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     case NativeMethods.UIA_NamePropertyId:
                         return Name;
                     case NativeMethods.UIA_ControlTypePropertyId:
-                        if (AccessibilityImprovements.Level3) {
-                            // In Level 3 the accessible hierarchy is changed so we cannot use Button type
-                            // for the grid items to not break automation logic that searches for the first
-                            // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
-                            // button is one of the first children of PropertyGridView.
-                            return NativeMethods.UIA_DataItemControlTypeId;
-                        }
-
-                        return NativeMethods.UIA_ButtonControlTypeId;
+                        // The accessible hierarchy is changed so we cannot use Button type
+                        // for the grid items to not break automation logic that searches for the first
+                        // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
+                        // button is one of the first children of PropertyGridView.
+                        return NativeMethods.UIA_DataItemControlTypeId;
                     case NativeMethods.UIA_IsExpandCollapsePatternAvailablePropertyId:
                         return (Object)IsPatternSupported(NativeMethods.UIA_ExpandCollapsePatternId);
                 }
 
-                if (AccessibilityImprovements.Level3) {
-                    switch (propertyID) {
-                        case NativeMethods.UIA_AccessKeyPropertyId:
-                            return string.Empty;
-                        case NativeMethods.UIA_HasKeyboardFocusPropertyId:
-                            return owner.hasFocus;
-                        case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
-                            return (this.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                        case NativeMethods.UIA_IsEnabledPropertyId:
-                            return true;
-                        case NativeMethods.UIA_AutomationIdPropertyId:
-                            return GetHashCode().ToString();
-                        case NativeMethods.UIA_HelpTextPropertyId:
-                            return Help ?? string.Empty;
-                        case NativeMethods.UIA_IsPasswordPropertyId:
-                            return false;
-                        case NativeMethods.UIA_IsOffscreenPropertyId:
-                            return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                        case NativeMethods.UIA_LegacyIAccessibleRolePropertyId:
-                            return Role;
-                        case NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId:
-                            return DefaultAction;
-                        default:
-                            return base.GetPropertyValue(propertyID);
-                    }
+                switch (propertyID) {
+                    case NativeMethods.UIA_AccessKeyPropertyId:
+                        return string.Empty;
+                    case NativeMethods.UIA_HasKeyboardFocusPropertyId:
+                        return owner.hasFocus;
+                    case NativeMethods.UIA_IsKeyboardFocusablePropertyId:
+                        return (this.State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
+                    case NativeMethods.UIA_IsEnabledPropertyId:
+                        return true;
+                    case NativeMethods.UIA_AutomationIdPropertyId:
+                        return GetHashCode().ToString();
+                    case NativeMethods.UIA_HelpTextPropertyId:
+                        return Help ?? string.Empty;
+                    case NativeMethods.UIA_IsPasswordPropertyId:
+                        return false;
+                    case NativeMethods.UIA_IsOffscreenPropertyId:
+                        return (this.State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
+                    case NativeMethods.UIA_LegacyIAccessibleRolePropertyId:
+                        return Role;
+                    case NativeMethods.UIA_LegacyIAccessibleDefaultActionPropertyId:
+                        return DefaultAction;
+                    default:
+                        return base.GetPropertyValue(propertyID);
                 }
-
-                return null;
             }
 
             internal override bool IsPatternSupported(int patternId) {
@@ -2894,9 +2868,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     return true;
                 }
 
-                if (AccessibilityImprovements.Level3 && (
-                    patternId == NativeMethods.UIA_InvokePatternId ||
-                    patternId == NativeMethods.UIA_LegacyIAccessiblePatternId)) {
+                if (patternId == NativeMethods.UIA_InvokePatternId ||
+                    patternId == NativeMethods.UIA_LegacyIAccessiblePatternId) {
                     return true;
                 }
 
@@ -2952,19 +2925,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             public override AccessibleRole Role {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        return AccessibleRole.Cell;
-                    }
-                    else if (AccessibilityImprovements.Level1)  {
-                        if (owner.Expandable) {
-                            return AccessibleRole.ButtonDropDownGrid;
-                        }
-                        else {
-                            return AccessibleRole.Cell;
-                        }
-                    }
-
-                    return AccessibleRole.Row;
+                    return AccessibleRole.Cell;
                 }
             }
 
@@ -3082,7 +3043,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // Focus the PropertyGridView window
                 //
                 if ( (flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus) {
-                    bool focused = PropertyGridView.FocusInternal();
+                    bool focused = PropertyGridView.Focus();
                 }
 
                 // Select the grid entry
@@ -3095,9 +3056,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             internal override void SetFocus() {
                 base.SetFocus();
 
-                if (AccessibilityImprovements.Level3) {
-                    RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                }
+                RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
             }
         }
 

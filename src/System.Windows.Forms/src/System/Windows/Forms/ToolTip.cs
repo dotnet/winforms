@@ -716,9 +716,7 @@ namespace System.Windows.Forms {
             this.CheckNativeToolTip(control);
             this.CheckCompositeControls(control);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Hook(control, this);
-            }
+            KeyboardToolTipStateMachine.Instance.Hook(control, this);
         }
 
         private void CheckNativeToolTip(Control associatedControl) {
@@ -776,9 +774,7 @@ namespace System.Windows.Forms {
             Control control = (Control)sender;
             this.DestroyRegion(control);
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Unhook(control, this);
-            }
+            KeyboardToolTipStateMachine.Instance.Unhook(control, this);
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.OnDraw"]/*' />
@@ -1233,7 +1229,7 @@ namespace System.Windows.Forms {
                 IntPtr hwndControl = UnsafeNativeMethods.WindowFromPoint(screenCoords.X, screenCoords.Y);
                 if (hwndControl != IntPtr.Zero)
                 {
-                    Control currentControl = Control.FromHandleInternal(hwndControl);
+                    Control currentControl = Control.FromHandle(hwndControl);
                     if (currentControl != null && tools != null && tools.ContainsKey(currentControl))
                     {
                         return hwndControl;
@@ -1253,7 +1249,7 @@ namespace System.Windows.Forms {
             while (!finalMatch) {
                 Point pt = screenCoords;
                 if (baseVar != null) {
-                    pt = baseVar.PointToClientInternal(screenCoords);
+                    pt = baseVar.PointToClient(screenCoords);
                 }
                 IntPtr found = UnsafeNativeMethods.ChildWindowFromPointEx(new HandleRef(null, baseHwnd), pt.X, pt.Y, NativeMethods.CWP_SKIPINVISIBLE);
 
@@ -1265,9 +1261,9 @@ namespace System.Windows.Forms {
                     finalMatch = true;
                 }
                 else {
-                    baseVar = Control.FromHandleInternal(found);
+                    baseVar = Control.FromHandle(found);
                     if (baseVar == null) {
-                        baseVar = Control.FromChildHandleInternal(found);
+                        baseVar = Control.FromChildHandle(found);
                         if (baseVar != null) {
                             hwnd = baseVar.Handle;
                         }
@@ -1280,7 +1276,7 @@ namespace System.Windows.Forms {
             }
 
             if (hwnd != IntPtr.Zero) {
-                Control ctl = Control.FromHandleInternal(hwnd);
+                Control ctl = Control.FromHandle(hwnd);
                 if (ctl != null) {
                     Control current = ctl;
                     while (current != null && current.Visible) {
@@ -1340,9 +1336,7 @@ namespace System.Windows.Forms {
                 regions[i].HandleCreated -= new EventHandler(this.HandleCreated);
                 regions[i].HandleDestroyed -= new EventHandler(this.HandleDestroyed);
 
-                if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                    KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
-                }
+                KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
             }
 
             created.Clear();
@@ -1351,9 +1345,7 @@ namespace System.Windows.Forms {
             ClearTopLevelControlEvents();
             this.topLevelControl = null;
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
-            }
+            KeyboardToolTipStateMachine.Instance.ResetStateMachine(this);
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.SetDelayTime"]/*' />
@@ -1550,7 +1542,7 @@ namespace System.Windows.Forms {
                    
                     p.X = visibleRect.left + (visibleRect.right - visibleRect.left)/2;
                     p.Y = visibleRect.top + (visibleRect.bottom - visibleRect.top)/2;
-                    associatedControl.PointToClientInternal(p);
+                    associatedControl.PointToClient(p);
                     SetTrackPosition(p.X, p.Y);
                     SetTool(win, text, TipInfo.Type.SemiAbsolute, p);
 
@@ -1942,7 +1934,7 @@ namespace System.Windows.Forms {
                 }
                 // Lets find the Form for associated Control ...
                 // and hook up to the Deactivated event to Hide the Shown tooltip
-                Form baseFrom = tool.FindFormInternal();
+                Form baseFrom = tool.FindForm();
                 if (baseFrom != null) {
                     baseFrom.Deactivate -= new EventHandler(this.BaseFormDeactivate);
                 }
@@ -1956,9 +1948,7 @@ namespace System.Windows.Forms {
         private void BaseFormDeactivate(object sender, System.EventArgs e){
             HideAllToolTips();
 
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.NotifyAboutFormDeactivation(this);
-            }
+            KeyboardToolTipStateMachine.Instance.NotifyAboutFormDeactivation(this);
         }
 
         private void HideAllToolTips() {
@@ -2049,7 +2039,7 @@ namespace System.Windows.Forms {
 
                 // Lets find the Form for associated Control ...
                 // and hook up to the Deactivated event to Hide the Shown tooltip
-                Form baseFrom = tool.FindFormInternal();
+                Form baseFrom = tool.FindForm();
                 if (baseFrom != null) {
                     baseFrom.Deactivate += new EventHandler(this.BaseFormDeactivate);
                 }
@@ -2155,7 +2145,7 @@ namespace System.Windows.Forms {
             {
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null) {
-                    win = (IWin32Window)Control.FromHandleInternal(ti.hwnd);
+                    win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
                 
                 if (win == null) {
@@ -2200,7 +2190,7 @@ namespace System.Windows.Forms {
 
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null) {
-                    win = (IWin32Window)Control.FromHandleInternal(ti.hwnd);
+                    win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
 
                 if (win == null) {
@@ -2256,7 +2246,7 @@ namespace System.Windows.Forms {
 
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null) {
-                    win = (IWin32Window)Control.FromHandleInternal(ti.hwnd);
+                    win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
                 
                 if (win == null) {
@@ -2365,7 +2355,7 @@ namespace System.Windows.Forms {
 
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null) {
-                    win = (IWin32Window)Control.FromHandleInternal(ti.hwnd);
+                    win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
 
                 if (win == null || !IsWindowActive(win)) {
@@ -2406,7 +2396,6 @@ namespace System.Windows.Forms {
                    if (currentCursor != null)
                    {
                         wp->x = cursorPos.X;
-                        // Since HotSpot requires a security demand .. we assert this and revert Assert immediately 
                         wp->y = cursorPos.Y;
                         if (wp->y + wp->cy + currentCursor.Size.Height - currentCursor.HotSpot.Y > screen.WorkingArea.Bottom) {
                             wp->y = cursorPos.Y - wp->cy;
@@ -2452,7 +2441,7 @@ namespace System.Windows.Forms {
 
                 IWin32Window win = (IWin32Window)owners[ti.hwnd];
                 if (win == null) {
-                    win = (IWin32Window)Control.FromHandleInternal(ti.hwnd);
+                    win = (IWin32Window)Control.FromHandle(ti.hwnd);
                 }
 
                 if (win == null) {
@@ -2565,7 +2554,7 @@ namespace System.Windows.Forms {
                         int ret = unchecked( (int) (long)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETCURRENTTOOL, 0, ti));
                         if (ret != 0) {
                             IWin32Window win = (IWin32Window)owners[ti.hwnd];
-                            Control ac = Control.FromHandleInternal(ti.hwnd);
+                            Control ac = Control.FromHandle(ti.hwnd);
                             if (win == null) {
                                 win = (IWin32Window)ac;
                             }

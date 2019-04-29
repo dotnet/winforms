@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     using System.Globalization;
 
     /// <include file='doc\DataGridViewLinkColumn.uex' path='docs/doc[@for="DataGridViewLinkColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewLinkColumn), "DataGridViewLinkColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewLinkColumn), "DataGridViewLinkColumn")]
     public class DataGridViewLinkColumn : DataGridViewColumn
     {
         private static Type columnType = typeof(DataGridViewLinkColumn);
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeActiveLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.ActiveLinkColor.Equals(SystemColors.HotTrack);
             }
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.LinkColor.Equals(SystemColors.HotTrack);
             }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeVisitedLinkColor()
         {
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level2)
+            if (SystemInformation.HighContrast)
             {
                 return !this.VisitedLinkColor.Equals(SystemColors.HotTrack);
             }

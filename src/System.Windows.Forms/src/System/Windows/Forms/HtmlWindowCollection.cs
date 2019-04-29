@@ -2,21 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
-using System.Security;
-using System.Runtime.InteropServices;
-using System.Net;
 using System.Collections;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection"]/*' />
-    public class HtmlWindowCollection : ICollection {
+namespace System.Windows.Forms
+{
+    public class HtmlWindowCollection : ICollection
+    {
         private UnsafeNativeMethods.IHTMLFramesCollection2 htmlFramesCollection2;
         private HtmlShimManager shimManager;
         

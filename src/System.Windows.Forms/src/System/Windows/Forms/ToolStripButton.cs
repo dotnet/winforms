@@ -266,11 +266,9 @@ namespace System.Windows.Forms {
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (propertyID) {
-                        case NativeMethods.UIA_ControlTypePropertyId:
-                            return NativeMethods.UIA_ButtonControlTypeId;
-                    }
+                switch (propertyID) {
+                    case NativeMethods.UIA_ControlTypePropertyId:
+                        return NativeMethods.UIA_ButtonControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -278,7 +276,7 @@ namespace System.Windows.Forms {
 
             public override AccessibleRole Role {
                 get {
-                    if (ownerItem.CheckOnClick && AccessibilityImprovements.Level1) {
+                    if (ownerItem.CheckOnClick) {
                         return AccessibleRole.CheckButton;
                     }
                     else {
@@ -293,11 +291,9 @@ namespace System.Windows.Forms {
                         return base.State | AccessibleStates.Checked;
                     }
 
-                    if (AccessibilityImprovements.Level1) {
-                        // Disabled ToolStripButton, that is selected, must have focus state so that Narrator can announce it
-                        if (!ownerItem.Enabled && ownerItem.Selected) {
-                            return base.State | AccessibleStates.Focused;
-                        }
+                    // Disabled ToolStripButton, that is selected, must have focus state so that Narrator can announce it
+                    if (!ownerItem.Enabled && ownerItem.Selected) {
+                        return base.State | AccessibleStates.Focused;
                     }
 
                     return base.State;

@@ -11,7 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Reflection;
-using System.Security;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;
 

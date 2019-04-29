@@ -116,7 +116,7 @@ namespace System.Windows.Forms {
         object oleCallback;
 
         private static int[] shortcutsToDisable;
-        private static int richEditMajorVersion = 3; //Assume version 3: it'll only be version 2 on Win98, and we don't yet load version 4.
+        private static int richEditMajorVersion = 3;
 
         private BitVector32 richTextBoxFlags = new BitVector32();
         private static readonly BitVector32.Section autoWordSelectionSection = BitVector32.CreateSection(1);
@@ -2584,27 +2584,12 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Paste"]/*' />
         /// <devdoc>
-        ///     Pastes the contents of the clipboard in the given clipboard format.
+        /// Pastes the contents of the clipboard in the given clipboard format.
         /// </devdoc>
-        public void Paste(DataFormats.Format clipFormat) {
-            PasteUnsafe(clipFormat, 0);
-        }
-
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Paste1"]/*' />
-        /// <devdoc>
-        /// Note that this doesn't make a security demand: functions that call this should.
-        /// </devdoc>
-        private void PasteUnsafe(DataFormats.Format clipFormat, int hIcon) {
-            NativeMethods.REPASTESPECIAL rps = null;
-
-            if (hIcon != 0) {
-                rps = new NativeMethods.REPASTESPECIAL();
-                rps.dwAspect = DVASPECT_ICON;
-                rps.dwParam = hIcon;
-            }
-            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_PASTESPECIAL, clipFormat.Id, rps);
+        public void Paste(DataFormats.Format clipFormat)
+        {
+            UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_PASTESPECIAL, clipFormat.Id, 0);
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ProcessCmdKey"]/*' />

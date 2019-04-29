@@ -12,7 +12,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Security;
 using Microsoft.Win32;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -161,8 +160,6 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Graphics AdornerWindowGraphics
         {
-            [ResourceExposure(ResourceScope.Process)]
-            [ResourceConsumption(ResourceScope.Process)]
             get
             {
                 Graphics result = _adornerWindow.CreateGraphics();

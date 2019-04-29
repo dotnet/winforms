@@ -2,22 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Windows.Forms.Layout;
-    using System.Collections.Specialized;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Design; 
-    using System.Security;
-    using Microsoft.Win32;
-    
-    /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox"]/*' />
+using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Design;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.Layout;
+using Microsoft.Win32;
+
+namespace System.Windows.Forms
+{
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
-    public class ToolStripTextBox : ToolStripControlHost {
+    public class ToolStripTextBox : ToolStripControlHost
+    {
 
         internal static readonly object EventTextBoxTextAlignChanged                              = new object();
         internal static readonly object EventAcceptsTabChanged                                    = new object();
@@ -113,11 +110,7 @@ namespace System.Windows.Forms {
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripTextBoxAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripTextBoxAccessibleObject(this);
         }
 
         [System.Runtime.InteropServices.ComVisible(true)]
@@ -695,7 +688,7 @@ namespace System.Windows.Forms {
                     get { return base.Font; }
                     set { 
                         base.Font = value;
-                        isFontSet = ShouldSerializeFont();    
+                        isFontSet = ShouldSerializeFont();
                     }
                 }
 
@@ -704,11 +697,7 @@ namespace System.Windows.Forms {
                    set { ownerItem = value; }
                 }
 
-                internal override bool SupportsUiaProviders {
-                    get {
-                        return AccessibilityImprovements.Level3;
-                    }
-                }
+                internal override bool SupportsUiaProviders => true;
 
                 private void InvalidateNonClient() {
                     if (!IsPopupTextBox) {
@@ -820,11 +809,7 @@ namespace System.Windows.Forms {
                 }
 
                 protected override AccessibleObject CreateAccessibilityInstance() {
-                    if (AccessibilityImprovements.Level3) {
-                        return new ToolStripTextBoxControlAccessibleObject(this);
-                    }
-
-                    return base.CreateAccessibilityInstance();
+                    return new ToolStripTextBoxControlAccessibleObject(this);
                 }
 
                 protected override void Dispose(bool disposing) {

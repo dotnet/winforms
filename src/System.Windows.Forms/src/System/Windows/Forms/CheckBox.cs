@@ -663,7 +663,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>        
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
-                if (FocusInternal()) {
+                if (Focus()) {
                     //Paint in raised state...
                     //
                     ResetFlagsandPaint();

@@ -275,7 +275,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     
                     btnDropDown = new DropDownButton();
                     btnDropDown.UseComboBoxTheme = true;
-                    Bitmap bitmap = CreateResizedBitmap("Arrow.ico", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
+                    Bitmap bitmap = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
                     btnDropDown.Image = bitmap;
                     btnDropDown.BackColor = SystemColors.Control;
                     btnDropDown.ForeColor = SystemColors.ControlText;
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     btnDialog.BackColor = SystemColors.Control;
                     btnDialog.ForeColor = SystemColors.ControlText;
                     btnDialog.TabIndex = 3;
-                    btnDialog.Image = CreateResizedBitmap("dotdotdot.ico", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
+                    btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
                     btnDialog.Click += new EventHandler(this.OnBtnClick);
                     btnDialog.KeyDown += new KeyEventHandler(this.OnBtnKeyDown);
                     btnDialog.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
@@ -709,11 +709,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
         
         private int TipColumn {
             get{
@@ -808,7 +804,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
         internal void AccessibilitySelect(GridEntry entry) {
             SelectGridEntry(entry, true);            
-            FocusInternal();
+            Focus();
         }
 
         private void AddGridEntryEvents(GridEntryCollection ipeArray, int startIndex, int count) {
@@ -936,16 +932,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     // so put it onto one of our children first.
                     if (resetFocus) {
                         if (DialogButton.Visible) {
-                            DialogButton.FocusInternal();
+                            DialogButton.Focus();
                         }
                         else if (DropDownButton.Visible) {
-                            DropDownButton.FocusInternal();
+                            DropDownButton.Focus();
                         }
                         else if (Edit.Visible) {
-                            Edit.FocusInternal();
+                            Edit.Focus();
                         }
                         else {
-                            FocusInternal();
+                            Focus();
                         }
                     
                         if (selectedRow != -1) {
@@ -989,7 +985,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                // when the dropdown closes.
                Edit.DontFocus = true;
                if (Edit.Focused && !gotfocus) {
-                 gotfocus = this.FocusInternal();
+                 gotfocus = this.Focus();
                }
                Edit.Visible = false;
                
@@ -997,12 +993,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                Edit.SelectionLength = 0;
                
                if (DialogButton.Focused && !gotfocus) {
-                  gotfocus = this.FocusInternal();
+                  gotfocus = this.Focus();
                }
                DialogButton.Visible = false;
                
                if (DropDownButton.Focused && !gotfocus) {
-                   gotfocus = this.FocusInternal();
+                   gotfocus = this.Focus();
                }
                DropDownButton.Visible = false;
                currentEditor = null;
@@ -1194,7 +1190,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                    if (dataObj != null) {
                       string data = (string)dataObj.GetData(typeof(string));
                       if (data != null) {
-                         Edit.FocusInternal();
+                         Edit.Focus();
                          Edit.Text = data;
                          SetCommitError(ERROR_NONE, true);
                       }   
@@ -1351,7 +1347,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             // if we are in an errorState, just put the focus back on the Edit
             if (errorState != ERROR_NONE && Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 return;
             }
 
@@ -1363,11 +1359,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     PopupDialog(selectedRow);
                 }
                 else {
-                    DialogButton.FocusInternal();
+                    DialogButton.Focus();
                 }
             }
             else if (Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
             }
             return;
@@ -1429,7 +1425,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
         
             if (Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
                 return;
             }
@@ -1530,14 +1526,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
             return InternalLabelWidth;
         }
 
-        internal bool IsExplorerTreeSupported {
-            get {
-                if (ownerGrid.CanShowVisualStyleGlyphs && UnsafeNativeMethods.IsVista && VisualStyleRenderer.IsSupported) {
-                    return true;
-                }
-
-                return false;
-            }
+        internal bool IsExplorerTreeSupported
+        {
+            get => ownerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
         }
 
         public virtual int GetOutlineIconSize() {
@@ -1671,7 +1662,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (selectedRow != -1) {
-                FocusInternal();
+                Focus();
                 SelectRow(selectedRow);
             }
         }
@@ -1841,7 +1832,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         public virtual void Flush() {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView::Flush()");
             if (Commit() && Edit.Focused) {
-                this.FocusInternal();
+                this.Focus();
             }
         }
 
@@ -2312,11 +2303,9 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         private void OnDropDownButtonGotFocus(object sender, EventArgs e) {
-            if (AccessibilityImprovements.Level3) {
-                DropDownButton dropDownButton = sender as DropDownButton;
-                if (dropDownButton != null) {
-                    dropDownButton.AccessibilityObject.SetFocus();
-                }
+            DropDownButton dropDownButton = sender as DropDownButton;
+            if (dropDownButton != null) {
+                dropDownButton.AccessibilityObject.SetFocus();
             }
         }
 
@@ -2327,7 +2316,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             if (e != null && !GetInPropertySet()) {
                 if (!Commit()) {
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     return;
                 }
             }
@@ -2345,7 +2334,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             // For empty GridView, draw a focus-indicator rectangle, just inside GridView borders
-            if ((totalProps <= 0) && AccessibilityImprovements.Level1) {
+            if (totalProps <= 0) {
                 int doubleOffset = 2 * offset_2Units;
 
                 if ((Size.Width > doubleOffset) && (Size.Height > doubleOffset)) {
@@ -2413,7 +2402,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             if (!DropDownListBox.InSetSelectedIndex()) {
                 GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
                 Edit.Text = gridEntry.GetPropertyTextValue(DropDownListBox.SelectedItem);
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
             }
             SetFlag(FlagDropDownCommit, true);
@@ -2507,7 +2496,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             base.OnLostFocus(e);
 
             // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
-            if (totalProps <= 0 && AccessibilityImprovements.Level1) {
+            if (totalProps <= 0) {
                 using (Graphics g = CreateGraphicsInternal()) {
                     Rectangle clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
                     Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Filling empty gridview rect=" + clearRect.ToString());
@@ -2535,7 +2524,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "PropertyGridView:OnEditGotFocus");
 
             if (!Edit.Visible) {
-                this.FocusInternal();
+                this.Focus();
                 return;
             }
 
@@ -2560,9 +2549,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 InvalidateRow(selectedRow);
                 (Edit.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
 
-                if (AccessibilityImprovements.Level3) {
-                    Edit.AccessibilityObject.SetFocus();
-                }
+                Edit.AccessibilityObject.SetFocus();
             }
             else {
                 SelectRow(0);
@@ -2682,7 +2669,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             
             // if the focus isn't goint to a child of the view
             if (!Commit()) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 return;
             }
             // change our focus state.
@@ -2752,7 +2739,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // if we aren't in an error state, just quit
                 if (errorState == ERROR_NONE) {
                    Edit.Text = originalTextValue;
-                   FocusInternal();
+                   Focus();
                    return true;
                 }
             
@@ -2780,19 +2767,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                     // this would be an odd thing to happen, but...
                     if (!success) {
-                        Edit.FocusInternal();
+                        Edit.Focus();
                         SelectEdit(false);
                         return true;
                     }
                 }
 
                 SetCommitError(ERROR_NONE);
-                FocusInternal();
+                Focus();
                 return true;
             }
             else if (sender != this) {
                 CloseDropDown();
-                FocusInternal();
+                Focus();
             }
             return false;
         }
@@ -3000,7 +2987,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         break;
                     case Keys.A:
                         if (fControl && !fAlt && !fShift && Edit.Visible) {
-                           Edit.FocusInternal();
+                           Edit.Focus();
                            Edit.SelectAll();       
                         }
                         break;
@@ -3048,7 +3035,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                }
             */
 
-            if (AccessibilityImprovements.Level3 && selectedGridEntry.Enumerable &&
+            if (selectedGridEntry.Enumerable &&
                 dropDownHolder != null && dropDownHolder.Visible &&
                 (keyCode == Keys.Up || keyCode == Keys.Down))
             {
@@ -3252,7 +3239,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                      CommitValue(values[index]);
                      SelectGridEntry(selectedGridEntry, true);
-                     Edit.FocusInternal();
+                     Edit.Focus();
                      return;
                   }
             }
@@ -3534,7 +3521,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             this.lastClickedEntry = (GridEntry)s;
             bool setSelectTime = s != selectedGridEntry;
             SelectGridEntry(lastClickedEntry, true);
-            Edit.FocusInternal();
+            Edit.Focus();
             
             if (lastMouseDown != InvalidPosition) {
             
@@ -3543,7 +3530,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                rowSelectTime = 0;    
                
                Point editPoint = PointToScreen(lastMouseDown);
-               editPoint = Edit.PointToClientInternal(editPoint);
+               editPoint = Edit.PointToClient(editPoint);
                Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONDOWN, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
                Edit.SendMessage(Interop.WindowMessages.WM_LBUTTONUP, 0, (int)(editPoint.Y << 16 | (editPoint.X & 0xFFFF))); 
             }
@@ -3773,7 +3760,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     //
                     IntPtr hdc = UnsafeNativeMethods.GetDC(new HandleRef(DropDownListBox, DropDownListBox.Handle));
                     IntPtr hFont = Font.ToHfont();
-                    System.Internal.HandleCollector.Add(hFont, NativeMethods.CommonHandles.GDI);
+                    Interop.HandleCollector.Add(hFont, Interop.CommonHandles.GDI);
                     NativeMethods.TEXTMETRIC tm = new NativeMethods.TEXTMETRIC();
                     int iSel = -1;
                     try {
@@ -3899,12 +3886,12 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                        Control focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
 
                         if (focusedControl == null || !IsMyChild(focusedControl)) {
                             if (forward) {
                                 TabSelection();
-                                focusedControl = Control.FromHandleInternal(UnsafeNativeMethods.GetFocus());
+                                focusedControl = Control.FromHandle(UnsafeNativeMethods.GetFocus());
                                 // make sure the value actually took the focus
                                 if (IsMyChild(focusedControl)) {
                                     return true;
@@ -3924,11 +3911,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             if (Edit.Focused) {
                                 if (forward) {
                                     if (DropDownButton.Visible) {
-                                        DropDownButton.FocusInternal();
+                                        DropDownButton.Focus();
                                         return true;
                                     }
                                     else if (DialogButton.Visible) {
-                                        DialogButton.FocusInternal();
+                                        DialogButton.Focus();
                                         return true;
                                     }
                                     // fall through
@@ -3940,7 +3927,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             }
                             else if (DialogButton.Focused || DropDownButton.Focused) {
                                 if (!forward && Edit.Visible) {
-                                    Edit.FocusInternal();
+                                    Edit.Focus();
                                     return true;
                                 }
                                 // fall through
@@ -4289,7 +4276,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
                 else {
-                    FocusInternal();
+                    Focus();
                 }
             }
 
@@ -4428,7 +4415,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             if (!GetFlag(FlagIsNewSelection)) {
-                FocusInternal();
+                Focus();
             }
             
             // 
@@ -4539,7 +4526,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // or the offsets will be wrong
                 if (selectedRow != -1 && row < selectedRow && Edit.Visible) {
                     // this will cause the commit
-                    FocusInternal();
+                    Focus();
 
                 }
 
@@ -4633,7 +4620,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             finally { 
     
                 if (!success) {
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     SelectEdit(false);
                 }
                 else {
@@ -4781,20 +4768,20 @@ namespace System.Windows.Forms.PropertyGridInternal {
         
         internal void ReverseFocus() {
             if (selectedGridEntry == null) {
-               FocusInternal();
+               Focus();
             }
             else {
                SelectGridEntry(selectedGridEntry, true);
                
                if (DialogButton.Visible) {
-                  DialogButton.FocusInternal();
+                  DialogButton.Focus();
                }
                else if (DropDownButton.Visible) {
-                  DropDownButton.FocusInternal();
+                  DropDownButton.Focus();
                }
                else if (Edit.Visible) {
                   Edit.SelectAll();
-                  Edit.FocusInternal();
+                  Edit.Focus();
                }
             }
         }
@@ -5046,7 +5033,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return;
 
             if (Edit.Visible) {
-                Edit.FocusInternal();
+                Edit.Focus();
                 SelectEdit(false);
             }
             else if (dropDownHolder != null && dropDownHolder.Visible) {
@@ -5054,7 +5041,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 return;
             }
             else if (currentEditor != null) {
-                currentEditor.FocusInternal();
+                currentEditor.Focus();
             }
 
             return;
@@ -5123,11 +5110,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         if (btnDialog != null) {
                             DialogButton.Size = DropDownButton.Size;
                             if (isScalingRequirementMet) {
-                                btnDialog.Image = CreateResizedBitmap("dotdotdot.ico", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
+                                btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
                             }
                         }
                         if (isScalingRequirementMet) {
-                            btnDropDown.Image = CreateResizedBitmap("Arrow.ico", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
+                            btnDropDown.Image = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
                         }
                     }
 
@@ -5150,7 +5137,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             bool commit = Commit();
             
             if (commit && this.FocusInside) {
-                FocusInternal();
+                Focus();
             }
             return commit;
         }
@@ -5207,7 +5194,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                             Point mouseLoc = Cursor.Position;
     
                             // convert to window coords
-                            mouseLoc = this.PointToClientInternal(mouseLoc);
+                            mouseLoc = this.PointToClient(mouseLoc);
     
                             // figure out where we are and apply the offset
                             mouseLoc = FindPosition(mouseLoc.X, mouseLoc.Y);
@@ -5266,19 +5253,19 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 case Interop.WindowMessages.WM_SETFOCUS:
                     if (!GetInPropertySet() && Edit.Visible && (errorState != ERROR_NONE || !Commit())) {
                         base.WndProc(ref m);
-                        Edit.FocusInternal();
+                        Edit.Focus();
                         return;
                     }
                     break;
                     
                 case Interop.WindowMessages.WM_IME_STARTCOMPOSITION:
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     Edit.Clear();
                     UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_STARTCOMPOSITION, 0, 0); 
                     return;
                     
                 case Interop.WindowMessages.WM_IME_COMPOSITION:
-                    Edit.FocusInternal();
+                    Edit.Focus();
                     UnsafeNativeMethods.PostMessage(new HandleRef(Edit, Edit.Handle), Interop.WindowMessages.WM_IME_COMPOSITION, m.WParam, m.LParam);
                     return;
                     
@@ -5598,7 +5585,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             public virtual void FocusComponent() {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose,  "DropDownHolder:FocusComponent()");
                 if (currentControl != null && Visible) {
-                    currentControl.FocusInternal();
+                    currentControl.Focus();
                 }
             }
             
@@ -6057,22 +6044,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// Indicates whether or not the control supports UIA Providers via
             /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
             /// </summary>
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             /// <summary>
             /// Constructs the new instance of the accessibility object for this control.
             /// </summary>
             /// <returns>The accessibility object instance.</returns>
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new GridViewListBoxAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new GridViewListBoxAccessibleObject(this);
             }
 
             public virtual bool InSetSelectedIndex() {
@@ -6451,12 +6430,8 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// Indicates whether or not the control supports UIA Providers via
             /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
             /// </summary>
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
-            
+            internal override bool SupportsUiaProviders => true;
+
             public override bool Focused {
                 get {
                     if (dontFocusMe) {
@@ -6493,7 +6468,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 set{
                     mouseHook.HookMouseDown = value;
                     if (value) {
-                        this.FocusInternal();
+                        this.Focus();
                     }
                 }
             }
@@ -6514,11 +6489,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// AccessibleObject for this GridViewEdit instance.
             /// </returns>
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level2) {
-                    return new GridViewEditAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new GridViewEditAccessibleObject(this);
             }
 
             protected override void DestroyHandle() {
@@ -6536,7 +6507,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             public void FilterKeyPress(char keyChar) {
             
                 if (IsInputChar(keyChar)) {
-                    this.FocusInternal();
+                    this.Focus();
                     this.SelectAll();
                     UnsafeNativeMethods.PostMessage(new HandleRef(this, Handle), Interop.WindowMessages.WM_CHAR, (IntPtr)keyChar, IntPtr.Zero);
                 }
@@ -6842,9 +6813,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     }
                 }
 
-                internal override bool IsIAccessibleExSupported() {
-                    return true;
-                }
+                internal override bool IsIAccessibleExSupported() => true;
 
                 /// <summary>
                 /// Returns the element in the specified direction.
@@ -6852,16 +6821,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
                 internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                    if (AccessibilityImprovements.Level3) {
-                        if (direction == UnsafeNativeMethods.NavigateDirection.Parent) {
-                            return propertyGridView.SelectedGridEntry.AccessibilityObject;
-                        }
-                        else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling) {
-                            if (propertyGridView.DropDownButton.Visible) {
-                                return propertyGridView.DropDownButton.AccessibilityObject;
-                            } else if (propertyGridView.DialogButton.Visible) {
-                                return propertyGridView.DialogButton.AccessibilityObject;
-                            }
+                    if (direction == UnsafeNativeMethods.NavigateDirection.Parent) {
+                        return propertyGridView.SelectedGridEntry.AccessibilityObject;
+                    }
+                    else if (direction == UnsafeNativeMethods.NavigateDirection.NextSibling) {
+                        if (propertyGridView.DropDownButton.Visible) {
+                            return propertyGridView.DropDownButton.AccessibilityObject;
+                        } else if (propertyGridView.DialogButton.Visible) {
+                            return propertyGridView.DialogButton.AccessibilityObject;
                         }
                     }
 
@@ -6873,11 +6840,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 /// </summary>
                 internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
                     get {
-                        if (AccessibilityImprovements.Level3) {
-                            return propertyGridView.AccessibilityObject;
-                        }
-
-                        return base.FragmentRoot;
+                        return propertyGridView.AccessibilityObject;
                     }
                 }
 
@@ -6888,14 +6851,11 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     else if (propertyID == NativeMethods.UIA_IsValuePatternAvailablePropertyId) {
                         return IsPatternSupported(NativeMethods.UIA_ValuePatternId);
                     }
-
-                    if (AccessibilityImprovements.Level3) {
-                        if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                            return NativeMethods.UIA_EditControlTypeId;
-                        }
-                        else if (propertyID == NativeMethods.UIA_NamePropertyId) {
-                            return Name;
-                        }
+                    else if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                        return NativeMethods.UIA_EditControlTypeId;
+                    }
+                    else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                        return Name;
                     }
 
                     return base.GetPropertyValue(propertyID);
@@ -6911,16 +6871,14 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
                 public override string Name {
                     get {
-                        if (AccessibilityImprovements.Level3) {
-                            string name = Owner.AccessibleName;
-                            if (name != null) {
-                                return name;
-                            }
-                            else {
-                                var selectedGridEntry = propertyGridView.SelectedGridEntry;
-                                if (selectedGridEntry != null) {
-                                    return selectedGridEntry.AccessibilityObject.Name;
-                                }
+                        string name = Owner.AccessibleName;
+                        if (name != null) {
+                            return name;
+                        }
+                        else {
+                            var selectedGridEntry = propertyGridView.SelectedGridEntry;
+                            if (selectedGridEntry != null) {
+                                return selectedGridEntry.AccessibilityObject.Name;
                             }
                         }
 
@@ -6944,9 +6902,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 #endregion
 
                 internal override void SetFocus() {
-                    if (AccessibilityImprovements.Level3) {
-                        RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
-                    }
+                    RaiseAutomationEvent(NativeMethods.UIA_AutomationFocusChangedEventId);
 
                     base.SetFocus();
                 }
@@ -7117,7 +7073,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                
                 IntPtr hWndAtPoint = hWnd;
                 IntPtr handle = control.Handle;
-                Control ctrlAtPoint = Control.FromHandleInternal(hWndAtPoint);
+                Control ctrlAtPoint = Control.FromHandle(hWndAtPoint);
 
                 // if it's us or one of our children, just process as normal
                 //
@@ -7230,11 +7186,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// otherwise return null.
             /// </returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment ElementProviderFromPoint(double x, double y) {
-                if (AccessibilityImprovements.Level3) {
-                    return HitTest((int)x, (int)y);
-                }
-
-                return base.ElementProviderFromPoint(x, y);
+                return HitTest((int)x, (int)y);
             }
 
             /// <summary>
@@ -7243,35 +7195,33 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
-                    if (propertyGridAccessibleObject != null) {
-                        var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
-                        if (navigationTarget != null) {
-                            return navigationTarget;
-                        }
+                var propertyGridAccessibleObject = _parentPropertyGrid.AccessibilityObject as PropertyGridAccessibleObject;
+                if (propertyGridAccessibleObject != null) {
+                    var navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
+                    if (navigationTarget != null) {
+                        return navigationTarget;
                     }
+                }
 
-                    if (_owningPropertyGridView.OwnerGrid.SortedByCategories) {
-                        switch (direction) {
-                            case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                                return GetFirstCategory();
-                            case UnsafeNativeMethods.NavigateDirection.LastChild:
-                                return GetLastCategory();
-                        }
+                if (_owningPropertyGridView.OwnerGrid.SortedByCategories) {
+                    switch (direction) {
+                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                            return GetFirstCategory();
+                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                            return GetLastCategory();
                     }
-                    else {
-                        switch (direction) {
-                            case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                                return GetChild(0);
-                            case UnsafeNativeMethods.NavigateDirection.LastChild:
-                                int childCount = GetChildCount();
-                                if (childCount > 0) {
-                                    return GetChild(childCount - 1);
-                                }
+                }
+                else {
+                    switch (direction) {
+                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                            return GetChild(0);
+                        case UnsafeNativeMethods.NavigateDirection.LastChild:
+                            int childCount = GetChildCount();
+                            if (childCount > 0) {
+                                return GetChild(childCount - 1);
+                            }
 
-                                return null;
-                        }
+                            return null;
                     }
                 }
 
@@ -7283,11 +7233,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             internal override UnsafeNativeMethods.IRawElementProviderFragmentRoot FragmentRoot {
                 get {
-                    if (AccessibilityImprovements.Level3) {
-                        return _owningPropertyGridView.OwnerGrid.AccessibilityObject;
-                    }
-
-                    return base.FragmentRoot;
+                    return _owningPropertyGridView.OwnerGrid.AccessibilityObject;
                 }
             }
 
@@ -7296,11 +7242,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// </summary>
             /// <returns>The accessible object for the currently focused grid entry.</returns>
             internal override UnsafeNativeMethods.IRawElementProviderFragment GetFocus() {
-                if (AccessibilityImprovements.Level3) {
-                    return GetFocused();
-                }
-
-                return base.FragmentRoot;
+                return GetFocused();
             }
 
             /// <summary>
@@ -7309,12 +7251,10 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <param name="propertyId">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_TableControlTypeId;
-                    } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
-                        return Name;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_TableControlTypeId;
+                } else if (propertyID == NativeMethods.UIA_NamePropertyId) {
+                    return Name;
                 }
 
                 return base.GetPropertyValue(propertyID);

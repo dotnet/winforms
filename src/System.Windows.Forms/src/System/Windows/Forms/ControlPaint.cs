@@ -303,7 +303,7 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, source));
             UnsafeNativeMethods.DeleteCompatibleDC(new HandleRef(null, target));
 
-            return System.Internal.HandleCollector.Add(colorMask, NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(colorMask, Interop.CommonHandles.GDI);
         }
 
         internal static IntPtr CreateHalftoneHBRUSH() {
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms {
                                SystemBrushes.Control :
                                SystemBrushes.Window;
             Color foreground = ((state & ButtonState.Inactive) == ButtonState.Inactive) ?
-                               ((SystemInformation.HighContrast && AccessibilityImprovements.Level1) ? SystemColors.GrayText : SystemColors.ControlDark) :
+                               (SystemInformation.HighContrast ? SystemColors.GrayText : SystemColors.ControlDark) :
                                SystemColors.ControlText;
             DrawFlatCheckBox(graphics, rectangle, foreground, background, state);
         }
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(graphics));
             }
 
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+            if (SystemInformation.HighContrast) {
                 // Ignore the foreground color argument and don't do shading in high contrast, 
                 // as colors should match the OS-defined ones.
                 graphics.DrawString(s, font, SystemBrushes.GrayText, layoutRectangle, format);
@@ -1918,7 +1918,7 @@ namespace System.Windows.Forms {
                 throw new ArgumentNullException(nameof(dc));
             }
 
-            if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+            if (SystemInformation.HighContrast) {
                 TextRenderer.DrawText(dc, s, font, layoutRectangle, SystemColors.GrayText, format);
             }
             else {
@@ -2721,10 +2721,8 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor"]/*' />
         /// <devdoc>
-        ///     Logic copied from Win2K sources to copy the lightening and
-        ///     darkening of colors.
+        /// Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </devdoc>
         private struct HLSColor {
             private const int ShadowAdj         = -333;

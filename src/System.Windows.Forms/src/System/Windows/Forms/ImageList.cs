@@ -746,7 +746,9 @@ namespace System.Windows.Forms {
             }
 
             // gpr: See Icon for description of fakeTransparencyColor
-            result.MakeTransparent(fakeTransparencyColor);
+            if (result.RawFormat.Guid != ImageFormat.Icon.Guid) {
+                result.MakeTransparent(fakeTransparencyColor);
+            }
             return result;
         }
 
@@ -1116,7 +1118,7 @@ namespace System.Windows.Forms {
                     Bitmap bitmap = (Bitmap)value;
 
                     bool ownsImage = false;
-                    if (owner.UseTransparentColor) {
+                    if (owner.UseTransparentColor && bitmap.RawFormat.Guid != ImageFormat.Icon.Guid) {
                         // Since there's no ImageList_ReplaceMasked, we need to generate
                         // a transparent bitmap
                         Bitmap source = bitmap;

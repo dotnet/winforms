@@ -486,7 +486,6 @@ namespace System.Windows.Forms.VisualStyles {
                 }
             }
 
-            // Following parts exist on Vista and later releases only
             internal static class Border
             {
                 // Paints a rectangle with a 1 pixel edge + round corners, 

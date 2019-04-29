@@ -2,28 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing.Design;
-    using System.Collections.Specialized;
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms.Design; 
-    using System.Security;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Internal;     
-    using System.Globalization;
-    
-    /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox"]/*' />
-    /// <devdoc/>
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Windows.Forms.Design;
+
+namespace System.Windows.Forms
+{
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DefaultProperty(nameof(Items))]
-    public class ToolStripComboBox : ToolStripControlHost {
-
-
+    public class ToolStripComboBox : ToolStripControlHost
+    {
         internal static readonly object EventDropDown                                    = new object();
         internal static readonly object EventDropDownClosed                              = new object();
         internal static readonly object EventDropDownStyleChanged                        = new object();
@@ -60,11 +52,7 @@ namespace System.Windows.Forms {
         ///     The new instance of the accessibility object for this ToolStripComboBox ToolStrip item
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripComboBoxAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripComboBoxAccessibleObject(this);
         }
 
         /// <summary>
@@ -651,11 +639,7 @@ namespace System.Windows.Forms {
             ///     The new instance of the accessibility object for this ToolStripComboBoxControl item
             /// </returns>
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new ToolStripComboBoxControlAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new ToolStripComboBoxControlAccessibleObject(this);
             }
 
             internal override FlatComboAdapter CreateFlatComboAdapterInstance() {
@@ -740,7 +724,7 @@ namespace System.Windows.Forms {
 
                     Brush brush;
                     if (comboBox.Enabled) {
-                        if (AccessibilityImprovements.Level2 && SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled) {
+                        if (SystemInformation.HighContrast && (comboBox.ContainsFocus || comboBox.MouseIsOver) && ToolStripManager.VisualStylesEnabled) {
                             brush = SystemBrushes.HighlightText;
                         }
                         else {
@@ -778,13 +762,9 @@ namespace System.Windows.Forms {
                 Update(); 
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
-            internal class ToolStripComboBoxControlAccessibleObject : ComboBoxUiaProvider {
+            internal class ToolStripComboBoxControlAccessibleObject : ComboBox.ComboBoxAccessibleObject {
 
                 private ComboBox.ChildAccessibleObject childAccessibleObject;
 

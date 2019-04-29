@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
 
     /// <include file='doc\DataGridViewButtonColumn.uex' path='docs/doc[@for="DataGridViewButtonColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewButtonColumn), "DataGridViewButtonColumn")]
     public class DataGridViewButtonColumn : DataGridViewColumn
     {
         private static Type columnType = typeof(DataGridViewButtonColumn);

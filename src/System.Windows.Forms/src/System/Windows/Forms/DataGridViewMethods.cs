@@ -57,10 +57,7 @@ namespace System.Windows.Forms
             {
                 this.AccessibilityNotifyClients(AccessibleEvents.Focus, objectID, childID);
 
-                if (AccessibilityImprovements.Level3)
-                {
-                    CurrentCell?.AccessibilityObject.SetFocus();
-                }
+                CurrentCell?.AccessibilityObject.SetFocus();
             }
             this.AccessibilityNotifyClients(AccessibleEvents.Selection, objectID, childID);
         }
@@ -3454,8 +3451,7 @@ namespace System.Windows.Forms
                         
                         // Force repainting of the current collumn's header cell to remove highlighting
                         if (this.ptCurrentCell.X != -1 && 
-                            this.SelectionMode == DataGridViewSelectionMode.FullRowSelect && 
-                            AccessibilityImprovements.Level2)
+                            this.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                         { 
                             InvalidateCellPrivate(this.ptCurrentCell.X, -1);
                         }
@@ -5206,7 +5202,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(this.CurrentCellInternal != null);
                 //Debug.Assert(this.editingControl.CanFocus);
-                this.editingControl.FocusInternal();
+                this.editingControl.Focus();
             }
         }
 
@@ -6262,7 +6258,7 @@ namespace System.Windows.Forms
                     if (keepFocus)
                     {
                         // Debug.Assert(this.CanFocus || this.Focused); // Invalid assertion
-                        FocusInternal();
+                        Focus();
                     }
                     this.ImeMode = editingControlImeMode;
                 }
@@ -15512,7 +15508,7 @@ namespace System.Windows.Forms
                 OnCellEnter(ref dataGridViewCell, this.ptCurrentCell.X, this.ptCurrentCell.Y);
 
                 // Force repainting of the current collumn's header cell to highlight it
-                if (this.SelectionMode == DataGridViewSelectionMode.FullRowSelect && AccessibilityImprovements.Level2)
+                if (this.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                 {
                     InvalidateCellPrivate(this.ptCurrentCell.X, -1);
                 }
@@ -16197,7 +16193,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (this.dataGridViewOper[DATAGRIDVIEWOPER_trackKeyboardColResize] && (e.KeyData & Keys.Alt) != Keys.Alt && AccessibilityImprovements.Level2)
+            if (this.dataGridViewOper[DATAGRIDVIEWOPER_trackKeyboardColResize] && (e.KeyData & Keys.Alt) != Keys.Alt)
             {
                 this.EndColumnResize(this.currentColSplitBar);
                 this.ResetKeyboardTrackingState();
@@ -17153,7 +17149,7 @@ namespace System.Windows.Forms
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsGridFocusRectangleEnabled()
         {
-            return this.ShowFocusCues && this.CurrentCell == null && AccessibilityImprovements.Level2;
+            return this.ShowFocusCues && this.CurrentCell == null;
         }
 
         // Creates a rectangle by merging row headers, column headers 
@@ -21922,7 +21918,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         protected bool ProcessF3Key(Keys keyData)
         {
-            if (this.ptCurrentCell.X != -1 && AccessibilityImprovements.Level2)
+            if (this.ptCurrentCell.X != -1)
             {
                 DataGridViewColumn dataGridViewColumn = Columns[this.ptCurrentCell.X];
                 if (dataGridViewColumn != null && CanSort(dataGridViewColumn))
@@ -22378,7 +22374,7 @@ namespace System.Windows.Forms
 
         private bool? ProcessColumnResize(Keys keyData, int step)
         {
-            if (AccessibilityImprovements.Level2 && (keyData & Keys.Alt) == Keys.Alt && this.AllowUserToResizeColumns && this.ptCurrentCell.X != -1)
+            if ((keyData & Keys.Alt) == Keys.Alt && this.AllowUserToResizeColumns && this.ptCurrentCell.X != -1)
             {
                 if (this.currentColSplitBar == -1)
                 {
@@ -26854,8 +26850,7 @@ namespace System.Windows.Forms
 
                             // Force repainting of the current and previous collumns` header cells to update highlighting
                             if (oldCurrentCellX != columnIndex &&
-                                this.SelectionMode == DataGridViewSelectionMode.FullRowSelect &&
-                                AccessibilityImprovements.Level2)
+                                this.SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
                                 if (oldCurrentCellX >= 0)
                                 {
@@ -28227,11 +28222,8 @@ namespace System.Windows.Forms
             ResetUIState(false /*useRowShortcut*/, false /*computeVisibleRows*/);
             OnSorted(EventArgs.Empty);
 
-            if (AccessibilityImprovements.Level3)
-            {
-                // RS4 narrator does not catch this event even though event is indeed raised.
-                AccessibilityNotifyClients(AccessibleEvents.Reorder, NativeMethods.OBJID_CLIENT, 0);
-            }
+            // RS4 narrator does not catch this event even though event is indeed raised.
+            AccessibilityNotifyClients(AccessibleEvents.Reorder, NativeMethods.OBJID_CLIENT, 0);
         }
 
         internal void SwapSortedRows(int rowIndex1, int rowIndex2)
@@ -29753,7 +29745,7 @@ namespace System.Windows.Forms
             }
             else 
             {
-                client = PointToClientInternal(new Point(x, y));
+                client = PointToClient(new Point(x, y));
                 HitTestInfo hti = HitTest(client.X, client.Y);
                 DataGridViewCell dataGridViewCell = null;
                 switch (hti.Type)

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         private static readonly int PropButtonCellUseColumnTextForButtonValue = PropertyStore.CreateKey();
         private static readonly VisualStyleElement ButtonElement = VisualStyleElement.Button.PushButton.Normal;
 
-        private const byte DATAGRIDVIEWBUTTONCELL_themeMargin = 100;  // used to calculate the margins required for XP theming rendering
+        private const byte DATAGRIDVIEWBUTTONCELL_themeMargin = 100; // Used to calculate the margins required for theming rendering
         private const byte DATAGRIDVIEWBUTTONCELL_horizontalTextMargin = 2;
         private const byte DATAGRIDVIEWBUTTONCELL_verticalTextMargin = 1;
         private const byte DATAGRIDVIEWBUTTONCELL_textPadding = 5;
@@ -1135,15 +1135,7 @@ namespace System.Windows.Forms
                 return 0;
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (AccessibilityImprovements.Level2)
-                {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID)
             {

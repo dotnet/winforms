@@ -340,8 +340,7 @@ using Microsoft.Win32;
 
         private static void InitializeRenderer(int state) {
             int part = CheckBoxElement.Part;
-            if (AccessibilityImprovements.Level2
-                && SystemInformation.HighContrast
+            if (SystemInformation.HighContrast
                 && IsDisabled((CheckBoxState)state)
                 && VisualStyleRenderer.IsCombinationDefined(CheckBoxElement.ClassName, VisualStyleElement.Button.CheckBox.HighContrastDisabledPart)) {
                     part = VisualStyleElement.Button.CheckBox.HighContrastDisabledPart;

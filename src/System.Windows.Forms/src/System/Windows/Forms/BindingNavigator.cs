@@ -186,19 +186,13 @@ namespace System.Windows.Forms {
             // Set up images
             //
 
-            Bitmap moveFirstImage    = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveFirst.bmp");
-            Bitmap movePreviousImage = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MovePrevious.bmp");
-            Bitmap moveNextImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveNext.bmp");
-            Bitmap moveLastImage     = new Bitmap(typeof(BindingNavigator), "BindingNavigator.MoveLast.bmp");
-            Bitmap addNewImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.AddNew.bmp");
-            Bitmap deleteImage       = new Bitmap(typeof(BindingNavigator), "BindingNavigator.Delete.bmp");
+            Bitmap moveFirstImage    = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveFirst");
+            Bitmap movePreviousImage = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MovePrevious");
+            Bitmap moveNextImage     = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveNext");
+            Bitmap moveLastImage     = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.MoveLast");
+            Bitmap addNewImage       = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.AddNew");
+            Bitmap deleteImage       = DpiHelper.GetBitmapFromIcon(typeof(BindingNavigator), "BindingNavigator.Delete");
 
-            moveFirstImage.MakeTransparent(System.Drawing.Color.Magenta);
-            movePreviousImage.MakeTransparent(System.Drawing.Color.Magenta);
-            moveNextImage.MakeTransparent(System.Drawing.Color.Magenta);
-            moveLastImage.MakeTransparent(System.Drawing.Color.Magenta);
-            addNewImage.MakeTransparent(System.Drawing.Color.Magenta);
-            deleteImage.MakeTransparent(System.Drawing.Color.Magenta);
 
             MoveFirstItem.Image    = moveFirstImage;
             MovePreviousItem.Image = movePreviousImage;

@@ -292,9 +292,7 @@ namespace System.Windows.Forms {
                         // Can't share images across threads.
                         if (defaultErrorImageForThread == null)
                         {
-                            defaultErrorImageForThread =
-                                new Bitmap(typeof(PictureBox),
-                                           "ImageInError.bmp");
+                            defaultErrorImageForThread = DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "ImageInError");
                         }
                         defaultErrorImage = defaultErrorImageForThread;
                     }
@@ -493,9 +491,7 @@ namespace System.Windows.Forms {
                         // Can't share images across threads.
                         if (defaultInitialImageForThread == null)
                         {
-                            defaultInitialImageForThread =
-                                new Bitmap(typeof(PictureBox),
-                                           "PictureBox.Loading.bmp");
+                            defaultInitialImageForThread =  DpiHelper.GetBitmapFromIcon(typeof(PictureBox), "PictureBox.Loading");
                         }
                         defaultInitialImage = defaultInitialImageForThread;
                     }

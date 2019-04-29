@@ -2,35 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Security;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Drawing.Imaging;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-
-    /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel"]/*' />
-    /// <devdoc>
-    ///     TBD.
-    /// </devdoc>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Docking(DockingBehavior.Never),
-    Designer("System.Windows.Forms.Design.SplitterPanelDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItem(false)
-    ]
-    public sealed class SplitterPanel : Panel {
-
+namespace System.Windows.Forms
+{
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Docking(DockingBehavior.Never)]
+    [Designer("System.Windows.Forms.Design.SplitterPanelDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItem(false)]
+    public sealed class SplitterPanel : Panel
+    {
         SplitContainer owner  = null;
         private bool collapsed = false;
         

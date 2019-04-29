@@ -616,7 +616,7 @@ namespace System.Windows.Forms {
 
                 int boxTop = FontHeight / 2;
 
-                if (SystemInformation.HighContrast && AccessibilityImprovements.Level1) {
+                if (SystemInformation.HighContrast) {
                     Color boxColor;
                     if (Enabled) {
                         boxColor = ForeColor;
@@ -727,11 +727,7 @@ namespace System.Windows.Forms {
             base.ScaleControl(factor, specified);
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.ToString"]/*' />
         /// <devdoc>
@@ -813,13 +809,7 @@ namespace System.Windows.Forms {
                 }
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 switch (propertyID) {

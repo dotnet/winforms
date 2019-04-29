@@ -145,7 +145,7 @@ namespace System.Windows.Forms {
                     state = ToolBarState.Disabled;
                 }
                 if (item is ToolStripButton && ((ToolStripButton)item).Checked) {
-                    if (((ToolStripButton)item).Selected && AccessibilityImprovements.Level1) {
+                    if (((ToolStripButton)item).Selected) {
                         state = ToolBarState.Hot; // we'd prefer HotChecked here, but Color Theme uses the same color as Checked
                     }
                     else {
@@ -371,7 +371,7 @@ namespace System.Windows.Forms {
            if (item != null) {
                Rectangle bounds = new Rectangle(Point.Empty, item.Size);
                if (item.IsTopLevel && !ToolStripManager.VisualStylesEnabled) {
-                    // CLASSIC MODE (3D edges)
+                    // Classic Mode (3D edges)
                     // Draw box highlight for toplevel items in downlevel platforms
                     if (item.BackgroundImage != null) {
                         ControlPaint.DrawBackgroundImage(g, item.BackgroundImage, item.BackColor, item.BackgroundImageLayout, item.ContentRectangle, item.ContentRectangle);
@@ -384,7 +384,7 @@ namespace System.Windows.Forms {
                     RenderSmall3DBorderInternal(g, bounds, state, (item.RightToLeft == RightToLeft.Yes));
                }
                else {
-                   // XP++ MODE (no 3D edges)
+                   // Modern MODE (no 3D edges)
                    // Draw blue filled highlight for toplevel items in themed platforms
                    // or items parented to a drop down
                    Rectangle fillRect = new Rectangle(Point.Empty, item.Size);
@@ -398,18 +398,16 @@ namespace System.Windows.Forms {
                         // Legacy behavior is to always paint the menu item background.
                         // The correct behavior is to only paint the background if the menu item is
                         // enabled.
-                        if (!AccessibilityImprovements.Level1 || item.Enabled) {
+                        if (item.Enabled) {
                             g.FillRectangle(SystemBrushes.Highlight, fillRect);
                         }
 
-                        if (AccessibilityImprovements.Level1) {
-                            Color borderColor = ToolStripManager.VisualStylesEnabled ?
-                                SystemColors.Highlight : ProfessionalColors.MenuItemBorder;
+                        Color borderColor = ToolStripManager.VisualStylesEnabled ?
+                            SystemColors.Highlight : ProfessionalColors.MenuItemBorder;
 
-                            // draw selection border - always drawn regardless of Enabled.
-                            using (Pen p = new Pen(borderColor)) {
-                                g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
-                            }
+                        // draw selection border - always drawn regardless of Enabled.
+                        using (Pen p = new Pen(borderColor)) {
+                            g.DrawRectangle(p, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
                         }
                     }
                     else {

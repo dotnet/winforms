@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseDown(MouseEventArgs e) {
             if (!FocusInside())
-                FocusInternal();
+                Focus();
             base.OnMouseDown(e);
         }
 

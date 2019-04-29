@@ -6,7 +6,7 @@ This document describes the experience of using WinForms on .NET Core. The [Deve
 
 Choose one of these options:
 
-1. [.NET Core 3.0 SDK Preview 1 (recommended)][.net-core-3.0-sdk-preview-1]
+1. [.NET Core 3.0 SDK Preview 1 (recommended)][.net-core-3.0-sdk-preview]
 
 1. [.NET Core 3.0 daily build (latest changes, but less stable)][.net-core-3.0-daily]
 
@@ -34,6 +34,6 @@ To port your existing WinForms application from .NET Framework to .NET Core 3.0,
 
 [comment]: <> (URI Links)
 
-[.net-core-3.0-sdk-preview-1]: https://www.microsoft.com/net/download
+[.net-core-3.0-sdk-preview]: https://dotnet.microsoft.com/download/dotnet-core/3.0
 [.net-core-3.0-daily]: https://github.com/dotnet/core/blob/master/daily-builds.md
 [.net-core-3.0-samples]: https://github.com/dotnet/samples/tree/master/windowsforms

@@ -1890,23 +1890,23 @@ namespace System.Windows.Forms {
 
                             if (selectNext) {
                                 if (!ContainsFocus) {
-                                    IContainerControl c = GetContainerControlInternal();
+                                    IContainerControl c = GetContainerControl();
                                     if (c != null) {
                                         while (c.ActiveControl is ContainerControl) {
                                             c = (IContainerControl) c.ActiveControl;
                                         }
                                         if (c.ActiveControl != null)
                                         {
-                                            c.ActiveControl.FocusInternal();
+                                            c.ActiveControl.Focus();
                                         }
                                     }
                                 }
                             }
                             else {
-                                IContainerControl c = GetContainerControlInternal();
+                                IContainerControl c = GetContainerControl();
                                 if (c != null && !DesignMode) {
                                     if (c is ContainerControl) {
-                                        ((ContainerControl)c).SetActiveControlInternal(this);
+                                        ((ContainerControl)c).SetActiveControl(this);
                                     }
                                     else {
                                         c.ActiveControl = this;
@@ -2021,10 +2021,10 @@ namespace System.Windows.Forms {
         /// </devdoc>
         /// <internalonly/>
         private bool WmSelChanging() {
-            IContainerControl c = GetContainerControlInternal();
+            IContainerControl c = GetContainerControl();
             if (c != null && !DesignMode) {
                 if (c is ContainerControl) {
-                    ((ContainerControl)c).SetActiveControlInternal(this);
+                    ((ContainerControl)c).SetActiveControl(this);
                 }
                 else {
                     c.ActiveControl = this;

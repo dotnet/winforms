@@ -2,18 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.ComponentModel;
+using System.Drawing;
 
-    using System;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Security;
-
-    /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar"]/*' />
+namespace System.Windows.Forms
+{
     [DefaultProperty(nameof(Value))]
-    public class ToolStripProgressBar : ToolStripControlHost {
-
+    public class ToolStripProgressBar : ToolStripControlHost
+    {
         internal static readonly object EventRightToLeftLayoutChanged = new object();
 
         private static readonly Padding defaultMargin = new Padding(1, 2, 1, 1);
@@ -259,15 +255,11 @@ namespace System.Windows.Forms {
         /// </returns>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ToolStripProgressBarAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ToolStripProgressBarAccessibleObject(this);
         }
 
         private static Control CreateControlInstance() {
-            ProgressBar progressBar = AccessibilityImprovements.Level3 ? new ToolStripProgressBarControl() : new ProgressBar();
+            ProgressBar progressBar = new ToolStripProgressBarControl();
             progressBar.Size = new Size(100,15);
             return progressBar;
         }
@@ -523,18 +515,10 @@ namespace System.Windows.Forms {
                 set { ownerItem = value; }
             }
 
-            internal override bool SupportsUiaProviders {
-                get {
-                    return AccessibilityImprovements.Level3;
-                }
-            }
+            internal override bool SupportsUiaProviders => true;
 
             protected override AccessibleObject CreateAccessibilityInstance() {
-                if (AccessibilityImprovements.Level3) {
-                    return new ToolStripProgressBarControlAccessibleObject(this);
-                }
-
-                return base.CreateAccessibilityInstance();
+                return new ToolStripProgressBarControlAccessibleObject(this);
             }
         }
 

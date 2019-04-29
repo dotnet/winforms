@@ -228,10 +228,6 @@ namespace System.Windows.Forms {
                                      LISTVIEWSTATE_labelWrap |
                                      LISTVIEWSTATE_autoArrange |
                                      LISTVIEWSTATE_showGroups;
-            if (!AccessibilityImprovements.Level3) {
-                // Show grey rectangle around the selected list item if the list view is out of focus.
-                listViewStateFlags |= LISTVIEWSTATE_hideSelection;
-            }
 
             listViewState = new System.Collections.Specialized.BitVector32(listViewStateFlags);
 
@@ -3970,7 +3966,7 @@ namespace System.Windows.Forms {
                 // And that may cause GetItemAt to throw an out of bounds exception.
 
                 Point pos = Cursor.Position;
-                pos = PointToClientInternal(pos);
+                pos = PointToClient(pos);
                 item = GetItemAt(pos.X, pos.Y);
             }
 
@@ -5188,7 +5184,7 @@ namespace System.Windows.Forms {
 
             if (CheckBoxes) {
                 Point pos = Cursor.Position;
-                pos = PointToClientInternal(pos);
+                pos = PointToClient(pos);
                 NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
 
                 lvhi.pt_x = pos.X;
@@ -5218,7 +5214,7 @@ namespace System.Windows.Forms {
 
             if (CheckBoxes) {
                 Point pos = Cursor.Position;
-                pos = PointToClientInternal(pos);
+                pos = PointToClient(pos);
                 NativeMethods.LVHITTESTINFO lvhi = new NativeMethods.LVHITTESTINFO();
 
                 lvhi.pt_x = pos.X;
@@ -5239,7 +5235,7 @@ namespace System.Windows.Forms {
             listViewState[LISTVIEWSTATE_expectingMouseUp] = true;
 
             //This is required to FORCE Validation before Windows ListView pushes its own message loop...
-            FocusInternal();
+            Focus();
 
             // Windows ListView pushes its own Windows ListView in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
@@ -5263,7 +5259,7 @@ namespace System.Windows.Forms {
                     }
                     else {
                         // When a user clicks on the state image, focus the item.
-                        if (AccessibilityImprovements.Level2 && lvhti.Item != null && lvhti.Location == ListViewHitTestLocations.StateImage) {
+                        if (lvhti.Item != null && lvhti.Location == ListViewHitTestLocations.StateImage) {
                             lvhti.Item.Focused = true;
                         }
                         DefWndProc(ref m);
@@ -5602,7 +5598,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         private int GetIndexOfClickedItem(NativeMethods.LVHITTESTINFO lvhi) {
             Point pos = Cursor.Position;
-            pos = PointToClientInternal(pos);
+            pos = PointToClient(pos);
             lvhi.pt_x = pos.X;
             lvhi.pt_y = pos.Y;
             return (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.LVM_HITTEST, 0, lvhi);
@@ -5723,10 +5719,9 @@ namespace System.Windows.Forms {
                             if (newValue != oldValue) {
                                 ItemCheckedEventArgs e = new ItemCheckedEventArgs(Items[nmlv->iItem]);
                                 OnItemChecked(e);
-                                if (AccessibilityImprovements.Level1) {
-                                    AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
-                                    AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
-                                }
+                                
+                                AccessibilityNotifyClients(AccessibleEvents.StateChange, nmlv->iItem);
+                                AccessibilityNotifyClients(AccessibleEvents.NameChange, nmlv->iItem);
                             }
 
                             int oldState = nmlv->uOldState & NativeMethods.LVIS_SELECTED;
@@ -5786,7 +5781,7 @@ namespace System.Windows.Forms {
 
                     MouseButtons button = nmhdr->code == NativeMethods.NM_CLICK ? MouseButtons.Left : MouseButtons.Right;
                     Point pos = Cursor.Position;
-                    pos = PointToClientInternal(pos);
+                    pos = PointToClient(pos);
 
                     if (!ValidationCancelled && displayIndex != -1) {
                         OnClick(EventArgs.Empty);
@@ -5906,9 +5901,6 @@ namespace System.Windows.Forms {
                                 // 
                                 // 
                                 int iTo = odStateChange.iTo;
-                                if (!UnsafeNativeMethods.IsVista) {
-                                    iTo--;
-                                }
                                 ListViewVirtualItemsSelectionRangeChangedEventArgs lvvisrce = new ListViewVirtualItemsSelectionRangeChangedEventArgs(odStateChange.iFrom, iTo, (odStateChange.uNewState & NativeMethods.LVIS_SELECTED) != 0);
                                 OnVirtualItemsSelectionRangeChanged(lvvisrce);
                             }
@@ -8783,11 +8775,7 @@ namespace System.Windows.Forms {
         /// The AccessibleObject for this ListView instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new ListViewAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new ListViewAccessibleObject(this);
         }
 
         internal class ListViewAccessibleObject : ControlAccessibleObject {

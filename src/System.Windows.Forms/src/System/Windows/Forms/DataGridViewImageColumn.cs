@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     using System.Globalization;
 
     /// <include file='doc\DataGridViewImageColumn.uex' path='docs/doc[@for="DataGridViewImageColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewImageColumn), "DataGridViewImageColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewImageColumn), "DataGridViewImageColumn")]
     public class DataGridViewImageColumn : DataGridViewColumn
     {
         private static Type columnType = typeof(DataGridViewImageColumn);

@@ -34,7 +34,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Represents the <see langword='static'/> instance of <see cref='System.Windows.Forms.OSFeature'/>
-        // to use for feature queries. This property is read-only.
+        /// to use for feature queries. This property is read-only.
         /// </summary>
         public static OSFeature Feature => _feature ?? (_feature = new OSFeature());
 
@@ -73,32 +73,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        internal bool OnXp
-        {
-            get
-            {
-                bool onXp = false;
-                if (Environment.OSVersion.Platform == System.PlatformID.Win32NT)
-                {
-                    onXp = Environment.OSVersion.Version.CompareTo(new Version(5, 1, 0, 0)) >= 0;
-                }
-                return onXp;
-            }
-        }
-
-        internal bool OnWin2k
-        {
-            get
-            {
-                bool onWin2k = false;
-                if (Environment.OSVersion.Platform == System.PlatformID.Win32NT)
-                {
-                    onWin2k = Environment.OSVersion.Version.CompareTo(new Version(5, 0, 0, 0)) >= 0;
-                }
-                return onWin2k;
-            }
-        }
-
         /// <summary>
         /// Retrieves whether SystemParameterType is supported on the Current OS version.
         /// </summary>
@@ -107,47 +81,17 @@ namespace System.Windows.Forms
             switch (enumVal)
             {
                 case SystemParameter.DropShadow:
-                    return Feature.OnXp;
-                    
-
                 case SystemParameter.FlatMenu:
-                    return Feature.OnXp;
-                    
-
                 case SystemParameter.FontSmoothingContrastMetric:
-                    return Feature.OnXp;
-                    
-                        
                 case SystemParameter.FontSmoothingTypeMetric:
-                    return Feature.OnXp;
-                    
-
                 case SystemParameter.MenuFadeEnabled:
-                    return Feature.OnWin2k;
-                    
-               
                 case SystemParameter.SelectionFade:
-                    return Feature.OnWin2k;
-                    
-
                 case SystemParameter.ToolTipAnimationMetric:
-                    return Feature.OnWin2k;
-                    
-
                 case SystemParameter.UIEffects:
-                    return Feature.OnWin2k;
-                    
-
                 case SystemParameter.CaretWidthMetric:
-                    return Feature.OnWin2k;
-                    
-
                 case SystemParameter.VerticalFocusThicknessMetric:
-                    return Feature.OnXp;
-                    
-
                 case SystemParameter.HorizontalFocusThicknessMetric:
-                    return Feature.OnXp;
+                    return true;
             }
 
             return false;

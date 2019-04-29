@@ -59,7 +59,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateCompatibleBitmap(HandleRef hDC, int width, int height) {
-            return System.Internal.HandleCollector.Add(IntCreateCompatibleBitmap(hDC, width, height), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateCompatibleBitmap(hDC, width, height), Interop.CommonHandles.GDI);
         }
 
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
@@ -160,7 +160,7 @@ namespace System.Windows.Forms {
         
         internal static extern bool IntDeleteObject(HandleRef hObject);
         public static bool DeleteObject(HandleRef hObject) {
-            System.Internal.HandleCollector.Remove((IntPtr)hObject, NativeMethods.CommonHandles.GDI);
+            Interop.HandleCollector.Remove((IntPtr)hObject, Interop.CommonHandles.GDI);
             return IntDeleteObject(hObject);
         }
 
@@ -174,7 +174,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateSolidBrush(int crColor) {
-            return System.Internal.HandleCollector.Add(IntCreateSolidBrush(crColor), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateSolidBrush(crColor), Interop.CommonHandles.GDI);
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=CharSet.Auto)]
         
@@ -345,7 +345,7 @@ namespace System.Windows.Forms {
         
         private static extern IntPtr /*HPALETTE*/ IntCreateHalftonePalette(HandleRef hdc);
         public static IntPtr /*HPALETTE*/ CreateHalftonePalette(HandleRef hdc) {
-            return System.Internal.HandleCollector.Add(IntCreateHalftonePalette(hdc), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateHalftonePalette(hdc), Interop.CommonHandles.GDI);
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=CharSet.Auto)]
         
@@ -360,7 +360,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateDIBSection(HandleRef hdc, HandleRef pbmi, int iUsage, byte[] ppvBits, IntPtr hSection, int dwOffset) {
-            return System.Internal.HandleCollector.Add(IntCreateDIBSection(hdc, pbmi, iUsage, ppvBits, hSection, dwOffset), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateDIBSection(hdc, pbmi, iUsage, ppvBits, hSection, dwOffset), Interop.CommonHandles.GDI);
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreateBitmap", CharSet=CharSet.Auto)]
@@ -369,7 +369,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, IntPtr lpvBits) {
-            return System.Internal.HandleCollector.Add(IntCreateBitmap(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateBitmap(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), Interop.CommonHandles.GDI);
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreateBitmap", CharSet=CharSet.Auto)]
@@ -378,7 +378,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, short[] lpvBits) {
-            return System.Internal.HandleCollector.Add(IntCreateBitmapShort(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateBitmapShort(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), Interop.CommonHandles.GDI);
         }
 
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreateBitmap", CharSet=CharSet.Auto)]
@@ -387,7 +387,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr /*HBITMAP*/ CreateBitmap(int nWidth, int nHeight, int nPlanes, int nBitsPerPixel, byte[] lpvBits) {
-            return System.Internal.HandleCollector.Add(IntCreateBitmapByte(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateBitmapByte(nWidth, nHeight, nPlanes, nBitsPerPixel, lpvBits), Interop.CommonHandles.GDI);
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreatePatternBrush", CharSet=CharSet.Auto)]
         
@@ -395,7 +395,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr /*HBRUSH*/ CreatePatternBrush(HandleRef hbmp) {
-            return System.Internal.HandleCollector.Add(IntCreatePatternBrush(hbmp), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreatePatternBrush(hbmp), Interop.CommonHandles.GDI);
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreateBrushIndirect", CharSet=CharSet.Auto)]
         
@@ -403,7 +403,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateBrushIndirect(NativeMethods.LOGBRUSH lb) {
-            return System.Internal.HandleCollector.Add(IntCreateBrushIndirect(lb), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateBrushIndirect(lb), Interop.CommonHandles.GDI);
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, EntryPoint="CreatePen", CharSet=CharSet.Auto)]
         
@@ -411,7 +411,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreatePen(int nStyle, int nWidth, int crColor) {
-            return System.Internal.HandleCollector.Add(IntCreatePen(nStyle, nWidth, crColor), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreatePen(nStyle, nWidth, crColor), Interop.CommonHandles.GDI);
         }
 
 
@@ -438,10 +438,10 @@ namespace System.Windows.Forms {
         
         private static extern IntPtr IntCopyImage(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags);
         public static IntPtr CopyImage(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags) {
-            return System.Internal.HandleCollector.Add(IntCopyImage(hImage, uType, cxDesired, cyDesired, fuFlags), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCopyImage(hImage, uType, cxDesired, cyDesired, fuFlags), Interop.CommonHandles.GDI);
         }
         public static IntPtr CopyImageAsCursor(HandleRef hImage, int uType, int cxDesired, int cyDesired, int fuFlags) {
-            return System.Internal.HandleCollector.Add(IntCopyImage(hImage, uType, cxDesired, cyDesired, fuFlags), NativeMethods.CommonHandles.Cursor);
+            return Interop.HandleCollector.Add(IntCopyImage(hImage, uType, cxDesired, cyDesired, fuFlags), Interop.CommonHandles.Cursor);
         }
 
 
@@ -476,23 +476,8 @@ namespace System.Windows.Forms {
         
         public static extern bool ValidateRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
 
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
-
-        //
-        // WARNING: Don't uncomment this code unless you absolutelly need it.  Use instead Marshal.GetLastWin32Error
-        // and mark your PInvoke [DllImport(..., SetLastError=true)]
-        // From MSDN:
-        // GetLastWin32Error exposes the Win32 GetLastError API method from Kernel32.DLL. This method exists because 
-        // it is not safe to make a direct platform invoke call to GetLastError to obtain this information. If you 
-        // want to access this error code, you must call GetLastWin32Error rather than writing your own platform invoke 
-        // definition for GetLastError and calling it. The common language runtime can make internal calls to APIs that 
-        // overwrite the operating system maintained GetLastError.
-        //
-        //[DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
-        //public extern static int GetLastError();
 
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
@@ -526,7 +511,7 @@ namespace System.Windows.Forms {
         
         
         public static IntPtr CreateRectRgn(int x1, int y1, int x2, int y2) {
-            return System.Internal.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), NativeMethods.CommonHandles.GDI);
+            return Interop.HandleCollector.Add(IntCreateRectRgn(x1, y1, x2, y2), Interop.CommonHandles.GDI);
         }
         [DllImport(ExternDll.Gdi32, SetLastError=true, ExactSpelling=true, CharSet=CharSet.Auto)]
         

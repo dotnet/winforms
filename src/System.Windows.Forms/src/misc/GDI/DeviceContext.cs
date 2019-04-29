@@ -5,6 +5,12 @@
 // #define TRACK_HDC
 // #define GDI_FINALIZATION_WATCH
 
+using System.Collections;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Runtime.InteropServices;
+
 #if DRAWING_DESIGN_NAMESPACE
 namespace System.Windows.Forms.Internal
 #elif DRAWING_NAMESPACE
@@ -13,18 +19,6 @@ namespace System.Drawing.Internal
 namespace System.Experimental.Gdi
 #endif
 {
-    using System;
-    using System.Collections;
-    using System.Internal;
-    using System.Security;
-    using System.Runtime.InteropServices;
-    using System.Diagnostics;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
-    using System.Runtime.Versioning;
-
     /// <include file='doc\IDeviceContext.uex' path='docs/doc[@for="DeviceContext"]/*' />
     /// <devdoc>
     ///     Represents a Win32 device context.  Provides operations for setting some of the properties
@@ -294,7 +288,6 @@ namespace System.Experimental.Gdi
    
             
             // If hdc is null, the function creates a memory DC compatible with the application's current screen.
-            // Win2K+: (See CreateCompatibleDC in the MSDN).
             // In this case the thread that calls CreateCompatibleDC owns the HDC that is created. When this thread is destroyed, 
             // the HDC is no longer valid.
 

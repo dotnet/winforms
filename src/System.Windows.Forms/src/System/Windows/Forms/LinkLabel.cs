@@ -880,14 +880,9 @@ namespace System.Windows.Forms {
         void IButtonControl.NotifyDefault(bool value) {
         }
 
-        /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OnGotFocus"]/*' />
         /// <devdoc>
-        ///   <para>
-        ///      Raises the <see cref='System.Windows.Forms.Control.GotFocus'/>
-        ///      event.
-        ///   </para>
+        /// Raises the <see cref='System.Windows.Forms.Control.GotFocus'/> event.
         /// </devdoc>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")]
         protected override void OnGotFocus(EventArgs e) {
             if (!this.processingOnGotFocus) {
                 base.OnGotFocus(e);
@@ -992,7 +987,7 @@ namespace System.Windows.Forms {
                 if ((((Link)links[i]).State & LinkState.Hover) == LinkState.Hover) {
                     ((Link)links[i]).State |= LinkState.Active;
 
-                    FocusInternal();
+                    Focus();
                     if (((Link)links[i]).Enabled) {
                         FocusLink = (Link)links[i];
                         InvalidateLink(FocusLink);
@@ -1873,11 +1868,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return false;
-            }
-        }
+        internal override bool SupportsUiaProviders => false;
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.WmSetCursor"]/*' />
         /// <devdoc>
@@ -2495,13 +2486,7 @@ namespace System.Windows.Forms {
             public LinkLabelAccessibleObject(LinkLabel owner) : base(owner) {
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkLabelAccessibleObject.GetChild"]/*' />
             /// <devdoc>
@@ -2605,22 +2590,13 @@ namespace System.Windows.Forms {
                 get {          
                     string text = link.Owner.Text;
                     string name;
-                    if (AccessibilityImprovements.Level3) {
-                        // return the full name of the link label for AI.Level3 
-                        // as sometimes the link name in isolation is unusable
-                        // to a customer using a screen reader
-                        name = text;
-                        if (link.Owner.UseMnemonic) {
-                            name = WindowsFormsUtils.TextWithoutMnemonics(name);
-                        }
-                    } else {
-                        int charStart = LinkLabel.ConvertToCharIndex(link.Start, text);
-                        int charEnd = LinkLabel.ConvertToCharIndex(link.Start + link.Length, text);
-                        name = text.Substring(charStart, charEnd - charStart);
-                        if (AccessibilityImprovements.Level1 && link.Owner.UseMnemonic) {
-                            // return the same value as the tooltip shows.
-                            name = WindowsFormsUtils.TextWithoutMnemonics(name);
-                        }
+
+                    // return the full name of the link label
+                    // as sometimes the link name in isolation
+                    // is unusable when using a screen reader
+                    name = text;
+                    if (link.Owner.UseMnemonic) {
+                        name = WindowsFormsUtils.TextWithoutMnemonics(name);
                     }
 
                     return name;
@@ -2659,12 +2635,9 @@ namespace System.Windows.Forms {
 
             public override string Value {
                 get {
-                    if (AccessibilityImprovements.Level1) {
-                        // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
-                        // Value is optional for this role (Link).
-                        return string.Empty;
-                    } 
-                    return Name;
+                    // Narrator announces Link's text twice, once as a Name property and once as a Value, thus removing value.
+                    // Value is optional for this role (Link).
+                    return string.Empty;
                 }
             }
 
@@ -2672,13 +2645,7 @@ namespace System.Windows.Forms {
                 link.Owner.OnLinkClicked(new LinkLabelLinkClickedEventArgs(link));
             }
 
-            internal override bool IsIAccessibleExSupported() {
-                if (AccessibilityImprovements.Level3) {
-                    return true;
-                }
-
-                return base.IsIAccessibleExSupported();
-            }
+            internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(int propertyID) {
                 if (propertyID == NativeMethods.UIA_IsEnabledPropertyId) {

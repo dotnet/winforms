@@ -330,7 +330,7 @@ namespace System.Windows.Forms {
                             if (ActiveControl == null)
                             {
                                 // If no control is selected focus will go to form
-                                SelectNextControlInternal(null, true, true, true, false);
+                                SelectNextControl(null, true, true, true, false);
                             }
 
                             InnerMostActiveContainerControl.FocusActiveControlInternal();
@@ -354,7 +354,7 @@ namespace System.Windows.Forms {
         public static Form ActiveForm {
             get {
                 IntPtr hwnd = UnsafeNativeMethods.GetForegroundWindow();
-                Control c = Control.FromHandleInternal(hwnd);
+                Control c = Control.FromHandle(hwnd);
                 if (c != null && c is Form) {
                     return(Form)c;
                 }
@@ -389,7 +389,7 @@ namespace System.Windows.Forms {
                     // If this.MdiClient != null it means this.IsMdiContainer == true.
                     if( this.ctlClient != null && this.ctlClient.IsHandleCreated){
                         IntPtr hwnd = this.ctlClient.SendMessage(Interop.WindowMessages.WM_MDIGETACTIVE, 0, 0);
-                        mdiChild = Control.FromHandleInternal( hwnd ) as Form;
+                        mdiChild = Control.FromHandle(hwnd) as Form;
                     }
                 }
                 if( mdiChild != null && mdiChild.Visible && mdiChild.Enabled ){
@@ -772,7 +772,7 @@ namespace System.Windows.Forms {
 
                 UpdateFormStyles();
 
-                // In Windows XP Theme, the FixedDialog tend to have a small Icon.
+                // In Windows Theme, the FixedDialog tend to have a small Icon.
                 // So to make this behave uniformly with other styles, we need to make
                 // the call to UpdateIcon after the the form styles have been updated.
                 if (formState[FormStateIconSet] == 0)
@@ -962,7 +962,7 @@ namespace System.Windows.Forms {
                         // race condition.
                         //
                         if (defaultIcon == null) {
-                            defaultIcon = new Icon(typeof(Form), "wfc.ico");
+                            defaultIcon = new Icon(typeof(Form), "wfc");
                         }
                     }
                 }
@@ -2400,8 +2400,8 @@ namespace System.Windows.Forms {
                 if (CalledCreateControl) {
                     if (CalledOnLoad) {
                         // Make sure the form is in the Application.OpenForms collection
-                        if (!Application.OpenFormsInternal.Contains(this)) {
-                            Application.OpenFormsInternalAdd(this);
+                        if (!Application.OpenForms.Contains(this)) {
+                            Application.OpenForms.Add(this);
                         }
                     }
                     else {
@@ -2478,7 +2478,7 @@ namespace System.Windows.Forms {
             
             if (value && !IsMdiChild && (WindowState == FormWindowState.Maximized || TopMost)) {
                 if (ActiveControl == null){
-                    SelectNextControlInternal(null, true, true, true, false);
+                    SelectNextControl(null, true, true, true, false);
                 }
                 FocusActiveControlInternal();
             }
@@ -3661,7 +3661,7 @@ namespace System.Windows.Forms {
                         if ((OwnerInternal != null) || (dialogOwner != null))
                         {
                             IntPtr ownerHandle = (dialogOwner != null) ? Control.GetSafeHandle(dialogOwner) : OwnerInternal.Handle;
-                            desktop = Screen.FromHandleInternal(ownerHandle);
+                            desktop = Screen.FromHandle(ownerHandle);
                         }
                         else
                         {
@@ -3700,7 +3700,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Attempts to set focus to this Form.</para>
         /// </devdoc>
-        internal override bool FocusInternal()
+        private protected override bool FocusInternal()
         {
             Debug.Assert( IsHandleCreated, "Attempt to set focus to a form that has not yet created its handle." );
 
@@ -3888,7 +3888,7 @@ namespace System.Windows.Forms {
 
                 ownerHandle = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
                 if (ownerHandle != IntPtr.Zero) {
-                    Screen desktop = Screen.FromHandleInternal(ownerHandle);
+                    Screen desktop = Screen.FromHandle(ownerHandle);
                     Rectangle screenRect = desktop.WorkingArea;
                     NativeMethods.RECT ownerRect = new NativeMethods.RECT();
 
@@ -3934,7 +3934,7 @@ namespace System.Windows.Forms {
                     hWndOwner = UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_HWNDPARENT);
                 }
                 if (hWndOwner != IntPtr.Zero) {
-                    desktop = Screen.FromHandleInternal(hWndOwner);
+                    desktop = Screen.FromHandle(hWndOwner);
                 }
                 else {
                     desktop = Screen.FromPoint(Control.MousePosition);
@@ -4111,7 +4111,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnFormClosed(FormClosedEventArgs e) {
             //Remove the form from Application.OpenForms (nothing happens if isn't present)
-            Application.OpenFormsInternalRemove(this);
+            Application.OpenForms.Remove(this);
 
             FormClosedEventHandler handler = (FormClosedEventHandler)Events[EVENT_FORMCLOSED];
             if (handler != null) handler(this,e);
@@ -4154,7 +4154,7 @@ namespace System.Windows.Forms {
                 Control activeControl = ActiveControl;
 
                 if( activeControl == null ){
-                    SelectNextControlInternal(this, true, true, true, true);
+                    SelectNextControl(this, true, true, true, true);
                 }
                 else{
                     FocusActiveControlInternal();
@@ -4206,7 +4206,7 @@ namespace System.Windows.Forms {
             formStateEx[FormStateExUseMdiChildProc] = 0;
 
             // just make sure we're no longer in the forms collection list
-            Application.OpenFormsInternalRemove(this);
+            Application.OpenForms.Remove(this);
         }
 
         /// <internalonly/>
@@ -4251,7 +4251,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLoad(EventArgs e) {
             //First - add the form to Application.OpenForms
-            Application.OpenFormsInternalAdd(this);
+            Application.OpenForms.Add(this);
             if (Application.UseWaitCursor) {
                 this.UseWaitCursor = true;
             }
@@ -4809,7 +4809,7 @@ namespace System.Windows.Forms {
                     Form[] ownedForms = this.OwnedForms;
                     FormClosedEventArgs fce = new FormClosedEventArgs(CloseReason.FormOwnerClosing);
                     for (int i = ownedFormsCount-1 ; i >= 0; i--) {
-                        if (ownedForms[i] != null && !Application.OpenFormsInternal.Contains(ownedForms[i])) {
+                        if (ownedForms[i] != null && !Application.OpenForms.Contains(ownedForms[i])) {
                             ownedForms[i].OnFormClosed(fce);
                         }
                     }
@@ -4850,7 +4850,7 @@ namespace System.Windows.Forms {
                     Form[] ownedForms = this.OwnedForms;
                     FormClosingEventArgs fce = new FormClosingEventArgs(CloseReason.FormOwnerClosing, false);
                     for (int i = ownedFormsCount - 1; i >= 0; i--) {
-                        if (ownedForms[i] != null && !Application.OpenFormsInternal.Contains(ownedForms[i])) {
+                        if (ownedForms[i] != null && !Application.OpenForms.Contains(ownedForms[i])) {
                             ownedForms[i].OnFormClosing(fce);
                             if (fce.Cancel) {
                                 e.Cancel = true;

@@ -1617,11 +1617,7 @@ namespace System.Windows.Forms {
             }
         }
 
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Renderer"]/*' />
         /// <devdoc>
@@ -1755,16 +1751,14 @@ namespace System.Windows.Forms {
                         UpdateToolTip(null);
                     }
 
-                    if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        ToolTip internalToolTip = this.ToolTip;
-                        foreach (ToolStripItem item in this.Items) {
-                            if (showItemToolTips) {
-                                KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
-                            }
-                            else {
-                                KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
-                            }
-                        } 
+                    ToolTip internalToolTip = this.ToolTip;
+                    foreach (ToolStripItem item in this.Items) {
+                        if (showItemToolTips) {
+                            KeyboardToolTipStateMachine.Instance.Hook(item, internalToolTip);
+                        }
+                        else {
+                            KeyboardToolTipStateMachine.Instance.Unhook(item, internalToolTip);
+                        }
                     }
 
                     // If the overflow button has not been created, don't check its properties
@@ -1887,7 +1881,7 @@ namespace System.Windows.Forms {
                 // so we get the focus off the thing that's currently focused 
                 // e.g. go from a text box to a toolstrip button
                 if (ContainsFocus && !Focused) {
-                    this.FocusInternal();
+                    this.Focus();
                     if (controlHost == null) {
                         // if nextItem IS a toolstripcontrolhost, we're going to focus it anyways
                         // we only fire KeyboardActive when "focusing" a non-hwnd backed item
@@ -1899,7 +1893,7 @@ namespace System.Windows.Forms {
                         SnapFocus(UnsafeNativeMethods.GetFocus());
                     }
                     controlHost.Control.Select();
-                    controlHost.Control.FocusInternal();
+                    controlHost.Control.Focus();
                 }
 
 
@@ -2213,11 +2207,10 @@ namespace System.Windows.Forms {
 
             if (start == null)  {
                 // The navigation should be consisstent when navigating in forward and
-                // backward direction entering the toolstrip, it means that for AI.Level3
-                // the first toolstrip item should be selected irrespectively TAB or SHIFT+TAB
+                // backward direction entering the toolstrip, it means that the first
+                // toolstrip item should be selected irrespectively TAB or SHIFT+TAB
                 // is pressed.
-                start = (forward) ? DisplayedItems[DisplayedItems.Count -1] :
-                    (AccessibilityImprovements.Level3 ? DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0] : DisplayedItems[0]);
+                start = (forward) ? DisplayedItems[DisplayedItems.Count -1] : DisplayedItems[DisplayedItems.Count > 1 ? 1 : 0];
             }
 
             int current = DisplayedItems.IndexOf(start);
@@ -3571,7 +3564,7 @@ namespace System.Windows.Forms {
                   // The idea here is to let items pretend they are controls.
                   // they should get paint events at 0,0 and have proper clipping regions
                   // set up for them.  We cannot use g.TranslateTransform as that does
-                  // not translate the GDI world, and things like XP Visual Styles and the
+                  // not translate the GDI world, and things like Visual Styles and the
                   // TextRenderer only know how to speak GDI.
                   //
                   // The previous appropach was to set up the GDI clipping region and allocate a graphics
@@ -3995,13 +3988,13 @@ namespace System.Windows.Forms {
            bool focusSuccess = false;
                    
            if ((hwndThatLostFocus != IntPtr.Zero) && (hwndThatLostFocus != this.Handle)) {
-                Control c = Control.FromHandleInternal(hwndThatLostFocus);
+                Control c = Control.FromHandle(hwndThatLostFocus);
 
                 Debug.WriteLineIf(SnapFocusDebug.TraceVerbose, "[ToolStrip RestoreFocus]: Will Restore Focus to: " + WindowsFormsUtils.GetControlInformation(hwndThatLostFocus));
                 hwndThatLostFocus = IntPtr.Zero;
 
                 if ((c != null) && c.Visible) {
-                    focusSuccess = c.FocusInternal();
+                    focusSuccess = c.Focus();
                 }
             }
             hwndThatLostFocus = IntPtr.Zero;
@@ -4124,7 +4117,7 @@ namespace System.Windows.Forms {
         protected override void Select(bool directed, bool forward) {
             bool correctParentActiveControl = true;
             if (ParentInternal != null) {
-                IContainerControl c = ParentInternal.GetContainerControlInternal();
+                IContainerControl c = ParentInternal.GetContainerControl();
 
                 if (c != null) {
                     c.ActiveControl = this;
@@ -4157,7 +4150,7 @@ namespace System.Windows.Forms {
         internal void SetFocusUnsafe() {
             if (TabStop) {
                 Debug.WriteLineIf(SnapFocusDebug.TraceVerbose,"[ToolStrip.SetFocus] Focusing toolstrip.");
-                FocusInternal();
+                Focus();
             }
             else {
                 Debug.WriteLineIf(SnapFocusDebug.TraceVerbose,"[ToolStrip.SetFocus] Entering menu mode.");
@@ -4489,10 +4482,6 @@ namespace System.Windows.Forms {
 
                     ToolTip.Hide(this);
 
-                    if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                        ToolTip.Active = false;
-                    }
-
                     currentlyActiveTooltipItem = item;
 
 
@@ -4500,10 +4489,6 @@ namespace System.Windows.Forms {
                         Cursor currentCursor = Cursor.CurrentInternal;
 
                         if (currentCursor != null) {
-                            if (AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                                ToolTip.Active = true;
-                            }
-
                             Point cursorLocation = Cursor.Position;
                             cursorLocation.Y += Cursor.Size.Height - currentCursor.HotSpot.Y;
 
@@ -4682,17 +4667,13 @@ namespace System.Windows.Forms {
 
 
         internal void OnItemAddedInternal(ToolStripItem item) {
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                if (this.ShowItemToolTips) {
-                    KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
-                }
+            if (this.ShowItemToolTips) {
+                KeyboardToolTipStateMachine.Instance.Hook(item, this.ToolTip);
             }
         }
 
         internal void OnItemRemovedInternal(ToolStripItem item) {
-            if (!AccessibilityImprovements.UseLegacyToolTipDisplay) {
-                KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
-            }
+            KeyboardToolTipStateMachine.Instance.Unhook(item, this.ToolTip);
         }
 
         internal override bool AllowsChildrenToShowToolTips() {
@@ -4965,31 +4946,27 @@ namespace System.Windows.Forms {
             }
 
             internal override UnsafeNativeMethods.IRawElementProviderFragment FragmentNavigate(UnsafeNativeMethods.NavigateDirection direction) {
-                if (AccessibilityImprovements.Level3) {
-                    switch (direction) {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            int childCount = GetChildFragmentCount();
-                            if (childCount > 0) {
-                                return this.GetChildFragment(0);
-                            }
-                            break;
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            childCount = GetChildFragmentCount();
-                            if (childCount > 0) {
-                                return this.GetChildFragment(childCount - 1);
-                            }
-                            break;
-                    }
+                switch (direction) {
+                    case UnsafeNativeMethods.NavigateDirection.FirstChild:
+                        int childCount = GetChildFragmentCount();
+                        if (childCount > 0) {
+                            return this.GetChildFragment(0);
+                        }
+                        break;
+                    case UnsafeNativeMethods.NavigateDirection.LastChild:
+                        childCount = GetChildFragmentCount();
+                        if (childCount > 0) {
+                            return this.GetChildFragment(childCount - 1);
+                        }
+                        break;
                 }
 
                 return base.FragmentNavigate(direction);
             }
 
             internal override object GetPropertyValue(int propertyID) {
-                if (AccessibilityImprovements.Level3) {
-                    if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
-                        return NativeMethods.UIA_ToolBarControlTypeId;
-                    }
+                if (propertyID == NativeMethods.UIA_ControlTypePropertyId) {
+                    return NativeMethods.UIA_ToolBarControlTypeId;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -5157,18 +5134,11 @@ namespace System.Windows.Forms {
     internal class MouseHoverTimer : IDisposable {
 
            private System.Windows.Forms.Timer mouseHoverTimer = new System.Windows.Forms.Timer();
-           private const int SPI_GETMOUSEHOVERTIME_WIN9X = 400;  // in Win9x this is not supported so lets use the default from a more modern OS.
-
            // consider - weak reference?
            private ToolStripItem currentItem = null;
 
            public MouseHoverTimer() {
-               int interval = SystemInformation.MouseHoverTime;
-               if (interval == 0) {
-                   interval = SPI_GETMOUSEHOVERTIME_WIN9X;
-               }
-
-               mouseHoverTimer.Interval = interval;
+               mouseHoverTimer.Interval = SystemInformation.MouseHoverTime;
                mouseHoverTimer.Tick    += new EventHandler(OnTick);
            }
 

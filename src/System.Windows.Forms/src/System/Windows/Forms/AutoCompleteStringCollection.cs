@@ -204,16 +204,10 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, value));
         }
 
-        /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.SyncRoot"]/*' />
         /// <devdoc>
-        /// <para>Gets an object that can be used to synchronize access to the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/>.</para>
+        /// Gets an object that can be used to synchronize access to the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/>.
         /// </devdoc>
-        public object SyncRoot {
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-            get {
-                return this;
-            }
-        }
+        public object SyncRoot => this;
 
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.IList.this"]/*' />
         object IList.this[int index] {

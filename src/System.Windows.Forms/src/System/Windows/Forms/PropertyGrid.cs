@@ -12,6 +12,7 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Drawing.Design;
+    using System.Drawing.Imaging;
     using System.Globalization;
     using System.IO;
     using System.Reflection;
@@ -81,8 +82,7 @@ namespace System.Windows.Forms {
         private object[]   currentObjects;
         
         private int                                 paintFrozen;
-        private Color                               lineColor = SystemInformation.HighContrast ? (AccessibilityImprovements.Level1 ? SystemColors.ControlDarkDark : SystemColors.ControlDark )
-                                                                : SystemColors.InactiveBorder;
+        private Color                               lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
         internal bool                               developerOverride = false;
         internal Brush                              lineBrush = null;
         private Color                               categoryForeColor = SystemColors.ControlText;
@@ -202,7 +202,7 @@ namespace System.Windows.Forms {
                 separator1 = CreateSeparatorButton();
                 separator2 = CreateSeparatorButton();
 
-                toolStrip = AccessibilityImprovements.Level3 ? new PropertyGridToolStrip(this) : new ToolStrip();
+                toolStrip = new PropertyGridToolStrip(this);
                 toolStrip.SuspendLayout();
                 toolStrip.ShowItemToolTips = true;
                 toolStrip.AccessibleName = SR.PropertyGridToolbarAccessibleName;
@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
               
                 Controls.AddRange(new Control[] { doccomment, hotcommands, gridView, toolStrip });
 
-                SetActiveControlInternal(gridView);
+                SetActiveControl(gridView);
                 toolStrip.ResumeLayout(false);  // SetupToolbar should perform the layout
                 SetupToolbar();
                 this.PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
@@ -699,7 +699,7 @@ namespace System.Windows.Forms {
                     SetToolStripRenderer();
                 }
 
-                SetHotCommandColors(value && !AccessibilityImprovements.Level2);
+                SetHotCommandColors(false);
             }
         }
 
@@ -1589,8 +1589,9 @@ namespace System.Windows.Forms {
         }
 
         private int AddImage(Bitmap image) {
-            
-            image.MakeTransparent();
+            if (image.RawFormat.Guid != ImageFormat.Icon.Guid) {
+                image.MakeTransparent();
+            }
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
             if (DpiHelper.IsScalingRequired && (image.Size.Width != normalButtonSize.Width || image.Size.Height != normalButtonSize.Height)) {
                 image = DpiHelper.CreateResizedBitmap(image, normalButtonSize);
@@ -1920,11 +1921,7 @@ namespace System.Windows.Forms {
         /// </summary>
         /// <returns></returns>
         protected override AccessibleObject CreateAccessibilityInstance() {
-            if (AccessibilityImprovements.Level3) {
-                return new PropertyGridAccessibleObject(this);
-            }
-
-            return base.CreateAccessibilityInstance();
+            return new PropertyGridAccessibleObject(this);
         }
 
         private /*protected virtual*/ PropertyGridView CreateGridView(IServiceProvider sp) {
@@ -2029,10 +2026,8 @@ namespace System.Windows.Forms {
             button.Click += eventHandler;
             button.ImageScaling = ToolStripItemImageScaling.SizeToFit;
 
-            if (AccessibilityImprovements.Level1) {
-                if (useCheckButtonRole) {
-                    button.AccessibleRole = AccessibleRole.CheckButton;
-                }
+            if (useCheckButtonRole) {
+                button.AccessibleRole = AccessibleRole.CheckButton;
             }
 
             return button;
@@ -2393,7 +2388,6 @@ namespace System.Windows.Forms {
             Bitmap largeBitmap = null;
             try {
                 Bitmap transparentBitmap = new Bitmap(originalBitmap);
-                transparentBitmap.MakeTransparent();
                 largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, largeButtonSize);
                 transparentBitmap.Dispose();
 
@@ -2577,9 +2571,9 @@ namespace System.Windows.Forms {
             }
         
             if (this.ActiveControl != gridView) {
-                this.SetActiveControlInternal(gridView);
+                this.SetActiveControl(gridView);
             }
-            gridView.FocusInternal();
+            gridView.Focus();
         }
 
         internal bool HavePropEntriesChanged() {
@@ -2849,13 +2843,13 @@ namespace System.Windows.Forms {
             base.OnGotFocus(e);
             
             if (this.ActiveControl == null) {
-                this.SetActiveControlInternal(gridView);
+                this.SetActiveControl(gridView);
             }
             else {
                 // sometimes the edit is still the active control
                 // when it's hidden or disabled...
-                if (!this.ActiveControl.FocusInternal()) {
-                    this.SetActiveControlInternal(gridView);
+                if (!this.ActiveControl.Focus()) {
+                    this.SetActiveControl(gridView);
                 }
             }
         }
@@ -3141,7 +3135,7 @@ namespace System.Windows.Forms {
         private void OnButtonClick(object sender, EventArgs e) {
             // we don't want to steal focus from the property pages...
             if (sender != btnViewPropertyPages) {
-                gridView.FocusInternal();
+                gridView.Focus();
             }
         }
 
@@ -3236,27 +3230,25 @@ namespace System.Windows.Forms {
         internal void OnPropertyValueSet(GridItem changedItem, object oldValue) {
             OnPropertyValueChanged(new PropertyValueChangedEventArgs(changedItem, oldValue));
 
-            // In Level 3 announce the property value change like standalone combobox control do: "[something] selected".
-            if (AccessibilityImprovements.Level3) {
-                bool dropDown = false;
-                Type propertyType = changedItem.PropertyDescriptor.PropertyType;
-                UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
-                if (editor != null) {
-                    dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
+            // Announce the property value change like standalone combobox control do: "[something] selected".
+            bool dropDown = false;
+            Type propertyType = changedItem.PropertyDescriptor.PropertyType;
+            UITypeEditor editor = (UITypeEditor)TypeDescriptor.GetEditor(propertyType, typeof(UITypeEditor));
+            if (editor != null) {
+                dropDown = editor.GetEditStyle() == UITypeEditorEditStyle.DropDown;
+            }
+            else {
+                var gridEntry = changedItem as GridEntry;
+                if (gridEntry != null && gridEntry.Enumerable) {
+                    dropDown = true;
                 }
-                else {
-                    var gridEntry = changedItem as GridEntry;
-                    if (gridEntry != null && gridEntry.Enumerable) {
-                        dropDown = true;
-                    }
-                }
+            }
 
-                if (dropDown && !gridView.DropDownVisible) {
-                    this.AccessibilityObject.RaiseAutomationNotification(
-                        Automation.AutomationNotificationKind.ActionCompleted,
-                        Automation.AutomationNotificationProcessing.All,
-                        string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
-                }
+            if (dropDown && !gridView.DropDownVisible) {
+                this.AccessibilityObject.RaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionCompleted,
+                    Automation.AutomationNotificationProcessing.All,
+                    string.Format(SR.PropertyGridPropertyValueSelectedFormat, changedItem.Value));
             }
         }
         
@@ -3617,12 +3609,11 @@ namespace System.Windows.Forms {
                         }
                         else if (gridView.FocusInside) {
                             if (toolStrip.Visible) {
-                                toolStrip.FocusInternal();
-                                if (AccessibilityImprovements.Level1) {
-                                    // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
-                                    if (toolStrip.Items.Count > 0) {
-                                        toolStrip.SelectNextToolStripItem(null, /*forward =*/ true);
-                                    }
+                                toolStrip.Focus();
+
+                                // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
+                                if (toolStrip.Items.Count > 0) {
+                                    toolStrip.SelectNextToolStripItem(null, /*forward =*/ true);
                                 }
                             }
                             else {
@@ -3646,7 +3637,7 @@ namespace System.Windows.Forms {
                                     gridView.ReverseFocus();
                                 }
                                 else if (toolStrip.Visible) {
-                                    toolStrip.FocusInternal();
+                                    toolStrip.Focus();
                                 }
                                 else {
                                     return base.ProcessDialogKey(keyData);
@@ -3663,7 +3654,7 @@ namespace System.Windows.Forms {
                         if (toolStrip.Focused) {
                             // normal stuff, just do the propsheet
                             if (peMain != null) {
-                                gridView.FocusInternal();
+                                gridView.Focus();
                             }
                             else {
                                 base.ProcessDialogKey(keyData);
@@ -3686,10 +3677,10 @@ namespace System.Windows.Forms {
                         else {
                             // coming from out side, start with the toolStrip
                             if (toolStrip.Visible) {
-                                toolStrip.FocusInternal();
+                                toolStrip.Focus();
                             }
                             else {
-                                gridView.FocusInternal();
+                                gridView.Focus();
                             }
                         }
 
@@ -4199,7 +4190,7 @@ namespace System.Windows.Forms {
         }
 
         private void SetToolStripRenderer() {
-            if (DrawFlatToolbar || (SystemInformation.HighContrast && AccessibilityImprovements.Level1)) {
+            if (DrawFlatToolbar || SystemInformation.HighContrast) {
                 // use an office look and feel with system colors 
                 ProfessionalColorTable colorTable = new ProfessionalColorTable();
                 colorTable.UseSystemColors = true;
@@ -4413,7 +4404,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByPropertyImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBAlpha.bmp");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBAlpha");
             }
         }
 
@@ -4428,7 +4419,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap SortByCategoryImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBCatego.bmp");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBCatego");
             }
         }
 
@@ -4443,7 +4434,7 @@ namespace System.Windows.Forms {
         ]
         protected virtual Bitmap ShowPropertyPageImage {
             get {
-                return new Bitmap(typeof(PropertyGrid), "PBPPage.bmp");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBPPage");
             }
         }
 
@@ -4620,11 +4611,7 @@ namespace System.Windows.Forms {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return AccessibilityImprovements.Level3;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <devdoc>
         ///     Determines whether the control supports rendering text using GDI+ and GDI.
@@ -4704,11 +4691,6 @@ namespace System.Windows.Forms {
             SetupToolbar(true);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.WndProc"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -5447,11 +5429,7 @@ namespace System.Windows.Forms {
         /// Indicates whether or not the control supports UIA Providers via
         /// IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
         /// </summary>
-        internal override bool SupportsUiaProviders {
-            get {
-                return true;
-            }
-        }
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         /// Constructs the new instance of the accessibility object for this control.

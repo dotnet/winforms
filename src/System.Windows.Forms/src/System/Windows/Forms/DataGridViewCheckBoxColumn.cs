@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     using System.Globalization;
     
     /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn"]/*' />
-    [ToolboxBitmapAttribute(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn.bmp")]
+    [ToolboxBitmapAttribute(typeof(DataGridViewCheckBoxColumn), "DataGridViewCheckBoxColumn")]
     public class DataGridViewCheckBoxColumn : DataGridViewColumn
     {
         /// <include file='doc\DataGridViewCheckBoxColumn.uex' path='docs/doc[@for="DataGridViewCheckBoxColumn.DataGridViewCheckBoxColumn"]/*' />

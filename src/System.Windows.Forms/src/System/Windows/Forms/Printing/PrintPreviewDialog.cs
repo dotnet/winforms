@@ -63,24 +63,15 @@ namespace System.Windows.Forms {
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.PrintPreviewDialog'/> class.</para>
         /// </devdoc>
         public PrintPreviewDialog() {
-
             
             #pragma warning disable 618
             base.AutoScaleBaseSize = new Size(5, 13);
             #pragma warning restore 618
-            
-            
 
             this.previewControl = new PrintPreviewControl();
             this.imageList = new ImageList();
-            
-            Bitmap bitmaps = new Bitmap(typeof(PrintPreviewDialog), "PrintPreviewStrip.bmp");
-            bitmaps.MakeTransparent();
-            imageList.Images.AddStrip(bitmaps);
-
+            imageList.Images.AddStrip(DpiHelper.GetBitmapFromIcon(typeof(PrintPreviewDialog), "PrintPreviewStrip"));
             InitForm();
-
-            
         }
 
         //subhag addition
@@ -1623,7 +1614,7 @@ namespace System.Windows.Forms {
         protected override bool ProcessTabKey(bool forward) {
             if (this.ActiveControl == this.previewControl)
             {
-                this.pageCounter.FocusInternal();
+                this.pageCounter.Focus();
                 return true;
             }
             return false;

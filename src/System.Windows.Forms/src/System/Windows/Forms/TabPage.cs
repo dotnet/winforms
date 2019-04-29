@@ -117,7 +117,7 @@ namespace System.Windows.Forms {
                 {
                     return color;
                 }
-                // If user has not set a color and if XP theming ON  and Parent's appearance is Normal, then return the Transparent Color....
+                // If user has not set a color and if theming ON  and Parent's appearance is Normal, then return the Transparent Color....
                 TabControl parent = ParentInternal as TabControl;
                 if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal)) {
                     return Color.Transparent;

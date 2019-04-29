@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms {
                 if (tv.LabelEdit == false)
                     throw new InvalidOperationException(SR.TreeNodeBeginEditFailed);
                 if (!tv.Focused)
-                    tv.FocusInternal();
+                    tv.Focus();
                 UnsafeNativeMethods.SendMessage(new HandleRef(tv, tv.Handle), NativeMethods.TVM_EDITLABEL, 0, handle);
             }
         }

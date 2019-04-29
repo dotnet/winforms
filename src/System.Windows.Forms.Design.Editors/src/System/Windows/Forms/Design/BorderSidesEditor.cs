@@ -21,7 +21,6 @@ namespace System.Windows.Forms.Design
         /// <summary>
         /// Edits the given object value using the editor style provided by BorderSidesEditor.GetEditStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)
@@ -43,10 +42,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Gets the editing style of the Edit method. If the method
-        /// is not supported, this will return UITypeEditorEditStyle.None.
+        /// Gets the editing style of the Edit method.
+        /// If the method is not supported, this will return UITypeEditorEditStyle.None.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;

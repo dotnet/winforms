@@ -1506,13 +1506,10 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DestroyHandle"]/*' />
         /// <devdoc>
-        ///     Destroys the handle associated with this control.
-        ///     User code should in general not call this function.
+        /// Destroys the handle associated with this control.
+        /// User code should in general not call this function.
         /// </devdoc>        
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // security review: this is a breaking change, but should it be fixed?
         protected override void DestroyHandle() {
             if (axState[fOwnWindow]) {
                 base.DestroyHandle();
@@ -1857,11 +1854,14 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override bool ProcessDialogKey(Keys keyData) 
         {
-            return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
+            if (ignoreDialogKeys)
+            {
+                return false;
+            }
+
+            return base.ProcessDialogKey(keyData);
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.PreProcessMessage"]/*' />
@@ -1955,13 +1955,11 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessMnemonic"]/*' />
         /// <devdoc>
-        ///     Process a mnemonic character.
-        ///     This is done by manufacturing a WM_SYSKEYDOWN message and passing it
-        ///     to the ActiveX control.
+        /// Process a mnemonic character.
+        /// This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
+        /// ActiveX control.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected internal override bool ProcessMnemonic(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
             if (CanSelect) {
@@ -3276,8 +3274,10 @@ namespace System.Windows.Forms {
                 }
 
                 case Interop.WindowMessages.WM_COMMAND:
-                    if (!ReflectMessageInternal(m.LParam, ref m))
+                    if (!ReflectMessage(m.LParam, ref m))
+                    {
                         DefWndProc(ref m);
+                    }
                     break;
                 
                 case Interop.WindowMessages.WM_CONTEXTMENU:
