@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [MemberData(nameof(IsDefaultAttribute_TestData))]
+        [MemberData(nameof(Equals_TestData))]
         public void ToolStripItemDesignerAvailabilityAttribute_Equals_Invoke_ReturnsExpected(ToolStripItemDesignerAvailabilityAttribute attribute, object obj, bool expected)
         {
             if (obj is ToolStripItemDesignerAvailability other)
