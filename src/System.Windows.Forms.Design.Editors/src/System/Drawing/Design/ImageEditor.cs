@@ -20,12 +20,12 @@ namespace System.Drawing.Design
     [CLSCompliant(false)]
     public class ImageEditor : UITypeEditor
     {
-        private static Type[] _imageExtenders = new Type[] { typeof(BitmapEditor), typeof(MetafileEditor) };
+        private static readonly Type[] s_imageExtenders = new Type[] { typeof(BitmapEditor), typeof(MetafileEditor) };
         private FileDialog _fileDialog;
 
         // Accessor needed into the static field so that derived classes
         // can implement a different list of supported image types.
-        protected virtual Type[] GetImageExtenders() => _imageExtenders;
+        protected virtual Type[] GetImageExtenders() => s_imageExtenders;
 
         [SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
         protected static string CreateExtensionsString(string[] extensions, string sep)
@@ -72,7 +72,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         /// Edits the given object value using the editor style provided by
-        /// GetEditorStyle.static A service provider is provided so that any
+        /// GetEditorStyle. A service provider is provided so that any
         /// required editing services can be obtained.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1818:DoNotConcatenateStringsInsideLoops")]
@@ -130,8 +130,8 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        /// Retrieves the editing style of the Edit method.static If the method
-        /// is not supported, this will return None.
+        /// Retrieves the editing style of the Edit method. If the method is not supported,
+        /// this will return None.
         /// </summary>
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
