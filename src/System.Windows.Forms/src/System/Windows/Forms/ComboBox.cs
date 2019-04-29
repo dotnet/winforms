@@ -4478,8 +4478,8 @@ namespace System.Windows.Forms {
                     runtimeId[1] = (int)(long)_owningComboBox.Handle;
                     runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
 
-                    var comboBoxUiaProvider = _owningComboBox.AccessibilityObject as ComboBoxUiaProvider;
-                    runtimeId[3] = comboBoxUiaProvider.ItemAccessibleObjects.GetId(_owningItem);
+                    var comboBoxAccessibleObject = _owningComboBox.AccessibilityObject as ComboBoxAccessibleObject;
+                    runtimeId[3] = comboBoxAccessibleObject.ItemAccessibleObjects.GetId(_owningItem);
 
                     return runtimeId;
                 }
