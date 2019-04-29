@@ -32,9 +32,8 @@ namespace System.Windows.Forms.Design
                     {
                         _bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bmpName);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        Debug.Fail("Failed to find bitmap '" + bmpName + "' for class " + GetType().FullName, ex.ToString());
                     }
 
                     _checkedBmp = true;
