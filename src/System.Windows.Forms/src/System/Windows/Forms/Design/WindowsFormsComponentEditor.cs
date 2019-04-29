@@ -34,16 +34,13 @@ namespace System.Windows.Forms.Design
         public virtual bool EditComponent(ITypeDescriptorContext context, object component, IWin32Window owner)
         {
             Type[] pageControlTypes = GetComponentEditorPages();
-            if (pageControlTypes != null && pageControlTypes.Length != 0)
+            if (pageControlTypes == null || pageControlTypes.Length == 0)
             {
-                ComponentEditorForm form = new ComponentEditorForm(component, pageControlTypes);
-                if (form.ShowForm(owner, GetInitialComponentEditorPageIndex()) == DialogResult.OK)
-                {
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            ComponentEditorForm form = new ComponentEditorForm(component, pageControlTypes);
+            return form.ShowForm(owner, GetInitialComponentEditorPageIndex()) == DialogResult.OK;
         }
 
         /// <summary>
