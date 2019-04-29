@@ -1409,7 +1409,6 @@ namespace System.Windows.Forms
         /// This method is useful when calling into GDI+ Graphics methods that modify the object's
         /// state, these methods fail under a locked terminal session.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         internal static bool InLockedTerminalSession()
         {
             if (TerminalServerSession)
@@ -1422,10 +1421,8 @@ namespace System.Windows.Forms
                     int error = Marshal.GetLastWin32Error();
                     return error == NativeMethods.ERROR_ACCESS_DENIED;
                 }
-                else
-                {
-                    SafeNativeMethods.CloseDesktop(hDsk);
-                }
+                
+                SafeNativeMethods.CloseDesktop(hDsk);
             }
 
             return false;
