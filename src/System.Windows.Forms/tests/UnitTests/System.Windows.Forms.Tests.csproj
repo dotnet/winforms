@@ -29,6 +29,9 @@
     <Content Include="bitmaps\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="bitmaps\10x16_one_entry_32bit.ico">
+      <LogicalName>System.Windows.Forms.Design.Tests.CustomPropertyTab</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

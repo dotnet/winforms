@@ -2,145 +2,114 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms.Design {
-    using System.Runtime.InteropServices;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System;
-    using System.Drawing;    
-    using System.Windows.Forms;
-    using Microsoft.Win32;
-    using System.Runtime.Versioning;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
 
-    /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab"]/*' />
-    /// <devdoc>
-    ///    <para>Provides a base class for property tabs.</para>
-    /// </devdoc>
-    public abstract class PropertyTab : IExtenderProvider {
+namespace System.Windows.Forms.Design
+{
+    /// <summary>
+    /// Provides a base class for property tabs.
+    /// </summary>
+    public abstract class PropertyTab : IExtenderProvider
+    {
+        private Bitmap _bitmap;
+        private bool _checkedBmp;
 
-        private object[] components; 
-        private Bitmap   bitmap;
-        private bool     checkedBmp;
+        ~PropertyTab() => Dispose(false);
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Finalize"]/*' />
-        ~PropertyTab() {
-            Dispose(false);
-        }
-
-        // don't override this. Just put a 16x16 bitmap in a file with the same name as your class in your resources.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Bitmap"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets a bitmap to display in the property tab.</para>
-        /// </devdoc>
-        public virtual Bitmap Bitmap {
-            
-            
-            get {
-                if (!checkedBmp && bitmap == null) {
-                    string bmpName = GetType().Name + "";
-                    try {
-                        bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bmpName);
+        /// <summary>
+        /// Gets or sets a bitmap to display in the property tab.
+        /// </summary>
+        public virtual Bitmap Bitmap
+        {
+            get
+            {
+                if (!_checkedBmp && _bitmap == null)
+                {
+                    string bmpName = GetType().Name;
+                    try
+                    {
+                        _bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bmpName);
                     }
-                    catch (Exception ex) {
-                        Debug.Fail("Failed to find bitmap '" + bmpName + "' for class " + GetType().FullName, ex.ToString());
+                    catch (Exception)
+                    {
                     }
-                    checkedBmp = true;
+
+                    _checkedBmp = true;
                 }
-                return bitmap;
+
+                return _bitmap;
             }
         }
 
-        // don't override this either.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Components"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets the array of components the property tab is associated with.</para>
-        /// </devdoc>
-        public virtual object[] Components {
-            get {
-                return components;
-            }
-            set {
-                this.components = value;
-            }
-        }
+        /// <summary>
+        /// Gets or sets the array of components the property tab is associated with.
+        /// </summary>
+        public virtual object[] Components { get; set; }
 
-        // okay.  Override this to give a good TabName.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.TabName"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets the name for the property tab.</para>
-        /// </devdoc>
-        public abstract string TabName {
-            get;
-        }
-        
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.HelpKeyword"]/*' />
-        /// <devdoc>
-        ///    <para>Gets or sets the help keyword that is to be associated with this tab. This defaults
-        ///       to the tab name.</para>
-        /// </devdoc>
-        public virtual string HelpKeyword {
-            get {
-                return TabName;
-            }
-        }
+        /// <summary>
+        /// Gets or sets the name for the property tab.
+        /// </summary>
+        public abstract string TabName { get; }
 
-        // override this to reject components you don't want to support.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.CanExtend"]/*' />
-        /// <devdoc>
-        ///    <para>Gets a value indicating whether the specified object be can extended.</para>
-        /// </devdoc>
-        public virtual bool CanExtend(object extendee) {
-            return true;
-        }
+        /// <summary>
+        /// Gets or sets the help keyword that is to be associated with this tab. This
+        /// defaults to the tab name.
+        /// </summary>
+        public virtual string HelpKeyword => TabName;
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Dispose"]/*' />
-        public virtual void Dispose() {
+        /// <summary>
+        /// Gets a value indicating whether the specified object be can extended.
+        /// </summary>
+        public virtual bool CanExtend(object extendee) => true;
+
+        public virtual void Dispose()
+        {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.Dispose2"]/*' />
-        protected virtual void Dispose(bool disposing) {
-            if (disposing) {
-                if (bitmap != null) {
-                    bitmap.Dispose();
-                    bitmap = null;
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_bitmap != null)
+                {
+                    _bitmap.Dispose();
+                    _bitmap = null;
                 }
             }
         }
 
-        // return the default property item
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetDefaultProperty"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the default property of the specified component.</para>
-        /// </devdoc>
-        public virtual PropertyDescriptor GetDefaultProperty(object component) {
+        /// <summary>
+        /// Gets the default property of the specified component.
+        /// </summary>
+        public virtual PropertyDescriptor GetDefaultProperty(object component)
+        {
             return TypeDescriptor.GetDefaultProperty(component);
         }
 
-        // okay, override this to return whatever you want to return... All properties must apply to component.
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetProperties"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the properties of the specified component.</para>
-        /// </devdoc>
-        public virtual PropertyDescriptorCollection GetProperties(object component) {
+        /// <summary>
+        /// Gets the properties of the specified component.
+        /// </summary>
+        public virtual PropertyDescriptorCollection GetProperties(object component)
+        {
             return GetProperties(component, null);
         }
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetProperties1"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the properties of the specified component which match the specified 
-        ///       attributes.</para>
-        /// </devdoc>
+        /// <summary>
+        /// Gets the properties of the specified component which match the specified
+        /// attributes.
+        /// </summary>
         public abstract PropertyDescriptorCollection GetProperties(object component, Attribute[] attributes);
 
-        /// <include file='doc\PropertyTab.uex' path='docs/doc[@for="PropertyTab.GetProperties2"]/*' />
-        /// <devdoc>
-        ///    <para>Gets the properties of the specified component...</para>
-        /// </devdoc>
-        public virtual PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes) {
-             return GetProperties(component, attributes);
+        /// <summary>
+        /// Gets the properties of the specified component.
+        /// </summary>
+        public virtual PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object component, Attribute[] attributes)
+        {
+            return GetProperties(component, attributes);
         }
     }
 }
-
