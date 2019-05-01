@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.Net;
     using System.Reflection;
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Threading;
     using System.Windows.Forms.Design;

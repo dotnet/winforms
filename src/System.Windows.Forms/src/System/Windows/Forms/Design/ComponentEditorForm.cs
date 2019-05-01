@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms.Design {
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;

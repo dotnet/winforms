@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -258,7 +257,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                    // first walk the list looking for items that need to be
                    // cleaned out.
                    //
-                   foreach(DictionaryEntry de in nativeProps) {
+                   foreach(DictionaryEntry de in nativeProps) {
+
                         entry = de.Value as Com2Properties;
 
                         if (entry != null && entry.TooOld) {
@@ -398,7 +398,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         /// <devdoc>
         /// Fired when the property info gets disposed.
         /// </devdoc>        
-        private void OnPropsInfoDisposed(object sender, EventArgs e) {
+        private void OnPropsInfoDisposed(object sender, EventArgs e) {
+
             Com2Properties propsInfo = sender as Com2Properties;
 
             if (propsInfo != null) {
@@ -409,12 +410,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
                     // find the key
                     object key = propsInfo.TargetObject;
 
-                    if (key == null && nativeProps.ContainsValue(propsInfo)) {
+                    if (key == null && nativeProps.ContainsValue(propsInfo)) {
+
                         // need to find it - the target object has probably been cleaned out
                         // of the Com2Properties object already, so we run through the
                         // hashtable looking for the value, so we know what key to remove.
                         //
-                        foreach (DictionaryEntry de in nativeProps) {
+                        foreach (DictionaryEntry de in nativeProps) {
+
                             if (de.Value == propsInfo) {
                                 key = de.Key;
                                 break;                                    

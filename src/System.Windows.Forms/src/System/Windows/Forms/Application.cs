@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Threading;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.ConstrainedExecution;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;

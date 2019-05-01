@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;

@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting.Lifetime;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Versioning;
     using System.Threading;

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
 
     /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu"]/*' />
     /// <devdoc>
