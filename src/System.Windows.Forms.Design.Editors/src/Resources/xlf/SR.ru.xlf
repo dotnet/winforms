@@ -44,7 +44,7 @@
       </trans-unit>
       <trans-unit id="CollectionEditorProperties">
         <source>{0} &amp;properties:</source>
-        <target state="translated">Свойства {0}:</target>
+        <target state="translated">&amp;Свойства {0}:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesMultiSelect">

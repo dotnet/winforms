@@ -70,7 +70,7 @@
       <trans-unit id="CommandSetError">
         <source>An error occurred while processing this command.
       {0}</source>
-        <target state="new">An error occurred while processing this command.
+        <target state="translated">이 명령을 처리하는 동안 오류가 발생했습니다.
       {0}</target>
         <note />
       </trans-unit>
@@ -156,7 +156,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuPaste">
         <source>&amp;Paste</source>
-        <target state="translated">붙여넣기</target>
+        <target state="translated">붙여넣기(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuProperties">
@@ -176,7 +176,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMargin">
         <source>ShowCheckMargin</source>
-        <target state="new">ShowCheckMargin</target>
+        <target state="translated">ShowCheckMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowCheckMarginDesc">
@@ -186,7 +186,7 @@
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMargin">
         <source>ShowImageMargin</source>
-        <target state="new">ShowImageMargin</target>
+        <target state="translated">ShowImageMargin</target>
         <note />
       </trans-unit>
       <trans-unit id="ContextMenuStripActionList_ShowImageMarginDesc">
@@ -206,12 +206,12 @@
       {1}
 
       Stack trace:{2}</source>
-        <target state="new">The control {0} has thrown an unhandled exception in the designer and has been disabled.
+        <target state="translated">{0} 컨트롤이 디자이너에서 처리되지 않은 예외를 throw하여 비활성화되었습니다.
 
-      Exception:
+      예외:
       {1}
 
-      Stack trace:{2}</target>
+      스택 추적:{2}</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerActionPanel_CouldNotConvertValue">
@@ -278,7 +278,7 @@
         <source>An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
 
       {0}</source>
-        <target state="new">An error occurred while loading the document.  Fix the error, and then try loading the document again. The error message follows:
+        <target state="translated">문서를 로드하는 동안 오류가 발생했습니다. 오류를 수정한 다음, 문서를 다시 로드하세요. 다음 오류 메시지가 나타납니다.
 
       {0}</target>
         <note />
@@ -615,12 +615,12 @@
       </trans-unit>
       <trans-unit id="SerializerNullNestedProperty">
         <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
-        <target state="new">The object '{0}' returned null for the property '{1}' but this is not allowed.</target>
+        <target state="translated">'{0}' 개체에서 '{1}' 속성에 대해 null을 반환했지만 이는 허용되지 않습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerPropertyGenFailed">
         <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
-        <target state="new">Code generation for property '{0}' failed.  Error was: '{1}'</target>
+        <target state="translated">'{0}' 속성의 코드를 생성하지 못했습니다. 오류: '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceException">
@@ -655,7 +655,7 @@
       </trans-unit>
       <trans-unit id="StandardMenuContents">
         <source>&amp;Contents</source>
-        <target state="translated">내용</target>
+        <target state="translated">내용(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCopy">
@@ -670,12 +670,12 @@
       </trans-unit>
       <trans-unit id="StandardMenuCustomize">
         <source>&amp;Customize</source>
-        <target state="translated">사용자 지정</target>
+        <target state="translated">사용자 지정(&amp;C)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuCut">
         <source>Cu&amp;t</source>
-        <target state="translated">잘라내기</target>
+        <target state="translated">잘라내기(&amp;T)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuEdit">
@@ -700,7 +700,7 @@
       </trans-unit>
       <trans-unit id="StandardMenuIndex">
         <source>&amp;Index</source>
-        <target state="translated">인덱스</target>
+        <target state="translated">인덱스(&amp;I)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuNew">
@@ -715,17 +715,17 @@
       </trans-unit>
       <trans-unit id="StandardMenuOptions">
         <source>&amp;Options</source>
-        <target state="translated">옵션</target>
+        <target state="translated">옵션(&amp;O)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPaste">
         <source>&amp;Paste</source>
-        <target state="translated">붙여넣기</target>
+        <target state="translated">붙여넣기(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrint">
         <source>&amp;Print</source>
-        <target state="translated">인쇄</target>
+        <target state="translated">인쇄(&amp;P)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuPrintPreview">
@@ -735,7 +735,7 @@
       </trans-unit>
       <trans-unit id="StandardMenuRedo">
         <source>&amp;Redo</source>
-        <target state="translated">다시 실행</target>
+        <target state="translated">다시 실행(&amp;R)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSave">
@@ -745,7 +745,7 @@
       </trans-unit>
       <trans-unit id="StandardMenuSaveAs">
         <source>Save &amp;As</source>
-        <target state="translated">다른 이름으로 저장</target>
+        <target state="translated">다른 이름으로 저장(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuSearch">
@@ -755,7 +755,7 @@
       </trans-unit>
       <trans-unit id="StandardMenuSelectAll">
         <source>Select &amp;All</source>
-        <target state="translated">모두 선택</target>
+        <target state="translated">모두 선택(&amp;A)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuTools">
@@ -765,22 +765,22 @@
       </trans-unit>
       <trans-unit id="StandardMenuUndo">
         <source>&amp;Undo</source>
-        <target state="translated">실행 취소</target>
+        <target state="translated">실행 취소(&amp;U)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolCut">
         <source>C&amp;ut</source>
-        <target state="translated">잘라내기</target>
+        <target state="translated">잘라내기(&amp;U)</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardToolHelp">
         <source>He&amp;lp</source>
-        <target state="translated">도움말</target>
+        <target state="translated">도움말(&amp;L)</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">
         <source>Dock:</source>
-        <target state="new">Dock:</target>
+        <target state="translated">도킹:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_DockDesc">
@@ -790,7 +790,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyle">
         <source>GripStyle:</source>
-        <target state="new">GripStyle:</target>
+        <target state="translated">GripStyle:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_GripStyleDesc">
@@ -805,7 +805,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">
         <source>RenderMode:</source>
-        <target state="new">RenderMode:</target>
+        <target state="translated">RenderMode:</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderModeDesc">
@@ -830,7 +830,7 @@
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerb">
         <source>Embed in ToolStripContainer</source>
-        <target state="new">Embed in ToolStripContainer</target>
+        <target state="translated">ToolStripContainer에 포함</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripDesignerEmbedVerbDesc">
