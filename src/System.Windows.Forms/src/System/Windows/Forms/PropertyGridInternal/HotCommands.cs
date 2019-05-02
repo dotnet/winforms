@@ -192,7 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (verbs[i].Visible && verbs[i].Supported) {
                     if (!firstVerb) {
                         sb.Append(Application.CurrentCulture.TextInfo.ListSeparator);
-                        sb.Append(" ");
+                        sb.Append(' ');
                         charLoc += 2;
                     }
                     string name = verbs[i].Text;
