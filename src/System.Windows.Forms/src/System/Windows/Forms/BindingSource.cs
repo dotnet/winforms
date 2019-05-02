@@ -179,7 +179,7 @@ namespace System.Windows.Forms
             // Today, this particular implementation of ICurrencyManagerProvider doesn't support the use of 'dot notation'
             // to specify chains of related data members. We don't have any scenarios for this which involve binding sources.
             // Return 'null' to force the binding context to fall back on its default related currency manager behavior.
-            if (dataMember.IndexOf(".") != -1)
+            if (dataMember.IndexOf('.') != -1)
             {
                 return null;
             }

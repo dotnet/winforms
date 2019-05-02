@@ -19166,7 +19166,7 @@ example usage
                                 ns = string.Empty;
                             }
 
-                            int firstDot = ns.IndexOf("/");
+                            int firstDot = ns.IndexOf('/');
                             if (firstDot != -1) {
                                 companyName = ns.Substring(0, firstDot);
                             }
@@ -19204,7 +19204,7 @@ example usage
                             if (ns == null) {
                                 ns = string.Empty;
                             }
-                            int firstDot = ns.IndexOf(".");
+                            int firstDot = ns.IndexOf('.');
                             if (firstDot != -1) {
                                 productName = ns.Substring(firstDot+1);
                             }

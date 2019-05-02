@@ -305,7 +305,7 @@ namespace System.Windows.Forms
             else
             {
                 // Data member specified, so get data source's binding manager, and hook a 'related' binding manager to it
-                int lastDot = dataMember.LastIndexOf(".");
+                int lastDot = dataMember.LastIndexOf('.');
                 string dataPath = (lastDot == -1) ? string.Empty : dataMember.Substring(0, lastDot);
                 string dataField = dataMember.Substring(lastDot + 1);
 
