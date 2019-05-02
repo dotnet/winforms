@@ -55,6 +55,10 @@
     <CodecovVersion>1.1.1</CodecovVersion>
     <ReportGeneratorVersion>4.0.9</ReportGeneratorVersion>
   </PropertyGroup>
+  <!-- override version set by Arcade which is too old -->
+  <PropertyGroup>
+    <XliffTasksVersion>0.2.0-beta-000081</XliffTasksVersion>
+  </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
