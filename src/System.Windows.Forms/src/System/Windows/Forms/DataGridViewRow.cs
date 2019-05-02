@@ -1985,7 +1985,7 @@ namespace System.Windows.Forms
 
                         if (i != childCount - 1)
                         {
-                            sb.Append(";");
+                            sb.Append(';');
                         }
                     }
 
