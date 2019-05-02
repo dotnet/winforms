@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">水平滚动条</target>
+        <target state="translated">水平</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">垂直滚动条</target>
+        <target state="translated">垂直</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">
@@ -10738,7 +10738,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolStripShowItemToolTipsDescr">
         <source>Specifies whether to display ToolTips on items.</source>
-        <target state="translated">指定是否显示项的 ToolTip。</target>
+        <target state="translated">指定是否显示项的工具提示。</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripSplitButtonDropDownButtonWidthDescr">
@@ -10898,7 +10898,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ToolTipUseFadingDescr">
         <source>When set to true, a fade effect is used when ToolTips are shown or hidden.</source>
-        <target state="translated">当设置为 true 时，在 ToolTips 显示或隐藏时使用淡入淡出效果。</target>
+        <target state="translated">当设置为 true 时，在工具提示显示或隐藏时使用淡入淡出效果。</target>
         <note />
       </trans-unit>
       <trans-unit id="TopLevelControlAdd">
@@ -11258,7 +11258,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TreeViewShowShowNodeToolTipsDescr">
         <source>Indicates whether ToolTips will be displayed on the nodes.</source>
-        <target state="translated">指示是否显示节点的 ToolTip。</target>
+        <target state="translated">指示是否显示节点的工具提示。</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeViewSortedDescr">
