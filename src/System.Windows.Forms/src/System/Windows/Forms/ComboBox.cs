@@ -111,7 +111,7 @@ namespace System.Windows.Forms {
         // thus changing the windowText...
         // hence we should Fire the TextChanged event in such a scenario..
         // The string below is used for checking the window Text before and after the dropdown.
-        private string currentText = "";
+        private string currentText = string.Empty;
         private string lastTextChangedValue;
         private bool dropDown;
         private AutoCompleteDropDownFinder finder = new AutoCompleteDropDownFinder();
@@ -2015,7 +2015,7 @@ namespace System.Windows.Forms {
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
                 if ((Keys)unchecked( (int) (long)m.WParam) == Keys.Delete) {
                     // Reset matching text and remove any selection
-                    this.MatchingText = "";
+                    this.MatchingText = string.Empty;
                     this.autoCompleteTimeStamp = DateTime.Now.Ticks;
                     if (this.Items.Count > 0) {
                         SelectedIndex = 0;
@@ -2030,7 +2030,7 @@ namespace System.Windows.Forms {
                     if (DateTime.Now.Ticks - this.autoCompleteTimeStamp > AutoCompleteTimeout ||
                         this.MatchingText.Length <= 1) {
                         // Reset matching text and remove any selection
-                        this.MatchingText = "";
+                        this.MatchingText = string.Empty;
                         if (this.Items.Count > 0) {
                             SelectedIndex = 0;
                         }
@@ -2044,7 +2044,7 @@ namespace System.Windows.Forms {
                     return false;
                 }
                 else if (keyChar == (char)Keys.Escape) {
-                    this.MatchingText = "";
+                    this.MatchingText = string.Empty;
                 }
 
                 string newMatchingText;
@@ -2598,7 +2598,7 @@ namespace System.Windows.Forms {
                 if (this.AutoCompleteMode != AutoCompleteMode.None &&
                     this.AutoCompleteSource == AutoCompleteSource.ListItems &&
                     this.DropDownStyle == ComboBoxStyle.DropDownList) {
-                    this.MatchingText = "";
+                    this.MatchingText = string.Empty;
                 }
                 base.OnLostFocus(e);
                 canFireLostFocus = false;

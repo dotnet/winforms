@@ -538,7 +538,7 @@ namespace System.Windows.Forms
         {
             if (!IsDataMemberValid())
             {
-                _dataMember = "";
+                _dataMember = string.Empty;
                 OnDataMemberChanged(EventArgs.Empty);
             }
         }

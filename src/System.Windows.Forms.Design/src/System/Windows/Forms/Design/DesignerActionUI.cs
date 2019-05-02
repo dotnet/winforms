@@ -996,7 +996,7 @@ namespace System.ComponentModel.Design
              StringBuilder sb = new StringBuilder(textLen+1);
              UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
              string typeOfControl = "Unknown";
-             string nameOfControl = "";
+             string nameOfControl = string.Empty;
              Control c = Control.FromHandle(hwnd);
              if (c != null) {
                 typeOfControl = c.GetType().Name;

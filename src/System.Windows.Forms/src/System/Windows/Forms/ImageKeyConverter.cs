@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
                         int nImages = imageList.Images.Count;
                         if (IncludeNoneAsStandardValue) {
                             values = new object[nImages + 1];
-                            values[nImages] = "";
+                            values[nImages] = string.Empty;
                         }
                         else {
                             values = new object[nImages];

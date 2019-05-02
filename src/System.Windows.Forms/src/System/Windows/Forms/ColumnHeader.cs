@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    this.name = "";
+                    this.name = string.Empty;
                 }
                 else {
                     this.name = value;
@@ -281,7 +281,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    this.text = "";
+                    this.text = string.Empty;
                 }
                 else {
                     this.text = value;

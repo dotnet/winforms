@@ -176,7 +176,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null)
-                    value = "";
+                    value = string.Empty;
                 if (format == null || !format.Equals(value)) {
                     this.format = value;
 

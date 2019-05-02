@@ -596,7 +596,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                     str += ".";
                 }
                 else {
-                    str = "";
+                    str = string.Empty;
                 }
                 str += this.PropertyLabel;
 

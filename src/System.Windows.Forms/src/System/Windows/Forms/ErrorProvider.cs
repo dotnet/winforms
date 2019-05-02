@@ -326,7 +326,7 @@ namespace System.Windows.Forms {
                     }
                     catch (ArgumentException) {
                         // The data member doesn't exist in the data source, so set it to null
-                        this.dataMember = "";
+                        this.dataMember = string.Empty;
                     }
                 }
 
@@ -352,7 +352,7 @@ namespace System.Windows.Forms {
                 return dataMember;
             }
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 Set_ErrorManager(this.DataSource, value, false);
             }
         }
@@ -474,10 +474,10 @@ namespace System.Windows.Forms {
                 string error = ((IDataErrorInfo) value)[dataBinding.BindingMemberInfo.BindingField];
 
                 if (error == null) {
-                    error = "";
+                    error = string.Empty;
                 }
 
-                string outputError = "";
+                string outputError = string.Empty;
 
                 if (controlError.Contains(errBindings[j].Control))
                     outputError = (string) controlError[errBindings[j].Control];
@@ -1327,7 +1327,7 @@ namespace System.Windows.Forms {
                 }
                 set {
                     if (value == null) {
-                        value = "";
+                        value = string.Empty;
                     }
 
                     // if the error is the same and the blinkStyle is not AlwaysBlink, then

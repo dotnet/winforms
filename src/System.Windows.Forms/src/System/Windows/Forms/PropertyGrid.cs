@@ -4589,7 +4589,7 @@ namespace System.Windows.Forms {
                     if (toolStrip != null) {
                         int index = unchecked((int)(long)m.WParam);
                         if( index >= 0 && index < toolStrip.Items.Count ) {
-                            string text = "";
+                            string text = string.Empty;
                             if (m.Msg == AutomationMessages.PGM_GETBUTTONTEXT) {
                                 text = toolStrip.Items[index].Text;
                             }

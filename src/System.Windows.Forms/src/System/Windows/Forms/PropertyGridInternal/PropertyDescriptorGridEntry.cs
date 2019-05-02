@@ -126,7 +126,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                    }
                    else {
 
-                        string typeName = "";
+                        string typeName = string.Empty;
 
                         Type componentType = propertyInfo.ComponentType;
                         

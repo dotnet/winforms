@@ -34,9 +34,9 @@ namespace System.Windows.Forms {
         private const int PANELTEXTINSET = 3;
         private const int PANELGAP = 2;
 
-        private string          text          = "";
-        private string          name          = "";
-        private string          toolTipText   = "";
+        private string          text          = string.Empty;
+        private string          name          = string.Empty;
+        private string          toolTipText   = string.Empty;
         private Icon            icon          = null;
 
         private HorizontalAlignment        alignment     = HorizontalAlignment.Left;
@@ -392,7 +392,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (!Text.Equals(value)) {
@@ -432,7 +432,7 @@ namespace System.Windows.Forms {
             }
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (!ToolTipText.Equals(value)) {
@@ -516,7 +516,7 @@ namespace System.Windows.Forms {
             string text;
             if (newPanel) {
                 if (this.text == null)
-                    text = "";
+                    text = string.Empty;
                 else
                     text = this.text;
             }
@@ -552,7 +552,7 @@ namespace System.Windows.Forms {
                 int     border = 0;
 
                 if (this.text == null) {
-                    text = "";
+                    text = string.Empty;
                 }
                 else {
                     text = this.text;

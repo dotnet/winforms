@@ -3127,7 +3127,7 @@ example usage
                     }
 
                     if (name == null) {
-                        name = "";
+                        name = string.Empty;
                     }
                 }
 
@@ -3706,7 +3706,7 @@ example usage
 
             set {
                 if (value == null) {
-                    value = "";
+                    value = string.Empty;
                 }
 
                 if (value == Text) {
@@ -4164,7 +4164,7 @@ example usage
                 }
             }
             set {
-                if (value == null) value = "";
+                if (value == null) value = string.Empty;
                 if (!WindowText.Equals(value)) {
                     if (IsHandleCreated) {
                         UnsafeNativeMethods.SetWindowText(new HandleRef(window, Handle), value);
@@ -11621,7 +11621,7 @@ example usage
             }
 
             if (name == null)
-                name = "";
+                name = string.Empty;
 
 
             MarshalStringToMessage(name, ref m);

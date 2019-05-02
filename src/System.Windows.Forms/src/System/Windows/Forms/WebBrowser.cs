@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         private WebBrowserEncryptionLevel encryptionLevel = WebBrowserEncryptionLevel.Insecure;
         private object objectForScripting;
         private WebBrowserEvent webBrowserEvent;
-        internal string statusText = "";
+        internal string statusText = string.Empty;
 
 
         private const int   WEBBROWSERSTATE_webBrowserShortcutsEnabled      = 0x00000001;
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
             set {
                 if (value == null)
                 {
-                    value = "";
+                    value = string.Empty;
                 }
                 //string length is a good initial guess for capacity -- 
                 //if it needs more room, it'll take it.
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
                         documentTitle = htmlDocument2.GetTitle();
                     }
                     catch (COMException) {
-                        documentTitle = "";
+                        documentTitle = string.Empty;
                     }
                 }
                 return documentTitle;
@@ -370,7 +370,7 @@ namespace System.Windows.Forms
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string DocumentType {
             get {
-                string docType = "";
+                string docType = string.Empty;
                 HtmlDocument htmlDocument = this.Document;
                 if (htmlDocument != null) {
                     UnsafeNativeMethods.IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as UnsafeNativeMethods.IHTMLDocument2;
@@ -379,7 +379,7 @@ namespace System.Windows.Forms
                         docType = htmlDocument2.GetMimeType();
                     }
                     catch (COMException) {
-                        docType = "";
+                        docType = string.Empty;
                     }
                 }
                 return docType;
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
         public virtual string StatusText {
             get {
                 if (this.Document == null) {
-                    statusText = "";
+                    statusText = string.Empty;
                 }
                 return statusText;
             }
@@ -1762,10 +1762,10 @@ namespace System.Windows.Forms
                     // to -1 on return back to native code, if the original value was null, we
                     // have to set targetFrameName and headers to "".
                     if (targetFrameName == null) {
-                        targetFrameName = "";
+                        targetFrameName = string.Empty;
                     }
                     if (headers == null) {
-                        headers = "";
+                        headers = string.Empty;
                     }
 
                     string urlString = urlObject == null ? "" : (string)urlObject;

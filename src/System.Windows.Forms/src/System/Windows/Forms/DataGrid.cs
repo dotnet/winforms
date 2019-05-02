@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
             // data binding
             //
             private object dataSource = null;
-            private string dataMember = "";
+            private string dataMember = string.Empty;
             private CurrencyManager listManager = null;
 
             // currently focused control
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms {
                     // when the designer resets the dataSource to null, set the dataMember to null, too
                     if ((value == null || value == Convert.DBNull) && this.DataMember != null && this.DataMember.Length != 0 ) {
                         this.dataSource = null;
-                        this.DataMember = "";
+                        this.DataMember = string.Empty;
                         return;
                     }
     
@@ -5623,7 +5623,7 @@ namespace System.Windows.Forms {
                     BindingManagerBase bm = this.BindingContext[value, this.dataMember];
                 }
                 catch {
-                    this.dataMember = "";
+                    this.dataMember = string.Empty;
                 }
             }
     
@@ -7116,7 +7116,7 @@ namespace System.Windows.Forms {
                                 // the user selected a set of rows to copy the data from
     
                                 int numRowsOutputted = 0;           // the number of rows written to "text"
-                                string text = "";
+                                string text = string.Empty;
     
                                 for (int i = 0; i < DataGridRowsLength; ++i)
                                 {

@@ -179,7 +179,7 @@ namespace System.Windows.Forms {
         private IntPtr wndprocAddr = IntPtr.Zero;
 
         private Guid   clsid;
-        private string text = "";
+        private string text = string.Empty;
         private string licenseKey = null;
 
         private readonly OleInterfaces oleSite;
@@ -2103,7 +2103,7 @@ namespace System.Windows.Forms {
                     return null;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_DISPLAYNAME:
                     string rval = GetParentContainer().GetNameForControl(this);
-                    if (rval == null) rval = "";
+                    if (rval == null) rval = string.Empty;
                     return rval;
                 case NativeMethods.ActiveX.DISPID_AMBIENT_LOCALEID:
                     Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "asked for localeid");

@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
         private TreeNodeImageIndexer selectedImageIndexer;
         private TreeNodeImageIndexer stateImageIndexer;
 
-        private string toolTipText = "";
+        private string toolTipText = string.Empty;
         private ContextMenu contextMenu = null;
         private ContextMenuStrip contextMenuStrip = null;
         internal bool nodesCleared = false;
