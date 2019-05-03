@@ -148,9 +148,7 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         public new event EventHandler PaddingChanged {
             add => base.PaddingChanged += value;
-            remove {
-                base.PaddingChanged -= value;
-            }
+            remove => base.PaddingChanged -= value;
         }
      
         private Control RTLGrip {

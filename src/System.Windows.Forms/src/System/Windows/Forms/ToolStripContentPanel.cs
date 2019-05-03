@@ -126,9 +126,7 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler AutoSizeChanged{
             add => base.AutoSizeChanged += value;
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         [
@@ -143,9 +141,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler CausesValidationChanged {
             add => base.CausesValidationChanged += value;
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            remove => base.CausesValidationChanged -= value;
         }
 
         [
@@ -166,17 +162,13 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler DockChanged {
            add => base.DockChanged += value;
-            remove {
-                base.DockChanged -= value;
-            }
+            remove => base.DockChanged -= value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripContentPanelOnLoadDescr))]
         public event EventHandler Load {
             add => Events.AddHandler(EventLoad, value);
-            remove {
-                Events.RemoveHandler(EventLoad, value);
-            }
+            remove => Events.RemoveHandler(EventLoad, value);
         }
 
         [
@@ -194,9 +186,7 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler LocationChanged {
            add => base.LocationChanged += value;
-            remove {
-                base.LocationChanged -= value;
-            }
+            remove => base.LocationChanged -= value;
         }
 
         [
@@ -250,9 +240,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged {
             add => base.TabIndexChanged += value;
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            remove => base.TabIndexChanged -= value;
         }
 
         [
@@ -272,9 +260,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
-            remove {
-                base.TabStopChanged -= value;
-            }
+            remove => base.TabStopChanged -= value;
         }
 
         private ToolStripRendererSwitcher RendererSwitcher {
@@ -320,9 +306,7 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged {
             add => Events.AddHandler(EventRendererChanged, value);
-            remove {
-                Events.RemoveHandler(EventRendererChanged, value);
-            }
+            remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
         private void HandleRendererChanged(object sender, EventArgs e) {

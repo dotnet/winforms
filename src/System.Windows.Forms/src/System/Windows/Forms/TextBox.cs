@@ -529,9 +529,7 @@ namespace System.Windows.Forms {
         public event EventHandler TextAlignChanged {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TextBox.Dispose"]/*' />

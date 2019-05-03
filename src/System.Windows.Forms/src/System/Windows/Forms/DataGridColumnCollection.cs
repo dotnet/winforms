@@ -328,9 +328,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event CollectionChangeEventHandler CollectionChanged {
             add => onCollectionChanged += value;
-            remove {
-                onCollectionChanged -= value;
-            }
+            remove => onCollectionChanged -= value;
         }
         
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Clear"]/*' />

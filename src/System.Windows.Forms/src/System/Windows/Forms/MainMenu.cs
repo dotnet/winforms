@@ -59,9 +59,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse {
             add => onCollapse += value;
-            remove {
-                onCollapse -= value;
-            }
+            remove => onCollapse -= value;
         }
 
         

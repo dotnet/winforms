@@ -412,9 +412,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
-            remove {
-                base.TabStopChanged -= value;
-            }
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.TabIndex"]/*' />
@@ -485,9 +483,7 @@ namespace System.Windows.Forms {
         [WinCategory("Action"), SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
         public event LinkLabelLinkClickedEventHandler LinkClicked {
             add => Events.AddHandler(EventLinkClicked, value);
-            remove {
-                Events.RemoveHandler(EventLinkClicked, value);
-            }
+            remove => Events.RemoveHandler(EventLinkClicked, value);
         }
 
         internal static Rectangle CalcTextRenderBounds(Rectangle textRect, Rectangle clientRect, ContentAlignment align) {

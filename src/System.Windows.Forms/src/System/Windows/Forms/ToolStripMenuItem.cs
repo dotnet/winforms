@@ -406,9 +406,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
             add => Events.AddHandler(EventCheckedChanged, value);
-            remove {
-                Events.RemoveHandler(EventCheckedChanged, value);
-            }
+            remove => Events.RemoveHandler(EventCheckedChanged, value);
         }   
         /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckStateChanged"]/*' />
         /// <devdoc>
@@ -419,9 +417,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
             add => Events.AddHandler(EventCheckStateChanged, value);
-            remove {
-                Events.RemoveHandler(EventCheckStateChanged, value);
-            }
+            remove => Events.RemoveHandler(EventCheckStateChanged, value);
         }
 
 

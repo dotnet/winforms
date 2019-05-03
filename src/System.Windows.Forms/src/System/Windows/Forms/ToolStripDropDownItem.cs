@@ -176,9 +176,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler DropDownClosed {
             add => Events.AddHandler(EventDropDownClosed, value);
-            remove {
-                Events.RemoveHandler(EventDropDownClosed, value);
-            }
+            remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
 
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownLocation"]/*' />
@@ -201,9 +199,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler DropDownOpening {
             add => Events.AddHandler(EventDropDownShow, value);
-            remove {
-                Events.RemoveHandler(EventDropDownShow, value);
-            }
+            remove => Events.RemoveHandler(EventDropDownShow, value);
         }   
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpened"]/*' />
         /// <devdoc>
@@ -215,9 +211,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler DropDownOpened {
             add => Events.AddHandler(EventDropDownOpened, value);
-            remove {
-                Events.RemoveHandler(EventDropDownOpened, value);
-            }
+            remove => Events.RemoveHandler(EventDropDownOpened, value);
         }   
 
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItems"]/*' />
@@ -242,9 +236,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction))]
         public event ToolStripItemClickedEventHandler DropDownItemClicked {
             add => Events.AddHandler(EventDropDownItemClicked, value);
-            remove {
-                Events.RemoveHandler(EventDropDownItemClicked, value);
-            }
+            remove => Events.RemoveHandler(EventDropDownItemClicked, value);
         }
 
         /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDownItems"]/*' />

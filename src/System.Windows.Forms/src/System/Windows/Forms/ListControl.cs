@@ -92,10 +92,7 @@ namespace System.Windows.Forms
         public event EventHandler DataSourceChanged
         {
             add => Events.AddHandler(s_dataSourceChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_dataSourceChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_dataSourceChangedEvent, value);
         }
 
         protected CurrencyManager DataManager => _dataManager;
@@ -131,10 +128,7 @@ namespace System.Windows.Forms
         public event EventHandler DisplayMemberChanged
         {
             add => Events.AddHandler(s_displayMemberChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_displayMemberChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_displayMemberChangedEvent, value);
         }
 
         /// <summary>
@@ -201,10 +195,7 @@ namespace System.Windows.Forms
         public event EventHandler FormatInfoChanged
         {
             add => Events.AddHandler(s_formatInfoChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_formatInfoChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_formatInfoChangedEvent, value);
         }
 
         [DefaultValue("")]
@@ -235,10 +226,7 @@ namespace System.Windows.Forms
         public event EventHandler FormatStringChanged
         {
             add => Events.AddHandler(s_formatStringChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_formatStringChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_formatStringChangedEvent, value);
         }
 
         [DefaultValue(false)]
@@ -262,10 +250,7 @@ namespace System.Windows.Forms
         public event EventHandler FormattingEnabledChanged
         {
             add => Events.AddHandler(s_formattingEnabledChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_formattingEnabledChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_formattingEnabledChangedEvent, value);
         }
 
         private static bool BindingMemberInfoInDataManager(CurrencyManager dataManager, BindingMemberInfo bindingMemberInfo)
@@ -347,10 +332,7 @@ namespace System.Windows.Forms
         public event EventHandler ValueMemberChanged
         {
             add => Events.AddHandler(s_valueMemberChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_valueMemberChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_valueMemberChangedEvent, value);
         }
 
         /// <devdoc>
@@ -403,10 +385,7 @@ namespace System.Windows.Forms
         public event EventHandler SelectedValueChanged
         {
             add => Events.AddHandler(s_selectedValueChangedEvent, value);
-            remove
-            {
-                Events.RemoveHandler(s_selectedValueChangedEvent, value);
-            }
+            remove => Events.RemoveHandler(s_selectedValueChangedEvent, value);
         }
 
         private void DataManager_PositionChanged(object sender, EventArgs e)

@@ -58,9 +58,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
             add => base.AutoSizeChanged += value;
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <devdoc>
@@ -417,9 +415,7 @@ namespace System.Windows.Forms
         ]
         public new event EventHandler VisibleChanged {
             add => base.VisibleChanged += value;
-            remove {
-                base.VisibleChanged -= value;
-            }
+            remove => base.VisibleChanged -= value;
         }
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DockChanged"]/*' />
@@ -433,9 +429,7 @@ namespace System.Windows.Forms
         ]
         public new event EventHandler DockChanged {
             add => base.DockChanged += value;
-            remove {
-                base.DockChanged -= value;
-            }
+            remove => base.DockChanged -= value;
         }
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.LocationChanged"]/*' />
@@ -449,9 +443,7 @@ namespace System.Windows.Forms
         ]
         public new event EventHandler LocationChanged {
             add => base.LocationChanged += value;
-            remove {
-                base.LocationChanged -= value;
-            }
+            remove => base.LocationChanged -= value;
         }
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabIndexChanged"]/*' />
@@ -465,9 +457,7 @@ namespace System.Windows.Forms
         ]
         public new event EventHandler TabIndexChanged {
             add => base.TabIndexChanged += value;
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            remove => base.TabIndexChanged -= value;
         }        
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabStopChanged"]/*' />
@@ -481,9 +471,7 @@ namespace System.Windows.Forms
         ]
         public new event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
-            remove {
-                base.TabStopChanged -= value;
-            }
+            remove => base.TabStopChanged -= value;
         }
 
     }

@@ -573,65 +573,47 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         public event GetBoolValueEventHandler QueryCanResetValue {
             add => Events.AddHandler(EventCanResetValue, value);
-            remove {
-                Events.RemoveHandler(EventCanResetValue, value);
-            }
+            remove => Events.RemoveHandler(EventCanResetValue, value);
         }
 
         public event GetAttributesEventHandler QueryGetBaseAttributes {
             add => Events.AddHandler(EventGetBaseAttributes, value);
-            remove {
-                Events.RemoveHandler(EventGetBaseAttributes, value);
-            }
+            remove => Events.RemoveHandler(EventGetBaseAttributes, value);
         }
 
         public event GetAttributesEventHandler QueryGetDynamicAttributes {
             add => Events.AddHandler(EventGetDynamicAttributes, value);
-            remove {
-                Events.RemoveHandler(EventGetDynamicAttributes, value);
-            }
+            remove => Events.RemoveHandler(EventGetDynamicAttributes, value);
         }
 
         public event GetNameItemEventHandler QueryGetDisplayName {
             add => Events.AddHandler(EventGetDisplayName, value);
-            remove {
-                Events.RemoveHandler(EventGetDisplayName, value);
-            }
+            remove => Events.RemoveHandler(EventGetDisplayName, value);
         }
 
         public event GetNameItemEventHandler QueryGetDisplayValue {
             add => Events.AddHandler(EventGetDisplayValue, value); 
-            remove {
-                Events.RemoveHandler(EventGetDisplayValue, value);
-            }
+            remove => Events.RemoveHandler(EventGetDisplayValue, value);
         }
 
         public event GetBoolValueEventHandler QueryGetIsReadOnly {
             add => Events.AddHandler(EventGetIsReadOnly, value);
-            remove {
-                Events.RemoveHandler(EventGetIsReadOnly, value);
-            }
+            remove => Events.RemoveHandler(EventGetIsReadOnly, value);
         }
 
         public event GetTypeConverterAndTypeEditorEventHandler QueryGetTypeConverterAndTypeEditor {
             add => Events.AddHandler(EventGetTypeConverterAndTypeEditor, value);
-            remove {
-                Events.RemoveHandler(EventGetTypeConverterAndTypeEditor, value);
-            }
+            remove => Events.RemoveHandler(EventGetTypeConverterAndTypeEditor, value);
         }
         
         public event Com2EventHandler QueryResetValue {
             add => Events.AddHandler(EventResetValue, value);
-            remove {
-                Events.RemoveHandler(EventResetValue, value);
-            }
+            remove => Events.RemoveHandler(EventResetValue, value);
         }
 
         public event GetBoolValueEventHandler QueryShouldSerializeValue {
             add => Events.AddHandler(EventShouldSerializeValue, value);
-            remove {
-                Events.RemoveHandler(EventShouldSerializeValue, value);
-            }
+            remove => Events.RemoveHandler(EventShouldSerializeValue, value);
         }
 
         /// <include file='doc\COM2PropertyDescriptor.uex' path='docs/doc[@for="Com2PropertyDescriptor.CanResetValue"]/*' />

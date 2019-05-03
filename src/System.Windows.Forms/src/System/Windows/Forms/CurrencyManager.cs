@@ -64,17 +64,13 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatData))]
         public event ItemChangedEventHandler ItemChanged {
             add => onItemChanged += value;
-            remove {
-                onItemChanged -= value;
-            }
+            remove => onItemChanged -= value;
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
             add => onListChanged += value;
-            remove {
-                onListChanged -= value;
-            }
+            remove => onListChanged -= value;
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.CurrencyManager"]/*' />
@@ -760,9 +756,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatData))]
         public event EventHandler MetaDataChanged {
             add => onMetaDataChangedHandler += value;
-            remove {
-                onMetaDataChangedHandler -= value;
-            }
+            remove => onMetaDataChangedHandler -= value;
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.OnCurrentChanged"]/*' />

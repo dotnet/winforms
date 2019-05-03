@@ -216,9 +216,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler AutoValidateChanged {
             add => this.autoValidateChanged += value;
-            remove {
-                this.autoValidateChanged -= value;
-            }
+            remove => this.autoValidateChanged -= value;
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.BindingContext"]/*' />

@@ -69,10 +69,7 @@ namespace System.Windows.Forms
         public event EventHandler Tick
         {
             add => _onTimer += value;
-            remove
-            {
-                _onTimer -= value;
-            }
+            remove => _onTimer -= value;
         }
 
         /// <summary>

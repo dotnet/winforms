@@ -355,10 +355,7 @@ namespace System.Windows.Forms {
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }                
 
         /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.DetailsClick"]/*' />

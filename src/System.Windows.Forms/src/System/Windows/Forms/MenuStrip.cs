@@ -108,17 +108,13 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuActivateDescr))]
         public event EventHandler MenuActivate {
             add => Events.AddHandler(EventMenuActivate, value);
-            remove {
-                Events.RemoveHandler(EventMenuActivate, value);
-            }
+            remove => Events.RemoveHandler(EventMenuActivate, value);
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.MenuStripMenuDeactivateDescr))]
         public event EventHandler MenuDeactivate {
             add => Events.AddHandler(EventMenuDeactivate, value);
-            remove {
-                Events.RemoveHandler(EventMenuDeactivate, value);
-            }
+            remove => Events.RemoveHandler(EventMenuDeactivate, value);
         }
 
         [DefaultValue(false)]

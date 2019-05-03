@@ -72,10 +72,7 @@ namespace System.Windows.Forms {
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <devdoc>
@@ -194,9 +191,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
-            remove {
-                base.KeyUp -= value;
-            }
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyDown"]/*' />
@@ -204,9 +199,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
-            remove {
-                base.KeyDown -= value;
-            }
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyPress"]/*' />
@@ -214,9 +207,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
-            remove {
-                base.KeyPress -= value;
-            }
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.TabStop"]/*' />
@@ -251,9 +242,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
-            remove {
-                base.TextChanged -= value;
-            }
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.OnResize"]/*' />

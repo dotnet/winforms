@@ -327,10 +327,7 @@ namespace System.ComponentModel.Design
         event EventHandler ISelectionService.SelectionChanged
         {
             add => _events.AddHandler(s_eventSelectionChanged, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventSelectionChanged, value);
-            }
+            remove => _events.RemoveHandler(s_eventSelectionChanged, value);
         }
 
         /// <summary>
@@ -339,10 +336,7 @@ namespace System.ComponentModel.Design
         event EventHandler ISelectionService.SelectionChanging
         {
             add => _events.AddHandler(s_eventSelectionChanging, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventSelectionChanging, value);
-            }
+            remove => _events.RemoveHandler(s_eventSelectionChanging, value);
         }
 
         /// <summary>

@@ -292,10 +292,7 @@ namespace System.Drawing.Design
         public event ToolboxComponentsCreatedEventHandler ComponentsCreated
         {
             add => _componentsCreatedEvent += value;
-            remove
-            {
-                _componentsCreatedEvent -= value;
-            }
+            remove => _componentsCreatedEvent -= value;
         }
 
         /// <summary>
@@ -304,10 +301,7 @@ namespace System.Drawing.Design
         public event ToolboxComponentsCreatingEventHandler ComponentsCreating
         {
             add => _componentsCreatingEvent += value;
-            remove
-            {
-                _componentsCreatingEvent -= value;
-            }
+            remove => _componentsCreatingEvent -= value;
         }
 
         /// <summary>

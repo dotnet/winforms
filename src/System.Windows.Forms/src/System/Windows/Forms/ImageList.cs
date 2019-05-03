@@ -397,16 +397,12 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler RecreateHandle {
             add => recreateHandler += value;
-            remove {
-                recreateHandler -= value;
-            }
+            remove => recreateHandler -= value;
         }
 
         internal event EventHandler ChangeHandle {
             add => changeHandler += value;
-            remove {
-                changeHandler -= value;
-            }
+            remove => changeHandler -= value;
         }
 
         //Creates a bitmap from the original image source..

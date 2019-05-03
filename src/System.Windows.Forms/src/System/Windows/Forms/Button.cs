@@ -214,9 +214,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
-            remove {
-                base.DoubleClick -= value;
-            }
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.MouseDoubleClick"]/*' />
@@ -224,9 +222,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.NotifyDefault"]/*' />

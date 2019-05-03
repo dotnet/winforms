@@ -141,9 +141,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add => base.BackColorChanged += value;
-            remove {
-                base.BackColorChanged -= value;
-            }
+            remove => base.BackColorChanged -= value;
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.BackgroundImage"]/*' />
@@ -169,9 +167,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.BackgroundImageLayout"]/*' />
@@ -190,9 +186,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.CreateParams"]/*' />
@@ -312,9 +306,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.ImeMode"]/*' />
@@ -333,9 +325,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.Panels"]/*' />
@@ -504,9 +494,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.StatusBarDrawItem))]
         public event StatusBarDrawItemEventHandler DrawItem {
             add => Events.AddHandler(EVENT_SBDRAWITEM, value);
-            remove {
-                Events.RemoveHandler(EVENT_SBDRAWITEM, value);
-            }
+            remove => Events.RemoveHandler(EVENT_SBDRAWITEM, value);
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.PanelClick"]/*' />
@@ -518,9 +506,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
         public event StatusBarPanelClickEventHandler PanelClick {
             add => Events.AddHandler(EVENT_PANELCLICK, value);
-            remove {
-                Events.RemoveHandler(EVENT_PANELCLICK, value);
-            }
+            remove => Events.RemoveHandler(EVENT_PANELCLICK, value);
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.OnPaint"]/*' />
@@ -531,9 +517,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
-            remove {
-                base.Paint -= value;
-            }
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.ArePanelsRealized"]/*' />

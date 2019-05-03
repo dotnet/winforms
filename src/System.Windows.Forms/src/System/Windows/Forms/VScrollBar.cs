@@ -57,10 +57,7 @@ namespace System.Windows.Forms
         public new event EventHandler RightToLeftChanged
         {
             add => base.RightToLeftChanged += value;
-            remove
-            {
-                base.RightToLeftChanged -= value;
-            }
+            remove => base.RightToLeftChanged -= value;
         }
     }
 }

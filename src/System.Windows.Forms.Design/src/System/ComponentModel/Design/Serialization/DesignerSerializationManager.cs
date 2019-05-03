@@ -156,10 +156,7 @@ namespace System.ComponentModel.Design.Serialization
         public event EventHandler SessionCreated
         {
             add => sessionCreatedEventHandler += value;
-            remove
-            {
-                sessionCreatedEventHandler -= value;
-            }
+            remove => sessionCreatedEventHandler -= value;
         }
 
         /// <summary>
@@ -168,10 +165,7 @@ namespace System.ComponentModel.Design.Serialization
         public event EventHandler SessionDisposed
         {
             add => sessionDisposedEventHandler += value;
-            remove
-            {
-                sessionDisposedEventHandler -= value;
-            }
+            remove => sessionDisposedEventHandler -= value;
         }
 
         /// <summary>
@@ -681,10 +675,7 @@ namespace System.ComponentModel.Design.Serialization
                 CheckSession();
                 resolveNameEventHandler += value;
             }
-            remove
-            {
-                resolveNameEventHandler -= value;
-            }
+            remove => resolveNameEventHandler -= value;
         }
 
         /// <summary>
@@ -697,10 +688,7 @@ namespace System.ComponentModel.Design.Serialization
                 CheckSession();
                 serializationCompleteEventHandler += value;
             }
-            remove
-            {
-                serializationCompleteEventHandler -= value;
-            }
+            remove => serializationCompleteEventHandler -= value;
         }
 
         /// <summary>

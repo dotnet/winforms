@@ -72,10 +72,7 @@ namespace System.Windows.Forms {
         public event CollectionChangeEventHandler CollectionChanged
         {
             add => this.onCollectionChanged += value;
-            remove
-            {
-                this.onCollectionChanged -= value;
-            }
+            remove => this.onCollectionChanged -= value;
         }
 
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.OnCollectionChanged"]/*' />

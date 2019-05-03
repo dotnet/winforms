@@ -61,10 +61,7 @@ namespace System.Windows.Forms
         public event CollectionChangeEventHandler CollectionChanging
         {
             add => _onCollectionChanging += value;
-            remove
-            {
-                _onCollectionChanging -= value;
-            }
+            remove => _onCollectionChanging -= value;
         }
 
         /// <devdoc>
@@ -74,10 +71,7 @@ namespace System.Windows.Forms
         public event CollectionChangeEventHandler CollectionChanged
         {
             add => _onCollectionChanged += value;
-            remove
-            {
-                _onCollectionChanged -= value;
-            }
+            remove => _onCollectionChanged -= value;
         }
 
         internal protected void Clear()

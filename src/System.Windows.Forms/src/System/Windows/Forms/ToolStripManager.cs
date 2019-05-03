@@ -458,9 +458,7 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public static event EventHandler RendererChanged {
             add => AddEventHandler(staticEventDefaultRendererChanged, value);
-            remove {
-                RemoveEventHandler(staticEventDefaultRendererChanged, value);
-            }
+            remove => RemoveEventHandler(staticEventDefaultRendererChanged, value);
         }
 
 

@@ -668,10 +668,7 @@ namespace System.Windows.Forms {
         public event DrawToolTipEventHandler Draw 
         {
             add => onDraw += value;
-            remove 
-            {
-                onDraw -= value;
-            }
+            remove => onDraw -= value;
         }
         
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Popup"]/*' />
@@ -682,10 +679,7 @@ namespace System.Windows.Forms {
         public event PopupEventHandler Popup 
         {
             add => onPopup += value;
-            remove 
-            {
-                onPopup -= value;
-            }
+            remove => onPopup -= value;
         }
 
 

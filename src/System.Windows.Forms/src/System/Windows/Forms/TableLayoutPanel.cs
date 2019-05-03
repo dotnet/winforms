@@ -358,9 +358,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelOnPaintCellDescr))]
         public event TableLayoutCellPaintEventHandler CellPaint {
             add => Events.AddHandler(EventCellPaint, value);
-            remove {
-                Events.RemoveHandler(EventCellPaint, value);
-            }
+            remove => Events.RemoveHandler(EventCellPaint, value);
         }
 
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.OnLayout"]/*' />

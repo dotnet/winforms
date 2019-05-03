@@ -100,10 +100,7 @@ namespace System.Windows.Forms {
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <devdoc>
@@ -289,9 +286,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
-            remove {
-                base.TabStopChanged -= value;
-            }
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.Text"]/*' />
@@ -355,9 +350,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler Click {
             add => base.Click += value;
-            remove {
-                base.Click -= value;
-            }
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseClick"]/*' />
@@ -365,9 +358,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseClick {
             add => base.MouseClick += value;
-            remove {
-                base.MouseClick -= value;
-            }
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.DoubleClick"]/*' />
@@ -375,9 +366,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
-            remove {
-                base.DoubleClick -= value;
-            }
+            remove => base.DoubleClick -= value;
         }
 
 
@@ -386,9 +375,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyUp"]/*' />
@@ -396,9 +383,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
-            remove {
-                base.KeyUp -= value;
-            }
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyDown"]/*' />
@@ -406,9 +391,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
-            remove {
-                base.KeyDown -= value;
-            }
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyPress"]/*' />
@@ -416,9 +399,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
-            remove {
-                base.KeyPress -= value;
-            }
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseDown"]/*' />
@@ -426,9 +407,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
             add => base.MouseDown += value;
-            remove {
-                base.MouseDown -= value;
-            }
+            remove => base.MouseDown -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseUp"]/*' />
@@ -436,9 +415,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
             add => base.MouseUp += value;
-            remove {
-                base.MouseUp -= value;
-            }
+            remove => base.MouseUp -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseMove"]/*' />
@@ -446,9 +423,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
             add => base.MouseMove += value;
-            remove {
-                base.MouseMove -= value;
-            }
+            remove => base.MouseMove -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseEnter"]/*' />
@@ -456,9 +431,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
             add => base.MouseEnter += value;
-            remove {
-                base.MouseEnter -= value;
-            }
+            remove => base.MouseEnter -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseLeave"]/*' />
@@ -466,9 +439,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
             add => base.MouseLeave += value;
-            remove {
-                base.MouseLeave -= value;
-            }
+            remove => base.MouseLeave -= value;
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.OnPaint"]/*' />

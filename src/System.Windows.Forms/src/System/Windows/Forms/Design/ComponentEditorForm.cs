@@ -160,10 +160,7 @@ namespace System.Windows.Forms.Design {
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }                
 
 

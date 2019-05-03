@@ -395,10 +395,7 @@ namespace System.Windows.Forms.Design.Behavior
         public event BehaviorDragDropEventHandler BeginDrag
         {
             add => _beginDragHandler += value;
-            remove
-            {
-                _beginDragHandler -= value;
-            }
+            remove => _beginDragHandler -= value;
         }
 
         /// <summary>
@@ -408,10 +405,7 @@ namespace System.Windows.Forms.Design.Behavior
         public event BehaviorDragDropEventHandler EndDrag
         {
             add => _endDragHandler += value;
-            remove
-            {
-                _endDragHandler -= value;
-            }
+            remove => _endDragHandler -= value;
         }
 
         /// <summary>
@@ -421,10 +415,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             add => _synchronizeEventHandler += value;
 
-            remove
-            {
-                _synchronizeEventHandler -= value;
-            }
+            remove => _synchronizeEventHandler -= value;
         }
 
         /// <summary>

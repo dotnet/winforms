@@ -480,9 +480,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler RefreshItems {
             add => onRefreshItems += value;
-            remove {
-                onRefreshItems -= value;
-            }
+            remove => onRefreshItems -= value;
         }
         
         /// <include file='doc\BindingNavigator.uex' path='docs/doc[@for="BindingNavigator.RefreshItemsCore"]/*' />

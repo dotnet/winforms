@@ -190,25 +190,19 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         public new event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            remove => base.BackgroundImageChanged -= value;
         }
 
         [Browsable(false)]
         public new event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         [Browsable(false)]
         public new event EventHandler BindingContextChanged {
             add => base.BindingContextChanged += value;
-            remove {
-                base.BindingContextChanged -= value;
-            }
+            remove => base.BindingContextChanged -= value;
         }
 
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.CanOverflow"]/*' />
@@ -227,8 +221,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event UICuesEventHandler ChangeUICues {
             add => base.ChangeUICues += value; 
-            remove { base.ChangeUICues -= value; }
-        }
+            remove => base.ChangeUICues -= value; }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -242,8 +235,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuChanged {
             add => base.ContextMenuChanged += value; 
-            remove {  base.ContextMenuChanged -= value; }
-        }
+            remove => base.ContextMenuChanged -= value; }
 
 
         [Browsable(false)]
@@ -258,8 +250,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler ContextMenuStripChanged {
             add => base.ContextMenuStripChanged += value; 
-            remove {  base.ContextMenuStripChanged -= value; }
-        }
+            remove => base.ContextMenuStripChanged -= value; }
         
         /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.CreateParams"]/*' />
         /// <internalonly/>
@@ -368,9 +359,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler DockChanged {
             add => base.DockChanged += value;
-            remove {
-                base.DockChanged -= value;
-            }
+            remove => base.DockChanged -= value;
         }
         
         /// <devdoc>
@@ -411,24 +400,19 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownClosedDecr))]
         public event ToolStripDropDownClosedEventHandler Closed {
             add => Events.AddHandler(EventClosed, value); 
-            remove {
-                Events.RemoveHandler(EventClosed, value);
-            }
+            remove => Events.RemoveHandler(EventClosed, value);
         }
 
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownClosingDecr))]
         public event ToolStripDropDownClosingEventHandler Closing {
             add => Events.AddHandler(EventClosing, value); 
-            remove {
-                Events.RemoveHandler(EventClosing, value);
-            }
+            remove => Events.RemoveHandler(EventClosing, value);
         }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler Enter {
             add => base.Enter += value; 
-            remove { base.Enter -= value; }
-        }
+            remove => base.Enter -= value; }
 
         public override Font Font {
             get {
@@ -450,20 +434,17 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler FontChanged {
             add => base.FontChanged += value; 
-            remove { base.FontChanged -= value; }
-        }
+            remove => base.FontChanged -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value; 
-            remove { base.ForeColorChanged -= value; }
-        }
+     remove => base.ForeColorChanged -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
             add => base.GiveFeedback += value; 
-            remove { base.GiveFeedback -= value; }
-        }
+            remove => base.GiveFeedback -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ToolStripGripDisplayStyle GripDisplayStyle {
@@ -506,14 +487,12 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")] //Everett
         new public event HelpEventHandler HelpRequested {
             add => base.HelpRequested += value; 
-            remove { base.HelpRequested -= value; }
-        }
+            remove => base.HelpRequested -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value; 
-            remove { base.ImeModeChanged -= value; }
-        }
+            remove => base.ImeModeChanged -= value; }
 
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.IsAutoGenerated"]/*' />
         /// <devdoc>
@@ -569,26 +548,22 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event KeyEventHandler KeyDown {
             add => base.KeyDown += value; 
-            remove { base.KeyDown -= value; }
-        }
+            remove => base.KeyDown -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value; 
-            remove { base.KeyPress -= value; }
-        }
+            remove => base.KeyPress -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event KeyEventHandler KeyUp {
             add => base.KeyUp += value; 
-            remove { base.KeyUp -= value; }
-        }
+            remove => base.KeyUp -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Leave {
             add => base.Leave += value; 
-            remove { base.Leave -= value; }
-        }
+            remove => base.Leave -= value; }
 
         /// <devdoc>
         ///     Override Location to make it hidden from the user in the designer
@@ -610,9 +585,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))]
         public event CancelEventHandler Opening {
             add => Events.AddHandler(EventOpening, value);
-            remove {
-                Events.RemoveHandler(EventOpening, value);
-            }
+            remove => Events.RemoveHandler(EventOpening, value);
         }
 
       
@@ -623,9 +596,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))]
         public event EventHandler Opened {
             add => Events.AddHandler(EventOpened, value); 
-            remove {
-                Events.RemoveHandler(EventOpened, value);
-            }
+            remove => Events.RemoveHandler(EventOpened, value);
         }
 
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.MaxItemSize"]/*' />
@@ -769,8 +740,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler RegionChanged {
             add => base.RegionChanged += value; 
-            remove { base.RegionChanged -= value; }
-        }
+            remove => base.RegionChanged -= value; }
 
        
         internal virtual bool RequiresScrollButtons {
@@ -817,8 +787,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event ScrollEventHandler Scroll {
             add => base.Scroll += value; 
-            remove { base.Scroll -= value; }
-        }
+            remove => base.Scroll -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool Stretch {
@@ -833,8 +802,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler StyleChanged {
             add => base.StyleChanged += value; 
-            remove { base.StyleChanged -= value; }
-        }
+            remove => base.StyleChanged -= value; }
 
 
        internal Control SourceControlInternal {
@@ -855,14 +823,12 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value; 
-            remove { base.TabStopChanged -= value; }
-        }
+            remove => base.TabStopChanged -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value; 
-            remove { base.TextChanged -= value; }
-        }
+            remove => base.TextChanged -= value; }
 
        [
        Browsable(false),
@@ -934,22 +900,18 @@ namespace System.Windows.Forms {
           ]
           public new event EventHandler TabIndexChanged {
               add => base.TabIndexChanged += value;
-              remove {
-                  base.TabIndexChanged -= value;
-              }
+              remove => base.TabIndexChanged -= value;
           }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Validated {
             add => base.Validated += value; 
-            remove { base.Validated -= value; }
-        }
+            remove => base.Validated -= value; }
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event CancelEventHandler Validating {
             add => base.Validating += value; 
-            remove { base.Validating -= value; }
-        }
+            remove => base.Validating -= value; }
 
         /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.Visible"]/*' />
         /// Override base Visible property in order to control serialization by setting default value

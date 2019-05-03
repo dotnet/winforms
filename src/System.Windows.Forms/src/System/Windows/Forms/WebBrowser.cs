@@ -521,10 +521,7 @@ namespace System.Windows.Forms
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
-            remove
-            {
-                base.PaddingChanged -= value;
-            }
+            remove => base.PaddingChanged -= value;
         }
 
         /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.ReadyState"]/*' />

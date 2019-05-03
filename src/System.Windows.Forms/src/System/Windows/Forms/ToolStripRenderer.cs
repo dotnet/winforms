@@ -134,9 +134,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderArrow"]/*' />
         public event ToolStripArrowRenderEventHandler RenderArrow {
             add => AddHandler(EventRenderArrow, value); 
-            remove {
-                RemoveHandler(EventRenderArrow, value);
-            }
+            remove => RemoveHandler(EventRenderArrow, value);
         }
             
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderToolStripBackground"]/*' />
@@ -145,24 +143,18 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripRenderEventHandler RenderToolStripBackground {
             add => AddHandler(EventRenderToolStripBackground, value); 
-            remove {
-                RemoveHandler(EventRenderToolStripBackground, value);
-            }
+            remove => RemoveHandler(EventRenderToolStripBackground, value);
         }
 
         
         public event ToolStripPanelRenderEventHandler RenderToolStripPanelBackground {
             add => AddHandler(EventRenderToolStripPanelBackground, value); 
-            remove {
-                RemoveHandler(EventRenderToolStripPanelBackground, value);
-            }
+            remove => RemoveHandler(EventRenderToolStripPanelBackground, value);
         }
 
         public event ToolStripContentPanelRenderEventHandler RenderToolStripContentPanelBackground {
              add => AddHandler(EventRenderToolStripContentPanelBackground, value); 
-             remove {
-                 RemoveHandler(EventRenderToolStripContentPanelBackground, value);
-             }
+             remove => RemoveHandler(EventRenderToolStripContentPanelBackground, value);
          }
 
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderBorder"]/*' />
@@ -171,9 +163,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripRenderEventHandler RenderToolStripBorder {
             add => AddHandler(EventRenderBorder, value); 
-            remove {
-                RemoveHandler(EventRenderBorder, value);
-            }
+            remove => RemoveHandler(EventRenderBorder, value);
         }
 
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderButtonBackground"]/*' />
@@ -182,9 +172,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderButtonBackground {
             add => AddHandler(EventRenderButtonBackground, value); 
-            remove {
-                RemoveHandler(EventRenderButtonBackground, value);
-            }
+            remove => RemoveHandler(EventRenderButtonBackground, value);
         }    
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderDropDownButtonBackground"]/*' />
         /// <devdoc>
@@ -192,9 +180,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderDropDownButtonBackground {
             add => AddHandler(EventRenderDropDownButtonBackground, value); 
-            remove {
-                RemoveHandler(EventRenderDropDownButtonBackground, value);
-            }
+            remove => RemoveHandler(EventRenderDropDownButtonBackground, value);
         }  
 
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderOverflowButtonBackground"]/*' />
@@ -203,9 +189,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderOverflowButtonBackground {
             add => AddHandler(EventRenderOverflowButtonBackground, value); 
-            remove {
-                RemoveHandler(EventRenderOverflowButtonBackground, value);
-            }
+            remove => RemoveHandler(EventRenderOverflowButtonBackground, value);
         }  
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderGrip"]/*' />
         /// <devdoc>
@@ -213,9 +197,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripGripRenderEventHandler RenderGrip {
             add => AddHandler(EventRenderGrip, value); 
-            remove {
-                RemoveHandler(EventRenderGrip, value);
-            }
+            remove => RemoveHandler(EventRenderGrip, value);
         }        
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItem"]/*' />
         /// <devdoc>
@@ -223,9 +205,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderItemBackground {
             add => AddHandler(EventRenderItemBackground, value); 
-            remove {
-                RemoveHandler(EventRenderItemBackground, value);
-            }
+            remove => RemoveHandler(EventRenderItemBackground, value);
         }               
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemImage"]/*' />
         /// <devdoc>
@@ -233,9 +213,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemImageRenderEventHandler RenderItemImage {
             add => AddHandler(EventRenderItemImage, value); 
-            remove {
-                RemoveHandler(EventRenderItemImage, value);
-            }
+            remove => RemoveHandler(EventRenderItemImage, value);
         }        
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemCheck"]/*' />
         /// <devdoc>
@@ -243,9 +221,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemImageRenderEventHandler RenderItemCheck {
             add => AddHandler(EventRenderItemCheck, value); 
-            remove {
-                RemoveHandler(EventRenderItemCheck, value);
-            }
+            remove => RemoveHandler(EventRenderItemCheck, value);
         }        
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderItemText"]/*' />
         /// <devdoc>
@@ -253,16 +229,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemTextRenderEventHandler RenderItemText {
             add => AddHandler(EventRenderItemText, value); 
-            remove {
-                RemoveHandler(EventRenderItemText, value);
-            }
+            remove => RemoveHandler(EventRenderItemText, value);
         }    
 
         public event ToolStripRenderEventHandler RenderImageMargin {
             add => AddHandler(EventRenderImageMargin, value); 
-            remove {
-                RemoveHandler(EventRenderImageMargin, value);
-            }
+            remove => RemoveHandler(EventRenderImageMargin, value);
         }
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderLabelBackground"]/*' />
         /// <devdoc>
@@ -270,9 +242,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderLabelBackground {
             add => AddHandler(EventRenderLabelBackground, value); 
-            remove {
-                RemoveHandler(EventRenderLabelBackground, value);
-            }
+            remove => RemoveHandler(EventRenderLabelBackground, value);
         }   
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderMenuItemBackground"]/*' />
         /// <devdoc>
@@ -280,9 +250,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderMenuItemBackground {
             add => AddHandler(EventRenderMenuItemBackground, value); 
-            remove {
-                RemoveHandler(EventRenderMenuItemBackground, value);
-            }
+            remove => RemoveHandler(EventRenderMenuItemBackground, value);
         }   
 
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderStatusStripPanelBackground"]/*' />
@@ -291,9 +259,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderToolStripStatusLabelBackground {
             add => AddHandler(EventRenderToolStripStatusLabelBackground, value); 
-            remove {
-                RemoveHandler(EventRenderToolStripStatusLabelBackground, value);
-            }
+            remove => RemoveHandler(EventRenderToolStripStatusLabelBackground, value);
         }
         
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderToolStripBackground"]/*' />
@@ -302,9 +268,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripRenderEventHandler RenderStatusStripSizingGrip {
             add => AddHandler(EventRenderStatusStripSizingGrip, value); 
-            remove {
-                RemoveHandler(EventRenderStatusStripSizingGrip, value);
-            }
+            remove => RemoveHandler(EventRenderStatusStripSizingGrip, value);
         }
             
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSplitButtonBackground"]/*' />
@@ -313,18 +277,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderSplitButtonBackground {
             add => AddHandler(EventRenderSplitButtonBackground, value); 
-            remove {
-                RemoveHandler(EventRenderSplitButtonBackground, value);
-            }
+            remove => RemoveHandler(EventRenderSplitButtonBackground, value);
         }        
       
     
        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSeparator"]/*' />
        public event ToolStripSeparatorRenderEventHandler RenderSeparator {
            add => AddHandler(EventRenderSeparator, value); 
-           remove {
-               RemoveHandler(EventRenderSeparator, value);
-           }
+           remove => RemoveHandler(EventRenderSeparator, value);
        }     
 
 #region EventHandlerSecurity

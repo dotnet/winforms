@@ -150,10 +150,7 @@ namespace System.Windows.Forms {
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.AutoEllipsis"]/*' />
@@ -222,9 +219,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageLayout"]/*' />
@@ -251,9 +246,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BorderStyle"]/*' />
@@ -704,9 +697,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyUp"]/*' />
@@ -714,9 +705,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
-            remove {
-             base.KeyUp -= value;
-            }
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyDown"]/*' />
@@ -724,9 +713,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
-            remove {
-                base.KeyDown -= value;
-            }
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyPress"]/*' />
@@ -734,9 +721,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
-            remove {
-             base.KeyPress -= value;
-            }
+            remove => base.KeyPress -= value;
         }
 
         internal LayoutUtils.MeasureTextCache MeasureTextCache {
@@ -832,9 +817,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
-            remove {
-                base.TabStopChanged -= value;
-            }
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TextAlign"]/*' />
@@ -905,9 +888,7 @@ namespace System.Windows.Forms {
         public event EventHandler TextAlignChanged {
             add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
         /// <devdoc>

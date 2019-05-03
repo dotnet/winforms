@@ -71,10 +71,7 @@ namespace System.Windows.Forms
         public new event EventHandler HelpRequest 
         {
             add => base.HelpRequest += value;
-            remove 
-            {
-                base.HelpRequest -= value;
-            }
+            remove => base.HelpRequest -= value;
         }
 
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.ShowNewFolderButton"]/*' />

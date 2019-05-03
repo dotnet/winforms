@@ -758,10 +758,7 @@ namespace System.Windows.Forms
         public event EventHandler AllowUserToAddRowsChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOADDROWSCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToDeleteRows"]/*' />
@@ -809,10 +806,7 @@ namespace System.Windows.Forms
         public event EventHandler AllowUserToDeleteRowsChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTODELETEROWSCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToOrderColumns"]/*' />
@@ -845,10 +839,7 @@ namespace System.Windows.Forms
         public event EventHandler AllowUserToOrderColumnsChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTOORDERCOLUMNSCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToResizeColumns"]/*' />
@@ -887,10 +878,7 @@ namespace System.Windows.Forms
         public event EventHandler AllowUserToResizeColumnsChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZECOLUMNSCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AllowUserToResizeRows"]/*' />
@@ -929,10 +917,7 @@ namespace System.Windows.Forms
         public event EventHandler AllowUserToResizeRowsChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALLOWUSERTORESIZEROWSCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AlternatingRowsDefaultCellStyle"]/*' />        
@@ -977,10 +962,7 @@ namespace System.Windows.Forms
         public event EventHandler AlternatingRowsDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWALTERNATINGROWSDEFAULTCELLSTYLECHANGED, value);
         }
 
         internal bool ApplyVisualStylesToInnerCells
@@ -1032,10 +1014,7 @@ namespace System.Windows.Forms
         public event EventHandler AutoGenerateColumnsChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOGENERATECOLUMNSCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSize"]/*' />
@@ -1132,10 +1111,7 @@ namespace System.Windows.Forms
         public event DataGridViewAutoSizeColumnsModeEventHandler AutoSizeColumnsModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNSMODECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.AutoSizeRowsMode"]/*' />
@@ -1190,10 +1166,7 @@ namespace System.Windows.Forms
         public event DataGridViewAutoSizeModeEventHandler AutoSizeRowsModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZEROWSMODECHANGED, value);
         }
         
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackColor"]/*' />
@@ -1224,10 +1197,7 @@ namespace System.Windows.Forms
         new public event EventHandler BackColorChanged
         {
             add => base.BackColorChanged += value;
-            remove
-            {
-                base.BackColorChanged -= value;
-            }
+            remove => base.BackColorChanged -= value;
         }
 
         internal SolidBrush BackgroundBrush 
@@ -1278,10 +1248,7 @@ namespace System.Windows.Forms
         public event EventHandler BackgroundColorChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBACKGROUNDCOLORCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundImage"]/*' />
@@ -1326,10 +1293,7 @@ namespace System.Windows.Forms
         new public event EventHandler BackgroundImageChanged
         {
             add => base.BackgroundImageChanged += value;
-            remove
-            {
-                base.BackgroundImageChanged -= value;
-            }
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackgroundImageLayoutChanged"]/*' />
@@ -1340,10 +1304,7 @@ namespace System.Windows.Forms
         new public event EventHandler BackgroundImageLayoutChanged
         {
             add => base.BackgroundImageLayoutChanged += value;
-            remove
-            {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShouldSerializeBackgroundColor"]/*' />
@@ -1394,10 +1355,7 @@ namespace System.Windows.Forms
         public event EventHandler BorderStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWBORDERSTYLECHANGED, value);
         }
 
         internal int BorderWidth 
@@ -1623,10 +1581,7 @@ namespace System.Windows.Forms
         public event EventHandler CellBorderStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBORDERSTYLECHANGED, value);
         }
 
         internal bool CellMouseDownInContentBounds
@@ -1847,10 +1802,7 @@ namespace System.Windows.Forms
         public event EventHandler ColumnHeadersBorderStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSBORDERSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersDefaultCellStyle"]/*' />
@@ -1914,10 +1866,7 @@ namespace System.Windows.Forms
         public event EventHandler ColumnHeadersDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeadersHeight"]/*' />
@@ -1961,10 +1910,7 @@ namespace System.Windows.Forms
         public event EventHandler ColumnHeadersHeightChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTCHANGED, value);
         }
 
         private bool ShouldSerializeColumnHeadersHeight()
@@ -2018,10 +1964,7 @@ namespace System.Windows.Forms
         public event DataGridViewAutoSizeModeEventHandler ColumnHeadersHeightSizeModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERSHEIGHTSIZEMODECHANGED, value);
         }
 
         /// <summary>
@@ -2332,10 +2275,7 @@ namespace System.Windows.Forms
         public event EventHandler DataMemberChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAMEMBERCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataSource"]/*' />
@@ -2395,10 +2335,7 @@ namespace System.Windows.Forms
         public event EventHandler DataSourceChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATASOURCECHANGED, value);
         }
 
         private static SolidBrush DefaultBackBrush 
@@ -2527,10 +2464,7 @@ namespace System.Windows.Forms
         public event EventHandler DefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTCELLSTYLECHANGED, value);
         }
 
         private static SolidBrush DefaultForeBrush 
@@ -2669,10 +2603,7 @@ namespace System.Windows.Forms
         public event EventHandler EditModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITMODECHANGED, value);
         }
 
         internal Point MouseEnteredCellAddress
@@ -3177,10 +3108,7 @@ namespace System.Windows.Forms
         new public event EventHandler ForeColorChanged
         {
             add => base.ForeColorChanged += value;
-            remove
-            {
-                base.ForeColorChanged -= value;
-            }
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Font"]/*' />
@@ -3210,10 +3138,7 @@ namespace System.Windows.Forms
         new public event EventHandler FontChanged
         {
             add => base.FontChanged += value;
-            remove
-            {
-                base.FontChanged -= value;
-            }
+            remove => base.FontChanged -= value;
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.GridColor"]/*' />
@@ -3261,10 +3186,7 @@ namespace System.Windows.Forms
         public event EventHandler GridColorChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWGRIDCOLORCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ShouldSerializeGridColor"]/*' />
@@ -3702,10 +3624,7 @@ namespace System.Windows.Forms
         public event EventHandler MultiSelectChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWMULTISELECTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowIndex"]/*' />
@@ -3773,10 +3692,7 @@ namespace System.Windows.Forms
         public new event EventHandler PaddingChanged
         {
             add => base.PaddingChanged += value;
-            remove
-            {
-                base.PaddingChanged -= value;
-            }
+            remove => base.PaddingChanged -= value;
         }
 
         internal DataGridViewCellStyle PlaceholderCellStyle
@@ -3878,10 +3794,7 @@ namespace System.Windows.Forms
         public event EventHandler ReadOnlyChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWREADONLYCHANGED, value);
         }
 
         private void ResetCurrentCell()
@@ -4074,10 +3987,7 @@ namespace System.Windows.Forms
         public event EventHandler RowHeadersBorderStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSBORDERSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersDefaultCellStyle"]/*' />
@@ -4122,10 +4032,7 @@ namespace System.Windows.Forms
         public event EventHandler RowHeadersDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSDEFAULTCELLSTYLECHANGED, value);
         }
         
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeadersVisible"]/*' />
@@ -4240,10 +4147,7 @@ namespace System.Windows.Forms
         public event EventHandler RowHeadersWidthChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHCHANGED, value);
         }
 
         private bool ShouldSerializeRowHeadersWidth()
@@ -4301,10 +4205,7 @@ namespace System.Windows.Forms
         public event DataGridViewAutoSizeModeEventHandler RowHeadersWidthSizeModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERSWIDTHSIZEMODECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Rows"]/*' />
@@ -4365,10 +4266,7 @@ namespace System.Windows.Forms
         public event EventHandler RowsDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSDEFAULTCELLSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowTemplate"]/*' />
@@ -4936,10 +4834,7 @@ namespace System.Windows.Forms
         new public event EventHandler TextChanged
         {
             add => base.TextChanged += value;
-            remove
-            {
-                base.TextChanged -= value;
-            }
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.this"]/*' />
@@ -5168,10 +5063,7 @@ namespace System.Windows.Forms
         public event DataGridViewAutoSizeColumnModeEventHandler AutoSizeColumnModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWAUTOSIZECOLUMNMODECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CancelRowEdit"]/*' />
@@ -5182,10 +5074,7 @@ namespace System.Windows.Forms
         public event QuestionEventHandler CancelRowEdit
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCANCELROWEDIT, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellBeginEdit"]/*' />
@@ -5196,10 +5085,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellCancelEventHandler CellBeginEdit 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLBEGINEDIT, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellClick"]/*' />
@@ -5210,10 +5096,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContentClick"]/*' />
@@ -5224,10 +5107,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellContentClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTCLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContentDoubleClick"]/*' />
@@ -5238,10 +5118,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellContentDoubleClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTENTDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContextMenuStripChanged"]/*' />
@@ -5253,10 +5130,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellContextMenuStripChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellContextMenuStripNeeded"]/*' />
@@ -5268,10 +5142,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellContextMenuStripNeededEventHandler CellContextMenuStripNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLCONTEXTMENUSTRIPNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellDoubleClick"]/*' />
@@ -5282,10 +5153,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellDoubleClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellEndEdit"]/*' />
@@ -5296,10 +5164,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellEndEdit 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENDEDIT, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellEnter"]/*' />
@@ -5310,10 +5175,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellEnter
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLENTER, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellErrorTextChanged"]/*' />
@@ -5324,10 +5186,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellErrorTextChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellErrorTextNeeded"]/*' />
@@ -5339,10 +5198,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellErrorTextNeededEventHandler CellErrorTextNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLERRORTEXTNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellFormatting"]/*' />
@@ -5353,10 +5209,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellFormattingEventHandler CellFormatting 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLFORMATTING, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellLeave"]/*' />
@@ -5367,10 +5220,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellLeave
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLLEAVE, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseClick"]/*' />
@@ -5381,10 +5231,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler CellMouseClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseDoubleClick"]/*' />
@@ -5395,10 +5242,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler CellMouseDoubleClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseDown"]/*' />
@@ -5409,10 +5253,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler CellMouseDown
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEDOWN, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseEnter"]/*' />
@@ -5423,10 +5264,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellMouseEnter
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEENTER, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseLeave"]/*' />
@@ -5437,10 +5275,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellMouseLeave
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSELEAVE, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseMove"]/*' />
@@ -5451,10 +5286,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler CellMouseMove
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEMOVE, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellMouseUp"]/*' />
@@ -5465,10 +5297,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler CellMouseUp 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLMOUSEUP, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellPainting"]/*' />
@@ -5479,10 +5308,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellPaintingEventHandler CellPainting 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPAINTING, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellParsing"]/*' />
@@ -5493,10 +5319,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellParsingEventHandler CellParsing
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLPARSING, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellStateChanged"]/*' />
@@ -5507,10 +5330,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellStateChangedEventHandler CellStateChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTATECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellStyleChanged"]/*' />
@@ -5521,10 +5341,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellStyleChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellStyleContentChanged"]/*' />
@@ -5535,10 +5352,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellStyleContentChangedEventHandler CellStyleContentChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLSTYLECONTENTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellToolTipTextChanged"]/*' />
@@ -5549,10 +5363,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellToolTipTextChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellToolTipTextNeeded"]/*' />
@@ -5564,10 +5375,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellToolTipTextNeededEventHandler CellToolTipTextNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLTOOLTIPTEXTNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValidated"]/*' />
@@ -5578,10 +5386,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellValidated
         {
          add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValidating"]/*' />
@@ -5592,10 +5397,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellValidatingEventHandler CellValidating
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALIDATING, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValueChanged"]/*' />
@@ -5606,10 +5408,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler CellValueChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValueNeeded"]/*' />
@@ -5621,10 +5420,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellValueEventHandler CellValueNeeded 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUENEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CellValuePushed"]/*' />
@@ -5636,10 +5432,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellValueEventHandler CellValuePushed 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCELLVALUEPUSHED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnAdded"]/*' />
@@ -5650,10 +5443,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnAdded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNADDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnContextMenuStripChanged"]/*' />
@@ -5664,10 +5454,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnContextMenuStripChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNCONTEXTMENUSTRIPCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDataPropertyNameChanged"]/*' />
@@ -5678,10 +5465,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnDataPropertyNameChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDATAPROPERTYNAMECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDefaultCellStyleChanged"]/*' />
@@ -5692,10 +5476,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDEFAULTCELLSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDisplayIndexChanged"]/*' />
@@ -5706,10 +5487,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnDisplayIndexChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDISPLAYINDEXCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDividerDoubleClick"]/*' />
@@ -5720,10 +5498,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnDividerDoubleClickEventHandler ColumnDividerDoubleClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnDividerWidthChanged"]/*' />
@@ -5734,10 +5509,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnDividerWidthChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNDIVIDERWIDTHCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeaderMouseClick"]/*' />
@@ -5748,10 +5520,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler ColumnHeaderMouseClick 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeaderMouseDoubleClick"]/*' />
@@ -5762,10 +5531,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler ColumnHeaderMouseDoubleClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERMOUSEDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnHeaderCellChanged"]/*' />
@@ -5776,10 +5542,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnHeaderCellChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNHEADERCELLCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnMinimumWidthChanged"]/*' />
@@ -5790,10 +5553,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnMinimumWidthChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNMINIMUMWIDTHCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnNameChanged"]/*' />
@@ -5804,10 +5564,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnNameChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNNAMECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnRemoved"]/*' />
@@ -5818,10 +5575,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnRemoved
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNREMOVED, value);
         }
 
         /*/// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnsDefaultCellStyleChanged"]/*' />
@@ -5829,10 +5583,7 @@ namespace System.Windows.Forms
         public event EventHandler ColumnsDefaultCellStyleChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSDEFAULTCELLSTYLECHANGED, value);
         }*/
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnSortModeChanged"]/*' />
@@ -5843,10 +5594,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnSortModeChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSORTMODECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnStateChanged"]/*' />
@@ -5857,10 +5605,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnStateChangedEventHandler ColumnStateChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNSTATECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnToolTipTextChanged"]/*' />
@@ -5871,10 +5616,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnToolTipTextChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNTOOLTIPTEXTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ColumnWidthChanged"]/*' />
@@ -5885,10 +5627,7 @@ namespace System.Windows.Forms
         public event DataGridViewColumnEventHandler ColumnWidthChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCOLUMNWIDTHCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentCellChanged"]/*' />
@@ -5899,10 +5638,7 @@ namespace System.Windows.Forms
         public event EventHandler CurrentCellChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.CurrentCellDirtyStateChanged"]/*' />
@@ -5914,10 +5650,7 @@ namespace System.Windows.Forms
         public event EventHandler CurrentCellDirtyStateChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWCURRENTCELLDIRTYSTATECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BindingComplete"]/*' />
@@ -5928,10 +5661,7 @@ namespace System.Windows.Forms
         public event DataGridViewBindingCompleteEventHandler DataBindingComplete
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATABINDINGCOMPLETE, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DataError"]/*' />
@@ -5942,10 +5672,7 @@ namespace System.Windows.Forms
         public event DataGridViewDataErrorEventHandler DataError
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDATAERROR, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.DefaultValuesNeeded"]/*' />
@@ -5957,10 +5684,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler DefaultValuesNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWDEFAULTVALUESNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.EditingControlShowing"]/*' />
@@ -5971,10 +5695,7 @@ namespace System.Windows.Forms
         public event DataGridViewEditingControlShowingEventHandler EditingControlShowing
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWEDITINGCONTROLSHOWING, value);
         }
 
         /*
@@ -5982,10 +5703,7 @@ namespace System.Windows.Forms
         public event QuestionEventHandler KeepNewRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWKEEPNEWROW, value);
         }*/
 
         /*/// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowDiscarded"]/*' />
@@ -5993,10 +5711,7 @@ namespace System.Windows.Forms
         public event EventHandler NewRowDiscarded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWDISCARDED, value);
         }*/
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.NewRowNeeded"]/*' />
@@ -6007,10 +5722,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler NewRowNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWNEWROWNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowContextMenuStripChanged"]/*' />
@@ -6021,10 +5733,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowContextMenuStripChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowContextMenuStripNeeded"]/*' />
@@ -6036,10 +5745,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowContextMenuStripNeededEventHandler RowContextMenuStripNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWCONTEXTMENUSTRIPNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDefaultCellStyleChanged"]/*' />
@@ -6050,10 +5756,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowDefaultCellStyleChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDEFAULTCELLSTYLECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDirtyStateNeeded"]/*' />
@@ -6065,10 +5768,7 @@ namespace System.Windows.Forms
         public event QuestionEventHandler RowDirtyStateNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIRTYSTATENEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDividerDoubleClick"]/*' />
@@ -6079,10 +5779,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowDividerDoubleClickEventHandler RowDividerDoubleClick
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowDividerHeightChanged"]/*' />
@@ -6093,10 +5790,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowDividerHeightChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWDIVIDERHEIGHTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowEnter"]/*' />
@@ -6107,10 +5801,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler RowEnter
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWENTER, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWENTER, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWENTER, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowErrorTextChanged"]/*' />
@@ -6121,10 +5812,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowErrorTextChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowErrorTextNeeded"]/*' />
@@ -6136,10 +5824,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowErrorTextNeededEventHandler RowErrorTextNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWERRORTEXTNEEDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeaderMouseClick"]/*' />
@@ -6150,10 +5835,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler RowHeaderMouseClick 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeaderMouseDoubleClick"]/*' />
@@ -6164,10 +5846,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellMouseEventHandler RowHeaderMouseDoubleClick 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERMOUSEDOUBLECLICK, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeaderCellChanged"]/*' />
@@ -6178,10 +5857,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowHeaderCellChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEADERCELLCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeightChanged"]/*' />
@@ -6192,10 +5868,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowHeightChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowHeightInfoNeeded"]/*' />
@@ -6207,10 +5880,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowHeightInfoNeededEventHandler RowHeightInfoNeeded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFONEEDED, value);
         }
 
         internal DataGridViewRowHeightInfoNeededEventArgs RowHeightInfoNeededEventArgs
@@ -6234,10 +5904,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowHeightInfoPushedEventHandler RowHeightInfoPushed
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWHEIGHTINFOPUSHED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowLeave"]/*' />
@@ -6248,10 +5915,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler RowLeave
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWLEAVE, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowMinimumHeightChanged"]/*' />
@@ -6262,10 +5926,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowMinimumHeightChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWMINIMUMHEIGHTCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowPostPaint"]/*' />
@@ -6276,10 +5937,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowPostPaintEventHandler RowPostPaint
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPOSTPAINT, value);
         }
 
         internal DataGridViewRowPostPaintEventArgs RowPostPaintEventArgs
@@ -6302,10 +5960,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowPrePaintEventHandler RowPrePaint
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWPREPAINT, value);
         }
 
         internal DataGridViewRowPrePaintEventArgs RowPrePaintEventArgs
@@ -6328,10 +5983,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowsAddedEventHandler RowsAdded
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSADDED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowsRemoved"]/*' />
@@ -6342,10 +5994,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowsRemovedEventHandler RowsRemoved
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSREMOVED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowStateChanged"]/*' />
@@ -6356,10 +6005,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowStateChangedEventHandler RowStateChanged 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWSTATECHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowUnshared"]/*' />
@@ -6371,10 +6017,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler RowUnshared 
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWUNSHARED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowValidated"]/*' />
@@ -6385,10 +6028,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellEventHandler RowValidated
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.RowValidating"]/*' />
@@ -6399,10 +6039,7 @@ namespace System.Windows.Forms
         public event DataGridViewCellCancelEventHandler RowValidating
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWROWVALIDATING, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Scroll"]/*' />
@@ -6413,10 +6050,7 @@ namespace System.Windows.Forms
         public event ScrollEventHandler Scroll
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSCROLL, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSCROLL, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSCROLL, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SelectionChanged"]/*' />
@@ -6427,10 +6061,7 @@ namespace System.Windows.Forms
         public event EventHandler SelectionChanged
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
-            remove 
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSELECTIONCHANGED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.SortCompare"]/*' />
@@ -6442,10 +6073,7 @@ namespace System.Windows.Forms
         public event DataGridViewSortCompareEventHandler SortCompare
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTCOMPARE, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Sorted"]/*' />
@@ -6456,10 +6084,7 @@ namespace System.Windows.Forms
         public event EventHandler Sorted
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWSORTED, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTED, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWSORTED, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.StyleChanged"]/*' />
@@ -6471,10 +6096,7 @@ namespace System.Windows.Forms
         new public event EventHandler StyleChanged
         {
             add => base.StyleChanged += value;
-            remove
-            {
-                base.StyleChanged -= value;
-            }
+            remove => base.StyleChanged -= value;
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserAddedRow"]/*' />
@@ -6485,10 +6107,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler UserAddedRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDEDROW, value);
         }
 
         /*/// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserAddingRow"]/*' />
@@ -6496,10 +6115,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowCancelEventHandler UserAddingRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERADDINGROW, value);
         }*/
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserDeletedRow"]/*' />
@@ -6510,10 +6126,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowEventHandler UserDeletedRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETEDROW, value);
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.UserDeletingRow"]/*' />
@@ -6524,10 +6137,7 @@ namespace System.Windows.Forms
         public event DataGridViewRowCancelEventHandler UserDeletingRow
         {
             add => this.Events.AddHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
-            remove
-            {
-                this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
-            }
+            remove => this.Events.RemoveHandler(EVENT_DATAGRIDVIEWUSERDELETINGROW, value);
         }
 
         ////////////////////////

@@ -111,8 +111,7 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler PaddingChanged {
             add => base.PaddingChanged += value; 
-            remove { base.PaddingChanged -= value; }
-        }
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SelectedIndex"]/*' />
         /// <devdoc>
@@ -250,9 +249,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
         public event EventHandler SelectedItemChanged {
             add => onSelectedItemChanged += value;
-            remove {
-                onSelectedItemChanged -= value;
-            }
+            remove => onSelectedItemChanged -= value;
         }
         
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.CreateAccessibilityInstance"]/*' />

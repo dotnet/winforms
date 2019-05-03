@@ -165,9 +165,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add => base.BackColorChanged += value;
-            remove {
-                base.BackColorChanged -= value;
-            }
+            remove => base.BackColorChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImage"]/*' />
@@ -186,9 +184,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayout"]/*' />
@@ -207,9 +203,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarForeColor"]/*' />
@@ -429,8 +423,7 @@ namespace System.Windows.Forms {
         ]
         new public event EventHandler Click {
             add => base.Click += value; 
-            remove { base.Click -= value; }
-        }
+            remove => base.Click -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateParams"]/*' />
         /// <devdoc>
@@ -531,8 +524,7 @@ namespace System.Windows.Forms {
         ]
         new public event EventHandler DoubleClick {
             add => base.DoubleClick += value; 
-            remove { base.DoubleClick -= value; }
-        }
+            remove => base.DoubleClick -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DropDownAlign"]/*' />
         /// <devdoc>
@@ -583,9 +575,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Format"]/*' />
@@ -624,9 +614,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged {
             add => Events.AddHandler(EVENT_FORMATCHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_FORMATCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_FORMATCHANGED, value);
         }
 
         /// <include file='doc\DateTimepicker.uex' path='docs/doc[@for="DateTimepicker.Paint"]/*' />
@@ -637,9 +625,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
-            remove {
-                base.Paint -= value;
-            }
+            remove => base.Paint -= value;
         }
 
         //Make sure the passed in minDate respects the current culture: this
@@ -787,8 +773,7 @@ namespace System.Windows.Forms {
         ]
         new public event MouseEventHandler MouseClick {
             add => base.MouseClick += value; 
-            remove { base.MouseClick -= value; }
-        }
+            remove => base.MouseClick -= value; }
 
         [
         Browsable(false),
@@ -796,8 +781,7 @@ namespace System.Windows.Forms {
         ]
         new public event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value; 
-            remove { base.MouseDoubleClick -= value; }
-        }
+            remove => base.MouseDoubleClick -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Padding"]/*' />
         [
@@ -816,8 +800,7 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler PaddingChanged {
             add => base.PaddingChanged += value; 
-            remove { base.PaddingChanged -= value; }
-        }
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.PreferredHeight"]/*' />
         /// <devdoc>
@@ -943,9 +926,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
-            remove {
-                base.TextChanged -= value;
-            }
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Value"]/*' />
@@ -1010,9 +991,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp {
             add => onCloseUp += value;
-            remove {
-                onCloseUp -= value;
-            }
+            remove => onCloseUp -= value;
         }
 
 
@@ -1020,9 +999,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
             add => onRightToLeftLayoutChanged += value;
-            remove {
-                onRightToLeftLayoutChanged -= value;
-            }
+            remove => onRightToLeftLayoutChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ValueChanged"]/*' />
@@ -1032,9 +1009,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
             add => onValueChanged += value;
-            remove {
-                onValueChanged -= value;
-            }
+            remove => onValueChanged -= value;
         }
 
 
@@ -1045,9 +1020,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown {
             add => onDropDown += value;
-            remove {
-                onDropDown -= value;
-            }
+            remove => onDropDown -= value;
         }
      
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateAccessibilityInstance"]/*' />

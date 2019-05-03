@@ -805,10 +805,7 @@ namespace System.ComponentModel.Design
         event ComponentEventHandler IComponentChangeService.ComponentAdded
         {
             add => _events.AddHandler(s_eventComponentAdded, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentAdded, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentAdded, value);
         }
 
         /// <summary>
@@ -817,10 +814,7 @@ namespace System.ComponentModel.Design
         event ComponentEventHandler IComponentChangeService.ComponentAdding
         {
             add => _events.AddHandler(s_eventComponentAdding, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentAdding, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentAdding, value);
         }
 
         /// <summary>
@@ -829,10 +823,7 @@ namespace System.ComponentModel.Design
         event ComponentChangedEventHandler IComponentChangeService.ComponentChanged
         {
             add => _events.AddHandler(s_eventComponentChanged, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentChanged, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentChanged, value);
         }
 
         /// <summary>
@@ -841,10 +832,7 @@ namespace System.ComponentModel.Design
         event ComponentChangingEventHandler IComponentChangeService.ComponentChanging
         {
             add => _events.AddHandler(s_eventComponentChanging, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentChanging, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentChanging, value);
         }
 
         /// <summary>
@@ -853,10 +841,7 @@ namespace System.ComponentModel.Design
         event ComponentEventHandler IComponentChangeService.ComponentRemoved
         {
             add => _events.AddHandler(s_eventComponentRemoved, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentRemoved, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentRemoved, value);
         }
 
         /// <summary>
@@ -865,10 +850,7 @@ namespace System.ComponentModel.Design
         event ComponentEventHandler IComponentChangeService.ComponentRemoving
         {
             add => _events.AddHandler(s_eventComponentRemoving, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentRemoving, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentRemoving, value);
         }
 
         /// <summary>
@@ -877,10 +859,7 @@ namespace System.ComponentModel.Design
         event ComponentRenameEventHandler IComponentChangeService.ComponentRename
         {
             add => _events.AddHandler(s_eventComponentRename, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventComponentRename, value);
-            }
+            remove => _events.RemoveHandler(s_eventComponentRename, value);
         }
 
         /// <summary>
@@ -967,10 +946,7 @@ namespace System.ComponentModel.Design
         event EventHandler IDesignerHost.Activated
         {
             add => _events.AddHandler(s_eventActivated, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventActivated, value);
-            }
+            remove => _events.RemoveHandler(s_eventActivated, value);
         }
 
         /// <summary>
@@ -979,10 +955,7 @@ namespace System.ComponentModel.Design
         event EventHandler IDesignerHost.Deactivated
         {
             add => _events.AddHandler(s_eventDeactivated, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventDeactivated, value);
-            }
+            remove => _events.RemoveHandler(s_eventDeactivated, value);
         }
 
         /// <summary>
@@ -991,10 +964,7 @@ namespace System.ComponentModel.Design
         event EventHandler IDesignerHost.LoadComplete
         {
             add => _events.AddHandler(s_eventLoadComplete, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventLoadComplete, value);
-            }
+            remove => _events.RemoveHandler(s_eventLoadComplete, value);
         }
 
         /// <summary>
@@ -1003,10 +973,7 @@ namespace System.ComponentModel.Design
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosed
         {
             add => _events.AddHandler(s_eventTransactionClosed, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventTransactionClosed, value);
-            }
+            remove => _events.RemoveHandler(s_eventTransactionClosed, value);
         }
 
         /// <summary>
@@ -1015,10 +982,7 @@ namespace System.ComponentModel.Design
         event DesignerTransactionCloseEventHandler IDesignerHost.TransactionClosing
         {
             add => _events.AddHandler(s_eventTransactionClosing, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventTransactionClosing, value);
-            }
+            remove => _events.RemoveHandler(s_eventTransactionClosing, value);
         }
 
         /// <summary>
@@ -1027,10 +991,7 @@ namespace System.ComponentModel.Design
         event EventHandler IDesignerHost.TransactionOpened
         {
             add => _events.AddHandler(s_eventTransactionOpened, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventTransactionOpened, value);
-            }
+            remove => _events.RemoveHandler(s_eventTransactionOpened, value);
         }
 
         /// <summary>
@@ -1039,10 +1000,7 @@ namespace System.ComponentModel.Design
         event EventHandler IDesignerHost.TransactionOpening
         {
             add => _events.AddHandler(s_eventTransactionOpening, value);
-            remove
-            {
-                _events.RemoveHandler(s_eventTransactionOpening, value);
-            }
+            remove => _events.RemoveHandler(s_eventTransactionOpening, value);
         }
 
         /// <summary>

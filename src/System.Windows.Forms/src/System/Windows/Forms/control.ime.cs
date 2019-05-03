@@ -300,9 +300,7 @@ namespace System.Windows.Forms
         [WinCategory( "Behavior" ), SRDescription( nameof(SR.ControlOnImeModeChangedDescr) )]
         public event EventHandler ImeModeChanged {
             add => Events.AddHandler( EventImeModeChanged, value );
-            remove {
-                Events.RemoveHandler( EventImeModeChanged, value );
-            }
+            remove => Events.RemoveHandler( EventImeModeChanged, value );
         }
 
         /// <devdoc>

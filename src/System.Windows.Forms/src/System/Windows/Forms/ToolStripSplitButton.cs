@@ -127,9 +127,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler ButtonClick {
             add => Events.AddHandler(EventButtonClick, value); 
-            remove {
-                Events.RemoveHandler(EventButtonClick, value);
-            }
+            remove => Events.RemoveHandler(EventButtonClick, value);
         }
         /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.ButtonDoubleClick"]/*' />
         /// <devdoc>
@@ -141,9 +139,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler ButtonDoubleClick {
             add => Events.AddHandler(EventButtonDoubleClick, value);
-            remove {
-                Events.RemoveHandler(EventButtonDoubleClick, value);
-            }
+            remove => Events.RemoveHandler(EventButtonDoubleClick, value);
         }
 
 
@@ -181,9 +177,7 @@ namespace System.Windows.Forms {
         ]
         public event EventHandler DefaultItemChanged {
             add => Events.AddHandler(EventDefaultItemChanged, value); 
-            remove {
-                Events.RemoveHandler(EventDefaultItemChanged, value);
-            }
+            remove => Events.RemoveHandler(EventDefaultItemChanged, value);
         }
 	
         /// <include file='doc\ToolStripComboButton.uex' path='docs/doc[@for="ToolStripSplitButton.DismissWhenClicked"]/*' />

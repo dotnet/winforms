@@ -157,9 +157,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
         public event EventHandler AcceptsTabChanged {
             add => Events.AddHandler(EVENT_ACCEPTSTABCHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_ACCEPTSTABCHANGED, value);
         }
 
 
@@ -317,9 +315,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
             add => base.AutoSizeChanged += value;
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageChanged"]/*' />
@@ -327,9 +323,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageLayout"]/*' />
@@ -351,9 +345,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BorderStyle"]/*' />
@@ -400,9 +392,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged {
             add => Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
         }
 
         internal virtual bool CanRaiseTextChangedEvent {
@@ -509,18 +499,14 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
             add => base.Click += value;
-            remove {
-                base.Click -= value;
-            }
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.MouseClick"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
             add => base.MouseClick += value;
-            remove {
-                base.MouseClick -= value;
-            }
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.DefaultCursor"]/*' />
@@ -596,9 +582,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged {
             add => Events.AddHandler(EVENT_HIDESELECTIONCHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_HIDESELECTIONCHANGED, value);
         }
 
         /// <devdoc>
@@ -774,9 +758,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged {
             add => Events.AddHandler(EVENT_MODIFIEDCHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_MODIFIEDCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_MODIFIEDCHANGED, value);
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Multiline"]/*' />
@@ -824,9 +806,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr))]
         public event EventHandler MultilineChanged {
             add => Events.AddHandler(EVENT_MULTILINECHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_MULTILINECHANGED, value);
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.Padding"]/*' />
@@ -849,9 +829,7 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler PaddingChanged {
             add => base.PaddingChanged += value;
-            remove {
-                base.PaddingChanged -= value;
-            }
+            remove => base.PaddingChanged -= value;
         }
 
         /// <devdoc>
@@ -1019,9 +997,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged {
             add => Events.AddHandler(EVENT_READONLYCHANGED, value);
-            remove {
-                Events.RemoveHandler(EVENT_READONLYCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_READONLYCHANGED, value);
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.SelectedText"]/*' />
@@ -1519,9 +1495,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
-            remove {
-                base.Paint -= value;
-            }
+            remove => base.Paint -= value;
         }
 
 

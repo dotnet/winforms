@@ -443,10 +443,7 @@ namespace System.Windows.Forms
         public event EventHandler Disposed
         {
             add => this.disposed += value;
-            remove
-            {
-                this.disposed -= value;
-            }
+            remove => this.disposed -= value;
         }
 
         /// <include file='doc\DataGridViewColumn.uex' path='docs/doc[@for="DataGridViewColumn.DividerWidth"]/*' />

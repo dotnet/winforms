@@ -138,10 +138,7 @@ namespace System.Windows.Forms {
         new public event EventHandler AutoSizeChanged
         {
             add => base.AutoSizeChanged += value;
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.BackColor"]/*' />
@@ -518,9 +515,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <devdoc>
