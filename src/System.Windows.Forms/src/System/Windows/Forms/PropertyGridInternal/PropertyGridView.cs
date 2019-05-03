@@ -789,14 +789,16 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
             Rectangle parent = gridEntry.OwnerGrid.GridViewAccessibleObject.Bounds;
 
-            if (pt.y > parent.Bottom - 1) // - 1 this is PropertyGridView bottom border 
+            int propertyGridViewBottom = parent.Bottom - 1; // - 1 is PropertyGridView bottom border 
+
+            if (pt.y > propertyGridViewBottom)
             {
                 return new Rectangle(0, 0, 0, 0);
             }
 
-            if (pt.y + rect.Height > parent.Bottom - 1) // - 1 this is PropertyGridView bottom border 
+            if (pt.y + rect.Height > propertyGridViewBottom)
             {
-                rect.Height = parent.Bottom - 1 - pt.y; // - 1 this is PropertyGridView bottom border
+                rect.Height = propertyGridViewBottom - pt.y;
             }
 
             return new Rectangle(pt.x, pt.y, rect.Width, rect.Height);
