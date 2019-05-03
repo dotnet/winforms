@@ -1153,7 +1153,7 @@ namespace System.Windows.Forms {
             // Note: Currently Winforms does not fully support surrogates.  If
             // the text contains surrogate characters this property may return incorrect values.
 
-            => IsHandleCreated ? SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle)) : Text.Length;
+            => IsHandleCreated ? Interop.User32.GetWindowTextLengthW(new HandleRef(this, Handle)) : Text.Length;
 
         // Since setting the WindowText while the handle is created
         // generates a WM_COMMAND message, we must trap that case

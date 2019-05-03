@@ -466,7 +466,7 @@ namespace System.Windows.Forms {
             set {
                 if (IsHandleCreated)
                 {
-                    if (SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle)) > 0) {
+                    if (Interop.User32.GetWindowTextLengthW(new HandleRef(this, Handle)) > 0) {
                         if (value == null) {
                             base.Font = null;
                             SetCharFormatFont(false, Font);
@@ -1950,7 +1950,7 @@ namespace System.Windows.Forms {
             if (characterSet.Length == 0)
                 return -1;
 
-            int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle));
+            int textLen = Interop.User32.GetWindowTextLengthW(new HandleRef(this, Handle));
             if (start == end) {
                 start = 0;
                 end = textLen;
@@ -3372,7 +3372,7 @@ namespace System.Windows.Forms {
                 int compMode = unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_GETIMECOMPMODE, 0, 0));
                 if (RichTextBoxConstants.ICM_NOTOPEN != compMode) {
 
-                    int textLength = SafeNativeMethods.GetWindowTextLength(new HandleRef(this, Handle));
+                    int textLength = Interop.User32.GetWindowTextLengthW(new HandleRef(this, Handle));
                     if (selStart == selEnd && textLength == MaxLength) {
 
                         SendMessage(Interop.WindowMessages.WM_KILLFOCUS, 0, 0);

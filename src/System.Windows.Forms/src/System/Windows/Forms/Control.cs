@@ -4270,21 +4270,9 @@ example usage
                     }
                 }
 
-                using (new MultithreadSafeCallScope()) {
-
-                    // it's okay to call GetWindowText cross-thread.
-                    //
-
-                    int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(window, Handle));
-
-                    // Check to see if the system supports DBCS character
-                    // if so, double the length of the buffer.
-                    if (SystemInformation.DbcsEnabled) {
-                        textLen = (textLen * 2) + 1;
-                    }
-                    StringBuilder sb = new StringBuilder(textLen + 1);
-                    UnsafeNativeMethods.GetWindowText(new HandleRef(window, Handle), sb, sb.Capacity);
-                    return sb.ToString();
+                using (new MultithreadSafeCallScope())
+                {
+                    return Interop.User32.GetWindowText(new HandleRef(window, Handle));
                 }
             }
             set {

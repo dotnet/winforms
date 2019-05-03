@@ -629,10 +629,7 @@ namespace System.Windows.Forms {
             }
             return retval;
         }
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
+
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]            
         
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]

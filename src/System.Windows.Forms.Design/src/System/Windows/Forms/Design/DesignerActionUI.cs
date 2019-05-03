@@ -992,9 +992,8 @@ namespace System.ComponentModel.Design
 	     if (!DesignerActionUI.DropDownVisibilityDebug.TraceVerbose) {
                 return string.Empty;
              }
-             int textLen = SafeNativeMethods.GetWindowTextLength(new HandleRef(null, hwnd));
-             StringBuilder sb = new StringBuilder(textLen+1);
-             UnsafeNativeMethods.GetWindowText(new HandleRef(null, hwnd), sb, sb.Capacity);
+
+             string windowText = Interop.User32.GetWindowText(new HandleRef(null, hwnd));
              string typeOfControl = "Unknown";
              string nameOfControl = "";
              Control c = Control.FromHandle(hwnd);
@@ -1015,7 +1014,7 @@ namespace System.ComponentModel.Design
                     }
                 }
              }
-             return sb.ToString() + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
+             return windowText + "\r\n\t\t\tType: [" + typeOfControl + "] Name: [" + nameOfControl + "]";
 #else
             return string.Empty;
 #endif

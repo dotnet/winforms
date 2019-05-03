@@ -48,9 +48,6 @@ namespace System.Windows.Forms.Design
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern bool IsChild(HandleRef hWndParent, HandleRef hwnd);
 
-        [DllImport(ExternDll.User32, CharSet = CharSet.Auto)]
-        public static extern int GetWindowText(HandleRef hWnd, StringBuilder lpString, int nMaxCount);
-        
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern int MsgWaitForMultipleObjectsEx(int nCount, IntPtr pHandles, int dwMilliseconds,
             int dwWakeMask, int dwFlags);
