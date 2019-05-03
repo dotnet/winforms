@@ -4555,7 +4555,7 @@ namespace System.Windows.Forms {
 
             public int GetId(object item) {
                 bool firstTime;
-                return unchecked((int)_idGenerator.GetId(item, out firstTime));
+                return unchecked((int)_idGenerator.GetId(item, out var _));
             }
         }
 
