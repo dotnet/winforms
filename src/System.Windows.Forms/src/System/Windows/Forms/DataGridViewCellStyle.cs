@@ -823,7 +823,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" ForeColor=" + this.ForeColor.ToString());
                 firstPropAdded = false;
@@ -832,7 +832,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" SelectionBackColor=" + this.SelectionBackColor.ToString());
                 firstPropAdded = false;
@@ -841,7 +841,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" SelectionForeColor=" + this.SelectionForeColor.ToString());
                 firstPropAdded = false;
@@ -850,7 +850,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Font=" + this.Font.ToString());
                 firstPropAdded = false;
@@ -859,7 +859,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" NullValue=" + this.NullValue.ToString());
                 firstPropAdded = false;
@@ -868,7 +868,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" DataSourceNullValue=" + this.DataSourceNullValue.ToString());
                 firstPropAdded = false;
@@ -877,7 +877,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Format=" + this.Format);
                 firstPropAdded = false;
@@ -886,7 +886,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" WrapMode=" + this.WrapMode.ToString());
                 firstPropAdded = false;
@@ -895,7 +895,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Alignment=" + this.Alignment.ToString());
                 firstPropAdded = false;
@@ -904,7 +904,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Padding=" + this.Padding.ToString());
                 firstPropAdded = false;
@@ -913,7 +913,7 @@ namespace System.Windows.Forms
             {
                 if (!firstPropAdded)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(" Tag=" + this.Tag.ToString());
                 firstPropAdded = false;

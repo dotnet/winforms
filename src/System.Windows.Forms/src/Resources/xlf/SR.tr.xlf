@@ -3134,7 +3134,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccHorizontalScrollBarAccName">
         <source>Horizontal</source>
-        <target state="needs-review-translation">Yatay Kaydırma Çubuğu</target>
+        <target state="translated">Yatay</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AccLinkCellDefaultAction">
@@ -3189,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="DataGridView_AccVerticalScrollBarAccName">
         <source>Vertical</source>
-        <target state="needs-review-translation">Dikey Kaydırma Çubuğu</target>
+        <target state="translated">Dikey</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridView_AdvancedCellBorderStyleInvalid">

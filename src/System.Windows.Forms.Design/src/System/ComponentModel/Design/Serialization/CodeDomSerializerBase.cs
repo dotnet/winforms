@@ -82,10 +82,10 @@ namespace System.ComponentModel.Design.Serialization
             StringBuilder typename = new StringBuilder(typeref.BaseType);
             if (!typeref.BaseType.Contains("`"))
             {
-                typename.Append("`");
+                typename.Append('`');
                 typename.Append(typeref.TypeArguments.Count);
             }
-            typename.Append("[");
+            typename.Append('[');
 
             bool first = true;
 
@@ -94,14 +94,14 @@ namespace System.ComponentModel.Design.Serialization
             {
                 if (!first)
                 {
-                    typename.Append(",");
+                    typename.Append(',');
                 }
-                typename.Append("[");
+                typename.Append('[');
                 typename.Append(GetTypeNameFromCodeTypeReferenceHelper(manager, childref));
-                typename.Append("]");
+                typename.Append(']');
                 first = false;
             }
-            typename.Append("]");
+            typename.Append(']');
 
             //otherwise, we have a generic and we need to format it.
             return typename.ToString();
