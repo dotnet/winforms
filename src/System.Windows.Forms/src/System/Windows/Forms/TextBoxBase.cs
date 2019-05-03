@@ -1196,7 +1196,7 @@ namespace System.Windows.Forms {
             textBoxFlags[codeUpdateText] = true;
             try {
                 if (IsHandleCreated) {
-                    UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), value);
+                    Interop.User32.SetWindowTextW(new HandleRef(this, Handle), value);
                 }
                 else {
                     if (value.Length == 0) {

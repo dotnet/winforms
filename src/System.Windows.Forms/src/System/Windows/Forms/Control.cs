@@ -4279,7 +4279,7 @@ example usage
                 if (value == null) value = "";
                 if (!WindowText.Equals(value)) {
                     if (IsHandleCreated) {
-                        UnsafeNativeMethods.SetWindowText(new HandleRef(window, Handle), value);
+                        Interop.User32.SetWindowTextW(new HandleRef(window, Handle), value);
                     }
                     else {
                         if (value.Length == 0) {
@@ -8067,7 +8067,7 @@ example usage
 
                 // Set the window text from the Text property.
                 if (text != null && text.Length != 0) {
-                    UnsafeNativeMethods.SetWindowText(new HandleRef(this, Handle), text);
+                    Interop.User32.SetWindowTextW(new HandleRef(this, Handle), text);
                 }
 
                 if (!(this is ScrollableControl) && !IsMirrored && GetState2(STATE2_SETSCROLLPOS) && !GetState2(STATE2_HAVEINVOKED)) {
