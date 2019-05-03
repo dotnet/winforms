@@ -61,10 +61,7 @@ namespace System.Windows.Forms.Design {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -84,7 +81,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets the page site.</para>
         /// </devdoc>
         protected IComponentEditorPageSite PageSite {
-            get { return pageSite; }
+            get => pageSite; 
             set { pageSite = value; }
         }
         /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Component"]/*' />
@@ -92,7 +89,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>Gets or sets the component to edit.</para>
         /// </devdoc>
         protected IComponent Component {
-            get { return component; }
+            get => component; 
             set { component = value; }
         }
         /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.FirstActivate"]/*' />
@@ -100,7 +97,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>Indicates whether the page is being activated for the first time.</para>
         /// </devdoc>
         protected bool FirstActivate {
-            get { return firstActivate; }
+            get => firstActivate; 
             set { firstActivate = value; }
         }
         /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.LoadRequired"]/*' />
@@ -108,7 +105,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>Indicates whether a load is required previous to editing.</para>
         /// </devdoc>
         protected bool LoadRequired {
-            get { return loadRequired; }
+            get => loadRequired; 
             set { loadRequired = value; }
         }
         /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.Loading"]/*' />
@@ -116,7 +113,7 @@ namespace System.Windows.Forms.Design {
         ///    <para>Indicates if loading is taking place.</para>
         /// </devdoc>
         protected int Loading {
-            get { return loading; }
+            get => loading; 
             set { loading = value; }
         }
 
@@ -126,9 +123,7 @@ namespace System.Windows.Forms.Design {
         ///       changes before it is deactivated.</para>
         /// </devdoc>
         public bool CommitOnDeactivate {
-            get {
-                return commitOnDeactivate;
-            }
+            get => commitOnDeactivate;
             set {
                 commitOnDeactivate = value;
             }

@@ -51,10 +51,7 @@ namespace System.Windows.Forms {
         // We need to send some messages to ListView when it gets initialized.
         internal ListView OwnerListview
         {
-            get
-            {
-                return listview;
-            }
+            get => listview;
             set
             {
                 int width = this.Width;
@@ -111,9 +108,7 @@ namespace System.Windows.Forms {
 	SRDescription(nameof(SR.ColumnHeaderDisplayIndexDescr))
 	]
         public int DisplayIndex {
-            get {
-                return this.DisplayIndexInternal;
-            }
+            get => this.DisplayIndexInternal;
 		
 	    set {
 
@@ -157,9 +152,7 @@ namespace System.Windows.Forms {
 	}
 
         internal int DisplayIndexInternal {
-            get {
-                return this.displayIndexInternal;
-            }
+            get => this.displayIndexInternal;
             set {
                 this.displayIndexInternal = value;
             }
@@ -228,9 +221,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public string ImageKey {
-            get {
-                return imageIndexer.Key;
-            }
+            get => imageIndexer.Key;
             set {
                 if (value != imageIndexer.Key) {
                     imageIndexer.Key = value;
@@ -262,9 +253,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ColumnHeaderNameDescr))
         ]
         public string Name {
-            get {
-                return WindowsFormsUtils.GetComponentName(this,name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this,name);
             set {
                 if (value == null) {
                     this.name = "";
@@ -288,9 +277,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ColumnCaption))
         ]
         public string Text {
-            get {
-                return(text != null ? text : "ColumnHeader");
-            }
+            get => (text != null ? text : "ColumnHeader");
             set {
                 if (value == null) {
                     this.text = "";
@@ -358,9 +345,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -495,9 +480,7 @@ namespace System.Windows.Forms {
             }
 
             public override ImageList ImageList {
-                get {
-                    return owner.ListView?.SmallImageList;
-                }
+                get => owner.ListView?.SmallImageList;
                 set {
                     Debug.Assert(false, "We should never set the image list");
                 }

@@ -286,10 +286,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.Int"]/*' />
         public int Int
         {
-            get
-            {
-                return this.integer;
-            }
+            get => this.integer;
             set
             {
                 this.integer = value;
@@ -299,10 +296,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewIntLinkedList.uex' path='docs/doc[@for="DataGridViewIntLinkedListElement.Next"]/*' />
         public DataGridViewIntLinkedListElement Next
         {
-            get
-            {
-                return this.next;
-            }
+            get => this.next;
             set
             {
                 this.next = value;

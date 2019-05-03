@@ -53,10 +53,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewImageCell))
@@ -75,10 +72,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
+            get => base.DefaultCellStyle;
             set
             {
                 base.DefaultCellStyle = value;
@@ -133,10 +127,7 @@ namespace System.Windows.Forms
         ]
         public Icon Icon
         {
-            get
-            {
-                return this.icon;
-            }
+            get => this.icon;
             set
             {
                 this.icon = value;
@@ -155,10 +146,7 @@ namespace System.Windows.Forms
         ]
         public Image Image
         {
-            get
-            {
-                return this.image;
-            }
+            get => this.image;
             set
             {
                 this.image = value;

@@ -202,7 +202,7 @@ namespace System.Windows.Forms
         ]
         public new bool AcceptsTab 
         {
-            get { return false; }
+            get => false; 
             set {}
         }
 
@@ -219,10 +219,7 @@ namespace System.Windows.Forms
         ]
         public bool AllowPromptAsInput
         {
-            get
-            {
-                return this.maskedTextProvider.AllowPromptAsInput;
-            }
+            get => this.maskedTextProvider.AllowPromptAsInput;
             set
             {
                 if( value != this.maskedTextProvider.AllowPromptAsInput )
@@ -267,10 +264,7 @@ namespace System.Windows.Forms
         ]
         public bool AsciiOnly
         {
-            get
-            {
-                return this.maskedTextProvider.AsciiOnly;
-            }
+            get => this.maskedTextProvider.AsciiOnly;
 
             set
             {
@@ -300,10 +294,7 @@ namespace System.Windows.Forms
         ]
         public bool BeepOnError
         {
-            get 
-            {
-                return this.flagState[BEEP_ON_ERROR];
-            }
+            get => this.flagState[BEEP_ON_ERROR];
             set 
             {
                 this.flagState[BEEP_ON_ERROR] = value;
@@ -371,10 +362,7 @@ namespace System.Windows.Forms
         ]
         public CultureInfo Culture
         {
-            get
-            {
-                return this.maskedTextProvider.Culture;
-            }
+            get => this.maskedTextProvider.Culture;
 
             set
             {
@@ -468,10 +456,7 @@ namespace System.Windows.Forms
         ]
         public IFormatProvider FormatProvider
         {
-            get
-            {
-                return this.formatProvider;
-            }
+            get => this.formatProvider;
 
             set
             {
@@ -490,10 +475,7 @@ namespace System.Windows.Forms
         ]
         public bool HidePromptOnLeave
         {
-            get 
-            {
-                return this.flagState[HIDE_PROMPT_ON_LEAVE];
-            }
+            get => this.flagState[HIDE_PROMPT_ON_LEAVE];
             set 
             {
                 if( this.flagState[HIDE_PROMPT_ON_LEAVE]  != value )
@@ -515,10 +497,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private bool IncludeLiterals
         {
-            get
-            {
-                return this.maskedTextProvider.IncludeLiterals;
-            }
+            get => this.maskedTextProvider.IncludeLiterals;
             set
             {
                 this.maskedTextProvider.IncludeLiterals = value;
@@ -531,10 +510,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         private bool IncludePrompt
         {
-            get
-            {
-                return this.maskedTextProvider.IncludePrompt;
-            }
+            get => this.maskedTextProvider.IncludePrompt;
             set
             {
                 this.maskedTextProvider.IncludePrompt = value;
@@ -553,10 +529,7 @@ namespace System.Windows.Forms
         ]
         public InsertKeyMode InsertKeyMode
         {
-            get
-            {
-                return this.insertMode;
-            }
+            get => this.insertMode;
             set
             {
                 //valid values are 0x0 to 0x2
@@ -687,10 +660,7 @@ namespace System.Windows.Forms
         ]
         public string Mask
         {
-            get 
-            {
-                return this.flagState[IS_NULL_MASK]? string.Empty : this.maskedTextProvider.Mask;
-            }
+            get => this.flagState[IS_NULL_MASK]? string.Empty : this.maskedTextProvider.Mask;
             set
             {
                 //
@@ -857,7 +827,7 @@ namespace System.Windows.Forms
         ]
         public override int MaxLength
         {
-            get{ return base.MaxLength; }
+            get => base.MaxLength; 
             set{}
         }
 
@@ -872,7 +842,7 @@ namespace System.Windows.Forms
         ]
         public override bool Multiline
         {
-            get { return false; }
+            get => false; 
             set {}
         }
 
@@ -974,10 +944,7 @@ namespace System.Windows.Forms
         ]
         public char PromptChar
         {
-            get
-            {
-                return this.maskedTextProvider.PromptChar;
-            }
+            get => this.maskedTextProvider.PromptChar;
             set
             {
                 if( !MaskedTextProvider.IsValidInputChar(value) )
@@ -1014,10 +981,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public new bool ReadOnly 
         {
-            get 
-            { 
-                return base.ReadOnly; 
-            }
+            get => base.ReadOnly; 
 
             set 
             {
@@ -1046,10 +1010,7 @@ namespace System.Windows.Forms
         ]
         public bool RejectInputOnFirstFailure
         {
-            get
-            {
-                return this.flagState[REJECT_INPUT_ON_FIRST_FAILURE];
-            }
+            get => this.flagState[REJECT_INPUT_ON_FIRST_FAILURE];
             set
             {
                 this.flagState[REJECT_INPUT_ON_FIRST_FAILURE] = value;
@@ -1078,10 +1039,7 @@ namespace System.Windows.Forms
         ]
         public bool ResetOnPrompt
         {
-            get 
-            {
-                return this.maskedTextProvider.ResetOnPrompt;
-            }
+            get => this.maskedTextProvider.ResetOnPrompt;
             set 
             {
                 this.maskedTextProvider.ResetOnPrompt = value;
@@ -1099,10 +1057,7 @@ namespace System.Windows.Forms
         ]
         public bool ResetOnSpace
         {
-            get 
-            {
-                return this.maskedTextProvider.ResetOnSpace;
-            }
+            get => this.maskedTextProvider.ResetOnSpace;
             set 
             {
                 this.maskedTextProvider.ResetOnSpace = value;
@@ -1120,10 +1075,7 @@ namespace System.Windows.Forms
         ]
         public bool SkipLiterals
         {
-            get 
-            {
-                return this.maskedTextProvider.SkipLiterals;
-            }
+            get => this.maskedTextProvider.SkipLiterals;
             set 
             {
                 this.maskedTextProvider.SkipLiterals = value;
@@ -1347,10 +1299,7 @@ namespace System.Windows.Forms
         ]
         public HorizontalAlignment TextAlign 
         {
-            get 
-            {
-                return textAlign;
-            }
+            get => textAlign;
             set 
             {
                 if (textAlign != value) 
@@ -1511,10 +1460,7 @@ namespace System.Windows.Forms
         ]
         public bool UseSystemPasswordChar
         {
-            get
-            {
-                return this.flagState[USE_SYSTEM_PASSWORD_CHAR];
-            }
+            get => this.flagState[USE_SYSTEM_PASSWORD_CHAR];
             set
             {
                 if (value != this.flagState[USE_SYSTEM_PASSWORD_CHAR])
@@ -1564,10 +1510,7 @@ namespace System.Windows.Forms
         ]
         public Type ValidatingType
         {
-            get 
-            {
-                return this.validatingType;
-            }
+            get => this.validatingType;
             set 
             {
                 if( this.validatingType != value )
@@ -1587,7 +1530,7 @@ namespace System.Windows.Forms
         ]
         public new bool WordWrap
         {
-            get { return false; }
+            get => false; 
             set {}
         }
 

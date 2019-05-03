@@ -72,7 +72,7 @@ namespace System.Windows.Forms {
         /// <devdoc> internal as this is a TableLayoutPanel feature only </devdoc>
         [DefaultValue(TableLayoutPanelCellBorderStyle.None), SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.TableLayoutPanelCellBorderStyleDescr))]
         internal TableLayoutPanelCellBorderStyle CellBorderStyle {
-            get { return _borderStyle; }
+            get => _borderStyle; 
             set { 
                 //valid values are 0x0 to 0x6
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)TableLayoutPanelCellBorderStyle.None, (int)TableLayoutPanelCellBorderStyle.OutsetPartial)){
@@ -190,9 +190,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
         public TableLayoutPanelGrowStyle GrowStyle {
-            get {
-                return TableLayout.GetContainerInfo(Owner).GrowStyle;
-            }   
+            get => TableLayout.GetContainerInfo(Owner).GrowStyle;   
             
             set { 
                 //valid values are 0x0 to 0x2
@@ -794,7 +792,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="ColumnStyle.Width"]/*' />
         public float Width {
-            get { return base.Size; }
+            get => base.Size; 
             set { base.Size = value; }
         }
     }
@@ -822,7 +820,7 @@ namespace System.Windows.Forms {
  
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyle.Height"]/*' />
         public float Height {
-            get { return base.Size; }
+            get => base.Size; 
             set { base.Size = value; }
         }
     } 

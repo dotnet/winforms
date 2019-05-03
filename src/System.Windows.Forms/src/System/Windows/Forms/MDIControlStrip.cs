@@ -99,9 +99,7 @@ namespace System.Windows.Forms {
             #endregion
 
             internal MenuStrip MergedMenu {
-                get {
-                    return mergedMenu;
-                }
+                get => mergedMenu;
                 set {
                     mergedMenu = value;
                 }

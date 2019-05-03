@@ -381,9 +381,7 @@ namespace System.Windows.Forms.Layout {
             // returns the display rectangle of the container - this WILL BE FLIPPED if the layout
             // is a vertical layout.
             public Rectangle DisplayRect {
-                get {
-                    return _displayRect; 
-                }
+                get => _displayRect; 
                 set { 
                     if (_displayRect != value) {
                         
@@ -544,7 +542,7 @@ namespace System.Windows.Forms.Layout {
             }
 
             public IArrangedElement Element {
-                get { return _element; }
+                get => _element; 
                 set { 
                     _element = value; 
                     Debug.Assert(Element == value, "Element should be the same as we set it to");

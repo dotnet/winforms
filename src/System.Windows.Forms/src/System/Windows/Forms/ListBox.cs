@@ -188,9 +188,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -206,9 +204,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -233,9 +229,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxBorderDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -269,9 +263,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxColumnWidthDescr))
         ]
         public int ColumnWidth {
-            get {
-                return columnWidth;
-            }
+            get => columnWidth;
 
             set {
                 if (value < 0)
@@ -367,9 +359,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public bool UseCustomTabOffsets {
-            get {
-                return useCustomTabOffsets;
-            }
+            get => useCustomTabOffsets;
             set {
                 if (useCustomTabOffsets != value) {
                     useCustomTabOffsets = value;
@@ -398,9 +388,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual DrawMode DrawMode {
-            get {
-                return drawMode;
-            }
+            get => drawMode;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -442,9 +430,7 @@ namespace System.Windows.Forms {
         // the control, but can be easily worked around by removing and re-adding all the items.
 
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
 
@@ -483,9 +469,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxHorizontalExtentDescr))
         ]
         public int HorizontalExtent {
-            get {
-                return horizontalExtent;
-            }
+            get => horizontalExtent;
 
             set {
                 if (value != horizontalExtent) {
@@ -510,9 +494,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxHorizontalScrollbarDescr))
         ]
         public bool HorizontalScrollbar {
-            get {
-                return horizontalScrollbar;
-            }
+            get => horizontalScrollbar;
 
             set {
                 if (value != horizontalScrollbar) {
@@ -549,9 +531,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public bool IntegralHeight {
-            get {
-                return integralHeight;
-            }
+            get => integralHeight;
 
             set {
                 if (integralHeight != value) {
@@ -678,9 +658,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxMultiColumnDescr))
         ]
         public bool MultiColumn {
-            get {
-                return multiColumn;
-            }
+            get => multiColumn;
             set {
                 if (multiColumn != value) {
                     if (value && drawMode == DrawMode.OwnerDrawVariable) {
@@ -767,9 +745,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxScrollIsVisibleDescr))
         ]
         public bool ScrollAlwaysVisible {
-            get {
-                return scrollAlwaysVisible;
-            }
+            get => scrollAlwaysVisible;
             set {
                 if (scrollAlwaysVisible != value) {
                     scrollAlwaysVisible = value;
@@ -961,9 +937,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxSelectionModeDescr))
         ]
         public virtual SelectionMode SelectionMode {
-            get {
-                return selectionMode;
-            }
+            get => selectionMode;
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended))
                 {
@@ -1003,9 +977,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxSortedDescr))
         ]
         public bool Sorted {
-            get {
-                return sorted;
-            }
+            get => sorted;
             set {
                 if (sorted != value) {
                     sorted = value;
@@ -1103,9 +1075,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListBoxUseTabStopsDescr))
         ]
         public bool UseTabStops {
-            get {
-                return useTabStops;
-            }
+            get => useTabStops;
             set {
                 if (useTabStops != value) {
                     useTabStops = value;
@@ -1168,7 +1138,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -3692,9 +3662,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
                 }
@@ -3981,9 +3949,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public object this[int index] {
-                get {
-                    return InnerArray.GetItem(index, SelectedObjectMask);
-                }
+                get => InnerArray.GetItem(index, SelectedObjectMask);
                 set {
                     throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
                 }

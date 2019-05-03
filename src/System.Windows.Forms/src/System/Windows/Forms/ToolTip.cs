@@ -125,9 +125,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool Active {
-            get {
-                return active;
-            }
+            get => active;
 
             set {
                 if (active != value) {
@@ -158,9 +156,7 @@ namespace System.Windows.Forms {
         DefaultValue(DEFAULT_DELAY)
         ]
         public int AutomaticDelay {
-            get {
-                return delayTimes[NativeMethods.TTDT_AUTOMATIC];
-            }
+            get => delayTimes[NativeMethods.TTDT_AUTOMATIC];
 
             set {
                 if (value < 0) {
@@ -186,9 +182,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolTipAutoPopDelayDescr))
         ]
         public int AutoPopDelay {
-            get {
-                return delayTimes[NativeMethods.TTDT_AUTOPOP];
-            }
+            get => delayTimes[NativeMethods.TTDT_AUTOPOP];
 
             set {
                 if (value < 0) {
@@ -209,9 +203,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color),"Info")
         ]
         public Color BackColor {
-            get {
-                return backColor;
-            }
+            get => backColor;
 
             set {
                 backColor = value;
@@ -265,9 +257,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color),"InfoText")
         ]
         public Color ForeColor {
-            get {
-                return foreColor;
-            }
+            get => foreColor;
 
             set {
                 if (value.IsEmpty) {
@@ -302,9 +292,7 @@ namespace System.Windows.Forms {
         DefaultValue(false)
         ]
         public bool IsBalloon {
-            get {
-                return isBalloon;
-            }
+            get => isBalloon;
 
             set {
                 if (isBalloon != value) {
@@ -355,9 +343,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolTipInitialDelayDescr))
         ]
         public int InitialDelay {
-            get {
-                return delayTimes[NativeMethods.TTDT_INITIAL];
-            }
+            get => delayTimes[NativeMethods.TTDT_INITIAL];
 
             set {
                 if (value < 0) {
@@ -378,10 +364,7 @@ namespace System.Windows.Forms {
         ]
         public bool OwnerDraw 
         {
-            get 
-            {
-                return ownerDraw;
-            }
+            get => ownerDraw;
             set 
             {
                 ownerDraw = value;
@@ -402,9 +385,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolTipReshowDelayDescr))
         ]
         public int ReshowDelay {
-            get {
-                return delayTimes[NativeMethods.TTDT_RESHOW];
-            }
+            get => delayTimes[NativeMethods.TTDT_RESHOW];
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ReshowDelay), value, 0));
@@ -425,9 +406,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolTipShowAlwaysDescr))
         ]
         public bool ShowAlways {
-            get {
-                return showAlways;
-            }
+            get => showAlways;
             set {
                 if (showAlways != value) {
                     showAlways = value;
@@ -451,9 +430,7 @@ namespace System.Windows.Forms {
         DefaultValue(false)
         ]
         public bool StripAmpersands {
-            get {
-                return stripAmpersands;
-            }
+            get => stripAmpersands;
             set {
                 if (stripAmpersands != value) {
                     stripAmpersands = value;
@@ -474,9 +451,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -493,9 +468,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolTipToolTipIconDescr))
         ]
         public ToolTipIcon ToolTipIcon {
-            get {
-                return toolTipIcon;
-            }
+            get => toolTipIcon;
             set {
                 if (toolTipIcon != value) {
                     //valid values are 0x0 to 0x3
@@ -530,10 +503,7 @@ namespace System.Windows.Forms {
         ]
         public string ToolTipTitle
         {
-            get
-            {
-                return toolTipTitle;
-            }
+            get => toolTipTitle;
             set
             {
                 if (value == null)
@@ -619,9 +589,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool UseAnimation {
-            get {
-                return useAnimation;
-            }
+            get => useAnimation;
             set {
                 if (useAnimation != value) {
                     useAnimation = value;
@@ -645,9 +613,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool UseFading {
-            get {
-                return useFading;
-            }
+            get => useFading;
             set {
                 if (useFading != value) {
                     useFading = value;
@@ -2610,9 +2576,7 @@ namespace System.Windows.Forms {
            }
 
            public string Caption {
-               get {
-                   return ((this.TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? caption:designerText;
-               }
+               get => ((this.TipType & (Type.Absolute | Type.SemiAbsolute)) != 0) ? caption:designerText;
                set {
                    this.caption = value;
                }

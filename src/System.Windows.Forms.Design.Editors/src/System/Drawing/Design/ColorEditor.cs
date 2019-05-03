@@ -174,10 +174,7 @@ namespace System.Drawing.Design
 
             public Color SelectedColor
             {
-                get
-                {
-                    return selectedColor;
-                }
+                get => selectedColor;
                 set
                 {
                     if (!value.Equals(selectedColor))

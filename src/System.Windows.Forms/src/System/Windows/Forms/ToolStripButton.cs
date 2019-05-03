@@ -49,9 +49,7 @@ namespace System.Windows.Forms {
         
         [DefaultValue(true)]
         public new bool AutoToolTip {
-            get { 
-                return base.AutoToolTip;
-            }
+            get => base.AutoToolTip;
             set {
                 base.AutoToolTip = value;
             }
@@ -75,9 +73,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))
         ]
         public bool CheckOnClick {
-            get {
-                return checkOnClick;
-            }
+            get => checkOnClick;
             set {
                 checkOnClick = value;
             }
@@ -95,9 +91,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripButtonCheckedDescr))
         ]
         public bool Checked {
-            get {
-                return checkState != CheckState.Unchecked;
-            }
+            get => checkState != CheckState.Unchecked;
 
             set {
                 if (value != Checked) {
@@ -119,9 +113,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxCheckStateDescr))
         ]
         public CheckState CheckState {
-            get {
-                return checkState;
-            }
+            get => checkState;
 
             set {
                 //valid values are 0x0 to 0x2

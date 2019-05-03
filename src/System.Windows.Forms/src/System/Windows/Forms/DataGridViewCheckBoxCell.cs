@@ -65,10 +65,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IDataGridViewEditingCell.EditingCellFormattedValue"]/*' />
         public virtual object EditingCellFormattedValue
         {
-            get
-            {
-                return GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
-            }
+            get => GetEditingCellFormattedValue(DataGridViewDataErrorContexts.Formatting);
             set
             {
                 if (this.FormattedValueType == null)
@@ -122,10 +119,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCheckBoxCell.uex' path='docs/doc[@for="DataGridViewCheckBoxCell.IDataGridViewEditingCell.EditingCellValueChanged"]/*' />
         public virtual bool EditingCellValueChanged
         {
-            get
-            {
-                return ((this.flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0x00);
-            }
+            get => ((this.flags & DATAGRIDVIEWCHECKBOXCELL_valueChanged) != 0x00);
             set
             {
                 if (value)
@@ -232,10 +226,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         public object FalseValue
         {
-            get
-            {
-                return this.Properties.GetObject(PropFalseValue);
-            }
+            get => this.Properties.GetObject(PropFalseValue);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropFalseValue))
@@ -328,10 +319,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         public object IndeterminateValue
         {
-            get
-            {
-                return this.Properties.GetObject(PropIndeterminateValue);
-            }
+            get => this.Properties.GetObject(PropIndeterminateValue);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropIndeterminateValue))
@@ -367,10 +355,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         public bool ThreeState
         {
-            get
-            {
-                return ((this.flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0x00);
-            }
+            get => ((this.flags & DATAGRIDVIEWCHECKBOXCELL_threeState) != 0x00);
             set
             {
                 if (this.ThreeState != value)
@@ -413,10 +398,7 @@ namespace System.Windows.Forms
         [DefaultValue(null)]
         public object TrueValue
         {
-            get
-            {
-                return this.Properties.GetObject(PropTrueValue);
-            }
+            get => this.Properties.GetObject(PropTrueValue);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropTrueValue))

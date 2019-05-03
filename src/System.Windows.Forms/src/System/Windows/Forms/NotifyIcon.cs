@@ -105,9 +105,7 @@ namespace System.Windows.Forms {
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
         public string BalloonTipText {
-            get { 
-                return balloonTipText; 
-            }
+            get => balloonTipText; 
             set {
                 if (value != balloonTipText) {
                     balloonTipText = value;
@@ -128,9 +126,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconBalloonTipIconDescr))
         ]
         public ToolTipIcon BalloonTipIcon {
-            get { 
-                return balloonTipIcon; 
-            }
+            get => balloonTipIcon; 
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolTipIcon.None, (int)ToolTipIcon.Error)){
@@ -156,9 +152,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconBalloonTipTitleDescr))
         ]
         public string BalloonTipTitle {
-            get { 
-                return balloonTipTitle; 
-            }
+            get => balloonTipTitle; 
             set {
                 if (value != balloonTipTitle) {
                     balloonTipTitle = value;
@@ -212,9 +206,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconMenuDescr))
         ]
         public ContextMenu ContextMenu {
-            get {
-                return contextMenu;
-            }
+            get => contextMenu;
 
             set {
                 this.contextMenu = value;
@@ -227,9 +219,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconMenuDescr))
         ]
         public ContextMenuStrip ContextMenuStrip {
-            get {
-                return contextMenuStrip;
-            }
+            get => contextMenuStrip;
     
             set {
                 this.contextMenuStrip = value;
@@ -250,9 +240,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconIconDescr))
         ]
         public Icon Icon {
-            get {
-                return icon;
-            }
+            get => icon;
             set {
                 if (icon != value) {
                     this.icon = value;
@@ -276,9 +264,7 @@ namespace System.Windows.Forms {
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))
         ]
         public string Text {
-            get {
-                return text;
-            }
+            get => text;
             set {
                 if (value == null) value = "";
                 if (value != null && !value.Equals(this.text)) {
@@ -306,9 +292,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.NotifyIconVisDescr))
         ]
         public bool Visible {
-            get {
-                return visible;
-            }
+            get => visible;
             set {
                 if (visible != value) {
                     UpdateIcon(value);
@@ -327,9 +311,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }

@@ -103,7 +103,7 @@ namespace System.Windows.Forms {
 
         ]
         public override bool AllowDrop {
-            get { return base.AllowDrop; }
+            get => base.AllowDrop; 
             set { base.AllowDrop = value; }
         }
 
@@ -112,7 +112,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public override bool AutoScroll {
-            get { return base.AutoScroll; }
+            get => base.AutoScroll; 
             set { base.AutoScroll = value; }
         }
 
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new Size AutoScrollMargin {
-            get { return base.AutoScrollMargin; }
+            get => base.AutoScrollMargin; 
             set { base.AutoScrollMargin = value; }
         }
 
@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new Size AutoScrollMinSize {
-            get { return base.AutoScrollMinSize; }
+            get => base.AutoScrollMinSize; 
             set { base.AutoScrollMinSize = value; }
         }
 
@@ -141,9 +141,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         public override bool AutoSize {
-            get {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 base.AutoSize = value;
             }
@@ -171,7 +169,7 @@ namespace System.Windows.Forms {
         }
 
         public Padding RowMargin {
-            get { return scaledRowMargin; }
+            get => scaledRowMargin; 
             set {
                 scaledRowMargin = value;
                 LayoutTransaction.DoLayout(this, this, "RowMargin");
@@ -180,9 +178,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Dock"]/*' />
         public override DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock = value;
 
@@ -222,9 +218,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public bool Locked {
-            get {
-                return state[stateLocked];
-            }
+            get => state[stateLocked];
             set {
                 state[stateLocked] = value;
             }
@@ -233,9 +227,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Orientation"]/*' />
         public Orientation Orientation {
-            get {
-                return orientation;
-            }
+            get => orientation;
             set {
                 if (orientation != value) {
                     orientation = value;
@@ -264,9 +256,7 @@ namespace System.Windows.Forms {
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public ToolStripRenderer Renderer {
-            get {
-                return RendererSwitcher.Renderer;
-            }
+            get => RendererSwitcher.Renderer;
             set {
                 RendererSwitcher.Renderer = value;
             }
@@ -279,9 +269,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance)),
         ]
         public ToolStripRenderMode RenderMode {
-            get {
-                return RendererSwitcher.RenderMode;
-            }
+            get => RendererSwitcher.RenderMode;
             set {
                 RendererSwitcher.RenderMode = value;
             }
@@ -339,9 +327,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new int TabIndex {
-            get {
-                return base.TabIndex;
-            }
+            get => base.TabIndex;
             set {
                 base.TabIndex = value;
             }
@@ -361,9 +347,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 SetStyle(ControlStyles.Selectable, value);
 
@@ -385,9 +369,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -732,9 +714,7 @@ namespace System.Windows.Forms {
 
 
         private static FeedbackRectangle CurrentFeedbackRect {
-            get {
-                return feedbackRect;
-            }
+            get => feedbackRect;
             set {
                 feedbackRect = value;
             }
@@ -1395,7 +1375,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get { return InnerList[index]; }
+                get => InnerList[index]; 
                 set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
             }
 

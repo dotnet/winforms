@@ -41,9 +41,7 @@ using Microsoft.Win32;
         ///    </para>
         /// </devdoc>
         public static bool RenderMatchingApplicationState {
-            get {
-                return renderMatchingApplicationState;
-            }
+            get => renderMatchingApplicationState;
             set {
                 renderMatchingApplicationState = value;
             }

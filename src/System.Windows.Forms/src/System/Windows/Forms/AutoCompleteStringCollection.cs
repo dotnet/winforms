@@ -28,9 +28,7 @@ namespace System.Windows.Forms {
         /// <para>Represents the entry at the specified index of the <see cref='System.Collections.Specialized.AutoCompleteStringCollection'/>.</para>
         /// </devdoc>
         public string this[int index] {
-            get {
-                return ((string)data[index]);
-            }
+            get => ((string)data[index]);
             set {
                 OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, data[index])); 
                 data[index] = value;
@@ -205,9 +203,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.IList.this"]/*' />
         object IList.this[int index] {
-            get {
-                return this[index];
-            }
+            get => this[index];
             set {
                 this[index] = (string)value;
             }

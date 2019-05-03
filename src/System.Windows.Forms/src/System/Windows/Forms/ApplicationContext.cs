@@ -49,9 +49,7 @@ namespace System.Windows.Forms {
         ///     loop will be terminated when mainForm is closed.
         /// </devdoc>
         public Form MainForm {
-            get {
-                return mainForm;
-            }
+            get => mainForm;
             set {
                 EventHandler onClose = new EventHandler(OnMainFormDestroy);
                 if (mainForm != null) {
@@ -76,9 +74,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }

@@ -121,10 +121,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public string Name
         {
-            get
-            {
-                return this.NativeHtmlWindow.GetName();
-            }
+            get => this.NativeHtmlWindow.GetName();
             set
             {
                 this.NativeHtmlWindow.SetName(value);
@@ -181,10 +178,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.StatusBarText"]/*' />
         public string StatusBarText
         {
-            get
-            {
-                return this.NativeHtmlWindow.GetStatus();
-            }
+            get => this.NativeHtmlWindow.GetStatus();
             set
             {
                 this.NativeHtmlWindow.SetStatus(value);

@@ -214,9 +214,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -233,9 +231,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -259,9 +255,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.borderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 if (borderStyle != value) {
@@ -291,9 +285,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewCheckBoxesDescr))
         ]
         public bool CheckBoxes {
-            get {
-                return treeViewState[TREEVIEWSTATE_checkBoxes];
-            }
+            get => treeViewState[TREEVIEWSTATE_checkBoxes];
 
             set {
                 if (CheckBoxes != value) {
@@ -408,9 +400,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -449,7 +439,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewFullRowSelectDescr))
         ]
         public bool FullRowSelect {
-            get { return treeViewState[TREEVIEWSTATE_fullRowSelect];}
+            get => treeViewState[TREEVIEWSTATE_fullRowSelect];
             set {
                 if (FullRowSelect != value) {
                     treeViewState[TREEVIEWSTATE_fullRowSelect] = value;
@@ -471,9 +461,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewHideSelectionDescr))
         ]
         public bool HideSelection {
-            get {
-                return treeViewState[TREEVIEWSTATE_hideSelection];
-            }
+            get => treeViewState[TREEVIEWSTATE_hideSelection];
 
             set {
                 if (HideSelection != value) {
@@ -497,9 +485,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewHotTrackingDescr))
         ]
         public bool HotTracking {
-            get {
-                return treeViewState[TREEVIEWSTATE_hotTracking];
-            }
+            get => treeViewState[TREEVIEWSTATE_hotTracking];
 
             set {
                 if (HotTracking != value) {
@@ -573,9 +559,7 @@ namespace System.Windows.Forms {
         RelatedImageList("ImageList")
         ]
         public string ImageKey {
-            get {
-                return ImageIndexer.Key;
-            }
+            get => ImageIndexer.Key;
 
             set {
                 if (ImageIndexer.Key != value) {
@@ -601,9 +585,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public ImageList ImageList {
-            get {
-                return imageList;
-            }
+            get => imageList;
             set {
                 if (value != imageList) {
        
@@ -672,9 +654,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewStateImageListDescr))
         ]
         public ImageList StateImageList {
-            get {
-                return stateImageList;
-            }
+            get => stateImageList;
             set {
                 if (value != stateImageList) {
 
@@ -811,9 +791,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewLabelEditDescr))
         ]
         public bool LabelEdit {
-            get {
-                return treeViewState[TREEVIEWSTATE_labelEdit];
-            }
+            get => treeViewState[TREEVIEWSTATE_labelEdit];
             set {
                 if (LabelEdit != value) {
                     treeViewState[TREEVIEWSTATE_labelEdit] = value;
@@ -885,9 +863,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewDrawModeDescr))
         ]
         public TreeViewDrawMode DrawMode {
-            get {
-                return drawMode;
-            }
+            get => drawMode;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -918,9 +894,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewPathSeparatorDescr))
         ]
         public string PathSeparator {
-            get {
-                return pathSeparator;
-            }
+            get => pathSeparator;
             set {
                 pathSeparator = value;
             }
@@ -933,7 +907,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -959,10 +933,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -982,9 +953,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewScrollableDescr))
         ]
         public bool Scrollable {
-            get {
-                return treeViewState[TREEVIEWSTATE_scrollable];
-            }
+            get => treeViewState[TREEVIEWSTATE_scrollable];
             set {
                 if (Scrollable != value) {
                     treeViewState[TREEVIEWSTATE_scrollable] = value;
@@ -1053,9 +1022,7 @@ namespace System.Windows.Forms {
         RelatedImageList("ImageList")
         ]
         public string SelectedImageKey {
-            get {
-                return SelectedImageIndexer.Key;
-            }
+            get => SelectedImageIndexer.Key;
 
             set {
                 if (SelectedImageIndexer.Key != value) {
@@ -1125,9 +1092,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewShowLinesDescr))
         ]
         public bool ShowLines {
-            get {
-                return treeViewState[TREEVIEWSTATE_showLines];
-            }
+            get => treeViewState[TREEVIEWSTATE_showLines];
             set {
                 if (ShowLines != value) {
                     treeViewState[TREEVIEWSTATE_showLines] = value;
@@ -1148,9 +1113,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewShowShowNodeToolTipsDescr))
         ]
         public bool ShowNodeToolTips {
-            get {
-                return treeViewState[TREEVIEWSTATE_showNodeToolTips];
-            }
+            get => treeViewState[TREEVIEWSTATE_showNodeToolTips];
             set {
                 if (ShowNodeToolTips != value) {
                     treeViewState[TREEVIEWSTATE_showNodeToolTips] = value;
@@ -1171,9 +1134,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewShowPlusMinusDescr))
         ]
         public bool ShowPlusMinus {
-            get {
-                return treeViewState[TREEVIEWSTATE_showPlusMinus];
-            }
+            get => treeViewState[TREEVIEWSTATE_showPlusMinus];
             set {
                 if (ShowPlusMinus != value) {
                     treeViewState[TREEVIEWSTATE_showPlusMinus] = value;
@@ -1195,7 +1156,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewShowRootLinesDescr))
         ]
         public bool ShowRootLines {
-            get { return treeViewState[TREEVIEWSTATE_showRootLines];}
+            get => treeViewState[TREEVIEWSTATE_showRootLines];
             set {
                 if (ShowRootLines != value) {
                     treeViewState[TREEVIEWSTATE_showRootLines] = value;
@@ -1217,9 +1178,7 @@ namespace System.Windows.Forms {
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
         ]
         public bool Sorted {
-            get {
-                return treeViewState[TREEVIEWSTATE_sorted];
-            }
+            get => treeViewState[TREEVIEWSTATE_sorted];
             set {
                 if (Sorted != value) {
                     treeViewState[TREEVIEWSTATE_sorted] = value;
@@ -1242,9 +1201,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeViewNodeSorterDescr))
         ]
         public IComparer TreeViewNodeSorter {
-            get {
-                return treeViewNodeSorter;
-            }
+            get => treeViewNodeSorter;
             set {
                 if (treeViewNodeSorter != value) {
                     treeViewNodeSorter = value;
@@ -1258,9 +1215,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }

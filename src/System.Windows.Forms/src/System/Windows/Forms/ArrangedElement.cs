@@ -73,7 +73,7 @@ namespace System.Windows.Forms {
            }
    
            public Padding Margin {
-               get { return CommonProperties.GetMargin(this); }
+               get => CommonProperties.GetMargin(this); 
                set { 
 
                 Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >=0),  "who's setting margin negative?");
@@ -84,7 +84,7 @@ namespace System.Windows.Forms {
            }
    
            public virtual Padding Padding {
-               get { return CommonProperties.GetPadding(this, DefaultPadding); }
+               get => CommonProperties.GetPadding(this, DefaultPadding); 
                set {
                    Debug.Assert((value.Right >= 0 && value.Left >= 0 && value.Top >= 0 && value.Bottom >=0),  "who's setting padding negative?");
                    value = LayoutUtils.ClampNegativePaddingToZero(value);
@@ -93,9 +93,7 @@ namespace System.Windows.Forms {
            }
 
           public virtual IArrangedElement Parent {
-              get {
-                  return parent;
-              }
+              get => parent;
               set {
                   parent = value as IArrangedElement;
               }
@@ -121,9 +119,7 @@ namespace System.Windows.Forms {
            }
 
           public virtual bool Visible {
-               get {
-                   return state[stateVisible];
-               }
+               get => state[stateVisible];
                set {
                    if ( state[stateVisible] != value) {
                        state[stateVisible] = value;

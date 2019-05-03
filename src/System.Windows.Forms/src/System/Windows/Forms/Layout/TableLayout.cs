@@ -1336,7 +1336,7 @@ namespace System.Windows.Forms.Layout {
             ///will fit in as necessary.  This occurs when a control
             ///is just added without specific position.
             internal int RowPosition {
-                get { return _rowPos; }
+                get => _rowPos; 
                 set {
                     // all validation should occur in TableLayoutSettings.
                     _rowPos = value; 
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms.Layout {
             ///will fit in as necessary.  This occurs when a control
             ///is just added without specific position.
             internal int ColumnPosition {
-                get { return _colPos;}
+                get => _colPos;
                 set {
                     // all validation should occur in TableLayoutSettings.
                     _colPos = value; 
@@ -1357,24 +1357,24 @@ namespace System.Windows.Forms.Layout {
             }
                 
             internal int RowStart {
-                get { return _rowStart; }
+                get => _rowStart; 
                 set { _rowStart = value; }
             }
 
             internal int ColumnStart {
-                get { return _columnStart; }
+                get => _columnStart; 
                 set { _columnStart = value; }
             }
 
             internal int ColumnSpan {
-                get { return _columnSpan; }
+                get => _columnSpan; 
                 set { 
                     _columnSpan = value;
                 }
             }
 
             internal int RowSpan {
-                get { return _rowSpan; }
+                get => _rowSpan; 
                 set { 
                     _rowSpan = value;
                 }
@@ -1497,7 +1497,7 @@ namespace System.Windows.Forms.Layout {
             */
             
             public int CellBorderWidth {
-                get { return _cellBorderWidth; }
+                get => _cellBorderWidth; 
                 set { _cellBorderWidth = value; }
             }
 
@@ -1506,7 +1506,7 @@ namespace System.Windows.Forms.Layout {
             /// list of ints that represent the sizes of individual columns
             /// </devdoc>
             public Strip[] Columns {
-                get { return _cols; }
+                get => _cols; 
                 set { 
                     Debug.Assert(_cols.Length != value.Length, "PERF: should not allocate strips, we've already got an array");
                     _cols = value;
@@ -1517,7 +1517,7 @@ namespace System.Windows.Forms.Layout {
             /// list of ints that represent the sizes of individual rows
             ///
             public Strip[] Rows {
-                get { return _rows; }
+                get => _rows; 
 
                 set { 
                     Debug.Assert(_rows.Length != value.Length, "PERF: should not allocate strips, we've already got an array");
@@ -1532,7 +1532,7 @@ namespace System.Windows.Forms.Layout {
             /// </devdoc>
             public int MaxRows {
 
-                get { return _maxRows; }
+                get => _maxRows; 
                 set { 
                     if (_maxRows != value) { 
                         _maxRows = value;
@@ -1549,7 +1549,7 @@ namespace System.Windows.Forms.Layout {
             /// </devdoc>
             public int MaxColumns {
                 
-                get { return _maxColumns; }
+                get => _maxColumns; 
 
                 set { 
                     if (_maxColumns != value) {
@@ -1595,9 +1595,7 @@ namespace System.Windows.Forms.Layout {
             ///     when the table gets full.
             /// </devdoc>
             public TableLayoutPanelGrowStyle GrowStyle {
-                get {
-                    return _growStyle;
-                }
+                get => _growStyle;
                 set {
                     if (_growStyle != value) {
                         _growStyle = value;
@@ -1713,7 +1711,7 @@ namespace System.Windows.Forms.Layout {
                 }
             }
             public bool Valid {
-                get { return _state[stateValid]; }
+                get => _state[stateValid]; 
                 set { _state[stateValid] = value;
                     if (!_state[stateValid]) {
                         _state[stateChildInfoValid] = false;
@@ -1744,12 +1742,12 @@ namespace System.Windows.Forms.Layout {
             }
                 
             public bool ChildHasColumnSpan {
-                get { return _state[stateChildHasColumnSpan]; }
+                get => _state[stateChildHasColumnSpan]; 
                 set { _state[stateChildHasColumnSpan] = value; }
             }
 
             public bool ChildHasRowSpan {
-                get { return _state[stateChildHasRowSpan]; }
+                get => _state[stateChildHasRowSpan]; 
                 set { _state[stateChildHasRowSpan] = value; }
             }
 
@@ -1775,7 +1773,7 @@ namespace System.Windows.Forms.Layout {
         private abstract class SizeProxy {
             protected Strip strip;
             public Strip Strip {
-                get { return strip; }
+                get => strip; 
                 set { strip = value; }
             }
 
@@ -1787,7 +1785,7 @@ namespace System.Windows.Forms.Layout {
         private class MinSizeProxy : SizeProxy {
             private static readonly MinSizeProxy instance = new MinSizeProxy();
             public override int Size {
-                get { return strip.MinSize; }
+                get => strip.MinSize; 
                 set { strip.MinSize = value; }
             }
             
@@ -1801,7 +1799,7 @@ namespace System.Windows.Forms.Layout {
         private class MaxSizeProxy : SizeProxy {
             private static readonly MaxSizeProxy instance = new MaxSizeProxy();
             public override int Size {
-                get { return strip.MaxSize; }
+                get => strip.MaxSize; 
                 set { strip.MaxSize = value; }
             }
 
@@ -1959,17 +1957,17 @@ namespace System.Windows.Forms.Layout {
             private bool _isStart;  //whether there is an element starting in this strip
             
             public int MinSize {
-                get { return _minSize; }
-                set { _minSize = value; }
+                get => _minSize; 
+        set { _minSize = value; }
             }
 
             public int MaxSize {
-                get { return _maxSize; }
+                get => _maxSize; 
                 set { _maxSize = value; }
             }
 
             public bool IsStart {
-                get { return _isStart; }
+                get => _isStart; 
                 set { _isStart = value; }
             }
         }

@@ -149,9 +149,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarAppearanceDescr))
         ]
         public ToolBarAppearance Appearance {
-            get {
-                return appearance;
-            }
+            get => appearance;
 
             set {
                 //valid values are 0x0 to 0x1
@@ -182,9 +180,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         public override bool AutoSize {
-            get {
-                return toolBarState[TOOLBARSTATE_autoSize];
-            }
+            get => toolBarState[TOOLBARSTATE_autoSize];
 
             set {
                 // Note that we intentionally do not call base.  Toolbars size themselves by
@@ -222,9 +218,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 base.BackColor = value;
             }
@@ -240,9 +234,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -258,9 +250,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -285,9 +275,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -454,9 +442,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarDividerDescr))
         ]
         public bool Divider {
-            get {
-                return toolBarState[TOOLBARSTATE_divider];
-            }
+            get => toolBarState[TOOLBARSTATE_divider];
 
             set {
                 if (Divider != value) {
@@ -479,7 +465,7 @@ namespace System.Windows.Forms {
         DefaultValue(DockStyle.Top)
         ]
         public override DockStyle Dock {
-            get { return base.Dock;}
+            get => base.Dock;
 
             set {
                 //valid values are 0x0 to 0x5
@@ -509,9 +495,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -529,9 +513,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarDropDownArrowsDescr))
         ]
         public bool DropDownArrows {
-            get {
-                return toolBarState[TOOLBARSTATE_dropDownArrows];
-            }
+            get => toolBarState[TOOLBARSTATE_dropDownArrows];
 
             set {
 
@@ -547,9 +529,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -573,9 +553,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarImageListDescr))
         ]
         public ImageList ImageList {
-            get {
-                return this.imageList;
-            }
+            get => this.imageList;
             set {
                 if (value != imageList) {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
@@ -624,9 +602,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -747,9 +723,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft {
-            get {
-                return base.RightToLeft;
-            }
+            get => base.RightToLeft;
             set {
                 base.RightToLeft = value;
             }
@@ -799,9 +773,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarShowToolTipsDescr))
         ]
         public bool ShowToolTips {
-            get {
-                return toolBarState[TOOLBARSTATE_showToolTips];
-            }
+            get => toolBarState[TOOLBARSTATE_showToolTips];
             set {
                 if (ShowToolTips != value) {
 
@@ -816,9 +788,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(false)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -833,9 +803,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -861,9 +829,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarTextAlignDescr))
         ]
         public ToolBarTextAlign TextAlign {
-            get {
-                return textAlign;
-            }
+            get => textAlign;
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarTextAlign.Underneath, (int)ToolBarTextAlign.Right)) {
@@ -891,9 +857,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarWrappableDescr))
         ]
         public bool Wrappable {
-            get {
-                return toolBarState[TOOLBARSTATE_wrappable];
-            }
+            get => toolBarState[TOOLBARSTATE_wrappable];
             set {
                 if (Wrappable != value) {
                     toolBarState[TOOLBARSTATE_wrappable] = value;
@@ -1691,9 +1655,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     if (value is ToolBarButton) {
                         this[index] = (ToolBarButton)value;

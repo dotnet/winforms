@@ -38,9 +38,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         public string ToolTip{
-            get {
-               return toolTipText;
-            }
+            get => toolTipText;
             set {
                   if (this.IsHandleCreated || !string.IsNullOrEmpty(value)) {
                       this.Reset();

@@ -92,10 +92,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set
             {
                 base.BackgroundImage = value;

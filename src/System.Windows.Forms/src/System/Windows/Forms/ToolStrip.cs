@@ -222,16 +222,14 @@ namespace System.Windows.Forms {
         // returns true when entered into menu mode through this toolstrip/menustrip
         // this is only really supported for menustrip active event, but to prevent casting everywhere...
         internal virtual bool KeyboardActive {
-            get { return GetToolStripState(STATE_MENUACTIVE); }
+            get => GetToolStripState(STATE_MENUACTIVE); 
             set { SetToolStripState(STATE_MENUACTIVE, value);}
         }
 
         // This is only for use in determining whether to show scroll bars on 
         // ToolStripDropDownMenus.  No one else should be using it for anything.
         internal virtual bool AllItemsVisible {
-            get {
-                return true;
-            }
+            get => true;
             set {
                 // we do nothing in repsonse to a set, since we calculate the value above.
             }
@@ -241,9 +239,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         public override bool AutoSize {
-            get {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 if (IsInToolStripPanel && base.AutoSize && !value) {
                     // Restoring the bounds can change the location of the toolstrip - 
@@ -274,9 +270,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override bool AutoScroll {
-            get {
-                return base.AutoScroll;
-            }
+            get => base.AutoScroll;
             set {
                 throw new NotSupportedException(SR.ToolStripDoesntSupportAutoScroll);
             }
@@ -288,9 +282,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMargin {
-            get {
-                return base.AutoScrollMargin;
-            }
+            get => base.AutoScrollMargin;
             set {
                 base.AutoScrollMargin = value;
             }
@@ -302,9 +294,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMinSize {
-            get {
-                return base.AutoScrollMinSize;
-            }
+            get => base.AutoScrollMinSize;
             set {
                 base.AutoScrollMinSize = value;
             }
@@ -316,9 +306,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Point AutoScrollPosition {
-            get {
-                return base.AutoScrollPosition;
-            }
+            get => base.AutoScrollPosition;
             set {
                 base.AutoScrollPosition = value;
             }
@@ -329,9 +317,7 @@ namespace System.Windows.Forms {
         /// Summary of AllowDrop.
         /// </devdoc>
         public override bool AllowDrop {
-            get {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set {
                 if (value && AllowItemReorder) {
                     throw new ArgumentException(SR.ToolStripAllowItemReorderAndAllowDropCannotBeSetToTrue);
@@ -361,7 +347,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior))
         ]
         public bool AllowItemReorder {
-            get { return GetToolStripState(STATE_ALLOWITEMREORDER); }
+            get => GetToolStripState(STATE_ALLOWITEMREORDER); 
             set {
                 if (GetToolStripState(STATE_ALLOWITEMREORDER) != value) {
                     if (AllowDrop && value) {
@@ -400,7 +386,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior))
         ]
         public bool AllowMerge {
-            get { return GetToolStripState(STATE_ALLOWMERGE); }
+            get => GetToolStripState(STATE_ALLOWMERGE); 
             set {
                 if (GetToolStripState(STATE_ALLOWMERGE) != value) {
                     SetToolStripState(STATE_ALLOWMERGE, value);
@@ -410,9 +396,7 @@ namespace System.Windows.Forms {
 
   
         public override AnchorStyles Anchor {
-            get {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set {
                 // the base calls SetDock, which causes an OnDockChanged to be called
                 // which forces two layouts of the parent.  
@@ -431,9 +415,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance))
         ]
         public new Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 base.BackColor = value;
             }
@@ -484,9 +466,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout))
         ]
         public bool CanOverflow {
-            get {
-                return GetToolStripState(STATE_CANOVERFLOW);
-            }
+            get => GetToolStripState(STATE_CANOVERFLOW);
             set {
                 if (GetToolStripState(STATE_CANOVERFLOW) != value) {
                     SetToolStripState(STATE_CANOVERFLOW, value);
@@ -552,7 +532,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Cursor Cursor {
-            get { return base.Cursor; }
+            get => base.Cursor; 
             set { base.Cursor = value; }
         }
 
@@ -710,9 +690,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(DockStyle.Top)]
         public override DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 if (value != Dock) {
                     using (new LayoutTransaction(this, this, PropertyNames.Dock))
@@ -821,9 +799,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public new Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -874,9 +850,7 @@ namespace System.Windows.Forms {
         DefaultValue(ToolStripGripStyle.Visible)
         ]
         public ToolStripGripStyle GripStyle {
-            get {
-                return toolStripGripStyle;
-            }
+            get => toolStripGripStyle;
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripGripStyle.Hidden, (int)ToolStripGripStyle.Visible)){
@@ -914,9 +888,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripGripDisplayStyleDescr))
         ]
         public Padding GripMargin {
-            get {
-                return Grip.Margin;
-            }
+            get => Grip.Margin;
             set {
                 Grip.Margin = value;
             }
@@ -987,18 +959,14 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripImageScalingSizeDescr)),
         ]
         public Size ImageScalingSize {
-            get {
-                return ImageScalingSizeInternal;
-            }
+            get => ImageScalingSizeInternal;
             set {
                 ImageScalingSizeInternal = value;              
             }
         }
 
         internal virtual Size ImageScalingSizeInternal {
-            get {
-                return imageScalingSize;
-            }
+            get => imageScalingSize;
             set {
                 if (imageScalingSize != value) {
                     imageScalingSize = value;
@@ -1024,9 +992,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public ImageList ImageList {
-            get {
-                return imageList;
-            }
+            get => imageList;
             set {
                 if (imageList != value) {
                     EventHandler handler = new EventHandler(ImageListRecreateHandle);
@@ -1185,9 +1151,7 @@ namespace System.Windows.Forms {
         /// without calling back on the user's code
         /// </devdoc>
         internal IDropTarget ItemReorderDropTarget {
-            get {
-                return itemReorderDropTarget;
-            }
+            get => itemReorderDropTarget;
             set {
                 itemReorderDropTarget = value;
             }
@@ -1201,9 +1165,7 @@ namespace System.Windows.Forms {
         /// without calling back on the user's code
         /// </devdoc>
         internal ISupportOleDropSource ItemReorderDropSource {
-            get {
-                return itemReorderDropSource;
-            }
+            get => itemReorderDropSource;
             set {
                 itemReorderDropSource = value;
             }
@@ -1237,9 +1199,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public LayoutSettings LayoutSettings {
-            get {
-                return layoutSettings;
-            }
+            get => layoutSettings;
             set {
                 layoutSettings = value;
             }
@@ -1328,9 +1288,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool LayoutRequired {
-            get {
-                return this.layoutRequired;
-            }
+            get => this.layoutRequired;
             set {
                 this.layoutRequired = value;
             }
@@ -1537,9 +1495,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ToolStripStretchDescr))]
         public bool Stretch {
-            get {
-                return GetToolStripState(STATE_STRETCH);
-            }
+            get => GetToolStripState(STATE_STRETCH);
             set {
                 if (Stretch != value) {
                     SetToolStripState(STATE_STRETCH,value);
@@ -1667,9 +1623,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
         public bool ShowItemToolTips {
-            get {
-                return showItemToolTips;
-            }
+            get => showItemToolTips;
             set {
                 if (showItemToolTips != value) {
                     showItemToolTips = value;
@@ -1718,9 +1672,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public new bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }

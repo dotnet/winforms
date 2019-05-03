@@ -117,9 +117,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxAcceptsReturnDescr))
         ]
         public bool AcceptsReturn {
-            get {
-                return acceptsReturn;
-            }
+            get => acceptsReturn;
 
             set {
                 acceptsReturn = value;
@@ -139,9 +137,7 @@ namespace System.Windows.Forms {
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode {
-            get {
-                return autoCompleteMode;
-            }
+            get => autoCompleteMode;
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoCompleteMode));
@@ -168,9 +164,7 @@ namespace System.Windows.Forms {
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource {
-            get {
-                return autoCompleteSource;
-            }
+            get => autoCompleteSource;
             set {
                 // FxCop: Avoid usage of Enum.IsDefined - this looks like an enum that could grow
                 if (!ClientUtils.IsEnumValid_NotSequential(value, 
@@ -245,9 +239,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxCharacterCasingDescr))
         ]
         public CharacterCasing CharacterCasing {
-            get {
-                return characterCasing;
-            }
+            get => characterCasing;
             set {
                 if (characterCasing != value) {
                     //verify that 'value' is a valid enum type...
@@ -264,9 +256,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.Multiline"]/*' />
         public override bool Multiline {
-            get {
-                return base.Multiline;
-            }
+            get => base.Multiline;
             set {
                 
                 if (Multiline != value)
@@ -402,9 +392,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxScrollBarsDescr))
         ]
         public ScrollBars ScrollBars {
-            get {
-                return scrollBars;
-            }
+            get => scrollBars;
             set {
                 if (scrollBars != value) {
                     //valid values are 0x0 to 0x3
@@ -444,9 +432,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
                 selectionSet = false;
@@ -469,9 +455,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxTextAlignDescr))
         ]
         public HorizontalAlignment TextAlign {
-            get {
-                return textAlign;
-            }
+            get => textAlign;
             set {
                 if (textAlign != value) {
                     //verify that 'value' is a valid enum type...
@@ -505,9 +489,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public bool UseSystemPasswordChar {
-            get {
-                return useSystemPasswordChar;
-            }
+            get => useSystemPasswordChar;
             set {
                 if (value != useSystemPasswordChar) {
                     useSystemPasswordChar = value;
@@ -823,10 +805,7 @@ namespace System.Windows.Forms {
         ]
         public string PlaceholderText
         {
-            get
-            {
-                return placeholderText;
-            }
+            get => placeholderText;
             set
             {
                 if (placeholderText != value)

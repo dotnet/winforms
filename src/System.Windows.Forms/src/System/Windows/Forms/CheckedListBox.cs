@@ -132,9 +132,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckedListBoxCheckOnClickDescr))
         ]
         public bool CheckOnClick {
-            get {
-                return checkOnClick;
-            }
+            get => checkOnClick;
 
             set {
                 checkOnClick = value;
@@ -198,9 +196,7 @@ namespace System.Windows.Forms {
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new object DataSource {
-            get {
-                return base.DataSource;
-            }
+            get => base.DataSource;
             set {
                 base.DataSource = value;
             }
@@ -213,9 +209,7 @@ namespace System.Windows.Forms {
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string DisplayMember {
-            get {
-                return base.DisplayMember ;
-            }
+            get => base.DisplayMember ;
             set {
                 base.DisplayMember = value;
             }
@@ -227,9 +221,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public override DrawMode DrawMode {
-            get {
-                return DrawMode.Normal;
-            }
+            get => DrawMode.Normal;
             set {
             }
         }
@@ -282,9 +274,7 @@ namespace System.Windows.Forms {
         ///     selection to be able to select one item or no items.
         /// </devdoc>
         public override SelectionMode SelectionMode {
-            get {
-                return base.SelectionMode;
-            }
+            get => base.SelectionMode;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SelectionMode.None, (int)SelectionMode.MultiExtended)){
@@ -312,9 +302,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckedListBoxThreeDCheckBoxesDescr))
         ]
         public bool ThreeDCheckBoxes {
-            get {
-                return !flat;
-            }
+            get => !flat;
             set {
                 // change the style and repaint.
                 //
@@ -339,9 +327,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
-            get{
-                return base.UseCompatibleTextRenderingInt;
-            }
+            get => base.UseCompatibleTextRenderingInt;
             set{
                 base.UseCompatibleTextRenderingInt = value;
             }
@@ -365,9 +351,7 @@ namespace System.Windows.Forms {
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string ValueMember {
-            get {
-                return base.ValueMember;
-            }
+            get => base.ValueMember;
             set {
                 base.ValueMember = value;
             }
@@ -434,7 +418,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -1133,9 +1117,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
                 }
@@ -1266,9 +1248,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public object this[int index] {
-                get {
-                    return InnerArray.GetItem(index, AnyMask);
-                }
+                get => InnerArray.GetItem(index, AnyMask);
                 set {
                     throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
                 }
@@ -1545,9 +1525,7 @@ namespace System.Windows.Forms {
             }
 
             public override string Name {
-                get {
-                    return name;
-                }
+                get => name;
                 set {
                     name = value;
                 }

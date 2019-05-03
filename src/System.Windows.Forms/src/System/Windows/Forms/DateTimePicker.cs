@@ -168,9 +168,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -186,9 +184,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -210,9 +206,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerCalendarForeColorDescr))
         ]
         public Color CalendarForeColor {
-            get {
-                return calendarForeColor;
-            }
+            get => calendarForeColor;
 
             set {
                 if (value.IsEmpty) {
@@ -277,9 +271,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerCalendarTitleBackColorDescr))
         ]
         public Color CalendarTitleBackColor {
-            get {
-                return calendarTitleBackColor;
-            }
+            get => calendarTitleBackColor;
 
             set {
                 if (value.IsEmpty) {
@@ -302,9 +294,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerCalendarTitleForeColorDescr))
         ]
         public Color CalendarTitleForeColor {
-            get {
-                return calendarTitleForeColor;
-            }
+            get => calendarTitleForeColor;
 
             set {
                 if (value.IsEmpty) {
@@ -327,9 +317,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerCalendarTrailingForeColorDescr))
         ]
         public Color CalendarTrailingForeColor {
-            get {
-                return calendarTrailingText;
-            }
+            get => calendarTrailingText;
 
             set {
                 if (value.IsEmpty) {
@@ -352,9 +340,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerCalendarMonthBackgroundDescr))
         ]
         public Color CalendarMonthBackground {
-            get {
-                return calendarMonthBackground;
-            }
+            get => calendarMonthBackground;
 
             set {
                 if (value.IsEmpty) {
@@ -469,9 +455,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerCustomFormatDescr))
         ]
         public string CustomFormat {
-            get {
-                return customFormat;
-            }
+            get => customFormat;
 
             set {
                 if ((value != null && !value.Equals(customFormat)) ||
@@ -505,9 +489,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -583,9 +565,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerFormatDescr))
         ]
         public DateTimePickerFormat Format {
-            get {
-                return format;
-            }
+            get => format;
 
             set {
                 //valid values are 0x1, 0x2,0x4,0x8. max number of bits on at a time is 1
@@ -662,9 +642,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerMaxDateDescr))
         ]
         public DateTime MaxDate {
-            get {
-                return EffectiveMaxDate(max);
-            }
+            get => EffectiveMaxDate(max);
             set {
                 if (value != max) {
                     if (value < EffectiveMinDate(min))
@@ -713,9 +691,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerMinDateDescr))
         ]
         public DateTime MinDate {
-            get {
-                return EffectiveMinDate(min);
-            }
+            get => EffectiveMinDate(min);
             set
             {
                 if (value != min)
@@ -784,7 +760,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -834,10 +810,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -863,9 +836,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerShowNoneDescr))
         ]
         public bool ShowCheckBox {
-            get {
-                return(style & NativeMethods.DTS_SHOWNONE) != 0;
-            }
+            get => (style & NativeMethods.DTS_SHOWNONE) != 0;
             set {
                 SetStyleBit(value, NativeMethods.DTS_SHOWNONE);
             }
@@ -882,9 +853,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DateTimePickerShowUpDownDescr))
         ]
         public bool ShowUpDown {
-            get {
-                return(style & NativeMethods.DTS_UPDOWN) != 0;
-            }
+    get => (style & NativeMethods.DTS_UPDOWN) != 0;
             set {
                 if (ShowUpDown != value) {
                     SetStyleBit(value, NativeMethods.DTS_UPDOWN);
@@ -900,9 +869,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 // Clause to check length
                 //

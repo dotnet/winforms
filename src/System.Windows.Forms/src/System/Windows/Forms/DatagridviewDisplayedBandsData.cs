@@ -55,10 +55,7 @@ namespace System.Windows.Forms
 
             public bool Dirty
             {
-                get
-                {
-                    return this.dirty;
-                }
+                get => this.dirty;
                 set
                 {
                     this.dirty = value;
@@ -91,10 +88,7 @@ namespace System.Windows.Forms
 
             public int FirstDisplayedScrollingCol
             {
-                get
-                {
-                    return this.firstDisplayedScrollingCol;
-                }
+                get => this.firstDisplayedScrollingCol;
                 set
                 {
                     if (value != this.firstDisplayedScrollingCol)
@@ -107,10 +101,7 @@ namespace System.Windows.Forms
 
             public int FirstDisplayedScrollingRow
             {
-                get
-                {
-                    return this.firstDisplayedScrollingRow;
-                }
+                get => this.firstDisplayedScrollingRow;
                 set
                 {
                     if (value != this.firstDisplayedScrollingRow)
@@ -159,10 +150,7 @@ namespace System.Windows.Forms
 
             public int LastTotallyDisplayedScrollingCol
             {
-                get
-                {
-                    return this.lastTotallyDisplayedScrollingCol;
-                }
+                get => this.lastTotallyDisplayedScrollingCol;
                 set
                 {
                     if (value != this.lastTotallyDisplayedScrollingCol)
@@ -175,10 +163,7 @@ namespace System.Windows.Forms
 
             public int NumDisplayedFrozenCols
             {
-                get
-                {
-                    return this.numDisplayedFrozenCols;
-                }
+                get => this.numDisplayedFrozenCols;
                 set
                 {
                     if (value != this.numDisplayedFrozenCols)
@@ -191,10 +176,7 @@ namespace System.Windows.Forms
 
             public int NumDisplayedFrozenRows
             {
-                get
-                {
-                    return this.numDisplayedFrozenRows;
-                }
+                get => this.numDisplayedFrozenRows;
                 set
                 {
                     if (value != this.numDisplayedFrozenRows)
@@ -207,10 +189,7 @@ namespace System.Windows.Forms
 
             public int NumDisplayedScrollingRows
             {
-                get
-                {
-                    return this.numDisplayedScrollingRows;
-                }
+                get => this.numDisplayedScrollingRows;
                 set
                 {
                     if (value != this.numDisplayedScrollingRows)
@@ -223,10 +202,7 @@ namespace System.Windows.Forms
 
             public int NumDisplayedScrollingCols
             {
-                get
-                {
-                    return this.numDisplayedScrollingCols;
-                }
+                get => this.numDisplayedScrollingCols;
                 set
                 {
                     if (value != this.numDisplayedScrollingCols)
@@ -239,10 +215,7 @@ namespace System.Windows.Forms
 
             public int NumTotallyDisplayedFrozenRows
             {
-                get
-                {
-                    return this.numTotallyDisplayedFrozenRows;
-                }
+                get => this.numTotallyDisplayedFrozenRows;
                 set
                 {
                     if (value != this.numTotallyDisplayedFrozenRows)
@@ -255,10 +228,7 @@ namespace System.Windows.Forms
 
             public int NumTotallyDisplayedScrollingRows
             {
-                get
-                {
-                    return this.numTotallyDisplayedScrollingRows;
-                }
+                get => this.numTotallyDisplayedScrollingRows;
                 set
                 {
                     if (value != this.numTotallyDisplayedScrollingRows)

@@ -303,9 +303,7 @@ namespace System.Windows.Forms {
         ///       or sets the locale information for the current thread.</para>
         /// </devdoc>
         public static CultureInfo CurrentCulture {
-            get {
-                return Thread.CurrentThread.CurrentCulture;
-            }
+            get => Thread.CurrentThread.CurrentCulture;
             set {
                 Thread.CurrentThread.CurrentCulture = value;
             }
@@ -317,9 +315,7 @@ namespace System.Windows.Forms {
         ///       sets the current input language for the current thread.</para>
         /// </devdoc>
         public static InputLanguage CurrentInputLanguage {
-            get {
-                return InputLanguage.CurrentInputLanguage;
-            }
+            get => InputLanguage.CurrentInputLanguage;
             set {
                 InputLanguage.CurrentInputLanguage = value;
             }
@@ -614,9 +610,7 @@ namespace System.Windows.Forms {
         ///       or sets whether the wait cursor is used for all open forms of the application.</para>
         /// </devdoc>
         public static bool UseWaitCursor {
-            get {
-                return useWaitCursor;
-            }
+            get => useWaitCursor;
             set {
                 lock (FormCollection.CollectionSyncRoot) 
                 {

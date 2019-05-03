@@ -80,9 +80,7 @@ namespace System.Windows.Forms {
         // =------------------------------------------------------------------
 
         public virtual bool Expanded {
-            get {
-                return expanded;
-            }
+            get => expanded;
             set {
                 if (expanded == value)
                     return;
@@ -130,9 +128,7 @@ namespace System.Windows.Forms {
 #endif //FALSE
 
         private int FocusedRelation {
-            get {
-                return this.dgTable.FocusedRelation;
-            }
+            get => this.dgTable.FocusedRelation;
             set {
                 dgTable.FocusedRelation = value;
             }

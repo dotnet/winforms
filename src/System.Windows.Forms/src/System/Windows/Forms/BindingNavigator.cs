@@ -252,9 +252,7 @@ namespace System.Windows.Forms {
         SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
         ]
         public BindingSource BindingSource {
-            get {
-                return bindingSource;
-            }
+            get => bindingSource;
 
             set {
                 WireUpBindingSource(ref bindingSource, value);
@@ -457,9 +455,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.BindingNavigatorCountItemFormatPropDescr))
         ]
         public string CountItemFormat {
-            get {
-                return countItemFormat;
-            }
+            get => countItemFormat;
 
             set {
                 if (countItemFormat != value) {

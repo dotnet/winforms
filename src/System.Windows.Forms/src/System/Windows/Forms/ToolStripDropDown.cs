@@ -93,9 +93,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool AllowItemReorder {
-            get {
-                return base.AllowItemReorder;
-            }
+            get => base.AllowItemReorder;
             set {
                 base.AllowItemReorder = value;
             }
@@ -114,9 +112,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlAllowTransparencyDescr))
         ]
         public bool AllowTransparency {
-            get {
-                return state[stateAllowTransparency];
-            }
+            get => state[stateAllowTransparency];
             set {
                 if (value != (state[stateAllowTransparency]) && 
                     OSFeature.Feature.IsPresent(OSFeature.LayeredWindows)) {
@@ -138,9 +134,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AnchorStyles Anchor {
-            get {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set {
                 base.Anchor = value;
             }
@@ -149,9 +143,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.AutoSize"]/*' />
         [DefaultValue(true)]
         public override bool AutoSize {
-            get {
-                return autoSize; 
-            }
+            get => autoSize; 
             set {
                 if (autoSize != value) {
                     autoSize = value;
@@ -173,9 +165,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripDropDownAutoCloseDescr))
         ]
         public bool AutoClose {
-            get {
-                return autoClose;
-            }
+            get => autoClose;
             set {
                 // 
                 if (autoClose != value) {
@@ -209,9 +199,7 @@ namespace System.Windows.Forms {
          Browsable(false), 
          EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CanOverflow { 
-            get { 
-                return base.CanOverflow;             
-            }
+            get => base.CanOverflow;             
             set { 
                 base.CanOverflow = value;
             }
@@ -225,7 +213,7 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new ContextMenu ContextMenu {
-            get { return base.ContextMenu; }
+            get => base.ContextMenu; 
             set { base.ContextMenu = value; }
         }
 
@@ -240,7 +228,7 @@ namespace System.Windows.Forms {
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new ContextMenuStrip ContextMenuStrip {
-            get { return base.ContextMenuStrip; }
+            get => base.ContextMenuStrip; 
             set { base.ContextMenuStrip = value; }
         }
 
@@ -345,9 +333,7 @@ namespace System.Windows.Forms {
         Browsable(false), 
         EditorBrowsable(EditorBrowsableState.Always)]
         public override DockStyle Dock {
-            get {
-               return base.Dock;
-            }
+            get => base.Dock;
             set{
                 base.Dock = value;
             }
@@ -460,9 +446,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new Padding GripMargin{
-            get {
-                return base.GripMargin;
-            }
+            get => base.GripMargin;
             set {
                 base.GripMargin = value;
             }
@@ -473,9 +457,7 @@ namespace System.Windows.Forms {
          Browsable(false), 
          EditorBrowsable(EditorBrowsableState.Never)]
         public new ToolStripGripStyle GripStyle {
-           get { 
-               return base.GripStyle;      
-           }
+           get => base.GripStyle;      
            set { 
               base.GripStyle = value;
            }        
@@ -572,9 +554,7 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new Point Location {
-            get {
-                return base.Location;
-            }
+            get => base.Location;
             set {
                 base.Location = value;
             }
@@ -678,7 +658,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(null), Browsable(false)]
         public ToolStripItem OwnerItem {
-            get { return ownerItem; }
+            get => ownerItem; 
             set { 
                   if (ownerItem != value) {
                     Font originalFont = this.Font;
@@ -727,9 +707,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Always)]
         new public Region Region {
-            get {
-                return base.Region;
-            }
+            get => base.Region;
             set {
                 base.Region = value;
             }
@@ -742,9 +720,7 @@ namespace System.Windows.Forms {
 
        
         internal virtual bool RequiresScrollButtons {
-            get {
-                return false; 
-            }
+            get => false; 
             set {
                 Debug.Fail("You can't set this except on ToolStripDropDownMenu");
             }
@@ -789,9 +765,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool Stretch {
-            get {
-                return base.Stretch;
-            }
+            get => base.Stretch;
             set {
                 base.Stretch = value;
             }
@@ -804,9 +778,7 @@ namespace System.Windows.Forms {
 
 
        internal Control SourceControlInternal {
-            get {
-                return Properties.GetObject(PropSourceControl) as Control;
-            }
+            get => Properties.GetObject(PropSourceControl) as Control;
             set{
                 Properties.SetObject(PropSourceControl, value);
             }
@@ -835,9 +807,7 @@ namespace System.Windows.Forms {
        SRCategory(nameof(SR.CatAppearance))
        ]
        public override ToolStripTextDirection TextDirection {
-           get {
-               return base.TextDirection;
-           }
+           get => base.TextDirection;
            set {
                base.TextDirection = value;
            }
@@ -855,9 +825,7 @@ namespace System.Windows.Forms {
        /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.TopLevel"]/*' />
       [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
        public bool TopLevel {
-            get {
-                return GetTopLevel();
-            }
+            get => GetTopLevel();
             set {
                 // 
                 if (value != GetTopLevel()) {
@@ -882,9 +850,7 @@ namespace System.Windows.Forms {
           Browsable(false)    
           ]
           public new int TabIndex {
-              get {
-                  return base.TabIndex;
-              }
+              get => base.TabIndex;
               set {
                   base.TabIndex = value;
               }
@@ -922,9 +888,7 @@ namespace System.Windows.Forms {
                 DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new bool Visible {
-            get {
-                return base.Visible;
-            }
+            get => base.Visible;
             set {
                 base.Visible = value;
             }

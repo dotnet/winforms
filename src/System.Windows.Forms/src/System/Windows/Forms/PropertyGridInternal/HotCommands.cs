@@ -33,9 +33,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public virtual bool AllowVisible {
-            get {
-                return allowVisible;
-            }
+            get => allowVisible;
             set {
                 if (this.allowVisible != value) {
                     this.allowVisible = value;

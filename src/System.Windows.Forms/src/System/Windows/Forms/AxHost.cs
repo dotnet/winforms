@@ -342,9 +342,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
 
             set {
                 base.BackColor = value;
@@ -355,9 +353,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
 
             set {
                 base.BackgroundImage = value;
@@ -368,9 +364,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
 
             set {
                 base.BackgroundImageLayout = value;
@@ -384,10 +378,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set
             {
                 base.ImeMode = value;
@@ -411,9 +402,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Cursor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor {
-            get {
-                return base.Cursor;
-            }
+            get => base.Cursor;
 
             set {
                 base.Cursor = value;
@@ -423,9 +412,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenu"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenu ContextMenu {
-            get {
-                return base.ContextMenu;
-            }
+            get => base.ContextMenu;
 
             set {
                 base.ContextMenu = value;
@@ -446,9 +433,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Enabled"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public virtual new bool Enabled {
-            get {
-                return base.Enabled;
-            }
+            get => base.Enabled;
 
             set {
                 base.Enabled = value;
@@ -458,9 +443,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Font"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
 
             set {
                 base.Font = value;
@@ -470,9 +453,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
 
             set {
                 base.ForeColor = value;
@@ -500,9 +481,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text {
-            get {
-                return text;
-            }
+            get => text;
 
             set {
                 text = value;
@@ -592,9 +571,7 @@ namespace System.Windows.Forms {
         }
 
         private int NoComponentChangeEvents {
-            get {
-                return noComponentChange;
-            }
+            get => noComponentChange;
 
             set {
                 noComponentChange = value;
@@ -2534,9 +2511,7 @@ namespace System.Windows.Forms {
         }
 
         private bool RefreshAllProperties {
-            get {
-                return axState[refreshProperties];
-            }
+            get => axState[refreshProperties];
             set {
                 axState[refreshProperties] = value;
                 if (value && !axState[listeningToIdle]) {
@@ -6144,9 +6119,7 @@ namespace System.Windows.Forms {
             }
 
             internal int Type {
-                get {
-                    return type;
-                }
+                get => type;
                 set {
                     type = value;
                 }

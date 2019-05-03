@@ -191,9 +191,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ErrorProviderContainerControlDescr))
         ]
         public ContainerControl ContainerControl {
-            get {
-                return parentControl;
-            }
+            get => parentControl;
             set {
                 if (parentControl != value) {
                     if (parentControl != null)
@@ -222,10 +220,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftDescr))
         ]
         public virtual bool RightToLeft {
-            get {
-
-                return rightToLeft;
-            }
+            get => rightToLeft;
 
             set {
                 if (value != rightToLeft) {
@@ -255,9 +250,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -326,9 +319,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ErrorProviderDataSourceDescr))
         ]
         public object DataSource {
-            get {
-                return dataSource;
-            }
+            get => dataSource;
             set {
                 if (parentControl != null && value != null && !string.IsNullOrEmpty(this.dataMember)) {
                     // Let's check if the datamember exists in the new data source
@@ -361,9 +352,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ErrorProviderDataMemberDescr))
         ]
         public string DataMember {
-            get {
-                return dataMember;
-            }
+            get => dataMember;
             set {
                 if (value == null) value = "";
                 Set_ErrorManager(this.DataSource, value, false);
@@ -526,9 +515,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public int BlinkRate {
-            get {
-                return blinkRate;
-            }
+            get => blinkRate;
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(BlinkRate), value, SR.BlinkRateMustBeZeroOrMore);
@@ -569,9 +556,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ErrorProviderIconDescr))
         ]
         public Icon Icon {
-            get {
-                return icon;
-            }
+            get => icon;
             set {
                 if (value == null)
                     throw new ArgumentNullException(nameof(value));
@@ -1344,9 +1329,7 @@ namespace System.Windows.Forms {
             ///     or disappear.
             /// </devdoc>
             public int BlinkPhase {
-                get {
-                    return blinkPhase;
-                }
+                get => blinkPhase;
                 set {
                     blinkPhase = value;
                 }
@@ -1357,9 +1340,7 @@ namespace System.Windows.Forms {
             ///     Returns or sets the icon padding for the control.
             /// </devdoc>
             public int IconPadding {
-                get {
-                    return iconPadding;
-                }
+                get => iconPadding;
                 set {
                     if (iconPadding != value) {
                         iconPadding = value;
@@ -1373,9 +1354,7 @@ namespace System.Windows.Forms {
             ///     Returns or sets the error description string for the control.
             /// </devdoc>
             public string Error {
-                get {
-                    return error;
-                }
+                get => error;
                 set {
                     if (value == null) {
                         value = "";
@@ -1413,9 +1392,7 @@ namespace System.Windows.Forms {
             ///     Returns or sets the location of the error icon for the control.
             /// </devdoc>
             public ErrorIconAlignment IconAlignment {
-                get {
-                    return iconAlignment;
-                }
+                get => iconAlignment;
                 set {
                     if (iconAlignment != value) {
                         //valid values are 0x0 to 0x5
@@ -1435,9 +1412,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             public bool ToolTipShown
             {
-                get {
-                    return this.toolTipShown;
-                }
+                get => this.toolTipShown;
                 set {
                     this.toolTipShown = value;
                 }

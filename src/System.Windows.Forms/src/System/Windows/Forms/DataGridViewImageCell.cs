@@ -188,10 +188,7 @@ namespace System.Windows.Forms
         ]
         public bool ValueIsIcon
         {
-            get
-            {
-                return ((this.flags & DATAGRIDVIEWIMAGECELL_valueIsIcon) != 0x00);
-            }
+            get => ((this.flags & DATAGRIDVIEWIMAGECELL_valueIsIcon) != 0x00);
             set
             {
                 if (this.ValueIsIcon != value)
@@ -1018,10 +1015,7 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewImageCell.uex' path='docs/doc[@for="DataGridViewImageCellAccessibleObject.Value"]/*' />
             public override string Value
             {
-                get 
-                {
-                    return base.Value;
-                }
+                get => base.Value;
 
                 set
                 {

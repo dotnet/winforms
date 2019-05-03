@@ -97,9 +97,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.ButtonAutoEllipsisDescr))
         ]
         public bool AutoEllipsis {
-            get {
-                return GetFlag(FlagAutoEllipsis);
-            }
+            get => GetFlag(FlagAutoEllipsis);
 
             set {
                 if (AutoEllipsis != value) {
@@ -120,9 +118,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize {
-            get {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 base.AutoSize = value;
                 //don't show ellipsis if the control is autosized
@@ -151,9 +147,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 if (DesignMode) {
                     if (value != Color.Empty) {
@@ -231,9 +225,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.IsDefault"]/*' />
         protected internal bool IsDefault {
-            get {
-                return GetFlag(FlagIsDefault);
-            }
+            get => GetFlag(FlagIsDefault);
             set {
                 if (GetFlag(FlagIsDefault) != value) {
                     SetFlag(FlagIsDefault, value);
@@ -264,9 +256,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.ButtonFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
-            get {
-                return flatStyle;
-            }
+            get => flatStyle;
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(FlatStyle));
@@ -360,9 +350,7 @@ namespace System.Windows.Forms {
             SRCategory(nameof(SR.CatAppearance))
         ]
         public ContentAlignment ImageAlign {
-            get {
-                return imageAlign;
-            }
+            get => imageAlign;
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -432,9 +420,7 @@ namespace System.Windows.Forms {
             SRCategory(nameof(SR.CatAppearance))
         ]
         public string ImageKey {
-            get {
-                return imageIndex.Key;
-            }
+            get => imageIndex.Key;
             set {
                 if (imageIndex.Key != value) {
                     if (value != null) {
@@ -463,9 +449,7 @@ namespace System.Windows.Forms {
             SRCategory(nameof(SR.CatAppearance))
         ]
         public ImageList ImageList {
-            get {
-                return imageList;
-            }
+            get => imageList;
             set {
                 if (imageList != value) {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
@@ -502,9 +486,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+  get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -601,9 +583,7 @@ namespace System.Windows.Forms {
         ///     Indicates whether the tooltip should be shown
         /// </devdoc>   
         internal bool ShowToolTip {
-            get {
-                return GetFlag(FlagShowToolTip);
-            }
+            get => GetFlag(FlagShowToolTip);
             set {
                 SetFlag(FlagShowToolTip, value);
             }
@@ -614,9 +594,7 @@ namespace System.Windows.Forms {
             SettingsBindable(true)
         ]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -635,9 +613,7 @@ namespace System.Windows.Forms {
             SRCategory(nameof(SR.CatAppearance))
         ]
         public virtual ContentAlignment TextAlign {
-            get {
-                return textAlign;
-            }
+            get => textAlign;
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -688,9 +664,7 @@ namespace System.Windows.Forms {
             SRCategory(nameof(SR.CatAppearance))
         ]
         public bool UseMnemonic {
-            get {
-                return GetFlag(FlagUseMnemonic);
-            }
+            get => GetFlag(FlagUseMnemonic);
         
             set {
                 SetFlag(FlagUseMnemonic, value);
@@ -1143,9 +1117,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
-            get{
-                return base.UseCompatibleTextRenderingInt;
-            }
+            get => base.UseCompatibleTextRenderingInt;
             set{
                 base.UseCompatibleTextRenderingInt = value;
             }

@@ -56,9 +56,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -70,9 +68,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -256,7 +252,7 @@ namespace System.Windows.Forms
          SRDescription(nameof(SR.TextBoxAcceptsTabDescr))
          ]
         public bool AcceptsTab { 
-            get { return TextBox.AcceptsTab; } 
+            get => TextBox.AcceptsTab;  
             set { TextBox.AcceptsTab = value; }
         }
 
@@ -267,7 +263,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxAcceptsReturnDescr))
         ]
         public bool AcceptsReturn { 
-            get { return TextBox.AcceptsReturn; } 
+            get => TextBox.AcceptsReturn;  
             set { TextBox.AcceptsReturn = value; }
         }
 
@@ -280,7 +276,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource { 
-            get { return TextBox.AutoCompleteCustomSource; } 
+            get => TextBox.AutoCompleteCustomSource;  
             set { TextBox.AutoCompleteCustomSource = value; }
         }
 
@@ -291,7 +287,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode {
-            get { return TextBox.AutoCompleteMode; } 
+            get => TextBox.AutoCompleteMode;  
             set { TextBox.AutoCompleteMode = value; }
         }
 
@@ -302,7 +298,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource { 
-            get { return TextBox.AutoCompleteSource; } 
+            get => TextBox.AutoCompleteSource;  
             set { TextBox.AutoCompleteSource = value; }
         }
 
@@ -314,7 +310,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxBorderDescr))
         ]
         public BorderStyle BorderStyle { 
-            get { return TextBox.BorderStyle; } 
+            get => TextBox.BorderStyle;  
             set { TextBox.BorderStyle = value; }
         }
 
@@ -336,7 +332,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxCharacterCasingDescr))
         ]
         public CharacterCasing CharacterCasing { 
-            get { return TextBox.CharacterCasing; } 
+            get => TextBox.CharacterCasing;  
             set { TextBox.CharacterCasing = value; }
         }
 
@@ -347,7 +343,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxHideSelectionDescr))
         ]
         public bool HideSelection {
-            get { return TextBox.HideSelection; } 
+            get => TextBox.HideSelection;  
             set { TextBox.HideSelection = value; }
         }
 
@@ -360,7 +356,7 @@ namespace System.Windows.Forms
         Editor("System.Windows.Forms.Design.StringArrayEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public string[] Lines { 
-            get { return TextBox.Lines; } 
+            get => TextBox.Lines;  
             set { TextBox.Lines = value; }
         }
 
@@ -372,7 +368,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxMaxLengthDescr))
         ]
         public int MaxLength {
-            get { return TextBox.MaxLength; }
+            get => TextBox.MaxLength; 
             set { TextBox.MaxLength = value; }
         }
 
@@ -384,7 +380,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxModifiedDescr))
         ]
         public bool Modified { 
-            get { return TextBox.Modified; }
+            get => TextBox.Modified; 
             set { TextBox.Modified = value; }
         }
 
@@ -398,7 +394,7 @@ namespace System.Windows.Forms
         Browsable(false),EditorBrowsable(EditorBrowsableState.Never)
         ]
         public bool Multiline { 
-            get { return TextBox.Multiline; }
+            get => TextBox.Multiline; 
             set { TextBox.Multiline = value; }
         }
 
@@ -409,7 +405,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxReadOnlyDescr))
         ]
         public bool ReadOnly {
-            get { return TextBox.ReadOnly; }
+            get => TextBox.ReadOnly; 
             set { TextBox.ReadOnly = value; }
         }
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectedText"]/*' />
@@ -420,7 +416,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxSelectedTextDescr))
         ]
         public string SelectedText { 
-            get { return TextBox.SelectedText; }
+            get => TextBox.SelectedText; 
             set { TextBox.SelectedText = value; }
         }
        
@@ -432,7 +428,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxSelectionLengthDescr))
         ]
         public int SelectionLength {
-            get { return TextBox.SelectionLength; }
+            get => TextBox.SelectionLength; 
             set { TextBox.SelectionLength = value; }
         }
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.SelectionStart"]/*' />
@@ -443,7 +439,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxSelectionStartDescr))
         ]
         public int SelectionStart {
-            get { return TextBox.SelectionStart; }
+            get => TextBox.SelectionStart; 
             set { TextBox.SelectionStart = value; }
         }
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ShortcutsEnabled"]/*' />
@@ -453,7 +449,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))
         ]
         public bool ShortcutsEnabled { 
-            get { return TextBox.ShortcutsEnabled; }
+            get => TextBox.ShortcutsEnabled; 
             set { TextBox.ShortcutsEnabled = value; }
         }
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.TextLength"]/*' />
@@ -469,7 +465,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.TextBoxTextAlignDescr))
         ]
         public HorizontalAlignment TextBoxTextAlign { 
-            get { return TextBox.TextAlign; } 
+            get => TextBox.TextAlign;  
             set { TextBox.TextAlign = value; }
         }
         
@@ -482,7 +478,7 @@ namespace System.Windows.Forms
         Browsable(false),EditorBrowsable(EditorBrowsableState.Never)
         ]
         public bool WordWrap { 
-            get { return TextBox.WordWrap; } 
+            get => TextBox.WordWrap;  
             set { TextBox.WordWrap = value; }
         }
  
@@ -645,7 +641,7 @@ namespace System.Windows.Forms
                 }
 
                 internal bool MouseIsOver {
-                    get { return mouseIsOver; }
+                    get => mouseIsOver; 
                     set {
                         if (mouseIsOver != value) {
                             mouseIsOver = value;
@@ -657,7 +653,7 @@ namespace System.Windows.Forms
                 }
 
                 public override Font Font {
-                    get { return base.Font; }
+                    get => base.Font; 
                     set { 
                         base.Font = value;
                         isFontSet = ShouldSerializeFont();
@@ -665,7 +661,7 @@ namespace System.Windows.Forms
                 }
 
                 public ToolStripTextBox Owner {
-                   get { return ownerItem; }
+                   get => ownerItem; 
                    set { ownerItem = value; }
                 }
 

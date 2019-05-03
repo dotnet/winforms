@@ -32,7 +32,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="RowStyleCollection.this"]/*' />
         public new RowStyle this[int index] {
-            get { return (RowStyle)((IList)this)[index]; }
+            get => (RowStyle)((IList)this)[index]; 
             set { ((IList)this)[index] = value; }
         }
 

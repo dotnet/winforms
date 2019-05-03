@@ -48,9 +48,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public TableLayoutSettings LayoutSettings {
-            get {
-                return _tableLayoutSettings;
-            }
+            get => _tableLayoutSettings;
             set {
                 if (value != null && value.IsStub) {
                     // WINRES only scenario.
@@ -77,7 +75,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public new BorderStyle BorderStyle {
-            get { return base.BorderStyle; }
+            get => base.BorderStyle; 
             set { 
                 base.BorderStyle = value; 
                 Debug.Assert(BorderStyle == value, "BorderStyle should be the same as we set it");
@@ -93,7 +91,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public TableLayoutPanelCellBorderStyle CellBorderStyle {
-            get { return _tableLayoutSettings.CellBorderStyle; }
+            get => _tableLayoutSettings.CellBorderStyle; 
             set { 
                 _tableLayoutSettings.CellBorderStyle = value; 
 
@@ -129,7 +127,7 @@ namespace System.Windows.Forms {
         [DefaultValue(0)]
         [Localizable(true)]
         public int ColumnCount {
-            get { return _tableLayoutSettings.ColumnCount; }
+            get => _tableLayoutSettings.ColumnCount; 
             set { 
                 _tableLayoutSettings.ColumnCount = value; 
                 Debug.Assert(ColumnCount == value, "ColumnCount should be the same as we set it");
@@ -146,9 +144,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(TableLayoutPanelGrowStyle.AddRows)]
         public TableLayoutPanelGrowStyle GrowStyle {
-            get {
-                return _tableLayoutSettings.GrowStyle;
-            }
+            get => _tableLayoutSettings.GrowStyle;
             set {
                 _tableLayoutSettings.GrowStyle = value;
             }
@@ -165,7 +161,7 @@ namespace System.Windows.Forms {
         [DefaultValue(0)]
         [Localizable(true)]
         public int RowCount {
-            get { return _tableLayoutSettings.RowCount; }
+            get => _tableLayoutSettings.RowCount; 
             set { _tableLayoutSettings.RowCount = value; }
         }
 

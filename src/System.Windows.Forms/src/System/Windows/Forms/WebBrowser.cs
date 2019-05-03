@@ -93,10 +93,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool AllowNavigation
         {
-            get
-            {
-                return webBrowserState[WEBBROWSERSTATE_allowNavigation];
-            }
+            get => webBrowserState[WEBBROWSERSTATE_allowNavigation];
             set
             {
                 webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
@@ -120,9 +117,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.WebBrowserAllowWebBrowserDropDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool AllowWebBrowserDrop {
-            get {
-                return this.AxIWebBrowser2.RegisterAsDropTarget;
-            }
+            get => this.AxIWebBrowser2.RegisterAsDropTarget;
             set {
                 //Note: you lose this value when you load a new document: the value needs to be refreshed in
                 //OnDocumentCompleted.
@@ -143,9 +138,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.WebBrowserScriptErrorsSuppressedDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(false)]
         public bool ScriptErrorsSuppressed {
-            get {
-                return this.AxIWebBrowser2.Silent;
-            }
+            get => this.AxIWebBrowser2.Silent;
             set {
                 if (value != ScriptErrorsSuppressed) {
                     this.AxIWebBrowser2.Silent = value;
@@ -163,9 +156,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.WebBrowserWebBrowserShortcutsEnabledDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool WebBrowserShortcutsEnabled {
-            get {
-                return webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
-            }
+            get => webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled];
             set {
                 webBrowserState[WEBBROWSERSTATE_webBrowserShortcutsEnabled] = value;
             }
@@ -191,9 +182,7 @@ namespace System.Windows.Forms
         /// from child classes.
         /// </devdoc>
         internal bool CanGoBackInternal {
-            get {
-                return webBrowserState[WEBBROWSERSTATE_canGoBack];
-            }
+            get => webBrowserState[WEBBROWSERSTATE_canGoBack];
             set {
                 if (value != CanGoBackInternal) {
                     webBrowserState[WEBBROWSERSTATE_canGoBack] = value;
@@ -222,9 +211,7 @@ namespace System.Windows.Forms
         /// be accessed from child classes.
         /// </devdoc>
         internal bool CanGoForwardInternal {
-            get {
-                return webBrowserState[WEBBROWSERSTATE_canGoForward];
-            }
+            get => webBrowserState[WEBBROWSERSTATE_canGoForward];
             set {
                 if (value != CanGoForwardInternal) {
                     webBrowserState[WEBBROWSERSTATE_canGoForward] = value;
@@ -460,9 +447,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.WebBrowserIsWebBrowserContextMenuEnabledDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool IsWebBrowserContextMenuEnabled {
-            get {
-                return webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
-            }
+            get => webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled];
             set {
                 webBrowserState[WEBBROWSERSTATE_isWebBrowserContextMenuEnabled] = value;
             }
@@ -480,10 +465,7 @@ namespace System.Windows.Forms
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object ObjectForScripting 
         {
-            get 
-            {
-                return objectForScripting;
-            }
+            get => objectForScripting;
             set 
             {
                 if (value != null)
@@ -507,7 +489,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -900,9 +882,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.WebBrowserScrollBarsEnabledDescr)),
         SRCategory(nameof(SR.CatBehavior)), DefaultValue(true)]
         public bool ScrollBarsEnabled {
-            get {
-                return webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled];
-            }
+            get => webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled];
             set {
                 if (value != webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled]) {
                     webBrowserState[WEBBROWSERSTATE_scrollbarsEnabled] = value;
@@ -1825,10 +1805,7 @@ namespace System.Windows.Forms
 
             public bool AllowNavigation
             {
-                get
-                {
-                    return allowNavigation;
-                }
+                get => allowNavigation;
                 set
                 {
                     allowNavigation = value;

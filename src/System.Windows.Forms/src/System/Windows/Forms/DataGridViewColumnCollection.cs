@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewColumnCollection.uex' path='docs/doc[@for="DataGridViewColumnCollection.IList.this"]/*' />
         object IList.this[int index]
         {
-            get { return this[index]; }
+            get => this[index]; 
             set { throw new NotSupportedException(); }
         }
 

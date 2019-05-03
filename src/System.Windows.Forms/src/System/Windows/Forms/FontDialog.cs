@@ -72,9 +72,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDallowSimulationsDescr))
         ]
         public bool AllowSimulations {
-            get {
-                return !GetOption(NativeMethods.CF_NOSIMULATIONS);
-            }
+            get => !GetOption(NativeMethods.CF_NOSIMULATIONS);
 
             set {
                 SetOption(NativeMethods.CF_NOSIMULATIONS, !value);
@@ -93,9 +91,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDallowVectorFontsDescr))
         ]
         public bool AllowVectorFonts {
-            get {
-                return !GetOption(NativeMethods.CF_NOVECTORFONTS);
-            }
+            get => !GetOption(NativeMethods.CF_NOVECTORFONTS);
 
             set {
                 SetOption(NativeMethods.CF_NOVECTORFONTS, !value);
@@ -116,9 +112,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDallowVerticalFontsDescr))
         ]
         public bool AllowVerticalFonts {
-            get {
-                return !GetOption(NativeMethods.CF_NOVERTFONTS);
-            }
+            get => !GetOption(NativeMethods.CF_NOVERTFONTS);
 
             set {
                 SetOption(NativeMethods.CF_NOVERTFONTS, !value);
@@ -140,9 +134,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDallowScriptChangeDescr))
         ]
         public bool AllowScriptChange {
-            get {
-                return !GetOption(NativeMethods.CF_SELECTSCRIPT);
-            }
+            get => !GetOption(NativeMethods.CF_SELECTSCRIPT);
 
             set {
                 SetOption(NativeMethods.CF_SELECTSCRIPT, !value);
@@ -194,9 +186,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDfixedPitchOnlyDescr))
         ]
         public bool FixedPitchOnly {
-            get {
-                return GetOption(NativeMethods.CF_FIXEDPITCHONLY);
-            }
+            get => GetOption(NativeMethods.CF_FIXEDPITCHONLY);
 
             set {
                 SetOption(NativeMethods.CF_FIXEDPITCHONLY, value);
@@ -247,9 +237,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDfontMustExistDescr))
         ]
         public bool FontMustExist {
-            get {
-                return GetOption(NativeMethods.CF_FORCEFONTEXIST);
-            }
+            get => GetOption(NativeMethods.CF_FORCEFONTEXIST);
 
             set {
                 SetOption(NativeMethods.CF_FORCEFONTEXIST, value);
@@ -269,9 +257,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDmaxSizeDescr))
         ]
         public int MaxSize {
-            get {
-                return maxSize;
-            }
+            get => maxSize;
             set {
                 if (value < 0) {
                     value = 0;
@@ -296,9 +282,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDminSizeDescr))
         ]
         public int MinSize {
-            get {
-                return minSize;
-            }
+            get => minSize;
             set {
                 if (value < 0) {
                     value = 0;
@@ -337,9 +321,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDscriptsOnlyDescr))
         ]
         public bool ScriptsOnly {
-            get {
-                return GetOption(NativeMethods.CF_SCRIPTSONLY);
-            }
+            get => GetOption(NativeMethods.CF_SCRIPTSONLY);
             set {
                 SetOption(NativeMethods.CF_SCRIPTSONLY, value);
             }
@@ -357,9 +339,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDshowApplyDescr))
         ]
         public bool ShowApply {
-            get {
-                return GetOption(NativeMethods.CF_APPLY);
-            }
+            get => GetOption(NativeMethods.CF_APPLY);
             set {
                 SetOption(NativeMethods.CF_APPLY, value);
             }
@@ -377,9 +357,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDshowColorDescr))
         ]
         public bool ShowColor {
-            get {
-                return showColor;
-            }
+            get => showColor;
             set {
                 this.showColor = value;
             }
@@ -398,9 +376,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDshowEffectsDescr))
         ]
         public bool ShowEffects {
-            get {
-                return GetOption(NativeMethods.CF_EFFECTS);
-            }
+            get => GetOption(NativeMethods.CF_EFFECTS);
             set {
                 SetOption(NativeMethods.CF_EFFECTS, value);
             }
@@ -418,9 +394,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FnDshowHelpDescr))
         ]
         public bool ShowHelp {
-            get {
-                return GetOption(NativeMethods.CF_SHOWHELP);
-            }
+            get => GetOption(NativeMethods.CF_SHOWHELP);
             set {
                 SetOption(NativeMethods.CF_SHOWHELP, value);
             }

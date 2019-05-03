@@ -37,7 +37,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         public FlowDirection FlowDirection {
-            get { return _flowLayoutSettings.FlowDirection; }
+            get => _flowLayoutSettings.FlowDirection; 
             set { 
                 _flowLayoutSettings.FlowDirection = value; 
                 Debug.Assert(FlowDirection == value, "FlowDirection should be the same as we set it");
@@ -50,7 +50,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
         public bool WrapContents {
-            get { return _flowLayoutSettings.WrapContents; }
+            get => _flowLayoutSettings.WrapContents; 
             set { 
                 _flowLayoutSettings.WrapContents = value;
                 Debug.Assert(WrapContents == value, "WrapContents should be the same as we set it");

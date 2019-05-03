@@ -1387,9 +1387,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
 
         public object Name
         {
-            get{
-                return nameItem;
-            }
+            get => nameItem;
             set{
                 nameItem = value;
             }
@@ -1415,9 +1413,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
         public bool Value{
-            get{
-                return value;
-            }
+            get => value;
             set{
                 this.value = value;
             }
@@ -1447,9 +1443,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
         
         public TypeConverter TypeConverter{
-            get{
-                return typeConverter;
-            }
+            get => typeConverter;
             set{
                 typeConverter = value;
             }
@@ -1457,9 +1451,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         
         public object TypeEditor
         {
-            get{
-                return typeEditor;
-            }
+            get => typeEditor;
             set{
                 typeEditor = value;
             }

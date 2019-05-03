@@ -63,10 +63,7 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewTopRowAccessibleObject.uex' path='docs/doc[@for="DataGridViewTopRowAccessibleObject.Owner"]/*' />
             public DataGridView Owner
             {
-                get
-                {
-                    return this.owner;
-                }
+                get => this.owner;
                 set
                 {
                     if (this.owner != null)

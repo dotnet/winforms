@@ -120,27 +120,21 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public override PropertyTab CurrentTab {
-            get {
-                return tab;
-            }
+            get => tab;
             set {
                 this.tab = value;
             }
         }
 
         internal override GridEntry DefaultChild {
-            get {
-                return propDefault;
-            }
+            get => propDefault;
             set {
                 this.propDefault = value;
             }
         }
 
         internal override IDesignerHost DesignerHost {
-            get {
-                return host;
-            }
+            get => host;
             set {
                 host = value;
             }
@@ -160,9 +154,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         internal override PropertyGridView GridEntryHost {
-            get {       
-                return this.gridEntryHost;
-            }
+            get => this.gridEntryHost;
             set {
                 this.gridEntryHost = value;
             }
@@ -216,9 +208,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// by this GridEntry.
         /// </devdoc>
         public override object PropertyValue{
-            get {
-                return objValue;
-            }
+            get => objValue;
             set {
                 object old = objValue;
                 objValue = value;

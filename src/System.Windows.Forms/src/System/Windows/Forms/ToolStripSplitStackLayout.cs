@@ -30,9 +30,7 @@ namespace System.Windows.Forms {
         // this is the index we use to send items to the overflow
         // if we run out of room
         protected int BackwardsWalkingIndex {
-            get {
-                return backwardsWalkingIndex;
-            }
+            get => backwardsWalkingIndex;
             set {
                 backwardsWalkingIndex = value;
             }
@@ -41,9 +39,7 @@ namespace System.Windows.Forms {
         // this is the index we use to walk the items and make 
         // decisions if there is enough room.
         protected int ForwardsWalkingIndex {
-            get {
-                return forwardsWalkingIndex;
-            }
+            get => forwardsWalkingIndex;
             set {
                 forwardsWalkingIndex = value;
             }
@@ -64,18 +60,14 @@ namespace System.Windows.Forms {
         }
 
         private int OverflowSpace {
-            get {
-                return overflowSpace;
-            }
+            get => overflowSpace;
             set {
                 overflowSpace = value;
             }
         }
 
         private bool OverflowRequired {
-            get {
-                return overflowRequired;
-            }
+            get => overflowRequired;
             set {
                 overflowRequired = value;
             }

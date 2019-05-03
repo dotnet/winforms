@@ -2616,32 +2616,32 @@ namespace System.Windows.Forms
             IntPtr m_hPrintTemplate;
             IntPtr m_hSetupTemplate;
 
-            public int lStructSize { get { return m_lStructSize; } set { m_lStructSize = value; } }
+            public int lStructSize { get => m_lStructSize;  set { m_lStructSize = value; } }
 
-            public IntPtr hwndOwner { get { return m_hwndOwner; } set { m_hwndOwner = value; } }
-            public IntPtr hDevMode { get { return m_hDevMode; } set { m_hDevMode = value; } }
-            public IntPtr hDevNames { get { return m_hDevNames; } set { m_hDevNames = value; } }
-            public IntPtr hDC { get { return m_hDC; } set { m_hDC = value; } }
+            public IntPtr hwndOwner { get => m_hwndOwner;  set { m_hwndOwner = value; } }
+            public IntPtr hDevMode { get => m_hDevMode;  set { m_hDevMode = value; } }
+            public IntPtr hDevNames { get => m_hDevNames;  set { m_hDevNames = value; } }
+            public IntPtr hDC { get => m_hDC;  set { m_hDC = value; } }
 
-            public int Flags { get { return m_Flags; } set { m_Flags = value; } }
+            public int Flags { get => m_Flags;  set { m_Flags = value; } }
 
-            public short nFromPage { get { return m_nFromPage; } set { m_nFromPage = value; } }
-            public short nToPage { get { return m_nToPage; } set { m_nToPage = value; } }
-            public short nMinPage { get { return m_nMinPage; } set { m_nMinPage = value; } }
-            public short nMaxPage { get { return m_nMaxPage; } set { m_nMaxPage = value; } }
-            public short nCopies { get { return m_nCopies; } set { m_nCopies = value; } }
+            public short nFromPage { get => m_nFromPage;  set { m_nFromPage = value; } }
+            public short nToPage { get => m_nToPage;  set { m_nToPage = value; } }
+            public short nMinPage { get => m_nMinPage;  set { m_nMinPage = value; } }
+            public short nMaxPage { get => m_nMaxPage;  set { m_nMaxPage = value; } }
+            public short nCopies { get => m_nCopies;  set { m_nCopies = value; } }
 
-            public IntPtr hInstance { get { return m_hInstance; } set { m_hInstance = value; } }
-            public IntPtr lCustData { get { return m_lCustData; } set { m_lCustData = value; } }
+            public IntPtr hInstance { get => m_hInstance;  set { m_hInstance = value; } }
+            public IntPtr lCustData { get => m_lCustData;  set { m_lCustData = value; } }
 
-            public WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
-            public WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
+            public WndProc lpfnPrintHook { get => m_lpfnPrintHook;  set { m_lpfnPrintHook = value; } }
+            public WndProc lpfnSetupHook { get => m_lpfnSetupHook;  set { m_lpfnSetupHook = value; } }
 
-            public string lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
-            public string lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
+            public string lpPrintTemplateName { get => m_lpPrintTemplateName;  set { m_lpPrintTemplateName = value; } }
+            public string lpSetupTemplateName { get => m_lpSetupTemplateName;  set { m_lpSetupTemplateName = value; } }
 
-            public IntPtr hPrintTemplate { get { return m_hPrintTemplate; } set { m_hPrintTemplate = value; } }
-            public IntPtr hSetupTemplate { get { return m_hSetupTemplate; } set { m_hSetupTemplate = value; } }
+            public IntPtr hPrintTemplate { get => m_hPrintTemplate;  set { m_hPrintTemplate = value; } }
+            public IntPtr hSetupTemplate { get => m_hSetupTemplate;  set { m_hSetupTemplate = value; } }
         }
 
         // Any change in PRINTDLG_64, should also be in PRINTDLG_32 and PRINTDLG
@@ -2675,32 +2675,32 @@ namespace System.Windows.Forms
             IntPtr m_hPrintTemplate;
             IntPtr m_hSetupTemplate;
 
-            public int lStructSize { get { return m_lStructSize; } set { m_lStructSize = value; } }
+            public int lStructSize { get => m_lStructSize;  set { m_lStructSize = value; } }
 
-            public IntPtr hwndOwner { get { return m_hwndOwner; } set { m_hwndOwner = value; } }
-            public IntPtr hDevMode { get { return m_hDevMode; } set { m_hDevMode = value; } }
-            public IntPtr hDevNames { get { return m_hDevNames; } set { m_hDevNames = value; } }
-            public IntPtr hDC { get { return m_hDC; } set { m_hDC = value; } }
+            public IntPtr hwndOwner { get => m_hwndOwner;  set { m_hwndOwner = value; } }
+            public IntPtr hDevMode { get => m_hDevMode;  set { m_hDevMode = value; } }
+            public IntPtr hDevNames { get => m_hDevNames;  set { m_hDevNames = value; } }
+            public IntPtr hDC { get => m_hDC;  set { m_hDC = value; } }
 
-            public int Flags { get { return m_Flags; } set { m_Flags = value; } }
+            public int Flags { get => m_Flags;  set { m_Flags = value; } }
 
-            public short nFromPage { get { return m_nFromPage; } set { m_nFromPage = value; } }
-            public short nToPage { get { return m_nToPage; } set { m_nToPage = value; } }
-            public short nMinPage { get { return m_nMinPage; } set { m_nMinPage = value; } }
-            public short nMaxPage { get { return m_nMaxPage; } set { m_nMaxPage = value; } }
-            public short nCopies { get { return m_nCopies; } set { m_nCopies = value; } }
+            public short nFromPage { get => m_nFromPage;  set { m_nFromPage = value; } }
+            public short nToPage { get => m_nToPage;  set { m_nToPage = value; } }
+            public short nMinPage { get => m_nMinPage;  set { m_nMinPage = value; } }
+            public short nMaxPage { get => m_nMaxPage;  set { m_nMaxPage = value; } }
+            public short nCopies { get => m_nCopies;  set { m_nCopies = value; } }
 
-            public IntPtr hInstance { get { return m_hInstance; } set { m_hInstance = value; } }
-            public IntPtr lCustData { get { return m_lCustData; } set { m_lCustData = value; } }
+            public IntPtr hInstance { get => m_hInstance;  set { m_hInstance = value; } }
+            public IntPtr lCustData { get => m_lCustData;  set { m_lCustData = value; } }
 
-            public WndProc lpfnPrintHook { get { return m_lpfnPrintHook; } set { m_lpfnPrintHook = value; } }
-            public WndProc lpfnSetupHook { get { return m_lpfnSetupHook; } set { m_lpfnSetupHook = value; } }
+            public WndProc lpfnPrintHook { get => m_lpfnPrintHook;  set { m_lpfnPrintHook = value; } }
+            public WndProc lpfnSetupHook { get => m_lpfnSetupHook;  set { m_lpfnSetupHook = value; } }
 
-            public string lpPrintTemplateName { get { return m_lpPrintTemplateName; } set { m_lpPrintTemplateName = value; } }
-            public string lpSetupTemplateName { get { return m_lpSetupTemplateName; } set { m_lpSetupTemplateName = value; } }
+            public string lpPrintTemplateName { get => m_lpPrintTemplateName;  set { m_lpPrintTemplateName = value; } }
+            public string lpSetupTemplateName { get => m_lpSetupTemplateName;  set { m_lpSetupTemplateName = value; } }
 
-            public IntPtr hPrintTemplate { get { return m_hPrintTemplate; } set { m_hPrintTemplate = value; } }
-            public IntPtr hSetupTemplate { get { return m_hSetupTemplate; } set { m_hSetupTemplate = value; } }
+            public IntPtr hPrintTemplate { get => m_hPrintTemplate;  set { m_hPrintTemplate = value; } }
+            public IntPtr hSetupTemplate { get => m_hSetupTemplate;  set { m_hSetupTemplate = value; } }
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]

@@ -81,9 +81,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelAlignmentDescr))
         ]
         public HorizontalAlignment Alignment {
-            get {
-                return alignment;
-            }
+            get => alignment;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -112,9 +110,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelAutoSizeDescr))
         ]
         public StatusBarPanelAutoSize AutoSize {
-            get {
-                return this.autoSize;
-            }
+            get => this.autoSize;
 
             set {
                 //valid values are 0x1 to 0x3
@@ -145,9 +141,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelBorderStyleDescr))
         ]
         public StatusBarPanelBorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x1 to 0x3
@@ -223,10 +217,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal int Index
         {
-            get
-            {
-                return index;
-            }
+            get => index;
             set
             {
                 index = value;
@@ -248,9 +239,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelMinWidthDescr))
         ]
         public int MinWidth {
-            get {
-                return this.minWidth;
-            }
+            get => this.minWidth;
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinWidth), value, 0));
@@ -279,9 +268,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelNameDescr))
         ]
         public string Name {
-            get {
-                return WindowsFormsUtils.GetComponentName(this, name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this, name);
             set {
                 name = value;
                 if(Site!= null) {
@@ -328,10 +315,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         internal int Right
         {
-            get
-            {
-                return right;
-            }
+            get => right;
             set
             {
                 right = value;
@@ -351,7 +335,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelStyleDescr))
         ]
         public StatusBarPanelStyle Style {
-            get { return style;}
+            get => style;
             set {
                 //valid values are 0x1 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)StatusBarPanelStyle.Text, (int)StatusBarPanelStyle.OwnerDraw)){
@@ -377,9 +361,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -483,9 +465,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarPanelWidthDescr))
         ]
         public int Width {
-            get {
-                return this.width;
-            }
+            get => this.width;
             set {
                 if (!initializing && value < this.minWidth)
                     throw new ArgumentOutOfRangeException(nameof(Width), SR.WidthGreaterThanMinWidth);

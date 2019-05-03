@@ -34,10 +34,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ///
     	public bool AppearsAfterItem { 
-            get
-            {
-                return appearsAfterItem;
-            }
+            get => appearsAfterItem;
             set
             {
                 if (appearsAfterItem != value) {
@@ -94,10 +91,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         ///
     	public int Index {
-            get
-            {
-                return index;
-            }
+            get => index;
             set
             {
                 if (index != value) {

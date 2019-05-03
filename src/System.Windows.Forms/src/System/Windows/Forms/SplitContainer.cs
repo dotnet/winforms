@@ -196,9 +196,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Point), "0, 0")
         ]
         public override Point AutoScrollOffset {
-            get {
-               return base.AutoScrollOffset;
-            }
+            get => base.AutoScrollOffset;
             set {
                 base.AutoScrollOffset = value;
             }
@@ -214,9 +212,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public new Size AutoScrollMinSize {
-            get {
-                return base.AutoScrollMinSize;
-            }
+            get => base.AutoScrollMinSize;
             set {
                 base.AutoScrollMinSize = value;
             }
@@ -233,9 +229,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public new Size AutoScrollMargin {
-            get {
-                return base.AutoScrollMargin;
-            }
+            get => base.AutoScrollMargin;
             set {
                 base.AutoScrollMargin = value;
             }
@@ -249,9 +243,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormAutoScrollPositionDescr))        
         ]
         public new Point AutoScrollPosition {
-            get {
-                return base.AutoScrollPosition;
-            }
+            get => base.AutoScrollPosition;
 
             set {
                 base.AutoScrollPosition = value;
@@ -265,10 +257,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -286,9 +275,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImage"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -297,9 +284,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -318,9 +303,7 @@ namespace System.Windows.Forms {
         SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")
         ]
         public override BindingContext BindingContext {
-            get {
-                return BindingContextInternal;
-            }
+            get => BindingContextInternal;
             set {
                 BindingContextInternal = value;
             }
@@ -338,9 +321,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitterBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -408,9 +389,7 @@ namespace System.Windows.Forms {
         ///     top of the container, extending the length of the container.
         /// </devdoc>
         public new DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock = value;
                 if (this.ParentInternal != null) {
@@ -445,9 +424,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerFixedPanelDescr))
         ]
         public FixedPanel FixedPanel {
-            get {
-                return fixedPanel;
-            }
+ get => fixedPanel;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -487,9 +464,7 @@ namespace System.Windows.Forms {
         ]
 
         public bool IsSplitterFixed {
-            get {
-                return splitterFixed;
-            }
+            get => splitterFixed;
             set {
                 splitterFixed = value;
             }
@@ -528,7 +503,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerOrientationDescr))
         ]
         public Orientation Orientation {
-            get { return  orientation; }
+            get => orientation; 
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical)){
@@ -546,9 +521,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.OverrideCursor"]/*' />
         private Cursor OverrideCursor {
-            get {
-                return overrideCursor;
-            }
+            get => overrideCursor;
             set {
                 if (overrideCursor != value) {
                     overrideCursor = value;
@@ -614,7 +587,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -636,9 +609,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerPanel1CollapsedDescr))
         ]
         public bool Panel1Collapsed {
-            get {
-                return panel1.Collapsed;
-            }
+            get => panel1.Collapsed;
             set {
                 if (value != panel1.Collapsed) {
                     if (value && panel2.Collapsed) {
@@ -660,9 +631,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerPanel2CollapsedDescr))
         ]
         public bool Panel2Collapsed {
-            get {
-                return panel2.Collapsed;
-            }
+            get => panel2.Collapsed;
             set {
                 if (value != panel2.Collapsed) {
                     if (value && panel1.Collapsed) {
@@ -685,9 +654,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All)       
         ]
         public int Panel1MinSize {
-            get {
-                return panel1MinSize;
-            }
+            get => panel1MinSize;
             set {
                 newPanel1MinSize = value;
                 if (value != Panel1MinSize && !initializing) {
@@ -724,9 +691,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All)
         ]
         public int Panel2MinSize {
-            get {
-                return panel2MinSize;
-            }
+            get => panel2MinSize;
             set {
                 newPanel2MinSize = value;
                 if (value != Panel2MinSize && !initializing) {
@@ -748,10 +713,7 @@ namespace System.Windows.Forms {
         ]
         public int SplitterDistance 
         {
-            get
-            {
-                return splitDistance;
-            }
+            get => splitDistance;
             set
             {
                 if (value != SplitterDistance)
@@ -828,9 +790,7 @@ namespace System.Windows.Forms {
 
         private int SplitterDistanceInternal {
 
-            get {
-                return splitterDistance;
-            }
+            get => splitterDistance;
             set {
                 SplitterDistance = value;
             }
@@ -847,9 +807,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitContainerSplitterIncrementDescr))
         ]
         public int SplitterIncrement {
-            get {
-                return splitterInc;
-            }
+            get => splitterInc;
             set {
 
                 if (value < 1 ) {
@@ -890,9 +848,7 @@ namespace System.Windows.Forms {
         DefaultValue(4)
         ]
         public int SplitterWidth {
-            get {
-                return splitterWidth;
-            }
+            get => splitterWidth;
             set {
                 newSplitterWidth = value;
                 if (value != SplitterWidth && !initializing) {
@@ -924,9 +880,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public new bool TabStop {
-            get {
-                return tabStop;
-            }
+            get => tabStop;
             set {
                 if (TabStop != value) {
                     tabStop = value;
@@ -940,9 +894,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }

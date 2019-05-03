@@ -131,9 +131,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBaseAlignmentDescr))
         ]
         public TabAlignment Alignment {
-            get {
-                return alignment;
-            }
+            get => alignment;
 
             set {
                 if (this.alignment != value) {
@@ -213,9 +211,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -231,9 +227,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -264,9 +258,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -275,9 +267,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -414,9 +404,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBaseDrawModeDescr))
         ]
         public TabDrawMode DrawMode {
-            get {
-                return drawMode;
-            }
+            get => drawMode;
 
             set {
                 //valid values are 0x0 to 0x1
@@ -441,9 +429,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBaseHotTrackDescr))
         ]
         public bool HotTrack {
-            get {
-                return tabControlState[TABCONTROLSTATE_hotTrack];
-            }
+            get => tabControlState[TABCONTROLSTATE_hotTrack];
 
             set {
                 if (HotTrack != value) {
@@ -467,9 +453,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBaseImageListDescr))
         ]
         public ImageList ImageList {
-            get {
-                return imageList;
-            }
+            get => imageList;
             set {
                 if (this.imageList != value) {
                     EventHandler recreateHandler = new EventHandler(ImageListRecreateHandle);
@@ -547,9 +531,7 @@ namespace System.Windows.Forms {
         ///     When the Add ends ... we reset this flag.
         /// </devdoc>
         private bool InsertingItem {
-            get {
-                return (bool)tabControlState[TABCONTROLSTATE_insertingItem];
-            }
+            get => (bool)tabControlState[TABCONTROLSTATE_insertingItem];
             set {
                 tabControlState[TABCONTROLSTATE_insertingItem] = value;
             }
@@ -569,9 +551,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBaseMultilineDescr))
         ]
         public bool Multiline {
-            get {
-                return tabControlState[TABCONTROLSTATE_multiline];
-            }
+            get => tabControlState[TABCONTROLSTATE_multiline];
             set {
                 if (Multiline != value) {
                     tabControlState[TABCONTROLSTATE_multiline] = value;
@@ -593,9 +573,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBasePaddingDescr))
         ]
         public new Point Padding {
-            get {
-                return padding;
-            }
+            get => padding;
             set {
                 if (value.X < 0 || value.Y < 0)
                 {
@@ -625,10 +603,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -746,9 +721,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabControlSelectedTabDescr))
         ]
         public TabPage SelectedTab {
-            get {
-                return SelectedTabInternal;
-            }
+            get => SelectedTabInternal;
             set {
                 SelectedTabInternal = value;
             }
@@ -786,9 +759,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public TabSizeMode SizeMode {
-            get {
-                return sizeMode;
-            }
+            get => sizeMode;
             set {
                 if (sizeMode == value) return;
 
@@ -814,9 +785,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabBaseShowToolTipsDescr))
         ]
         public bool ShowToolTips {
-            get {
-                return tabControlState[TABCONTROLSTATE_showToolTips];
-            }
+            get => tabControlState[TABCONTROLSTATE_showToolTips];
             set {
                 if (ShowToolTips != value) {
                     tabControlState[TABCONTROLSTATE_showToolTips] = value;
@@ -858,9 +827,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -2068,9 +2035,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.TabPageCollection.this"]/*' />
             public virtual TabPage this[int index] {
-                get {
-                    return owner.GetTabPage(index);
-                }
+                get => owner.GetTabPage(index);
                 set {
                     owner.SetTabPage(index, value, value.GetTCITEM());
                 }

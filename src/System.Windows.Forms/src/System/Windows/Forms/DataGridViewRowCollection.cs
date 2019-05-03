@@ -109,10 +109,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.IList.this"]/*' />
         object IList.this[int index]
         {
-            get
-            {
-                return this[index]; 
-            }
+            get => this[index]; 
             set 
             {
                 throw new NotSupportedException();

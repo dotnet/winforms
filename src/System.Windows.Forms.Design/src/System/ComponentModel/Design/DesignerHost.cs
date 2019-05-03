@@ -105,7 +105,7 @@ namespace System.ComponentModel.Design
         // Internal flag which is used to track when we are in the process of commiting or canceling a transaction.
         internal bool IsClosingTransaction
         {
-            get { return _state[s_stateIsClosingTransaction]; }
+            get => _state[s_stateIsClosingTransaction]; 
             set { _state[s_stateIsClosingTransaction] = value; }
         }
 

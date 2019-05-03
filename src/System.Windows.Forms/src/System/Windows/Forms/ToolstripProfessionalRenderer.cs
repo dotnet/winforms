@@ -93,9 +93,7 @@ namespace System.Windows.Forms {
         
     
         public bool RoundedEdges {
-            get {
-                return roundedEdges;
-            }
+            get => roundedEdges;
             set {
                 roundedEdges = value;
             }

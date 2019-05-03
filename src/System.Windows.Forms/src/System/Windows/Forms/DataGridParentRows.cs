@@ -91,9 +91,7 @@ namespace System.Windows.Forms {
         }
 
         internal Color BackColor {
-            get {
-                return backBrush.Color;
-            }
+            get => backBrush.Color;
             set {
                 if (value.IsEmpty)
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows BackColor"));
@@ -105,9 +103,7 @@ namespace System.Windows.Forms {
         }
 
         internal SolidBrush BackBrush {
-            get {
-                return backBrush;
-            }
+            get => backBrush;
             set {
                 if (value != backBrush) {
                     CheckNull(value, "BackBrush");
@@ -118,9 +114,7 @@ namespace System.Windows.Forms {
         }
 
         internal SolidBrush ForeBrush {
-            get {
-                return foreBrush;
-            }
+            get => foreBrush;
             set {
                 if (value != foreBrush) {
                     CheckNull(value, "BackBrush");
@@ -151,9 +145,7 @@ namespace System.Windows.Forms {
 
         /*
         internal Color BorderColor {
-            get {
-                return borderColor;
-            }
+            get => borderColor;
             set {
                 if (value != borderColor) {
                     borderColor = value;
@@ -164,9 +156,7 @@ namespace System.Windows.Forms {
         */
 
         internal Brush BorderBrush {
-            get {
-                return borderBrush;
-            }
+            get => borderBrush;
             set {
                 if (value != borderBrush) {
                     borderBrush = value;
@@ -177,9 +167,7 @@ namespace System.Windows.Forms {
 
         /*
         internal Brush GridLineBrush {
-            get {
-                return gridLineBrush;
-            }
+            get => gridLineBrush;
             set {
                 if (value != gridLineBrush) {
                     gridLineBrush = value;
@@ -190,9 +178,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool GridLineDots {
-            get {
-                return gridLineDots;
-            }
+            get => gridLineDots;
             set {
                 if (gridLineDots != value) {
                     gridLineDots = value;
@@ -210,9 +196,7 @@ namespace System.Windows.Forms {
         }
 
         internal Color ForeColor {
-            get {
-                return foreBrush.Color;
-            }
+            get => foreBrush.Color;
             set {
                 if (value.IsEmpty)
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Parent Rows ForeColor"));
@@ -224,9 +208,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool Visible {
-            get {
-                return dataGrid.ParentRowsVisible;
-            }
+            get => dataGrid.ParentRowsVisible;
             set {
                 dataGrid.ParentRowsVisible = value;
             }

@@ -35,7 +35,7 @@ namespace System.Windows.Forms {
         }
 
         internal override bool KeyboardActive {
-            get { return base.KeyboardActive; }
+            get => base.KeyboardActive; 
             set {
                 if (base.KeyboardActive != value) {
                     base.KeyboardActive = value;
@@ -57,9 +57,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public new bool CanOverflow {
-            get {
-                return base.CanOverflow;
-            }
+            get => base.CanOverflow;
             set {
                 base.CanOverflow = value;
             }
@@ -97,9 +95,7 @@ namespace System.Windows.Forms {
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
         public new ToolStripGripStyle GripStyle {
-            get {
-                return base.GripStyle;
-            }
+            get => base.GripStyle;
             set {
                 base.GripStyle = value;
             }
@@ -121,9 +117,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
         public new bool ShowItemToolTips {
-            get {
-                return base.ShowItemToolTips;
-            }
+            get => base.ShowItemToolTips;
             set {
                 base.ShowItemToolTips = value;
             }
@@ -133,9 +127,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ToolStripStretchDescr))]
         public new bool Stretch {
-            get {
-                return base.Stretch;
-            }
+            get => base.Stretch;
             set {
                 base.Stretch = value;
             }
@@ -147,9 +139,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior))]
         [TypeConverterAttribute(typeof(MdiWindowListItemConverter))]
         public ToolStripMenuItem MdiWindowListItem {
-            get {
-                return mdiWindowListItem;
-            }
+            get => mdiWindowListItem;
             set {
                 mdiWindowListItem = value;
             }

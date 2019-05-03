@@ -156,9 +156,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static Rectangle Clip {
-            get {
-                return ClipInternal;
-            }
+            get => ClipInternal;
             set {
                 ClipInternal = value;
             }
@@ -194,9 +192,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static Cursor Current {
-            get {
-                return CurrentInternal;
-            }
+            get => CurrentInternal;
 
             set {
                 CurrentInternal = value;
@@ -320,9 +316,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }

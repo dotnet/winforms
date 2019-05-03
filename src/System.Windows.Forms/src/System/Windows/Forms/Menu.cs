@@ -127,9 +127,7 @@ namespace System.Windows.Forms
         Browsable(false)
         ]
         public string Name {
-            get {
-                return WindowsFormsUtils.GetComponentName(this, name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this, name);
             set {
                 if (value == null || value.Length == 0) {
                     name = null;
@@ -179,9 +177,7 @@ namespace System.Windows.Forms
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -660,9 +656,7 @@ namespace System.Windows.Forms
             
             /// <include file='doc\Menu.uex' path='docs/doc[@for="MenuItemCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     throw new NotSupportedException();
                 }

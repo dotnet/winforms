@@ -36,7 +36,7 @@ namespace WinformsControlsTest
         [TypeConverter(typeof(SomeCollectionTypeConverter))]
         public IList<int> AAAAAFirstCollection
         {
-            get { return new List<int>(new int[] { 1, 2, 3 }); }
+            get => new List<int>(new int[] { 1, 2, 3 }); 
             set { }
         }
     }

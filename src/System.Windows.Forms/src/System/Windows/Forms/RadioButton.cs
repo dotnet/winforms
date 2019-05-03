@@ -90,9 +90,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RadioButtonAutoCheckDescr))
         ]
         public bool AutoCheck {
-            get {
-                return autoCheck;
-            }
+            get => autoCheck;
 
             set {
                 if (autoCheck != value) {
@@ -117,9 +115,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RadioButtonAppearanceDescr))
         ]
         public Appearance Appearance {
-            get {
-                return appearance;
-            }
+            get => appearance;
 
             set {
                 if (appearance != value) {
@@ -169,9 +165,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RadioButtonCheckAlignDescr))
         ]
         public ContentAlignment CheckAlign {
-            get {
-                return checkAlign;
-            }
+            get => checkAlign;
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -203,9 +197,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RadioButtonCheckedDescr))
         ]
         public bool Checked {
-            get {
-                return isChecked;
-            }
+            get => isChecked;
 
             set {
                 if (isChecked != value) {
@@ -336,9 +328,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.TabStop"]/*' />
         [DefaultValue(false)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -357,9 +347,7 @@ namespace System.Windows.Forms {
         DefaultValue(ContentAlignment.MiddleLeft)
         ]
         public override ContentAlignment TextAlign {
-            get {
-                return base.TextAlign;
-            }
+            get => base.TextAlign;
             set {
                 base.TextAlign = value;
             }

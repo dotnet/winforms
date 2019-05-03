@@ -101,7 +101,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -198,9 +198,7 @@ namespace System.Windows.Forms {
         ]
         public bool Sorted {
 
-            get {
-                return sorted;
-            }
+            get => sorted;
 
             set {
                 sorted = value;
@@ -225,9 +223,7 @@ namespace System.Windows.Forms {
         ]
         public bool Wrap {
 
-            get {
-                return wrap;
-            }
+            get => wrap;
 
             set {
                 wrap = value;
@@ -599,9 +595,7 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public override object this[int index] {
-                get {
-                    return base[index];
-                }
+                get => base[index];
 
                 set {
                     base[index] = value;
@@ -837,9 +831,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject.Name"]/*' />
             public override string Name {
-                get {
-                    return name;
-                }
+                get => name;
                 set {
                     name = value;
                 }

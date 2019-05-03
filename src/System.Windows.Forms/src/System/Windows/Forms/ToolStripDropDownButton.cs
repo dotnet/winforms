@@ -51,9 +51,7 @@ namespace System.Windows.Forms
  
         [DefaultValue(true)]
         public new bool AutoToolTip {
-            get { 
-                return base.AutoToolTip;
-            }
+            get => base.AutoToolTip;
             set {
                 base.AutoToolTip = value;
             }
@@ -73,9 +71,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatAppearance))
         ]
         public bool ShowDropDownArrow {
-            get {
-                return showDropDownArrow;
-            }
+            get => showDropDownArrow;
             set {
                 if (showDropDownArrow != value) {
                     showDropDownArrow = value;

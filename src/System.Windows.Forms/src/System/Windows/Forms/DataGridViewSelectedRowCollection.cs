@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewSelectedRowCollection.uex' path='docs/doc[@for="DataGridViewSelectedRowCollection.IList.this"]/*' />
         object IList.this[int index]
         {
-            get { return this.items[index]; }
+            get => this.items[index]; 
             set { throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection)); }
         }
 

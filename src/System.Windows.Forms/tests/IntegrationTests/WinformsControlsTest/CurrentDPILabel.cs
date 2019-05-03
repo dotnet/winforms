@@ -19,7 +19,7 @@ namespace WinformsControlsTest
         [DefaultValue(false)]
         public override bool AutoSize 
         {
-            get { return base.AutoSize; }
+            get => base.AutoSize; 
             set { base.AutoSize = value; }
         }
         private void CurrentDPILabel_HandleCreated(object sender, EventArgs e)

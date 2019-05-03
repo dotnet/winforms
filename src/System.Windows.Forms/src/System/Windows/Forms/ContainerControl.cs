@@ -133,9 +133,7 @@ namespace System.Windows.Forms {
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AutoScaleMode AutoScaleMode {
-            get {
-                return autoScaleMode;
-            }
+            get => autoScaleMode;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoScaleMode.None, (int)AutoScaleMode.Inherit)){
@@ -268,9 +266,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContainerControlActiveControlDescr))
         ]
         public Control ActiveControl {
-            get {
-                return activeControl;
-            }
+            get => activeControl;
 
             set {
                 SetActiveControl(value);

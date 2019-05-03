@@ -716,10 +716,7 @@ namespace System.Windows.Forms
         ]
         public bool AllowUserToAddRows
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToAddRows];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToAddRows];
             set
             {
                 if (this.AllowUserToAddRows != value)
@@ -768,10 +765,7 @@ namespace System.Windows.Forms
         ]
         public bool AllowUserToDeleteRows
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToDeleteRows];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToDeleteRows];
             set
             {
                 if (this.AllowUserToDeleteRows != value)
@@ -816,10 +810,7 @@ namespace System.Windows.Forms
         ]
         public bool AllowUserToOrderColumns
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToOrderColumns];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_allowUserToOrderColumns];
             set
             {
                 if (this.AllowUserToOrderColumns != value)
@@ -855,10 +846,7 @@ namespace System.Windows.Forms
         ]
         public bool AllowUserToResizeColumns
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeColumns];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeColumns];
             set
             {
                 if (this.AllowUserToResizeColumns != value)
@@ -894,10 +882,7 @@ namespace System.Windows.Forms
         ]
         public bool AllowUserToResizeRows
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeRows];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_allowUserToResizeRows];
             set
             {
                 if (this.AllowUserToResizeRows != value)
@@ -992,10 +977,7 @@ namespace System.Windows.Forms
         ]
         public bool AutoGenerateColumns
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns];
             set{
                 if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_autoGenerateColumns] != value)
                 {
@@ -1022,10 +1004,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public override bool AutoSize
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_isAutoSized];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_isAutoSized];
             set
             {
                 base.AutoSize = value;
@@ -1046,10 +1025,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewAutoSizeColumnsMode AutoSizeColumnsMode
         {
-            get
-            {
-                return this.autoSizeColumnsMode;
-            }
+            get => this.autoSizeColumnsMode;
         
             set
             {
@@ -1124,10 +1100,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewAutoSizeRowsMode AutoSizeRowsMode
         {
-            get
-            {
-                return this.autoSizeRowsMode;
-            }
+            get => this.autoSizeRowsMode;
             set
             {
                 switch (value) 
@@ -1176,10 +1149,7 @@ namespace System.Windows.Forms
         ]
         public override Color BackColor
         {
-            get 
-            {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set 
             {
                 base.BackColor = value;
@@ -1215,10 +1185,7 @@ namespace System.Windows.Forms
         ]
         public Color BackgroundColor
         {
-            get
-            {
-                return this.backgroundBrush.Color;
-            }
+            get => this.backgroundBrush.Color;
             set
             {
                 if (value.IsEmpty)
@@ -1255,10 +1222,7 @@ namespace System.Windows.Forms
         ]
         public override Image BackgroundImage
         {
-            get
-            {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set
             {
                 base.BackgroundImage = value;
@@ -1272,10 +1236,7 @@ namespace System.Windows.Forms
         ]
         public override ImageLayout BackgroundImageLayout
         {
-            get
-            {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set
             {
                 base.BackgroundImageLayout = value;
@@ -1318,10 +1279,7 @@ namespace System.Windows.Forms
         ]
         public BorderStyle BorderStyle
         {
-            get 
-            {
-                return this.borderStyle;
-            }
+            get => this.borderStyle;
             set 
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2
@@ -1583,10 +1541,7 @@ namespace System.Windows.Forms
 
         internal bool CellMouseDownInContentBounds
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds];
             set
             {
                 this.dataGridViewState2[DATAGRIDVIEWSTATE2_cellMouseDownInContentBounds] = value;
@@ -1638,10 +1593,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewClipboardCopyMode ClipboardCopyMode
         {
-            get
-            {
-                return this.clipboardCopyMode;
-            }
+            get => this.clipboardCopyMode;
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
@@ -1662,10 +1614,7 @@ namespace System.Windows.Forms
         ]
         public int ColumnCount
         {
-            get
-            {
-                return this.Columns.Count;
-            }
+            get => this.Columns.Count;
             set
             {
                 if (value < 0)
@@ -1874,10 +1823,7 @@ namespace System.Windows.Forms
         ]
         public int ColumnHeadersHeight
         {
-            get 
-            {
-                return this.columnHeadersHeight;
-            }
+            get => this.columnHeadersHeight;
             set 
             {
                 if (value < minimumColumnHeadersHeight)
@@ -1929,10 +1875,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewColumnHeadersHeightSizeMode ColumnHeadersHeightSizeMode
         {
-            get
-            {
-                return this.columnHeadersHeightSizeMode;
-            }
+            get => this.columnHeadersHeightSizeMode;
             set
             {
                // Sequential enum.  Valid values are 0x0 to 0x2
@@ -1988,10 +1931,7 @@ namespace System.Windows.Forms
         ]
         public bool ColumnHeadersVisible 
         {
-            get 
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_columnHeadersVisible];
             set 
             {
                 if (this.ColumnHeadersVisible != value)
@@ -2573,10 +2513,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewEditMode EditMode
         {
-            get
-            {
-                return this.editMode;
-            }
+            get => this.editMode;
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
@@ -2723,10 +2660,7 @@ namespace System.Windows.Forms
         ]
         public bool EnableHeadersVisualStyles
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles];
             set
             {
                 if (this.dataGridViewState2[DATAGRIDVIEWSTATE2_enableHeadersVisualStyles] != value)
@@ -2930,10 +2864,7 @@ namespace System.Windows.Forms
         ]
         public int FirstDisplayedScrollingColumnIndex
         {
-            get
-            {
-                return this.displayedBandsInfo.FirstDisplayedScrollingCol;
-            }
+            get => this.displayedBandsInfo.FirstDisplayedScrollingCol;
             set
             {
                 if (value < 0 || value >= this.Columns.Count)
@@ -3006,10 +2937,7 @@ namespace System.Windows.Forms
         ]
         public int FirstDisplayedScrollingRowIndex
         {
-            get
-            {
-                return this.displayedBandsInfo.FirstDisplayedScrollingRow;
-            }
+            get => this.displayedBandsInfo.FirstDisplayedScrollingRow;
             set
             {
                 if (value < 0 || value >= this.Rows.Count)
@@ -3085,10 +3013,7 @@ namespace System.Windows.Forms
         ]
         public override Color ForeColor
         {
-            get 
-            {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set 
             {
                 base.ForeColor = value;
@@ -3113,10 +3038,7 @@ namespace System.Windows.Forms
         ]
         public override Font Font
         {
-            get 
-            {
-                return base.Font;
-            }
+            get => base.Font;
             set 
             {
                 base.Font = value;
@@ -3144,10 +3066,7 @@ namespace System.Windows.Forms
         ]
         public Color GridColor
         {
-            get
-            {
-                return this.gridPen.Color;
-            }
+            get => this.gridPen.Color;
             set
             {
                 if (value.IsEmpty)
@@ -3198,10 +3117,7 @@ namespace System.Windows.Forms
 
         internal int HorizontalOffset 
         {
-            get 
-            {
-                return this.horizontalOffset;
-            }
+            get => this.horizontalOffset;
             set 
             {
                 if (value < 0)
@@ -3334,10 +3250,7 @@ namespace System.Windows.Forms
         ]
         public int HorizontalScrollingOffset
         {
-            get
-            {
-                return this.horizontalOffset;
-            }
+            get => this.horizontalOffset;
             set
             {
                 // int widthNotVisible = this.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) - this.layout.Data.Width;
@@ -3396,10 +3309,7 @@ namespace System.Windows.Forms
 
         internal bool InDisplayIndexAdjustments
         {
-            get
-            {
-                return this.dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments];
-            }
+            get => this.dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments];
             set
             {
                 this.dataGridViewOper[DATAGRIDVIEWOPER_inDisplayIndexAdjustments] = value;
@@ -3594,10 +3504,7 @@ namespace System.Windows.Forms
         ]
         public bool MultiSelect
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_multiSelect];
             set
             {
                 if (this.MultiSelect != value)
@@ -3643,10 +3550,7 @@ namespace System.Windows.Forms
 
         private int NoSelectionChangeCount
         {
-            get
-            {
-                return this.noSelectionChangeCount;
-            }
+            get => this.noSelectionChangeCount;
             set
             {
                 Debug.Assert(value >= 0);
@@ -3666,10 +3570,7 @@ namespace System.Windows.Forms
         ]
         public new Padding Padding 
         {
-            get 
-            { 
-                return base.Padding; 
-            }
+            get => base.Padding; 
             set 
             { 
                 base.Padding = value;
@@ -3709,10 +3610,7 @@ namespace System.Windows.Forms
         ]
         public bool ReadOnly
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly];
             set
             {
                 if (value != this.dataGridViewState1[DATAGRIDVIEWSTATE1_readOnly])
@@ -3831,10 +3729,7 @@ namespace System.Windows.Forms
         ]
         public int RowCount
         {
-            get
-            {
-                return this.Rows.Count;
-            }
+            get => this.Rows.Count;
             set
             {
                 if (this.AllowUserToAddRowsInternal)
@@ -4042,10 +3937,7 @@ namespace System.Windows.Forms
         ]
         public bool RowHeadersVisible
         {
-            get 
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_rowHeadersVisible];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_rowHeadersVisible];
             set 
             {
                 if (this.RowHeadersVisible != value)
@@ -4079,10 +3971,7 @@ namespace System.Windows.Forms
         ]
         public int RowHeadersWidth
         {
-            get 
-            {
-                return this.rowHeadersWidth;
-            }
+            get => this.rowHeadersWidth;
             set 
             {
                 if (value < minimumRowHeadersWidth)
@@ -4163,10 +4052,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewRowHeadersWidthSizeMode RowHeadersWidthSizeMode
         {
-            get
-            {
-                return this.rowHeadersWidthSizeMode;
-            }
+            get => this.rowHeadersWidthSizeMode;
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
@@ -4324,10 +4210,7 @@ namespace System.Windows.Forms
         ]
         public ScrollBars ScrollBars
         {
-            get
-            {
-                return this.scrollBars;
-            }
+            get => this.scrollBars;
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x3
@@ -4497,10 +4380,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewSelectionMode SelectionMode
         {
-            get
-            {
-                return this.selectionMode;
-            }
+            get => this.selectionMode;
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x4
@@ -4536,10 +4416,7 @@ namespace System.Windows.Forms
         ]
         public bool ShowCellErrors
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrors];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellErrors];
             set
             {
                 if (this.ShowCellErrors != value)
@@ -4591,10 +4468,7 @@ namespace System.Windows.Forms
         ]
         public bool ShowCellToolTips
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellToolTips];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_showCellToolTips];
             set
             {
                 if (this.ShowCellToolTips != value)
@@ -4645,10 +4519,7 @@ namespace System.Windows.Forms
         ]
         public bool ShowEditingIcon
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_showEditingIcon];
             set
             {
                 if (this.ShowEditingIcon != value)
@@ -4686,10 +4557,7 @@ namespace System.Windows.Forms
         ]
         public bool ShowRowErrors
         {
-            get
-            {
-                return this.dataGridViewState2[DATAGRIDVIEWSTATE2_showRowErrors];
-            }
+            get => this.dataGridViewState2[DATAGRIDVIEWSTATE2_showRowErrors];
             set 
             {
                 if (this.ShowRowErrors != value)
@@ -4785,10 +4653,7 @@ namespace System.Windows.Forms
         ]
         public bool StandardTab
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab];
             set
             {
                 if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_standardTab] != value)
@@ -4809,10 +4674,7 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return base.Text;
-            }
+            get => base.Text;
             set
             {
                 base.Text = value;
@@ -4941,10 +4803,7 @@ namespace System.Windows.Forms
 
         internal int VerticalOffset
         {
-            get
-            {
-                return this.verticalOffset;
-            }
+            get => this.verticalOffset;
             set 
             {
                 if (value < 0)
@@ -5019,10 +4878,7 @@ namespace System.Windows.Forms
         ]
         public bool VirtualMode
         {
-            get
-            {
-                return this.dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode];
-            }
+            get => this.dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode];
             set
             {
                 if (this.dataGridViewState1[DATAGRIDVIEWSTATE1_virtualMode] != value)

@@ -56,10 +56,7 @@ namespace System.Windows.Forms.Design
 
         private string AccessibleName
         {
-            get
-            {
-                return (string)ShadowProperties["AccessibleName"];
-            }
+            get => (string)ShadowProperties["AccessibleName"];
             set
             {
                 ShadowProperties["AccessibleName"] = value;

@@ -143,10 +143,7 @@ namespace System.Windows.Forms.Design {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -567,9 +564,7 @@ namespace System.Windows.Forms.Design {
             }
 
             internal bool Dirty {
-                get {
-                    return isDirty;
-                }
+                get => isDirty;
                 set {
                     isDirty = value;
                 }

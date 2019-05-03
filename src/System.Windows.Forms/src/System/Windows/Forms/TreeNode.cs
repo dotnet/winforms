@@ -306,9 +306,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool CheckedStateInternal {
-            get {
-                return treeNodeState[TREENODESTATE_isChecked];
-            }
+            get => treeNodeState[TREENODESTATE_isChecked];
             set {
                 treeNodeState[TREENODESTATE_isChecked] = value;
             }
@@ -317,9 +315,7 @@ namespace System.Windows.Forms {
         // Checked does sanity checking and fires Before/AfterCheck events, then forwards to this
         // property to get/set the actual checked value.
         internal bool CheckedInternal {
-            get {
-                return CheckedStateInternal;
-            }
+            get => CheckedStateInternal;
             set {
                 CheckedStateInternal = value;
                 if (handle == IntPtr.Zero)
@@ -390,9 +386,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenu ContextMenu {
-            get {
-                return contextMenu;
-            }
+            get => contextMenu;
             set {
                 contextMenu = value;
             }
@@ -407,9 +401,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenuStrip ContextMenuStrip {
-            get {
-                return contextMenuStrip;
-            }
+            get => contextMenuStrip;
             set {
                 contextMenuStrip = value;
             }
@@ -524,7 +516,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.ImageList")
         ]
         public int ImageIndex {
-            get { return ImageIndexer.Index;}
+            get => ImageIndexer.Index;
             set {
                 ImageIndexer.Index = value;
                 UpdateNode(NativeMethods.TVIF_IMAGE);
@@ -548,7 +540,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.ImageList")
         ]
         public string ImageKey {
-            get {return ImageIndexer.Key;}
+            get => ImageIndexer.Key;
             set {
                 ImageIndexer.Key = value;
                 UpdateNode(NativeMethods.TVIF_IMAGE);
@@ -854,9 +846,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.ImageList")
         ]
         public int SelectedImageIndex {
-            get {
-                return SelectedImageIndexer.Index;
-            }
+            get => SelectedImageIndexer.Index;
             set {
                 SelectedImageIndexer.Index = value;
                 UpdateNode(NativeMethods.TVIF_SELECTEDIMAGE);
@@ -879,9 +869,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.ImageList")
         ]
         public string SelectedImageKey {
-            get { 
-                return SelectedImageIndexer.Key; 
-            }
+            get => SelectedImageIndexer.Key; 
             set {
                 SelectedImageIndexer.Key = value;
                 UpdateNode(NativeMethods.TVIF_SELECTEDIMAGE);
@@ -927,8 +915,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.StateImageList")
         ]
         public string StateImageKey {
-            get { 
-                return StateImageIndexer.Key; }
+            get => StateImageIndexer.Key; 
             set {
                 if (StateImageIndexer.Key != value) {
                     StateImageIndexer.Key = value;
@@ -952,9 +939,7 @@ namespace System.Windows.Forms {
         RelatedImageList("TreeView.StateImageList")
         ]
         public int StateImageIndex {
-            get {
-                return (treeView == null || treeView.StateImageList == null) ? -1:StateImageIndexer.Index;
-            }
+            get => (treeView == null || treeView.StateImageList == null) ? -1:StateImageIndexer.Index;
             set {
                 if (value < -1 || value > ALLOWEDIMAGES) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidArgument, nameof(StateImageIndex), value));
@@ -978,9 +963,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -996,9 +979,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeNodeTextDescr))
         ]
         public string Text {
-            get {
-                return text == null ? "" : text;
-            }
+            get => text == null ? "" : text;
             set {
                 this.text = value;
                 UpdateNode(NativeMethods.TVIF_TEXT);
@@ -1017,9 +998,7 @@ namespace System.Windows.Forms {
         DefaultValue("")
         ]
         public string ToolTipText {
-            get {
-                return toolTipText;
-            }
+            get => toolTipText;
             set {
                 toolTipText = value;
             }
@@ -1034,9 +1013,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TreeNodeNodeNameDescr))
         ]
         public string Name {
-            get {
-                return name == null ? "" : name;
-            }
+            get => name == null ? "" : name;
             set {
                 this.name = value;
             }

@@ -77,9 +77,7 @@ namespace System.Windows.Forms {
         ///     Returns the ending time of this range.
         /// </devdoc>
         public DateTime End {
-            get { 
-                return end;
-            }
+            get => end;
             set { 
                 end = value.Date;
             }
@@ -90,9 +88,7 @@ namespace System.Windows.Forms {
         ///     Starting time of this range
         /// </devdoc>
         public DateTime Start {
-            get {
-                return start;
-            }
+            get => start;
             set { 
                 start = value.Date;
             }

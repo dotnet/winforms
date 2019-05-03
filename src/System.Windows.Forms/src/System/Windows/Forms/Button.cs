@@ -72,9 +72,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlAutoSizeModeDescr))
         ]
         public AutoSizeMode AutoSizeMode {
-            get {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set {
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
@@ -173,9 +171,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ButtonDialogResultDescr))
         ]
         public virtual DialogResult DialogResult {
-            get {
-                return dialogResult;
-            }
+            get => dialogResult;
 
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)DialogResult.None, (int) DialogResult.No)) {

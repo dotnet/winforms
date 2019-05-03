@@ -39,9 +39,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public static bool RenderMatchingApplicationState {
-            get {
-                return renderMatchingApplicationState;
-            }
+            get => renderMatchingApplicationState;
             set {
                 renderMatchingApplicationState = value;
             }

@@ -81,9 +81,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new bool RightToLeftAutoMirrorImage {
-            get {
-                return base.RightToLeftAutoMirrorImage;
-            }
+            get => base.RightToLeftAutoMirrorImage;
             set {
                 base.RightToLeftAutoMirrorImage = value;
             }

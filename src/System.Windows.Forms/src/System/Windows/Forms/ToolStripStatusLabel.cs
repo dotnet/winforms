@@ -73,9 +73,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public new ToolStripItemAlignment Alignment {
-           get {
-               return base.Alignment;
-           }
+           get => base.Alignment;
            set {
                base.Alignment = value;
            }
@@ -89,9 +87,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatAppearance))
         ]
         public Border3DStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
             set {
                 if (!ClientUtils.IsEnumValid_NotSequential(value, 
                                              (int)value,
@@ -123,9 +119,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatAppearance))
         ]
         public ToolStripStatusLabelBorderSides BorderSides {
-            get {
-                return borderSides;
-            }
+            get => borderSides;
             set {
                 // no Enum.IsDefined as this is a flags enum.
                 if (borderSides != value) {
@@ -158,7 +152,7 @@ namespace System.Windows.Forms
         SRCategory(nameof(SR.CatAppearance))
         ]
         public bool Spring {
-            get { return spring; }
+            get => spring; 
             set {
                 if (spring != value) {
                     spring = value;
@@ -182,9 +176,7 @@ namespace System.Windows.Forms
         EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutomationLiveSetting LiveSetting {
-            get {
-                return liveSetting;
-            }
+            get => liveSetting;
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));

@@ -248,9 +248,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxCheckedDescr))
         ]
         public bool Checked {
-            get {
-                return CheckState != CheckState.Unchecked;
-            }
+            get => CheckState != CheckState.Unchecked;
 
             set {
                 if (value != Checked) {
@@ -355,9 +353,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.ToolStripButtonCheckOnClickDescr))
          ]
          public bool CheckOnClick {
-             get {
-                 return checkOnClick;
-             }
+             get => checkOnClick;
              set {
                  checkOnClick = value;
              }
@@ -432,9 +428,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout))
      	]
         public new ToolStripItemOverflow Overflow {
-            get { 
-                return base.Overflow;
-            }
+            get => base.Overflow;
             set { 
                 base.Overflow = value;
             }
@@ -501,9 +495,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public string ShortcutKeyDisplayString {
-            get {
-                return shortcutKeyDisplayString;
-            }
+            get => shortcutKeyDisplayString;
             set {
                 if (shortcutKeyDisplayString != value) {
                     shortcutKeyDisplayString = value;
@@ -534,9 +526,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MenuItemShowShortCutDescr))
         ]
         public bool ShowShortcutKeys {
-            get {
-                return showShortcutKeys;
-            }
+            get => showShortcutKeys;
             set {
                 if (value != showShortcutKeys) {
                    ClearShortcutCache();
@@ -1260,16 +1250,14 @@ namespace System.Windows.Forms {
         }
         // the current item to autoexpand.
         private ToolStripMenuItem CurrentItem {
-            get {
-                return currentItem;
-            }
+            get => currentItem;
             set{
                 Debug.WriteLineIf(ToolStrip.MenuAutoExpandDebug.TraceVerbose && currentItem != value, "[MenuTimer.CurrentItem] changed: " + ((value == null) ? "null" : value.ToString()));
                 currentItem = value;                
             }
         }
         public bool InTransition {
-            get { return inTransition; }
+            get => inTransition; 
             set { inTransition = value; }
         }
           

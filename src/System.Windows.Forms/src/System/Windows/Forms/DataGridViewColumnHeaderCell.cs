@@ -69,10 +69,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SortOrder SortGlyphDirection
         {
-            get
-            {
-                return this.sortGlyphDirection;
-            }
+            get => this.sortGlyphDirection;
             set
             {
                 // Sequential enum.  Valid values are 0x0 to 0x2

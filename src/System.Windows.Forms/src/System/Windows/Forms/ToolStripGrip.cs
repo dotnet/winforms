@@ -65,9 +65,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool MovingToolStrip {
-            get {
-                return ((ToolStripPanelRow != null) && movingToolStrip);  
-            }
+            get => ((ToolStripPanelRow != null) && movingToolStrip);  
             set {
                 if ((movingToolStrip != value) && ParentInternal != null) {
                     if (value) {

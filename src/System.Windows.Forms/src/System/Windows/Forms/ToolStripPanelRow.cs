@@ -123,9 +123,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool CachedBoundsMode {
-            get {
-                return state[stateCachedBoundsMode];
-            }
+            get => state[stateCachedBoundsMode];
             set {
                 state[stateCachedBoundsMode] = value;
             }
@@ -197,9 +195,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Initialized "]/*' />
         private bool Initialized {
-            get {
-                return state[stateInitialized];
-            }
+            get => state[stateInitialized];
             set {
                 state[stateInitialized] = value;
             }
@@ -207,13 +203,13 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Margin"]/*' />
         public Padding Margin {
-            get { return CommonProperties.GetMargin(this); }
+            get => CommonProperties.GetMargin(this); 
             set { if (Margin != value ) CommonProperties.SetMargin(this, value); }
         }
 
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.Padding"]/*' />
         public virtual Padding Padding {
-            get { return CommonProperties.GetPadding(this, DefaultPadding); }
+            get => CommonProperties.GetPadding(this, DefaultPadding); 
             set {
                 if (Padding != value) CommonProperties.SetPadding(this, value);
             }

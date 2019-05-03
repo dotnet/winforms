@@ -145,10 +145,7 @@ namespace System.Windows.Forms
         ]
         public virtual ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return GetContextMenuStrip(this.RowIndex);
-            }
+            get => GetContextMenuStrip(this.RowIndex);
             set
             {
                 this.ContextMenuStripInternal = value;
@@ -157,10 +154,7 @@ namespace System.Windows.Forms
 
         private ContextMenuStrip ContextMenuStripInternal
         {
-            get
-            {
-                return (ContextMenuStrip)this.Properties.GetObject(PropCellContextMenuStrip);
-            }
+            get => (ContextMenuStrip)this.Properties.GetObject(PropCellContextMenuStrip);
             set
             {
                 ContextMenuStrip oldValue = (ContextMenuStrip)this.Properties.GetObject(PropCellContextMenuStrip);
@@ -186,10 +180,7 @@ namespace System.Windows.Forms
 
         private byte CurrentMouseLocation
         {
-            get
-            {
-                return (byte)(this.flags & (DATAGRIDVIEWCELL_flagDataArea | DATAGRIDVIEWCELL_flagErrorArea));
-            }
+            get => (byte)(this.flags & (DATAGRIDVIEWCELL_flagDataArea | DATAGRIDVIEWCELL_flagErrorArea));
             set
             {
                 this.flags = (byte)(this.flags & ~(DATAGRIDVIEWCELL_flagDataArea | DATAGRIDVIEWCELL_flagErrorArea));
@@ -299,10 +290,7 @@ namespace System.Windows.Forms
         ]
         public string ErrorText
         {
-            get
-            {
-                return GetErrorText(this.RowIndex);
-            }
+            get => GetErrorText(this.RowIndex);
             set
             {
                 this.ErrorTextInternal = value;
@@ -838,10 +826,7 @@ namespace System.Windows.Forms
         ]
         public object Tag
         {
-            get
-            {
-                return this.Properties.GetObject(PropCellTag);
-            }
+            get => this.Properties.GetObject(PropCellTag);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropCellTag))
@@ -858,10 +843,7 @@ namespace System.Windows.Forms
         ]
         public string ToolTipText
         {
-            get
-            {
-                return GetToolTipText(this.RowIndex);
-            }
+            get => GetToolTipText(this.RowIndex);
             set
             {
                 this.ToolTipTextInternal = value;
@@ -4801,10 +4783,7 @@ namespace System.Windows.Forms
             /// <include file='doc\DataGridViewCell.uex' path='docs/doc[@for="DataGridViewCellAccessibleObject.Owner"]/*' />
             public DataGridViewCell Owner
             {
-                get
-                {
-                    return this.owner;
-                }
+                get => this.owner;
                 set
                 {
                     if (this.owner != null)

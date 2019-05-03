@@ -116,9 +116,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormAutoScrollDescr))
         ]
         public virtual bool AutoScroll {
-            get {
-                return GetScrollState(ScrollStateAutoScrolling);
-            }
+            get => GetScrollState(ScrollStateAutoScrolling);
 
             set {
                 if (value) {
@@ -144,9 +142,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormAutoScrollMarginDescr))
         ]
         public Size AutoScrollMargin {
-            get {
-                return requestedScrollMargin;
-            }
+            get => requestedScrollMargin;
 
             set {
                 if (value.Width < 0 || value.Height < 0) {
@@ -192,9 +188,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormAutoScrollMinSizeDescr))
         ]
         public Size AutoScrollMinSize {
-            get {
-                return userAutoScrollMinSize;
-            }
+            get => userAutoScrollMinSize;
 
             set {
                 if (value != userAutoScrollMinSize) {
@@ -282,9 +276,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected bool HScroll {
-            get {
-                return GetScrollState(ScrollStateHScrollVisible);
-            }
+            get => GetScrollState(ScrollStateHScrollVisible);
             set { 
                 SetScrollState(ScrollStateHScrollVisible, value);
             }
@@ -320,9 +312,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected bool VScroll {
-            get { 
-                return GetScrollState(ScrollStateVScrollVisible);
-            }
+       get => GetScrollState(ScrollStateVScrollVisible);
             set {
                 SetScrollState(ScrollStateVScrollVisible, value);
             }

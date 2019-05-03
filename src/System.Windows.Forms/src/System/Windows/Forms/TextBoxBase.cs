@@ -141,9 +141,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxAcceptsTabDescr))
         ]
         public bool AcceptsTab {
-            get {
-                return textBoxFlags[acceptsTab];
-            }
+            get => textBoxFlags[acceptsTab];
             set {
                 if (textBoxFlags[acceptsTab] != value) {
                     textBoxFlags[acceptsTab] = value;
@@ -174,9 +172,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))
         ]
         public virtual bool ShortcutsEnabled {
-            get {
-                return textBoxFlags[shortcutsEnabled];
-            }
+            get => textBoxFlags[shortcutsEnabled];
             set {
                 if (shortcutsToDisable == null) {
                     shortcutsToDisable = new int[] {(int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
@@ -242,9 +238,7 @@ namespace System.Windows.Forms {
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
 
         public override bool AutoSize {
-            get {
-                return textBoxFlags[autoSize];
-            }
+            get => textBoxFlags[autoSize];
             set {
                 // Note that we intentionally do not call base.  TextBoxes size themselves by
                 // overriding SetBoundsCore (old RTM code).  We let CommonProperties.GetAutoSize
@@ -299,9 +293,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -328,9 +320,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -357,9 +347,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxBorderDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 if (borderStyle != value) {
@@ -481,9 +469,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -559,9 +545,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxHideSelectionDescr))
         ]
         public bool HideSelection {
-            get {
-                return textBoxFlags[hideSelection];
-            }
+            get => textBoxFlags[hideSelection];
 
             set {
                 if (textBoxFlags[hideSelection] != value) {
@@ -689,9 +673,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxMaxLengthDescr))
         ]
         public virtual int MaxLength {
-            get {
-                return maxLength;
-            }
+            get => maxLength;
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxLength), value, 0));
@@ -770,9 +752,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.All)
         ]
         public virtual bool Multiline {
-            get {
-                return textBoxFlags[multiline];
-            }
+            get => textBoxFlags[multiline];
             set {
                 if (textBoxFlags[multiline] != value) {
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Multiline)) {
@@ -810,7 +790,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -970,9 +950,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxReadOnlyDescr))
         ]
         public bool ReadOnly {
-            get {
-                return textBoxFlags[readOnly];
-            }
+            get => textBoxFlags[readOnly];
             set {
                 if (textBoxFlags[readOnly] != value) {
                     textBoxFlags[readOnly] = value;
@@ -1134,9 +1112,7 @@ namespace System.Windows.Forms {
         Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))
         ]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 if (value != base.Text) {
                     base.Text = value;
@@ -1164,9 +1140,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         internal override string WindowText {
-            get {
-                return base.WindowText;
-            }
+            get => base.WindowText;
 
             set {
                 if (value == null) value = "";
@@ -1227,9 +1201,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TextBoxWordWrapDescr))
         ]
         public bool WordWrap {
-            get {
-                return textBoxFlags[wordWrap];
-            }
+            get => textBoxFlags[wordWrap];
             set {
                 using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.WordWrap)) {
                     if (textBoxFlags[wordWrap] != value) {

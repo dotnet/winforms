@@ -66,9 +66,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDallowFullOpenDescr))
         ]
         public virtual bool AllowFullOpen {
-            get {
-                return !GetOption(NativeMethods.CC_PREVENTFULLOPEN);
-            }
+            get => !GetOption(NativeMethods.CC_PREVENTFULLOPEN);
 
             set {
                 SetOption(NativeMethods.CC_PREVENTFULLOPEN, !value);
@@ -88,9 +86,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDanyColorDescr))
         ]
         public virtual bool AnyColor {
-            get {
-                return GetOption(NativeMethods.CC_ANYCOLOR);
-            }
+            get => GetOption(NativeMethods.CC_ANYCOLOR);
 
             set {
                 SetOption(NativeMethods.CC_ANYCOLOR, value);
@@ -108,9 +104,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDcolorDescr))
         ]
         public Color Color {
-            get {
-                return color;
-            }
+            get => color;
             set {
                 if (!value.IsEmpty) {
                     color = value;
@@ -134,7 +128,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDcustomColorsDescr))
         ]
         public int[] CustomColors {
-            get { return(int[]) customColors.Clone();}
+            get => (int[]) customColors.Clone();
             set {
                 int length = value == null? 0: Math.Min(value.Length, 16);
                 if (length > 0) Array.Copy(value, 0, customColors, 0, length);
@@ -155,9 +149,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDfullOpenDescr))
         ]
         public virtual bool FullOpen {
-            get {
-                return GetOption(NativeMethods.CC_FULLOPEN);
-            }
+            get => GetOption(NativeMethods.CC_FULLOPEN);
 
             set {
                 SetOption(NativeMethods.CC_FULLOPEN, value);
@@ -197,9 +189,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDshowHelpDescr))
         ]
         public virtual bool ShowHelp {
-            get {
-                return GetOption(NativeMethods.CC_SHOWHELP);
-            }
+            get => GetOption(NativeMethods.CC_SHOWHELP);
             set {
                 SetOption(NativeMethods.CC_SHOWHELP, value);
             }
@@ -220,9 +210,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.CDsolidColorOnlyDescr))
         ]
         public virtual bool SolidColorOnly {
-            get {
-                return GetOption(NativeMethods.CC_SOLIDCOLOR);
-            }
+            get => GetOption(NativeMethods.CC_SOLIDCOLOR);
             set {
                 SetOption(NativeMethods.CC_SOLIDCOLOR, value);
             }

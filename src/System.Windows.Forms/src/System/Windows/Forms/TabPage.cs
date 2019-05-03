@@ -60,9 +60,7 @@ namespace System.Windows.Forms {
         Localizable(false)
         ]
         public override AutoSizeMode AutoSizeMode {
-            get {
-                return AutoSizeMode.GrowOnly;
-            }
+            get => AutoSizeMode.GrowOnly;
             set {
             }
         }
@@ -74,10 +72,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -173,9 +168,7 @@ namespace System.Windows.Forms {
         SRDescription (nameof(SR.TabItemImageIndexDescr))
         ]
         public int ImageIndex {
-            get {
-                return ImageIndexer.Index;
-            }
+            get => ImageIndexer.Index;
             set {
                 if (value < -1)
                 {
@@ -207,9 +200,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabItemImageIndexDescr))
         ]
         public string ImageKey {
-            get {
-                return ImageIndexer.Key;
-            }
+            get => ImageIndexer.Key;
             set {
                 this.ImageIndexer.Key = value;
 
@@ -234,9 +225,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Anchor"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override AnchorStyles Anchor {
-            get {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set {
                 base.Anchor = value;
             }
@@ -245,9 +234,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Dock"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock = value;
             }
@@ -263,9 +250,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Enabled"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool Enabled {
-            get {
-                return base.Enabled;
-            }
+            get => base.Enabled;
             set {
                 base.Enabled = value;
             }
@@ -285,9 +270,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TabItemUseVisualStyleBackColorDescr))
         ]
         public bool UseVisualStyleBackColor {
-            get {
-                return useVisualStyleBackColor;
-            }
+            get => useVisualStyleBackColor;
             set {
                 useVisualStyleBackColor = value;
                 this.Invalidate(true);
@@ -298,9 +281,7 @@ namespace System.Windows.Forms {
         // Make the Location property non-browsable for the TabPages.
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public Point Location {
-            get {
-                return base.Location;
-            }
+            get => base.Location;
             set {
                 base.Location = value;
             }
@@ -318,7 +299,7 @@ namespace System.Windows.Forms {
         [DefaultValue(typeof(Size), "0, 0")]
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override Size MaximumSize {
-            get { return base.MaximumSize; }
+            get => base.MaximumSize; 
 
             set { 
                 base.MaximumSize = value;
@@ -328,7 +309,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MinimumSize"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         public override Size MinimumSize {
-            get { return base.MinimumSize; }
+            get => base.MinimumSize; 
 
             set { 
                 base.MinimumSize = value;
@@ -344,9 +325,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndex"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public int TabIndex {
-            get {
-                return base.TabIndex;
-            }
+            get => base.TabIndex;
             set {
                 base.TabIndex = value;
             }
@@ -373,9 +352,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStop"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -395,9 +372,7 @@ namespace System.Windows.Forms {
         EditorBrowsable (EditorBrowsableState.Always)
         ]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
                 UpdateParent ();
@@ -422,9 +397,7 @@ namespace System.Windows.Forms {
         SRDescription (nameof(SR.TabItemToolTipTextDescr))
         ]
         public string ToolTipText {
-            get {
-                return toolTipText;
-            }
+            get => toolTipText;
             set {
                 if (value == null) {
                     value = "";
@@ -441,9 +414,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Visible"]/*' />
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public bool Visible {
-            get {
-                return base.Visible;
-            }
+            get => base.Visible;
             set {
                 base.Visible = value;
             }

@@ -340,9 +340,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.AutoScroll"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
-            get {
-                return base.AutoScroll;
-            }
+            get => base.AutoScroll;
             set {
                 base.AutoScroll = value;
             }
@@ -350,9 +348,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackColor"]/*' />
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 base.BackColor = value;
                 toolStrip.BackColor = value;
@@ -363,9 +359,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -381,9 +375,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -474,9 +466,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "ControlText")
         ]
         public Color CategoryForeColor {
-            get {
-                return categoryForeColor;
-            }
+            get => categoryForeColor;
             set {
                 if (categoryForeColor != value) {
                     categoryForeColor = value;
@@ -494,9 +484,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridCommandsBackColorDesc))
         ]
         public Color CommandsBackColor {
-            get {
-                return hotcommands.BackColor;
-            }
+            get => hotcommands.BackColor;
             set {
                 hotcommands.BackColor = value;
                 hotcommands.Label.BackColor = value;
@@ -512,9 +500,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))
         ]
         public Color CommandsForeColor {
-            get {
-                return hotcommands.ForeColor;
-            }
+            get => hotcommands.ForeColor;
             set {
                 hotcommands.ForeColor = value;
                 hotcommands.Label.ForeColor = value;
@@ -530,9 +516,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridCommandsLinkColorDesc))
         ]
         public Color CommandsLinkColor {
-            get {
-                return hotcommands.Label.LinkColor;
-            }
+            get => hotcommands.Label.LinkColor;
             set {
                 hotcommands.Label.LinkColor = value;
             }
@@ -547,9 +531,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridCommandsActiveLinkColorDesc))
         ]
         public Color CommandsActiveLinkColor {
-            get {
-                return hotcommands.Label.ActiveLinkColor;
-            }
+            get => hotcommands.Label.ActiveLinkColor;
             set {
                 hotcommands.Label.ActiveLinkColor = value;
             }
@@ -564,9 +546,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridCommandsDisabledLinkColorDesc))
         ]
         public Color CommandsDisabledLinkColor {
-            get {
-                return hotcommands.Label.DisabledLinkColor;
-            }
+            get => hotcommands.Label.DisabledLinkColor;
             set {
                 hotcommands.Label.DisabledLinkColor = value;
             }
@@ -582,9 +562,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "ControlDark")
         ]
         public Color CommandsBorderColor {
-            get {
-                return hotcommands.BorderColor;
-            }
+            get => hotcommands.BorderColor;
             set {
                 hotcommands.BorderColor = value;
             }
@@ -612,9 +590,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridCommandsVisibleIfAvailable))
         ]
         public virtual bool CommandsVisibleIfAvailable {
-            get {
-                return hotcommands.AllowVisible;
-            }
+            get => hotcommands.AllowVisible;
             set {
                 bool hotcommandsVisible = hotcommands.Visible;
                 hotcommands.AllowVisible = value;
@@ -678,9 +654,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DrawFlatToolbar"]/*' />
         protected bool DrawFlatToolbar {
-            get {
-                return drawFlatToolBar;
-            }
+            get => drawFlatToolBar;
             set {
                 if (drawFlatToolBar != value) {
                     drawFlatToolBar = value;
@@ -694,9 +668,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -710,9 +682,7 @@ namespace System.Windows.Forms {
         }
 
         private bool FreezePainting {
-            get {
-               return paintFrozen > 0;
-            }
+            get => paintFrozen > 0;
             set {
                
                if (value && IsHandleCreated && this.Visible) {
@@ -753,9 +723,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "Control")
         ]
         public Color HelpBackColor {
-            get {
-                return doccomment.BackColor;
-            }
+            get => doccomment.BackColor;
             set {
                 doccomment.BackColor = value;
             }
@@ -771,9 +739,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "ControlText")
         ]
         public Color HelpForeColor {
-            get {
-                return doccomment.ForeColor;
-            }
+            get => doccomment.ForeColor;
             set {
                 doccomment.ForeColor = value;
             }
@@ -789,9 +755,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "ControlDark")
         ]
         public Color HelpBorderColor {
-            get {
-                return doccomment.BorderColor;
-            }
+            get => doccomment.BorderColor;
             set {
                 doccomment.BorderColor = value;
             }
@@ -808,9 +772,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridHelpVisibleDesc))
         ]
         public virtual bool HelpVisible {
-            get {
-                return this.helpVisible;
-            }
+            get => this.helpVisible;
             set {
                 this.helpVisible = value;
 
@@ -858,9 +820,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "Highlight")
         ]
         public Color SelectedItemWithFocusBackColor {
-            get {
-                return selectedItemWithFocusBackColor;
-            }
+            get => selectedItemWithFocusBackColor;
             set {
                 if (selectedItemWithFocusBackColor != value)
                 {
@@ -880,9 +840,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "HighlightText")
         ]
         public Color SelectedItemWithFocusForeColor {
-            get {
-                return selectedItemWithFocusForeColor;
-            }
+            get => selectedItemWithFocusForeColor;
             set {
                 if (selectedItemWithFocusForeColor != value)
                 {
@@ -902,9 +860,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "GrayText")
         ]
         public Color DisabledItemForeColor {
-            get {
-                return gridView.GrayTextColor;
-            }
+            get => gridView.GrayTextColor;
             set {
                 gridView.GrayTextColor = value;
                 gridView.Invalidate();
@@ -921,9 +877,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "Control")
         ]
         public Color CategorySplitterColor {
-            get {
-                return categorySplitterColor;
-            }
+            get => categorySplitterColor;
             set {
                 if (categorySplitterColor != value) {
                     categorySplitterColor = value;
@@ -942,9 +896,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool CanShowVisualStyleGlyphs {
-            get {
-                return canShowVisualStyleGlyphs;
-            }
+            get => canShowVisualStyleGlyphs;
             set {
                 if (canShowVisualStyleGlyphs != value) {
                     canShowVisualStyleGlyphs = value;
@@ -967,9 +919,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "InactiveBorder")
         ]
         public Color LineColor {
-            get {
-                return lineColor;
-            }
+            get => lineColor;
             set {
                 if (lineColor != value) {
                     lineColor = value;
@@ -990,7 +940,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -1013,9 +963,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridPropertySortDesc))
         ]
         public PropertySort PropertySort {
-            get {
-                return propertySortValue;
-            }
+            get => propertySortValue;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)PropertySort.NoSort, (int)PropertySort.CategorizedAlphabetical)){
@@ -1374,9 +1322,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.Site"]/*' />
         public override ISite Site {
-            get {
-                return base.Site;
-            }
+            get => base.Site;
             set {
                
                 // Perf - the base class is possibly going to change the font via ambient properties service
@@ -1409,9 +1355,7 @@ namespace System.Windows.Forms {
         [Browsable(false), 
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -1431,9 +1375,7 @@ namespace System.Windows.Forms {
         DefaultValue(false)
         ]
         public bool LargeButtons {
-            get {
-                return buttonType == LARGE_BUTTONS;
-            }
+            get => buttonType == LARGE_BUTTONS;
             set {
                 if (value == (buttonType == LARGE_BUTTONS)) {
                     return;
@@ -1478,9 +1420,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PropertyGridToolbarVisibleDesc))
         ]
         public virtual bool ToolbarVisible {
-            get {
-                return this.toolbarVisible;
-            }
+            get => this.toolbarVisible;
             set {
                 this.toolbarVisible = value;
 
@@ -1517,9 +1457,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "Window")
         ]
         public Color ViewBackColor {
-            get {
-                return gridView.BackColor;
-            }
+            get => gridView.BackColor;
             set {
                 gridView.BackColor = value;
                 gridView.Invalidate();
@@ -1533,9 +1471,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "WindowText")
         ]
         public Color ViewForeColor {
-            get {
-                return gridView.ForeColor;
-            }
+            get => gridView.ForeColor;
             set {
                 gridView.ForeColor = value;
                 gridView.Invalidate();
@@ -1553,9 +1489,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), "ControlDark")
         ]
         public Color ViewBorderColor {
-            get {
-                return viewBorderColor;
-            }
+            get => viewBorderColor;
             set {
                 if (viewBorderColor != value) {
                     viewBorderColor = value;
@@ -4502,9 +4436,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
-            get{
-                return base.UseCompatibleTextRenderingInt;
-            }
+            get => base.UseCompatibleTextRenderingInt;
             set{
                 base.UseCompatibleTextRenderingInt = value;
                 doccomment.UpdateTextRenderingEngine();
@@ -4758,9 +4690,7 @@ namespace System.Windows.Forms {
             }
 
             public override Cursor Cursor {
-                 get {
-                     return Cursors.Default;
-                 }
+                 get => Cursors.Default;
                  set {
                      base.Cursor = value;
                  }
@@ -4780,9 +4710,7 @@ namespace System.Windows.Forms {
             */
 
             public Color BorderColor {
-                get {
-                    return borderColor;
-                }
+                get => borderColor;
                 set {
                     borderColor = value;
                 }

@@ -66,9 +66,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public override bool AllowDrop {
-            get {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set {
                 base.AllowDrop = value;
             }
@@ -82,10 +80,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -112,9 +107,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public AutoSizeMode AutoSizeMode {
-            get {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
@@ -214,9 +207,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.ButtonFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
-            get {
-                return flatStyle;
-            }
+            get => flatStyle;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
@@ -269,9 +260,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -289,9 +278,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public override string Text {
-            get{
-                return base.Text;
-            }
+            get => base.Text;
             set {
                // the GroupBox controls immediately draws when teh WM_SETTEXT comes through, but
                // does so in the wrong font, so we suspend that behavior, and then
@@ -321,9 +308,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.UseCompatibleTextRenderingDescr))
         ]
         public bool UseCompatibleTextRendering {
-            get{
-                return base.UseCompatibleTextRenderingInt;
-            }
+            get => base.UseCompatibleTextRenderingInt;
             set{
                 base.UseCompatibleTextRenderingInt = value;
             }

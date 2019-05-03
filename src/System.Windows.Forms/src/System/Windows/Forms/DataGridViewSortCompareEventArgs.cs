@@ -79,10 +79,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewSortCompareEventArgs.uex' path='docs/doc[@for="DataGridViewSortCompareEventArgs.SortResult"]/*' />
         public int SortResult
         {
-            get
-            {
-                return this.sortResult;
-            }
+            get => this.sortResult;
             set
             {
                 this.sortResult = value;

@@ -54,10 +54,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -84,9 +81,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public AutoSizeMode AutoSizeMode {
-            get {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly))
                 {
@@ -119,9 +114,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         ]
         public override AutoValidate AutoValidate {
-            get {
-                return base.AutoValidate;
-            }
+            get => base.AutoValidate;
             set {
                 base.AutoValidate = value;
             }
@@ -150,9 +143,7 @@ namespace System.Windows.Forms {
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 if (borderStyle != value) {
@@ -223,9 +214,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]                
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }

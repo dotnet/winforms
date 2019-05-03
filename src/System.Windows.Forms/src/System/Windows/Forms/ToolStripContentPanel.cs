@@ -45,9 +45,7 @@ namespace System.Windows.Forms {
          Localizable(false)
          ]
          public override AutoSizeMode AutoSizeMode {
-            get {
-                return AutoSizeMode.GrowOnly;
-            }
+            get => AutoSizeMode.GrowOnly;
             set {
             }
          }
@@ -57,9 +55,7 @@ namespace System.Windows.Forms {
          EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
          ]
          public override AnchorStyles Anchor {
-             get {
-                 return base.Anchor;
-             }
+             get => base.Anchor;
              set {
                  base.Anchor = value;
              }
@@ -70,7 +66,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public override bool AutoScroll {
-            get { return base.AutoScroll; }
+            get => base.AutoScroll; 
             set { base.AutoScroll = value; }
         }
 
@@ -79,7 +75,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMargin {
-            get { return base.AutoScrollMargin; }
+            get => base.AutoScrollMargin; 
             set { base.AutoScrollMargin = value; }
         }
 
@@ -88,7 +84,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMinSize {
-            get { return base.AutoScrollMinSize; }
+            get => base.AutoScrollMinSize; 
             set { base.AutoScrollMinSize = value; }
         }
 
@@ -97,15 +93,13 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override bool AutoSize {
-            get { return base.AutoSize; }
+            get => base.AutoSize; 
             set { base.AutoSize = value; } 
         }
 
 
         public override Color BackColor {
-            get { 
-                return base.BackColor; 
-            }
+            get => base.BackColor; 
 
             set { 
 
@@ -134,7 +128,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new bool CausesValidation {
-            get { return base.CausesValidation; }
+            get => base.CausesValidation; 
             set { base.CausesValidation = value; }
         }
   
@@ -149,9 +143,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock=value;
             }
@@ -176,7 +168,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Point Location {
-            get { return base.Location; }
+            get => base.Location; 
             set { base.Location = value; }
         }
 
@@ -194,7 +186,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Size MinimumSize {
-            get { return base.MinimumSize; }
+            get => base.MinimumSize; 
             set { base.MinimumSize = value; }
         }
 
@@ -204,7 +196,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override Size MaximumSize {
-            get { return base.MaximumSize; }
+            get => base.MaximumSize; 
             set { base.MaximumSize = value; }
         }
 
@@ -214,9 +206,7 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new string Name {
-            get {
-                return base.Name;
-            }
+            get => base.Name;
             set {
                 base.Name = value;
             }
@@ -229,9 +219,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new int TabIndex {
-            get {
-                return base.TabIndex;
-            }
+            get => base.TabIndex;
             set {
                 base.TabIndex = value;
             }
@@ -249,9 +237,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -279,9 +265,7 @@ namespace System.Windows.Forms {
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public ToolStripRenderer Renderer {
-            get {
-                return RendererSwitcher.Renderer;
-            }
+            get => RendererSwitcher.Renderer;
             set {
                 RendererSwitcher.Renderer = value;
             }
@@ -294,9 +278,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance)),
         ]
         public ToolStripRenderMode RenderMode {
-            get {
-                return RendererSwitcher.RenderMode;      
-            }
+            get => RendererSwitcher.RenderMode;      
             set {
                 RendererSwitcher.RenderMode = value;
             }

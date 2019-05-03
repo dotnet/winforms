@@ -73,9 +73,7 @@ namespace System.Windows.Forms {
         ///          that match the current theme.  If theming is not turned on, we'll fall back to SystemColors.
         /// </devdoc>
         public bool UseSystemColors {
-            get {
-                return useSystemColors;
-            }
+            get => useSystemColors;
             set{
                 if (useSystemColors != value) {
                     useSystemColors = value;

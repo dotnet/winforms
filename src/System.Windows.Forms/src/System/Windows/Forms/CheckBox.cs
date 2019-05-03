@@ -82,9 +82,7 @@ namespace System.Windows.Forms {
         }
         
         private bool AccObjDoDefaultAction {
-            get {
-                return this.accObjDoDefaultAction;
-            }
+            get => this.accObjDoDefaultAction;
             set {
                 this.accObjDoDefaultAction = value;
             }
@@ -103,9 +101,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxAppearanceDescr))
         ]
         public Appearance Appearance {
-            get {
-                return appearance;
-            }
+            get => appearance;
 
             set {
                 //valid values are 0x0 to 0x1
@@ -147,9 +143,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxAutoCheckDescr))
         ]
         public bool AutoCheck {
-            get {
-                return autoCheck;
-            }
+            get => autoCheck;
 
             set {
                 autoCheck = value;
@@ -173,9 +167,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxCheckAlignDescr))
         ]
         public ContentAlignment CheckAlign {
-            get {
-                return checkAlign;
-            }
+            get => checkAlign;
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -212,9 +204,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxCheckedDescr))
         ]
         public bool Checked {
-            get {
-                return checkState != CheckState.Unchecked;
-            }
+            get => checkState != CheckState.Unchecked;
 
             set {
                 if (value != Checked) {
@@ -236,9 +226,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxCheckStateDescr))
         ]
         public CheckState CheckState {
-            get {
-                return checkState;
-            }
+            get => checkState;
 
             set {
                 // valid values are 0-2 inclusive.
@@ -408,9 +396,7 @@ namespace System.Windows.Forms {
         DefaultValue(ContentAlignment.MiddleLeft)
         ]
         public override ContentAlignment TextAlign {
-            get {
-                return base.TextAlign;
-            }
+            get => base.TextAlign;
             set {
                 base.TextAlign = value;
             }
@@ -427,9 +413,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.CheckBoxThreeStateDescr))
         ]
         public bool ThreeState {
-            get {
-                return threeState;
-            }
+            get => threeState;
             set {
                 threeState = value;
             }

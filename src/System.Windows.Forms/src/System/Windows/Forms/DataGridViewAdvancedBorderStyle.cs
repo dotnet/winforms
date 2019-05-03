@@ -52,10 +52,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.All"]/*' />
         public DataGridViewAdvancedCellBorderStyle All
         {
-            get 
-            {
-                return this.all ? this.top : DataGridViewAdvancedCellBorderStyle.NotSet;
-            }
+            get => this.all ? this.top : DataGridViewAdvancedCellBorderStyle.NotSet;
             set 
             {
 
@@ -254,10 +251,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Top"]/*' />
         public DataGridViewAdvancedCellBorderStyle Top
         {
-            get 
-            {
-                return this.top;
-            }
+            get => this.top;
             set 
             {
                  // Sequential enum.  Valid values are 0x0 to 0x7

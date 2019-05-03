@@ -24,7 +24,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TableLayoutSettings.uex' path='docs/doc[@for="Style.SizeType"]/*' />
         [DefaultValue(SizeType.AutoSize)]
         public SizeType SizeType {
-            get { return _sizeType; }
+            get => _sizeType; 
             set { 
                 if (_sizeType != value) {
                     _sizeType = value; 
@@ -40,7 +40,7 @@ namespace System.Windows.Forms {
         }
 
         internal float Size {
-            get { return _size; }
+            get => _size; 
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Size), value, 0));
@@ -63,7 +63,7 @@ namespace System.Windows.Forms {
         }
 
         internal IArrangedElement Owner {
-            get { return _owner; }
+            get => _owner; 
             set { _owner = value; }
         }
 

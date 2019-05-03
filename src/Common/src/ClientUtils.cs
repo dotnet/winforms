@@ -295,9 +295,7 @@
             ///           
             /// </summary>
             public int RefCheckThreshold {
-                get{
-                    return this.refCheckThreshold;
-                }
+                get => this.refCheckThreshold;
                 set {
                     this.refCheckThreshold = value;
                 }

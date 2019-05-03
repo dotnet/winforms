@@ -110,10 +110,7 @@ namespace System.Windows.Forms
         [DefaultValue(true)]
         public virtual bool AutoComplete
         {
-            get
-            {
-                return ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_autoComplete) != 0x00);
-            }
+            get => ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_autoComplete) != 0x00);
             set
             {
                 //CheckNoSharedCell();
@@ -146,10 +143,7 @@ namespace System.Windows.Forms
 
         private CurrencyManager DataManager
         {
-            get
-            {
-                return GetDataManager(this.DataGridView);
-            }
+            get => GetDataManager(this.DataGridView);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropComboBoxCellDataManager))
@@ -162,10 +156,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="DataGridViewComboBoxCell.DataSource"]/*' />
         public virtual object DataSource
         {
-            get
-            {
-                return this.Properties.GetObject(PropComboBoxCellDataSource);
-            }
+            get => this.Properties.GetObject(PropComboBoxCellDataSource);
             set
             {
                 //CheckNoSharedCell();
@@ -282,10 +273,7 @@ namespace System.Windows.Forms
 
         private PropertyDescriptor DisplayMemberProperty
         {
-            get
-            {
-                return (PropertyDescriptor)this.Properties.GetObject(PropComboBoxCellDisplayMemberProp);
-            }
+            get => (PropertyDescriptor)this.Properties.GetObject(PropComboBoxCellDisplayMemberProp);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropComboBoxCellDisplayMemberProp))
@@ -452,10 +440,7 @@ namespace System.Windows.Forms
 
         private DataGridViewComboBoxEditingControl EditingComboBox
         {
-            get
-            {
-                return (DataGridViewComboBoxEditingControl)this.Properties.GetObject(PropComboBoxCellEditingComboBox);
-            }
+            get => (DataGridViewComboBoxEditingControl)this.Properties.GetObject(PropComboBoxCellEditingComboBox);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropComboBoxCellEditingComboBox))
@@ -592,10 +577,7 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         public virtual bool Sorted
         {
-            get
-            {
-                return ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_sorted) != 0x00);
-            }
+            get => ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_sorted) != 0x00);
             set
             {
                 //CheckNoSharedCell();
@@ -627,10 +609,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewComboBoxColumn TemplateComboBoxColumn
         {
-            get
-            {
-                return (DataGridViewComboBoxColumn) this.Properties.GetObject(PropComboBoxCellColumnTemplate);
-            }
+            get => (DataGridViewComboBoxColumn) this.Properties.GetObject(PropComboBoxCellColumnTemplate);
             set
             {
                 this.Properties.SetObject(PropComboBoxCellColumnTemplate, value);
@@ -683,10 +662,7 @@ namespace System.Windows.Forms
 
         private PropertyDescriptor ValueMemberProperty
         {
-            get
-            {
-                return (PropertyDescriptor)this.Properties.GetObject(PropComboBoxCellValueMemberProp);
-            }
+            get => (PropertyDescriptor)this.Properties.GetObject(PropComboBoxCellValueMemberProp);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropComboBoxCellValueMemberProp))
@@ -882,10 +858,7 @@ namespace System.Windows.Forms
 
         private bool CreateItemsFromDataSource
         {
-            get
-            {
-                return ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource) != 0x00);
-            }
+            get => ((this.flags & DATAGRIDVIEWCOMBOBOXCELL_createItemsFromDataSource) != 0x00);
             set
             {
                 if (value)

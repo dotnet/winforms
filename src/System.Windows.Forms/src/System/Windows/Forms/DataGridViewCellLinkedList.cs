@@ -295,10 +295,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCellLinkedList.uex' path='docs/doc[@for="DataGridViewCellLinkedListElement.Next"]/*' />
         public DataGridViewCellLinkedListElement Next
         {
-            get
-            {
-                return this.next;
-            }
+            get => this.next;
             set
             {
                 this.next = value;

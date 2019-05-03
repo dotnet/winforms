@@ -56,9 +56,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public new bool CanOverflow { 
-            get { 
-                return base.CanOverflow;         
-            }
+            get => base.CanOverflow;         
             set { 
                 base.CanOverflow = value;
             }
@@ -109,9 +107,7 @@ namespace System.Windows.Forms {
        /// <include file='doc\StatusStrip.uex' path='docs/doc[@for="StatusStrip.Dock"]/*' />
        [DefaultValue(DockStyle.Bottom)]
        public override DockStyle Dock {
-           get {
-               return base.Dock;
-           }
+           get => base.Dock;
            set {
                base.Dock = value;
            }
@@ -119,9 +115,7 @@ namespace System.Windows.Forms {
 
         [DefaultValue(ToolStripGripStyle.Hidden)]
         public new ToolStripGripStyle GripStyle {
-            get {
-            	return base.GripStyle;
-            }
+            get => base.GripStyle;
             set {
             	base.GripStyle = value;
             }
@@ -129,7 +123,7 @@ namespace System.Windows.Forms {
 
         [DefaultValue(ToolStripLayoutStyle.Table)]
         public new ToolStripLayoutStyle LayoutStyle {
-            get { return base.LayoutStyle; }
+            get => base.LayoutStyle; 
             set { base.LayoutStyle = value; }
         }
 
@@ -137,10 +131,8 @@ namespace System.Windows.Forms {
         // changing this is not supported at DT
         [Browsable(false)]
         public new Padding Padding {
-            get { 
-                return base.Padding;
-            }
-            set {
+            get => base.Padding;
+      set {
                 base.Padding = value;
             }
         }
@@ -165,9 +157,7 @@ namespace System.Windows.Forms {
        [SRDescription(nameof(SR.ToolStripShowItemToolTipsDescr))]
        [SRCategory(nameof(SR.CatBehavior))]
        public new bool ShowItemToolTips { 
-           get {
-                return base.ShowItemToolTips;
-           }
+           get => base.ShowItemToolTips;
            set {
                 base.ShowItemToolTips = value;
             }
@@ -196,9 +186,7 @@ namespace System.Windows.Forms {
        SRDescription(nameof(SR.StatusStripSizingGripDescr))
        ]
        public bool SizingGrip {
-          get {
-              return state[stateSizingGrip];
-          }
+          get => state[stateSizingGrip];
           set {
               if (value != state[stateSizingGrip]) {
                   state[stateSizingGrip] = value;
@@ -233,9 +221,7 @@ namespace System.Windows.Forms {
        [SRCategory(nameof(SR.CatLayout))]
        [SRDescription(nameof(SR.ToolStripStretchDescr))]
        public new bool Stretch {
-           get {
-              return base.Stretch;
-           }
+           get => base.Stretch;
            set {
               base.Stretch = value;
            }

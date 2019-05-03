@@ -166,10 +166,7 @@ namespace System.Windows.Forms
 
             public bool DoNotChangePositionInTheCurrencyManager
             {
-                get
-                {
-                    return this.dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager];
-                }
+                get => this.dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager];
                 set
                 {
                     this.dataConnectionState[DATACONNECTIONSTATE_doNotChangePositionInTheCurrencyManager] = value;

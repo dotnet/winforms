@@ -97,9 +97,7 @@ namespace System.Windows.Forms {
         // =------------------------------------------------------------------
 
         internal bool BackButtonActive {
-            get {
-                return backActive;
-            }
+            get => backActive;
             set {
                 if (backActive != value) {
                     backActive = value;
@@ -109,9 +107,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool DownButtonActive {
-            get {
-                return downActive;
-            }
+            get => downActive;
             set {
                 if (downActive != value) {
                     downActive = value;
@@ -139,9 +135,7 @@ namespace System.Windows.Forms {
         }
         
         internal Color BackColor {
-            get {
-                return backBrush.Color;
-            }
+            get => backBrush.Color;
             set {
                 if (!backBrush.Color.Equals(value)) {
                     if (value.IsEmpty)
@@ -217,9 +211,7 @@ namespace System.Windows.Forms {
         }
 
         internal string Text {
-            get {
-                return text;
-            }
+            get => text;
             set {
                 if (value == null)
                     text = "";
@@ -230,9 +222,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool TextBorderVisible {
-            get {
-                return textBorderVisible;
-            }
+            get => textBorderVisible;
             set {
                 textBorderVisible = value;
                 Invalidate();
@@ -240,9 +230,7 @@ namespace System.Windows.Forms {
         }
 
         internal Color ForeColor {
-            get {
-                return foreBrush.Color;
-            }
+            get => foreBrush.Color;
             set {
                 if (value.IsEmpty)
                     throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "Caption ForeColor"));
@@ -259,9 +247,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool BackButtonVisible {
-            get {
-                return backButtonVisible;
-            }
+            get => backButtonVisible;
             set {
                 if (backButtonVisible != value) {
                     backButtonVisible = value;
@@ -271,9 +257,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool DownButtonVisible {
-            get {
-                return downButtonVisible;
-            }
+            get => downButtonVisible;
             set {
                 if (downButtonVisible != value) {
                     downButtonVisible = value;
@@ -591,9 +575,7 @@ namespace System.Windows.Forms {
         }
 
         private bool DownButtonDown {
-            get {
-                return downButtonDown;
-            }
+            get => downButtonDown;
             set {
                 if (downButtonDown != value)
                 {

@@ -75,9 +75,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DefaultValue(AnchorStyles.None)]
         public override AnchorStyles Anchor {
-            get {
-                return AnchorStyles.None;
-            }
+            get => AnchorStyles.None;
             set {
                 // do nothing!
             }
@@ -86,9 +84,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.AllowDrop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop {
-            get {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set {
                 base.AllowDrop = value;
             }
@@ -123,9 +119,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ForeColor"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -141,9 +135,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -159,9 +151,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -177,9 +167,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Font"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
             }
@@ -204,9 +192,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitterBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -261,7 +247,7 @@ namespace System.Windows.Forms {
         DefaultValue(DockStyle.Left)
         ]
         public override DockStyle Dock {
-            get { return base.Dock;}
+            get => base.Dock;
 
             set {
             
@@ -303,9 +289,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -332,9 +316,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitterMinExtraDescr))
         ]
         public int MinExtra {
-            get {
-                return minExtra;
-            }
+            get => minExtra;
             set {
                 if (value < 0) value = 0;
                 minExtra = value;
@@ -354,9 +336,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SplitterMinSizeDescr))
         ]
         public int MinSize {
-            get {
-                return minSize;
-            }
+            get => minSize;
             set {
                 if (value < 0) value = 0;
                 minSize = value;
@@ -425,9 +405,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TabStop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -447,9 +425,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]                
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }

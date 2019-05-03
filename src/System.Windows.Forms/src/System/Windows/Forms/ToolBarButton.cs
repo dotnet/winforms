@@ -127,9 +127,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonMenuDescr))
         ]
         public Menu DropDownMenu {
-            get {
-                return dropDownMenu;
-            }
+            get => dropDownMenu;
 
             set {
                 //The dropdownmenu must be of type ContextMenu, Main & Items are invalid.
@@ -151,9 +149,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonEnabledDescr))
         ]
         public bool Enabled {
-            get {
-                return enabled;
-            }
+            get => enabled;
 
             set {
                 if (enabled != value) {
@@ -182,9 +178,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
         ]
         public int ImageIndex {
-            get {
-                return ImageIndexer.Index;
-            }
+            get => ImageIndexer.Index;
             set {
                 if (ImageIndexer.Index != value) {
                     if (value < -1)
@@ -210,9 +204,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonImageIndexDescr))
         ]
         public string ImageKey {
-            get {
-                return ImageIndexer.Key;
-            }
+            get => ImageIndexer.Key;
             set {
                 if (ImageIndexer.Key != value) {
                     ImageIndexer.Key = value;
@@ -228,9 +220,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public string Name {
-            get {
-                return WindowsFormsUtils.GetComponentName(this, name);
-            }
+            get => WindowsFormsUtils.GetComponentName(this, name);
             set {
                 if (value == null || value.Length == 0) {
                     name = null;
@@ -341,9 +331,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)
         ]
         public ToolBarButtonStyle Style {
-            get {
-                return style;
-            }
+            get => style;
             set {
                 //valid values are 0x1 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolBarButtonStyle.PushButton, (int)ToolBarButtonStyle.DropDownButton)){
@@ -365,9 +353,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -383,9 +369,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonTextDescr))
         ]
         public string Text {
-            get {
-                return(text == null) ? "" : text;
-            }
+            get => (text == null) ? "" : text;
             set {
                 if (string.IsNullOrEmpty(value)) {
                     value = null;
@@ -414,9 +398,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonToolTipTextDescr))
         ]
         public string ToolTipText {
-            get {
-                return tooltipText == null ? "" : tooltipText;
-            }
+            get => tooltipText == null ? "" : tooltipText;
             set {
                 tooltipText = value;
             }
@@ -434,9 +416,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolBarButtonVisibleDescr))
         ]
         public bool Visible {
-            get {
-                return visible;
-            }
+            get => visible;
             set {
                 if (visible != value) {
                     visible = value;

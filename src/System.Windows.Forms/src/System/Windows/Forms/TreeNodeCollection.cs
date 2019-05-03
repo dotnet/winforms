@@ -39,9 +39,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.FixedIndex"]/*' />
         internal int FixedIndex
         {
-            get {
-                return fixedIndex;
-            }
+            get => fixedIndex;
             set {
                 fixedIndex = value;
             }
@@ -68,9 +66,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.this"]/*' />
         object IList.this[int index] {
-            get {
-                return this[index];
-            }
+            get => this[index];
             set {
                 if (value is TreeNode) {
                     this[index] = (TreeNode)value;

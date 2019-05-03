@@ -182,9 +182,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.Format"]/*' />
         [DefaultValue(null), Editor("System.Windows.Forms.Design.DataGridColumnStyleFormatEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor))]
         public string Format {
-            get {
-                return format;
-            }
+            get => format;
             set {
                 if (value == null)
                     value = "";
@@ -207,9 +205,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.FormatInfo"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public IFormatProvider FormatInfo {
-            get {
-                return this.formatInfo;
-            }
+            get => this.formatInfo;
             set {
                 if (this.formatInfo == null || !this.formatInfo.Equals(value))
                     this.formatInfo = value;
@@ -218,9 +214,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTextBoxColumn.uex' path='docs/doc[@for="DataGridTextBoxColumn.ReadOnly"]/*' />
         public override bool ReadOnly {
-            get {
-                return base.ReadOnly;
-            }
+            get => base.ReadOnly;
             set {
                 // if the gridColumn is can't convert the string to 
                 // the backGround propertyDescriptor, then make the column ReadOnly

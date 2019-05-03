@@ -235,9 +235,7 @@ namespace System.Windows.Forms{
 
         /// <include file='doc\DataGridTextBox.uex' path='docs/doc[@for="DataGridTextBox.IsInEditOrNavigateMode"]/*' />
         public bool IsInEditOrNavigateMode {
-            get {
-                return isInEditOrNavigateMode;
-            }
+            get => isInEditOrNavigateMode;
             set {
                 isInEditOrNavigateMode = value;
                 if (value)

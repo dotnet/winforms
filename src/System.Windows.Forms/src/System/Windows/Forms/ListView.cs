@@ -254,9 +254,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewActivationDescr))
         ]
         public ItemActivation Activation {
-            get {
-                return activation;
-            }
+            get => activation;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -287,9 +285,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewAlignmentDescr))
         ]
         public ListViewAlignment Alignment {
-            get {
-                return alignStyle;
-            }
+            get => alignStyle;
 
             set {
                 // using this as ListViewAlignment has discontiguous values.
@@ -321,9 +317,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewAllowColumnReorderDescr))
         ]
         public bool AllowColumnReorder {
-            get {
-                return listViewState[LISTVIEWSTATE_allowColumnReorder];
-            }
+            get => listViewState[LISTVIEWSTATE_allowColumnReorder];
 
             set {
                 if (AllowColumnReorder != value) {
@@ -345,9 +339,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewAutoArrangeDescr))
         ]
         public bool AutoArrange {
-            get {
-                return listViewState[LISTVIEWSTATE_autoArrange];
-            }
+            get => listViewState[LISTVIEWSTATE_autoArrange];
 
             set {
                 if (AutoArrange != value) {
@@ -378,9 +370,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -400,9 +390,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewBackgroundImageTiledDescr))
         ]
         public bool BackgroundImageTiled {
-            get {
-                return listViewState[LISTVIEWSTATE_backgroundImageTiled];
-            }
+            get => listViewState[LISTVIEWSTATE_backgroundImageTiled];
             set {
                 if (BackgroundImageTiled != value) {
                     listViewState[LISTVIEWSTATE_backgroundImageTiled] = value;
@@ -439,9 +427,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.borderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -468,9 +454,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewCheckBoxesDescr))
         ]
         public bool CheckBoxes {
-            get {
-                return listViewState[LISTVIEWSTATE_checkBoxes];
-            }
+            get => listViewState[LISTVIEWSTATE_checkBoxes];
 
             set {
                 if (this.UseCompatibleStateImageBehavior) {
@@ -763,9 +747,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.DoubleBuffered"]/*' />
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 if (this.DoubleBuffered != value)
                 {
@@ -857,9 +839,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewFullRowSelectDescr))
         ]
         public bool FullRowSelect {
-            get {
-                return listViewState[LISTVIEWSTATE_fullRowSelect];
-            }
+            get => listViewState[LISTVIEWSTATE_fullRowSelect];
             set {
                 if (FullRowSelect != value) {
                     listViewState[LISTVIEWSTATE_fullRowSelect] = value;
@@ -879,9 +859,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewGridLinesDescr))
         ]
         public bool GridLines {
-            get {
-                return listViewState[LISTVIEWSTATE_gridLines];
-            }
+            get => listViewState[LISTVIEWSTATE_gridLines];
 
             set {
                 if (GridLines != value) {
@@ -933,7 +911,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewHeaderStyleDescr))
         ]
         public ColumnHeaderStyle HeaderStyle {
-            get { return headerStyle;}
+            get => headerStyle;
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ColumnHeaderStyle.None, (int)ColumnHeaderStyle.Clickable))
@@ -968,9 +946,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewHideSelectionDescr))
         ]
         public bool HideSelection {
-            get {
-                return listViewState[LISTVIEWSTATE_hideSelection];
-            }
+            get => listViewState[LISTVIEWSTATE_hideSelection];
 
             set {
                 if (HideSelection != value) {
@@ -989,9 +965,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewHotTrackingDescr))
         ]
         public bool HotTracking {
-            get {
-                return listViewState[LISTVIEWSTATE_hotTracking];
-            }
+            get => listViewState[LISTVIEWSTATE_hotTracking];
             set {
                 if (HotTracking != value) {
 
@@ -1015,9 +989,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewHoverSelectDescr))
         ]
         public bool HoverSelection {
-            get {
-                return listViewState[LISTVIEWSTATE_hoverSelection];
-            }
+            get => listViewState[LISTVIEWSTATE_hoverSelection];
 
             set {
                 if (HoverSelection != value) {
@@ -1056,9 +1028,7 @@ namespace System.Windows.Forms {
         }
 
         private bool ItemCollectionChangedInMouseDown {
-            get {
-                return this.listViewState[LISTVIEWSTATE_itemCollectionChangedInMouseDown];
-            }
+            get => this.listViewState[LISTVIEWSTATE_itemCollectionChangedInMouseDown];
             set {
                 this.listViewState[LISTVIEWSTATE_itemCollectionChangedInMouseDown] = value;
             }
@@ -1089,9 +1059,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewLabelEditDescr))
         ]
         public bool LabelEdit {
-            get {
-                return listViewState[LISTVIEWSTATE_labelEdit];
-            }
+            get => listViewState[LISTVIEWSTATE_labelEdit];
             set {
                 if (LabelEdit != value) {
                     listViewState[LISTVIEWSTATE_labelEdit] = value;
@@ -1111,9 +1079,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewLabelWrapDescr))
         ]
         public bool LabelWrap {
-            get {
-                return listViewState[LISTVIEWSTATE_labelWrap];
-            }
+            get => listViewState[LISTVIEWSTATE_labelWrap];
             set {
                 if (LabelWrap != value) {
                     listViewState[LISTVIEWSTATE_labelWrap] = value;
@@ -1132,9 +1098,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewLargeImageListDescr))
         ]
         public ImageList LargeImageList {
-            get {
-                return imageListLarge;
-            }
+            get => imageListLarge;
             set {
                 if (value != imageListLarge) {
 
@@ -1171,9 +1135,7 @@ namespace System.Windows.Forms {
         /// value can be accessed from child classes.
         /// </devdoc>
         internal bool ListViewHandleDestroyed {
-            get {
-                return listViewState[LISTVIEWSTATE_handleDestroyed];
-            }
+            get => listViewState[LISTVIEWSTATE_handleDestroyed];
             set {
                 listViewState[LISTVIEWSTATE_handleDestroyed] = value;
             }
@@ -1190,9 +1152,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewItemSorterDescr))
         ]
         public IComparer ListViewItemSorter {
-            get {
-                return listItemSorter;
-            }
+            get => listItemSorter;
             set {
                 if (listItemSorter != value) {
                     listItemSorter = value;
@@ -1214,9 +1174,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewMultiSelectDescr))
         ]
         public bool MultiSelect {
-            get {
-                return listViewState[LISTVIEWSTATE_multiSelect];
-            }
+            get => listViewState[LISTVIEWSTATE_multiSelect];
             set {
                 if (MultiSelect != value) {
                     listViewState[LISTVIEWSTATE_multiSelect] = value;
@@ -1236,9 +1194,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewOwnerDrawDescr))
         ]
         public bool OwnerDraw {
-            get {
-                return listViewState[LISTVIEWSTATE_ownerDraw];
-            }
+            get => listViewState[LISTVIEWSTATE_ownerDraw];
 
             set {
                 if (OwnerDraw != value)
@@ -1263,10 +1219,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -1296,9 +1249,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewScrollableDescr))
         ]
         public bool Scrollable {
-            get {
-                return listViewState[LISTVIEWSTATE_scrollable];
-            }
+            get => listViewState[LISTVIEWSTATE_scrollable];
             set {
                 if (Scrollable != value) {
                     listViewState[LISTVIEWSTATE_scrollable] = value;
@@ -1350,9 +1301,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewShowGroupsDescr))
         ]
         public bool ShowGroups {
-            get {
-                return this.listViewState[LISTVIEWSTATE_showGroups];
-            }
+            get => this.listViewState[LISTVIEWSTATE_showGroups];
             set {
                 if (value != this.ShowGroups) {
                     this.listViewState[LISTVIEWSTATE_showGroups] = value;
@@ -1373,9 +1322,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewSmallImageListDescr))
         ]
         public ImageList SmallImageList {
-            get {
-                return imageListSmall;
-            }
+            get => imageListSmall;
             set {
                 if (imageListSmall != value) {
 
@@ -1418,9 +1365,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewShowItemToolTipsDescr))
         ]
         public bool ShowItemToolTips {
-            get {
-                return listViewState[LISTVIEWSTATE_showItemToolTips];
-            }
+            get => listViewState[LISTVIEWSTATE_showItemToolTips];
             set {
                 if (ShowItemToolTips != value) {
                     listViewState[LISTVIEWSTATE_showItemToolTips] = value;
@@ -1436,9 +1381,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewSortingDescr))
         ]
         public SortOrder Sorting {
-            get {
-                return sorting;
-            }
+            get => sorting;
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)SortOrder.None, (int)SortOrder.Descending))
@@ -1476,9 +1419,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewStateImageListDescr))
         ]
         public ImageList StateImageList {
-            get {
-                return imageListState;
-            }
+            get => imageListState;
             set {
                 if (this.UseCompatibleStateImageBehavior) {
                     if (imageListState != value) {
@@ -1548,9 +1489,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -1679,9 +1618,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool UseCompatibleStateImageBehavior {
-            get {
-                return this.listViewState1[LISTVIEWSTATE1_useCompatibleStateImageBehavior];
-            }
+            get => this.listViewState1[LISTVIEWSTATE1_useCompatibleStateImageBehavior];
             set
             {
                 this.listViewState1[LISTVIEWSTATE1_useCompatibleStateImageBehavior] = value;
@@ -1695,9 +1632,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewViewDescr))
         ]
         public View View {
-            get {
-                return viewStyle;
-            }
+            get => viewStyle;
             set {
                 if (value == View.Tile && this.CheckBoxes) {
                     throw new NotSupportedException(SR.ListViewTileViewDoesNotSupportCheckBoxes);
@@ -1743,9 +1678,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewVirtualListSizeDescr))
         ]
         public int VirtualListSize {
-            get {
-                return this.virtualListSize;
-            }
+          get => this.virtualListSize;
             set {
                 if (value < 0)
                     throw new System.ArgumentException(string.Format(SR.ListViewVirtualListSizeInvalidArgument, "value", (value)));
@@ -1782,9 +1715,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListViewVirtualModeDescr))
         ]
         public bool VirtualMode {
-            get {
-                return listViewState[LISTVIEWSTATE_virtualMode];
-            }
+            get => listViewState[LISTVIEWSTATE_virtualMode];
             set {
                 if (value == VirtualMode)
                     return;
@@ -1949,7 +1880,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -6124,9 +6055,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="CheckedIndexCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     throw new NotSupportedException();
                 }
@@ -6632,9 +6561,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="SelectedIndexCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     throw new NotSupportedException();
                 }
@@ -7212,9 +7139,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ColumnHeaderCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     throw new NotSupportedException();
                 }
@@ -7817,9 +7742,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\ListView.uex' path='docs/doc[@for="ListViewItemCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     if (value is ListViewItem) {
                         this[index] = (ListViewItem)value;

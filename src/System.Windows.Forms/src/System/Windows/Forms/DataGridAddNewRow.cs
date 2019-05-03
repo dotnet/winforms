@@ -37,9 +37,7 @@ namespace System.Windows.Forms {
         ///      exists in the cursor that created this row.
         /// </devdoc>
         public bool DataBound {
-            get {
-                return dataBound;
-            }
+            get => dataBound;
             set {
                 dataBound = value;
             }

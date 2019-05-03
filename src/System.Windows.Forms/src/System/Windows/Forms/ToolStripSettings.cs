@@ -24,9 +24,7 @@ namespace System.Windows.Forms {
         [UserScopedSetting]
         [DefaultSettingValue("true")]
         public bool IsDefault {
-            get {
-                return (bool) this["IsDefault"]; 
-            }
+            get => (bool) this["IsDefault"]; 
             set {
                 this["IsDefault"] = value;
             }
@@ -34,9 +32,7 @@ namespace System.Windows.Forms {
         
         [UserScopedSetting]
         public string ItemOrder {
-            get {
-                return this["ItemOrder"] as string;
-            }
+            get => this["ItemOrder"] as string;
             set {
                 this["ItemOrder"] = value;
             }
@@ -44,9 +40,7 @@ namespace System.Windows.Forms {
         
         [UserScopedSetting]
         public string Name {
-            get {
-                return this["Name"] as string;
-            }
+            get => this["Name"] as string;
             set {
                 this["Name"] = value;
             }
@@ -55,9 +49,7 @@ namespace System.Windows.Forms {
         [UserScopedSetting]
         [DefaultSettingValue("0,0")]
         public Point Location {
-            get {
-                return (Point) this["Location"];
-            }
+            get => (Point) this["Location"];
             set {
                 this["Location"] = value;
             }
@@ -66,9 +58,7 @@ namespace System.Windows.Forms {
         [UserScopedSetting]
         [DefaultSettingValue("0,0")]
         public Size Size {
-            get {
-                return (Size) this["Size"];
-            }
+            get => (Size) this["Size"];
             set {
                 this["Size"] = value;
             }
@@ -76,9 +66,7 @@ namespace System.Windows.Forms {
 
         [UserScopedSetting]
         public string ToolStripPanelName {
-            get {
-                return this["ToolStripPanelName"] as string;
-            }
+            get => this["ToolStripPanelName"] as string;
             set {
                 this["ToolStripPanelName"] = value;
             }
@@ -87,9 +75,7 @@ namespace System.Windows.Forms {
         [UserScopedSetting]
         [DefaultSettingValue("true")]
         public bool Visible {
-            get {
-                return (bool) this["Visible"];
-            }
+            get => (bool) this["Visible"];
             set {
                 this["Visible"] = value;
             }

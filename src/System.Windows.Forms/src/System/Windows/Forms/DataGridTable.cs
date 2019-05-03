@@ -116,9 +116,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DataGridAllowSortingDescr))
         ]
         public bool AllowSorting {
-            get {
-                return allowSorting;
-            }
+            get => allowSorting;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AllowSorting"));
@@ -146,9 +144,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridAlternatingBackColorDescr))
         ]
         public Color AlternatingBackColor {
-            get {
-                return alternatingBackBrush.Color;
-            }
+            get => alternatingBackBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "AlternatingBackColor"));
@@ -215,9 +211,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.ControlBackColorDescr))
         ]
         public Color BackColor {
-            get {
-                return this.backBrush.Color;
-            }
+            get => this.backBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "BackColor"));
@@ -326,9 +320,7 @@ namespace System.Windows.Forms {
         }
 
         internal int FocusedRelation {
-            get {
-                return focusedRelation;
-            }
+            get => focusedRelation;
             set {
                 if (focusedRelation != value) {
                     focusedRelation = value;
@@ -355,9 +347,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.ControlForeColorDescr))
         ]
         public Color ForeColor {
-            get {
-                return this.foreBrush.Color;
-            }
+            get => this.foreBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "ForeColor"));
@@ -400,9 +390,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridGridLineColorDescr))
         ]
         public Color GridLineColor {
-            get {
-                return gridLineBrush.Color;
-            }
+            get => gridLineBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineColor"));
@@ -458,9 +446,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridGridLineStyleDescr))
         ]
         public DataGridLineStyle GridLineStyle {
-            get {
-                return gridLineStyle;
-            }
+            get => gridLineStyle;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "GridLineStyle"));
@@ -490,9 +476,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridHeaderBackColorDescr))         
         ]
         public Color HeaderBackColor {
-            get {
-                return headerBackBrush.Color;
-            }
+            get => headerBackBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderBackColor"));
@@ -550,9 +534,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridHeaderFontDescr))
         ]
         public Font HeaderFont {
-            get {
-                return(headerFont == null ? (this.DataGrid == null ? Control.DefaultFont : this.DataGrid.Font) : headerFont);
-            }
+            get => (headerFont == null ? (this.DataGrid == null ? Control.DefaultFont : this.DataGrid.Font) : headerFont);
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderFont"));
@@ -600,9 +582,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridHeaderForeColorDescr))         
         ]
         public Color HeaderForeColor {
-            get {
-                return headerForePen.Color;
-            }
+            get => headerForePen.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "HeaderForeColor"));
@@ -663,9 +643,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridLinkColorDescr))
         ]
         public Color LinkColor {
-            get {
-                return linkBrush.Color;
-            }
+            get => linkBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "LinkColor"));
@@ -799,9 +777,7 @@ namespace System.Windows.Forms {
          TypeConverter(typeof(DataGridPreferredColumnWidthTypeConverter))
         ]
         public int PreferredColumnWidth {
-            get {
-                return preferredColumnWidth;
-            }
+            get => preferredColumnWidth;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PreferredColumnWidth"));
@@ -839,9 +815,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridPreferredRowHeightDescr))
         ]
         public int PreferredRowHeight {
-            get {
-                return prefferedRowHeight;
-            }
+            get => prefferedRowHeight;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "PrefferedRowHeight"));
@@ -900,9 +874,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridColumnHeadersVisibleDescr))
         ]
         public bool ColumnHeadersVisible {
-            get {
-                return columnHeadersVisible;
-            }
+            get => columnHeadersVisible;
             set {
                 if (columnHeadersVisible != value) {
                     columnHeadersVisible = value;
@@ -928,9 +900,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridRowHeadersVisibleDescr))
         ]
         public bool RowHeadersVisible {
-            get {
-                return rowHeadersVisible;
-            }
+            get => rowHeadersVisible;
             set {
                 if (rowHeadersVisible != value) {
                     rowHeadersVisible = value;
@@ -957,9 +927,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridRowHeaderWidthDescr))
         ]
         public int RowHeaderWidth {
-            get {
-                return rowHeaderWidth;
-            }
+            get => rowHeaderWidth;
             set {
                 if (this.DataGrid != null)
                     value = Math.Max(this.DataGrid.MinimumRowHeaderWidth(), value);
@@ -990,9 +958,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridSelectionBackColorDescr))
         ]
         public Color SelectionBackColor {
-            get {
-                return selectionBackBrush.Color;
-            }
+            get => selectionBackBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionBackColor"));
@@ -1049,9 +1015,7 @@ namespace System.Windows.Forms {
          SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
         ]
         public Color SelectionForeColor {
-            get {
-                return selectionForeBrush.Color;
-            }
+            get => selectionForeBrush.Color;
             set {
                 if (this.isDefaultTableStyle) {
                     throw new ArgumentException(string.Format(SR.DataGridDefaultTableSet, "SelectionForeColor"));
@@ -1244,9 +1208,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Editor("System.Windows.Forms.Design.DataGridTableStyleMappingNameEditor, " + AssemblyRef.SystemDesign, typeof(System.Drawing.Design.UITypeEditor)), DefaultValue("")]
         public string MappingName {
-            get {
-                return mappingName;
-            }
+            get => mappingName;
             set {
                 if (value == null)
                     value = "";
@@ -1326,9 +1288,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public virtual DataGrid DataGrid {
-            get {
-                return dataGrid;
-            }
+            get => dataGrid;
             set {
                 SetInternalDataGrid(value, true);
             }
@@ -1341,9 +1301,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(false)]
         public virtual bool ReadOnly {
-            get {
-                return readOnly;
-            }
+            get => readOnly;
             set {
                 if (readOnly != value) {
                     readOnly = value;

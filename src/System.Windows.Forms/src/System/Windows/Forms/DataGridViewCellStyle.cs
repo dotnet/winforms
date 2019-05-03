@@ -142,10 +142,7 @@ namespace System.Windows.Forms
         ]
         public Color BackColor
         {
-            get
-            {
-                return this.Properties.GetColor(PropBackColor);              
-            }
+            get => this.Properties.GetColor(PropBackColor);              
             set
             {
                 Color c = this.BackColor;
@@ -210,10 +207,7 @@ namespace System.Windows.Forms
         ]
         public Font Font
         {
-            get
-            {
-                return (Font) this.Properties.GetObject(PropFont);
-            }
+            get => (Font) this.Properties.GetObject(PropFont);
             set
             {
                 Font f = this.Font;
@@ -236,10 +230,7 @@ namespace System.Windows.Forms
         ]
         public Color ForeColor
         {
-            get
-            {
-                return this.Properties.GetColor(PropForeColor);
-            }
+            get => this.Properties.GetColor(PropForeColor);
             set
             {
                 Color c = this.ForeColor;
@@ -466,10 +457,7 @@ namespace System.Windows.Forms
 
         internal DataGridViewCellStyleScopes Scope
         {
-            get
-            {
-                return this.scope;
-            }
+            get => this.scope;
             set
             {
                 this.scope = value;
@@ -482,10 +470,7 @@ namespace System.Windows.Forms
         ]
         public Color SelectionBackColor
         {
-            get
-            {
-                return this.Properties.GetColor(PropSelectionBackColor);              
-            }
+            get => this.Properties.GetColor(PropSelectionBackColor);              
             set
             {
                 Color c = this.SelectionBackColor;
@@ -506,10 +491,7 @@ namespace System.Windows.Forms
         ]
         public Color SelectionForeColor
         {
-            get
-            {
-                return this.Properties.GetColor(PropSelectionForeColor);        
-            }
+            get => this.Properties.GetColor(PropSelectionForeColor);        
             set
             {
                 Color c = this.SelectionForeColor;
@@ -531,10 +513,7 @@ namespace System.Windows.Forms
         ]
         public object Tag
         {
-            get
-            {
-                return Properties.GetObject(PropTag);
-            }
+            get => Properties.GetObject(PropTag);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropTag))

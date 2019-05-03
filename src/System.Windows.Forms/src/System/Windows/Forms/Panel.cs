@@ -56,10 +56,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -86,9 +83,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public virtual AutoSizeMode AutoSizeMode {
-            get {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutoSizeMode));
@@ -120,9 +115,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PanelBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 if (borderStyle != value) {
@@ -214,9 +207,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(false)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -227,9 +218,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }

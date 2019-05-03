@@ -26,10 +26,7 @@ namespace System.Windows.Forms
 
         public override long Position
         {
-            get
-            {
-                return Seek(0, SeekOrigin.Current);
-            }
+            get => Seek(0, SeekOrigin.Current);
 
             set
             {

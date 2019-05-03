@@ -125,9 +125,7 @@ namespace System.Resources {
         ///     BasePath for relatives filepaths with ResXFileRefs.
         /// </devdoc>
         public string BasePath {
-            get {
-                return basePath;
-            }
+            get => basePath;
             set {
                 if(isReaderDirty) {
                     throw new InvalidOperationException(SR.InvalidResXBasePathOperation);
@@ -144,9 +142,7 @@ namespace System.Resources {
         ///     scenario.
         /// </devdoc>
         public bool UseResXDataNodes {
-            get {
-                return this.useResXDataNodes;
-            }
+            get => this.useResXDataNodes;
             set {
                 if(isReaderDirty) {
                     throw new InvalidOperationException(SR.InvalidResXBasePathOperation);

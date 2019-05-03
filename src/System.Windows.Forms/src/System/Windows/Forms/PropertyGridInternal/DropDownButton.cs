@@ -30,9 +30,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         //
         public bool IgnoreMouse {
 
-            get {
-                return ignoreMouse;
-            }
+            get => ignoreMouse;
             set {
                 ignoreMouse = value;
             }

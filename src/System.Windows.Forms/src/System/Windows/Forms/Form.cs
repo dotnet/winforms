@@ -270,9 +270,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormAcceptButtonDescr))
         ]
         public IButtonControl AcceptButton {
-            get {
-                return (IButtonControl)Properties.GetObject(PropAcceptButton);
-            }
+            get => (IButtonControl)Properties.GetObject(PropAcceptButton);
             set {
                 if (AcceptButton != value) {
                     Properties.SetObject(PropAcceptButton, value);
@@ -402,9 +400,7 @@ namespace System.Windows.Forms {
         ///    Property to be used internally.  See comments a on ActiveMdiChild property.
         /// </devdoc>
         internal Form ActiveMdiChildInternal{
-            get{
-                return (Form)Properties.GetObject(PropActiveMdiChild);
-            }
+            get => (Form)Properties.GetObject(PropActiveMdiChild);
 
             set{
                 Properties.SetObject(PropActiveMdiChild, value);
@@ -415,10 +411,7 @@ namespace System.Windows.Forms {
         //longer do because of added event Deactivate.
         private Form FormerlyActiveMdiChild
         {
-            get
-            {
-                return (Form)Properties.GetObject(PropFormerlyActiveMdiChild);
-            }
+            get => (Form)Properties.GetObject(PropFormerlyActiveMdiChild);
 
             set
             {
@@ -439,9 +432,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlAllowTransparencyDescr))
         ]
         public bool AllowTransparency {
-            get {
-                return formState[FormStateAllowTransparency] != 0;
-            }
+            get => formState[FormStateAllowTransparency] != 0;
             set {
                 if (value != (formState[FormStateAllowTransparency] != 0) &&
                     OSFeature.Feature.IsPresent(OSFeature.LayeredWindows)) {
@@ -481,9 +472,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public bool AutoScale {
-            get {
-                return formState[FormStateAutoScaling] != 0;
-            }
+            get => formState[FormStateAutoScaling] != 0;
 
             set {
                 formStateEx[FormStateExSettingAutoScale] = 1;
@@ -558,7 +547,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public override bool AutoScroll {
-            get { return base.AutoScroll;}
+            get => base.AutoScroll;
 
             set {
                 if (value) {
@@ -574,7 +563,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize {
-            get { return formStateEx[FormStateExAutoSize] != 0; }
+            get => formStateEx[FormStateExAutoSize] != 0; 
             set {
                 if (value != AutoSize) {
                     formStateEx[FormStateExAutoSize] = value ? 1 : 0;
@@ -612,9 +601,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public AutoSizeMode AutoSizeMode {
-            get {
-                return GetAutoSizeMode();
-            }
+            get => GetAutoSizeMode();
             set {
 
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoSizeMode.GrowAndShrink, (int)AutoSizeMode.GrowOnly)){
@@ -647,9 +634,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         ]
         public override AutoValidate AutoValidate {
-            get {
-                return base.AutoValidate;
-            }
+            get => base.AutoValidate;
             set {
                 base.AutoValidate = value;
             }
@@ -687,36 +672,28 @@ namespace System.Windows.Forms {
         }
 
         private bool CalledClosing {
-            get{
-                return formStateEx[FormStateExCalledClosing] != 0;
-            }
+            get => formStateEx[FormStateExCalledClosing] != 0;
             set{
                 formStateEx[FormStateExCalledClosing] = (value ? 1 : 0);
             }
         }
 
         private bool CalledCreateControl {
-            get{
-                return formStateEx[FormStateExCalledCreateControl] != 0;
-            }
+            get => formStateEx[FormStateExCalledCreateControl] != 0;
             set{
                 formStateEx[FormStateExCalledCreateControl] = (value ? 1 : 0);
             }
         }
 
         private bool CalledMakeVisible {
-            get{
-                return formStateEx[FormStateExCalledMakeVisible] != 0;
-            }
+            get => formStateEx[FormStateExCalledMakeVisible] != 0;
             set{
                 formStateEx[FormStateExCalledMakeVisible] = (value ? 1 : 0);
             }
         }
 
         private bool CalledOnLoad {
-            get{
-                return formStateEx[FormStateExCalledOnLoad] != 0;
-            }
+            get => formStateEx[FormStateExCalledOnLoad] != 0;
             set{
                 formStateEx[FormStateExCalledOnLoad] = (value ? 1 : 0);
             }
@@ -791,9 +768,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormCancelButtonDescr))
         ]
         public IButtonControl CancelButton {
-            get {
-                return (IButtonControl)Properties.GetObject(PropCancelButton);
-            }
+            get => (IButtonControl)Properties.GetObject(PropCancelButton);
             set {
                 Properties.SetObject(PropCancelButton, value);
 
@@ -814,9 +789,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         new public Size ClientSize {
-            get {
-                return base.ClientSize;
-            }
+            get => base.ClientSize;
             set {
                 base.ClientSize = value;
             }
@@ -933,7 +906,7 @@ namespace System.Windows.Forms {
         }
 
         internal CloseReason CloseReason {
-            get { return closeReason; }
+            get => closeReason; 
             set { closeReason = value; }
         }
         /// <devdoc>
@@ -1034,9 +1007,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormDialogResultDescr))
         ]
         public DialogResult DialogResult {
-            get {
-                return dialogResult;
-            }
+            get => dialogResult;
 
             set {
                 //valid values are 0x0 to 0x7
@@ -1078,9 +1049,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormHelpButtonDescr))
         ]
         public bool HelpButton {
-            get {
-                return formState[FormStateHelpButton] != 0;
-            }
+            get => formState[FormStateHelpButton] != 0;
 
             set {
                 if (value) {
@@ -1152,9 +1121,7 @@ namespace System.Windows.Forms {
         ///     Determines whether the window is closing.
         /// </summary>
         private bool IsClosing {
-            get {
-                return formStateEx[FormStateExWindowClosing] == 1;
-            }
+            get => formStateEx[FormStateExWindowClosing] == 1;
             set {
                 formStateEx[FormStateExWindowClosing] = value ? 1 : 0;
             }
@@ -1217,9 +1184,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormIsMDIContainerDescr))
         ]
         public bool IsMdiContainer {
-            get {
-                return ctlClient != null;
-            }
+            get => ctlClient != null;
 
             set {
                 if (value == IsMdiContainer)
@@ -1263,9 +1228,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormKeyPreviewDescr))
         ]
         public bool KeyPreview {
-            get {
-                return formState[FormStateKeyPreview] != 0;
-            }
+            get => formState[FormStateKeyPreview] != 0;
             set {
                 if (value) {
                     formState[FormStateKeyPreview] = 1;
@@ -1284,9 +1247,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SettingsBindable(true)]
         public new Point Location {
-            get {
-                return base.Location;
-            }
+            get => base.Location;
             set {
                 base.Location = value;
             }
@@ -1300,9 +1261,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected Rectangle MaximizedBounds {
-            get {
-                return Properties.GetRectangle(PropMaximizedBounds, out _);            
-            }
+            get => Properties.GetRectangle(PropMaximizedBounds, out _);            
             set {
                 if (!value.Equals( MaximizedBounds )) {
                     Properties.SetRectangle(PropMaximizedBounds, value);
@@ -1390,9 +1349,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(ReferenceConverter))
         ]
         public MenuStrip MainMenuStrip {
-            get {
-                return (MenuStrip)Properties.GetObject(PropMainMenuStrip);
-            }
+            get => (MenuStrip)Properties.GetObject(PropMainMenuStrip);
             set {
                 Properties.SetObject(PropMainMenuStrip, value);
                 if (IsHandleCreated && Menu == null) {
@@ -1407,7 +1364,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new Padding Margin {
-            get { return base.Margin; }
+            get => base.Margin; 
             set {
                   base.Margin = value;
             }
@@ -1439,9 +1396,7 @@ namespace System.Windows.Forms {
         Browsable(false),
         ]
         public MainMenu Menu {
-            get {
-                return (MainMenu)Properties.GetObject(PropMainMenu);
-            }
+            get => (MainMenu)Properties.GetObject(PropMainMenu);
             set {
                 MainMenu mainMenu = Menu;
 
@@ -1560,9 +1515,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormMaximizeBoxDescr))
         ]
         public bool MaximizeBox {
-            get {
-                return formState[FormStateMaximizeBox] != 0;
-            }
+            get => formState[FormStateMaximizeBox] != 0;
             set {
                 if (value) {
                     formState[FormStateMaximizeBox] = 1;
@@ -1624,9 +1577,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormMDIParentDescr))
         ]
         public Form MdiParent {
-            get {
-                return MdiParentInternal;
-            }
+            get => MdiParentInternal;
             set {
                 MdiParentInternal = value;
             }
@@ -1704,12 +1655,12 @@ namespace System.Windows.Forms {
         }
 
         private MdiWindowListStrip MdiWindowListStrip {
-            get { return Properties.GetObject(PropMdiWindowListStrip) as MdiWindowListStrip; }
+            get => Properties.GetObject(PropMdiWindowListStrip) as MdiWindowListStrip; 
             set { Properties.SetObject(PropMdiWindowListStrip, value); }
         }
 
         private MdiControlStrip MdiControlStrip {
-            get { return Properties.GetObject(PropMdiControlStrip) as MdiControlStrip; }
+            get => Properties.GetObject(PropMdiControlStrip) as MdiControlStrip; 
             set { Properties.SetObject(PropMdiControlStrip, value); }
         }
 
@@ -1766,9 +1717,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormMinimizeBoxDescr))
         ]
         public bool MinimizeBox {
-            get {
-                return formState[FormStateMinimizeBox] != 0;
-            }
+       get => formState[FormStateMinimizeBox] != 0;
             set {
                 if (value) {
                     formState[FormStateMinimizeBox] = 1;
@@ -1905,9 +1854,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormOwnerDescr))
         ]
         public Form Owner {
-            get {
-                return OwnerInternal;
-            }
+            get => OwnerInternal;
             set {
                 Form ownerOld = OwnerInternal;
                 if (ownerOld == value)
@@ -1979,10 +1926,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -1995,9 +1939,7 @@ namespace System.Windows.Forms {
         }
 
         internal override Control ParentInternal {
-            get {
-                return base.ParentInternal;
-            }
+            get => base.ParentInternal;
             set {
                 if (value != null) {
                     Owner = null;
@@ -2102,9 +2044,7 @@ namespace System.Windows.Forms {
         Localizable(false)
         ]
         new public Size Size {
-            get {
-                return base.Size;
-            }
+            get => base.Size;
             set {
                 base.Size = value;
             }
@@ -2122,9 +2062,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormSizeGripStyleDescr))
         ]
         public SizeGripStyle SizeGripStyle {
-            get {
-                return(SizeGripStyle)formState[FormStateSizeGripStyle];
-            }
+            get => (SizeGripStyle)formState[FormStateSizeGripStyle];
             set {
                 if (SizeGripStyle != value) {
                     //do some bounds checking here
@@ -2155,9 +2093,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormStartPositionDescr))
         ]
         public FormStartPosition StartPosition {
-            get {
-                return(FormStartPosition)formState[FormStateStartPos];
-            }
+            get => (FormStartPosition)formState[FormStateStartPos];
             set {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FormStartPosition.Manual, (int)FormStartPosition.CenterParent))
@@ -2177,9 +2113,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         new public int TabIndex {
-            get {
-                return base.TabIndex;
-            }
+            get => base.TabIndex;
             set {
                 base.TabIndex = value;
             }
@@ -2205,9 +2139,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public new bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -2242,9 +2174,7 @@ namespace System.Windows.Forms {
 
         [SettingsBindable(true)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -2259,9 +2189,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public bool TopLevel {
-            get {
-                return GetTopLevel();
-            }
+            get => GetTopLevel();
             set {
                 if (!value && ((Form)this).IsMdiContainer && !DesignMode) {
                     throw new ArgumentException(SR.MDIContainerMustBeTopLevel, "value");

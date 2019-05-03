@@ -132,9 +132,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
         }
 
         internal bool AlwaysValid {
-            get {
-                return this.alwaysValid > 0;
-            }
+            get => this.alwaysValid > 0;
             set {
                 if (value) {
                     if (alwaysValid == 0 && !CheckValid()) {

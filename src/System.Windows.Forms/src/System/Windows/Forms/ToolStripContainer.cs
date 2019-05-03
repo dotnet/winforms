@@ -70,7 +70,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override bool AutoScroll {
-            get { return base.AutoScroll; }
+            get => base.AutoScroll; 
             set { base.AutoScroll = value; }
         }
 
@@ -80,7 +80,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMargin {
-            get { return base.AutoScrollMargin; }
+            get => base.AutoScrollMargin; 
             set { base.AutoScrollMargin = value; }
         }
 
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Size AutoScrollMinSize {
-            get { return base.AutoScrollMinSize; }
+            get => base.AutoScrollMinSize; 
             set { base.AutoScrollMinSize = value; }
         }
         [
@@ -99,7 +99,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Color BackColor {
-            get { return base.BackColor; }
+            get => base.BackColor; 
             set { base.BackColor = value; }
         }
 
@@ -119,7 +119,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Image BackgroundImage {
-            get { return base.BackgroundImage; }
+            get => base.BackgroundImage; 
             set { base.BackgroundImage = value; }
         }
 
@@ -140,7 +140,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override ImageLayout BackgroundImageLayout {
-            get { return base.BackgroundImageLayout; }
+            get => base.BackgroundImageLayout; 
             set { base.BackgroundImageLayout = value; }
         }
 
@@ -172,9 +172,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool BottomToolStripPanelVisible {
-            get {
-                return BottomToolStripPanel.Visible;
-            }
+            get => BottomToolStripPanel.Visible;
             set {
                 BottomToolStripPanel.Visible = value;
             }
@@ -198,7 +196,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new bool CausesValidation {
-            get { return base.CausesValidation; }
+            get => base.CausesValidation; 
             set { base.CausesValidation = value; }
         }
 
@@ -214,7 +212,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new ContextMenuStrip ContextMenuStrip {
-            get { return base.ContextMenuStrip; }
+            get => base.ContextMenuStrip; 
             set { base.ContextMenuStrip = value; }
         }
 
@@ -230,7 +228,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public override Cursor Cursor {
-            get { return base.Cursor; }
+            get => base.Cursor; 
             set { base.Cursor = value; }
         }
 
@@ -257,7 +255,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public new Color ForeColor {
-            get { return base.ForeColor; }
+            get => base.ForeColor; 
             set { base.ForeColor = value; }
         }
 
@@ -290,9 +288,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool LeftToolStripPanelVisible {
-            get {
-                return LeftToolStripPanel.Visible;
-            }
+            get => LeftToolStripPanel.Visible;
             set {
                 LeftToolStripPanel.Visible = value;
             }
@@ -317,9 +313,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool RightToolStripPanelVisible {
-            get {
-                return RightToolStripPanel.Visible;
-            }
+            get => RightToolStripPanel.Visible;
             set {
                 RightToolStripPanel.Visible = value;
             }
@@ -343,9 +337,7 @@ namespace System.Windows.Forms {
         DefaultValue(true)
         ]
         public bool TopToolStripPanelVisible {
-            get {
-                return TopToolStripPanel.Visible;
-            }
+            get => TopToolStripPanel.Visible;
             set {
                 TopToolStripPanel.Visible = value;
             }

@@ -107,10 +107,7 @@ namespace System.Windows.Forms
 
         internal Bitmap FlipXPThemesBitmap
         {
-            get
-            {
-                return (Bitmap)this.Properties.GetObject(PropFlipXPThemesBitmap);
-            }
+            get => (Bitmap)this.Properties.GetObject(PropFlipXPThemesBitmap);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropFlipXPThemesBitmap))
@@ -175,10 +172,7 @@ namespace System.Windows.Forms
         ]
         public override bool ReadOnly
         {
-            get
-            {
-                return true;
-            }
+            get => true;
             set
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_HeaderCellReadOnlyProperty, "ReadOnly"));
@@ -218,10 +212,7 @@ namespace System.Windows.Forms
         ]
         public override bool Selected
         {
-            get
-            {
-                return false;
-            }
+            get => false;
             set
             {
                 throw new InvalidOperationException(string.Format(SR.DataGridView_HeaderCellReadOnlyProperty, "Selected"));

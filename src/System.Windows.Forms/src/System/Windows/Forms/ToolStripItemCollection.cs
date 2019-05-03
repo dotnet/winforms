@@ -314,7 +314,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IList.this"]/*' />
         object IList.this[int index] {
-            get { return InnerList[index]; }            
+            get => InnerList[index];             
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
         }
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.Insert"]/*' />

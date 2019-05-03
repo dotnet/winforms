@@ -178,9 +178,7 @@ namespace System.Windows.Forms {
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode {
-            get {
-                return autoCompleteMode;
-            }
+            get => autoCompleteMode;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutoCompleteMode.None, (int)AutoCompleteMode.SuggestAppend)) {
@@ -215,9 +213,7 @@ namespace System.Windows.Forms {
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource {
-            get {
-                return autoCompleteSource;
-            }
+            get => autoCompleteSource;
             set {
                 // FxCop: Avoid usage of Enum.IsDefined - this looks like an enum that could grow
                 if (!ClientUtils.IsEnumValid_NotSequential(value, (int)value,
@@ -307,9 +303,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -318,9 +312,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -439,9 +431,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ListControlDataSourceDescr))
         ]
         public new object DataSource {
-            get {
-                return base.DataSource;
-            }
+            get => base.DataSource;
             set {
                 base.DataSource = value;
             }
@@ -596,9 +586,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ComboBoxFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
-            get {
-                return flatStyle;
-            }
+            get => flatStyle;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System)) {
@@ -655,9 +643,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))
         ]
         public bool IntegralHeight {
-            get {
-                return integralHeight;
-            }
+            get => integralHeight;
 
             set {
                 if (integralHeight != value) {
@@ -771,9 +757,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))
         ]
         public int MaxDropDownItems {
-            get {
-                return maxDropDownItems;
-            }
+            get => maxDropDownItems;
             set {
                 if (value < 1 || value > 100) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidBoundArgument, nameof(MaxDropDownItems), value, 1, 100));
@@ -783,14 +767,14 @@ namespace System.Windows.Forms {
         }
 
         public override Size MaximumSize {
-            get { return base.MaximumSize; }
+            get => base.MaximumSize; 
             set {
                 base.MaximumSize = new Size(value.Width, 0);
             }
         }
 
         public override Size MinimumSize {
-            get { return base.MinimumSize; }
+            get => base.MinimumSize; 
             set {
                 base.MinimumSize = new Size(value.Width, 0);
             }
@@ -808,9 +792,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ComboBoxMaxLengthDescr))
         ]
         public int MaxLength {
-            get {
-                return Properties.GetInteger(PropMaxLength);
-            }
+            get => Properties.GetInteger(PropMaxLength);
             set {
                 if (value < 0) value = 0;
                 if (MaxLength != value) {
@@ -825,7 +807,7 @@ namespace System.Windows.Forms {
         ///     If the mouse is over the combobox, draw selection rect.
         /// </devdoc>
         internal bool MouseIsOver {
-            get { return mouseOver; }
+            get => mouseOver; 
             set {
                 if (mouseOver != value) {
                     mouseOver = value;
@@ -847,7 +829,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value; }
         }
 
@@ -1149,9 +1131,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ComboBoxSortedDescr))
         ]
         public bool Sorted {
-            get {
-                return sorted;
-            }
+            get => sorted;
             set {
                 if (sorted != value) {
                     if (this.DataSource != null && value) {
@@ -5146,9 +5126,7 @@ namespace System.Windows.Forms {
             /// Gets or sets the accessible Name of ComboBox's child text element.
             /// </summary>
             public override string Name {
-                get {
-                    return _owner.AccessibilityObject.Name ?? string.Empty;
-                }
+                get => _owner.AccessibilityObject.Name ?? string.Empty;
                 set {
                     // Do nothing.
                 }
@@ -5284,9 +5262,7 @@ namespace System.Windows.Forms {
             /// Gets or sets the accessible Name of ComboBox's child DropDown button. ("Open" or "Close" depending on stat of the DropDown)
             /// </summary>
             public override string Name {
-                get {
-                    return get_accNameInternal(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
-                }
+                get => get_accNameInternal(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
                 set {
                     var systemIAccessible = GetSystemIAccessibleInternal();
                     systemIAccessible.set_accName(COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX, value);

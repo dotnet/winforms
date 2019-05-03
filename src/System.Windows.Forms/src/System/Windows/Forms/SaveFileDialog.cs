@@ -42,9 +42,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SaveFileDialogCreatePrompt))
         ]
         public bool CreatePrompt {
-            get {
-                return GetOption(NativeMethods.OFN_CREATEPROMPT);
-            }
+            get => GetOption(NativeMethods.OFN_CREATEPROMPT);
             set {
                 SetOption(NativeMethods.OFN_CREATEPROMPT, value);
             }
@@ -63,9 +61,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.SaveFileDialogOverWritePrompt))
         ]
         public bool OverwritePrompt {
-            get {
-                return GetOption(NativeMethods.OFN_OVERWRITEPROMPT);
-            }
+            get => GetOption(NativeMethods.OFN_OVERWRITEPROMPT);
             set {
                 SetOption(NativeMethods.OFN_OVERWRITEPROMPT, value);
             }

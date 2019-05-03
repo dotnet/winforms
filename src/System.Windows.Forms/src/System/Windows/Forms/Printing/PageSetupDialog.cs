@@ -58,9 +58,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDallowMarginsDescr))
         ]
         public bool AllowMargins {
-            get { 
-                return allowMargins;
-            }
+            get => allowMargins;
             set { 
                 allowMargins = value;
             }
@@ -78,7 +76,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDallowOrientationDescr))
         ]
         public bool AllowOrientation {
-            get { return allowOrientation;}
+            get => allowOrientation;
             set { allowOrientation = value;}
         }
 
@@ -96,7 +94,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDallowPaperDescr))
         ]
         public bool AllowPaper {
-            get { return allowPaper;}
+            get => allowPaper;
             set { allowPaper = value;}
         }
 
@@ -113,7 +111,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDallowPrinterDescr))
         ]
         public bool AllowPrinter {
-            get { return allowPrinter;}
+            get => allowPrinter;
             set { allowPrinter = value;}
         }
 
@@ -129,7 +127,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDdocumentDescr))
         ]
         public PrintDocument Document {
-            get { return printDocument;}
+            get => printDocument;
             set { 
                 printDocument = value;
                 if (printDocument != null) {
@@ -150,7 +148,7 @@ namespace System.Windows.Forms {
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public bool EnableMetric {
-            get { return enableMetric;}
+            get => enableMetric;
             set { enableMetric = value;}
         }
 
@@ -167,7 +165,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDminMarginsDescr))
         ]
         public Margins MinMargins {
-            get { return minMargins;}
+            get => minMargins;
             set { 
                 if (value == null)
                     value = new Margins(0, 0, 0, 0);
@@ -193,7 +191,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDpageSettingsDescr))
         ]
         public PageSettings PageSettings {
-            get { return pageSettings;}
+            get => pageSettings;
             set {
                 pageSettings = value;
                 printDocument = null;
@@ -216,7 +214,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDprinterSettingsDescr))
         ]
         public PrinterSettings PrinterSettings {
-            get { return printerSettings;}
+            get => printerSettings;
             set {
                 printerSettings = value;
                 printDocument = null;
@@ -235,7 +233,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDshowHelpDescr))
         ]
         public bool ShowHelp {
-            get { return showHelp;}
+            get => showHelp;
             set { showHelp = value;}
         }
 
@@ -251,7 +249,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PSDshowNetworkDescr))
         ]
         public bool ShowNetwork {
-            get { return showNetwork;}
+            get => showNetwork;
             set { showNetwork = value;}
         }
 

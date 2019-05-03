@@ -241,9 +241,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemAccessibleDefaultActionDescr))
         ]
         public string AccessibleDefaultActionDescription {
-            get {
-                return (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
-            }
+            get => (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
             set {
                 Properties.SetObject(PropAccessibleDefaultActionDescription, value);
                 OnAccessibleDefaultActionDescriptionChanged(EventArgs.Empty);
@@ -260,9 +258,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemAccessibleDescriptionDescr))
         ]
         public string AccessibleDescription {
-            get {
-                return (string)Properties.GetObject(PropAccessibleDescription);
-            }
+            get => (string)Properties.GetObject(PropAccessibleDescription);
             set {
                 Properties.SetObject(PropAccessibleDescription, value);
                 OnAccessibleDescriptionChanged(EventArgs.Empty);
@@ -280,9 +276,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemAccessibleNameDescr))
         ]
         public string AccessibleName {
-            get {
-                return (string)Properties.GetObject(PropAccessibleName);
-            }
+            get => (string)Properties.GetObject(PropAccessibleName);
 
             set {
                 Properties.SetObject(PropAccessibleName, value);
@@ -335,9 +329,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemAlignmentDescr))
         ]
         public ToolStripItemAlignment Alignment {
-            get {
-                return alignment;
-            }
+            get => alignment;
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemAlignment.Left, (int)ToolStripItemAlignment.Right))
@@ -371,9 +363,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public virtual bool AllowDrop {
-            get {
-                return state[stateAllowDrop];     
-            }
+            get => state[stateAllowDrop];     
             set {
                 if (value !=  state[stateAllowDrop]) {
                     EnsureParentDropTargetRegistered();
@@ -393,9 +383,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.ToolStripItemAutoSizeDescr))]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public bool AutoSize {
-            get {       
-                return state[stateAutoSize];
-            }
+            get => state[stateAutoSize];
             set {
                 if (state[stateAutoSize] != value) {
                     state[stateAutoSize] = value;
@@ -414,9 +402,7 @@ namespace System.Windows.Forms {
         [SRDescription(nameof(SR.ToolStripItemAutoToolTipDescr))]
         [SRCategory(nameof(SR.CatBehavior))]
         public bool AutoToolTip {
-           get { 
-                return state[stateAutoToolTip];
-           }
+           get => state[stateAutoToolTip];
            set {
                 state[stateAutoToolTip] = value;
            }
@@ -468,10 +454,7 @@ namespace System.Windows.Forms {
         DefaultValue(null)
         ]
         public virtual Image BackgroundImage {
-            get {
-                return Properties.GetObject(PropBackgroundImage) as Image;
-                 
-            }
+            get => Properties.GetObject(PropBackgroundImage) as Image;
             set {
                 if (BackgroundImage != value) {
                      Properties.SetObject(PropBackgroundImage, value);
@@ -728,9 +711,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemDisplayStyleDescr))
         ]
         public virtual ToolStripItemDisplayStyle DisplayStyle {
-            get { 
-                return displayStyle; 
-            }
+            get => displayStyle; 
             set {
                  if (displayStyle != value) {
                     //valid values are 0x0 to 0x3
@@ -778,9 +759,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemDoubleClickedEnabledDescr))
         ]
         public bool DoubleClickEnabled {
-            get {
-                return state[stateDoubleClickEnabled];
-            }
+            get => state[stateDoubleClickEnabled];
             set {
                 state[stateDoubleClickEnabled] = value;
             }
@@ -1012,9 +991,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public int Height {
-            get {
-                return Bounds.Height;
-            }
+            get => Bounds.Height;
             set{
                 Rectangle currentBounds = this.Bounds;
                 SetBounds(currentBounds.X, currentBounds.Y, currentBounds.Width, value);
@@ -1097,9 +1074,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemImageAlignDescr))
         ]
         public ContentAlignment ImageAlign {
-            get {
-                return imageAlign;
-            }
+            get => imageAlign;
             set {
 
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
@@ -1172,9 +1147,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemImageTransparentColorDescr))
         ] 
         public Color ImageTransparentColor {
-            get {
-                return imageTransparentColor;
-            }
+            get => imageTransparentColor;
             set {
                 if (imageTransparentColor != value) {
                     imageTransparentColor = value;
@@ -1253,9 +1226,7 @@ namespace System.Windows.Forms {
         RelatedImageList("Owner.ImageList")
        ]
         public string ImageKey {
-            get { 
-                return this.ImageIndexer.Key;
-            }
+            get => this.ImageIndexer.Key;
             set {
                 ImageIndexer.Key = value;
                 state[stateInvalidMirroredImage] = true;
@@ -1274,9 +1245,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemImageScalingDescr))
         ]
         public ToolStripItemImageScaling ImageScaling {
-            get {
-                return imageScaling;
-            }
+            get => imageScaling;
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemImageScaling.None, (int)ToolStripItemImageScaling.SizeToFit))
@@ -1397,7 +1366,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout))
         ]
         public Padding Margin {
-            get { return CommonProperties.GetMargin(this); }
+            get => CommonProperties.GetMargin(this); 
             set { 
                 if (Margin != value) {
                     state[stateUseAmbientMargin] = false;
@@ -1468,7 +1437,7 @@ namespace System.Windows.Forms {
 
         // required for menus
         internal bool MouseDownAndUpMustBeInSameItem {
-            get { return state[stateMouseDownAndUpMustBeInSameItem]; }
+            get => state[stateMouseDownAndUpMustBeInSameItem]; 
             set { state[stateMouseDownAndUpMustBeInSameItem] = value; }
         }
 
@@ -1564,9 +1533,7 @@ namespace System.Windows.Forms {
         DefaultValue(null)
         ]
         public string Name {
-            get {
-                return WindowsFormsUtils.GetComponentName(this, (string)Properties.GetObject(ToolStripItem.PropName));
-            }
+            get => WindowsFormsUtils.GetComponentName(this, (string)Properties.GetObject(ToolStripItem.PropName));
             set {
                 if (DesignMode) //InDesignMode the Extender property will set it to the right value.
                 {
@@ -1587,9 +1554,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public ToolStrip Owner {
-            get {
-                return this.owner;
-            }
+            get => this.owner;
              set {
                if (owner != value) {
                     if (owner != null) {
@@ -1683,9 +1648,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout))
         ]
         public ToolStripItemOverflow Overflow {
-            get { 
-                return overflow; 
-            }
+            get => overflow; 
             set { 
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)ToolStripItemOverflow.Never, (int)ToolStripItemOverflow.AsNeeded))
@@ -1710,7 +1673,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatLayout))
         ]
         public virtual Padding Padding {
-            get { return CommonProperties.GetPadding(this, DefaultPadding); }
+            get => CommonProperties.GetPadding(this, DefaultPadding); 
             set {
                 if (Padding != value) {
                     CommonProperties.SetPadding(this, value);
@@ -1723,9 +1686,7 @@ namespace System.Windows.Forms {
         /// This is explicitly a ToolStrip, because only ToolStrips know how to manage ToolStripitems
         /// </devdoc>
         internal ToolStrip ParentInternal {
-            get {
-                return parent;
-            }
+            get => parent;
             set {  
                 if (parent != value) {
                     ToolStrip oldParent = parent;
@@ -1908,9 +1869,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemRightToLeftAutoMirrorImageDescr))
         ]
         public bool RightToLeftAutoMirrorImage {
-            get {
-                return state[stateRightToLeftAutoMirrorImage];
-            }
+            get => state[stateRightToLeftAutoMirrorImage];
             set {
                 if (state[stateRightToLeftAutoMirrorImage] != value) {
                     state[stateRightToLeftAutoMirrorImage]  = value; 
@@ -2001,9 +1960,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemSizeDescr))
         ]
         public virtual Size Size {
-            get {
-                return Bounds.Size; 
-            }
+     get => Bounds.Size; 
             set { 
                 Rectangle currentBounds = Bounds;
                 currentBounds.Size = value;
@@ -2012,27 +1969,21 @@ namespace System.Windows.Forms {
         }
 
         internal bool SupportsRightClick {
-            get {
-                return state[stateSupportsRightClick];
-            }
+            get => state[stateSupportsRightClick];
             set {
                 state[stateSupportsRightClick] = value;
             }
         }
 
         internal bool SupportsItemClick {
-            get {
-                return state[stateSupportsItemClick];
-            }
+            get => state[stateSupportsItemClick];
             set {
                 state[stateSupportsItemClick] = value;
             }
         }
 
         internal bool SupportsSpaceKey {
-            get {
-                return state[stateSupportsSpaceKey];
-            }
+            get => state[stateSupportsSpaceKey];
             set {
                 state[stateSupportsSpaceKey] = value;
             }
@@ -2040,9 +1991,7 @@ namespace System.Windows.Forms {
 
                    
         internal bool SupportsDisabledHotTracking {
-            get {
-                return state[stateSupportsDisabledHotTracking];
-            }
+            get => state[stateSupportsDisabledHotTracking];
             set {
                 state[stateSupportsDisabledHotTracking] = value;
             }
@@ -2109,9 +2058,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemTextAlignDescr))
         ]
         public virtual ContentAlignment TextAlign {
-            get {
-                return textAlign;
-            }
+            get => textAlign;
             set {
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -2221,9 +2168,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemVisibleDescr))
         ]
         public bool Visible {
-            get { 
-                return (ParentInternal!=null) && (ParentInternal.Visible) &&  Available; 
-            }
+            get => (ParentInternal!=null) && (ParentInternal.Visible) &&  Available; 
             set { 
                 SetVisibleCore(value);                
             }
@@ -2248,9 +2193,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public int Width {
-            get {
-                return Bounds.Width;
-            }
+            get => Bounds.Width;
             set {
                 Rectangle currentBounds = this.Bounds;
                 SetBounds(currentBounds.X, currentBounds.Y, value, currentBounds.Height);

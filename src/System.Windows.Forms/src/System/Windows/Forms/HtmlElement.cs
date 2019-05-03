@@ -97,10 +97,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Enabled"]/*' />
         public bool Enabled
         {
-            get
-            {
-                return !(((UnsafeNativeMethods.IHTMLElement3)this.NativeHtmlElement).GetDisabled());
-            }
+            get => !(((UnsafeNativeMethods.IHTMLElement3)this.NativeHtmlElement).GetDisabled());
             set
             {
                 ((UnsafeNativeMethods.IHTMLElement3)this.NativeHtmlElement).SetDisabled(!value);
@@ -159,10 +156,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InnerHtml"]/*' />
         public string InnerHtml
         {
-            get
-            {
-                return this.NativeHtmlElement.GetInnerHTML();
-            }
+            get => this.NativeHtmlElement.GetInnerHTML();
             set
             {
                 try
@@ -183,10 +177,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.InnerText"]/*' />
         public string InnerText
         {
-            get
-            {
-                return this.NativeHtmlElement.GetInnerText();
-            }
+            get => this.NativeHtmlElement.GetInnerText();
             set
             {
                 try
@@ -207,10 +198,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Name"]/*' />
         public string Name
         {
-            get
-            {
-                return this.GetAttribute("Name");
-            }
+            get => this.GetAttribute("Name");
             set
             {
                 this.SetAttribute("Name", value);
@@ -266,10 +254,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OuterHtml"]/*' />
         public string OuterHtml
         {
-            get
-            {
-                return this.NativeHtmlElement.GetOuterHTML();
-            }
+            get => this.NativeHtmlElement.GetOuterHTML();
             set
             {
                 try
@@ -290,10 +275,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.OuterText"]/*' />
         public string OuterText
         {
-            get
-            {
-                return this.NativeHtmlElement.GetOuterText();
-            }
+            get => this.NativeHtmlElement.GetOuterText();
             set
             {
                 try
@@ -337,10 +319,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollLeft"]/*' />
         public int ScrollLeft
         {
-            get
-            {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetScrollLeft();
-            }
+            get => ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetScrollLeft();
             set
             {
                 ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).SetScrollLeft(value);
@@ -350,10 +329,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.ScrollTop"]/*' />
         public int ScrollTop
         {
-            get
-            {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetScrollTop();
-            }
+            get => ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetScrollTop();
             set
             {
                 ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).SetScrollTop(value);
@@ -371,10 +347,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.Style"]/*' />
         public string Style
         {
-            get
-            {
-                return this.NativeHtmlElement.GetStyle().GetCssText();
-            }
+            get => this.NativeHtmlElement.GetStyle().GetCssText();
             set
             {
                 this.NativeHtmlElement.GetStyle().SetCssText(value);
@@ -393,10 +366,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlElement.uex' path='docs/doc[@for="HtmlElement.TabIndex"]/*' />
         public short TabIndex
         {
-            get
-            {
-                return ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetTabIndex();
-            }
+            get => ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).GetTabIndex();
             set
             {
                 ((UnsafeNativeMethods.IHTMLElement2)this.NativeHtmlElement).SetTabIndex(value);

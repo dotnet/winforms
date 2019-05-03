@@ -40,10 +40,7 @@ namespace System.Windows.Forms
         ]
         public override bool CheckFileExists
         {
-            get
-            {
-                return base.CheckFileExists;
-            }
+            get => base.CheckFileExists;
             set
             {
                 base.CheckFileExists = value;
@@ -64,10 +61,7 @@ namespace System.Windows.Forms
         ]
         public bool Multiselect
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_ALLOWMULTISELECT);
-            }
+            get => GetOption(NativeMethods.OFN_ALLOWMULTISELECT);
             set
             {
                 SetOption(NativeMethods.OFN_ALLOWMULTISELECT, value);
@@ -88,10 +82,7 @@ namespace System.Windows.Forms
         ]
         public bool ReadOnlyChecked
         {
-            get
-            {
-                return GetOption(NativeMethods.OFN_READONLY);
-            }
+            get => GetOption(NativeMethods.OFN_READONLY);
             set
             {
                 SetOption(NativeMethods.OFN_READONLY, value);
@@ -111,10 +102,7 @@ namespace System.Windows.Forms
         ]
         public bool ShowReadOnly
         {
-            get
-            {
-                return !GetOption(NativeMethods.OFN_HIDEREADONLY);
-            }
+            get => !GetOption(NativeMethods.OFN_HIDEREADONLY);
             set
             {
                 SetOption(NativeMethods.OFN_HIDEREADONLY, !value);

@@ -78,7 +78,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.IList.this"]/*' />
         object IList.this[int index] {
-            get { return items[index]; }
+            get => items[index]; 
             set { throw new NotSupportedException(); }
         }
 

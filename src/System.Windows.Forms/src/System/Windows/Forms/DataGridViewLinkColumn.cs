@@ -80,10 +80,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewLinkCell))
@@ -191,10 +188,7 @@ namespace System.Windows.Forms
         ]
         public string Text
         {
-            get
-            {
-                return this.text;
-            }
+            get => this.text;
             set
             {
                 if (!string.Equals(value, this.text, StringComparison.Ordinal))

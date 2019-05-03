@@ -54,9 +54,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -68,9 +66,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -109,7 +105,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ProgressBarMarqueeAnimationSpeed))
         ]
         public int MarqueeAnimationSpeed {
-            get { return ProgressBar.MarqueeAnimationSpeed; }
+            get => ProgressBar.MarqueeAnimationSpeed; 
             set { ProgressBar.MarqueeAnimationSpeed = value; }
         }
 
@@ -121,9 +117,7 @@ namespace System.Windows.Forms
        SRDescription(nameof(SR.ProgressBarMaximumDescr))
        ]
         public int Maximum {
-            get {
-                return ProgressBar.Maximum;
-            }
+            get => ProgressBar.Maximum;
             set {
                 ProgressBar.Maximum = value;
             }
@@ -135,9 +129,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ProgressBarMinimumDescr))
         ]
         public int Minimum {
-            get {
-                return ProgressBar.Minimum;
-            }
+            get => ProgressBar.Minimum;
             set {
                 ProgressBar.Minimum = value;
             }
@@ -157,10 +149,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return ProgressBar.RightToLeftLayout;
-            }
+            get => ProgressBar.RightToLeftLayout;
 
             set {
                 ProgressBar.RightToLeftLayout = value;
@@ -178,9 +167,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ProgressBarStepDescr))
         ]
         public int Step {
-            get {
-                return ProgressBar.Step;
-            }
+            get => ProgressBar.Step;
             set {
                 ProgressBar.Step = value;
             }
@@ -197,9 +184,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ProgressBarStyleDescr))
         ]
         public ProgressBarStyle Style {
-            get {
-                return ProgressBar.Style;
-            }
+            get => ProgressBar.Style;
             set {
                 ProgressBar.Style = value;
             }
@@ -216,10 +201,7 @@ namespace System.Windows.Forms
         ]
         public override string Text
         {
-            get
-            {
-                return Control.Text;
-            }
+            get => Control.Text;
             set
             {
                 Control.Text = value;
@@ -239,9 +221,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ProgressBarValueDescr))
         ]
         public int Value {
-            get {
-                return ProgressBar.Value;
-            }
+            get => ProgressBar.Value;
             set {
                 ProgressBar.Value = value;
             }
@@ -459,7 +439,7 @@ namespace System.Windows.Forms
             private ToolStripProgressBar ownerItem;
 
             public ToolStripProgressBar Owner {
-                get { return ownerItem; }
+                get => ownerItem; 
                 set { ownerItem = value; }
             }
 

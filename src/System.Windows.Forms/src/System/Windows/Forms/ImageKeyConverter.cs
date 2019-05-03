@@ -37,9 +37,7 @@ namespace System.Windows.Forms {
         /// the ToolStripItem.Owner property.
         /// </devdoc>
         internal string ParentImageListProperty {
-            get {
-                return parentImageListProperty;
-            }
+            get => parentImageListProperty;
             set {
                 parentImageListProperty = value;
             }

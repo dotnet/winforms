@@ -357,9 +357,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// of the target object.
         /// </devdoc>
         internal virtual GridEntry DefaultChild {
-            get {
-                return null;
-            }
+            get => null;
             set{}
         }
 
@@ -411,9 +409,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public override bool Expanded {
-            get{
-                return InternalExpanded;
-            }
+            get => InternalExpanded;
             set {
                 GridEntryHost.SetExpand(this, value);
             }
@@ -554,9 +550,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// Checks if the entry is currently expanded
         /// </devdoc>
         public bool Focus {
-            get{
-                return this.hasFocus;
-            }
+            get => this.hasFocus;
             set{
 
                 if (Disposed) {
@@ -709,9 +703,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         public virtual bool IsExpandable {
-            get {
-                return this.Expandable;
-            }
+            get => this.Expandable;
             set {
                 if (value != GetFlagSet(FL_EXPANDABLE)) {
                     SetFlag(FL_EXPANDABLE_FAILED, false);
@@ -835,9 +827,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public virtual GridEntry ParentGridEntry{
-            get {
-                return this.parentPE;
-            }
+            get => this.parentPE;
             set {
                 Debug.Assert(value != this, "how can we be our own parent?");
                 this.parentPE = value;
@@ -1010,9 +1000,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         internal Point ValueToolTipLocation {
-            get {
-                return ShouldRenderPassword ? InvalidPoint : valueTipPoint;
-            }
+            get => ShouldRenderPassword ? InvalidPoint : valueTipPoint;
             set{
                 valueTipPoint = value;
             }
@@ -2974,9 +2962,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
 
             public override string Value {
-                get {
-                    return owner.GetPropertyTextValue();
-                }
+                get => owner.GetPropertyTextValue();
 
                 set {
                     owner.SetPropertyTextValue(value);

@@ -58,7 +58,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDallowCurrentPageDescr))
         ]
         public bool AllowCurrentPage {
-            get { return allowCurrentPage;}
+            get => allowCurrentPage;
             set { allowCurrentPage = value;}
         }
         
@@ -75,7 +75,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDallowPagesDescr))
         ]
         public bool AllowSomePages {
-            get { return allowPages;}
+            get => allowPages;
             set { allowPages = value;}
         }
 
@@ -89,7 +89,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDallowPrintToFileDescr))
         ]
         public bool AllowPrintToFile {
-            get { return allowPrintToFile;}
+            get => allowPrintToFile;
             set { allowPrintToFile = value;}
         }
 
@@ -105,7 +105,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDallowSelectionDescr))
         ]
         public bool AllowSelection {
-            get { return allowSelection;}
+            get => allowSelection;
             set { allowSelection = value;}
         }
 
@@ -121,7 +121,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDdocumentDescr))
         ]
         public PrintDocument Document {
-            get { return printDocument;}
+            get => printDocument;
             set { 
                 printDocument = value;
                 if (printDocument == null)
@@ -182,7 +182,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDprintToFileDescr))
         ]
         public bool PrintToFile {
-            get { return printToFile;}
+            get => printToFile;
             set { printToFile = value;}
         }
 
@@ -198,7 +198,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDshowHelpDescr))
         ]
         public bool ShowHelp {
-            get { return showHelp;}
+            get => showHelp;
             set { showHelp = value;}
         }
 
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PDshowNetworkDescr))
         ]
         public bool ShowNetwork {
-            get { return showNetwork;}
+            get => showNetwork;
             set { showNetwork = value;}
         }
 

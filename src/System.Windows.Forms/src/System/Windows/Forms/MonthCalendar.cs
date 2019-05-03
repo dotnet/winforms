@@ -255,9 +255,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -274,9 +272,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -335,9 +331,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarDimensionsDescr))
         ]
         public Size CalendarDimensions {
-            get {
-                return dimensions;
-            }
+            get => dimensions;
             set {
                 if (!this.dimensions.Equals(value))
                     SetCalendarDimensions(value.Width, value.Height);
@@ -397,9 +391,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -416,9 +408,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarFirstDayOfWeekDescr))
         ]
         public Day FirstDayOfWeek {
-            get {
-                return firstDayOfWeek;
-            }
+            get => firstDayOfWeek;
 
             set {
                 //valid values are 0x0 to 0x7
@@ -459,9 +449,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -485,9 +473,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarMaxDateDescr))
         ]
         public DateTime MaxDate {
-            get {
-                return DateTimePicker.EffectiveMaxDate(maxDate);
-            }
+            get => DateTimePicker.EffectiveMaxDate(maxDate);
             set {
                 if (value != maxDate) {
                     if (value < DateTimePicker.EffectiveMinDate(minDate)) {
@@ -511,9 +497,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarMaxSelectionCountDescr))
         ]
         public int MaxSelectionCount {
-            get {
-                return maxSelectionCount;
-            }
+            get => maxSelectionCount;
             set {
                 if (value < 1) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MaxSelectionCount), value.ToString("D"), 1));
@@ -540,9 +524,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarMinDateDescr))
         ]
         public DateTime MinDate {
-            get {
-                return DateTimePicker.EffectiveMinDate(minDate);
-            }
+            get => DateTimePicker.EffectiveMinDate(minDate);
             set {
                 if (value != minDate) {
                     if (value > DateTimePicker.EffectiveMaxDate(maxDate)) {
@@ -618,7 +600,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -644,10 +626,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -673,9 +652,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarScrollChangeDescr))
         ]
         public int ScrollChange {
-            get {
-                return scrollChange;
-            }
+            get => scrollChange;
             set {
                 if (scrollChange != value) {
 
@@ -706,9 +683,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarSelectionEndDescr))
         ]
         public DateTime SelectionEnd {
-            get {
-                return selectionEnd;
-            }
+            get => selectionEnd;
             set {
                 if (selectionEnd != value) {
 
@@ -749,9 +724,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarSelectionStartDescr))
         ]
         public DateTime SelectionStart {
-            get {
-                return selectionStart;
-            }
+            get => selectionStart;
             set {
                 if (selectionStart != value) {
 
@@ -790,9 +763,7 @@ namespace System.Windows.Forms {
         Bindable(true)
         ]
         public SelectionRange SelectionRange {
-            get {
-                return new SelectionRange(SelectionStart, SelectionEnd);
-            }
+            get => new SelectionRange(SelectionStart, SelectionEnd);
             set {
                 SetSelectionRange(value.Start, value.End);
             }
@@ -809,9 +780,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarShowTodayDescr))
         ]
         public bool ShowToday {
-            get {
-                return showToday;
-            }
+            get => showToday;
             set {
                 if (showToday != value) {
                     showToday = value;
@@ -832,9 +801,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarShowTodayCircleDescr))
         ]
         public bool ShowTodayCircle {
-            get {
-                return showTodayCircle;
-            }
+            get => showTodayCircle;
             set {
                 if (showTodayCircle != value) {
                     showTodayCircle = value;
@@ -855,9 +822,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarShowWeekNumbersDescr))
         ]
         public bool ShowWeekNumbers {
-            get {
-                return showWeekNumbers;
-            }
+            get => showWeekNumbers;
             set {
                 if (showWeekNumbers != value) {
                     showWeekNumbers = value;
@@ -908,9 +873,7 @@ namespace System.Windows.Forms {
         Localizable(false)
         ]
         public new Size Size {
-            get {
-                return base.Size;
-            }
+            get => base.Size;
             set {
                 base.Size = value;
             }
@@ -920,9 +883,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -1005,9 +966,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarTitleBackColorDescr))
         ]
         public Color TitleBackColor {
-            get {
-                return titleBackColor;
-            }
+            get => titleBackColor;
             set {
                 if (value.IsEmpty) {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
@@ -1028,9 +987,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarTitleForeColorDescr))
         ]
         public Color TitleForeColor {
-            get {
-                return titleForeColor;
-            }
+            get => titleForeColor;
             set {
                 if (value.IsEmpty) {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,
@@ -1051,9 +1008,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.MonthCalendarTrailingForeColorDescr))
         ]
         public Color TrailingForeColor {
-            get {
-                return trailingForeColor;
-            }
+            get => trailingForeColor;
             set {
                 if (value.IsEmpty) {
                     throw new ArgumentException(string.Format(SR.InvalidNullArgument,

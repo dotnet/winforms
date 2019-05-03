@@ -37,10 +37,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public int Seconds
         {
-            get
-            {
-                return this.seconds;
-            }
+            get => this.seconds;
             set
             {
                 if (value < 0)
@@ -56,10 +53,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         public decimal Increment {
 
-            get 
-            {
-                return this.increment;
-            }
+            get => this.increment;
 
             set
             {

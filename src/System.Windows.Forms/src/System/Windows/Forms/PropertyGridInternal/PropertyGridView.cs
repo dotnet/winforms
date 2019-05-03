@@ -209,9 +209,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 this.backgroundBrush = new SolidBrush(value);
                 base.BackColor = value;
@@ -569,9 +567,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         internal GridEntry SelectedGridEntry {
-            get {
-                return selectedGridEntry;
-            }
+            get => selectedGridEntry;
             set {
                 if (allGridEntries != null) {
                     foreach (GridEntry e in allGridEntries) {
@@ -687,9 +683,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         /// services.  This may be null.
         /// </devdoc>
         public IServiceProvider ServiceProvider {
-            get { 
-               return serviceProvider;
-            }
+            get => serviceProvider;
             set {
                if (value != serviceProvider) {
                     this.serviceProvider = value;
@@ -711,9 +705,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         internal override bool SupportsUiaProviders => true;
         
         private int TipColumn {
-            get{
-                return(tipInfo & unchecked((int)0xFFFF0000)) >> 16;
-            }
+            get => (tipInfo & unchecked((int)0xFFFF0000)) >> 16;
             set{
 
                 // clear the column
@@ -725,9 +717,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         private int TipRow {
-            get{
-                return tipInfo & 0xFFFF;
-            }
+            get => tipInfo & 0xFFFF;
             set{
 
                 // clear the row
@@ -5436,9 +5426,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
        
 
             public virtual bool HookMouseDown{
-                get{
-                    return mouseHook.HookMouseDown;
-                }
+                get => mouseHook.HookMouseDown;
                 set{
                     mouseHook.HookMouseDown = value;
                 }
@@ -6418,7 +6406,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             }
                         
             public virtual bool Filter {
-                get { return filter;}
+                get => filter;
 
                 set {
                     this.filter = value;
@@ -6442,9 +6430,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
 
             public override string Text {
-                get {
-                    return base.Text;
-                }
+                get => base.Text;
                 set {
                     fInSetText = true;
                     base.Text = value;
@@ -6461,9 +6447,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
 
 
             public virtual bool HookMouseDown{
-                get{
-                    return mouseHook.HookMouseDown;
-                }
+                get => mouseHook.HookMouseDown;
                 set{
                     mouseHook.HookMouseDown = value;
                     if (value) {

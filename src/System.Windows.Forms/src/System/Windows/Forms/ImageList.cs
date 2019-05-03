@@ -112,12 +112,12 @@ namespace System.Windows.Forms {
             private ImageList imageList = null;
 
             public virtual ImageList ImageList {
-                get { return imageList; }
+                get => imageList; 
                 set { imageList = value; }
             }
 
             public virtual string Key {
-                get { return key; }
+                get => key; 
                 set {
                     index = -1;
                     key = (value == null ? string.Empty : value);
@@ -126,7 +126,7 @@ namespace System.Windows.Forms {
             }
 
             public virtual int Index {
-                get { return index; }
+                get => index; 
                 set {
                     key = string.Empty;
                     index = value;
@@ -158,9 +158,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ImageListColorDepthDescr))
         ]
         public ColorDepth ColorDepth {
-            get {
-                return colorDepth;
-            }
+            get => colorDepth;
             set {
                 // ColorDepth is not conitguous - list the members instead.
                 if (!ClientUtils.IsEnumValid_NotSequential(value, 
@@ -245,9 +243,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ImageListSizeDescr))
         ]
         public Size ImageSize {
-            get {
-                return imageSize;
-            }
+            get => imageSize;
             set {
                 if (value.IsEmpty) {
                     throw new ArgumentException(string.Format(SR.InvalidArgument, nameof(ImageSize), "Size.Empty"), nameof(value));
@@ -359,9 +355,7 @@ namespace System.Windows.Forms {
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return userData;
-            }
+            get => userData;
             set {
                 userData = value;
             }
@@ -376,9 +370,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ImageListTransparentColorDescr))
         ]
         public Color TransparentColor {
-            get {
-                return transparentColor;
-            }
+            get => transparentColor;
             set {
                 transparentColor = value;
             }
@@ -1137,9 +1129,7 @@ namespace System.Windows.Forms {
             object IList.this[int index] {
                 
                 
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     if (value is Image) {
                         this[index] = (Image)value;
@@ -1544,7 +1534,7 @@ namespace System.Windows.Forms {
                 }
 
                 public string Name {
-                    get { return name; }
+                    get => name; 
                     set { name = value; }
                 }
             }

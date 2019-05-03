@@ -1008,38 +1008,38 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop {
             int                  index;
 
             public string Name {
-                get { return name; }
+                get => name; 
                 set { name = value; }
             }
             public int DispId {
-                get { return dispid; }
+                get => dispid; 
                 set { dispid = value; }
             }
             public Type ValueType {
-                get { return valueType; }
+                get => valueType; 
                 set { valueType = value; }
             }
             public ArrayList Attributes {
                 get { return attributes; }
             }
             public int ReadOnly {
-                get { return readOnly; }
+                get => readOnly; 
                 set { readOnly = value; }
             }
             public bool IsDefault {
-                get { return isDefault; }
+                get => isDefault; 
                 set { isDefault = value; }
             }
             public object TypeData {
-                get { return typeData; }
+                get => typeData; 
                 set { typeData = value; }
             }
             public bool NonBrowsable {
-                get { return nonbrowsable; }
+                get => nonbrowsable; 
                 set { nonbrowsable = value; }
             }
             public int Index{
-                get {return index;}
+                get => index;
                 set {index = value;}
             }
 

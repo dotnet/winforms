@@ -74,10 +74,7 @@ namespace System.Drawing.Design
         /// </summary>
         public AssemblyName AssemblyName
         {
-            get
-            {
-                return (AssemblyName)Properties["AssemblyName"];
-            }
+            get => (AssemblyName)Properties["AssemblyName"];
             set
             {
                 Properties["AssemblyName"] = value;
@@ -111,10 +108,7 @@ namespace System.Drawing.Design
         /// </summary>
         public Bitmap Bitmap
         {
-            get
-            {
-                return (Bitmap)Properties["Bitmap"];
-            }
+            get => (Bitmap)Properties["Bitmap"];
             set
             {
                 Properties["Bitmap"] = value;
@@ -127,10 +121,7 @@ namespace System.Drawing.Design
         /// </summary>
         public Bitmap OriginalBitmap
         {
-            get
-            {
-                return (Bitmap)Properties["OriginalBitmap"];
-            }
+            get => (Bitmap)Properties["OriginalBitmap"];
             set
             {
                 Properties["OriginalBitmap"] = value;
@@ -143,10 +134,7 @@ namespace System.Drawing.Design
         /// </summary>
         public string Company
         {
-            get
-            {
-                return (string)Properties["Company"];
-            }
+            get => (string)Properties["Company"];
             set
             {
                 Properties["Company"] = value;
@@ -170,10 +158,7 @@ namespace System.Drawing.Design
         /// </summary>
         public string Description
         {
-            get
-            {
-                return (string)Properties["Description"];
-            }
+            get => (string)Properties["Description"];
             set
             {
                 Properties["Description"] = value;
@@ -185,10 +170,7 @@ namespace System.Drawing.Design
         /// </summary>
         public string DisplayName
         {
-            get
-            {
-                return (string)Properties["DisplayName"];
-            }
+            get => (string)Properties["DisplayName"];
             set
             {
                 Properties["DisplayName"] = value;
@@ -201,10 +183,7 @@ namespace System.Drawing.Design
         /// </summary>
         public ICollection Filter
         {
-            get
-            {
-                return (ICollection)Properties["Filter"];
-            }
+            get => (ICollection)Properties["Filter"];
             set
             {
                 Properties["Filter"] = value;
@@ -266,10 +245,7 @@ namespace System.Drawing.Design
         /// </summary>
         public string TypeName
         {
-            get
-            {
-                return (string)Properties["TypeName"];
-            }
+            get => (string)Properties["TypeName"];
             set
             {
                 Properties["TypeName"] = value;

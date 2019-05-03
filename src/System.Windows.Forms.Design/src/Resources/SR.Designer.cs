@@ -52,9 +52,7 @@ namespace System.Windows.Forms.Design.Resources {
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         public static global::System.Globalization.CultureInfo Culture {
-            get {
-                return resourceCulture;
-            }
+            get => resourceCulture;
             set {
                 resourceCulture = value;
             }

@@ -124,7 +124,7 @@ namespace System.Windows.Forms.Layout {
 
         /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.IList.this"]/*' />
         object IList.this[int index] {
-            get { return InnerList[index]; }            
+            get => InnerList[index];             
             set { throw new NotSupportedException(); }
         }
         #endregion

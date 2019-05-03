@@ -33,9 +33,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new bool AutoToolTip {
-               get { 
-                    return base.AutoToolTip;
-               }
+               get => base.AutoToolTip;
                set {
                     base.AutoToolTip = value;
                }
@@ -49,10 +47,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override Image BackgroundImage {
-                get {
-                    return base.BackgroundImage;
-                     
-                }
+                get => base.BackgroundImage;
                 set {
                     base.BackgroundImage = value;
                 }
@@ -65,9 +60,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override ImageLayout BackgroundImageLayout {
-              get {
-                  return base.BackgroundImageLayout;
-              }
+              get => base.BackgroundImageLayout;
               set {
                   base.BackgroundImageLayout = value;
               }
@@ -107,9 +100,7 @@ namespace System.Windows.Forms {
            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
            ]
            public new bool DoubleClickEnabled {
-               get {
-                   return base.DoubleClickEnabled;
-               }
+               get => base.DoubleClickEnabled;
                set {
                    base.DoubleClickEnabled = value;
                }
@@ -122,9 +113,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override bool Enabled {
-                get {
-                  return base.Enabled;
-                }
+                get => base.Enabled;
                 set {
                   base.Enabled = value;
                 }
@@ -145,9 +134,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new ToolStripItemDisplayStyle DisplayStyle {
-                get { 
-                    return base.DisplayStyle; 
-                }
+                get => base.DisplayStyle; 
                 set {
                    base.DisplayStyle = value;
                 }
@@ -167,9 +154,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override Font Font {
-                get { 
-                    return base.Font; 
-                }
+                get => base.Font; 
                 set {
                    base.Font = value;
                 }
@@ -181,9 +166,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new ContentAlignment ImageAlign {
-                get {
-                    return base.ImageAlign;
-                }
+                get => base.ImageAlign;
                 set {
                     base.ImageAlign = value;
                 }
@@ -198,9 +181,7 @@ namespace System.Windows.Forms {
             public override Image Image {
                 
                 
-                get {
-                    return base.Image;
-                }
+                get => base.Image;
                 set {
                     base.Image = value;
                 }
@@ -214,9 +195,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new int ImageIndex {
-                get {
-                    return base.ImageIndex;
-                }
+                get => base.ImageIndex;
                 set {
                     base.ImageIndex = value;
                 }
@@ -229,9 +208,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new string ImageKey {
-               get {
-                   return base.ImageKey;
-               }
+               get => base.ImageKey;
                set {
                    base.ImageKey = value;
                }
@@ -243,9 +220,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new Color ImageTransparentColor {
-                get {
-                    return base.ImageTransparentColor;
-                }
+                get => base.ImageTransparentColor;
                 set {
                    base.ImageTransparentColor = value;                    
                 }
@@ -257,9 +232,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new ToolStripItemImageScaling ImageScaling {
-                get {
-                    return base.ImageScaling;
-                }
+                get => base.ImageScaling;
                 set {
                     base.ImageScaling = value;
                 }
@@ -297,9 +270,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public override string Text {
-              get {
-                  return base.Text;
-              }
+              get => base.Text;
               set {
                   base.Text = value;
               }
@@ -319,9 +290,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new ContentAlignment TextAlign {
-                 get {
-                     return base.TextAlign;
-                 }
+                 get => base.TextAlign;
                  set {
                      base.TextAlign = value;
                  }
@@ -330,9 +299,7 @@ namespace System.Windows.Forms {
             
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DefaultValue(ToolStripTextDirection.Horizontal)]
             public override ToolStripTextDirection TextDirection {
-                 get {
-                     return base.TextDirection;
-                 }
+                 get => base.TextDirection;
                  set {
                      base.TextDirection = value;
                  }
@@ -345,9 +312,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new TextImageRelation TextImageRelation {
-               get {
-                   return base.TextImageRelation;
-               }
+               get => base.TextImageRelation;
                set {
                    base.TextImageRelation = value;      
                }
@@ -359,9 +324,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new string ToolTipText {
-                get {
-                    return base.ToolTipText;
-                }
+                get => base.ToolTipText;
                 set {
                     base.ToolTipText = value;
                 }
@@ -373,9 +336,7 @@ namespace System.Windows.Forms {
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
             ]
             public new bool RightToLeftAutoMirrorImage {
-                get {
-                    return base.RightToLeftAutoMirrorImage;
-                }
+                get => base.RightToLeftAutoMirrorImage;
                 set {
                     base.RightToLeftAutoMirrorImage = value;
                 }

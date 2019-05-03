@@ -156,9 +156,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public override bool AllowDrop {
-            get {
-                return richTextBoxFlags[allowOleDropSection] != 0;
-            }
+            get => richTextBoxFlags[allowOleDropSection] != 0;
             set {
                 richTextBoxFlags[allowOleDropSection] = value ? 1 : 0;
                 UpdateOleCallback();
@@ -166,9 +164,7 @@ namespace System.Windows.Forms {
         }
 
         internal bool AllowOleObjects {
-            get {
-                return richTextBoxFlags[allowOleObjectsSection] != 0;
-            }
+            get => richTextBoxFlags[allowOleObjectsSection] != 0;
             set {
                 richTextBoxFlags[allowOleObjectsSection] = value ? 1 : 0;
             }
@@ -192,9 +188,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         public override bool AutoSize {
-            get {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 base.AutoSize = value;
             }
@@ -210,7 +204,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxAutoWordSelection))
         ]
         public bool AutoWordSelection {
-            get { return richTextBoxFlags[autoWordSelectionSection] != 0; }
+            get => richTextBoxFlags[autoWordSelectionSection] != 0; 
             set {
                 richTextBoxFlags[autoWordSelectionSection] = value ? 1 : 0;
                 if (IsHandleCreated) {
@@ -224,9 +218,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -242,9 +234,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -269,9 +259,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxBulletIndent))
         ]
         public int BulletIndent {
-            get {
-                return bulletIndent;
-            }
+            get => bulletIndent;
 
             set {
 
@@ -288,7 +276,7 @@ namespace System.Windows.Forms {
         }
 
         private bool CallOnContentsResized {
-            get { return richTextBoxFlags[callOnContentsResizedSection] != 0; }
+            get => richTextBoxFlags[callOnContentsResizedSection] != 0; 
             set { richTextBoxFlags[callOnContentsResizedSection] = value ? 1 : 0; }
         }
 
@@ -397,9 +385,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxDetectURLs))
         ]
         public bool DetectUrls {
-            get {
-                return richTextBoxFlags[autoUrlDetectSection] != 0;
-            }
+            get => richTextBoxFlags[autoUrlDetectSection] != 0;
             set {
                 if (value != DetectUrls) {
                     richTextBoxFlags[autoUrlDetectSection] = value ? 1 : 0;
@@ -430,10 +416,7 @@ namespace System.Windows.Forms {
         ]
         public bool EnableAutoDragDrop
         {
-            get
-            {
-                return richTextBoxFlags[enableAutoDragDropSection] != 0;
-            }
+            get => richTextBoxFlags[enableAutoDragDropSection] != 0;
             set
             {
                 richTextBoxFlags[enableAutoDragDropSection] = value ? 1 : 0;
@@ -443,9 +426,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ForeColor"]/*' />
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 if (IsHandleCreated) {
                     if (InternalSetForeColor(value)) {
@@ -460,9 +441,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Font"]/*' />
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 if (IsHandleCreated)
                 {
@@ -518,7 +497,7 @@ namespace System.Windows.Forms {
         }
 
         private bool InConstructor {
-            get { return richTextBoxFlags[fInCtorSection] != 0; }
+            get => richTextBoxFlags[fInCtorSection] != 0; 
             set { richTextBoxFlags[fInCtorSection] = value ? 1 : 0; }
         }
 
@@ -557,7 +536,7 @@ namespace System.Windows.Forms {
         }
 
         private bool LinkCursor {
-            get { return richTextBoxFlags[linkcursorSection] != 0; }
+            get => richTextBoxFlags[linkcursorSection] != 0; 
             set { richTextBoxFlags[linkcursorSection] = value ? 1 : 0; }
         }
 
@@ -566,9 +545,7 @@ namespace System.Windows.Forms {
         DefaultValue(int.MaxValue),
         ]
         public override int MaxLength {
-            get {
-                return base.MaxLength;
-            }
+            get => base.MaxLength;
             set {
                 base.MaxLength = value;
             }
@@ -576,16 +553,14 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Multiline"]/*' />
         [DefaultValue(true)]
         public override bool Multiline {
-            get {
-                return base.Multiline;
-            }
+            get => base.Multiline;
             set {
                 base.Multiline = value;
             }
         }
 
         private bool ProtectedError {
-            get { return richTextBoxFlags[protectedErrorSection] != 0; }
+            get => richTextBoxFlags[protectedErrorSection] != 0; 
             set { richTextBoxFlags[protectedErrorSection] = value ? 1 : 0; }
         }
 
@@ -620,7 +595,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public bool RichTextShortcutsEnabled {
-            get { return richTextBoxFlags[richTextShortcutsEnabledSection] != 0; }
+            get => richTextBoxFlags[richTextShortcutsEnabledSection] != 0; 
             set { 
                 if (shortcutsToDisable == null) {
                     shortcutsToDisable = new int[] {(int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ};
@@ -640,9 +615,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxRightMargin))
         ]
         public int RightMargin {
-            get {
-                return rightMargin;
-            }
+            get => rightMargin;
             set {
                 if (this.rightMargin != value) {
                     if (value < 0)
@@ -722,9 +695,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxScrollBars))
         ]
         public RichTextBoxScrollBars ScrollBars {
-            get {
-                return (RichTextBoxScrollBars) richTextBoxFlags[scrollBarsSection];
-            }
+            get => (RichTextBoxScrollBars) richTextBoxFlags[scrollBarsSection];
             set {
                 // we could be more clever here, but it doesnt seem like this would get set enough 
                 // to warrant a clever bitmask.
@@ -1021,9 +992,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxSelFont))
         ]
         public Font SelectionFont {
-            get {
-                return GetCharFormatFont(true);
-            }
+            get => GetCharFormatFont(true);
             set {
                 SetCharFormatFont(true, value);
             }
@@ -1345,7 +1314,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.RichTextBoxSelMargin))
         ]
         public bool ShowSelectionMargin {
-            get { return richTextBoxFlags[showSelBarSection] != 0; }
+            get => richTextBoxFlags[showSelBarSection] != 0; 
             set {
                 if (value != ShowSelectionMargin) {
                     richTextBoxFlags[showSelBarSection] = value ? 1 : 0;
@@ -1414,7 +1383,7 @@ namespace System.Windows.Forms {
         }
 
         private bool SuppressTextChangedEvent {
-            get { return richTextBoxFlags[suppressTextChangedEventSection] != 0; }
+            get => richTextBoxFlags[suppressTextChangedEventSection] != 0; 
             set { 
                 bool oldValue = SuppressTextChangedEvent;
                 if (value != oldValue) {

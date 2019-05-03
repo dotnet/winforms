@@ -448,9 +448,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ///     Prevents the contents of the collection from being re-initialized;
             /// </devdoc>
             public bool Locked {
-               get {
-                  return locked;
-               }
+               get => locked;
                set {
                   this.locked = value;
                }

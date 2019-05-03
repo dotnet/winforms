@@ -142,9 +142,7 @@ namespace System.Windows.Forms {
         }
 
         private Link FocusLink {
-            get {
-                return focusLink;
-            }
+            get => focusLink;
             set {
                 if (focusLink != value) {
 
@@ -199,10 +197,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new FlatStyle FlatStyle
         {
-            get
-            {
-                return base.FlatStyle;
-            }
+            get => base.FlatStyle;
             set
             {
                 base.FlatStyle = value;
@@ -275,9 +270,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.LinkLabelLinkBehaviorDescr))
         ]
         public LinkBehavior LinkBehavior {
-            get {
-                return linkBehavior;
-            }
+            get => linkBehavior;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline)){
@@ -382,9 +375,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.OverrideCursor"]/*' />
         protected Cursor OverrideCursor {
-            get {
-                return overrideCursor;
-            }
+            get => overrideCursor;
             set {
                 if (overrideCursor != value) {
                     overrideCursor = value;
@@ -416,9 +407,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.TabIndex"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -427,9 +416,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Text"]/*' />
         [RefreshProperties(RefreshProperties.Repaint)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -438,7 +425,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.Padding"]/*' />
         [RefreshProperties(RefreshProperties.Repaint)]
         public new Padding Padding {
-            get {return base.Padding;}
+            get => base.Padding;
             set { base.Padding = value;}
         }
 
@@ -848,9 +835,7 @@ namespace System.Windows.Forms {
         /// </para>
         /// </devdoc>
         DialogResult IButtonControl.DialogResult {
-            get {
-                return dialogResult;
-            }
+            get => dialogResult;
 
             set {
                 //valid values are 0x0 to 0x7
@@ -1913,9 +1898,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkCollection.this"]/*' />
             public virtual Link this[int index] {
-                get {
-                    return(Link)owner.links[index];
-                }
+                get => (Link)owner.links[index];
                 set {
                     owner.links[index] = value;
 
@@ -1928,9 +1911,7 @@ namespace System.Windows.Forms {
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     if (value is Link) {
                         this[index] = (Link)value;

@@ -64,9 +64,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripLabelIsLinkDescr))
         ]
         public bool IsLink {
-          get {
-              return isLink;
-          }
+          get => isLink;
           set {
               if (isLink != value) {
                   isLink = value;
@@ -118,9 +116,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripLabelLinkBehaviorDescr))
         ]
         public LinkBehavior LinkBehavior {
-            get {
-                return linkBehavior;
-            }
+            get => linkBehavior;
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)LinkBehavior.SystemDefault, (int)LinkBehavior.NeverUnderline))
@@ -162,9 +158,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripLabelLinkVisitedDescr))
         ]
         public bool LinkVisited {
-            get {
-                return linkVisited;
-            }
+            get => linkVisited;
             set {
                 if (linkVisited != value) {
                     linkVisited = value;

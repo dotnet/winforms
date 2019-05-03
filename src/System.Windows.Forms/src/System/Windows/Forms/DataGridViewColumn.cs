@@ -95,10 +95,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewAutoSizeColumnMode AutoSizeMode
         {
-            get
-            {
-                return this.autoSizeMode;
-            }
+            get => this.autoSizeMode;
             set
             {
                switch (value) 
@@ -171,10 +168,7 @@ namespace System.Windows.Forms
         // in databound cases. Null otherwise.
         internal TypeConverter BoundColumnConverter
         {
-            get
-            {
-                return this.boundColumnConverter;
-            }
+            get => this.boundColumnConverter;
             set
             {
                 this.boundColumnConverter = value;
@@ -183,10 +177,7 @@ namespace System.Windows.Forms
 
         internal int BoundColumnIndex
         {
-            get
-            {
-                return this.boundColumnIndex;
-            }
+            get => this.boundColumnIndex;
             set
             {
                 this.boundColumnIndex = value;
@@ -201,10 +192,7 @@ namespace System.Windows.Forms
         ]
         public virtual DataGridViewCell CellTemplate
         {
-            get
-            {
-                return this.cellTemplate;
-            }
+            get => this.cellTemplate;
             set
             {
                 this.cellTemplate = value;
@@ -239,10 +227,7 @@ namespace System.Windows.Forms
         ]
         public override ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return base.ContextMenuStrip;
-            }
+            get => base.ContextMenuStrip;
             set
             {
                 base.ContextMenuStrip = value;
@@ -260,10 +245,7 @@ namespace System.Windows.Forms
         ]
         public string DataPropertyName
         {
-            get
-            {
-                return this.dataPropertyName;
-            }
+            get => this.dataPropertyName;
             set
             {
                 if (value == null)
@@ -289,10 +271,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
+            get => base.DefaultCellStyle;
             set
             {
                 base.DefaultCellStyle = value;
@@ -326,10 +305,7 @@ namespace System.Windows.Forms
 
         internal int DesiredFillWidth
         {
-            get
-            {
-                return this.desiredFillWidth;
-            }
+            get => this.desiredFillWidth;
             set
             {
                 this.desiredFillWidth = value;
@@ -338,10 +314,7 @@ namespace System.Windows.Forms
 
         internal int DesiredMinimumWidth
         {
-            get
-            {
-                return this.desiredMinimumWidth;
-            }
+            get => this.desiredMinimumWidth;
             set
             {
                 this.desiredMinimumWidth = value;
@@ -355,10 +328,7 @@ namespace System.Windows.Forms
         ]
         public int DisplayIndex
         {
-            get 
-            {
-                return this.displayIndex;
-            }
+            get => this.displayIndex;
             set 
             {
                 if (this.displayIndex != value)
@@ -407,10 +377,7 @@ namespace System.Windows.Forms
 
         internal bool DisplayIndexHasChanged
         {
-            get
-            {
-                return (this.flags & DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal) != 0;
-            }
+            get => (this.flags & DATAGRIDVIEWCOLUMN_displayIndexHasChangedInternal) != 0;
             set
             {
                 if (value)
@@ -454,10 +421,7 @@ namespace System.Windows.Forms
         ]
         public int DividerWidth
         {
-            get 
-            {
-                return this.DividerThickness;
-            }
+            get => this.DividerThickness;
             set 
             {
                 this.DividerThickness = value;
@@ -472,10 +436,7 @@ namespace System.Windows.Forms
         ]
         public float FillWeight
         {
-            get
-            {
-                return this.fillWeight;
-            }
+            get => this.fillWeight;
             set
             {
                 if (value <= 0)
@@ -517,10 +478,7 @@ namespace System.Windows.Forms
         ]
         public override bool Frozen
         {
-            get
-            {
-                return base.Frozen;
-            }
+            get => base.Frozen;
             set
             {
                 base.Frozen = value;
@@ -534,10 +492,7 @@ namespace System.Windows.Forms
         ]
         public DataGridViewColumnHeaderCell HeaderCell
         {
-            get
-            {
-                return (DataGridViewColumnHeaderCell) base.HeaderCellCore;
-            }
+            get => (DataGridViewColumnHeaderCell) base.HeaderCellCore;
             set
             {
                 base.HeaderCellCore = value;
@@ -751,10 +706,7 @@ namespace System.Windows.Forms
 
         internal bool IsBrowsableInternal
         {
-            get
-            {
-                return (this.flags & DATAGRIDVIEWCOLUMN_isBrowsableInternal) != 0;
-            }
+            get => (this.flags & DATAGRIDVIEWCOLUMN_isBrowsableInternal) != 0;
             set
             {
                 if (value)
@@ -783,10 +735,7 @@ namespace System.Windows.Forms
 
         internal bool IsDataBoundInternal
         {
-            get
-            {
-                return (this.flags & DATAGRIDVIEWCOLUMN_isDataBound) != 0;
-            }
+            get => (this.flags & DATAGRIDVIEWCOLUMN_isDataBound) != 0;
             set
             {
                 if (value)
@@ -810,10 +759,7 @@ namespace System.Windows.Forms
         ]
         public int MinimumWidth
         {
-            get
-            {
-                return this.MinimumThickness;
-            }
+            get => this.MinimumThickness;
             set
             {
                 this.MinimumThickness = value;
@@ -879,10 +825,7 @@ namespace System.Windows.Forms
         ]
         public override bool ReadOnly
         {
-            get
-            {
-                return base.ReadOnly;
-            }
+            get => base.ReadOnly;
             set
             {
                 if (this.IsDataBound &&
@@ -905,10 +848,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewTriState Resizable
         {
-            get
-            {
-                return base.Resizable;
-            }
+            get => base.Resizable;
             set
             {
                 base.Resizable = value;
@@ -922,10 +862,7 @@ namespace System.Windows.Forms
         ]
         public ISite Site
         {
-            get
-            {
-                return this.site;
-            }
+            get => this.site;
             set
             {
                 this.site = value;
@@ -1002,10 +939,7 @@ namespace System.Windows.Forms
         ]
         public string ToolTipText
         {
-            get
-            {
-                return this.HeaderCell.ToolTipText;
-            }
+            get => this.HeaderCell.ToolTipText;
             set
             {
                 if (string.Compare(this.ToolTipText, value, false /*ignore case*/, CultureInfo.InvariantCulture) != 0)
@@ -1022,10 +956,7 @@ namespace System.Windows.Forms
 
         internal float UsedFillWeight
         {
-            get
-            {
-                return this.usedFillWeight;
-            }
+            get => this.usedFillWeight;
             set
             {
                 Debug.Assert(value > 0);
@@ -1041,10 +972,7 @@ namespace System.Windows.Forms
         ]
         public Type ValueType
         {
-            get
-            {
-                return (Type) this.Properties.GetObject(PropDataGridViewColumnValueType);
-            }
+            get => (Type) this.Properties.GetObject(PropDataGridViewColumnValueType);
             set
             {
                 // what should we do when we modify the ValueType in the dataGridView column???
@@ -1061,10 +989,7 @@ namespace System.Windows.Forms
         ]
         public override bool Visible
         {
-            get
-            {
-                return base.Visible;
-            }
+            get => base.Visible;
             set
             {
                 base.Visible = value;
@@ -1080,10 +1005,7 @@ namespace System.Windows.Forms
         ]
         public int Width
         {
-            get
-            {
-                return this.Thickness;
-            }
+            get => this.Thickness;
             set
             {
                 this.Thickness = value;

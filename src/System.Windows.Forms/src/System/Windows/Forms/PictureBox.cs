@@ -135,9 +135,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop {
-            get {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set {
                 base.AllowDrop = value;
             }
@@ -155,9 +153,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -206,9 +202,7 @@ namespace System.Windows.Forms {
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CausesValidation {
-            get {
-                return base.CausesValidation;
-            }
+            get => base.CausesValidation;
             set {
                 base.CausesValidation = value;
             }
@@ -309,9 +303,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -330,9 +322,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
             }
@@ -357,9 +347,7 @@ namespace System.Windows.Forms {
         ]
         public Image Image {
             
-            get {
-                return image;
-            }
+            get => image;
             set {
                 InstallNewImage(value, ImageInstallationType.DirectlySpecified);
             }
@@ -376,10 +364,7 @@ namespace System.Windows.Forms {
         ]
         public string ImageLocation 
         {
-            get 
-            {
-                return imageLocation;
-            }
+            get => imageLocation;
             set 
             {
                 // Reload even if value hasn't changed, since Image itself may
@@ -513,9 +498,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -864,9 +847,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft {
-            get {
-                return base.RightToLeft;
-            }
+            get => base.RightToLeft;
             set {
                 base.RightToLeft = value;
             }
@@ -912,9 +893,7 @@ namespace System.Windows.Forms {
         RefreshProperties(RefreshProperties.Repaint)        
         ]
         public PictureBoxSizeMode SizeMode {
-            get {
-                return sizeMode;
-            }
+            get => sizeMode;
             set {
                 //valid values are 0x0 to 0x4
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)PictureBoxSizeMode.Normal, (int)PictureBoxSizeMode.Zoom))
@@ -955,9 +934,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -976,9 +953,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public int TabIndex {
-            get {
-                return base.TabIndex;
-            }
+            get => base.TabIndex;
             set {
                 base.TabIndex = value;
             }
@@ -997,9 +972,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -1282,9 +1255,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PictureBoxWaitOnLoadDescr))
         ]
         public bool WaitOnLoad {
-            get {
-                return pictureBoxState[PICTUREBOXSTATE_waitOnLoad];
-            }
+            get => pictureBoxState[PICTUREBOXSTATE_waitOnLoad];
             set {
                 pictureBoxState[PICTUREBOXSTATE_waitOnLoad] = value;
             }

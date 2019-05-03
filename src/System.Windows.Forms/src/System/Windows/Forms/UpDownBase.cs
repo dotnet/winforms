@@ -117,9 +117,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoScroll {
-            get {
-                return false;
-            }
+            get => false;
             set {
                 // Don't allow AutoScroll to be set to anything
             }
@@ -132,9 +130,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public Size AutoScrollMargin {
-            get {
-                return base.AutoScrollMargin;
-            }
+            get => base.AutoScrollMargin;
             set {
                 base.AutoScrollMargin = value;
             }
@@ -147,9 +143,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public Size AutoScrollMinSize {
-            get {
-                return base.AutoScrollMinSize;
-            }
+            get => base.AutoScrollMinSize;
             set {
                 base.AutoScrollMinSize = value;
             }
@@ -163,10 +157,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
-            get
-            {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set
             {
                 base.AutoSize = value;
@@ -190,9 +181,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public override Color BackColor {
-            get {
-                return upDownEdit.BackColor;
-            }
+            get => upDownEdit.BackColor;
             set {
                 base.BackColor = value; // Don't remove this or you will break serialization.
                 upDownEdit.BackColor = value;
@@ -205,9 +194,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -225,9 +212,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -254,9 +239,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.UpDownBaseBorderStyleDescr))
         ]
         public BorderStyle BorderStyle {
-            get {
-                return borderStyle;
-            }
+            get => borderStyle;
 
             set {
                 //valid values are 0x0 to 0x2
@@ -280,9 +263,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected bool ChangingText {
-            get {
-                return changingText;
-            }
+            get => changingText;
 
             set {
                 changingText = value;
@@ -293,9 +274,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// </devdoc>
         public override ContextMenu ContextMenu {
-            get {
-                return base.ContextMenu;
-            }
+            get => base.ContextMenu;
             set {
                 base.ContextMenu = value;
                 this.upDownEdit.ContextMenu = value;
@@ -303,9 +282,7 @@ namespace System.Windows.Forms {
         }
 
         public override ContextMenuStrip ContextMenuStrip {
-            get {
-                return base.ContextMenuStrip;
-            }
+            get => base.ContextMenuStrip;
             set {
                 base.ContextMenuStrip = value;
                 this.upDownEdit.ContextMenuStrip = value;
@@ -385,9 +362,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         public override Color ForeColor {
-            get {
-                return upDownEdit.ForeColor;
-            }
+            get => upDownEdit.ForeColor;
             set {
                 base.ForeColor = value;
                 upDownEdit.ForeColor = value;
@@ -409,9 +384,7 @@ namespace System.Windows.Forms {
         ]
         public bool InterceptArrowKeys {
 
-            get {
-                return interceptArrowKeys;
-            }
+            get => interceptArrowKeys;
 
             set {
                 interceptArrowKeys = value;
@@ -420,7 +393,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MaximumSize"]/*' />
         public override Size MaximumSize {
-            get { return base.MaximumSize; }
+            get => base.MaximumSize; 
             set {
                 base.MaximumSize = new Size(value.Width, 0);
             }
@@ -428,7 +401,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MinimumSize"]/*' />
         public override Size MinimumSize {
-            get { return base.MinimumSize; }
+            get => base.MinimumSize; 
             set {
                 base.MinimumSize = new Size(value.Width, 0);
             }
@@ -514,9 +487,7 @@ namespace System.Windows.Forms {
         ]
         public bool ReadOnly {
 
-            get {
-                return upDownEdit.ReadOnly;
-            }
+            get => upDownEdit.ReadOnly;
 
             set {
                 upDownEdit.ReadOnly = value;
@@ -534,9 +505,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public override string Text {
-            get {
-                return upDownEdit.Text;
-            }
+            get => upDownEdit.Text;
 
             set {
                 upDownEdit.Text = value;
@@ -574,9 +543,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.UpDownBaseTextAlignDescr))
         ]
         public HorizontalAlignment TextAlign {
-            get {
-                return upDownEdit.TextAlign;
-            }
+            get => upDownEdit.TextAlign;
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)HorizontalAlignment.Left, (int)HorizontalAlignment.Center))
@@ -610,9 +577,7 @@ namespace System.Windows.Forms {
         ]
         public LeftRightAlignment UpDownAlign {
 
-            get {
-                return upDownAlign;
-            }
+            get => upDownAlign;
 
             set {
                 //valid values are 0x0 to 0x1
@@ -645,9 +610,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected bool UserEdit {
-            get {
-                return userEdit;
-            }
+            get => userEdit;
 
             set {
                 userEdit = value;
@@ -1211,9 +1174,7 @@ namespace System.Windows.Forms {
             }
 
             public override string Text {
-                get {
-                    return base.Text;
-                }
+                get => base.Text;
                 set {
                     bool valueChanged = (value != base.Text);
                     base.Text = value;      
@@ -1310,9 +1271,7 @@ namespace System.Windows.Forms {
                 }
 
                 public override string Name {
-                    get {
-                        return parent.AccessibilityObject.Name;
-                    }
+                    get => parent.AccessibilityObject.Name;
                     set {
                         parent.AccessibilityObject.Name = value;
                     }

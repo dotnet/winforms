@@ -244,9 +244,7 @@ namespace System.Windows.Forms {
         ///    <para> Gets or sets the position you are at within the list.</para>
         /// </devdoc>
         public override int Position {
-            get {
-                return listposition;
-            }
+            get => listposition;
             set {
                 if (listposition == -1)
                     return;

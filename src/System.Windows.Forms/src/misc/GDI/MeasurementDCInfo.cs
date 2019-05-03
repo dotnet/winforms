@@ -46,10 +46,7 @@ namespace System.Experimental.Gdi {
        ///
        internal static WindowsFont LastUsedFont 
        {
-          get 
-          {
-             return (cachedMeasurementDCInfo == null) ? null : cachedMeasurementDCInfo.LastUsedFont;
-          }
+          get => (cachedMeasurementDCInfo == null) ? null : cachedMeasurementDCInfo.LastUsedFont;
           set 
           {
              if (cachedMeasurementDCInfo == null) 

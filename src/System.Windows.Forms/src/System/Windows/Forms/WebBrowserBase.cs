@@ -608,9 +608,7 @@ namespace System.Windows.Forms
 #endif
 
         internal WebBrowserHelper.AXState ActiveXState {
-            get {
-                return axState;
-            }
+            get => axState;
             set {
                 axState = value;
             }
@@ -830,9 +828,7 @@ namespace System.Windows.Forms
         }
 
         internal int NoComponentChangeEvents {
-            get {
-                return noComponentChange;
-            }
+            get => noComponentChange;
 
             set {
                 noComponentChange = value;
@@ -1343,9 +1339,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 base.BackColor = value;
             }
@@ -1355,9 +1349,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
             }
@@ -1367,9 +1359,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -1382,10 +1372,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public ImeMode ImeMode
         {
-            get
-            {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set
             {
                 base.ImeMode = value;
@@ -1399,9 +1386,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AllowDrop {
-            get {
-                return base.AllowDrop;
-            }
+            get => base.AllowDrop;
             set {
                 throw new NotSupportedException(SR.WebBrowserAllowDropNotSupported);
             }
@@ -1411,9 +1396,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 throw new NotSupportedException(SR.WebBrowserBackgroundImageNotSupported);
             }
@@ -1423,9 +1406,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 throw new NotSupportedException(SR.WebBrowserBackgroundImageLayoutNotSupported);
             }
@@ -1435,9 +1416,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override Cursor Cursor {
-            get {
-                return base.Cursor;
-            }
+            get => base.Cursor;
             set {
                 throw new NotSupportedException(SR.WebBrowserCursorNotSupported);
             }
@@ -1448,10 +1427,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public bool Enabled
         {
-            get
-            {
-                return base.Enabled;
-            }
+            get => base.Enabled;
             set
             {
                 throw new NotSupportedException(SR.WebBrowserEnabledNotSupported);
@@ -1462,10 +1438,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Localizable(false)]
         public override RightToLeft RightToLeft
         {
-            get
-            {
-                return RightToLeft.No;
-            }
+            get => RightToLeft.No;
             set
             {
                 throw new NotSupportedException(SR.WebBrowserRightToLeftNotSupported);
@@ -1481,9 +1454,7 @@ namespace System.Windows.Forms
             Bindable(false)
         ]
         public override string Text {
-            get {
-                return "";
-            }
+            get => "";
             set {
                 throw new NotSupportedException(SR.WebBrowserTextNotSupported);
             }
@@ -1493,9 +1464,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new bool UseWaitCursor {
-            get {
-                return base.UseWaitCursor;
-            }
+            get => base.UseWaitCursor;
             set {
                 throw new NotSupportedException(SR.WebBrowserUseWaitCursorNotSupported);
             }

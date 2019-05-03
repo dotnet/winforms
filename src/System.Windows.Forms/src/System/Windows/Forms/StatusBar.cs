@@ -152,9 +152,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -170,9 +168,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -234,9 +230,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -253,9 +247,7 @@ namespace System.Windows.Forms {
         DefaultValue(DockStyle.Bottom)
         ]
         public override DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock = value;
             }
@@ -273,7 +265,7 @@ namespace System.Windows.Forms {
         Localizable(true)
         ]
         public override Font Font {
-            get { return base.Font;}
+            get => base.Font;
             set {
                 base.Font = value;
                 SetPanelContentsWidths(false);
@@ -289,9 +281,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -307,9 +297,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -396,9 +384,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarShowPanelsDescr))
         ]
         public bool ShowPanels {
-            get {
-                return showPanels;
-            }
+            get => showPanels;
             set {
                 if (showPanels != value) {
                     showPanels = value;
@@ -439,9 +425,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.StatusBarSizingGripDescr))
         ]
         public bool SizingGrip {
-            get {
-                return sizeGrip;
-            }
+            get => sizeGrip;
             set {
                 if (value != sizeGrip) {
                     sizeGrip = value;
@@ -459,9 +443,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(false)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -1164,9 +1146,7 @@ namespace System.Windows.Forms {
             ///       This method will return an individual StatusBarPanel with the appropriate index.
             /// </devdoc>
             public virtual StatusBarPanel this[int index] {
-                get {
-                    return(StatusBarPanel)owner.panels[index];
-                }
+                get => (StatusBarPanel)owner.panels[index];
                 set {
 
                     if (value == null)
@@ -1201,9 +1181,7 @@ namespace System.Windows.Forms {
 
             /// <include file='doc\StatusBar.uex' path='docs/doc[@for="StatusBarPanelCollection.IList.this"]/*' />
             object IList.this[int index] {
-                get {
-                    return this[index];
-                }
+                get => this[index];
                 set {
                     if (value is StatusBarPanel) {
                         this[index] = (StatusBarPanel)value;

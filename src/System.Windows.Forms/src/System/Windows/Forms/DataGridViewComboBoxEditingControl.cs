@@ -38,10 +38,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlDataGridView"]/*' />
         public virtual DataGridView EditingControlDataGridView
         {
-            get
-            {
-                return this.dataGridView;
-            }
+            get => this.dataGridView;
             set
             {
                 this.dataGridView = value;
@@ -51,10 +48,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlFormattedValue"]/*' />
         public virtual object EditingControlFormattedValue
         {
-            get
-            {
-                return GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
-            }
+            get => GetEditingControlFormattedValue(DataGridViewDataErrorContexts.Formatting);
             set
             {
                 string valueStr = value as string;
@@ -72,10 +66,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlRowIndex"]/*' />
         public virtual int EditingControlRowIndex
         {
-            get
-            {
-                return this.rowIndex;
-            }
+            get => this.rowIndex;
             set
             {
                 this.rowIndex = value;
@@ -85,10 +76,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewComboBoxEditingControl.uex' path='docs/doc[@for="DataGridViewComboBoxEditingControl.IDataGridViewEditingControl.EditingControlValueChanged"]/*' />
         public virtual bool EditingControlValueChanged
         {
-            get
-            {
-                return this.valueChanged;
-            }
+            get => this.valueChanged;
             set
             {
                 this.valueChanged = value;

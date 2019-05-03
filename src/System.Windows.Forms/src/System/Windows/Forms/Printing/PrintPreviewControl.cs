@@ -78,9 +78,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
         ]
         public bool UseAntiAlias {
-            get {
-                return antiAlias;
-            }
+            get => antiAlias;
             set {
                 antiAlias = value;
             }
@@ -99,7 +97,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewAutoZoomDescr))
         ]
         public bool AutoZoom {
-            get { return autoZoom;}
+            get => autoZoom;
             set {
                 if (autoZoom != value) {
                     autoZoom = value;
@@ -121,7 +119,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewDocumentDescr))
         ]
         public PrintDocument Document {
-            get { return document;}
+            get => document;
             set {
                 document = value;
                 InvalidatePreview();
@@ -141,7 +139,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewColumnsDescr))
         ]
         public int Columns {
-            get { return columns;}
+            get => columns;
             set {
                 if (value < 1 ) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(Columns), value, 1));
@@ -181,7 +179,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlWithScrollbarsPositionDescr))
         ]
         private Point Position {
-            get { return position;}
+            get => position;
             set {
                 SetPositionNoInvalidate(value);
             }
@@ -200,7 +198,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatBehavior))
         ]
         public int Rows {
-            get { return rows;}
+            get => rows;
             set {
                 
                 if (value < 1 ) {
@@ -225,9 +223,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftDescr))
         ]
         public override RightToLeft RightToLeft {
-            get {
-                return base.RightToLeft;
-            }
+            get => base.RightToLeft;
             set {
                 base.RightToLeft = value;
                 InvalidatePreview();
@@ -241,9 +237,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]                
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -311,7 +305,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlWithScrollbarsVirtualSizeDescr))
         ]
         private Size VirtualSize {
-            get { return virtualSize;}
+            get => virtualSize;
             set {
                 SetVirtualSizeNoInvalidate(value);
                 Invalidate();
@@ -330,7 +324,7 @@ namespace System.Windows.Forms {
         DefaultValue(DefaultZoom)
         ]
         public double Zoom {
-            get { return zoom;}
+            get => zoom;
             set {
                 if (value <= 0)
                     throw new ArgumentException(SR.PrintPreviewControlZoomNegative);

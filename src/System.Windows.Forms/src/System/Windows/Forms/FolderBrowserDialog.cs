@@ -87,10 +87,7 @@ namespace System.Windows.Forms
         ]
         public bool ShowNewFolderButton
         {
-            get
-            {
-                return showNewFolderButton;
-            }
+            get => showNewFolderButton;
             set
             {
                 showNewFolderButton = value;
@@ -112,10 +109,7 @@ namespace System.Windows.Forms
         ]
         public string SelectedPath
         {
-            get
-            {
-                return selectedPath;
-            }
+            get => selectedPath;
             set
             {
                 selectedPath = (value == null) ? string.Empty : value;
@@ -169,10 +163,7 @@ namespace System.Windows.Forms
         ]
         public string Description
         {
-            get
-            {
-                return descriptionText;
-            }
+            get => descriptionText;
             set
             {
                 descriptionText = (value == null) ? string.Empty : value;

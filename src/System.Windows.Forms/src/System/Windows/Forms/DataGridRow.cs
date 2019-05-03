@@ -128,9 +128,7 @@ namespace System.Windows.Forms {
         }
 
         internal DataGridTableStyle DataGridTableStyle {
-            get {
-                return this.dgTable;
-            }
+            get => this.dgTable;
             set {
                 dgTable = value;
             }
@@ -157,9 +155,7 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets the height of the row.</para>
         /// </devdoc>
         public virtual int Height {
-            get {
-                return height;
-            }
+            get => height;
             set {
                 // the height of the row should be at least 0.
                 // this way, if the row has a relationship list and the user resizes the row such that
@@ -188,9 +184,7 @@ namespace System.Windows.Forms {
         ///    <para>Gets or sets a value indicating whether the row is selected.</para>
         /// </devdoc>
         public virtual bool Selected {
-            get {
-                return selected;
-            }
+            get => selected;
             set {
                 selected = value;
                 InvalidateRow();

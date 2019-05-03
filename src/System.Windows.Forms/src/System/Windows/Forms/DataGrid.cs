@@ -386,9 +386,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.DataGridAllowSortingDescr))
             ]
             public bool AllowSorting {
-                get {
-                    return gridState[GRIDSTATE_allowSorting];
-                }
+                get => gridState[GRIDSTATE_allowSorting];
                 set {
                     if (AllowSorting != value) {
                         gridState[GRIDSTATE_allowSorting] = value;
@@ -407,9 +405,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridAlternatingBackColorDescr))
             ]
             public Color AlternatingBackColor {
-                get {
-                    return alternatingBackBrush.Color;
-                }
+                get => alternatingBackBrush.Color;
                 set {
                     if (value.IsEmpty) {
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor,
@@ -480,9 +476,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.ControlForeColorDescr))
             ]
             public override Color ForeColor {
-                get {
-                    return base.ForeColor;
-                }
+                get => base.ForeColor;
                 set {
                     base.ForeColor = value;
                 }
@@ -527,9 +521,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.DataGridBorderStyleDescr))
             ]
             public BorderStyle BorderStyle {
-                get {
-                    return borderStyle;
-                }
+                get => borderStyle;
                 set {
                     //valid values are 0x0 to 0x2. 
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
@@ -642,9 +634,7 @@ namespace System.Windows.Forms {
     
            
            private bool ListHasErrors {
-                get {
-                   return gridState[GRIDSTATE_listHasErrors];
-                }
+                get => gridState[GRIDSTATE_listHasErrors];
                 set {
                     if (ListHasErrors != value)
                     {
@@ -692,9 +682,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridCaptionBackColorDescr))
             ]
             public Color CaptionBackColor {
-                get {
-                    return Caption.BackColor;
-                }
+                get => Caption.BackColor;
                 set {
                     if (IsTransparentColor(value))
                         throw new ArgumentException(SR.DataGridTransparentCaptionBackColorNotAllowed);
@@ -732,9 +720,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridCaptionForeColorDescr))
             ]
             public Color CaptionForeColor {
-                get {
-                    return Caption.ForeColor;
-                }
+                get => Caption.ForeColor;
                 set {
                     Caption.ForeColor = value;
                 }
@@ -770,9 +756,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridCaptionFontDescr))
             ]
             public Font CaptionFont {
-                get {
-                    return Caption.Font;
-                }
+                get => Caption.Font;
                 set {
                     Caption.Font = value;
                 }
@@ -805,9 +789,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridCaptionTextDescr))
             ]
             public string CaptionText {
-                get {
-                    return Caption.Text;
-                }
+                get => Caption.Text;
                 set {
                     Caption.Text = value;
                 }
@@ -826,9 +808,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridCaptionVisibleDescr))        
             ]
             public bool CaptionVisible {
-                get {
-                    return layout.CaptionVisible;
-                }
+                get => layout.CaptionVisible;
                 set {
                     if (layout.CaptionVisible != value) {
                         layout.CaptionVisible = value;
@@ -860,9 +840,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridCurrentCellDescr))
             ]
             public DataGridCell CurrentCell {
-                get {
-                    return new DataGridCell(currentRow, currentCol);
-                }
+                get => new DataGridCell(currentRow, currentCol);
                 set {
                     // if the OnLayout event was not set in the grid, then we can't
                     // reliably set the currentCell on the grid.
@@ -1121,18 +1099,14 @@ namespace System.Windows.Forms {
             }
     
             private int CurrentColumn {
-                get {
-                    return CurrentCell.ColumnNumber;
-                }
+                get => CurrentCell.ColumnNumber;
                 set {
                     this.CurrentCell = new DataGridCell(currentRow, value);
                 }
             }
     
             private int CurrentRow {
-                get {
-                    return CurrentCell.RowNumber;
-                }
+                get => CurrentCell.RowNumber;
                 set {
                     CurrentCell = new DataGridCell(value, currentCol);
                 }
@@ -1144,9 +1118,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridSelectionBackColorDescr))
             ]
             public Color SelectionBackColor {
-                get {
-                    return selectionBackBrush.Color;
-                }
+                get => selectionBackBrush.Color;
                 set {
                     if (value.IsEmpty)
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionBackColor"));
@@ -1190,9 +1162,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridSelectionForeColorDescr))        
             ]
             public Color SelectionForeColor {
-                get {
-                    return selectionForeBrush.Color;
-                }
+                get => selectionForeBrush.Color;
                 set {
                     if (value.IsEmpty)
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "SelectionForeColor"));
@@ -1247,9 +1217,7 @@ namespace System.Windows.Forms {
             }
     
             internal int ToolTipId {
-                get {
-                    return toolTipId;
-                }
+                get => toolTipId;
                 set {
                     toolTipId = value;
                 }
@@ -1378,9 +1346,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridDataSourceDescr))
             ]
             public object DataSource {
-                get {
-                    return dataSource;
-                }
+                get => dataSource;
     
                 set {
                     if (value != null && !(value is IList || value is IListSource))
@@ -1435,9 +1401,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridDataMemberDescr))
             ]
             public string DataMember {
-                get {
-                    return dataMember;
-                }
+                get => dataMember;
                 set {
                     if (dataMember != null && dataMember.Equals(value))
                         return;
@@ -1729,9 +1693,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridGridLineColorDescr))
             ]
             public Color GridLineColor {
-                get {
-                    return gridLineBrush.Color;
-                }
+                get => gridLineBrush.Color;
                 set {
                     if (gridLineBrush.Color != value) {
                         if (value.IsEmpty)
@@ -1774,9 +1736,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridGridLineStyleDescr))
             ]
             public DataGridLineStyle GridLineStyle {
-                get {
-                    return gridLineStyle;
-                }
+                get => gridLineStyle;
                 set {
                     //valid values are 0x0 to 0x1.
                     if (!ClientUtils.IsEnumValid(value, (int)value, (int)DataGridLineStyle.None, (int)DataGridLineStyle.Solid))
@@ -1812,9 +1772,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridParentRowsLabelStyleDescr))
             ]
             public DataGridParentRowsLabelStyle ParentRowsLabelStyle {
-                get {
-                    return parentRowsLabels;
-                }
+                get => parentRowsLabels;
     
                 set {
                     //valid values are 0x0 to 0x3
@@ -1875,9 +1833,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridFlatModeDescr))
             ]
             public bool FlatMode {
-                get {
-                    return gridState[GRIDSTATE_isFlatMode];
-                }
+                get => gridState[GRIDSTATE_isFlatMode];
                 set {
                     if (value != FlatMode) {
                         gridState[GRIDSTATE_isFlatMode] = value;
@@ -1908,9 +1864,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridHeaderBackColorDescr))         
             ]
             public Color HeaderBackColor {
-                get {
-                    return headerBackBrush.Color;
-                }
+                get => headerBackBrush.Color;
                 set {
                     if (value.IsEmpty)
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderBackColor"));
@@ -1977,9 +1931,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridBackgroundColorDescr))         
             ]
             public Color BackgroundColor {
-                get {
-                    return backgroundBrush.Color;
-                }
+                get => backgroundBrush.Color;
                 set {
                     if (value.IsEmpty)
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "BackgroundColor"));
@@ -2017,9 +1969,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridHeaderFontDescr))
             ]
             public Font HeaderFont {
-                get {
-                    return(headerFont == null ? this.Font : headerFont);
-                }
+                get => (headerFont == null ? this.Font : headerFont);
                 set {
                     if (value == null)
                         throw new ArgumentNullException(nameof(HeaderFont));
@@ -2063,9 +2013,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridHeaderForeColorDescr))         
             ]
             public Color HeaderForeColor {
-                get {
-                    return headerForePen.Color;
-                }
+                get => headerForePen.Color;
                 set {
                     if (value.IsEmpty)
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "HeaderForeColor"));
@@ -2115,9 +2063,7 @@ namespace System.Windows.Forms {
             }
     
             internal int HorizontalOffset {
-                get {
-                    return horizontalOffset;
-                }
+                get => horizontalOffset;
                 set {
                     //if (CompModSwitches.DataGridScrolling.TraceVerbose) Debug.WriteLine("DataGridScrolling: Set_HorizontalOffset, value = " + value.ToString());
                     if (value < 0)
@@ -2231,9 +2177,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridLinkColorDescr))
             ]
             public Color LinkColor {
-                get {
-                    return linkBrush.Color;
-                }
+                get => linkBrush.Color;
                 set {
                     if (value.IsEmpty)
                         throw new ArgumentException(string.Format(SR.DataGridEmptyColor, "LinkColor"));
@@ -2277,9 +2221,7 @@ namespace System.Windows.Forms {
  
             ]
             public Color LinkHoverColor {
-                get {
-                    return this.LinkColor;
-                }
+                get => this.LinkColor;
                 set {
                 }
             }
@@ -2328,9 +2270,7 @@ namespace System.Windows.Forms {
              SRCategory(nameof(SR.CatBehavior))
             ]
             public bool AllowNavigation {
-                get {
-                    return gridState[GRIDSTATE_allowNavigation];
-                }
+                get => gridState[GRIDSTATE_allowNavigation];
                 set {
                     if (AllowNavigation != value) {
                         gridState[GRIDSTATE_allowNavigation] = value;
@@ -2432,9 +2372,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridParentRowsBackColorDescr))
             ]
             public Color ParentRowsBackColor {
-                get {
-                    return parentRows.BackColor;
-                }
+                get => parentRows.BackColor;
                 set {
                     if (IsTransparentColor(value))
                         throw new ArgumentException(SR.DataGridTransparentParentRowsBackColorNotAllowed);
@@ -2476,9 +2414,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridParentRowsForeColorDescr))         
             ]
             public Color ParentRowsForeColor {
-                get {
-                    return parentRows.ForeColor;
-                }
+                get => parentRows.ForeColor;
                 set {
                     this.parentRows.ForeColor = value;
                 }
@@ -2523,9 +2459,7 @@ namespace System.Windows.Forms {
              TypeConverter(typeof(DataGridPreferredColumnWidthTypeConverter))
             ]
             public int PreferredColumnWidth {
-                get {
-                    return preferredColumnWidth;
-                }
+                get => preferredColumnWidth;
                 set {
                     if (value < 0)
                         throw new ArgumentException(SR.DataGridColumnWidth, "PreferredColumnWidth");
@@ -2546,9 +2480,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridPreferredRowHeightDescr))
             ]
             public int PreferredRowHeight {
-                get {
-                    return prefferedRowHeight;
-                }
+                get => prefferedRowHeight;
                 set {
                     if (value < 0)
                         throw new ArgumentException(SR.DataGridRowRowHeight);
@@ -2577,9 +2509,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridReadOnlyDescr))
             ]
             public bool ReadOnly {
-                get {
-                    return gridState[GRIDSTATE_readOnlyMode];
-                }
+                get => gridState[GRIDSTATE_readOnlyMode];
                 set {
                     if (ReadOnly != value) {
                         bool recreateRows = false;
@@ -2638,9 +2568,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridColumnHeadersVisibleDescr))
             ]
             public bool ColumnHeadersVisible {
-                get {
-                    return gridState[GRIDSTATE_columnHeadersVisible];
-                }
+                get => gridState[GRIDSTATE_columnHeadersVisible];
                 set {
                     if (ColumnHeadersVisible != value) {
                         gridState[GRIDSTATE_columnHeadersVisible] = value;
@@ -2664,9 +2592,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridParentRowsVisibleDescr))        
             ]
             public bool ParentRowsVisible {
-                get {
-                    return layout.ParentRowsVisible;
-                }
+                get => layout.ParentRowsVisible;
                 set {
                     if (layout.ParentRowsVisible != value) {
                         SetParentRowsVisibility(value);
@@ -2706,9 +2632,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridRowHeadersVisibleDescr))
             ]
             public bool RowHeadersVisible {
-                get {
-                    return gridState[GRIDSTATE_rowHeadersVisible];
-                }
+                get => gridState[GRIDSTATE_rowHeadersVisible];
                 set {
                     if (RowHeadersVisible != value) {
                         gridState[GRIDSTATE_rowHeadersVisible] = value;
@@ -2725,9 +2649,7 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridRowHeaderWidthDescr))
             ]
             public int RowHeaderWidth {
-                get {
-                    return rowHeaderWidth;
-                }
+                get => rowHeaderWidth;
                 set {
                     value = Math.Max(this.minRowHeaderWidth, value);
                     if (rowHeaderWidth != value)
@@ -2755,9 +2677,7 @@ namespace System.Windows.Forms {
              Bindable(false)
             ]
             public override string Text {
-                get {
-                    return base.Text;
-                }
+                get => base.Text;
                 set {
                     base.Text = value;
                 }
@@ -2861,9 +2781,7 @@ namespace System.Windows.Forms {
             /// <para>Gets or sets the value of a specified <see cref='System.Windows.Forms.DataGridCell'/>.</para>
             /// </devdoc>
             public object this[DataGridCell cell] {
-                get {
-                    return this[cell.RowNumber, cell.ColumnNumber];
-                }
+                get => this[cell.RowNumber, cell.ColumnNumber];
                 set {
                     this[cell.RowNumber, cell.ColumnNumber] = value;
                 }
@@ -4386,9 +4304,7 @@ namespace System.Windows.Forms {
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Site"]/*' />
             public override ISite Site {
-                get {
-                    return base.Site;
-                }
+                get => base.Site;
                 set {
                     ISite temp = this.Site;
                     base.Site = value;
@@ -9115,9 +9031,7 @@ namespace System.Windows.Forms {
                 }
     
                 public bool AllowAdd {
-                    get {
-                        return allowAdd;
-                    }
+                    get => allowAdd;
                     set {
                         if (allowAdd != value) {
                             allowAdd = value;
@@ -9126,9 +9040,7 @@ namespace System.Windows.Forms {
                 }
     
                 public bool AllowEdit {
-                    get {
-                        return allowEdit;
-                    }
+                    get => allowEdit;
                     set {
                         if (allowEdit != value) {
                             allowEdit = value;
@@ -9137,9 +9049,7 @@ namespace System.Windows.Forms {
                 }
     
                 public bool AllowRemove {
-                    get {
-                        return allowRemove;
-                    }
+                    get => allowRemove;
                     set {
                         if (allowRemove != value) {
                             allowRemove = value;

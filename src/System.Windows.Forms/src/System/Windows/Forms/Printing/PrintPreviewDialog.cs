@@ -82,9 +82,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public IButtonControl AcceptButton {
-            get {
-                return base.AcceptButton;
-            }
+            get => base.AcceptButton;
             set {
                 base.AcceptButton = value;
             }
@@ -120,10 +118,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
-            get { 
-                
-                return base.AutoScroll;
-            }
+            get => base.AutoScroll;
             set {
                 base.AutoScroll = value;
             }
@@ -137,9 +132,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize {
-            get { 
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 base.AutoSize = value;
             }
@@ -160,9 +153,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AutoValidate AutoValidate {
-            get {
-                return base.AutoValidate;
-            }
+            get => base.AutoValidate;
             set {
                 base.AutoValidate = value;
             }
@@ -182,9 +173,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color BackColor {
-            get {
-                return base.BackColor;
-            }
+            get => base.BackColor;
             set {
                 base.BackColor = value;
             }
@@ -204,9 +193,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public IButtonControl CancelButton {
-            get {
-                return base.CancelButton;
-            }
+            get => base.CancelButton;
             set {
                 base.CancelButton = value;
             }
@@ -218,9 +205,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool ControlBox {
-            get {
-                return base.ControlBox;
-            }
+            get => base.ControlBox;
             set {
                 base.ControlBox = value;
             }
@@ -232,9 +217,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenuStrip ContextMenuStrip {
-            get {
-                 return base.ContextMenuStrip;
-             }
+            get => base.ContextMenuStrip;
              set {
                  base.ContextMenuStrip = value;
              }
@@ -255,9 +238,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormBorderStyle FormBorderStyle {
-            get {
-                return base.FormBorderStyle;
-            }
+            get => base.FormBorderStyle;
             set {
                 base.FormBorderStyle = value;
             }
@@ -271,9 +252,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool HelpButton {
-            get {
-                return base.HelpButton;
-            }
+            get => base.HelpButton;
             set {
                 base.HelpButton = value;
             }
@@ -288,9 +267,7 @@ namespace System.Windows.Forms {
         new public Icon Icon {
             
             
-            get {
-                return base.Icon;
-            }
+            get => base.Icon;
             set {
                 base.Icon = value;
             }
@@ -304,9 +281,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool IsMdiContainer {
-            get {
-                return base.IsMdiContainer;
-            }
+            get => base.IsMdiContainer;
             set {
                 base.IsMdiContainer = value;
             }
@@ -321,9 +296,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool KeyPreview {
-            get {
-                return base.KeyPreview;
-            }
+            get => base.KeyPreview;
             set {
                 base.KeyPreview = value;
             }
@@ -336,9 +309,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size MaximumSize {
-            get {
-                return base.MaximumSize;
-            }
+            get => base.MaximumSize;
             set {
                 base.MaximumSize = value;
             }
@@ -356,9 +327,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool MaximizeBox {
-            get {
-                return base.MaximizeBox;
-            }
+            get => base.MaximizeBox;
             set {
                 base.MaximizeBox = value;
             }
@@ -370,9 +339,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Padding Margin {
-            get {
-                return base.Margin;
-            }
+            get => base.Margin;
             set {
                 base.Margin = value;
             }
@@ -394,9 +361,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public MainMenu Menu {
-            get {
-                return base.Menu;
-            }
+            get => base.Menu;
             set {
                 base.Menu = value;
             }
@@ -410,9 +375,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size MinimumSize {
-            get {
-                return base.MinimumSize;
-            }
+            get => base.MinimumSize;
             set {
                 base.MinimumSize = value;
             }
@@ -432,9 +395,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Padding Padding {
-            get {
-                return base.Padding;
-            }
+            get => base.Padding;
             set {
                 base.Padding = value;
             }
@@ -455,9 +416,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size Size {
-            get {
-                return base.Size;
-            }
+            get => base.Size;
             set {
                 base.Size = value;
             }
@@ -477,9 +436,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormStartPosition StartPosition {
-            get {
-                return base.StartPosition;
-            }
+            get => base.StartPosition;
             set {
                 base.StartPosition = value;
             }
@@ -491,9 +448,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TopMost {
-            get {
-                return base.TopMost;
-            }
+            get => base.TopMost;
             set {
                 base.TopMost = value;
             }
@@ -505,9 +460,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Color TransparencyKey {
-            get {
-                return base.TransparencyKey;
-            }
+            get => base.TransparencyKey;
             set {
                 base.TransparencyKey = value;
             }
@@ -519,9 +472,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool UseWaitCursor{
-            get {
-                return base.UseWaitCursor;
-            }
+            get => base.UseWaitCursor;
             set {
                 base.UseWaitCursor = value;
             }
@@ -534,9 +485,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public FormWindowState WindowState {
-            get {
-                return base.WindowState;
-            }
+            get => base.WindowState;
             set {
                 base.WindowState = value;
             }
@@ -547,9 +496,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public AccessibleRole AccessibleRole {
-            get {
-                return base.AccessibleRole;
-            }
+            get => base.AccessibleRole;
             set {
                 base.AccessibleRole = value;
             }
@@ -560,9 +507,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public string AccessibleDescription {
-             get {
-                return base.AccessibleDescription;
-            }
+             get => base.AccessibleDescription;
             set {
                 base.AccessibleDescription = value;
             }
@@ -573,9 +518,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public string AccessibleName {
-             get {
-                return base.AccessibleName;
-            }
+             get => base.AccessibleName;
             set {
                 base.AccessibleName = value;
             }
@@ -587,9 +530,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool CausesValidation {
-             get {
-                return base.CausesValidation;
-            }
+             get => base.CausesValidation;
             set {
                 base.CausesValidation = value;
             }
@@ -624,9 +565,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool Enabled {
-            get {
-                return base.Enabled;
-            }
+            get => base.Enabled;
             set {
                 base.Enabled = value;
             }
@@ -645,9 +584,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         new public Point Location {
-            get {
-                return base.Location;
-            }
+            get => base.Location;
             set {
                 base.Location = value;
             }
@@ -661,9 +598,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Tag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public object Tag {
-            get {
-                return base.Tag;
-            }
+            get => base.Tag;
             set {
                 base.Tag = value;
             }
@@ -675,10 +610,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AllowDrop {
-            get {
-                return base.AllowDrop;
-            }
-            set {
+            get => base.AllowDrop;
+   set {
                 base.AllowDrop = value;
             }
         }
@@ -689,9 +622,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Cursor Cursor {
-            get {
-                return base.Cursor;
-            }
+            get => base.Cursor;
             set {
                 base.Cursor = value;
             }
@@ -709,9 +640,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -729,9 +658,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -749,9 +676,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -773,9 +698,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size AutoScrollMargin {
-            get {
-                return base.AutoScrollMargin;
-            }
+            get => base.AutoScrollMargin;
             set {
                 base.AutoScrollMargin = value;
             }
@@ -786,9 +709,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public Size AutoScrollMinSize {
-            get {
-                return base.AutoScrollMinSize;
-            }
+            get => base.AutoScrollMinSize;
             set {
                 base.AutoScrollMinSize = value;
             }
@@ -801,9 +722,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override AnchorStyles Anchor {
-            get {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set {
                 base.Anchor = value;
             }
@@ -814,9 +733,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool Visible {
-            get {
-                return base.Visible;
-            }
+            get => base.Visible;
             set {
                 base.Visible = value;
             }
@@ -833,9 +750,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return base.ForeColor;
-            }
+            get => base.ForeColor;
             set {
                 base.ForeColor = value;
             }
@@ -855,9 +770,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override RightToLeft RightToLeft {
-            get {
-                return base.RightToLeft;
-            }
+            get => base.RightToLeft;
             set {
                 base.RightToLeft = value;
             }
@@ -872,10 +785,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool RightToLeftLayout {
-            get {
-
-                return base.RightToLeftLayout;
-            }
+            get => base.RightToLeftLayout;
 
             set {
                 base.RightToLeftLayout = value;
@@ -904,9 +814,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -924,9 +832,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -948,9 +854,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock = value;
             }
@@ -969,9 +873,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
             }
@@ -990,9 +892,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ContextMenu ContextMenu {
-            get {
-                return base.ContextMenu;
-            }
+            get => base.ContextMenu;
             set {
                 base.ContextMenu = value;
             }
@@ -1024,9 +924,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewAntiAliasDescr))
         ]
         public bool UseAntiAlias {
-            get {
-                return PrintPreviewControl.UseAntiAlias;
-            }
+            get => PrintPreviewControl.UseAntiAlias;
             set {
                 PrintPreviewControl.UseAntiAlias = value;
             }
@@ -1045,9 +943,7 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("This property has been deprecated. Use the AutoScaleDimensions property instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         public override Size AutoScaleBaseSize {
-            get {
-                return base.AutoScaleBaseSize;
-            }
+            get => base.AutoScaleBaseSize;
 
             set {
                 // No-op
@@ -1068,9 +964,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.PrintPreviewDocumentDescr))
         ]
         public PrintDocument Document {
-            get { 
-                return previewControl.Document;
-            }
+            get => previewControl.Document;
             set {
                 previewControl.Document = value;
             }
@@ -1079,9 +973,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MinimizeBox"]/*' />
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool MinimizeBox {
-            get {
-                return base.MinimizeBox;
-            }
+            get => base.MinimizeBox;
             set {
                 base.MinimizeBox = value;
             }
@@ -1109,9 +1001,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false),EditorBrowsable(EditorBrowsableState.Advanced)]
         public new double Opacity {
-            get {
-                return base.Opacity;
-            }
+            get => base.Opacity;
             set {
                 base.Opacity = value;
             }
@@ -1120,9 +1010,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ShowInTaskbar"]/*' />
         [Browsable(false), DefaultValue(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool ShowInTaskbar {
-            get {
-                return base.ShowInTaskbar;
-            }
+            get => base.ShowInTaskbar;
             set {
                 base.ShowInTaskbar = value;
             }
@@ -1131,9 +1019,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.SizeGripStyle"]/*' />
         [Browsable(false), DefaultValue(SizeGripStyle.Hide), EditorBrowsable(EditorBrowsableState.Never)]
         public new SizeGripStyle SizeGripStyle {
-            get {
-                return base.SizeGripStyle;
-            }
+            get => base.SizeGripStyle;
             set {
                 base.SizeGripStyle = value;
             }

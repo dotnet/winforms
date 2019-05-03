@@ -61,10 +61,7 @@ namespace System.Windows.Forms
 
         private DataGridViewTextBoxEditingControl EditingTextBox
         {
-            get
-            {
-                return (DataGridViewTextBoxEditingControl) this.Properties.GetObject(PropTextBoxCellEditingTextBox);
-            }
+            get => (DataGridViewTextBoxEditingControl) this.Properties.GetObject(PropTextBoxCellEditingTextBox);
             set
             {
                 if (value != null || this.Properties.ContainsObject(PropTextBoxCellEditingTextBox))

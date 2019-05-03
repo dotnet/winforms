@@ -48,10 +48,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCell CellTemplate
         {
-            get
-            {
-                return base.CellTemplate;
-            }
+            get => base.CellTemplate;
             set
             {
                 if (value != null && !(value is System.Windows.Forms.DataGridViewCheckBoxCell))
@@ -78,10 +75,7 @@ namespace System.Windows.Forms
         ]
         public override DataGridViewCellStyle DefaultCellStyle
         {
-            get
-            {
-                return base.DefaultCellStyle;
-            }
+            get => base.DefaultCellStyle;
             set
             {
                 base.DefaultCellStyle = value;

@@ -84,7 +84,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.IList.this"]/*' />
         object IList.this[int index]
         {
-            get { return this[index]; }
+            get => this[index]; 
             set { this[index] = (DataGridViewCell) value; }
         }
 
@@ -140,10 +140,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public DataGridViewCell this[int index]
         {
-            get
-            {
-                return (DataGridViewCell) this.items[index];
-            }
+            get => (DataGridViewCell) this.items[index];
             set
             {
                 DataGridViewCell dataGridViewCell = value;

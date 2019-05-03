@@ -507,9 +507,7 @@ namespace System.Windows.Forms {
         /// potentially you could want a themed app but an unthemed toolstrip. (e.g. Whidbey VS).
         /// </devdoc>
         public static bool VisualStylesEnabled {
-            get {
-                return visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
-            }
+            get => visualStylesEnabledIfPossible && Application.RenderWithVisualStyles;
             set {
                 bool oldVis = VisualStylesEnabled;
                 visualStylesEnabledIfPossible = value;
@@ -716,9 +714,7 @@ namespace System.Windows.Forms {
 
             // returns whether or not we should show focus cues for mnemonics.
             public bool ShowUnderlines {
-                get {
-                    return _showUnderlines;
-                }
+                get => _showUnderlines;
                 set {
                     if (_showUnderlines != value) {
                         _showUnderlines = value;
@@ -728,9 +724,7 @@ namespace System.Windows.Forms {
             }
 
             private HandleRef ActiveHwndInternal {
-                get {
-                    return _activeHwnd;
-                }
+                get => _activeHwnd;
                 set {
                     if (_activeHwnd.Handle != value.Handle) {
                         Control control = null;
@@ -762,9 +756,7 @@ namespace System.Windows.Forms {
 
 
             internal static bool MenuKeyToggle {
-                get {
-                    return Instance.menuKeyToggle;
-                }
+                get => Instance.menuKeyToggle;
                 set {
                     if (Instance.menuKeyToggle != value) {
                         Instance.menuKeyToggle = value;
@@ -2179,41 +2171,31 @@ namespace System.Windows.Forms {
             }
         }
         public ToolStripItem TargetItem {
-            get {
-                return targetItem;
-            }
+            get => targetItem;
             set {
                 targetItem = value;
             }
         }
         public int Index {
-            get {
-                return index;
-            }
+            get => index;
             set {
                 index = value;
             }
         }
         public int PreviousIndex {
-            get {
-                return previousIndex;
-            }
+            get => previousIndex;
             set {
                 previousIndex = value;
             }
         }
         public ToolStripItemCollection PreviousIndexCollection {
-            get {
-                return previousIndexCollection;
-            }
+            get => previousIndexCollection;
             set {
                 previousIndexCollection = value;
             }
         }
         public ToolStripItemCollection IndexCollection {
-            get {
-                return indexCollection;
-            }
+            get => indexCollection;
             set {
                 indexCollection = value;
             }

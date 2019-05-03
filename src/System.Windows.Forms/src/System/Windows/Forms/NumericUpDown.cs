@@ -128,9 +128,7 @@ namespace System.Windows.Forms {
         ]
         public int DecimalPlaces {
 
-            get {
-                return decimalPlaces;
-            }
+            get => decimalPlaces;
 
             set {
                 if (value < 0 || value > 99) {
@@ -154,9 +152,7 @@ namespace System.Windows.Forms {
         ]
         public bool Hexadecimal {
 
-            get {
-                return hexadecimal;
-            }
+            get => hexadecimal;
 
             set {
                 hexadecimal = value;
@@ -206,9 +202,7 @@ namespace System.Windows.Forms {
         ]
         public decimal Maximum {
 
-            get {
-                return maximum;
-            }
+            get => maximum;
 
             set {
                 maximum = value;
@@ -233,9 +227,7 @@ namespace System.Windows.Forms {
         ]
         public decimal Minimum {
 
-            get {
-                return minimum;
-            }
+            get => minimum;
 
             set {
                 minimum = value;
@@ -256,7 +248,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -290,9 +282,7 @@ namespace System.Windows.Forms {
         ]
         // We're just overriding this to make it non-browsable.
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -318,9 +308,7 @@ namespace System.Windows.Forms {
         ]
         public bool ThousandsSeparator {
 
-            get {
-                return thousandsSeparator;
-            }
+            get => thousandsSeparator;
 
             set {
                 thousandsSeparator = value;

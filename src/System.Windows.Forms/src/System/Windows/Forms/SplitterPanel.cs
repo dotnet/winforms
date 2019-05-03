@@ -27,9 +27,7 @@ namespace System.Windows.Forms
         }
 
         internal bool Collapsed {
-            get {
-                return collapsed;
-            }
+            get => collapsed;
             set {
                 collapsed = value;
             }
@@ -46,9 +44,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new bool AutoSize {
-            get {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 base.AutoSize = value;
             }
@@ -71,9 +67,7 @@ namespace System.Windows.Forms
         Localizable(false)
         ]
         public override AutoSizeMode AutoSizeMode {
-            get {
-                return AutoSizeMode.GrowOnly;
-            }
+            get => AutoSizeMode.GrowOnly;
             set {
             }
         }
@@ -88,9 +82,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new AnchorStyles Anchor {
-            get {
-                return base.Anchor;
-            }
+            get => base.Anchor;
             set {
                 base.Anchor = value;
             }
@@ -107,9 +99,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new BorderStyle BorderStyle {
-            get {
-                return base.BorderStyle;
-            }
+            get => base.BorderStyle;
             set {
                 base.BorderStyle = value;
             }
@@ -128,9 +118,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new DockStyle Dock {
-            get {
-                return base.Dock;
-            }
+            get => base.Dock;
             set {
                 base.Dock = value;
             }
@@ -174,9 +162,7 @@ namespace System.Windows.Forms
         }
 
         internal int HeightInternal {
-            get {
-                return ((Panel)this).Height;
-            }
+            get => ((Panel)this).Height;
             set {
                 ((Panel)this).Height = value;
             }
@@ -192,9 +178,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new Point Location {
-            get {
-                return base.Location;
-            }
+            get => base.Location;
             set {
                 base.Location = value;
             }
@@ -222,9 +206,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new Size MinimumSize {
-            get {
-                return base.MinimumSize;
-            }
+            get => base.MinimumSize;
             set {
                 base.MinimumSize = value;
             }
@@ -241,9 +223,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new Size MaximumSize {
-            get {
-                return base.MaximumSize;
-            }
+            get => base.MaximumSize;
             set {
                 base.MaximumSize = value;
             }
@@ -261,9 +241,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new string Name {
-            get {
-                return base.Name;
-            }
+            get => base.Name;
             set {
                 base.Name = value;
             }
@@ -289,9 +267,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new Control Parent {
-            get {
-                return base.Parent;
-            }
+            get => base.Parent;
             set {
                 base.Parent = value;
             }
@@ -328,9 +304,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new int TabIndex {
-            get {
-                return base.TabIndex;
-            }
+            get => base.TabIndex;
             set {
                 base.TabIndex = value;
             }
@@ -347,9 +321,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -365,9 +337,7 @@ namespace System.Windows.Forms
         Browsable(false)    
         ]
         public new bool Visible {
-            get {
-                return base.Visible;
-            }
+            get => base.Visible;
             set {
                 base.Visible = value;
             }
@@ -396,9 +366,7 @@ namespace System.Windows.Forms
         }
 
         internal int WidthInternal {
-            get {
-                return ((Panel)this).Width;
-            }
+            get => ((Panel)this).Width;
             set {
                 ((Panel)this).Width = value;
             }

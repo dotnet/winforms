@@ -72,9 +72,7 @@ namespace System.Windows.Forms {
 
         [DefaultValue(true)]
         public new bool AutoToolTip {
-            get { 
-                return base.AutoToolTip;
-            }
+            get => base.AutoToolTip;
             set {
                 base.AutoToolTip = value;
             }
@@ -155,9 +153,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(null), Browsable(false)]
         public ToolStripItem DefaultItem {
-            get { 
-                return defaultItem; 
-            }
+            get => defaultItem; 
             set { 
                 if (defaultItem != value) {
                     OnDefaultItemChanged(EventArgs.Empty); 
@@ -236,9 +232,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripSplitButtonDropDownButtonWidthDescr))
         ]
         public int DropDownButtonWidth {
-            get{ 
-                return dropDownButtonWidth;
-            }
+            get => dropDownButtonWidth;
             set {
                 if (value < 0) {
                     // throw if less than 0.
@@ -318,9 +312,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         internal int SplitterWidth {
-            get {
-                return splitterWidth;
-            }
+            get => splitterWidth;
             set {
                 if (value < 0) {
                     splitterWidth = 0;
@@ -638,9 +630,7 @@ namespace System.Windows.Forms {
             }
 
             public override bool Enabled {
-                get {
-                    return owner.Enabled;
-                }
+                get => owner.Enabled;
                 set {
                     // do nothing
                 }
@@ -648,18 +638,14 @@ namespace System.Windows.Forms {
             
 
             public override ToolStripItemDisplayStyle DisplayStyle {
-                get {
-                    return owner.DisplayStyle;
-                }
+                get => owner.DisplayStyle;
                 set {
                     // do nothing
                 }
             }
 
             public override Padding Padding {
-                get {
-                    return this.owner.Padding;
-                }
+                get => this.owner.Padding;
                 set {
                     // do nothing
                 }

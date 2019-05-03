@@ -62,7 +62,7 @@ namespace System.Windows.Forms {
         }
 
         public Rectangle CachedBounds {
-            get { return cachedBounds; }
+            get => cachedBounds; 
             set { cachedBounds = value;
                 Debug.Assert(cachedBounds.X >= 0 &&  cachedBounds.Y >= 0, "cached bounds are outside of the client area, investigate");
             }
@@ -90,7 +90,7 @@ namespace System.Windows.Forms {
 
         
         public ToolStripPanelRow ToolStripPanelRow {
-            get { return parent; }
+            get => parent; 
             set { 
                 if (parent != value) {
                     if (parent != null) {

@@ -89,9 +89,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         public override bool AutoSize {
-            get {
-                return autoSize;
-            }
+            get => autoSize;
 
             set {
                 // Note that we intentionally do not call base.  Labels size themselves by
@@ -127,9 +125,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -145,9 +141,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -226,9 +220,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override bool DoubleBuffered {
-            get {
-                return base.DoubleBuffered;
-            }
+            get => base.DoubleBuffered;
             set {
                 base.DoubleBuffered = value;
             }
@@ -237,9 +229,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Font"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Font Font {
-            get {
-                return base.Font;
-            }
+            get => base.Font;
             set {
                 base.Font = value;
             }
@@ -259,9 +249,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Color ForeColor {
-            get {
-                return SystemColors.WindowText;
-            }
+            get => SystemColors.WindowText;
             set {
             }
         }
@@ -276,9 +264,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -304,9 +290,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarLargeChangeDescr))
         ]
         public int LargeChange {
-            get {
-                return largeChange;
-            }
+            get => largeChange;
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(LargeChange), string.Format(SR.TrackBarLargeChangeError, value));
@@ -333,9 +317,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarMaximumDescr))
         ]
         public int Maximum {
-            get {
-                return maximum;
-            }
+            get => maximum;
             set {
                 if (maximum != value) {
                     if (value < minimum) {
@@ -357,9 +339,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarMinimumDescr))
         ]
         public int Minimum {
-            get {
-                return minimum;
-            }
+            get => minimum;
             set {
                 if (minimum != value) {
                     if (value > maximum) {
@@ -383,9 +363,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarOrientationDescr))
         ]
         public Orientation Orientation {
-            get {
-                return orientation;
-            }
+            get => orientation;
             set {
                 //valid values are 0x0 to 0x1
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)Orientation.Horizontal, (int)Orientation.Vertical))
@@ -424,7 +402,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Padding Padding {
-            get { return base.Padding; }
+            get => base.Padding; 
             set { base.Padding = value;}
         }
 
@@ -478,10 +456,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ControlRightToLeftLayoutDescr))
         ]
         public virtual bool RightToLeftLayout {
-            get {
-
-                return rightToLeftLayout;
-            }
+            get => rightToLeftLayout;
 
             set {
                 if (value != rightToLeftLayout) {
@@ -505,9 +480,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarSmallChangeDescr))
         ]
         public int SmallChange {
-            get {
-                return smallChange;
-            }
+            get => smallChange;
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(SmallChange), string.Format(SR.TrackBarSmallChangeError, value));
@@ -525,9 +498,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Text"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -553,9 +524,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarTickStyleDescr))
         ]
         public TickStyle TickStyle {
-            get {
-                return tickStyle;
-            }
+            get => tickStyle;
             set {
                 // Confirm that value is a valid enum
                 //valid values are 0x0 to 0x3
@@ -585,9 +554,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.TrackBarTickFrequencyDescr))
         ]
         public int TickFrequency {
-            get {
-                return tickFrequency;
-            }
+            get => tickFrequency;
             set {
                 if (tickFrequency != value) {
                     tickFrequency = value;

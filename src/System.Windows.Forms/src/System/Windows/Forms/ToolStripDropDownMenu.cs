@@ -85,9 +85,7 @@ namespace System.Windows.Forms
             }
 
             internal override bool AllItemsVisible {
-                get {
-                    return !RequiresScrollButtons;
-                }
+                get => !RequiresScrollButtons;
                 set {
                     RequiresScrollButtons = !value;
                 }
@@ -155,9 +153,7 @@ namespace System.Windows.Forms
             }
 
             internal int PaddingToTrim {
-                get {
-                    return paddingToTrim;
-                }
+                get => paddingToTrim;
                 set {
                     if (paddingToTrim != value) {
                         paddingToTrim = value;
@@ -189,7 +185,7 @@ namespace System.Windows.Forms
             DefaultValue(ToolStripLayoutStyle.Flow)
             ]
             public new ToolStripLayoutStyle LayoutStyle {
-                get { return base.LayoutStyle; }
+                get => base.LayoutStyle; 
                 set { base.LayoutStyle = value; }
             }
 
@@ -210,9 +206,7 @@ namespace System.Windows.Forms
             SRCategory(nameof(SR.CatAppearance))
             ]
             public bool ShowImageMargin {
-                get {
-                    return state[stateShowImageMargin];
-                }
+                get => state[stateShowImageMargin];
                 set {
                     if (value != state[stateShowImageMargin]) {
                         state[stateShowImageMargin] = value;
@@ -228,9 +222,7 @@ namespace System.Windows.Forms
             SRCategory(nameof(SR.CatAppearance))
             ]
             public bool ShowCheckMargin {
-                get {
-                    return state[stateShowCheckMargin];
-                }
+                get => state[stateShowCheckMargin];
                 set {
                     if (value != state[stateShowCheckMargin]) {
                         state[stateShowCheckMargin] = value;
@@ -594,9 +586,7 @@ namespace System.Windows.Forms
             }
 
             internal override bool RequiresScrollButtons {
-                get {
-                    return GetToolStripState(STATE_SCROLLBUTTONS);
-                }
+                get => GetToolStripState(STATE_SCROLLBUTTONS);
                 set {
                     bool changed = (RequiresScrollButtons != value);
                     SetToolStripState(STATE_SCROLLBUTTONS, value);

@@ -407,9 +407,7 @@ namespace System.Experimental.Gdi
 
         public bool OwnedByCacheManager
         {
-            get {
-                return ownedByCacheManager;
-            }
+            get => ownedByCacheManager;
             set {
                 if (value) {
                     everOwnedByCacheManager = true;

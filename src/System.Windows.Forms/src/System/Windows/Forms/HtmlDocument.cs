@@ -94,10 +94,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Domain"]/*' />
         public string Domain
         {
-            get
-            {
-                return this.NativeHtmlDocument2.GetDomain();
-            }
+            get => this.NativeHtmlDocument2.GetDomain();
             set
             {
                 try
@@ -115,10 +112,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Title"]/*' />
         public string Title
         {
-            get
-            {
-                return this.NativeHtmlDocument2.GetTitle();
-            }
+            get => this.NativeHtmlDocument2.GetTitle();
             set
             {
                 this.NativeHtmlDocument2.SetTitle(value);
@@ -297,10 +291,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Cookie"]/*' />
         public string Cookie
         {
-            get
-            {
-                return this.NativeHtmlDocument2.GetCookie();
-            }
+            get => this.NativeHtmlDocument2.GetCookie();
             set
             {
                 this.NativeHtmlDocument2.SetCookie(value);
@@ -310,10 +301,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.RightToLeft"]/*' />
         public bool RightToLeft
         {
-            get
-            {
-                return ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).GetDir() == "rtl";
-            }
+            get => ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).GetDir() == "rtl";
             set
             {
                 ((UnsafeNativeMethods.IHTMLDocument3)this.NativeHtmlDocument2).SetDir(value ? "rtl" : "ltr");
@@ -322,10 +310,7 @@ namespace System.Windows.Forms
 
         public string Encoding
         {
-            get
-            {
-                return this.NativeHtmlDocument2.GetCharset();
-            }
+            get => this.NativeHtmlDocument2.GetCharset();
             set
             {
                 this.NativeHtmlDocument2.SetCharset(value);

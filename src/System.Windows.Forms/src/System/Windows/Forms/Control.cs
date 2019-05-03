@@ -672,9 +672,7 @@ example usage
             SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))
         ]
         public string AccessibleDefaultActionDescription {
-            get {
-                return (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
-            }
+            get => (string)Properties.GetObject(PropAccessibleDefaultActionDescription);
             set {
                 Properties.SetObject(PropAccessibleDefaultActionDescription, value);
             }
@@ -691,9 +689,7 @@ example usage
             SRDescription(nameof(SR.ControlAccessibleDescriptionDescr))
         ]
         public string AccessibleDescription {
-            get {
-                return (string)Properties.GetObject(PropAccessibleDescription);
-            }
+            get => (string)Properties.GetObject(PropAccessibleDescription);
             set {
                 Properties.SetObject(PropAccessibleDescription, value);
             }
@@ -710,9 +706,7 @@ example usage
             SRDescription(nameof(SR.ControlAccessibleNameDescr))
         ]
         public string AccessibleName {
-            get {
-                return (string)Properties.GetObject(PropAccessibleName);
-            }
+            get => (string)Properties.GetObject(PropAccessibleName);
 
             set {
                 Properties.SetObject(PropAccessibleName, value);
@@ -840,9 +834,7 @@ example usage
             SRDescription(nameof(SR.ControlAllowDropDescr))
         ]
         public virtual bool AllowDrop {
-            get {
-                return GetState(STATE_ALLOWDROP);
-            }
+            get => GetState(STATE_ALLOWDROP);
 
             set {
                 if (GetState(STATE_ALLOWDROP) != value) {
@@ -900,9 +892,7 @@ example usage
             RefreshProperties(RefreshProperties.Repaint)
         ]
         public virtual AnchorStyles Anchor {
-            get {
-                return DefaultLayout.GetAnchor(this);
-            }
+            get => DefaultLayout.GetAnchor(this);
             set {
                 DefaultLayout.SetAnchor(ParentInternal, this, value);
             }
@@ -917,7 +907,7 @@ example usage
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual bool AutoSize {
-            get { return CommonProperties.GetAutoSize(this); }
+            get => CommonProperties.GetAutoSize(this); 
             set {
                 if(value != AutoSize) {
                     CommonProperties.SetAutoSize(this, value);
@@ -1107,9 +1097,7 @@ example usage
             SRDescription(nameof(SR.ControlBackgroundImageDescr))
         ]
         public virtual Image BackgroundImage {
-            get {
-                return (Image)Properties.GetObject(PropBackgroundImage);
-            }
+            get => (Image)Properties.GetObject(PropBackgroundImage);
             set {
                 if (BackgroundImage != value) {
                     Properties.SetObject(PropBackgroundImage, value);
@@ -1176,10 +1164,7 @@ example usage
         // Set/reset by ContainerControl.AssignActiveControlInternal
         internal bool BecomingActiveControl
         {
-            get
-            {
-                return GetState2(STATE2_BECOMINGACTIVECONTROL);
-            }
+            get => GetState2(STATE2_BECOMINGACTIVECONTROL);
             set
             {
                 if (value != this.BecomingActiveControl)
@@ -1254,9 +1239,7 @@ example usage
             SRDescription(nameof(SR.ControlBindingContextDescr))
         ]
         public virtual BindingContext BindingContext {
-            get {
-                return BindingContextInternal;
-            }
+            get => BindingContextInternal;
             set {
                 BindingContextInternal = value;
             }
@@ -1297,9 +1280,7 @@ example usage
             SRCategory(nameof(SR.CatLayout))
         ]
         public Rectangle Bounds {
-            get {
-                return new Rectangle(x, y, width, height);
-            }
+            get => new Rectangle(x, y, width, height);
 
             set {
                 SetBounds(value.X, value.Y, value.Width, value.Height, BoundsSpecified.All);
@@ -1384,9 +1365,7 @@ example usage
             SRDescription(nameof(SR.ControlCaptureDescr))
         ]
         public bool Capture {
-            get {
-                return CaptureInternal;
-            }
+            get => CaptureInternal;
 
             set {
                 CaptureInternal = value;
@@ -1420,9 +1399,7 @@ example usage
             SRDescription(nameof(SR.ControlCausesValidationDescr))
         ]
         public bool CausesValidation {
-            get {
-                return GetState(STATE_CAUSESVALIDATION);
-            }
+            get => GetState(STATE_CAUSESVALIDATION);
             set {
                 if (value != this.CausesValidation) {
                     SetState(STATE_CAUSESVALIDATION, value);
@@ -1495,7 +1472,7 @@ example usage
             DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public static bool CheckForIllegalCrossThreadCalls {
-            get { return checkForIllegalCrossThreadCalls; }
+            get => checkForIllegalCrossThreadCalls; 
             set { checkForIllegalCrossThreadCalls = value; }
         }
 
@@ -1526,9 +1503,7 @@ example usage
             SRDescription(nameof(SR.ControlClientSizeDescr))
         ]
         public Size ClientSize {
-            get {
-                return new Size(clientWidth, clientHeight);
-            }
+            get => new Size(clientWidth, clientHeight);
 
             set {
                 SetClientSizeCore(value.Width, value.Height);
@@ -1611,9 +1586,7 @@ example usage
             Browsable(false)
         ]
         public virtual ContextMenu ContextMenu {
-            get {
-                return (ContextMenu)Properties.GetObject(PropContextMenu);
-            }
+            get => (ContextMenu)Properties.GetObject(PropContextMenu);
             set {
                 ContextMenu oldValue = (ContextMenu)Properties.GetObject(PropContextMenu);
 
@@ -1658,9 +1631,7 @@ example usage
             SRDescription(nameof(SR.ControlContextMenuDescr))
         ]
         public virtual ContextMenuStrip ContextMenuStrip {
-            get {
-                 return (ContextMenuStrip)Properties.GetObject(PropContextMenuStrip);
-             }
+            get => (ContextMenuStrip)Properties.GetObject(PropContextMenuStrip);
              set {
                  ContextMenuStrip oldValue = Properties.GetObject(PropContextMenuStrip) as ContextMenuStrip;
 
@@ -2224,9 +2195,7 @@ example usage
             SRDescription(nameof(SR.ControlDockDescr))
         ]
         public virtual DockStyle Dock {
-            get {
-                return DefaultLayout.GetDock(this);
-            }
+            get => DefaultLayout.GetDock(this);
             set {
                 if(value != Dock) {
 #if DEBUG
@@ -2262,9 +2231,7 @@ example usage
             SRDescription(nameof(SR.ControlDoubleBufferedDescr))
         ]
         protected virtual bool DoubleBuffered {
-            get {
-                return GetStyle(ControlStyles.OptimizedDoubleBuffer);
-            }
+            get => GetStyle(ControlStyles.OptimizedDoubleBuffer);
             set {
                 if (value != DoubleBuffered) {
                     if (value) {
@@ -2753,9 +2720,7 @@ example usage
             SRDescription(nameof(SR.ControlHeightDescr))
         ]
         public int Height {
-            get {
-                return height;
-            }
+            get => height;
             set{
                 SetBounds(x, y, width, value, BoundsSpecified.Height);
             }
@@ -2957,9 +2922,7 @@ example usage
             SRDescription(nameof(SR.ControlIsAccessibleDescr))
         ]
         public bool IsAccessible {
-            get {
-                return GetState(STATE_ISACCESSIBLE);
-            }
+            get => GetState(STATE_ISACCESSIBLE);
             set {
                 SetState(STATE_ISACCESSIBLE, value);
             }
@@ -3052,9 +3015,7 @@ example usage
             SRDescription(nameof(SR.ControlLeftDescr))
         ]
         public int Left {
-            get {
-                return x;
-            }
+            get => x;
             set {
                 SetBounds(value, y, width, height, BoundsSpecified.X);
             }
@@ -3070,9 +3031,7 @@ example usage
             SRDescription(nameof(SR.ControlLocationDescr))
         ]
         public Point Location {
-            get {
-                return new Point(x, y);
-            }
+            get => new Point(x, y);
             set {
                 SetBounds(value.X, value.Y, width, height, BoundsSpecified.Location);
             }
@@ -3093,7 +3052,7 @@ example usage
         ]
         public Padding Margin
         {
-            get { return CommonProperties.GetMargin(this); }
+            get => CommonProperties.GetMargin(this); 
             set
             {
                 // This should be done here rather than in the property store as
@@ -3124,7 +3083,7 @@ example usage
         [SRDescription(nameof(SR.ControlMaximumSizeDescr))]
         [AmbientValue(typeof(Size), "0, 0")]
         public virtual Size MaximumSize {
-            get { return CommonProperties.GetMaximumSize(this, DefaultMaximumSize); }
+            get => CommonProperties.GetMaximumSize(this, DefaultMaximumSize); 
             set {
                 if (value == Size.Empty) {
                     CommonProperties.ClearMaximumSize(this);
@@ -3144,7 +3103,7 @@ example usage
         [Localizable(true)]
         [SRDescription(nameof(SR.ControlMinimumSizeDescr))]
         public virtual Size MinimumSize {
-            get { return CommonProperties.GetMinimumSize(this, DefaultMinimumSize); }
+            get => CommonProperties.GetMinimumSize(this, DefaultMinimumSize); 
             set {
                 if (value != MinimumSize) {
                     // SetMinimumSize causes a layout as a side effect.
@@ -3246,18 +3205,14 @@ example usage
             SRDescription(nameof(SR.ControlParentDescr))
         ]
         public Control Parent {
-            get {
-                return ParentInternal;
-            }
+            get => ParentInternal;
             set {
                 ParentInternal = value;
             }
         }
 
         internal virtual Control ParentInternal {
-            get {
-                return parent;
-            }
+            get => parent;
             set {
                 if (parent != value) {
                     if (value != null) {
@@ -3346,9 +3301,7 @@ example usage
         }
 
         private Control ReflectParent {
-            get {
-                return reflectParent;
-            }
+            get => reflectParent;
             set {
                 if (value != null) {
                     value.AddReflectChild();
@@ -3374,9 +3327,7 @@ example usage
         SRDescription(nameof(SR.ControlRegionDescr))
         ]
         public Region Region {
-            get {
-                return (Region)Properties.GetObject(PropRegion);
-            }
+            get => (Region)Properties.GetObject(PropRegion);
             set {
                 Region oldRegion = Region;
                 if (oldRegion != value) {
@@ -3484,9 +3435,7 @@ example usage
         ///     RequiredScaling always returns None.
         /// </devdoc>
         internal bool RequiredScalingEnabled {
-            get {
-                return (requiredScaling & RequiredScalingEnabledMask) != 0;
-            }
+            get => (requiredScaling & RequiredScalingEnabledMask) != 0;
             set {
                 byte scaling = (byte)(requiredScaling & RequiredScalingMask);
                 requiredScaling = scaling;
@@ -3502,9 +3451,7 @@ example usage
         SRDescription(nameof(SR.ControlResizeRedrawDescr))
         ]
         protected bool ResizeRedraw {
-            get {
-                return GetStyle( ControlStyles.ResizeRedraw );
-            }
+            get => GetStyle( ControlStyles.ResizeRedraw );
             set {
                 SetStyle( ControlStyles.ResizeRedraw, value );
             }
@@ -3607,9 +3554,7 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Site"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
-            get {
-                return base.Site;
-            }
+            get => base.Site;
             set {
                 AmbientProperties oldAmbients = AmbientPropertiesService;
                 AmbientProperties newAmbients = null;
@@ -3682,9 +3627,7 @@ example usage
         SRDescription(nameof(SR.ControlSizeDescr))
         ]
         public Size Size {
-            get {
-                return new Size(width, height);
-            }
+            get => new Size(width, height);
             set {
                 SetBounds(x, y, value.Width, value.Height, BoundsSpecified.Size);
             }
@@ -3710,9 +3653,7 @@ example usage
         SRDescription(nameof(SR.ControlTabIndexDescr))
         ]
         public int TabIndex {
-            get {
-                return tabIndex == -1 ? 0 : tabIndex;
-            }
+            get => tabIndex == -1 ? 0 : tabIndex;
             set {
                 if (value < 0) {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(TabIndex), value, 0));
@@ -3745,9 +3686,7 @@ example usage
         SRDescription(nameof(SR.ControlTabStopDescr))
         ]
         public bool TabStop {
-            get {
-                return TabStopInternal;
-            }
+            get => TabStopInternal;
             set {
                 if (TabStop != value) {
                     TabStopInternal = value;
@@ -3759,9 +3698,7 @@ example usage
 
         // Grab out the logical of setting TABSTOP state, so that derived class could use this.
         internal bool TabStopInternal {
-            get {
-                return (state & STATE_TABSTOP) != 0;
-            }
+            get => (state & STATE_TABSTOP) != 0;
             set {
                 if (TabStopInternal != value) {
                     SetState(STATE_TABSTOP, value);
@@ -3788,9 +3725,7 @@ example usage
         TypeConverter(typeof(StringConverter)),
         ]
         public object Tag {
-            get {
-                return Properties.GetObject(PropUserData);
-            }
+            get => Properties.GetObject(PropUserData);
             set {
                 Properties.SetObject(PropUserData, value);
             }
@@ -3863,9 +3798,7 @@ example usage
         SRDescription(nameof(SR.ControlTopDescr))
         ]
         public int Top {
-            get {
-                return y;
-            }
+            get => y;
             set {
                 SetBounds(x, value, width, height, BoundsSpecified.Y);
             }
@@ -4044,7 +3977,7 @@ example usage
         SRDescription(nameof(SR.ControlUseWaitCursorDescr)),
         ]
         public bool UseWaitCursor {
-            get { return GetState(STATE_USEWAITCURSOR); }
+            get => GetState(STATE_USEWAITCURSOR); 
             set {
                 if (GetState(STATE_USEWAITCURSOR) != value) {
                     SetState(STATE_USEWAITCURSOR, value);
@@ -4123,9 +4056,7 @@ example usage
         SRDescription(nameof(SR.ControlVisibleDescr))
         ]
         public bool Visible {
-            get {
-                return GetVisibleCore();
-            }
+            get => GetVisibleCore();
             set {
                 SetVisibleCore(value);
             }
@@ -4200,9 +4131,7 @@ example usage
         SRDescription(nameof(SR.ControlWidthDescr))
         ]
         public int Width {
-            get {
-                return width;
-            }
+            get => width;
             set {
                 SetBounds(x, y, value, height, BoundsSpecified.Width);
             }
@@ -4212,9 +4141,7 @@ example usage
         ///     The current exStyle of the hWnd
         /// </devdoc>
         private int WindowExStyle {
-            get {
-                return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
-            }
+            get => unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
             set {
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE, new HandleRef(null, (IntPtr)value));
             }
@@ -4224,9 +4151,7 @@ example usage
         ///     The current style of the hWnd
         /// </devdoc>
         internal int WindowStyle {
-            get {
-                return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
-            }
+            get => unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
             set {
                 UnsafeNativeMethods.SetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE, new HandleRef(null, (IntPtr)value));
             }
@@ -4243,9 +4168,7 @@ example usage
         SRDescription(nameof(SR.ControlWindowTargetDescr))
         ]
         public IWindowTarget WindowTarget {
-            get {
-                return window.WindowTarget;
-            }
+            get => window.WindowTarget;
             set {
                 window.WindowTarget = value;
             }
@@ -4439,7 +4362,7 @@ example usage
         Localizable(true)
         ]
         public Padding Padding {
-            get { return CommonProperties.GetPadding(this, DefaultPadding); }
+            get => CommonProperties.GetPadding(this, DefaultPadding); 
             set {
                 if (value != Padding) {
                     CommonProperties.SetPadding(this, value);
@@ -13540,9 +13463,7 @@ example usage
             }
 
             internal IWindowTarget WindowTarget {
-                get {
-                    return target;
-                }
+                get => target;
                 set {
                     target = value;
                 }
@@ -15259,9 +15180,7 @@ example usage
             /// </devdoc>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             internal bool EventsFrozen {
-                get {
-                    return activeXState[eventsFrozen];
-                }
+                get => activeXState[eventsFrozen];
                 set {
                     activeXState[eventsFrozen] = value;
                 }
@@ -17567,7 +17486,7 @@ example usage
              * The name of the component.
              */
             public string Name {
-                get { return name;}
+                get => name;
                 set {
                     if (value == null || name == null) {
                         name = value;
@@ -17828,9 +17747,7 @@ example usage
             ///      The current value of the property.
             /// </devdoc>
             internal object Value {
-                get {
-                    return value;
-                }
+                get => value;
                 set {
                     this.value = value;
                     empty = false;
@@ -18227,9 +18144,7 @@ example usage
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ControlAccessibleObject.Handle"]/*' />
             public IntPtr Handle {
 
-                get {
-                    return handle;
-                }
+                get => handle;
 
                 set {
                     if (handle != value) {

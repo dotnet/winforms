@@ -61,9 +61,7 @@ namespace System.Windows.Forms {
         [TypeConverterAttribute(typeof(StringConverter)),
         DefaultValue(true)]
         public object TrueValue {
-            get {
-                return trueValue;
-            }
+            get => trueValue;
             set {
                 if (!trueValue.Equals(value)) {
                     this.trueValue = value;
@@ -86,9 +84,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [TypeConverterAttribute(typeof(StringConverter)), DefaultValue(false)]
         public object FalseValue {
-            get {
-                return falseValue;
-            }
+            get => falseValue;
             set {
                 if (!falseValue.Equals(value)) {
                     this.falseValue = value;
@@ -111,9 +107,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [TypeConverterAttribute(typeof(StringConverter))]
         public object NullValue {
-            get {
-                return nullValue;
-            }
+            get => nullValue;
             set {
                 if (!nullValue.Equals(value)) {
                     this.nullValue = value;
@@ -411,9 +405,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.DataGridBoolColumnAllowNullValue))
         ]
         public bool AllowNull {
-            get {
-                return allowNull;
-            }
+            get => allowNull;
             set {
                 if (allowNull != value)
                 {

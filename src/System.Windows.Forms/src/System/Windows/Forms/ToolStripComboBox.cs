@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public System.Windows.Forms.AutoCompleteStringCollection AutoCompleteCustomSource { 
-            get { return ComboBox.AutoCompleteCustomSource; }
+            get => ComboBox.AutoCompleteCustomSource; 
             set { ComboBox.AutoCompleteCustomSource = value;}
         }
 
@@ -160,7 +160,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteMode AutoCompleteMode { 
-            get { return ComboBox.AutoCompleteMode; }
+            get => ComboBox.AutoCompleteMode; 
             set { ComboBox.AutoCompleteMode = value;}
         }
         
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         Browsable(true), EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutoCompleteSource AutoCompleteSource { 
-            get { return ComboBox.AutoCompleteSource; }
+            get => ComboBox.AutoCompleteSource; 
             set { ComboBox.AutoCompleteSource = value;}
         }
 
@@ -181,9 +181,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
         ]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -195,9 +193,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -271,7 +267,7 @@ namespace System.Windows.Forms
         DefaultValue(106)
         ]
         public int DropDownHeight { 
-            get { return ComboBox.DropDownHeight; }
+            get => ComboBox.DropDownHeight; 
             set { ComboBox.DropDownHeight = value;}
 
         }
@@ -284,7 +280,7 @@ namespace System.Windows.Forms
         RefreshPropertiesAttribute(RefreshProperties.Repaint)
         ]
         public ComboBoxStyle DropDownStyle {
-            get { return ComboBox.DropDownStyle; }
+            get => ComboBox.DropDownStyle; 
             set { ComboBox.DropDownStyle = value;}
         }
 
@@ -294,7 +290,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxDropDownWidthDescr))
         ]
         public int DropDownWidth { 
-            get { return ComboBox.DropDownWidth; }
+            get => ComboBox.DropDownWidth; 
             set { ComboBox.DropDownWidth = value;}
         }
 
@@ -305,7 +301,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxDroppedDownDescr))
         ]
         public bool DroppedDown { 
-            get { return ComboBox.DroppedDown; }
+            get => ComboBox.DroppedDown; 
             set { ComboBox.DroppedDown = value;}
         }
 
@@ -317,7 +313,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxFlatStyleDescr))
         ]
         public FlatStyle FlatStyle { 
-            get { return ComboBox.FlatStyle; }
+            get => ComboBox.FlatStyle; 
             set { ComboBox.FlatStyle = value;}
         }
 
@@ -329,7 +325,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxIntegralHeightDescr))
         ]
         public bool IntegralHeight {
-            get { return ComboBox.IntegralHeight; }
+            get => ComboBox.IntegralHeight; 
             set { ComboBox.IntegralHeight = value;}
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Items"]/*' />
@@ -357,7 +353,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxMaxDropDownItemsDescr))
         ]
         public int MaxDropDownItems { 
-            get { return ComboBox.MaxDropDownItems; }
+            get => ComboBox.MaxDropDownItems; 
             set { ComboBox.MaxDropDownItems = value;}
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.MaxLength"]/*' />
@@ -368,7 +364,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxMaxLengthDescr))
         ]
         public int MaxLength {
-           get {  return ComboBox.MaxLength; }
+           get => ComboBox.MaxLength; 
            set {  ComboBox.MaxLength = value; }
         }
 
@@ -379,7 +375,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxSelectedIndexDescr))
         ]
         public int SelectedIndex { 
-            get { return ComboBox.SelectedIndex; }
+            get => ComboBox.SelectedIndex; 
             set { ComboBox.SelectedIndex = value;}
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndexChanged"]/*' />
@@ -396,7 +392,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxSelectedItemDescr))
         ]
         public object SelectedItem { 
-            get { return ComboBox.SelectedItem; }
+            get => ComboBox.SelectedItem; 
             set { ComboBox.SelectedItem = value;}
         }  
 
@@ -407,7 +403,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxSelectedTextDescr))
         ]
         public string SelectedText {
-            get { return ComboBox.SelectedText; }
+            get => ComboBox.SelectedText; 
             set { ComboBox.SelectedText = value;}
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectionLength"]/*' />
@@ -417,7 +413,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxSelectionLengthDescr))
         ]
         public int SelectionLength { 
-            get { return ComboBox.SelectionLength; }
+            get => ComboBox.SelectionLength; 
             set { ComboBox.SelectionLength = value;}
         }
 
@@ -428,7 +424,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxSelectionStartDescr))
         ]
         public int SelectionStart { 
-            get { return ComboBox.SelectionStart; }
+            get => ComboBox.SelectionStart; 
             set { ComboBox.SelectionStart = value;}
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.Sorted"]/*' />
@@ -438,7 +434,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ComboBoxSortedDescr))
         ]
         public bool Sorted { 
-            get { return ComboBox.Sorted; }
+            get => ComboBox.Sorted; 
             set {ComboBox.Sorted = value;}
         }
 
@@ -592,7 +588,7 @@ namespace System.Windows.Forms
                }
 
             public ToolStripComboBox Owner {
-                get { return owner; }
+                get => owner; 
                 set { owner = value; }
             }
 

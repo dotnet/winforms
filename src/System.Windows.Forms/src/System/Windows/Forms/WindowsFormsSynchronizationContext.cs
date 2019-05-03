@@ -103,9 +103,7 @@ namespace System.Windows.Forms
         // when we start a message loop.  Default: true.
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static bool AutoInstall {
-            get {
-                return !dontAutoInstall;
-            }
+            get => !dontAutoInstall;
             set {
                 dontAutoInstall = !value;
             }

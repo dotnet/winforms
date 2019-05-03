@@ -132,9 +132,7 @@ namespace System.Windows.Forms {
         DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)
         ]
         public override bool AutoSize {
-            get {
-                return base.AutoSize;
-            }
+            get => base.AutoSize;
             set {
                 if (AutoSize != value) {
                     base.AutoSize = value;
@@ -165,9 +163,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.LabelAutoEllipsisDescr))
         ]
         public bool AutoEllipsis {
-            get {
-                return labelState[StateAutoEllipsis] != 0;
-            }
+            get => labelState[StateAutoEllipsis] != 0;
 
             set {
                 if (AutoEllipsis != value) {
@@ -204,9 +200,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.LabelBackgroundImageDescr))
         ]
         public override Image BackgroundImage {
-            get {
-                return base.BackgroundImage;
-            }
+            get => base.BackgroundImage;
             set {
                 base.BackgroundImage = value;
             }
@@ -229,9 +223,7 @@ namespace System.Windows.Forms {
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never)
         ]
         public override ImageLayout BackgroundImageLayout {
-            get {
-                return base.BackgroundImageLayout;
-            }
+            get => base.BackgroundImageLayout;
             set {
                 base.BackgroundImageLayout = value;
             }
@@ -257,9 +249,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.LabelBorderDescr))
         ]
         public virtual BorderStyle BorderStyle {
-            get {
-                return (BorderStyle)labelState[StateBorderStyle];
-            }
+            get => (BorderStyle)labelState[StateBorderStyle];
             set {
                 //valid values are 0x0 to 0x2
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)){
@@ -383,9 +373,7 @@ namespace System.Windows.Forms {
             SRDescription(nameof(SR.ButtonFlatStyleDescr))
         ]
         public FlatStyle FlatStyle {
-            get {
-                return (FlatStyle)labelState[StateFlatStyle];
-            }
+            get => (FlatStyle)labelState[StateFlatStyle];
             set {
                 //valid values are 0x0 to 0x3
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)FlatStyle.Flat, (int)FlatStyle.System))
@@ -574,9 +562,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance))
         ]
         public ImageList ImageList {
-            get {
-                return (ImageList)Properties.GetObject(PropImageList);
-            }
+            get => (ImageList)Properties.GetObject(PropImageList);
             set {
                 if (ImageList != value) {
 
@@ -664,9 +650,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always)
         ]
         public AutomationLiveSetting LiveSetting {
-            get {
-                return liveSetting;
-            }
+            get => liveSetting;
             set {
                 if (!ClientUtils.IsEnumValid(value, (int)value, (int)AutomationLiveSetting.Off, (int)AutomationLiveSetting.Assertive)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(AutomationLiveSetting));
@@ -678,9 +662,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImeMode"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
-            get {
-                return base.ImeMode;
-            }
+            get => base.ImeMode;
             set {
                 base.ImeMode = value;
             }
@@ -774,9 +756,7 @@ namespace System.Windows.Forms {
         [Obsolete("This property has been deprecated. Use BackColor instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         virtual new protected bool RenderTransparent
         {
-            get {
-                return((Control) this).RenderTransparent;
-            }
+            get => ((Control) this).RenderTransparent;
             set {
             }
         }
@@ -797,9 +777,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public bool TabStop {
-            get {
-                return base.TabStop;
-            }
+            get => base.TabStop;
             set {
                 base.TabStop = value;
             }
@@ -866,9 +844,7 @@ namespace System.Windows.Forms {
         SettingsBindable(true)
         ]
         public override string Text {
-            get {
-                return base.Text;
-            }
+            get => base.Text;
             set {
                 base.Text = value;
             }
@@ -930,9 +906,7 @@ namespace System.Windows.Forms {
         SRCategory(nameof(SR.CatAppearance))
         ]
         public bool UseMnemonic {
-            get {
-                return labelState[StateUseMnemonic] != 0;
-            }
+            get => labelState[StateUseMnemonic] != 0;
 
             set {
 
@@ -1684,14 +1658,14 @@ namespace System.Windows.Forms {
            }
 
            public override ImageList ImageList {
-                get { return (owner == null) ? null : owner.ImageList; }
+                get => (owner == null) ? null : owner.ImageList; 
 
                 set { Debug.Assert(false, "Setting the image list in this class is not supported");}
            }
 
 
            public override string Key {
-                get { return base.Key; }
+                get => base.Key; 
                 set {
                       base.Key = value;
                       useIntegerIndex = false;
@@ -1699,7 +1673,7 @@ namespace System.Windows.Forms {
            }
 
            public override int Index {
-                get { return base.Index; }
+                get => base.Index; 
                 set {
                       base.Index = value;
                       useIntegerIndex = true;

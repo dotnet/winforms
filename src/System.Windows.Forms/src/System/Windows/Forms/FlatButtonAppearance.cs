@@ -41,9 +41,7 @@ namespace System.Windows.Forms {
         DefaultValue(1),
         ]
         public int BorderSize {
-            get {
-                return borderSize;
-            }
+            get => borderSize;
             set {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(BorderSize), value, 0));
@@ -72,9 +70,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), ""),
         ]
         public Color BorderColor {
-            get {
-                return borderColor;
-            }
+            get => borderColor;
             set {
                 if (value.Equals(Color.Transparent)) {
                     throw new NotSupportedException(SR.ButtonFlatAppearanceInvalidBorderColor);
@@ -101,9 +97,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), ""),
         ]
         public Color CheckedBackColor {
-            get {
-                return checkedBackColor;
-            }
+            get => checkedBackColor;
             set {
                 if (checkedBackColor != value) {
                     checkedBackColor = value;
@@ -127,9 +121,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), ""),
         ]
         public Color MouseDownBackColor {
-            get {
-                return mouseDownBackColor;
-            }
+            get => mouseDownBackColor;
             set {
                 if (mouseDownBackColor != value) {
                     mouseDownBackColor = value;
@@ -153,9 +145,7 @@ namespace System.Windows.Forms {
         DefaultValue(typeof(Color), ""),
         ]
         public Color MouseOverBackColor {
-            get {
-                return mouseOverBackColor;
-            }
+            get => mouseOverBackColor;
             set {
                 if (mouseOverBackColor != value) {
                     mouseOverBackColor = value;

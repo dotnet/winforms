@@ -53,9 +53,7 @@ namespace System.Windows.Forms {
 
         [ConfigurationProperty("jitDebugging", DefaultValue=JitDebuggingDefault)]
         public bool JitDebugging {
-            get {
-                return (bool) base[s_propJitDebugging];
-            }
+            get => (bool) base[s_propJitDebugging];
 
             set {
                 base[s_propJitDebugging] = value;

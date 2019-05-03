@@ -61,9 +61,7 @@ namespace System.Windows.Forms
      
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.BackColor"]/*' />
         public override Color BackColor {
-            get {
-                return Control.BackColor;
-            }
+            get => Control.BackColor;
             set {
                 Control.BackColor = value;
             }
@@ -82,9 +80,7 @@ namespace System.Windows.Forms
         DefaultValue(null)
         ]
         public override Image BackgroundImage {
-            get {
-                return Control.BackgroundImage;
-            }
+            get => Control.BackgroundImage;
             set {
                 Control.BackgroundImage = value;
             }
@@ -98,9 +94,7 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ControlBackgroundImageLayoutDescr))
         ]
         public override ImageLayout BackgroundImageLayout {
-          get {
-              return Control.BackgroundImageLayout;
-          }
+          get => Control.BackgroundImageLayout;
           set {
               Control.BackgroundImageLayout = value;
           }
@@ -124,14 +118,14 @@ namespace System.Windows.Forms
         SRDescription(nameof(SR.ControlCausesValidationDescr))
         ]
         public bool CausesValidation {
-            get { return Control.CausesValidation; }
+            get => Control.CausesValidation; 
             set { Control.CausesValidation = value; }
         }
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ControlAlign"]/*' />
         [DefaultValue(ContentAlignment.MiddleCenter), Browsable(false)]
         public ContentAlignment ControlAlign {
-            get { return controlAlign; }
+            get => controlAlign; 
             set { 
                 if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value)) {
                     throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
@@ -179,9 +173,7 @@ namespace System.Windows.Forms
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.DisplayStyle"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public new ToolStripItemDisplayStyle DisplayStyle {
-            get { 
-                return base.DisplayStyle; 
-            }
+            get => base.DisplayStyle; 
             set {
                base.DisplayStyle = value;
             }
@@ -200,18 +192,14 @@ namespace System.Windows.Forms
         /// </devdoc>
         [DefaultValue(false), Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool DoubleClickEnabled {
-            get {
-                return base.DoubleClickEnabled;
-            }
+            get => base.DoubleClickEnabled;
             set {
                 base.DoubleClickEnabled = value;
             }
         }
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Font"]/*' />
         public override Font Font {
-            get {
-                return Control.Font;
-            }
+            get => Control.Font;
             set {
                 Control.Font = value;
             }
@@ -219,9 +207,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Enabled"]/*' />
         public override bool Enabled {
-            get {
-                return Control.Enabled;
-            }
+            get => Control.Enabled;
             set {
                 Control.Enabled = value;
             }
@@ -247,9 +233,7 @@ namespace System.Windows.Forms
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ForeColor"]/*' />
         public override Color ForeColor {
-            get {
-                return Control.ForeColor;
-            }
+            get => Control.ForeColor;
             set {
                 Control.ForeColor = value;
             }
@@ -275,9 +259,7 @@ namespace System.Windows.Forms
         public override Image Image {
             
             
-            get {
-                return base.Image;
-            }
+            get => base.Image;
             set {
                 base.Image = value;
             }
@@ -288,9 +270,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new ToolStripItemImageScaling ImageScaling {
-            get {
-                return base.ImageScaling;
-            }
+            get => base.ImageScaling;
             set {
                 base.ImageScaling = value;
             }
@@ -301,9 +281,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new Color ImageTransparentColor {
-            get {
-                return base.ImageTransparentColor;
-            }
+            get => base.ImageTransparentColor;
             set {
                 base.ImageTransparentColor = value;
             }
@@ -315,9 +293,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new ContentAlignment ImageAlign {
-            get {
-                return base.ImageAlign;
-            }
+            get => base.ImageAlign;
             set {
                 base.ImageAlign = value;
 
@@ -402,9 +378,7 @@ namespace System.Windows.Forms
         DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)
         ]
         public new bool RightToLeftAutoMirrorImage {
-            get {
-                return base.RightToLeftAutoMirrorImage;
-            }
+            get => base.RightToLeftAutoMirrorImage;
             set {
                 base.RightToLeftAutoMirrorImage = value;
             }
@@ -422,9 +396,7 @@ namespace System.Windows.Forms
         }
 
         public override Size Size {
-            get {
-                return base.Size;
-            }
+            get => base.Size;
             set {
                 Rectangle specifiedBounds = Rectangle.Empty;
                 if (control != null) {
@@ -453,9 +425,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site {
-            get {
-                return base.Site;
-            }
+            get => base.Site;
             set {
                 base.Site = value;
                 if (value != null)
@@ -475,9 +445,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         [DefaultValue("")]
         public override string Text {
-            get {
-                return Control.Text;
-            }
+            get => Control.Text;
             set {
                 Control.Text = value;
             }
@@ -486,9 +454,7 @@ namespace System.Windows.Forms
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.TextAlign"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new ContentAlignment TextAlign {
-             get {
-                 return base.TextAlign;
-             }
+             get => base.TextAlign;
              set {
                  base.TextAlign = value;
              }
@@ -496,9 +462,7 @@ namespace System.Windows.Forms
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DefaultValue(ToolStripTextDirection.Horizontal)]
         public override ToolStripTextDirection TextDirection {
-             get {
-                 return base.TextDirection;
-             }
+             get => base.TextDirection;
              set {
                  base.TextDirection = value;
              }
@@ -507,9 +471,7 @@ namespace System.Windows.Forms
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.TextImageRelation"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new TextImageRelation TextImageRelation {
-           get {
-               return base.TextImageRelation;
-           }
+           get => base.TextImageRelation;
            set {
                base.TextImageRelation = value;      
            }
@@ -1085,9 +1047,7 @@ namespace System.Windows.Forms
             ///       the component associated with the <see cref='System.ComponentModel.ISite'/>.</para>
             /// </devdoc>
             string ISite.Name {
-                get {
-                    return owner.Site.Name;
-                }
+                get => owner.Site.Name;
                 set {
                     owner.Site.Name = value;
                 }
