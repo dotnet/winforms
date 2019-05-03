@@ -703,6 +703,7 @@ namespace System.Windows.Forms {
         LB_SETSEL = 0x0185,
         LB_SETCURSEL = 0x0186,
         LB_GETSEL = 0x0187,
+        LB_SETCARETINDEX = 0x019E,
         LB_GETCARETINDEX = 0x019F,
         LB_GETCURSEL = 0x0188,
         LB_GETTEXT = 0x0189,

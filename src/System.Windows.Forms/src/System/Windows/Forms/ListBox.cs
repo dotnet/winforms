@@ -27,6 +27,7 @@ namespace System.Windows.Forms
     using System.Text;
     using static System.Windows.Forms.UnsafeNativeMethods;
     using static System.Windows.Forms.ListBox;
+    using System.Runtime.Serialization;
 
     /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox"]/*' />
     /// <devdoc>
@@ -4893,15 +4894,15 @@ namespace System.Windows.Forms
 
             internal override object GetObjectForChildInternal(int idChild)
             {
-                if (idChild >= 0)
+                if (idChild > 0)
                 {
-                    if (_itemAccessibleObjects.Count < idChild + 1)
+                    if (idChild > _itemAccessibleObjects.Count - 1)
                     {
-                        ListBoxItemAccessibleObject newItemAccessibleObject = new ListBoxItemAccessibleObject(this, _owningListBox, idChild);
+                        ListBoxItemAccessibleObject newItemAccessibleObject = new ListBoxItemAccessibleObject(_owningListBox, idChild - 1);
                         _itemAccessibleObjects.Add(newItemAccessibleObject);
                         return newItemAccessibleObject;
                     }
-                    return _itemAccessibleObjects[idChild];
+                    return _itemAccessibleObjects[idChild - 1];
                 }
                 return base.GetObjectForChildInternal(idChild);
             }
@@ -4915,7 +4916,6 @@ namespace System.Windows.Forms
                 this._owningListBox = owningListBox;
                 _itemAccessibleObjects = new ArrayList();
             }
-
 
             internal override bool IsIAccessibleExSupported()
             {
@@ -4936,20 +4936,18 @@ namespace System.Windows.Forms
         [ComVisible(true)]
         internal class ListBoxItemAccessibleObject : AccessibleObject
         {
-            ListBoxAccessibleObject _owningListBoxAccessibleObject;
             ListBox _owningListBox;
-            int _idItem;
+            int _itemId;
 
-            public ListBoxItemAccessibleObject(ListBoxAccessibleObject owningListBoxAccessibleObject, ListBox owningListBox, int idItem)
+            public ListBoxItemAccessibleObject(ListBox owningListBox, int itemId)
             {
                 _owningListBox = owningListBox;
-                _owningListBoxAccessibleObject = owningListBoxAccessibleObject;
-                _idItem = idItem;
+                _itemId = itemId;
             }
 
             internal override void ScrollIntoView()
             {
-                //TODO: Implement this method
+                _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, _itemId, 0);
             }
 
             internal override bool IsPatternSupported(int patternId)
