@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Runtime.Serialization;
     using System.Threading;

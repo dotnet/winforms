@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Text;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
     using System.Text;
     using System.Windows.Forms.ComponentModel;

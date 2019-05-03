@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
 

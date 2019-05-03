@@ -13,7 +13,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using System.Drawing.Text;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Windows.Forms.VisualStyles;
     using System.Windows.Forms.Layout;
     using System.Diagnostics.CodeAnalysis;

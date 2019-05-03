@@ -5,7 +5,6 @@
 
 
 namespace System.Windows.Forms.Design {
-    using System.Runtime.Remoting;
     using System.ComponentModel;
 
     using System.Diagnostics;

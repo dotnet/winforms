@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Design;
     using System.Drawing.Printing;
-    using System.Runtime.Remoting;
     using System.Windows.Forms.Design;
     using System.Runtime.InteropServices;
     using System.Runtime.Versioning;

@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Drawing;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Windows.Forms;
     using System.Collections;

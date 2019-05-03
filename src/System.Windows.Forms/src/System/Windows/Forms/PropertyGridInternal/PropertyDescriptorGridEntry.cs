@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms.PropertyGridInternal {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;

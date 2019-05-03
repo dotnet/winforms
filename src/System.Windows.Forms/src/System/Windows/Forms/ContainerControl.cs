@@ -6,7 +6,6 @@
 namespace System.Windows.Forms {
     using System.Threading;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;

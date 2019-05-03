@@ -6,7 +6,6 @@ namespace System.Windows.Forms
 {
     using System.Text;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System;
     using System.Diagnostics.CodeAnalysis;

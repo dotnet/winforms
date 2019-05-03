@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using Accessibility;
 
     using System.Text;
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
 

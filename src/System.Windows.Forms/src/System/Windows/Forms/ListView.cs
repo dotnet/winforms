@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Drawing.Design;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
     using System.Windows.Forms.Internal;
     using System.Windows.Forms.Layout;
