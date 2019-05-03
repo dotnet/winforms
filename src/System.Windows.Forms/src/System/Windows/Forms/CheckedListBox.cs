@@ -379,9 +379,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DataSourceChanged {
-            add {
-                base.DataSourceChanged += value;
-            }
+            add => base.DataSourceChanged += value;
             remove {
                 base.DataSourceChanged -= value;
             }
@@ -391,9 +389,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DisplayMemberChanged {
-            add {
-                base.DisplayMemberChanged += value;
-            }
+            add => base.DisplayMemberChanged += value;
             remove {
                 base.DisplayMemberChanged -= value;
             }
@@ -402,9 +398,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
-            add {
-                onItemCheck += value;
-            }
+            add => onItemCheck += value;
             remove {
                 onItemCheck -= value;
             }
@@ -414,9 +408,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
+            add => base.Click += value;
             remove {
                 base.Click -= value;
             }
@@ -426,9 +418,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
+            add => base.MouseClick += value;
             remove {
                 base.MouseClick -= value;
             }
@@ -438,9 +428,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DrawItemEventHandler DrawItem {
-            add {
-                base.DrawItem += value;
-            }
+            add => base.DrawItem += value;
             remove {
                 base.DrawItem -= value;
             }
@@ -450,9 +438,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MeasureItemEventHandler MeasureItem {
-            add {
-                base.MeasureItem += value;
-            }
+            add => base.MeasureItem += value;
             remove {
                 base.MeasureItem -= value;
             }
@@ -473,9 +459,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ValueMemberChanged {
-            add {
-                base.ValueMemberChanged += value;
-            }
+            add => base.ValueMemberChanged += value;
             remove {
                 base.ValueMemberChanged -= value;
             }

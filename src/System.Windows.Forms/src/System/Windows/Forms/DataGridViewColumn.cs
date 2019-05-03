@@ -442,10 +442,7 @@ namespace System.Windows.Forms
         ]
         public event EventHandler Disposed
         {
-            add
-            {
-                this.disposed += value;
-            }
+            add => this.disposed += value;
             remove
             {
                 this.disposed -= value;

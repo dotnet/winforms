@@ -219,10 +219,7 @@ namespace System.Windows.Forms
 
         public event EventHandler PositionChanged
         {
-            add
-            {
-                onPositionChangedHandler += value;
-            }
+            add => onPositionChangedHandler += value;
             remove
             {
                 onPositionChangedHandler -= value;

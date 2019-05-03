@@ -137,10 +137,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove
             {
                 base.AutoSizeChanged -= value;
@@ -520,9 +517,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
+            add => base.ImeModeChanged += value;
             remove {
                 base.ImeModeChanged -= value;
             }

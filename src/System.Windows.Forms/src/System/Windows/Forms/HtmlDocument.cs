@@ -529,10 +529,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Click"]/*' />
         public event HtmlElementEventHandler Click
         {
-            add
-            {
-                DocumentShim.AddHandler(EventClick, value);
-            }
+            add => DocumentShim.AddHandler(EventClick, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventClick, value);
@@ -542,10 +539,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.ContextMenuShowing"]/*' />
         public event HtmlElementEventHandler ContextMenuShowing
         {
-            add
-            {
-                DocumentShim.AddHandler(EventContextMenuShowing, value);
-            }
+            add => DocumentShim.AddHandler(EventContextMenuShowing, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventContextMenuShowing, value);
@@ -555,10 +549,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Focusing"]/*' />
         public event HtmlElementEventHandler Focusing
         {
-            add
-            {
-                DocumentShim.AddHandler(EventFocusing, value);
-            }
+            add => DocumentShim.AddHandler(EventFocusing, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventFocusing, value);
@@ -568,10 +559,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.LosingFocus"]/*' />
         public event HtmlElementEventHandler LosingFocus
         {
-            add
-            {
-                DocumentShim.AddHandler(EventLosingFocus, value);
-            }
+            add => DocumentShim.AddHandler(EventLosingFocus, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventLosingFocus, value);
@@ -581,10 +569,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseDown"]/*' />
         public event HtmlElementEventHandler MouseDown
         {
-            add
-            {
-                DocumentShim.AddHandler(EventMouseDown, value);
-            }
+            add => DocumentShim.AddHandler(EventMouseDown, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventMouseDown, value);
@@ -597,10 +582,7 @@ namespace System.Windows.Forms
         /// </devdoc>
         public event HtmlElementEventHandler MouseLeave
         {
-            add
-            {
-                DocumentShim.AddHandler(EventMouseLeave, value);
-            }
+            add => DocumentShim.AddHandler(EventMouseLeave, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventMouseLeave, value);
@@ -610,10 +592,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseMove"]/*' />
         public event HtmlElementEventHandler MouseMove
         {
-            add
-            {
-                DocumentShim.AddHandler(EventMouseMove, value);
-            }
+            add => DocumentShim.AddHandler(EventMouseMove, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventMouseMove, value);
@@ -623,10 +602,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseOver"]/*' />
         public event HtmlElementEventHandler MouseOver
         {
-            add
-            {
-                DocumentShim.AddHandler(EventMouseOver, value);
-            }
+            add => DocumentShim.AddHandler(EventMouseOver, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventMouseOver, value);
@@ -637,10 +613,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.MouseUp"]/*' />
         public event HtmlElementEventHandler MouseUp
         {
-            add
-            {
-                DocumentShim.AddHandler(EventMouseUp, value);
-            }
+            add => DocumentShim.AddHandler(EventMouseUp, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventMouseUp, value);
@@ -650,10 +623,7 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlDocument.uex' path='docs/doc[@for="HtmlDocument.Stop"]/*' />
         public event HtmlElementEventHandler Stop
         {
-            add
-            {
-                DocumentShim.AddHandler(EventStop, value);
-            }
+            add => DocumentShim.AddHandler(EventStop, value);
             remove
             {
                 DocumentShim.RemoveHandler(EventStop, value);

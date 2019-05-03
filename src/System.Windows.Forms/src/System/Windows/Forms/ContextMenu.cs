@@ -64,9 +64,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
-            add {
-                onPopup += value;
-            }
+            add => onPopup += value;
             remove {
                 onPopup -= value;
             }
@@ -78,9 +76,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse {
-            add {
-                onCollapse += value;
-            }
+            add => onCollapse += value;
             remove {
                 onCollapse -= value;
             }

@@ -451,9 +451,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnAvailableChangedDescr))
         ]
         public event EventHandler AvailableChanged {
-            add {
-                Events.AddHandler(EventAvailableChanged, value);
-            }
+            add => Events.AddHandler(EventAvailableChanged, value);
             remove {
                 Events.RemoveHandler(EventAvailableChanged, value);
             }
@@ -549,9 +547,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
-            add {
-                Events.AddHandler(EventBackColorChanged, value);
-            }
+            add => Events.AddHandler(EventBackColorChanged, value);
             remove {
                 Events.RemoveHandler(EventBackColorChanged, value);
             }
@@ -614,9 +610,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnClickDescr))
         ]
         public event EventHandler Click {
-            add { 
-                Events.AddHandler(EventClick, value); 
-             }
+            add => Events.AddHandler(EventClick, value); 
             remove {
                 Events.RemoveHandler(EventClick, value);                
             }
@@ -765,9 +759,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event EventHandler DisplayStyleChanged {
-            add { 
-                Events.AddHandler(EventDisplayStyleChanged, value); 
-            }
+            add => Events.AddHandler(EventDisplayStyleChanged, value); 
             remove {
                 Events.RemoveHandler(EventDisplayStyleChanged, value);
             }
@@ -784,9 +776,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
-            add {
-                Events.AddHandler(EventDoubleClick, value);
-            }
+            add => Events.AddHandler(EventDoubleClick, value);
             remove {
                 Events.RemoveHandler(EventDoubleClick, value);
             }
@@ -813,9 +803,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event DragEventHandler DragDrop {
-            add {
-                Events.AddHandler(EventDragDrop, value);
-            }
+            add => Events.AddHandler(EventDragDrop, value);
             remove {
                 Events.RemoveHandler(EventDragDrop, value);
             }
@@ -829,9 +817,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event DragEventHandler DragEnter {
-            add {
-                Events.AddHandler(EventDragEnter, value);
-            }
+            add => Events.AddHandler(EventDragEnter, value);
             remove {
                 Events.RemoveHandler(EventDragEnter, value);
             }
@@ -845,9 +831,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event DragEventHandler DragOver {
-            add {
-                Events.AddHandler(EventDragOver, value);
-            }
+            add => Events.AddHandler(EventDragOver, value);
             remove {
                 Events.RemoveHandler(EventDragOver, value);
             }
@@ -861,9 +845,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event EventHandler DragLeave {
-            add {
-                Events.AddHandler(EventDragLeave, value);
-            }
+            add => Events.AddHandler(EventDragLeave, value);
             remove {
                 Events.RemoveHandler(EventDragLeave, value);
             }
@@ -937,18 +919,14 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemEnabledChangedDescr))
         ]
         public event EventHandler EnabledChanged {
-            add {
-                Events.AddHandler(EventEnabledChanged, value);
-            }
+            add => Events.AddHandler(EventEnabledChanged, value);
             remove {
                 Events.RemoveHandler(EventEnabledChanged, value);
             }
         }
 
         internal event EventHandler InternalEnabledChanged {
-            add {
-                Events.AddHandler(EventInternalEnabledChanged, value);
-            }
+            add => Events.AddHandler(EventInternalEnabledChanged, value);
             remove {
                 Events.RemoveHandler(EventInternalEnabledChanged, value);
             }
@@ -997,9 +975,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ForeColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
-            add {
-                Events.AddHandler(EventForeColorChanged, value);
-            }
+            add => Events.AddHandler(EventForeColorChanged, value);
             remove {
                 Events.RemoveHandler(EventForeColorChanged, value);
             }
@@ -1046,9 +1022,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                Events.AddHandler(EventGiveFeedback, value);
-            }
+            add => Events.AddHandler(EventGiveFeedback, value);
             remove {
                 Events.RemoveHandler(EventGiveFeedback, value);
             }
@@ -1442,9 +1416,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ToolStripItemOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
-            add {
-                Events.AddHandler(EventLocationChanged, value);
-            }
+            add => Events.AddHandler(EventLocationChanged, value);
             remove {
                 Events.RemoveHandler(EventLocationChanged, value);
             }
@@ -1544,9 +1516,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseDownDescr))
         ]
         public event MouseEventHandler MouseDown {
-            add {
-                Events.AddHandler(EventMouseDown, value);
-            }
+            add => Events.AddHandler(EventMouseDown, value);
             remove {
                 Events.RemoveHandler(EventMouseDown, value);
             }
@@ -1562,9 +1532,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseEnterDescr))
         ]
         public event EventHandler MouseEnter {
-            add {
-                Events.AddHandler(EventMouseEnter, value);
-            }
+            add => Events.AddHandler(EventMouseEnter, value);
             remove {
                 Events.RemoveHandler(EventMouseEnter, value);
             }
@@ -1579,9 +1547,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseLeaveDescr))
         ]
         public event EventHandler MouseLeave {
-            add {
-                Events.AddHandler(EventMouseLeave, value);
-            }
+            add => Events.AddHandler(EventMouseLeave, value);
             remove {
                 Events.RemoveHandler(EventMouseLeave, value);
             }
@@ -1597,9 +1563,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseHoverDescr))
         ]
         public event EventHandler MouseHover {
-            add {
-                Events.AddHandler(EventMouseHover, value);
-            }
+            add => Events.AddHandler(EventMouseHover, value);
             remove {
                 Events.RemoveHandler(EventMouseHover, value);
             }
@@ -1614,9 +1578,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseMoveDescr))
         ]
         public event MouseEventHandler MouseMove {
-            add {
-                Events.AddHandler(EventMouseMove, value);
-            }
+            add => Events.AddHandler(EventMouseMove, value);
             remove {
                 Events.RemoveHandler(EventMouseMove, value);
             }
@@ -1631,9 +1593,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseUpDescr))
         ]
         public event MouseEventHandler MouseUp {
-            add {
-                Events.AddHandler(EventMouseUp, value);
-            }
+            add => Events.AddHandler(EventMouseUp, value);
             remove {
                 Events.RemoveHandler(EventMouseUp, value);
             }
@@ -1720,9 +1680,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOwnerChangedDescr))
         ]
         public event EventHandler OwnerChanged {
-            add {
-                Events.AddHandler(EventOwnerChanged, value);
-            }
+            add => Events.AddHandler(EventOwnerChanged, value);
             remove {
                 Events.RemoveHandler(EventOwnerChanged, value);
             }
@@ -1734,9 +1692,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnPaintDescr))
         ]
         public event PaintEventHandler Paint {
-            add {
-                Events.AddHandler(EventPaint, value);
-            }
+            add => Events.AddHandler(EventPaint, value);
             remove {
                 Events.RemoveHandler(EventPaint, value);
             }
@@ -1906,9 +1862,7 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                Events.AddHandler(EventQueryContinueDrag, value);
-            }
+            add => Events.AddHandler(EventQueryContinueDrag, value);
             remove {
                 Events.RemoveHandler(EventQueryContinueDrag, value);
             }
@@ -1917,9 +1871,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.QueryAccessibilityHelp"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripItemOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                Events.AddHandler(EventQueryAccessibilityHelp, value);
-            }
+            add => Events.AddHandler(EventQueryAccessibilityHelp, value);
             remove {
                 Events.RemoveHandler(EventQueryAccessibilityHelp, value);
             }
@@ -2045,9 +1997,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
-            add {
-                Events.AddHandler(EventRightToLeft, value);
-            }
+            add => Events.AddHandler(EventRightToLeft, value);
             remove {
                 Events.RemoveHandler(EventRightToLeft, value);
             }
@@ -2082,9 +2032,7 @@ namespace System.Windows.Forms {
 
 #if SELECTEDCHANGED
         public event EventHandler SelectedChanged {
-            add { 
-                Events.AddHandler(EventSelectedChanged, value); 
-             }
+            add => Events.AddHandler(EventSelectedChanged, value); 
             remove {
                 Events.RemoveHandler(EventSelectedChanged, value);                
             }
@@ -2236,9 +2184,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnTextChangedDescr))]
         public event EventHandler TextChanged {
-            add {
-                Events.AddHandler(EventText, value);
-            }
+            add => Events.AddHandler(EventText, value);
             remove {
                 Events.RemoveHandler(EventText, value);
             }
@@ -2348,9 +2294,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.VisibleChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
-            add {
-                Events.AddHandler(EventVisibleChanged, value);
-            }
+            add => Events.AddHandler(EventVisibleChanged, value);
             remove {
                 Events.RemoveHandler(EventVisibleChanged, value);
             }

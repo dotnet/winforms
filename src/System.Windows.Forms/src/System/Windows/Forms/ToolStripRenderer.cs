@@ -133,9 +133,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderArrow"]/*' />
         public event ToolStripArrowRenderEventHandler RenderArrow {
-            add { 
-                AddHandler(EventRenderArrow, value); 
-            }
+            add => AddHandler(EventRenderArrow, value); 
             remove {
                 RemoveHandler(EventRenderArrow, value);
             }
@@ -146,9 +144,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripRenderEventHandler RenderToolStripBackground {
-            add { 
-                AddHandler(EventRenderToolStripBackground, value); 
-            }
+            add => AddHandler(EventRenderToolStripBackground, value); 
             remove {
                 RemoveHandler(EventRenderToolStripBackground, value);
             }
@@ -156,18 +152,14 @@ namespace System.Windows.Forms {
 
         
         public event ToolStripPanelRenderEventHandler RenderToolStripPanelBackground {
-            add { 
-                AddHandler(EventRenderToolStripPanelBackground, value); 
-            }
+            add => AddHandler(EventRenderToolStripPanelBackground, value); 
             remove {
                 RemoveHandler(EventRenderToolStripPanelBackground, value);
             }
         }
 
         public event ToolStripContentPanelRenderEventHandler RenderToolStripContentPanelBackground {
-             add { 
-                 AddHandler(EventRenderToolStripContentPanelBackground, value); 
-             }
+             add => AddHandler(EventRenderToolStripContentPanelBackground, value); 
              remove {
                  RemoveHandler(EventRenderToolStripContentPanelBackground, value);
              }
@@ -178,9 +170,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripRenderEventHandler RenderToolStripBorder {
-            add { 
-                AddHandler(EventRenderBorder, value); 
-            }
+            add => AddHandler(EventRenderBorder, value); 
             remove {
                 RemoveHandler(EventRenderBorder, value);
             }
@@ -191,9 +181,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderButtonBackground {
-            add { 
-                AddHandler(EventRenderButtonBackground, value); 
-            }
+            add => AddHandler(EventRenderButtonBackground, value); 
             remove {
                 RemoveHandler(EventRenderButtonBackground, value);
             }
@@ -203,9 +191,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderDropDownButtonBackground {
-            add { 
-                AddHandler(EventRenderDropDownButtonBackground, value); 
-            }
+            add => AddHandler(EventRenderDropDownButtonBackground, value); 
             remove {
                 RemoveHandler(EventRenderDropDownButtonBackground, value);
             }
@@ -216,9 +202,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderOverflowButtonBackground {
-            add { 
-                AddHandler(EventRenderOverflowButtonBackground, value); 
-            }
+            add => AddHandler(EventRenderOverflowButtonBackground, value); 
             remove {
                 RemoveHandler(EventRenderOverflowButtonBackground, value);
             }
@@ -228,9 +212,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripGripRenderEventHandler RenderGrip {
-            add { 
-                AddHandler(EventRenderGrip, value); 
-            }
+            add => AddHandler(EventRenderGrip, value); 
             remove {
                 RemoveHandler(EventRenderGrip, value);
             }
@@ -240,9 +222,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderItemBackground {
-            add { 
-                AddHandler(EventRenderItemBackground, value); 
-            }
+            add => AddHandler(EventRenderItemBackground, value); 
             remove {
                 RemoveHandler(EventRenderItemBackground, value);
             }
@@ -252,9 +232,7 @@ namespace System.Windows.Forms {
         /// Draws the split button
         /// </devdoc>
         public event ToolStripItemImageRenderEventHandler RenderItemImage {
-            add { 
-                AddHandler(EventRenderItemImage, value); 
-            }
+            add => AddHandler(EventRenderItemImage, value); 
             remove {
                 RemoveHandler(EventRenderItemImage, value);
             }
@@ -264,9 +242,7 @@ namespace System.Windows.Forms {
         /// Draws the checkmark
         /// </devdoc>
         public event ToolStripItemImageRenderEventHandler RenderItemCheck {
-            add { 
-                AddHandler(EventRenderItemCheck, value); 
-            }
+            add => AddHandler(EventRenderItemCheck, value); 
             remove {
                 RemoveHandler(EventRenderItemCheck, value);
             }
@@ -276,18 +252,14 @@ namespace System.Windows.Forms {
         /// Draws the split button
         /// </devdoc>
         public event ToolStripItemTextRenderEventHandler RenderItemText {
-            add { 
-                AddHandler(EventRenderItemText, value); 
-            }
+            add => AddHandler(EventRenderItemText, value); 
             remove {
                 RemoveHandler(EventRenderItemText, value);
             }
         }    
 
         public event ToolStripRenderEventHandler RenderImageMargin {
-            add { 
-                AddHandler(EventRenderImageMargin, value); 
-            }
+            add => AddHandler(EventRenderImageMargin, value); 
             remove {
                 RemoveHandler(EventRenderImageMargin, value);
             }
@@ -297,9 +269,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderLabelBackground {
-            add { 
-                AddHandler(EventRenderLabelBackground, value); 
-            }
+            add => AddHandler(EventRenderLabelBackground, value); 
             remove {
                 RemoveHandler(EventRenderLabelBackground, value);
             }
@@ -309,9 +279,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderMenuItemBackground {
-            add { 
-                AddHandler(EventRenderMenuItemBackground, value); 
-            }
+            add => AddHandler(EventRenderMenuItemBackground, value); 
             remove {
                 RemoveHandler(EventRenderMenuItemBackground, value);
             }
@@ -322,9 +290,7 @@ namespace System.Windows.Forms {
         /// Draws the split button
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderToolStripStatusLabelBackground {
-            add { 
-                AddHandler(EventRenderToolStripStatusLabelBackground, value); 
-            }
+            add => AddHandler(EventRenderToolStripStatusLabelBackground, value); 
             remove {
                 RemoveHandler(EventRenderToolStripStatusLabelBackground, value);
             }
@@ -335,9 +301,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event ToolStripRenderEventHandler RenderStatusStripSizingGrip {
-            add { 
-                AddHandler(EventRenderStatusStripSizingGrip, value); 
-            }
+            add => AddHandler(EventRenderStatusStripSizingGrip, value); 
             remove {
                 RemoveHandler(EventRenderStatusStripSizingGrip, value);
             }
@@ -348,9 +312,7 @@ namespace System.Windows.Forms {
         /// Draws the split button
         /// </devdoc>
         public event ToolStripItemRenderEventHandler RenderSplitButtonBackground {
-            add { 
-                AddHandler(EventRenderSplitButtonBackground, value); 
-            }
+            add => AddHandler(EventRenderSplitButtonBackground, value); 
             remove {
                 RemoveHandler(EventRenderSplitButtonBackground, value);
             }
@@ -359,9 +321,7 @@ namespace System.Windows.Forms {
     
        /// <include file='doc\ToolStripRenderer.uex' path='docs/doc[@for="ToolStripRenderer.RenderSeparator"]/*' />
        public event ToolStripSeparatorRenderEventHandler RenderSeparator {
-           add { 
-               AddHandler(EventRenderSeparator, value); 
-           }
+           add => AddHandler(EventRenderSeparator, value); 
            remove {
                RemoveHandler(EventRenderSeparator, value);
            }

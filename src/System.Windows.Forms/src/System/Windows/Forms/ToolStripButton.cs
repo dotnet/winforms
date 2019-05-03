@@ -147,9 +147,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
-            add {
-                Events.AddHandler(EventCheckedChanged, value);
-            }
+            add => Events.AddHandler(EventCheckedChanged, value);
             remove {
                 Events.RemoveHandler(EventCheckedChanged, value);
             }
@@ -162,9 +160,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
-            add {
-                Events.AddHandler(EventCheckStateChanged, value);
-            }
+            add => Events.AddHandler(EventCheckStateChanged, value);
             remove {
                 Events.RemoveHandler(EventCheckStateChanged, value);
             }

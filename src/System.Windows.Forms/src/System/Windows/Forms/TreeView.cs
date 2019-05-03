@@ -230,9 +230,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -255,9 +253,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -958,7 +954,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -1287,9 +1283,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -1359,9 +1353,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeLabelEdit"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
         public event NodeLabelEditEventHandler BeforeLabelEdit {
-            add {
-                onBeforeLabelEdit += value;
-            }
+            add => onBeforeLabelEdit += value;
             remove {
                 onBeforeLabelEdit -= value;
             }
@@ -1371,9 +1363,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterLabelEdit"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterEditDescr))]
         public event NodeLabelEditEventHandler AfterLabelEdit {
-            add {
-                onAfterLabelEdit += value;
-            }
+            add => onAfterLabelEdit += value;
             remove {
                 onAfterLabelEdit -= value;
             }
@@ -1383,9 +1373,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCheckDescr))]
         public event TreeViewCancelEventHandler BeforeCheck {
-            add {
-                onBeforeCheck += value;
-            }
+            add => onBeforeCheck += value;
             remove {
                 onBeforeCheck -= value;
             }
@@ -1395,9 +1383,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCheckDescr))]
         public event TreeViewEventHandler AfterCheck {
-            add {
-                onAfterCheck += value;
-            }
+            add => onAfterCheck += value;
             remove {
                 onAfterCheck -= value;
             }
@@ -1407,9 +1393,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeCollapse"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeCollapseDescr))]
         public event TreeViewCancelEventHandler BeforeCollapse {
-            add {
-                onBeforeCollapse += value;
-            }
+            add => onBeforeCollapse += value;
             remove {
                 onBeforeCollapse -= value;
             }
@@ -1419,9 +1403,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterCollapse"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterCollapseDescr))]
         public event TreeViewEventHandler AfterCollapse {
-            add {
-                onAfterCollapse += value;
-            }
+            add => onAfterCollapse += value;
             remove {
                 onAfterCollapse -= value;
             }
@@ -1431,9 +1413,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeExpand"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeExpandDescr))]
         public event TreeViewCancelEventHandler BeforeExpand {
-            add {
-                onBeforeExpand += value;
-            }
+            add => onBeforeExpand += value;
             remove {
                 onBeforeExpand -= value;
             }
@@ -1443,9 +1423,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterExpand"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterExpandDescr))]
         public event TreeViewEventHandler AfterExpand {
-            add {
-                onAfterExpand += value;
-            }
+            add => onAfterExpand += value;
             remove {
                 onAfterExpand -= value;
             }
@@ -1457,9 +1435,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewDrawNodeEventDescr))]
         public event DrawTreeNodeEventHandler DrawNode {
-            add {
-                onDrawNode += value;
-            }
+            add => onDrawNode += value;
             remove {
                 onDrawNode -= value;
             }
@@ -1468,9 +1444,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ItemDrag"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
-            add {
-                onItemDrag += value;
-            }
+            add => onItemDrag += value;
             remove {
                 onItemDrag -= value;
             }
@@ -1479,9 +1453,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseHover"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TreeViewNodeMouseHoverDescr))]
         public event TreeNodeMouseHoverEventHandler NodeMouseHover  {
-            add {
-                onNodeMouseHover += value;
-            }
+            add => onNodeMouseHover += value;
             remove {
                 onNodeMouseHover -= value;
             }
@@ -1492,9 +1464,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BeforeSelect"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewBeforeSelectDescr))]
         public event TreeViewCancelEventHandler BeforeSelect {
-            add {
-                onBeforeSelect += value;
-            }
+            add => onBeforeSelect += value;
             remove {
                 onBeforeSelect -= value;
             }
@@ -1504,9 +1474,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.AfterSelect"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewAfterSelectDescr))]
         public event TreeViewEventHandler AfterSelect {
-            add {
-                onAfterSelect += value;
-            }
+            add => onAfterSelect += value;
             remove {
                 onAfterSelect -= value;
             }
@@ -1519,9 +1487,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
+            add => base.Paint += value;
             remove {
                 base.Paint -= value;
             }
@@ -1530,9 +1496,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseClick"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseClick {
-            add {
-                onNodeMouseClick += value;
-            }
+            add => onNodeMouseClick += value;
             remove {
                 onNodeMouseClick -= value;
             }
@@ -1541,9 +1505,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.NodeMouseDoubleClick"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TreeViewNodeMouseDoubleClickDescr))]
         public event TreeNodeMouseClickEventHandler NodeMouseDoubleClick {
-            add {
-                onNodeMouseDoubleClick += value;
-            }
+            add => onNodeMouseDoubleClick += value;
             remove {
                 onNodeMouseDoubleClick -= value;
             }
@@ -1552,9 +1514,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
+            add => onRightToLeftLayoutChanged += value;
             remove {
                 onRightToLeftLayoutChanged -= value;
             }

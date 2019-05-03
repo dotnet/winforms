@@ -149,10 +149,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove
             {
                 base.AutoSizeChanged -= value;
@@ -224,9 +221,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -255,9 +250,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -710,9 +703,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
+            add => base.ImeModeChanged += value;
             remove {
                 base.ImeModeChanged -= value;
             }
@@ -722,9 +713,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-             base.KeyUp += value;
-            }
+            add => base.KeyUp += value;
             remove {
              base.KeyUp -= value;
             }
@@ -734,9 +723,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                 base.KeyDown += value;
-            }
+            add => base.KeyDown += value;
             remove {
                 base.KeyDown -= value;
             }
@@ -746,9 +733,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-             base.KeyPress += value;
-            }
+            add => base.KeyPress += value;
             remove {
              base.KeyPress -= value;
             }
@@ -846,9 +831,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
+            add => base.TabStopChanged += value;
             remove {
                 base.TabStopChanged -= value;
             }
@@ -920,9 +903,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TextAlignChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.LabelOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
-            add {
-                Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
             remove {
                 Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);

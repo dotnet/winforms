@@ -189,9 +189,7 @@ namespace System.Windows.Forms
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DisplayStyleChanged {
-            add { 
-                Events.AddHandler(EventDisplayStyleChanged, value); 
-            }
+            add => Events.AddHandler(EventDisplayStyleChanged, value); 
             remove {
                 Events.RemoveHandler(EventDisplayStyleChanged, value);
             }
@@ -235,9 +233,7 @@ namespace System.Windows.Forms
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GotFocus"]/*' />
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
-            add {
-                Events.AddHandler(EventEnter, value);
-            }
+            add => Events.AddHandler(EventEnter, value);
             remove {
                 Events.RemoveHandler(EventEnter, value);
             }
@@ -271,9 +267,7 @@ namespace System.Windows.Forms
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public event EventHandler GotFocus {
-            add {
-                Events.AddHandler(EventGotFocus, value);
-            }
+            add => Events.AddHandler(EventGotFocus, value);
             remove {
                 Events.RemoveHandler(EventGotFocus, value);
             }
@@ -338,9 +332,7 @@ namespace System.Windows.Forms
 
          [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
          public event EventHandler Leave {
-             add {
-                 Events.AddHandler(EventLeave, value);
-             }
+             add => Events.AddHandler(EventLeave, value);
              remove {
                  Events.RemoveHandler(EventLeave, value);
              }
@@ -357,9 +349,7 @@ namespace System.Windows.Forms
          EditorBrowsable(EditorBrowsableState.Advanced)
          ]
          public event EventHandler LostFocus {
-             add {
-                 Events.AddHandler(EventLostFocus, value);
-             }
+             add => Events.AddHandler(EventLostFocus, value);
              remove {
                  Events.RemoveHandler(EventLostFocus, value);
              }
@@ -372,9 +362,7 @@ namespace System.Windows.Forms
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
          public event KeyEventHandler KeyDown {
-             add {
-                 Events.AddHandler(EventKeyDown, value);
-             }
+             add => Events.AddHandler(EventKeyDown, value);
              remove {
                  Events.RemoveHandler(EventKeyDown, value);
              }
@@ -386,9 +374,7 @@ namespace System.Windows.Forms
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
          public event KeyPressEventHandler KeyPress {
-             add {
-                 Events.AddHandler(EventKeyPress, value);
-             }
+             add => Events.AddHandler(EventKeyPress, value);
              remove {
                  Events.RemoveHandler(EventKeyPress, value);
              }
@@ -400,9 +386,7 @@ namespace System.Windows.Forms
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
          public event KeyEventHandler KeyUp {
-             add {
-                 Events.AddHandler(EventKeyUp, value);
-             }
+             add => Events.AddHandler(EventKeyUp, value);
              remove {
                  Events.RemoveHandler(EventKeyUp, value);
              }
@@ -549,9 +533,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
-            add {
-                Events.AddHandler(EventValidating, value);
-            }
+            add => Events.AddHandler(EventValidating, value);
             remove {
                 Events.RemoveHandler(EventValidating, value);
             }
@@ -560,9 +542,7 @@ namespace System.Windows.Forms
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
-            add {
-                Events.AddHandler(EventValidated, value);
-            }
+            add => Events.AddHandler(EventValidated, value);
             remove {
                 Events.RemoveHandler(EventValidated, value);
             }

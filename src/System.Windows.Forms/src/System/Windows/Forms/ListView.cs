@@ -391,9 +391,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -1288,9 +1286,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
             }
@@ -1571,9 +1567,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -1831,9 +1825,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.AfterLabelEdit"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewAfterLabelEditDescr))]
         public event LabelEditEventHandler AfterLabelEdit {
-            add {
-                onAfterLabelEdit += value;
-            }
+            add => onAfterLabelEdit += value;
             remove {
                 onAfterLabelEdit -= value;
             }
@@ -1842,9 +1834,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.BeforeLabelEdit"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewBeforeLabelEditDescr))]
         public event LabelEditEventHandler BeforeLabelEdit {
-            add {
-                onBeforeLabelEdit += value;
-            }
+            add => onBeforeLabelEdit += value;
             remove {
                 onBeforeLabelEdit -= value;
             }
@@ -1853,9 +1843,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.CacheVirtualItems"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewCacheVirtualItemsEventDescr))]
         public event CacheVirtualItemsEventHandler CacheVirtualItems {
-            add {
-                Events.AddHandler(EVENT_CACHEVIRTUALITEMS, value);
-            }
+            add => Events.AddHandler(EVENT_CACHEVIRTUALITEMS, value);
             remove {
                 Events.RemoveHandler(EVENT_CACHEVIRTUALITEMS, value);
             }
@@ -1864,9 +1852,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ColumnClick"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewColumnClickDescr))]
         public event ColumnClickEventHandler ColumnClick {
-            add {
-                onColumnClick += value;
-            }
+            add => onColumnClick += value;
             remove {
                 onColumnClick -= value;
             }
@@ -1878,9 +1864,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnReorderedDscr))]
         public event ColumnReorderedEventHandler ColumnReordered {
-            add {
-                Events.AddHandler(EVENT_COLUMNREORDERED, value);
-            }
+            add => Events.AddHandler(EVENT_COLUMNREORDERED, value);
             remove {
                 Events.RemoveHandler(EVENT_COLUMNREORDERED, value);
             }
@@ -1892,9 +1876,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangedDscr))]
         public event ColumnWidthChangedEventHandler ColumnWidthChanged {
-            add {
-                Events.AddHandler(EVENT_COLUMNWIDTHCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_COLUMNWIDTHCHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_COLUMNWIDTHCHANGED, value);
             }
@@ -1906,9 +1888,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ListViewColumnWidthChangingDscr))]
         public event ColumnWidthChangingEventHandler ColumnWidthChanging {
-            add {
-                Events.AddHandler(EVENT_COLUMNWIDTHCHANGING, value);
-            }
+            add => Events.AddHandler(EVENT_COLUMNWIDTHCHANGING, value);
             remove {
                 Events.RemoveHandler(EVENT_COLUMNWIDTHCHANGING, value);
             }
@@ -1920,9 +1900,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawColumnHeaderEventDescr))]
         public event DrawListViewColumnHeaderEventHandler DrawColumnHeader {
-            add {
-                Events.AddHandler(EVENT_DRAWCOLUMNHEADER, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWCOLUMNHEADER, value);
             remove {
                 Events.RemoveHandler(EVENT_DRAWCOLUMNHEADER, value);
             }
@@ -1934,9 +1912,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawItemEventDescr))]
         public event DrawListViewItemEventHandler DrawItem {
-            add {
-                Events.AddHandler(EVENT_DRAWITEM, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWITEM, value);
             remove {
                 Events.RemoveHandler(EVENT_DRAWITEM, value);
             }
@@ -1948,9 +1924,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewDrawSubItemEventDescr))]
         public event DrawListViewSubItemEventHandler DrawSubItem {
-            add {
-                Events.AddHandler(EVENT_DRAWSUBITEM, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWSUBITEM, value);
             remove {
                 Events.RemoveHandler(EVENT_DRAWSUBITEM, value);
             }
@@ -1959,9 +1933,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemActivate"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemClickDescr))]
         public event EventHandler ItemActivate {
-            add {
-                onItemActivate += value;
-            }
+            add => onItemActivate += value;
             remove {
                 onItemActivate -= value;
             }
@@ -1970,9 +1942,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
-            add {
-                onItemCheck += value;
-            }
+            add => onItemCheck += value;
             remove {
                 onItemCheck -= value;
             }
@@ -1981,9 +1951,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemChecked"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemCheckedDescr))]
         public event ItemCheckedEventHandler ItemChecked {
-            add {
-                onItemChecked += value;
-            }
+            add => onItemChecked += value;
             remove {
                 onItemChecked -= value;
             }
@@ -1992,9 +1960,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.ItemDrag"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemDragDescr))]
         public event ItemDragEventHandler ItemDrag {
-            add {
-                onItemDrag += value;
-            }
+            add => onItemDrag += value;
             remove {
                 onItemDrag -= value;
             }
@@ -2003,9 +1969,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.NodeMouseHover"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewItemMouseHoverDescr))]
         public event ListViewItemMouseHoverEventHandler ItemMouseHover {
-            add {
-                onItemMouseHover += value;
-            }
+            add => onItemMouseHover += value;
             remove {
                 onItemMouseHover -= value;
             }
@@ -2014,9 +1978,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewItemSelectionChangedDescr))]
         public event ListViewItemSelectionChangedEventHandler ItemSelectionChanged {
-            add {
-                Events.AddHandler(EVENT_ITEMSELECTIONCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_ITEMSELECTIONCHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_ITEMSELECTIONCHANGED, value);
             }
@@ -2038,7 +2000,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -2048,9 +2010,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
+            add => base.Paint += value;
             remove {
                 base.Paint -= value;
             }
@@ -2059,9 +2019,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.RetrieveVirtualItem"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewRetrieveVirtualItemEventDescr))]
         public event RetrieveVirtualItemEventHandler RetrieveVirtualItem {
-            add {
-                Events.AddHandler(EVENT_RETRIEVEVIRTUALITEM, value);
-            }
+            add => Events.AddHandler(EVENT_RETRIEVEVIRTUALITEM, value);
             remove {
                 Events.RemoveHandler(EVENT_RETRIEVEVIRTUALITEM, value);
             }
@@ -2072,9 +2030,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ListViewSearchForVirtualItemDescr))]
         public event SearchForVirtualItemEventHandler SearchForVirtualItem {
-            add {
-                Events.AddHandler(EVENT_SEARCHFORVIRTUALITEM, value);
-            }
+            add => Events.AddHandler(EVENT_SEARCHFORVIRTUALITEM, value);
             remove {
                 Events.RemoveHandler(EVENT_SEARCHFORVIRTUALITEM, value);
             }
@@ -2083,9 +2039,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewSelectedIndexChangedDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
             }
@@ -2094,9 +2048,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListView.uex' path='docs/doc[@for="ListView.VirtualItemsSelectionRangeChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ListViewVirtualItemsSelectionRangeChangedDescr))]
         public event ListViewVirtualItemsSelectionRangeChangedEventHandler VirtualItemsSelectionRangeChanged {
-            add {
-                Events.AddHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_VIRTUALITEMSSELECTIONRANGECHANGED, value);
             }

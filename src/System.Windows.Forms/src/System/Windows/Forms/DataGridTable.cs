@@ -136,9 +136,7 @@ namespace System.Windows.Forms {
         /// <para>[To be  supplied]</para>
         /// </devdoc>
         public event EventHandler AllowSortingChanged {
-            add {
-                Events.AddHandler(EventAllowSorting, value);
-            }
+            add => Events.AddHandler(EventAllowSorting, value);
             remove {
                 Events.RemoveHandler(EventAllowSorting, value);
             }
@@ -174,9 +172,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.AlternatingBackColorChanged"]/*' />
         public event EventHandler AlternatingBackColorChanged {
-            add {
-                Events.AddHandler(EventAlternatingBackColor, value);
-            }
+            add => Events.AddHandler(EventAlternatingBackColor, value);
             remove {
                 Events.RemoveHandler(EventAlternatingBackColor, value);
             }
@@ -247,9 +243,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.BackColorChanged"]/*' />
         public event EventHandler BackColorChanged {
-            add {
-                Events.AddHandler(EventBackColor, value);
-            }
+            add => Events.AddHandler(EventBackColor, value);
             remove {
                 Events.RemoveHandler(EventBackColor, value);
             }
@@ -389,9 +383,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ForeColorChanged"]/*' />
         public event EventHandler ForeColorChanged {
-            add {
-                Events.AddHandler(EventForeColor, value);
-            }
+            add => Events.AddHandler(EventForeColor, value);
             remove {
                 Events.RemoveHandler(EventForeColor, value);
             }
@@ -437,9 +429,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridLineColorChanged"]/*' />
         public event EventHandler GridLineColorChanged {
-            add {
-                Events.AddHandler(EventGridLineColor, value);
-            }
+            add => Events.AddHandler(EventGridLineColor, value);
             remove {
                 Events.RemoveHandler(EventGridLineColor, value);
             }
@@ -500,9 +490,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.GridLineStyleChanged"]/*' />
         public event EventHandler GridLineStyleChanged {
-            add {
-                Events.AddHandler(EventGridLineStyle, value);
-            }
+            add => Events.AddHandler(EventGridLineStyle, value);
             remove {
                 Events.RemoveHandler(EventGridLineStyle, value);
             }
@@ -543,9 +531,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderBackColorChanged"]/*' />
         public event EventHandler HeaderBackColorChanged {
-            add {
-                Events.AddHandler(EventHeaderBackColor, value);
-            }
+            add => Events.AddHandler(EventHeaderBackColor, value);
             remove {
                 Events.RemoveHandler(EventHeaderBackColor, value);
             }
@@ -600,9 +586,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderFontChanged"]/*' />
         public event EventHandler HeaderFontChanged {
-            add {
-                Events.AddHandler(EventHeaderFont, value);
-            }
+            add => Events.AddHandler(EventHeaderFont, value);
             remove {
                 Events.RemoveHandler(EventHeaderFont, value);
             }
@@ -660,9 +644,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.HeaderForeColorChanged"]/*' />
         public event EventHandler HeaderForeColorChanged {
-            add {
-                Events.AddHandler(EventHeaderForeColor, value);
-            }
+            add => Events.AddHandler(EventHeaderForeColor, value);
             remove {
                 Events.RemoveHandler(EventHeaderForeColor, value);
             }
@@ -719,9 +701,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkColorChanged"]/*' />
         public event EventHandler LinkColorChanged {
-            add {
-                Events.AddHandler(EventLinkColor, value);
-            }
+            add => Events.AddHandler(EventLinkColor, value);
             remove {
                 Events.RemoveHandler(EventLinkColor, value);
             }
@@ -765,9 +745,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkHoverColorChanged"]/*' />
         /// <internalonly/>
         public event EventHandler LinkHoverColorChanged {
-            add {
-                Events.AddHandler(EventLinkHoverColor, value);
-            }
+            add => Events.AddHandler(EventLinkHoverColor, value);
             remove {
                 Events.RemoveHandler(EventLinkHoverColor, value);
             }
@@ -876,9 +854,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.PreferredColumnWidthChanged"]/*' />
         public event EventHandler PreferredColumnWidthChanged {
-            add {
-                Events.AddHandler(EventPreferredColumnWidth, value);
-            }
+            add => Events.AddHandler(EventPreferredColumnWidth, value);
             remove {
                 Events.RemoveHandler(EventPreferredColumnWidth, value);
             }
@@ -931,9 +907,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.PreferredRowHeightChanged"]/*' />
         public event EventHandler PreferredRowHeightChanged {
-            add {
-                Events.AddHandler(EventPreferredRowHeight, value);
-            }
+            add => Events.AddHandler(EventPreferredRowHeight, value);
             remove {
                 Events.RemoveHandler(EventPreferredRowHeight, value);
             }
@@ -973,9 +947,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ColumnHeadersVisibleChanged"]/*' />
         public event EventHandler ColumnHeadersVisibleChanged {
-            add {
-                Events.AddHandler(EventColumnHeadersVisible, value);
-            }
+            add => Events.AddHandler(EventColumnHeadersVisible, value);
             remove {
                 Events.RemoveHandler(EventColumnHeadersVisible, value);
             }
@@ -1005,9 +977,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RowHeadersVisibleChanged"]/*' />
         public event EventHandler RowHeadersVisibleChanged {
-            add {
-                Events.AddHandler(EventRowHeadersVisible, value);
-            }
+            add => Events.AddHandler(EventRowHeadersVisible, value);
             remove {
                 Events.RemoveHandler(EventRowHeadersVisible, value);
             }
@@ -1044,9 +1014,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.RowHeaderWidthChanged"]/*' />
         public event EventHandler RowHeaderWidthChanged {
-            add {
-                Events.AddHandler(EventRowHeaderWidth, value);
-            }
+            add => Events.AddHandler(EventRowHeaderWidth, value);
             remove {
                 Events.RemoveHandler(EventRowHeaderWidth, value);
             }
@@ -1082,9 +1050,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SelectionBackColorChanged"]/*' />
         public event EventHandler SelectionBackColorChanged {
-            add {
-                Events.AddHandler(EventSelectionBackColor, value);
-            }
+            add => Events.AddHandler(EventSelectionBackColor, value);
             remove {
                 Events.RemoveHandler(EventSelectionBackColor, value);
             }
@@ -1143,9 +1109,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.SelectionForeColorChanged"]/*' />
         public event EventHandler SelectionForeColorChanged {
-            add {
-                Events.AddHandler(EventSelectionForeColor, value);
-            }
+            add => Events.AddHandler(EventSelectionForeColor, value);
             remove {
                 Events.RemoveHandler(EventSelectionForeColor, value);
             }
@@ -1347,9 +1311,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.MappingNameChanged"]/*' />
         public event EventHandler MappingNameChanged {
-            add {
-                Events.AddHandler(EventMappingName, value);
-            }
+            add => Events.AddHandler(EventMappingName, value);
             remove {
                 Events.RemoveHandler(EventMappingName, value);
             }
@@ -1436,9 +1398,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ReadOnlyChanged"]/*' />
         public event EventHandler ReadOnlyChanged {
-            add {
-                Events.AddHandler(EventReadOnly, value);
-            }
+            add => Events.AddHandler(EventReadOnly, value);
             remove {
                 Events.RemoveHandler(EventReadOnly, value);
             }

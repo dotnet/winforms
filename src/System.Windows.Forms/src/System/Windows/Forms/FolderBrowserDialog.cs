@@ -70,10 +70,7 @@ namespace System.Windows.Forms
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler HelpRequest 
         {
-            add 
-            {
-                base.HelpRequest += value;
-            }
+            add => base.HelpRequest += value;
             remove 
             {
                 base.HelpRequest -= value;

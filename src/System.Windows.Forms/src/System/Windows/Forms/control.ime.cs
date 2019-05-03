@@ -299,9 +299,7 @@ namespace System.Windows.Forms
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ImeModeChanged"]/*' />
         [WinCategory( "Behavior" ), SRDescription( nameof(SR.ControlOnImeModeChangedDescr) )]
         public event EventHandler ImeModeChanged {
-            add {
-                Events.AddHandler( EventImeModeChanged, value );
-            }
+            add => Events.AddHandler( EventImeModeChanged, value );
             remove {
                 Events.RemoveHandler( EventImeModeChanged, value );
             }

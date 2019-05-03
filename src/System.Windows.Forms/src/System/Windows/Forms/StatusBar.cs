@@ -140,9 +140,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
+            add => base.BackColorChanged += value;
             remove {
                 base.BackColorChanged -= value;
             }
@@ -170,9 +168,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -193,9 +189,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -317,9 +311,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
+            add => base.ForeColorChanged += value;
             remove {
                 base.ForeColorChanged -= value;
             }
@@ -340,9 +332,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
+            add => base.ImeModeChanged += value;
             remove {
                 base.ImeModeChanged -= value;
             }
@@ -513,9 +503,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.StatusBarDrawItem))]
         public event StatusBarDrawItemEventHandler DrawItem {
-            add {
-                Events.AddHandler(EVENT_SBDRAWITEM, value);
-            }
+            add => Events.AddHandler(EVENT_SBDRAWITEM, value);
             remove {
                 Events.RemoveHandler(EVENT_SBDRAWITEM, value);
             }
@@ -529,9 +517,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.StatusBarOnPanelClickDescr))]
         public event StatusBarPanelClickEventHandler PanelClick {
-            add {
-                Events.AddHandler(EVENT_PANELCLICK, value);
-            }
+            add => Events.AddHandler(EVENT_PANELCLICK, value);
             remove {
                 Events.RemoveHandler(EVENT_PANELCLICK, value);
             }
@@ -544,9 +530,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
+            add => base.Paint += value;
             remove {
                 base.Paint -= value;
             }

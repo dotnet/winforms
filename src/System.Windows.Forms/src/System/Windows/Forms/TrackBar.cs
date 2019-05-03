@@ -120,10 +120,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove
             {
                 base.AutoSizeChanged -= value;
@@ -146,9 +143,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -169,9 +164,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -268,9 +261,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
+            add => base.FontChanged += value;
             remove {
                 base.FontChanged -= value;
             }
@@ -294,9 +285,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
+            add => base.ForeColorChanged += value;
             remove {
                 base.ForeColorChanged -= value;
             }
@@ -318,9 +307,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
+            add => base.ImeModeChanged += value;
             remove {
                 base.ImeModeChanged -= value;
             }
@@ -468,7 +455,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -575,9 +562,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -676,9 +661,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
+            add => base.Click += value;
             remove {
                 base.Click -= value;
             }
@@ -688,9 +671,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
+            add => base.DoubleClick += value;
             remove {
                 base.DoubleClick -= value;
             }
@@ -700,9 +681,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
+            add => base.MouseClick += value;
             remove {
                 base.MouseClick -= value;
             }
@@ -712,9 +691,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
+            add => base.MouseDoubleClick += value;
             remove {
                 base.MouseDoubleClick -= value;
             }
@@ -723,9 +700,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
             }
@@ -734,9 +709,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Scroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TrackBarOnScrollDescr))]
         public event EventHandler Scroll {
-            add {
-                Events.AddHandler(EVENT_SCROLL, value);
-            }
+            add => Events.AddHandler(EVENT_SCROLL, value);
             remove {
                 Events.RemoveHandler(EVENT_SCROLL, value);
             }
@@ -749,9 +722,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
+            add => base.Paint += value;
             remove {
                 base.Paint -= value;
             }
@@ -760,9 +731,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ValueChanged"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
-            add {
-                Events.AddHandler(EVENT_VALUECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_VALUECHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_VALUECHANGED, value);
             }

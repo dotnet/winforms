@@ -376,9 +376,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -399,9 +397,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -718,9 +714,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
+            add => base.ForeColorChanged += value;
             remove {
                 base.ForeColorChanged -= value;
             }
@@ -1017,7 +1011,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -1439,9 +1433,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -1605,9 +1597,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
+            add => base.KeyDown += value;
             remove {
                 base.KeyDown -= value;
             }
@@ -1618,9 +1608,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
+            add => base.KeyPress += value;
             remove {
                 base.KeyPress -= value;
             }
@@ -1631,9 +1619,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
+            add => base.KeyUp += value;
             remove {
                 base.KeyUp -= value;
             }
@@ -1643,9 +1629,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
-            add {
-                base.MouseDown += value;
-            }
+            add => base.MouseDown += value;
             remove {
                 base.MouseDown -= value;
             }
@@ -1655,9 +1639,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
-            add {
-                base.MouseUp += value;
-            }
+            add => base.MouseUp += value;
             remove {
                 base.MouseUp -= value;
             }
@@ -1667,9 +1649,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
-            add {
-                base.MouseMove += value;
-            }
+            add => base.MouseMove += value;
             remove {
                 base.MouseMove -= value;
             }
@@ -1679,9 +1659,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
-            add {
-                base.MouseEnter += value;
-            }
+            add => base.MouseEnter += value;
             remove {
                 base.MouseEnter -= value;
             }
@@ -1691,9 +1669,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
-            add {
-                base.MouseLeave += value;
-            }
+            add => base.MouseLeave += value;
             remove {
                 base.MouseLeave -= value;
             }
@@ -1703,9 +1679,7 @@ namespace System.Windows.Forms {
         /// <devdoc> Event that is fired when a property value is modified.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
-            add {
-                Events.AddHandler(EventPropertyValueChanged, value);
-            }
+            add => Events.AddHandler(EventPropertyValueChanged, value);
             remove {
                 Events.RemoveHandler(EventPropertyValueChanged, value);
             }
@@ -1714,9 +1688,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.ComComponentNameChanged"]/*' />
         ///<internalonly/>        
         event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
-            add {
-                Events.AddHandler(EventComComponentNameChanged, value);
-            }
+            add => Events.AddHandler(EventComComponentNameChanged, value);
             remove {
                 Events.RemoveHandler(EventComComponentNameChanged, value);
             }
@@ -1726,9 +1698,7 @@ namespace System.Windows.Forms {
         /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
-            add {
-                Events.AddHandler(EventPropertyTabChanged, value);
-            }
+            add => Events.AddHandler(EventPropertyTabChanged, value);
             remove {
                 Events.RemoveHandler(EventPropertyTabChanged, value);
             }
@@ -1738,9 +1708,7 @@ namespace System.Windows.Forms {
         /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
-            add {
-                Events.AddHandler(EventPropertySortChanged, value);
-            }
+            add => Events.AddHandler(EventPropertySortChanged, value);
             remove {
                 Events.RemoveHandler(EventPropertySortChanged, value);
             }
@@ -1750,9 +1718,7 @@ namespace System.Windows.Forms {
         /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
-            add {
-                Events.AddHandler(EventSelectedGridItemChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedGridItemChanged, value);
             remove {
                 Events.RemoveHandler(EventSelectedGridItemChanged, value);
             }
@@ -1761,9 +1727,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelecteObjectsChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
-            add {
-                Events.AddHandler(EventSelectedObjectsChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedObjectsChanged, value);
             remove {
                 Events.RemoveHandler(EventSelectedObjectsChanged, value);
             }

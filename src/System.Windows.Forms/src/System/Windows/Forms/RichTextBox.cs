@@ -237,9 +237,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -260,9 +258,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -1540,9 +1536,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ContentsResized"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
-            add {
-                Events.AddHandler(EVENT_REQUESTRESIZE, value);
-            }
+            add => Events.AddHandler(EVENT_REQUESTRESIZE, value);
             remove {
                 Events.RemoveHandler(EVENT_REQUESTRESIZE, value);
             }
@@ -1556,9 +1550,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public new event DragEventHandler DragDrop {
-            add {
-                base.DragDrop += value;
-            }
+            add => base.DragDrop += value;
             remove {
                 base.DragDrop -= value;
             }
@@ -1571,9 +1563,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public new event DragEventHandler DragEnter {
-            add {
-                base.DragEnter += value;
-            }
+            add => base.DragEnter += value;
             remove {
                 base.DragEnter -= value;
             }
@@ -1582,9 +1572,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DragLeave {
-            add {
-                base.DragLeave += value;
-            }
+            add => base.DragLeave += value;
             remove {
                 base.DragLeave -= value;
             }
@@ -1593,9 +1581,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragOver"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DragEventHandler DragOver {
-            add {
-                base.DragOver += value;
-            }
+            add => base.DragOver += value;
             remove {
                 base.DragOver -= value;
             }
@@ -1604,9 +1590,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GiveFeedback"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                base.GiveFeedback += value;
-            }
+            add => base.GiveFeedback += value;
             remove {
                 base.GiveFeedback -= value;
             }
@@ -1615,9 +1599,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.QueryContinueDrag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                base.QueryContinueDrag += value;
-            }
+            add => base.QueryContinueDrag += value;
             remove {
                 base.QueryContinueDrag -= value;
             }
@@ -1626,9 +1608,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.HScroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
-            add {
-                Events.AddHandler(EVENT_HSCROLL, value);
-            }
+            add => Events.AddHandler(EVENT_HSCROLL, value);
             remove {
                 Events.RemoveHandler(EVENT_HSCROLL, value);
             }
@@ -1637,9 +1617,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LinkClicked"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
-            add {
-                Events.AddHandler(EVENT_LINKACTIVATE, value);
-            }
+            add => Events.AddHandler(EVENT_LINKACTIVATE, value);
             remove {
                 Events.RemoveHandler(EVENT_LINKACTIVATE, value);
             }
@@ -1649,9 +1627,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ImeChange"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
-            add {
-                Events.AddHandler(EVENT_IMECHANGE, value);
-            }
+            add => Events.AddHandler(EVENT_IMECHANGE, value);
             remove {
                 Events.RemoveHandler(EVENT_IMECHANGE, value);
             }
@@ -1661,9 +1637,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Protected"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
-            add {
-                Events.AddHandler(EVENT_PROTECTED, value);
-            }
+            add => Events.AddHandler(EVENT_PROTECTED, value);
             remove {
                 Events.RemoveHandler(EVENT_PROTECTED, value);
             }
@@ -1673,9 +1647,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
-            add {
-                Events.AddHandler(EVENT_SELCHANGE, value);
-            }
+            add => Events.AddHandler(EVENT_SELCHANGE, value);
             remove {
                 Events.RemoveHandler(EVENT_SELCHANGE, value);
             }
@@ -1685,9 +1657,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.VScroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
-            add {
-                Events.AddHandler(EVENT_VSCROLL, value);
-            }
+            add => Events.AddHandler(EVENT_VSCROLL, value);
             remove {
                 Events.RemoveHandler(EVENT_VSCROLL, value);
             }

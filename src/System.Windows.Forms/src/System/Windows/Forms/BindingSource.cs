@@ -426,10 +426,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceAddingNewEventHandlerDescr))]
         public event AddingNewEventHandler AddingNew
         {
-            add
-            {
-                Events.AddHandler(s_eventAddingNew, value);
-            }
+            add => Events.AddHandler(s_eventAddingNew, value);
             remove
             {
                 Events.RemoveHandler(s_eventAddingNew, value);
@@ -440,10 +437,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceBindingCompleteEventHandlerDescr))]
         public event BindingCompleteEventHandler BindingComplete
         {
-            add
-            {
-                Events.AddHandler(s_eventBindingComplete, value);
-            }
+            add => Events.AddHandler(s_eventBindingComplete, value);
             remove
             {
                 Events.RemoveHandler(s_eventBindingComplete, value);
@@ -454,10 +448,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))]
         public event BindingManagerDataErrorEventHandler DataError
         {
-            add
-            {
-                Events.AddHandler(s_eventDataErrror, value);
-            }
+            add => Events.AddHandler(s_eventDataErrror, value);
             remove
             {
                 Events.RemoveHandler(s_eventDataErrror, value);
@@ -468,10 +459,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceDataSourceChangedEventHandlerDescr))]
         public event EventHandler DataSourceChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventDataSourceChanged, value);
-            }
+            add => Events.AddHandler(s_eventDataSourceChanged, value);
             remove
             {
                 Events.RemoveHandler(s_eventDataSourceChanged, value);
@@ -482,10 +470,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceDataMemberChangedEventHandlerDescr))]
         public event EventHandler DataMemberChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventDataMemberChanged, value);
-            }
+            add => Events.AddHandler(s_eventDataMemberChanged, value);
             remove
             {
                 Events.RemoveHandler(s_eventDataMemberChanged, value);
@@ -496,10 +481,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceCurrentChangedEventHandlerDescr))]
         public event EventHandler CurrentChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventCurrentChanged, value);
-            }
+            add => Events.AddHandler(s_eventCurrentChanged, value);
             remove
             {
                 Events.RemoveHandler(s_eventCurrentChanged, value);
@@ -510,10 +492,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceCurrentItemChangedEventHandlerDescr))]
         public event EventHandler CurrentItemChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventCurrentItemChanged, value);
-            }
+            add => Events.AddHandler(s_eventCurrentItemChanged, value);
             remove
             {
                 Events.RemoveHandler(s_eventCurrentItemChanged, value);
@@ -524,10 +503,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceListChangedEventHandlerDescr))]
         public event ListChangedEventHandler ListChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventListChanged, value);
-            }
+            add => Events.AddHandler(s_eventListChanged, value);
             remove
             {
                 Events.RemoveHandler(s_eventListChanged, value);
@@ -538,10 +514,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourcePositionChangedEventHandlerDescr))]
         public event EventHandler PositionChanged
         {
-            add
-            {
-                Events.AddHandler(s_eventPositionChanged, value);
-            }
+            add => Events.AddHandler(s_eventPositionChanged, value);
             remove
             {
                 Events.RemoveHandler(s_eventPositionChanged, value);
@@ -1500,10 +1473,7 @@ namespace System.Windows.Forms
         /// </summary>
         event EventHandler ISupportInitializeNotification.Initialized
         {
-            add
-            {
-                Events.AddHandler(s_eventInitialized, value);
-            }
+            add => Events.AddHandler(s_eventInitialized, value);
             remove
             {
                 Events.RemoveHandler(s_eventInitialized, value);

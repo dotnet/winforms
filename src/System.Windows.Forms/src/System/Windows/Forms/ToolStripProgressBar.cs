@@ -308,10 +308,7 @@ namespace System.Windows.Forms
         ]
         new public event KeyEventHandler KeyDown
         {
-            add
-            {
-                base.KeyDown += value;
-            }
+            add => base.KeyDown += value;
             remove
             {
                 base.KeyDown -= value;
@@ -328,10 +325,7 @@ namespace System.Windows.Forms
         ]
         new public event KeyPressEventHandler KeyPress
         {
-            add
-            {
-                base.KeyPress += value;
-            }
+            add => base.KeyPress += value;
             remove
             {
                 base.KeyPress -= value;
@@ -348,10 +342,7 @@ namespace System.Windows.Forms
         ]
         new public event KeyEventHandler KeyUp
         {
-            add
-            {
-                base.KeyUp += value;
-            }
+            add => base.KeyUp += value;
             remove
             {
                 base.KeyUp -= value;
@@ -367,10 +358,7 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler LocationChanged
         {
-            add
-            {
-                base.LocationChanged += value;
-            }
+            add => base.LocationChanged += value;
             remove
             {
                 base.LocationChanged -= value;
@@ -387,10 +375,7 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler OwnerChanged
         {
-            add
-            {
-                base.OwnerChanged += value;
-            }
+            add => base.OwnerChanged += value;
             remove
             {
                 base.OwnerChanged -= value;
@@ -400,9 +385,7 @@ namespace System.Windows.Forms
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EventRightToLeftLayoutChanged, value);
-            }
+            add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
             remove {
                 Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
             }
@@ -418,10 +401,7 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler TextChanged
         {
-            add
-            {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove
             {
                 base.TextChanged -= value;
@@ -439,10 +419,7 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler Validated
         {
-            add
-            {
-                base.Validated += value;
-            }
+            add => base.Validated += value;
             remove
             {
                 base.Validated -= value;
@@ -459,10 +436,7 @@ namespace System.Windows.Forms
         ]
         new public event CancelEventHandler Validating
         {
-            add
-            {
-                base.Validating += value;
-            }
+            add => base.Validating += value;
             remove
             {
                 base.Validating -= value;

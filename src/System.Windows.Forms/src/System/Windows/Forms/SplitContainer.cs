@@ -279,9 +279,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove {
                 base.AutoSizeChanged -= value;
             }
@@ -397,9 +395,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="SplitContainer.ControlAdded"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded {
-            add {
-                base.ControlAdded += value;
-            }
+            add => base.ControlAdded += value;
             remove {
                 base.ControlAdded -= value;
             }
@@ -407,9 +403,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="SplitContainer.ControlRemoved"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved {
-             add {
-                 base.ControlRemoved += value;
-             }
+             add => base.ControlRemoved += value;
              remove {
                  base.ControlRemoved -= value;
              }
@@ -637,7 +631,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -1022,9 +1016,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -1034,9 +1026,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -1045,9 +1035,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoving"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterCancelEventHandler SplitterMoving {
-            add {
-                Events.AddHandler(EVENT_MOVING, value);
-            }
+            add => Events.AddHandler(EVENT_MOVING, value);
             remove {
                 Events.RemoveHandler(EVENT_MOVING, value);
             }
@@ -1056,9 +1044,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoved"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
-            add {
-                Events.AddHandler(EVENT_MOVED, value);
-            }
+            add => Events.AddHandler(EVENT_MOVED, value);
             remove {
                 Events.RemoveHandler(EVENT_MOVED, value);
             }
@@ -1068,9 +1054,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }

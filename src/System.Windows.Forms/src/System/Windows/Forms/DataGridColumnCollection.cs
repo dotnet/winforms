@@ -327,9 +327,7 @@ namespace System.Windows.Forms {
         /// <para>Occurs when a change is made to the System.Windows.Forms.GridColumnStylesCollection.</para>
         /// </devdoc>
         public event CollectionChangeEventHandler CollectionChanged {
-            add {
-                onCollectionChanged += value;
-            }
+            add => onCollectionChanged += value;
             remove {
                 onCollectionChanged -= value;
             }

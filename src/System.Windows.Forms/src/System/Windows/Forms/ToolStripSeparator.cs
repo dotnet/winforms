@@ -135,9 +135,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler EnabledChanged {
-                add {
-                    base.EnabledChanged += value;
-                }
+                add => base.EnabledChanged += value;
                 remove {
                     base.EnabledChanged -= value;
                 }
@@ -162,9 +160,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler DisplayStyleChanged {
-                add {
-                    base.DisplayStyleChanged += value;
-                }
+                add => base.DisplayStyleChanged += value;
                 remove {
                     base.DisplayStyleChanged -= value;
                 }
@@ -319,9 +315,7 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
-                add {
-                    base.TextChanged += value;
-                }
+                add => base.TextChanged += value;
                 remove {
                     base.TextChanged -= value;
                 }

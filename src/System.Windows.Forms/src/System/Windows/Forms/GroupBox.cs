@@ -99,10 +99,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove
             {
                 base.AutoSizeChanged -= value;
@@ -291,9 +288,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
+            add => base.TabStopChanged += value;
             remove {
                 base.TabStopChanged -= value;
             }
@@ -359,9 +354,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
+            add => base.Click += value;
             remove {
                 base.Click -= value;
             }
@@ -371,9 +364,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
+            add => base.MouseClick += value;
             remove {
                 base.MouseClick -= value;
             }
@@ -383,9 +374,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
+            add => base.DoubleClick += value;
             remove {
                 base.DoubleClick -= value;
             }
@@ -396,9 +385,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
+            add => base.MouseDoubleClick += value;
             remove {
                 base.MouseDoubleClick -= value;
             }
@@ -408,9 +395,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
+            add => base.KeyUp += value;
             remove {
                 base.KeyUp -= value;
             }
@@ -420,9 +405,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
+            add => base.KeyDown += value;
             remove {
                 base.KeyDown -= value;
             }
@@ -432,9 +415,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
+            add => base.KeyPress += value;
             remove {
                 base.KeyPress -= value;
             }
@@ -444,9 +425,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
-            add {
-                base.MouseDown += value;
-            }
+            add => base.MouseDown += value;
             remove {
                 base.MouseDown -= value;
             }
@@ -456,9 +435,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
-            add {
-                base.MouseUp += value;
-            }
+            add => base.MouseUp += value;
             remove {
                 base.MouseUp -= value;
             }
@@ -468,9 +445,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
-            add {
-                base.MouseMove += value;
-            }
+            add => base.MouseMove += value;
             remove {
                 base.MouseMove -= value;
             }
@@ -480,9 +455,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
-            add {
-                base.MouseEnter += value;
-            }
+            add => base.MouseEnter += value;
             remove {
                 base.MouseEnter -= value;
             }
@@ -492,9 +465,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
-            add {
-                base.MouseLeave += value;
-            }
+            add => base.MouseLeave += value;
             remove {
                 base.MouseLeave -= value;
             }

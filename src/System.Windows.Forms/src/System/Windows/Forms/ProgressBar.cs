@@ -171,9 +171,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -198,9 +196,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -224,9 +220,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
+            add => base.CausesValidationChanged += value;
             remove {
                 base.CausesValidationChanged -= value;
             }
@@ -285,9 +279,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
+            add => base.FontChanged += value;
             remove {
                 base.FontChanged -= value;
             }
@@ -308,9 +300,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
+            add => base.ImeModeChanged += value;
             remove {
                 base.ImeModeChanged -= value;
             }
@@ -474,7 +464,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -511,9 +501,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
+            add => onRightToLeftLayoutChanged += value;
             remove {
                 onRightToLeftLayoutChanged -= value;
             }
@@ -559,9 +547,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
+            add => base.TabStopChanged += value;
             remove {
                 base.TabStopChanged -= value;
             }
@@ -585,9 +571,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -623,9 +607,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
+            add => base.DoubleClick += value;
             remove {
                 base.DoubleClick -= value;
             }
@@ -635,9 +617,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
+            add => base.MouseDoubleClick += value;
             remove {
                 base.MouseDoubleClick -= value;
             }
@@ -647,9 +627,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
+            add => base.KeyUp += value;
             remove {
                 base.KeyUp -= value;
             }
@@ -659,9 +637,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
+            add => base.KeyDown += value;
             remove {
                 base.KeyDown -= value;
             }
@@ -671,9 +647,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
+            add => base.KeyPress += value;
             remove {
                 base.KeyPress -= value;
             }
@@ -683,9 +657,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
-            add {
-                base.Enter += value;
-            }
+            add => base.Enter += value;
             remove {
                 base.Enter -= value;
             }
@@ -695,9 +667,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
-            add {
-                base.Leave += value;
-            }
+            add => base.Leave += value;
             remove {
                 base.Leave -= value;
             }
@@ -710,9 +680,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
+            add => base.Paint += value;
             remove {
                 base.Paint -= value;
             }

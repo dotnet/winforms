@@ -63,9 +63,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatData))]
         public event ItemChangedEventHandler ItemChanged {
-            add {
-                onItemChanged += value;
-            }
+            add => onItemChanged += value;
             remove {
                 onItemChanged -= value;
             }
@@ -73,9 +71,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ListChanged"]/*' />
         public event ListChangedEventHandler ListChanged {
-            add {
-                onListChanged += value;
-            }
+            add => onListChanged += value;
             remove {
                 onListChanged -= value;
             }
@@ -763,9 +759,7 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")] //Exists in Everett
         [SRCategory(nameof(SR.CatData))]
         public event EventHandler MetaDataChanged {
-            add {
-                onMetaDataChangedHandler += value;
-            }
+            add => onMetaDataChangedHandler += value;
             remove {
                 onMetaDataChangedHandler -= value;
             }

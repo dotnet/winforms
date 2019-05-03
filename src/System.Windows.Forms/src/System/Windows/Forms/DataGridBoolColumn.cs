@@ -75,9 +75,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.TrueValueChanged"]/*' />
         public event EventHandler TrueValueChanged { 
-            add {
-                Events.AddHandler(EventTrueValue, value);
-            }
+            add => Events.AddHandler(EventTrueValue, value);
             remove {
                 Events.RemoveHandler(EventTrueValue, value);
             }
@@ -104,9 +102,7 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.FalseValueChanged"]/*' />
         public event EventHandler FalseValueChanged { 
-            add {
-                Events.AddHandler(EventFalseValue, value);
-            }
+            add => Events.AddHandler(EventFalseValue, value);
             remove {
                 Events.RemoveHandler(EventFalseValue, value);
             }
@@ -443,9 +439,7 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.AllowNullChanged"]/*' />
         public event EventHandler AllowNullChanged { 
-            add {
-                Events.AddHandler(EventAllowNull, value);
-            }
+            add => Events.AddHandler(EventAllowNull, value);
             remove {
                 Events.RemoveHandler(EventAllowNull, value);
             }

@@ -396,18 +396,14 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ImageListOnRecreateHandleDescr))
         ]
         public event EventHandler RecreateHandle {
-            add {
-                recreateHandler += value;
-            }
+            add => recreateHandler += value;
             remove {
                 recreateHandler -= value;
             }
         }
 
         internal event EventHandler ChangeHandle {
-            add {
-                changeHandler += value;
-            }
+            add => changeHandler += value;
             remove {
                 changeHandler -= value;
             }

@@ -71,10 +71,7 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove
             {
                 base.AutoSizeChanged -= value;
@@ -196,9 +193,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
+            add => base.KeyUp += value;
             remove {
                 base.KeyUp -= value;
             }
@@ -208,9 +203,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
+            add => base.KeyDown += value;
             remove {
                 base.KeyDown -= value;
             }
@@ -220,9 +213,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
+            add => base.KeyPress += value;
             remove {
                 base.KeyPress -= value;
             }
@@ -259,9 +250,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }

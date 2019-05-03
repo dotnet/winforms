@@ -149,9 +149,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
+            add => base.AutoSizeChanged += value;
             remove {
                 base.AutoSizeChanged -= value;
             }
@@ -176,9 +174,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.AutoValidateChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler AutoValidateChanged {
-            add {
-                base.AutoValidateChanged += value;
-            }
+            add => base.AutoValidateChanged += value;
             remove {
                 base.AutoValidateChanged -= value;
             }
@@ -202,9 +198,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
+            add => base.BackColorChanged += value;
             remove {
                 base.BackColorChanged -= value;
             }
@@ -257,9 +251,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ContextMenuStripChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuStripChanged {
-            add {
-                base.ContextMenuStripChanged += value;
-            }
+            add => base.ContextMenuStripChanged += value;
             remove {
                 base.ContextMenuStripChanged -= value;
             }
@@ -365,9 +357,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MaximumSizeChanged {
-            add {
-                base.MaximumSizeChanged += value;
-            }
+            add => base.MaximumSizeChanged += value;
             remove {
                 base.MaximumSizeChanged -= value;
             }
@@ -404,9 +394,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MarginChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MarginChanged {
-            add {
-                base.MarginChanged += value;
-            }
+            add => base.MarginChanged += value;
             remove {
                 base.MarginChanged -= value;
             }
@@ -448,9 +436,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MinimumSizeChanged {
-            add {
-                base.MinimumSizeChanged += value;
-            }
+            add => base.MinimumSizeChanged += value;
             remove {
                 base.MinimumSizeChanged -= value;
             }
@@ -475,9 +461,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.PaddingChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler PaddingChanged {
-            add {
-                base.PaddingChanged += value;
-            }
+            add => base.PaddingChanged += value;
             remove {
                 base.PaddingChanged -= value;
             }
@@ -502,9 +486,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler SizeChanged {
-            add {
-                base.SizeChanged += value;
-            }
+            add => base.SizeChanged += value;
             remove {
                 base.SizeChanged -= value;
             }
@@ -639,9 +621,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
+            add => base.CausesValidationChanged += value;
             remove {
                 base.CausesValidationChanged -= value;
             }
@@ -681,9 +661,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
-            add {
-                base.EnabledChanged += value;
-            }
+            add => base.EnabledChanged += value;
             remove {
                 base.EnabledChanged -= value;
             }
@@ -707,9 +685,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
-            add {
-                base.LocationChanged += value;
-            }
+            add => base.LocationChanged += value;
             remove {
                 base.LocationChanged -= value;
             }
@@ -756,9 +732,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
-            add {
-                base.CursorChanged += value;
-            }
+            add => base.CursorChanged += value;
             remove {
                 base.CursorChanged -= value;
             }
@@ -781,9 +755,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -806,9 +778,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -831,9 +801,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
+            add => base.ImeModeChanged += value;
             remove {
                 base.ImeModeChanged -= value;
             }
@@ -901,9 +869,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged {
-            add {
-                base.VisibleChanged += value;
-            }
+            add => base.VisibleChanged += value;
             remove {
                 base.VisibleChanged -= value;
             }
@@ -925,9 +891,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
+            add => base.ForeColorChanged += value;
             remove {
                 base.ForeColorChanged -= value;
             }
@@ -972,9 +936,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
-            add {
-                base.RightToLeftChanged += value;
-            }
+            add => base.RightToLeftChanged += value;
             remove {
                 base.RightToLeftChanged -= value;
             }
@@ -983,9 +945,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.RightToLeftLayoutChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftLayoutChanged {
-            add {
-                base.RightToLeftLayoutChanged += value;
-            }
+            add => base.RightToLeftLayoutChanged += value;
             remove {
                 base.RightToLeftLayoutChanged -= value;
             }
@@ -1010,9 +970,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
+            add => base.TabStopChanged += value;
             remove {
                 base.TabStopChanged -= value;
             }
@@ -1036,9 +994,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -1064,9 +1020,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DockChanged {
-            add {
-                base.DockChanged += value;
-            }
+            add => base.DockChanged += value;
             remove {
                 base.DockChanged -= value;
             }
@@ -1090,9 +1044,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
+            add => base.FontChanged += value;
             remove {
                 base.FontChanged -= value;
             }
@@ -1116,9 +1068,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuChanged {
-            add {
-                base.ContextMenuChanged += value;
-            }
+            add => base.ContextMenuChanged += value;
             remove {
                 base.ContextMenuChanged -= value;
             }

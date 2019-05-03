@@ -56,10 +56,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged
         {
-            add
-            {
-                base.RightToLeftChanged += value;
-            }
+            add => base.RightToLeftChanged += value;
             remove
             {
                 base.RightToLeftChanged -= value;

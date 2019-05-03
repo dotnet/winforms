@@ -479,9 +479,7 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.BindingNavigatorRefreshItemsEventDescr))
         ]
         public event EventHandler RefreshItems {
-            add {
-                onRefreshItems += value;
-            }
+            add => onRefreshItems += value;
             remove {
                 onRefreshItems -= value;
             }

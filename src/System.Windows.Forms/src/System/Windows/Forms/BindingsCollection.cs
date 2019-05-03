@@ -60,10 +60,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.collectionChangingEventDescr))]
         public event CollectionChangeEventHandler CollectionChanging
         {
-            add
-            {
-                _onCollectionChanging += value;
-            }
+            add => _onCollectionChanging += value;
             remove
             {
                 _onCollectionChanging -= value;
@@ -76,10 +73,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.collectionChangedEventDescr))]
         public event CollectionChangeEventHandler CollectionChanged
         {
-            add
-            {
-                _onCollectionChanged += value;
-            }
+            add => _onCollectionChanged += value;
             remove
             {
                 _onCollectionChanged -= value;

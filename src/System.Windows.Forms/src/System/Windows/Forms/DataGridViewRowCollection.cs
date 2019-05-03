@@ -306,10 +306,7 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewRowCollection.uex' path='docs/doc[@for="DataGridViewRowCollection.CollectionChanged"]/*' />
         public event CollectionChangeEventHandler CollectionChanged
         {
-            add
-            {
-                this.onCollectionChanged += value;
-            }
+            add => this.onCollectionChanged += value;
             remove
             {
                 this.onCollectionChanged -= value;

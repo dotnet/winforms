@@ -436,9 +436,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler Apply {
-            add {
-                Events.AddHandler(EventApply, value);
-            }
+            add => Events.AddHandler(EventApply, value);
             remove {
                 Events.RemoveHandler(EventApply, value);
             }

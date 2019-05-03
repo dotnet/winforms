@@ -164,9 +164,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
+            add => base.BackColorChanged += value;
             remove {
                 base.BackColorChanged -= value;
             }
@@ -187,9 +185,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
+            add => base.BackgroundImageChanged += value;
             remove {
                 base.BackgroundImageChanged -= value;
             }
@@ -210,9 +206,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
             remove {
                 base.BackgroundImageLayoutChanged -= value;
             }
@@ -434,7 +428,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler Click {
-            add { base.Click += value; }
+            add => base.Click += value; 
             remove { base.Click -= value; }
         }
 
@@ -536,7 +530,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler DoubleClick {
-            add { base.DoubleClick += value; }
+            add => base.DoubleClick += value; 
             remove { base.DoubleClick -= value; }
         }
 
@@ -588,9 +582,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
+            add => base.ForeColorChanged += value;
             remove {
                 base.ForeColorChanged -= value;
             }
@@ -631,9 +623,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.FormatChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged {
-            add {
-                Events.AddHandler(EVENT_FORMATCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_FORMATCHANGED, value);
             remove {
                 Events.RemoveHandler(EVENT_FORMATCHANGED, value);
             }
@@ -646,9 +636,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
+            add => base.Paint += value;
             remove {
                 base.Paint -= value;
             }
@@ -798,7 +786,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event MouseEventHandler MouseClick {
-            add { base.MouseClick += value; }
+            add => base.MouseClick += value; 
             remove { base.MouseClick -= value; }
         }
 
@@ -807,7 +795,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event MouseEventHandler MouseDoubleClick {
-            add { base.MouseDoubleClick += value; }
+            add => base.MouseDoubleClick += value; 
             remove { base.MouseDoubleClick -= value; }
         }
 
@@ -827,7 +815,7 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
+            add => base.PaddingChanged += value; 
             remove { base.PaddingChanged -= value; }
         }
 
@@ -954,9 +942,7 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
+            add => base.TextChanged += value;
             remove {
                 base.TextChanged -= value;
             }
@@ -1023,9 +1009,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp {
-            add {
-                onCloseUp += value;
-            }
+            add => onCloseUp += value;
             remove {
                 onCloseUp -= value;
             }
@@ -1035,9 +1019,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
+            add => onRightToLeftLayoutChanged += value;
             remove {
                 onRightToLeftLayoutChanged -= value;
             }
@@ -1049,9 +1031,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
-            add {
-                onValueChanged += value;
-            }
+            add => onValueChanged += value;
             remove {
                 onValueChanged -= value;
             }
@@ -1064,9 +1044,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown {
-            add {
-                onDropDown += value;
-            }
+            add => onDropDown += value;
             remove {
                 onDropDown -= value;
             }

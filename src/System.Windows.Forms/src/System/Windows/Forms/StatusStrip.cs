@@ -147,9 +147,7 @@ namespace System.Windows.Forms {
 
         [Browsable(false)]
         public new event EventHandler PaddingChanged {
-            add {
-                base.PaddingChanged += value;
-            }
+            add => base.PaddingChanged += value;
             remove {
                 base.PaddingChanged -= value;
             }

@@ -411,9 +411,7 @@ namespace System.Windows.Forms {
         // Make this event visible through the property browser.
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
+            add => base.TabStopChanged += value;
             remove {
                 base.TabStopChanged -= value;
             }
@@ -486,9 +484,7 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [WinCategory("Action"), SRDescription(nameof(SR.LinkLabelLinkClickedDescr))]
         public event LinkLabelLinkClickedEventHandler LinkClicked {
-            add {
-                Events.AddHandler(EventLinkClicked, value);
-            }
+            add => Events.AddHandler(EventLinkClicked, value);
             remove {
                 Events.RemoveHandler(EventLinkClicked, value);
             }

@@ -213,9 +213,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
+            add => base.DoubleClick += value;
             remove {
                 base.DoubleClick -= value;
             }
@@ -225,9 +223,7 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
+            add => base.MouseDoubleClick += value;
             remove {
                 base.MouseDoubleClick -= value;
             }

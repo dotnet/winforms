@@ -667,10 +667,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipDrawEventDescr))]
         public event DrawToolTipEventHandler Draw 
         {
-            add 
-            {
-                onDraw += value;
-            }
+            add => onDraw += value;
             remove 
             {
                 onDraw -= value;
@@ -684,10 +681,7 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipPopupEventDescr))]
         public event PopupEventHandler Popup 
         {
-            add 
-            {
-                onPopup += value;
-            }
+            add => onPopup += value;
             remove 
             {
                 onPopup -= value;

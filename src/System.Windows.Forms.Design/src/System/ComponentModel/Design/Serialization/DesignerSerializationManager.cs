@@ -155,10 +155,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public event EventHandler SessionCreated
         {
-            add
-            {
-                sessionCreatedEventHandler += value;
-            }
+            add => sessionCreatedEventHandler += value;
             remove
             {
                 sessionCreatedEventHandler -= value;
@@ -170,10 +167,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public event EventHandler SessionDisposed
         {
-            add
-            {
-                sessionDisposedEventHandler += value;
-            }
+            add => sessionDisposedEventHandler += value;
             remove
             {
                 sessionDisposedEventHandler -= value;
