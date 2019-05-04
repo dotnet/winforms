@@ -17,20 +17,17 @@ internal static partial class Interop
 
         public static unsafe string GetWindowText(HandleRef hWnd)
         {
-            int textLength = GetWindowTextLengthW(hWnd);
-            char[] displayName = ArrayPool<char>.Shared.Rent(textLength + 1);
-            try
+            int textLength = GetWindowTextLengthW(hWnd) + 2;
+            char[] windowTitleBuffer = ArrayPool<char>.Shared.Rent(textLength);
+            string windowTitle;
+            fixed (char *pWindowTitle = windowTitleBuffer)
             {
-                fixed (char *pDisplayName = displayName)
-                {
-                    int actualTextLength = GetWindowTextW(hWnd, pDisplayName, textLength + 1);
-                    return new string(pDisplayName, 0, actualTextLength);
-                }
+                int actualTextLength = GetWindowTextW(hWnd, pWindowTitle, textLength);
+                windowTitle = new string(pWindowTitle, 0, actualTextLength);
             }
-            finally
-            {
-                ArrayPool<char>.Shared.Return(displayName);
-            }
+            
+            ArrayPool<char>.Shared.Return(windowTitleBuffer);
+            return windowTitle;
         }
     }
 }
