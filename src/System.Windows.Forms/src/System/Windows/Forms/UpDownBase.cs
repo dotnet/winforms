@@ -181,14 +181,8 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
         
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackColor"]/*' />
@@ -228,12 +222,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BackgroundImageLayout"]/*' />
@@ -254,12 +244,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.BorderStyle"]/*' />
@@ -464,48 +450,32 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseEnter {
-            add {
-                base.MouseEnter += value;
-            }
-            remove {
-                base.MouseEnter -= value;
-            }
+            add => base.MouseEnter += value;
+            remove => base.MouseEnter -= value;
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseLeave"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseLeave {
-            add {
-                base.MouseLeave += value;
-            }
-            remove {
-                base.MouseLeave -= value;
-            }
+            add => base.MouseLeave += value;
+            remove => base.MouseLeave -= value;
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseHover"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseHover {
-            add {
-                base.MouseHover += value;
-            }
-            remove {
-                base.MouseHover -= value;
-            }
+            add => base.MouseHover += value;
+            remove => base.MouseHover -= value;
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseMove"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseMove {
-            add {
-                base.MouseMove += value;
-            }
-            remove {
-                base.MouseMove -= value;
-            }
+            add => base.MouseMove += value;
+            remove => base.MouseMove -= value;
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.PreferredHeight"]/*' />
@@ -1441,12 +1411,8 @@ namespace System.Windows.Forms {
             ///     Adds a handler for the updown button event.
             /// </devdoc>
             public event UpDownEventHandler UpDown {
-                add {
-                    upDownEventHandler += value;
-                }
-                remove {
-                    upDownEventHandler -= value;
-                }
+                add => upDownEventHandler += value;
+                remove => upDownEventHandler -= value;
             }
 
             // Called when the mouse button is pressed - we need to start

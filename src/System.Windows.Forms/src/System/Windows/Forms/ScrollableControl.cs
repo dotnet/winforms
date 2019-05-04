@@ -993,12 +993,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll {
-            add {
-                Events.AddHandler(EVENT_SCROLL, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SCROLL, value);
-            }
+            add => Events.AddHandler(EVENT_SCROLL, value);
+            remove => Events.RemoveHandler(EVENT_SCROLL, value);
         }
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnScroll"]/*' />

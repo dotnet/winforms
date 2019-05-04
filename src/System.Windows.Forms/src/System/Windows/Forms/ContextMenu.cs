@@ -63,12 +63,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
-            add {
-                onPopup += value;
-            }
-            remove {
-                onPopup -= value;
-            }
+            add => onPopup += value;
+            remove => onPopup -= value;
         }
         
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Collapse"]/*' />
@@ -77,12 +73,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse {
-            add {
-                onCollapse += value;
-            }
-            remove {
-                onCollapse -= value;
-            }
+            add => onCollapse += value;
+            remove => onCollapse -= value;
         }
         
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.RightToLeft"]/*' />

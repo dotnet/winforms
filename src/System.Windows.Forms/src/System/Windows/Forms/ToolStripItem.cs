@@ -451,12 +451,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnAvailableChangedDescr))
         ]
         public event EventHandler AvailableChanged {
-            add {
-                Events.AddHandler(EventAvailableChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventAvailableChanged, value);
-            }
+            add => Events.AddHandler(EventAvailableChanged, value);
+            remove => Events.RemoveHandler(EventAvailableChanged, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Image"]/*' />
@@ -549,12 +545,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.BackColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
-            add {
-                Events.AddHandler(EventBackColorChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackColorChanged, value);
-            }
+            add => Events.AddHandler(EventBackColorChanged, value);
+            remove => Events.RemoveHandler(EventBackColorChanged, value);
         }
         
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Bounds"]/*' />
@@ -614,12 +606,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnClickDescr))
         ]
         public event EventHandler Click {
-            add { 
-                Events.AddHandler(EventClick, value); 
-             }
-            remove {
-                Events.RemoveHandler(EventClick, value);                
-            }
+            add => Events.AddHandler(EventClick, value); 
+            remove => Events.RemoveHandler(EventClick, value);                
         }
 
         [
@@ -765,12 +753,8 @@ namespace System.Windows.Forms {
         /// <para>Occurs when the display style has changed</para>
         /// </devdoc>
         public event EventHandler DisplayStyleChanged {
-            add { 
-                Events.AddHandler(EventDisplayStyleChanged, value); 
-            }
-            remove {
-                Events.RemoveHandler(EventDisplayStyleChanged, value);
-            }
+            add => Events.AddHandler(EventDisplayStyleChanged, value); 
+            remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
         }
         [EditorBrowsable(EditorBrowsableState.Advanced)]     
         private RightToLeft DefaultRightToLeft {
@@ -784,12 +768,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
-            add {
-                Events.AddHandler(EventDoubleClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDoubleClick, value);
-            }
+            add => Events.AddHandler(EventDoubleClick, value);
+            remove => Events.RemoveHandler(EventDoubleClick, value);
         }
 
         [
@@ -813,12 +793,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event DragEventHandler DragDrop {
-            add {
-                Events.AddHandler(EventDragDrop, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragDrop, value);
-            }
+            add => Events.AddHandler(EventDragDrop, value);
+            remove => Events.RemoveHandler(EventDragDrop, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragEnter"]/*' />
@@ -829,12 +805,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event DragEventHandler DragEnter {
-            add {
-                Events.AddHandler(EventDragEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragEnter, value);
-            }
+            add => Events.AddHandler(EventDragEnter, value);
+            remove => Events.RemoveHandler(EventDragEnter, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragOver"]/*' />
@@ -845,12 +817,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event DragEventHandler DragOver {
-            add {
-                Events.AddHandler(EventDragOver, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragOver, value);
-            }
+            add => Events.AddHandler(EventDragOver, value);
+            remove => Events.RemoveHandler(EventDragOver, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.DragLeave"]/*' />
@@ -861,12 +829,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event EventHandler DragLeave {
-            add {
-                Events.AddHandler(EventDragLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragLeave, value);
-            }
+            add => Events.AddHandler(EventDragLeave, value);
+            remove => Events.RemoveHandler(EventDragLeave, value);
         }
 
         /// <devdoc>
@@ -937,21 +901,13 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemEnabledChangedDescr))
         ]
         public event EventHandler EnabledChanged {
-            add {
-                Events.AddHandler(EventEnabledChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnabledChanged, value);
-            }
+            add => Events.AddHandler(EventEnabledChanged, value);
+            remove => Events.RemoveHandler(EventEnabledChanged, value);
         }
 
         internal event EventHandler InternalEnabledChanged {
-            add {
-                Events.AddHandler(EventInternalEnabledChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventInternalEnabledChanged, value);
-            }
+            add => Events.AddHandler(EventInternalEnabledChanged, value);
+            remove => Events.RemoveHandler(EventInternalEnabledChanged, value);
         }
        
         private void EnsureParentDropTargetRegistered() {
@@ -997,12 +953,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ForeColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
-            add {
-                Events.AddHandler(EventForeColorChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventForeColorChanged, value);
-            }
+            add => Events.AddHandler(EventForeColorChanged, value);
+            remove => Events.RemoveHandler(EventForeColorChanged, value);
         }
    
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Font"]/*' />
@@ -1046,12 +998,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                Events.AddHandler(EventGiveFeedback, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGiveFeedback, value);
-            }
+            add => Events.AddHandler(EventGiveFeedback, value);
+            remove => Events.RemoveHandler(EventGiveFeedback, value);
         }   
   
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Height"]/*' />
@@ -1442,12 +1390,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ToolStripItemOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
-            add {
-                Events.AddHandler(EventLocationChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLocationChanged, value);
-            }
+            add => Events.AddHandler(EventLocationChanged, value);
+            remove => Events.RemoveHandler(EventLocationChanged, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Margin"]/*' />
@@ -1544,12 +1488,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseDownDescr))
         ]
         public event MouseEventHandler MouseDown {
-            add {
-                Events.AddHandler(EventMouseDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseDown, value);
-            }
+            add => Events.AddHandler(EventMouseDown, value);
+            remove => Events.RemoveHandler(EventMouseDown, value);
         }
 
 
@@ -1562,12 +1502,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseEnterDescr))
         ]
         public event EventHandler MouseEnter {
-            add {
-                Events.AddHandler(EventMouseEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseEnter, value);
-            }
+            add => Events.AddHandler(EventMouseEnter, value);
+            remove => Events.RemoveHandler(EventMouseEnter, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseLeave"]/*' />
@@ -1579,12 +1515,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseLeaveDescr))
         ]
         public event EventHandler MouseLeave {
-            add {
-                Events.AddHandler(EventMouseLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseLeave, value);
-            }
+            add => Events.AddHandler(EventMouseLeave, value);
+            remove => Events.RemoveHandler(EventMouseLeave, value);
         }
 
 
@@ -1597,12 +1529,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseHoverDescr))
         ]
         public event EventHandler MouseHover {
-            add {
-                Events.AddHandler(EventMouseHover, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseHover, value);
-            }
+            add => Events.AddHandler(EventMouseHover, value);
+            remove => Events.RemoveHandler(EventMouseHover, value);
         }   
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseMove"]/*' />
@@ -1614,12 +1542,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseMoveDescr))
         ]
         public event MouseEventHandler MouseMove {
-            add {
-                Events.AddHandler(EventMouseMove, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseMove, value);
-            }
+            add => Events.AddHandler(EventMouseMove, value);
+            remove => Events.RemoveHandler(EventMouseMove, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.MouseUp"]/*' />
@@ -1631,12 +1555,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnMouseUpDescr))
         ]
         public event MouseEventHandler MouseUp {
-            add {
-                Events.AddHandler(EventMouseUp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseUp, value);
-            }
+            add => Events.AddHandler(EventMouseUp, value);
+            remove => Events.RemoveHandler(EventMouseUp, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Name"]/*' />
@@ -1720,12 +1640,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOwnerChangedDescr))
         ]
         public event EventHandler OwnerChanged {
-            add {
-                Events.AddHandler(EventOwnerChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventOwnerChanged, value);
-            }
+            add => Events.AddHandler(EventOwnerChanged, value);
+            remove => Events.RemoveHandler(EventOwnerChanged, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Paint"]/*' />
@@ -1734,12 +1650,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripItemOnPaintDescr))
         ]
         public event PaintEventHandler Paint {
-            add {
-                Events.AddHandler(EventPaint, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPaint, value);
-            }
+            add => Events.AddHandler(EventPaint, value);
+            remove => Events.RemoveHandler(EventPaint, value);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Parent"]/*' />
         /// <devdoc>
@@ -1906,23 +1818,15 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                Events.AddHandler(EventQueryContinueDrag, value);
-            }
-            remove {
-                Events.RemoveHandler(EventQueryContinueDrag, value);
-            }
+            add => Events.AddHandler(EventQueryContinueDrag, value);
+            remove => Events.RemoveHandler(EventQueryContinueDrag, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.QueryAccessibilityHelp"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripItemOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                Events.AddHandler(EventQueryAccessibilityHelp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventQueryAccessibilityHelp, value);
-            }
+            add => Events.AddHandler(EventQueryAccessibilityHelp, value);
+            remove => Events.RemoveHandler(EventQueryAccessibilityHelp, value);
         }
 
       
@@ -2045,12 +1949,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
-            add {
-                Events.AddHandler(EventRightToLeft, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRightToLeft, value);
-            }
+            add => Events.AddHandler(EventRightToLeft, value);
+            remove => Events.RemoveHandler(EventRightToLeft, value);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Selected"]/*' />
         /// <devdoc>
@@ -2082,12 +1982,8 @@ namespace System.Windows.Forms {
 
 #if SELECTEDCHANGED
         public event EventHandler SelectedChanged {
-            add { 
-                Events.AddHandler(EventSelectedChanged, value); 
-             }
-            remove {
-                Events.RemoveHandler(EventSelectedChanged, value);                
-            }
+            add => Events.AddHandler(EventSelectedChanged, value); 
+            remove => Events.RemoveHandler(EventSelectedChanged, value);                
         }
 #endif
 
@@ -2236,12 +2132,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnTextChangedDescr))]
         public event EventHandler TextChanged {
-            add {
-                Events.AddHandler(EventText, value);
-            }
-            remove {
-                Events.RemoveHandler(EventText, value);
-            }
+            add => Events.AddHandler(EventText, value);
+            remove => Events.RemoveHandler(EventText, value);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.TextDirection"]/*' />
         [
@@ -2348,12 +2240,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.VisibleChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripItemOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
-            add {
-                Events.AddHandler(EventVisibleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventVisibleChanged, value);
-            }
+            add => Events.AddHandler(EventVisibleChanged, value);
+            remove => Events.RemoveHandler(EventVisibleChanged, value);
         }
 
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.Width"]/*' />

@@ -105,14 +105,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public event EventHandler Undoing
         {
-            add
-            {
-                _undoingEvent += value;
-            }
-            remove
-            {
-                _undoingEvent -= value;
-            }
+            add => _undoingEvent += value;
+            remove => _undoingEvent -= value;
         }
 
         /// <summary>
@@ -120,14 +114,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public event EventHandler Undone
         {
-            add
-            {
-                _undoneEvent += value;
-            }
-            remove
-            {
-                _undoneEvent -= value;
-            }
+            add => _undoneEvent += value;
+            remove => _undoneEvent -= value;
         }
 
         /// <summary>

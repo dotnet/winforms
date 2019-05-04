@@ -549,12 +549,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BorderStyleChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnBorderStyleChangedDescr))]
             public event EventHandler BorderStyleChanged {
-                add {
-                    Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_BORDERSTYLECHANGED, value);
+                remove => Events.RemoveHandler(EVENT_BORDERSTYLECHANGED, value);
             }
     
             private int BorderWidth {
@@ -848,12 +844,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CaptionVisibleChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnCaptionVisibleChangedDescr))]
             public event EventHandler CaptionVisibleChanged {
-                add {
-                    Events.AddHandler(EVENT_CAPTIONVISIBLECHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_CAPTIONVISIBLECHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_CAPTIONVISIBLECHANGED, value);
+                remove => Events.RemoveHandler(EVENT_CAPTIONVISIBLECHANGED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CurrentCell"]/*' />
@@ -1124,12 +1116,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CurrentCellChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnCurrentCellChangedDescr))]
             public event EventHandler CurrentCellChanged {
-                add {
-                    Events.AddHandler(EVENT_CURRENTCELLCHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_CURRENTCELLCHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_CURRENTCELLCHANGED, value);
+                remove => Events.RemoveHandler(EVENT_CURRENTCELLCHANGED, value);
             }
     
             private int CurrentColumn {
@@ -1430,12 +1418,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataSourceChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnDataSourceChangedDescr))]
             public event EventHandler DataSourceChanged {
-                add {
-                    Events.AddHandler(EVENT_DATASOURCECHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_DATASOURCECHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_DATASOURCECHANGED, value);
+                remove => Events.RemoveHandler(EVENT_DATASOURCECHANGED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.DataMember"]/*' />
@@ -1853,12 +1837,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsLabelStyleChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnParentRowsLabelStyleChangedDescr))]
             public event EventHandler ParentRowsLabelStyleChanged {
-                add {
-                    Events.AddHandler(EVENT_PARENTROWSLABELSTYLECHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_PARENTROWSLABELSTYLECHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_PARENTROWSLABELSTYLECHANGED, value);
+                remove => Events.RemoveHandler(EVENT_PARENTROWSLABELSTYLECHANGED, value);
             }
     
             internal bool Initializing {
@@ -1912,12 +1892,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.FlatModeChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnFlatModeChangedDescr))]
             public event EventHandler FlatModeChanged {
-                add {
-                    Events.AddHandler(EVENT_FLATMODECHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_FLATMODECHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_FLATMODECHANGED, value);
+                remove => Events.RemoveHandler(EVENT_FLATMODECHANGED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HeaderBackColor"]/*' />
@@ -2026,12 +2002,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundColorChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnBackgroundColorChangedDescr))]
             public event EventHandler BackgroundColorChanged {
-                add {
-                    Events.AddHandler(EVENT_BACKGROUNDCOLORCHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_BACKGROUNDCOLORCHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_BACKGROUNDCOLORCHANGED, value);
+                remove => Events.RemoveHandler(EVENT_BACKGROUNDCOLORCHANGED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.HeaderFont"]/*' />
@@ -2377,12 +2349,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.AllowNavigationChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnNavigationModeChangedDescr))]
             public event EventHandler AllowNavigationChanged {
-                add {
-                    Events.AddHandler(EVENT_ALLOWNAVIGATIONCHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_ALLOWNAVIGATIONCHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_ALLOWNAVIGATIONCHANGED, value);
+                remove => Events.RemoveHandler(EVENT_ALLOWNAVIGATIONCHANGED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Cursor"]/*' />
@@ -2404,12 +2372,8 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler CursorChanged {
-                add {
-                    base.CursorChanged += value;
-                }
-                remove {
-                    base.CursorChanged -= value;
-                }
+                add => base.CursorChanged += value;
+                remove => base.CursorChanged -= value;
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImage"]/*' />
@@ -2448,24 +2412,16 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler BackgroundImageChanged {
-                add {
-                    base.BackgroundImageChanged += value;
-                }
-                remove {
-                    base.BackgroundImageChanged -= value;
-                }
+                add => base.BackgroundImageChanged += value;
+                remove => base.BackgroundImageChanged -= value;
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageLayoutChanged"]/*' />
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler BackgroundImageLayoutChanged {
-                add {
-                    base.BackgroundImageLayoutChanged += value;
-                }
-                remove {
-                    base.BackgroundImageLayoutChanged -= value;
-                }
+                add => base.BackgroundImageLayoutChanged += value;
+                remove => base.BackgroundImageLayoutChanged -= value;
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsBackColor"]/*' />
@@ -2668,12 +2624,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ReadOnlyChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnReadOnlyChangedDescr))]
             public event EventHandler ReadOnlyChanged {
-                add {
-                    Events.AddHandler(EVENT_READONLYCHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_READONLYCHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_READONLYCHANGED, value);
+                remove => Events.RemoveHandler(EVENT_READONLYCHANGED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ColumnHeadersVisible"]/*' />
@@ -2736,12 +2688,8 @@ namespace System.Windows.Forms {
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.ParentRowsVisibleChanged"]/*' />
             [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DataGridOnParentRowsVisibleChangedDescr))]
             public event EventHandler ParentRowsVisibleChanged {
-                add {
-                    Events.AddHandler(EVENT_PARENTROWSVISIBLECHANGED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_PARENTROWSVISIBLECHANGED, value);
-                }
+                add => Events.AddHandler(EVENT_PARENTROWSVISIBLECHANGED, value);
+                remove => Events.RemoveHandler(EVENT_PARENTROWSVISIBLECHANGED, value);
             }
     
             internal bool ParentRowsIsEmpty() {
@@ -2822,12 +2770,8 @@ namespace System.Windows.Forms {
             /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
-                add {
-                    base.TextChanged += value;
-                }
-                remove {
-                    base.TextChanged -= value;
-                }
+                add => base.TextChanged += value;
+                remove => base.TextChanged -= value;
             }
             
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.VertScrollBar"]/*' />
@@ -4407,12 +4351,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridNavigateEventDescr))]
             public event NavigateEventHandler Navigate {
-                add {
-                    onNavigate += value;
-                }
-                remove {
-                    onNavigate -= value;
-                }
+                add => onNavigate += value;
+                remove => onNavigate -= value;
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.RowHeaderClick"]/*' />
@@ -4420,12 +4360,8 @@ namespace System.Windows.Forms {
             ///    <para>Occurs when a row header is clicked.</para>
             /// </devdoc>
             protected event EventHandler RowHeaderClick {
-                add {
-                    onRowHeaderClick += value;
-                }
-                remove {
-                    onRowHeaderClick -= value;
-                }
+                add => onRowHeaderClick += value;
+                remove => onRowHeaderClick -= value;
             }
     
             /// <devdoc>
@@ -4436,12 +4372,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridNodeClickEventDescr))]
             internal event EventHandler NodeClick {
-                add {
-                    Events.AddHandler(EVENT_NODECLICKED, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_NODECLICKED, value);
-                }
+                add => Events.AddHandler(EVENT_NODECLICKED, value);
+                remove => Events.RemoveHandler(EVENT_NODECLICKED, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Scroll"]/*' />
@@ -4452,12 +4384,8 @@ namespace System.Windows.Forms {
             /// </devdoc>
             [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DataGridScrollEventDescr))]
             public event EventHandler Scroll {
-                add {
-                    Events.AddHandler(EVENT_SCROLL, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_SCROLL, value);
-                }
+                add => Events.AddHandler(EVENT_SCROLL, value);
+                remove => Events.RemoveHandler(EVENT_SCROLL, value);
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.Site"]/*' />
@@ -8284,12 +8212,8 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridBackButtonClickDescr))
             ]
             public event EventHandler BackButtonClick {
-                add {
-                    Events.AddHandler(EVENT_BACKBUTTONCLICK, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_BACKBUTTONCLICK, value);
-                }
+                add => Events.AddHandler(EVENT_BACKBUTTONCLICK, value);
+                remove => Events.RemoveHandler(EVENT_BACKBUTTONCLICK, value);
             }
     
             // the DownButtonClick event
@@ -8303,12 +8227,8 @@ namespace System.Windows.Forms {
              SRDescription(nameof(SR.DataGridDownButtonClickDescr))
             ]
             public event EventHandler ShowParentDetailsButtonClick {
-                add {
-                    Events.AddHandler(EVENT_DOWNBUTTONCLICK, value);
-                }
-                remove {
-                    Events.RemoveHandler(EVENT_DOWNBUTTONCLICK, value);
-                }
+                add => Events.AddHandler(EVENT_DOWNBUTTONCLICK, value);
+                remove => Events.RemoveHandler(EVENT_DOWNBUTTONCLICK, value);
             }
     
             private void ResetMouseState() {

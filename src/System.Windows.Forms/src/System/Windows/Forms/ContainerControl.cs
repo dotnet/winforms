@@ -214,12 +214,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContainerControlOnAutoValidateChangedDescr)),
         ]
         public event EventHandler AutoValidateChanged {
-            add {
-                this.autoValidateChanged += value;
-            }
-            remove {
-                this.autoValidateChanged -= value;
-            }
+            add => this.autoValidateChanged += value;
+            remove => this.autoValidateChanged -= value;
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.BindingContext"]/*' />

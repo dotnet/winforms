@@ -89,14 +89,8 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
@@ -264,12 +258,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler DockChanged {
-            add {
-                base.DockChanged += value;
-            }
-            remove {
-                base.DockChanged -= value;
-            }
+            add => base.DockChanged += value;
+            remove => base.DockChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Enabled"]/*' />
@@ -287,12 +277,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
-            add {
-                base.EnabledChanged += value;
-            }
-            remove {
-                base.EnabledChanged -= value;
-            }
+            add => base.EnabledChanged += value;
+            remove => base.EnabledChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UseVisualStyleBackColor"]/*' />
@@ -330,12 +316,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
-            add {
-                base.LocationChanged += value;
-            }
-            remove {
-                base.LocationChanged -= value;
-            }
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MaximumSize"]/*' />
@@ -392,12 +374,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStop"]/*' />
@@ -415,12 +393,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Text"]/*' />
@@ -443,12 +417,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable (true), EditorBrowsable (EditorBrowsableState.Always)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ToolTipText"]/*' />
@@ -493,12 +463,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged {
-            add {
-                base.VisibleChanged += value;
-            }
-            remove {
-                base.VisibleChanged -= value;
-            }
+            add => base.VisibleChanged += value;
+            remove => base.VisibleChanged -= value;
         }
 
         /// <devdoc>

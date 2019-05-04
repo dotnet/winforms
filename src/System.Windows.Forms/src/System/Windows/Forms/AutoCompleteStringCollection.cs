@@ -71,14 +71,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.CollectionChanged"]/*' />
         public event CollectionChangeEventHandler CollectionChanged
         {
-            add
-            {
-                this.onCollectionChanged += value;
-            }
-            remove
-            {
-                this.onCollectionChanged -= value;
-            }
+            add => this.onCollectionChanged += value;
+            remove => this.onCollectionChanged -= value;
         }
 
         /// <include file='doc\AutoCompleteStringCollection.uex' path='docs/doc[@for="AutoCompleteStringCollection.OnCollectionChanged"]/*' />

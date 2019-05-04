@@ -238,12 +238,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
-            add {
-                onRightToLeftChanged += value;
-            }
-            remove {
-                onRightToLeftChanged -= value;
-            }
+            add => onRightToLeftChanged += value;
+            remove => onRightToLeftChanged -= value;
         }        
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Tag"]/*' />

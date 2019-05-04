@@ -526,13 +526,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextAlignChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
-            add {
-                Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TextBox.Dispose"]/*' />

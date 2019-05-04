@@ -219,12 +219,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            add => base.CausesValidationChanged += value;
+            remove => base.CausesValidationChanged -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CreateParams"]/*' />
@@ -328,12 +324,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Font"]/*' />
@@ -354,12 +346,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
-            remove {
-                base.FontChanged -= value;
-            }
+            add => base.FontChanged += value;
+            remove => base.FontChanged -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Image"]/*' />
@@ -542,12 +530,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Load"]/*' />
@@ -848,14 +832,8 @@ namespace System.Windows.Forms {
         ]
         public event AsyncCompletedEventHandler LoadCompleted
         {
-            add
-            {
-                this.Events.AddHandler(loadCompletedKey, value);
-            }
-            remove
-            {
-                this.Events.RemoveHandler(loadCompletedKey, value);
-            }
+            add => this.Events.AddHandler(loadCompletedKey, value);
+            remove => this.Events.RemoveHandler(loadCompletedKey, value);
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.LoadProgressChanged"]/*' />
@@ -865,14 +843,8 @@ namespace System.Windows.Forms {
         ]
         public event ProgressChangedEventHandler LoadProgressChanged
         {
-            add
-            {
-                this.Events.AddHandler(loadProgressChangedKey, value);
-            }
-            remove
-            {
-                this.Events.RemoveHandler(loadProgressChangedKey, value);
-            }
+            add => this.Events.AddHandler(loadProgressChangedKey, value);
+            remove => this.Events.RemoveHandler(loadProgressChangedKey, value);
         }
         
         private void ResetInitialImage()
@@ -910,12 +882,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
-            add {
-                base.RightToLeftChanged += value;
-            }
-            remove {
-                base.RightToLeftChanged -= value;
-            }
+            add => base.RightToLeftChanged += value;
+            remove => base.RightToLeftChanged -= value;
         }
 
         // Be sure not to re-serialized initial image if it's the default. 
@@ -983,13 +951,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.SizeModeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PictureBoxOnSizeModeChangedDescr))]
         public event EventHandler SizeModeChanged {
-            add {
-                Events.AddHandler(EVENT_SIZEMODECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SIZEMODECHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_SIZEMODECHANGED, value);
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabStop"]/*' />
@@ -1010,12 +974,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabIndex"]/*' />
@@ -1036,12 +996,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Text"]/*' />
@@ -1062,69 +1018,45 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Enter"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
-            add {
-                base.Enter += value;
-            }
-            remove {
-                base.Enter -= value;
-            }
+            add => base.Enter += value;
+            remove => base.Enter -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.KeyPress"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Leave"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
-            add {
-                base.Leave += value;
-            }
-            remove {
-                base.Leave -= value;
-            }
+            add => base.Leave += value;
+            remove => base.Leave -= value;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.AdjustSize"]/*' />

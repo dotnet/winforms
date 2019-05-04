@@ -58,12 +58,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\MainMenu.uex' path='docs/doc[@for="MainMenu.Collapse"]/*' />
         [SRDescription(nameof(SR.MainMenuCollapseDescr))]
         public event EventHandler Collapse {
-            add {
-                onCollapse += value;
-            }
-            remove {
-                onCollapse -= value;
-            }
+            add => onCollapse += value;
+            remove => onCollapse -= value;
         }
 
         

@@ -69,12 +69,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <devdoc>
@@ -137,12 +133,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         ]
         public new event EventHandler AutoValidateChanged {
-            add {
-                base.AutoValidateChanged += value;
-            }
-            remove {
-                base.AutoValidateChanged -= value;
-            }
+            add => base.AutoValidateChanged += value;
+            remove => base.AutoValidateChanged -= value;
         }
 
 		/// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.BorderStyle"]/*' />
@@ -221,12 +213,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.UserControlOnLoadDescr))]
         public event EventHandler Load {
-            add {
-                Events.AddHandler(EVENT_LOAD, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_LOAD, value);
-            }
+            add => Events.AddHandler(EVENT_LOAD, value);
+            remove => Events.RemoveHandler(EVENT_LOAD, value);
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.Text"]/*' />
@@ -248,12 +236,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.ValidateChildren"]/*' />

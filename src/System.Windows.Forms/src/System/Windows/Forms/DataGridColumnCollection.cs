@@ -326,12 +326,8 @@ namespace System.Windows.Forms {
         /// <para>Occurs when a change is made to the System.Windows.Forms.GridColumnStylesCollection.</para>
         /// </devdoc>
         public event CollectionChangeEventHandler CollectionChanged {
-            add {
-                onCollectionChanged += value;
-            }
-            remove {
-                onCollectionChanged -= value;
-            }
+            add => onCollectionChanged += value;
+            remove => onCollectionChanged -= value;
         }
         
         /// <include file='doc\DataGridColumnCollection.uex' path='docs/doc[@for="GridColumnStylesCollection.Clear"]/*' />

@@ -200,12 +200,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImageLayout"]/*' />
@@ -223,12 +219,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BorderStyle"]/*' />
@@ -1070,12 +1062,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.TopIndex"]/*' />
@@ -1166,23 +1154,15 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Click"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.MouseClick"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Padding"]/*' />
@@ -1201,9 +1181,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.OnPaint"]/*' />
         /// <devdoc>
@@ -1211,47 +1190,31 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.DrawItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
-            add {
-                Events.AddHandler(EVENT_DRAWITEM, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DRAWITEM, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWITEM, value);
+            remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
         }
 
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.MeasureItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
-            add {
-                Events.AddHandler(EVENT_MEASUREITEM, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MEASUREITEM, value);
-            }
+            add => Events.AddHandler(EVENT_MEASUREITEM, value);
+            remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
         }
 
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BeginUpdate"]/*' />

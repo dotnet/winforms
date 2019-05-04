@@ -263,14 +263,8 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
@@ -448,12 +442,8 @@ namespace System.Windows.Forms {
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnBeginDrag))]
         public event EventHandler BeginDrag {
-            add {
-                Events.AddHandler(EventBeginDrag, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBeginDrag, value);
-            }
+            add => Events.AddHandler(EventBeginDrag, value);
+            remove => Events.RemoveHandler(EventBeginDrag, value);
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="ToolStrip.BindingContext"]/*' />
@@ -543,12 +533,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false)]
         public new event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            add => base.CausesValidationChanged += value;
+            remove => base.CausesValidationChanged -= value;
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Controls"]/*' />
@@ -561,12 +547,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ControlAdded"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded {
-            add {
-                base.ControlAdded += value;
-            }
-            remove {
-                base.ControlAdded -= value;
-            }
+            add => base.ControlAdded += value;
+            remove => base.ControlAdded -= value;
         }
 
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -580,33 +562,21 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false)]
         public new event EventHandler CursorChanged {
-            add {
-                base.CursorChanged += value;
-            }
-            remove {
-                base.CursorChanged -= value;
-            }
+            add => base.CursorChanged += value;
+            remove => base.CursorChanged -= value;
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ControlRemoved"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved {
-             add {
-                 base.ControlRemoved += value;
-             }
-             remove {
-                 base.ControlRemoved -= value;
-             }
+             add => base.ControlRemoved += value;
+             remove => base.ControlRemoved -= value;
         }
 
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ToolStripOnEndDrag))]
         public event EventHandler EndDrag {
-            add {
-                Events.AddHandler(EventEndDrag, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEndDrag, value);
-            }
+            add => Events.AddHandler(EventEndDrag, value);
+            remove => Events.RemoveHandler(EventEndDrag, value);
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Font"]/*' />
@@ -873,14 +843,8 @@ namespace System.Windows.Forms {
         ]
         public new event EventHandler ForeColorChanged
         {
-            add
-            {
-                base.ForeColorChanged += value;
-            }
-            remove
-            {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         private bool HasKeyboardInput {
@@ -1163,12 +1127,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ItemAdded"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemAddedDescr))]
         public event ToolStripItemEventHandler ItemAdded {
-          add {
-              Events.AddHandler(EventItemAdded, value);
-          }
-          remove {
-              Events.RemoveHandler(EventItemAdded, value);
-          }
+          add => Events.AddHandler(EventItemAdded, value);
+          remove => Events.RemoveHandler(EventItemAdded, value);
         }
 
 
@@ -1178,12 +1138,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ToolStripItemOnClickDescr))]
         public event ToolStripItemClickedEventHandler ItemClicked {
-            add {
-                Events.AddHandler(EventItemClicked, value);
-            }
-            remove {
-                Events.RemoveHandler(EventItemClicked, value);
-            }
+            add => Events.AddHandler(EventItemClicked, value);
+            remove => Events.RemoveHandler(EventItemClicked, value);
         }
 
 
@@ -1213,12 +1169,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ItemRemoved"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripItemRemovedDescr))]
         public event ToolStripItemEventHandler ItemRemoved {
-          add {
-              Events.AddHandler(EventItemRemoved, value);
-          }
-          remove {
-              Events.RemoveHandler(EventItemRemoved, value);
-          }
+          add => Events.AddHandler(EventItemRemoved, value);
+          remove => Events.RemoveHandler(EventItemRemoved, value);
         }
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IsDropDown"]/*' />
         /// <devdoc> handy check for painting and sizing </devdoc>
@@ -1377,12 +1329,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutCompleted"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutCompleteDescr))]
         public event EventHandler LayoutCompleted {
-            add {
-                Events.AddHandler(EventLayoutCompleted, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLayoutCompleted, value);
-            }
+            add => Events.AddHandler(EventLayoutCompleted, value);
+            remove => Events.RemoveHandler(EventLayoutCompleted, value);
         }
 
         internal bool LayoutRequired {
@@ -1397,12 +1345,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripLayoutStyleChangedDescr))]
         public event EventHandler LayoutStyleChanged {
-            add {
-                Events.AddHandler(EventLayoutStyleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLayoutStyleChanged, value);
-            }
+            add => Events.AddHandler(EventLayoutStyleChanged, value);
+            remove => Events.RemoveHandler(EventLayoutStyleChanged, value);
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LayoutEngine"]/*' />
@@ -1417,12 +1361,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.LocationChanging"]/*' />
         internal event ToolStripLocationCancelEventHandler LocationChanging {
-            add {
-                Events.AddHandler(EventLocationChanging, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLocationChanging, value);
-            }
+            add => Events.AddHandler(EventLocationChanging, value);
+            remove => Events.RemoveHandler(EventLocationChanging, value);
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.MaxItemSize"]/*' />
@@ -1515,12 +1455,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.PaintGrip"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ToolStripPaintGripDescr))]
         public event PaintEventHandler PaintGrip {
-            add {
-                Events.AddHandler(EventPaintGrip, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPaintGrip, value);
-            }
+            add => Events.AddHandler(EventPaintGrip, value);
+            remove => Events.RemoveHandler(EventPaintGrip, value);
         }
 
         internal RestoreFocusMessageFilter RestoreFocusFilter {
@@ -1668,12 +1604,8 @@ namespace System.Windows.Forms {
 
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged {
-            add {
-                Events.AddHandler(EventRendererChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRendererChanged, value);
-            }
+            add => Events.AddHandler(EventRendererChanged, value);
+            remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
          /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DrawMode"]/*' />

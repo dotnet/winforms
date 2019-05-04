@@ -52,14 +52,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public event DesignerActionUIStateChangeEventHandler DesignerActionUIStateChange
         {
-            add
-            {
-                _designerActionUIStateChangedEventHandler += value;
-            }
-            remove
-            {
-                _designerActionUIStateChangedEventHandler -= value;
-            }
+            add => _designerActionUIStateChangedEventHandler += value;
+            remove => _designerActionUIStateChangedEventHandler -= value;
         }
 
 

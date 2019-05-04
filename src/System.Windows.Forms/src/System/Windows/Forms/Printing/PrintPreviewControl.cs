@@ -254,12 +254,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPage"]/*' />
@@ -302,12 +298,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.StartPageChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnStartPageChangedDescr))]
         public event EventHandler StartPageChanged {
-            add {
-                Events.AddHandler(EVENT_STARTPAGECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_STARTPAGECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_STARTPAGECHANGED, value);
         }
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.VirtualSize"]/*' />

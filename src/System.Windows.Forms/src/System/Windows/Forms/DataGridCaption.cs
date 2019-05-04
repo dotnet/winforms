@@ -304,12 +304,8 @@ namespace System.Windows.Forms {
         ///     Adds a listener for the BackwardClicked event.
         /// </devdoc>
         internal event EventHandler BackwardClicked {
-            add {
-                Events.AddHandler(EVENT_BACKWARDCLICKED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_BACKWARDCLICKED, value);
-            }
+            add => Events.AddHandler(EVENT_BACKWARDCLICKED, value);
+            remove => Events.RemoveHandler(EVENT_BACKWARDCLICKED, value);
         }
 
 
@@ -317,21 +313,13 @@ namespace System.Windows.Forms {
         ///     Adds a listener for the CaptionClicked event.
         /// </devdoc>
         internal event EventHandler CaptionClicked {
-            add {
-                Events.AddHandler(EVENT_CAPTIONCLICKED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CAPTIONCLICKED, value);
-            }
+            add => Events.AddHandler(EVENT_CAPTIONCLICKED, value);
+            remove => Events.RemoveHandler(EVENT_CAPTIONCLICKED, value);
         }
 
         internal event EventHandler DownClicked {
-            add {
-                Events.AddHandler(EVENT_DOWNCLICKED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DOWNCLICKED, value);
-            }
+            add => Events.AddHandler(EVENT_DOWNCLICKED, value);
+            remove => Events.RemoveHandler(EVENT_DOWNCLICKED, value);
         }
 
         private void Invalidate() {

@@ -495,80 +495,52 @@ namespace System.Windows.Forms
        /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.AcceptsTabChanged"]/*' />
        [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnAcceptsTabChangedDescr))]
        public event EventHandler AcceptsTabChanged {
-            add {
-                Events.AddHandler(EventAcceptsTabChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventAcceptsTabChanged, value);
-            }
+            add => Events.AddHandler(EventAcceptsTabChanged, value);
+            remove => Events.RemoveHandler(EventAcceptsTabChanged, value);
         }
 
        
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.BorderStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnBorderStyleChangedDescr))]
         public event EventHandler BorderStyleChanged {
-            add {
-                Events.AddHandler(EventBorderStyleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBorderStyleChanged, value);
-            }
+            add => Events.AddHandler(EventBorderStyleChanged, value);
+            remove => Events.RemoveHandler(EventBorderStyleChanged, value);
         }
 
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.HideSelectionChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnHideSelectionChangedDescr))]
         public event EventHandler HideSelectionChanged {
-            add {
-                Events.AddHandler(EventHideSelectionChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHideSelectionChanged, value);
-            }
+            add => Events.AddHandler(EventHideSelectionChanged, value);
+            remove => Events.RemoveHandler(EventHideSelectionChanged, value);
         }
         
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ModifiedChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnModifiedChangedDescr))]
         public event EventHandler ModifiedChanged {
-            add {
-                Events.AddHandler(EventModifiedChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventModifiedChanged, value);
-            }
+            add => Events.AddHandler(EventModifiedChanged, value);
+            remove => Events.RemoveHandler(EventModifiedChanged, value);
         }
 
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.MultilineChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnMultilineChangedDescr)),Browsable(false),EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler MultilineChanged {
-           add {
-               Events.AddHandler(EventMultilineChanged, value);
-           }
-           remove {
-               Events.RemoveHandler(EventMultilineChanged, value);
-           }
+           add => Events.AddHandler(EventMultilineChanged, value);
+           remove => Events.RemoveHandler(EventMultilineChanged, value);
         }
         
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.ReadOnlyChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.TextBoxBaseOnReadOnlyChangedDescr))]
         public event EventHandler ReadOnlyChanged {
-           add {
-               Events.AddHandler(EventReadOnlyChanged, value);
-           }
-           remove {
-               Events.RemoveHandler(EventReadOnlyChanged, value);
-           }
+           add => Events.AddHandler(EventReadOnlyChanged, value);
+           remove => Events.RemoveHandler(EventReadOnlyChanged, value);
         }
 
         
         /// <include file='doc\ToolStripTextBox.uex' path='docs/doc[@for="ToolStripTextBox.TextAlignChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ToolStripTextBoxTextBoxTextAlignChangedDescr))]
         public event EventHandler TextBoxTextAlignChanged {
-            add {
-                Events.AddHandler(EventTextBoxTextAlignChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTextBoxTextAlignChanged, value);
-            }
+            add => Events.AddHandler(EventTextBoxTextAlignChanged, value);
+            remove => Events.RemoveHandler(EventTextBoxTextAlignChanged, value);
         }
 #endregion WrappedEvents
 

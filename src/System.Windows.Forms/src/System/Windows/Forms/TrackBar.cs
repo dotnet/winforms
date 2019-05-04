@@ -119,14 +119,8 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
@@ -145,12 +139,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageLayout"]/*' />
@@ -168,12 +158,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.CreateParams"]/*' />
@@ -267,12 +253,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
-            remove {
-                base.FontChanged -= value;
-            }
+            add => base.FontChanged += value;
+            remove => base.FontChanged -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ForeColor"]/*' />
@@ -293,12 +275,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ImeMode"]/*' />
@@ -317,12 +295,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.LargeChange"]/*' />
@@ -467,9 +441,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.PreferredDimension"]/*' />
         /// <devdoc>
@@ -574,12 +547,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.TickStyle"]/*' />
@@ -675,70 +644,46 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Scroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.TrackBarOnScrollDescr))]
         public event EventHandler Scroll {
-            add {
-                Events.AddHandler(EVENT_SCROLL, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SCROLL, value);
-            }
+            add => Events.AddHandler(EVENT_SCROLL, value);
+            remove => Events.RemoveHandler(EVENT_SCROLL, value);
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnPaint"]/*' />
@@ -748,23 +693,15 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ValueChanged"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
-            add {
-                Events.AddHandler(EVENT_VALUECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_VALUECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_VALUECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_VALUECHANGED, value);
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.AdjustSize"]/*' />

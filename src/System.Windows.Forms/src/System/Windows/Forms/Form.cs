@@ -596,14 +596,8 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
@@ -668,12 +662,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always),
         ]
         public new event EventHandler AutoValidateChanged {
-            add {
-                base.AutoValidateChanged += value;
-            }
-            remove {
-                base.AutoValidateChanged -= value;
-            }
+            add => base.AutoValidateChanged += value;
+            remove => base.AutoValidateChanged -= value;
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.BackColor"]/*' />
@@ -1112,12 +1102,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.FormHelpButtonClickedDescr))
         ]
         public event CancelEventHandler HelpButtonClicked {
-            add {
-                Events.AddHandler(EVENT_HELPBUTTONCLICKED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_HELPBUTTONCLICKED, value);
-            }
+            add => Events.AddHandler(EVENT_HELPBUTTONCLICKED, value);
+            remove => Events.RemoveHandler(EVENT_HELPBUTTONCLICKED, value);
         }
 
         /// <devdoc>
@@ -1332,13 +1318,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MaximizedBoundsChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximizedBoundsChangedDescr))]
         public event EventHandler MaximizedBoundsChanged {
-            add {
-                Events.AddHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_MAXIMIZEDBOUNDSCHANGED, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MaximumSize"]/*' />
@@ -1399,13 +1381,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MaximumSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMaximumSizeChangedDescr))]
         public event EventHandler MaximumSizeChanged {
-            add {
-                Events.AddHandler(EVENT_MAXIMUMSIZECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MAXIMUMSIZECHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_MAXIMUMSIZECHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_MAXIMUMSIZECHANGED, value);
         }
         [
         SRCategory(nameof(SR.CatWindowStyle)),
@@ -1444,12 +1422,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MarginChanged {
-            add {
-                base.MarginChanged += value;
-            }
-            remove {
-                base.MarginChanged -= value;
-            }
+            add => base.MarginChanged += value;
+            remove => base.MarginChanged -= value;
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Menu"]/*' />
@@ -1572,13 +1546,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MinimumSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.FormOnMinimumSizeChangedDescr))]
         public event EventHandler MinimumSizeChanged {
-            add {
-                Events.AddHandler(EVENT_MINIMUMSIZECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MINIMUMSIZECHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_MINIMUMSIZECHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_MINIMUMSIZECHANGED, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MaximizeBox"]/*' />
@@ -2222,12 +2192,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.TabStop"]/*' />
@@ -2254,12 +2220,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.TabStopChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <devdoc>
@@ -2565,12 +2527,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnActivateDescr))]
         public event EventHandler Activated {
-            add {
-                Events.AddHandler(EVENT_ACTIVATED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_ACTIVATED, value);
-            }
+            add => Events.AddHandler(EVENT_ACTIVATED, value);
+            remove => Events.RemoveHandler(EVENT_ACTIVATED, value);
         }
 
 
@@ -2585,12 +2543,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public event CancelEventHandler Closing {
-            add {
-                Events.AddHandler(EVENT_CLOSING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CLOSING, value);
-            }
+            add => Events.AddHandler(EVENT_CLOSING, value);
+            remove => Events.RemoveHandler(EVENT_CLOSING, value);
         }
 
 
@@ -2605,12 +2559,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public event EventHandler Closed {
-            add {
-                Events.AddHandler(EVENT_CLOSED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CLOSED, value);
-            }
+            add => Events.AddHandler(EVENT_CLOSED, value);
+            remove => Events.RemoveHandler(EVENT_CLOSED, value);
         }
 
 
@@ -2620,12 +2570,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.FormOnDeactivateDescr))]
         public event EventHandler Deactivate {
-            add {
-                Events.AddHandler(EVENT_DEACTIVATE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DEACTIVATE, value);
-            }
+            add => Events.AddHandler(EVENT_DEACTIVATE, value);
+            remove => Events.RemoveHandler(EVENT_DEACTIVATE, value);
         }
 
 
@@ -2635,12 +2581,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosingDescr))]
         public event FormClosingEventHandler FormClosing {
-            add {
-                Events.AddHandler(EVENT_FORMCLOSING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_FORMCLOSING, value);
-            }
+            add => Events.AddHandler(EVENT_FORMCLOSING, value);
+            remove => Events.RemoveHandler(EVENT_FORMCLOSING, value);
         }
 
 
@@ -2650,12 +2592,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnFormClosedDescr))]
         public event FormClosedEventHandler FormClosed {
-            add {
-                Events.AddHandler(EVENT_FORMCLOSED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_FORMCLOSED, value);
-            }
+            add => Events.AddHandler(EVENT_FORMCLOSED, value);
+            remove => Events.RemoveHandler(EVENT_FORMCLOSED, value);
         }
 
 
@@ -2665,12 +2603,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnLoadDescr))]
         public event EventHandler Load {
-            add {
-                Events.AddHandler(EVENT_LOAD, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_LOAD, value);
-            }
+            add => Events.AddHandler(EVENT_LOAD, value);
+            remove => Events.RemoveHandler(EVENT_LOAD, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MdiChildActivate"]/*' />
@@ -2680,12 +2614,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnMDIChildActivateDescr))]
         public event EventHandler MdiChildActivate {
-            add {
-                Events.AddHandler(EVENT_MDI_CHILD_ACTIVATE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MDI_CHILD_ACTIVATE, value);
-            }
+            add => Events.AddHandler(EVENT_MDI_CHILD_ACTIVATE, value);
+            remove => Events.RemoveHandler(EVENT_MDI_CHILD_ACTIVATE, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MenuComplete"]/*' />
@@ -2698,12 +2628,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event EventHandler MenuComplete {
-            add {
-                Events.AddHandler(EVENT_MENUCOMPLETE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MENUCOMPLETE, value);
-            }
+     add => Events.AddHandler(EVENT_MENUCOMPLETE, value);
+            remove => Events.RemoveHandler(EVENT_MENUCOMPLETE, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.MenuStart"]/*' />
@@ -2716,12 +2642,8 @@ namespace System.Windows.Forms {
         Browsable(false)
         ]
         public event EventHandler MenuStart {
-            add {
-                Events.AddHandler(EVENT_MENUSTART, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MENUSTART, value);
-            }
+            add => Events.AddHandler(EVENT_MENUSTART, value);
+            remove => Events.RemoveHandler(EVENT_MENUSTART, value);
         }
 
 
@@ -2731,12 +2653,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeDescr))]
         public event InputLanguageChangedEventHandler InputLanguageChanged {
-            add {
-                Events.AddHandler(EVENT_INPUTLANGCHANGE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_INPUTLANGCHANGE, value);
-            }
+            add => Events.AddHandler(EVENT_INPUTLANGCHANGE, value);
+            remove => Events.RemoveHandler(EVENT_INPUTLANGCHANGE, value);
         }
 
 
@@ -2747,23 +2665,15 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnInputLangChangeRequestDescr))]
         public event InputLanguageChangingEventHandler InputLanguageChanging {
-            add {
-                Events.AddHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
-            }
+            add => Events.AddHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
+            remove => Events.RemoveHandler(EVENT_INPUTLANGCHANGEREQUEST, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Shown"]/*' />
@@ -2772,12 +2682,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.FormOnShownDescr))]
         public event EventHandler Shown {
-            add {
-                Events.AddHandler(EVENT_SHOWN, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SHOWN, value);
-            }
+            add => Events.AddHandler(EVENT_SHOWN, value);
+            remove => Events.RemoveHandler(EVENT_SHOWN, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.Activate"]/*' />
@@ -4528,12 +4434,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.FormOnDpiChangedDescr))]
         public event DpiChangedEventHandler DpiChanged {
-            add {
-                Events.AddHandler(EVENT_DPI_CHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DPI_CHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_DPI_CHANGED, value);
+            remove => Events.RemoveHandler(EVENT_DPI_CHANGED, value);
         }
 
         /// <devdoc>
@@ -4989,12 +4891,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeBeginDescr))]
         public event EventHandler ResizeBegin {
-            add {
-                Events.AddHandler(EVENT_RESIZEBEGIN, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_RESIZEBEGIN, value);
-            }
+            add => Events.AddHandler(EVENT_RESIZEBEGIN, value);
+            remove => Events.RemoveHandler(EVENT_RESIZEBEGIN, value);
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ResizeEnd"]/*' />
@@ -5003,12 +4901,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.FormOnResizeEndDescr))]
         public event EventHandler ResizeEnd {
-            add {
-                Events.AddHandler(EVENT_RESIZEEND, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_RESIZEEND, value);
-            }
+            add => Events.AddHandler(EVENT_RESIZEEND, value);
+            remove => Events.RemoveHandler(EVENT_RESIZEEND, value);
         }
 
         /// <devdoc>
