@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
 
             //create the MyGeneric`2[ part
             StringBuilder typename = new StringBuilder(typeref.BaseType);
-            if (typeref.BaseType.IndexOf('`') == -1)
+            if (!typeref.BaseType.Contains('`'))
             {
                 typename.Append("`");
                 typename.Append(typeref.TypeArguments.Count);
