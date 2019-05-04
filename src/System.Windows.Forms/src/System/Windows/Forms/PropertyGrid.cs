@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms {
                 {
                     tab = CreateTab(tabType, host);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return;
                 }
