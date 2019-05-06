@@ -218,7 +218,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackColor"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -232,7 +231,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add => base.BackColorChanged += value;
@@ -251,7 +249,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -270,7 +267,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -383,7 +379,6 @@ namespace System.Windows.Forms {
         ///     however, forget to get base.CreateParams first to get the struct
         ///     filled up with the basic info.
         /// </devdoc>
-        /// <internalonly/>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -473,7 +468,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Dock"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Sets the way in which this ToolBar is docked to its parent. We need to
@@ -549,7 +543,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ForeColor"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -563,7 +556,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -641,7 +633,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -752,7 +743,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RightToLeft"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -766,7 +756,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RightToLeftChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
             add => base.RightToLeftChanged += value;
@@ -778,7 +767,6 @@ namespace System.Windows.Forms {
         /// We need to track the current scale factor so that we can tell the
         ///  unmanaged control how to scale its buttons.
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void ScaleCore(float dx, float dy) {
             currentScaleDX = dx;
@@ -824,7 +812,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.TabStop"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [DefaultValue(false)]
@@ -838,7 +825,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Text"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [
@@ -856,7 +842,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -953,7 +938,6 @@ namespace System.Windows.Forms {
         ///     Adjusts the height or width of the ToolBar to make sure we have enough
         ///     room to show the buttons.
         /// </devdoc>
-        /// <internalonly/>
         // we pass in a value for dock rather than calling Dock ourselves
         // because we can't change Dock until the size has been properly adjusted.
         private void AdjustSize(DockStyle dock) {
@@ -984,7 +968,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -1012,7 +995,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 // 
@@ -1065,7 +1047,6 @@ namespace System.Windows.Forms {
         ///     a little better, and lets us actually show things like DropDown Arrows
         ///     for ToolBars
         /// </devdoc>
-        /// <internalonly/>
         private void ForceButtonWidths() {
 
             if (buttons != null && buttonSize.IsEmpty && IsHandleCreated) {
@@ -1096,7 +1077,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.Insert"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         private void Insert(int index, ToolBarButton button) {
@@ -1145,7 +1125,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Adds a button to the ToolBar
         /// </devdoc>
-        /// <internalonly/>
         private int InternalAddButton(ToolBarButton button) {
             if (button == null)
                 throw new ArgumentNullException(nameof(button));
@@ -1159,7 +1138,6 @@ namespace System.Windows.Forms {
         ///     Changes the data for a button in the ToolBar, and then does the appropriate
         ///     work to update the ToolBar control.
         /// </devdoc>
-        /// <internalonly/>
         internal void InternalSetButton(int index, ToolBarButton value, bool recreate, bool updateText) {
 
             // tragically, there doesn't appear to be a way to remove the
@@ -1213,7 +1191,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnHandleCreated"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overridden from the control class so we can add all the buttons
@@ -1255,7 +1232,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnResize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       The control is being resized. Make sure the width/height are correct.
@@ -1267,7 +1243,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.OnFontChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overridden to ensure that the buttons and the control resize properly
@@ -1291,7 +1266,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Sets all the button data into the ToolBar control
         /// </devdoc>
-        /// <internalonly/>
         private void RealizeButtons() {
             if (buttons != null) {
                 IntPtr ptbbuttons = IntPtr.Zero;
@@ -1350,7 +1324,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.RemoveAt"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         private void RemoveAt(int index) {
@@ -1384,7 +1357,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrides Control.setBoundsCore to enforce AutoSize.
         /// </devdoc>
-        /// <internalonly/>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             int originalHeight = height;
             int originalWidth = width;
@@ -1428,7 +1400,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
-        /// <internalonly/>
         internal void SetToolTip(ToolTip toolTip) {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, this.Handle), NativeMethods.TB_SETTOOLTIPS, new HandleRef(toolTip, toolTip.Handle), 0);
 
@@ -1438,7 +1409,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1454,7 +1424,6 @@ namespace System.Windows.Forms {
         ///     control is pretty flakey, and the only real choice here is to recreate
         ///     the handle and re-realize all the buttons.
         /// </devdoc>
-        /// <internalonly/>
         internal void UpdateButtons() {
             if (IsHandleCreated) {
                 RecreateHandle();
@@ -1466,7 +1435,6 @@ namespace System.Windows.Forms {
         ///     The button clicked was a dropdown button.  If it has a menu specified,
         ///     show it now.  Otherwise, fire an onButtonDropDown event.
         /// </devdoc>
-        /// <internalonly/>
         private void WmNotifyDropDown(ref Message m) {
             NativeMethods.NMTOOLBAR nmTB = (NativeMethods.NMTOOLBAR)m.GetLParam(typeof(NativeMethods.NMTOOLBAR));
 
@@ -1561,7 +1529,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.WmReflectCommand"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
 
             int id = NativeMethods.Util.LOWORD(m.WParam);
@@ -1580,7 +1547,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBar.WndProc"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_COMMAND + Interop.WindowMessages.WM_REFLECT:
@@ -1724,7 +1690,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -1772,7 +1737,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -1780,7 +1744,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -1788,7 +1751,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
@@ -1825,7 +1787,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object button) {
                 if (button is ToolBarButton) {
                     return Add((ToolBarButton)button);
@@ -1884,7 +1845,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object button) {
                 if (button is ToolBarButton) {
                     return Contains((ToolBarButton)button);
@@ -1905,7 +1865,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (owner.buttonCount > 0) {
                     System.Array.Copy(owner.buttons, 0, dest, index, owner.buttonCount);
@@ -1923,7 +1882,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object button) {
                 if (button is ToolBarButton) {
                     return IndexOf((ToolBarButton)button);
@@ -1970,7 +1928,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object button) {
                 if (button is ToolBarButton) {
                     Insert(index, (ToolBarButton)button);
@@ -1985,7 +1942,6 @@ namespace System.Windows.Forms {
            /// <devdoc>
            ///     <para>Determines if the index is valid for the collection.</para>
            /// </devdoc>
-           /// <internalonly/>
            private bool IsValidIndex(int index) {
                return ((index >= 0) && (index < this.Count));
             }
@@ -2031,7 +1987,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ToolBar.uex' path='docs/doc[@for="ToolBarButtonCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object button) {
                 if (button is ToolBarButton) {
                     Remove((ToolBarButton)button);

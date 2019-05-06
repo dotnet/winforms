@@ -58,32 +58,27 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Children"]/*' />
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get { return DisplayedItems; }
         }
         
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Container"]/*' />
-        /// <internalonly/>
         IArrangedElement IArrangedElement.Container {
             get { return ParentInternal; }
         }
         
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.ParticipatesInLayout"]/*' />
-        /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
                 
 
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Properties"]/*' />
-        /// <internalonly/>
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
         
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }

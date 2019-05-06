@@ -79,7 +79,6 @@ namespace System.Windows.Forms {
         
             /// <devdoc>
             /// </devdoc>
-            /// <internalonly/>
             internal const int IgnoreThreadModel     = 0x10000000;
         }
 
@@ -1562,7 +1561,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnInPlaceActive"]/*' />
-        /// <internalonly/>
         protected virtual void OnInPlaceActive() {
         }
 
@@ -2449,7 +2447,6 @@ namespace System.Windows.Forms {
         //
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetAttributes"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         AttributeCollection ICustomTypeDescriptor.GetAttributes() {
             if (!axState[editorRefresh] && HasPropertyPages()) {
@@ -2460,7 +2457,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetClassName"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the class name for this object.  If null is returned,
         /// the type name is used.
@@ -2471,7 +2467,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetComponentName"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the name for this object.  If null is returned,
         /// the default is used.
@@ -2482,7 +2477,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetConverter"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the type converter for this object.
         /// </devdoc>
@@ -2492,21 +2486,18 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultEvent"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() {
             return TypeDescriptor.GetDefaultEvent(this, true);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultProperty"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() {
             return TypeDescriptor.GetDefaultProperty(this, true);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEditor"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the an editor for this object.
         /// </devdoc>
@@ -2525,14 +2516,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEvents"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents() {
             return TypeDescriptor.GetEvents(this, true);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetEvents(Attribute"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) {
             return TypeDescriptor.GetEvents(this, attributes, true);
@@ -2698,21 +2687,18 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() {
             return FillProperties(null);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties1"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) {
             return FillProperties(attributes);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetPropertyOwner"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd) {
             return this;
@@ -3480,7 +3466,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.Finalize"]/*' />
-            /// <internalonly/>
             ~ConnectionPointCookie(){
                 if (connectionPoint != null && cookie != 0) {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload()) {
@@ -4680,7 +4665,6 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private int Convert2int(object o, bool xDirection) {
             o = ((Array)o).GetValue(0);
             // yacky yacky yacky...
@@ -4694,7 +4678,6 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private short Convert2short(object o) {
             o = ((Array)o).GetValue(0);
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);
@@ -4703,7 +4686,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
         protected void RaiseOnMouseMove(object o1, object o2, object o3, object o4) {
             RaiseOnMouseMove(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
@@ -4712,7 +4694,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, float x, float y) {
             RaiseOnMouseMove(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
@@ -4721,7 +4702,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove2"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, int x, int y) {
             base.OnMouseMove(new MouseEventArgs( (MouseButtons)(((int)button) << 20), 1, x, y, 0));
@@ -4730,7 +4710,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
         protected void RaiseOnMouseUp(object o1, object o2, object o3, object o4) {
             RaiseOnMouseUp(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
@@ -4739,7 +4718,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, float x, float y) {
             RaiseOnMouseUp(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
@@ -4748,7 +4726,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp2"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, int x, int y) {
             base.OnMouseUp(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
@@ -4757,7 +4734,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]        
         protected void RaiseOnMouseDown(object o1, object o2, object o3, object o4) {
             RaiseOnMouseDown(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
@@ -4766,7 +4742,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, float x, float y) {
             RaiseOnMouseDown(button, shift, Twip2Pixel((int) x,true), Twip2Pixel((int) y, false));
@@ -4775,7 +4750,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown2"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, int x, int y) {
             base.OnMouseDown(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
@@ -5997,7 +5971,6 @@ namespace System.Windows.Forms {
         ///      State from one data type to another.  Access this
         ///      class through the TypeDescriptor.
         /// </devdoc>
-        /// <internalonly/>
         public class StateConverter : TypeConverter {
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertFrom"]/*' />
@@ -6006,7 +5979,6 @@ namespace System.Windows.Forms {
             ///       convert an object in the given source type to the native type of the converter
             ///       using the context.</para>
             /// </devdoc>
-            /// <internalonly/>
             public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
                 if (sourceType == typeof(byte[])) {
                     return true;
@@ -6020,7 +5992,6 @@ namespace System.Windows.Forms {
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object to the given destination type using the context.</para>
             /// </devdoc>
-            /// <internalonly/>
             public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
                 if (destinationType == typeof(byte[])) {
                     return true;
@@ -6033,7 +6004,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>Converts the given object to the converter's native type.</para>
             /// </devdoc>
-            /// <internalonly/>
             public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
                 if (value is byte[]) {
                     MemoryStream ms = new MemoryStream((byte[])value);
@@ -6051,7 +6021,6 @@ namespace System.Windows.Forms {
             ///      type is string.  If this cannot convert to the desitnation type, this will
             ///      throw a NotSupportedException.
             /// </devdoc>
-            /// <internalonly/>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
                     throw new ArgumentNullException(nameof(destinationType));
@@ -6349,7 +6318,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             /// ISerializable private implementation
             /// </devdoc>
-            /// <internalonly/>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
                 MemoryStream stream = new MemoryStream();
                 Save(stream);

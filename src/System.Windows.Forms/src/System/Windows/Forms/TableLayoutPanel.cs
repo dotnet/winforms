@@ -192,7 +192,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.CreateControlsInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -207,7 +206,6 @@ namespace System.Windows.Forms {
         
         #region Extended Properties
         /// <include file='doc\GridPanel.uex' path='docs/doc[@for="GridPanel.IExtenderProvider.CanExtend"]/*' />
-        /// <internalonly/>
         bool IExtenderProvider.CanExtend(object obj) {
             Control control = obj as Control;
             return control != null && control.Parent == this;
@@ -362,7 +360,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TableLayoutPanel.uex' path='docs/doc[@for="TableLayoutPanel.OnLayout"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    When a layout fires, make sure we're painting all of our
         ///    cell borders.

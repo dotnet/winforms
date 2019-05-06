@@ -627,7 +627,6 @@ example usage
         ///     Returns a specific AccessibleObject associated with this
         ///     control, based on standard "accessibile object id".
         /// </devdoc>
-        /// <internalonly/>
         private AccessibleObject GetAccessibilityObject(int accObjId) {
             AccessibleObject accessibleObject;
 
@@ -1309,7 +1308,6 @@ example usage
 
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal virtual bool CanAccessProperties {
             get {
                 return true;
@@ -1878,7 +1876,6 @@ example usage
         ///     This property is set in the MDI children in WmClose method in form.cs when the top window is closing.
         ///     This property will be used in ActiveControl to determine if we want to skip set focus and window handle re-creation for the control.
         /// </devdoc>
-        /// <internalonly/>
         internal bool IsTopMdiWindowClosing {
             set {
                 SetState2(STATE2_TOPMDIWINDOWCLOSING, value);
@@ -1892,7 +1889,6 @@ example usage
         ///     returns bool indicating whether the control is currently being scaled.
         ///     This property is set in ScaleControl method to allow method being called to condition code that should not run for scaling.
         /// </devdoc>
-        /// <internalonly/>
         internal bool IsCurrentlyBeingScaled {
             private set {
                 SetState2(STATE2_CURRENTLYBEINGSCALED, value);
@@ -1907,7 +1903,6 @@ example usage
         ///     handle for this control.  If the control's handle hasn't been
         ///     created yet, this method will return the current thread's ID.
         /// </devdoc>
-        /// <internalonly/>
         internal int CreateThreadId {
             get {
                 if (IsHandleCreated) {
@@ -3432,7 +3427,6 @@ example usage
 
         // Helper function for Rtl
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RenderRightToLeft"]/*' />
-        /// <internalonly/>
         [Obsolete("This property has been deprecated. Please use RightToLeft instead. http://go.microsoft.com/fwlink/?linkid=14202")]
         protected internal bool RenderRightToLeft
         {
@@ -3461,7 +3455,6 @@ example usage
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </devdoc>
-        /// <internalonly/>
         internal virtual bool RenderTransparencyWithVisualStyles {
             get {
                 return false;
@@ -4218,7 +4211,6 @@ example usage
         /// <devdoc>
         ///     The current exStyle of the hWnd
         /// </devdoc>
-        /// <internalonly/>
         private int WindowExStyle {
             get {
                 return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_EXSTYLE));
@@ -4231,7 +4223,6 @@ example usage
         /// <devdoc>
         ///     The current style of the hWnd
         /// </devdoc>
-        /// <internalonly/>
         internal int WindowStyle {
             get {
                 return unchecked((int)(long)UnsafeNativeMethods.GetWindowLong(new HandleRef(this, Handle), NativeMethods.GWL_STYLE));
@@ -4245,7 +4236,6 @@ example usage
         /// <devdoc>
         ///     The target of Win32 window messages.
         /// </devdoc>
-        /// <internalonly/>
         [
         SRCategory(nameof(SR.CatBehavior)),
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never),
@@ -5199,7 +5189,6 @@ example usage
         }
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void ChildGotFocus(Control child) {
             if (IsActiveX) {
                 ActiveXOnFocus(true);
@@ -5771,7 +5760,6 @@ example usage
         ///     handle, so we traverse up the parent chain until we find one.
         ///     Failing that, we just return ouselves.
         /// </devdoc>
-        /// <internalonly/>
         private Control FindMarshalingControl() {
             // 
             lock(this) {
@@ -5806,7 +5794,6 @@ example usage
         /// <devdoc>
         ///     Used by AxHost to fire the CreateHandle event.
         /// </devdoc>
-        /// <internalonly/>
         internal void RaiseCreateHandleEvent(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EventHandleCreated];
             if (handler != null) handler(this, e);
@@ -6548,7 +6535,6 @@ example usage
         ///     Sets up the TrackMouseEvent for listening for the
         ///     mouse leave event.
         /// </devdoc>
-        /// <internalonly/>
         private void HookMouseEvent() {
             if (!GetState(STATE_TRACKINGMOUSEEVENT)) {
                 SetState(STATE_TRACKINGMOUSEEVENT, true);
@@ -6601,7 +6587,6 @@ example usage
         ///     Initializes mouse wheel support. This may involve registering some windows
         ///     messages on older operating systems.
         /// </devdoc>
-        /// <internalonly/>
         private void InitMouseWheelSupport() {
             if (!mouseWheelInit) {
                 // If we are running on a system without a mouse wheel then we must use
@@ -6978,7 +6963,6 @@ example usage
         /// <devdoc>
         /// determines whether the font is set
         /// </devdoc>
-        /// <internalonly/>
         internal bool IsFontSet() {
             Font font = (Font)Properties.GetObject(PropFont);
             if (font != null) {
@@ -6992,7 +6976,6 @@ example usage
         ///     The method returns true if "descendant" (the argument) is a descendant
         ///     of "this". I'd expect it to be the other way around, but oh well too late.
         /// </devdoc>
-        /// <internalonly/>
         internal bool IsDescendant(Control descendant) {
             Control control = descendant;
             while (control != null) {
@@ -7316,7 +7299,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.NotifyInvalidate"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Propagates the invalidation event, notifying the control that
         ///    some part of it is being invalidated and will subsequently need
@@ -9268,7 +9250,6 @@ example usage
         ///     for the context in which the validation is occuring, eg. change of focus
         ///     between controls in a container. Stuff like that is handled by the caller.
         /// </devdoc>
-        /// <internalonly/>
         internal bool PerformControlValidation(bool bulkValidation) {
 
             // Skip validation for controls that don't support it
@@ -9306,7 +9287,6 @@ example usage
         ///     Return value indicates whether validation failed for any of the controls validated.
         ///     Calling function is responsible for checking the correctness of the validationConstraints argument.
         /// </devdoc>
-        /// <internalonly/>
         internal bool PerformContainerValidation(ValidationConstraints validationConstraints) {
             bool failed = false;
 
@@ -10219,7 +10199,6 @@ example usage
         /// <devdoc>
         ///     Resets the mouse leave listeners.
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void ResetMouseEventArgs() {
             if (GetState(STATE_TRACKINGMOUSEEVENT)) {
@@ -10318,7 +10297,6 @@ example usage
         /// <devdoc>
         ///     Used to actually register the control as a drop target.
         /// </devdoc>
-        /// <internalonly/>
         internal void SetAcceptDrops(bool accept) {
             if (accept != GetState(STATE_DROPTARGET) && IsHandleCreated) {
                 try {
@@ -11249,7 +11227,6 @@ example usage
         ///     of its containing control. Defaults to 'EnablePreventFocusChange' if there is no containing control
         ///     (eg. because this control is a top-level container).
         /// </devdoc>
-        /// <internalonly/>
         internal static AutoValidate GetAutoValidateForControl(Control control) {
             ContainerControl parent = control.ParentContainerControl;
             return (parent != null) ? parent.AutoValidate : AutoValidate.EnablePreventFocusChange;
@@ -11260,7 +11237,6 @@ example usage
         ///     Is auto-validation currently in effect for this control?
         ///     Depends on the AutoValidate property of the containing control.
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal bool ShouldAutoValidate {
             get {
@@ -11508,7 +11484,6 @@ example usage
         /// <devdoc>
         ///     Stops listening for the mouse leave event.
         /// </devdoc>
-        /// <internalonly/>
         private void UnhookMouseEvent() {
             SetState(STATE_TRACKINGMOUSEEVENT, false);
         }
@@ -11830,7 +11805,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_CAPTURECHANGED message
         /// </devdoc>
-        /// <internalonly/>
         private void WmCaptureChanged(ref Message m) {
             OnMouseCaptureChanged(EventArgs.Empty);
             DefWndProc(ref m);
@@ -11840,7 +11814,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_COMMAND message
         /// </devdoc>
-        /// <internalonly/>
         private void WmCommand(ref Message m) {
             if (IntPtr.Zero == m.LParam) {
                 if (Command.DispatchID(NativeMethods.Util.LOWORD(m.WParam))) return;
@@ -11862,7 +11835,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
-        /// <internalonly/>
         internal void WmContextMenu(ref Message m, Control sourceControl) {
             ContextMenu contextMenu             = Properties.GetObject(PropContextMenu) as ContextMenu;
             ContextMenuStrip contextMenuStrip   = (contextMenu != null) ? null /*save ourselves a property fetch*/
@@ -11909,7 +11881,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_CTLCOLOR message
         /// </devdoc>
-        /// <internalonly/>
         private void WmCtlColorControl(ref Message m) {
             // We could simply reflect the message, but it's faster to handle it here if possible.
             Control control = Control.FromHandle(m.LParam);
@@ -11931,7 +11902,6 @@ example usage
         /// <devdoc>
         ///     WM_DRAWITEM handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmDrawItem(ref Message m) {
 
             // If the wparam is zero, then the message was sent by a menu.
@@ -11962,7 +11932,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_ERASEBKGND message
         /// </devdoc>
-        /// <internalonly/>
         private void WmEraseBkgnd(ref Message m) {
             if (GetStyle(ControlStyles.UserPaint)) {
                 // When possible, it's best to do all painting directly from WM_PAINT.
@@ -11990,7 +11959,6 @@ example usage
         ///     Handles the WM_EXITMENULOOP message. If this control has a context menu, its
         ///     Collapse event is raised.
         /// </devdoc>
-        /// <internalonly/>
         private void WmExitMenuLoop(ref Message m) {
             bool isContextMenu = (unchecked((int)(long)m.WParam) == 0) ? false : true;
 
@@ -12007,7 +11975,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_GETCONTROLNAME message. Returns the name of the control.
         /// </devdoc>
-        /// <internalonly/>
         private void WmGetControlName(ref Message m) {
             string name;
 
@@ -12028,7 +11995,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_GETCONTROLTYPE message. Returns the name of the control.
         /// </devdoc>
-        /// <internalonly/>
         private void WmGetControlType(ref Message m) {
             string type = GetType().AssemblyQualifiedName;
             MarshalStringToMessage(type, ref m);
@@ -12037,7 +12003,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_GETOBJECT message. Used for accessibility.
         /// </devdoc>
-        /// <internalonly/>
         private void WmGetObject(ref Message m) {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + this.GetType().FullName + ", lParam = " + m.LParam.ToString());
 
@@ -12119,7 +12084,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_HELP message
         /// </devdoc>
-        /// <internalonly/>
         private void WmHelp(ref Message m) {
 
             // if there's currently a message box open - grab the help info from it.
@@ -12151,7 +12115,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_INITMENUPOPUP message
         /// </devdoc>
-        /// <internalonly/>
         private void WmInitMenuPopup(ref Message m) {
             ContextMenu contextMenu = (ContextMenu)Properties.GetObject(PropContextMenu);
             if (contextMenu != null) {
@@ -12165,7 +12128,6 @@ example usage
         /// <devdoc>
         ///     WM_MEASUREITEM handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmMeasureItem(ref Message m) {
 
             // If the wparam is zero, then the message was sent by a menu.
@@ -12196,7 +12158,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MENUCHAR message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMenuChar(ref Message m) {
             Menu menu = ContextMenu;
             if (menu != null) {
@@ -12211,7 +12172,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MENUSELECT message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMenuSelect(ref Message m) {
             int item = NativeMethods.Util.LOWORD(m.WParam);
             int flags = NativeMethods.Util.HIWORD(m.WParam);
@@ -12244,7 +12204,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_CREATE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmCreate(ref Message m) {
 
             DefWndProc(ref m);
@@ -12272,7 +12231,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_DESTROY message
         /// </devdoc>
-        /// <internalonly/>
         private void WmDestroy(ref Message m) {
             // Let any interested sites know that we're destroying our handle
             //
@@ -12313,7 +12271,6 @@ example usage
         ///     Handles the WM_CHAR, WM_KEYDOWN, WM_SYSKEYDOWN, WM_KEYUP, and
         ///     WM_SYSKEYUP messages.
         /// </devdoc>
-        /// <internalonly/>
         private void WmKeyChar(ref Message m) {
             if (ProcessKeyMessage(ref m)) return;
             DefWndProc(ref m);
@@ -12322,7 +12279,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_KILLFOCUS message
         /// </devdoc>
-        /// <internalonly/>
         private void WmKillFocus(ref Message m) {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmKillFocus - " + this.Name);
             WmImeKillFocus();
@@ -12333,7 +12289,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MOUSEDOWN message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseDown(ref Message m, MouseButtons button, int clicks) {
             // If this is a "real" mouse event (not just WM_LBUTTONDOWN, etc) then
             // we need to see if something happens during processing of
@@ -12384,7 +12339,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MOUSEENTER message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseEnter(ref Message m) {
             DefWndProc(ref m);
             KeyboardToolTipStateMachine.Instance.NotifyAboutMouseEnter(this);
@@ -12394,7 +12348,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MOUSELEAVE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseLeave(ref Message m) {
             DefWndProc(ref m);
             OnMouseLeave(EventArgs.Empty);
@@ -12440,7 +12393,6 @@ example usage
         ///     Handles the "WM_MOUSEHOVER" message... until we get actuall OS support
         ///     for this, it is implemented as a custom message.
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseHover(ref Message m) {
             DefWndProc(ref m);
             OnMouseHover(EventArgs.Empty);
@@ -12449,7 +12401,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MOUSEMOVE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseMove(ref Message m) {
             // If the UserMouse style is set, the control does its own processing
             // of mouse messages
@@ -12463,7 +12414,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MOUSEUP message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseUp(ref Message m, MouseButtons button, int clicks) {
             // Get the mouse location
             //
@@ -12530,7 +12480,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_MOUSEWHEEL message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseWheel(ref Message m) {
             Point p = new Point(NativeMethods.Util.SignedLOWORD(m.LParam), NativeMethods.Util.SignedHIWORD(m.LParam));
             p = PointToClient(p);
@@ -12553,7 +12502,6 @@ example usage
         ///     addition to WM_WINDOWPOSCHANGED because windows may
         ///     send WM_MOVE directly.
         /// </devdoc>
-        /// <internalonly/>
         private void WmMove(ref Message m) {
             DefWndProc(ref m);
             UpdateBounds();
@@ -12562,7 +12510,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_NOTIFY message
         /// </devdoc>
-        /// <internalonly/>
         private unsafe void WmNotify(ref Message m) {
             NativeMethods.NMHDR* nmhdr = (NativeMethods.NMHDR*)m.LParam;
             if (!ReflectMessage(nmhdr->hwndFrom,ref m)) {
@@ -12581,7 +12528,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_NOTIFYFORMAT message
         /// </devdoc>
-        /// <internalonly/>
         private void WmNotifyFormat(ref Message m) {
             if (!ReflectMessage(m.WParam, ref m)) {
                 DefWndProc(ref m);
@@ -12591,7 +12537,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_DRAWITEM\WM_MEASUREITEM messages for controls other than menus
         /// </devdoc>
-        /// <internalonly/>
         private void WmOwnerDraw(ref Message m) {          
             bool reflectCalled = false;
 
@@ -12629,7 +12574,6 @@ example usage
         ///     Handles the WM_PAINT messages.  This should only be called
         ///     for userpaint controls.
         /// </devdoc>
-        /// <internalonly/>
         private void WmPaint(ref Message m) {
             bool doubleBuffered = DoubleBuffered || (GetStyle(ControlStyles.AllPaintingInWmPaint) && DoubleBufferingEnabled);
 #if DEBUG
@@ -12765,7 +12709,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_PRINTCLIENT messages.  
         /// </devdoc>
-        /// <internalonly/>
         private void WmPrintClient(ref Message m) {
             using (PaintEventArgs e = new PrintPaintEventArgs(m, m.WParam, ClientRectangle)) {
                 OnPrint(e);
@@ -12791,7 +12734,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_SETCURSOR message
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetCursor(ref Message m) {
 
             // Accessing through the Handle property has side effects that break this
@@ -12809,7 +12751,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_WINDOWPOSCHANGING message
         /// </devdoc>
-        /// <internalonly/>
         private unsafe void WmWindowPosChanging(ref Message m) {
 
             // We let this fall through to defwndproc unless we are being surfaced as
@@ -12841,7 +12782,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_PARENTNOTIFY message
         /// </devdoc>
-        /// <internalonly/>
         private void WmParentNotify(ref Message m) {
             int msg = NativeMethods.Util.LOWORD(m.WParam);
             IntPtr hWnd = IntPtr.Zero;
@@ -12863,7 +12803,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_SETFOCUS message
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetFocus(ref Message m) {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "Control::WmSetFocus - " + this.Name);
             WmImeSetFocus();
@@ -12897,7 +12836,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_SHOWWINDOW message
         /// </devdoc>
-        /// <internalonly/>
         private void WmShowWindow(ref Message m) {
             // We get this message for each control, even if their parent is not visible.
 
@@ -12951,7 +12889,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_UPDATEUISTATE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmUpdateUIState(ref Message m) {
 
             // See "How this all works" in ShowKeyboardCues
@@ -13043,7 +12980,6 @@ example usage
         /// <devdoc>
         ///     Handles the WM_WINDOWPOSCHANGED message
         /// </devdoc>
-        /// <internalonly/>
         private unsafe void WmWindowPosChanged(ref Message m) {
             DefWndProc(ref m);
             // Update new size / position
@@ -13457,7 +13393,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Children"]/*' />
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
                 ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(PropControlsCollection);
@@ -13469,7 +13404,6 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Container"]/*' />
-        /// <internalonly/>
         IArrangedElement IArrangedElement.Container {
             get {
                 // This is safe because the IArrangedElement interface is internal
@@ -13478,26 +13412,22 @@ example usage
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.ParticipatesInLayout"]/*' />
-        /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.PerformLayout"]/*' />
-        /// <internalonly/>
         void IArrangedElement.PerformLayout(IArrangedElement affectedElement, string affectedProperty) {
             PerformLayout(new LayoutEventArgs(affectedElement, affectedProperty));
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.Properties"]/*' />
-        /// <internalonly/>
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
 
         // CAREFUL: This really calls SetBoundsCore, not SetBounds.
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             ISite site = Site;
             IComponentChangeService ccs = null;
@@ -13669,25 +13599,21 @@ example usage
         /// Explicit support of DropTarget
         ///
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragEnter"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragEnter(DragEventArgs drgEvent) {
                 OnDragEnter(drgEvent);
         }
         
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragOver"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs drgEvent) {
                 OnDragOver(drgEvent);
         }
         
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragLeave"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
                 OnDragLeave(e);
         }
         
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.IDropTarget.OnDragDrop"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs drgEvent) {
                 OnDragDrop(drgEvent);
         }
@@ -13696,13 +13622,11 @@ example usage
         /// Explicit support of DropSource
         ///
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnGiveFeedback"]/*' />
-        /// <internalonly/>
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
                 OnGiveFeedback(giveFeedbackEventArgs);
         }
         
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
-        /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
                 OnQueryContinueDrag(queryContinueDragEventArgs);
         }
@@ -13829,7 +13753,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object control) {
                 if (control is Control) {
                     Add((Control)control);
@@ -13866,7 +13789,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.ICloneable.Clone"]/*' />
-            /// <internalonly/>
             object ICloneable.Clone() {
                 // Use CreateControlInstance so we get the same type of ControlCollection, but whack the
                 // owner so adding controls to this new collection does not affect the control we cloned from.
@@ -13908,7 +13830,6 @@ example usage
             ///           of all the controls that match.
             ///     </para>
             /// </devdoc>
-            /// <internalonly/>
             private ArrayList FindInternal(string key, bool searchAllChildren, ControlCollection controlsToLookIn, ArrayList foundControls) {
                 if ((controlsToLookIn == null) || (foundControls == null)) {
                     return null;
@@ -13994,7 +13915,6 @@ example usage
             /// <devdoc>
             ///     <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
-            /// <internalonly/>
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
@@ -14003,7 +13923,6 @@ example usage
             /// <devdoc>
             ///     <para>Who owns this control collection.</para>
             /// </devdoc>
-            /// <internalonly/>
             public Control Owner {
                 get {
                     return owner;
@@ -14045,7 +13964,6 @@ example usage
             }
 
             /// <include file='doc\Control.uex' path='docs/doc[@for="ControlCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object control) {
                 if (control is Control) {
                     Remove((Control)control);
@@ -14159,7 +14077,6 @@ example usage
             ///     This is internal virtual method so that "Readonly Collections" can override this and throw as they should not allow changing
             ///     the child control indices.
             /// </devdoc>
-            /// <internalonly/>
             internal virtual void SetChildIndexInternal(Control child, int newIndex)
             {
                 // Sanity check parameters
@@ -14252,7 +14169,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.GetControlInfo"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleControl.GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetControlInfo");
 
@@ -14275,7 +14191,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.OnMnemonic"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleControl.OnMnemonic(ref NativeMethods.MSG pMsg) {
 
             // If we got a mnemonic here, then the appropriate control will focus itself which
@@ -14289,7 +14204,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleControl.OnAmbientPropertyChange(int dispID) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnAmbientPropertyChange.  Dispid: " + dispID);
             Debug.Indent();
@@ -14301,7 +14215,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleControl.FreezeEvents"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleControl.FreezeEvents(int bFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:FreezeEvents.  Freeze: " + bFreeze);
             ActiveXInstance.EventsFrozen = (bFreeze != 0);
@@ -14312,7 +14225,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceActiveObject.GetWindow(out IntPtr hwnd) {
             return((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
         }
@@ -14320,7 +14232,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.ContextSensitiveHelp(int fEnterMode) {
             ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
@@ -14328,7 +14239,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceActiveObject.TranslateAccelerator(ref NativeMethods.MSG lpmsg) {
             return ActiveXInstance.TranslateAccelerator(ref lpmsg);
         }
@@ -14336,7 +14246,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.OnFrameWindowActivate(bool fActivate) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnFrameWindowActivate");
             OnFrameWindowActivate(fActivate);
@@ -14346,7 +14255,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.OnDocWindowActivate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.OnDocWindowActivate(int fActivate) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OnDocWindowActivate.  Activate: " + fActivate.ToString(CultureInfo.InvariantCulture));
             Debug.Indent();
@@ -14357,7 +14265,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.ResizeBorder"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.ResizeBorder(NativeMethods.COMRECT prcBorder, UnsafeNativeMethods.IOleInPlaceUIWindow pUIWindow, bool fFrameWindow) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ResizesBorder");
             // return NativeMethods.S_OK;
@@ -14366,7 +14273,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceActiveObject.EnableModeless"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceActiveObject.EnableModeless(int fEnable) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnableModeless");
             // return NativeMethods.S_OK;
@@ -14375,7 +14281,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.GetWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceObject.GetWindow(out IntPtr hwnd) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetWindow");
             int hr = ActiveXInstance.GetWindow(out hwnd);
@@ -14386,7 +14291,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceObject.ContextSensitiveHelp(int fEnterMode) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ContextSensitiveHelp.  Mode: " + fEnterMode.ToString(CultureInfo.InvariantCulture));
             if (fEnterMode != 0) {
@@ -14397,7 +14301,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.InPlaceDeactivate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceObject.InPlaceDeactivate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InPlaceDeactivate");
             Debug.Indent();
@@ -14408,7 +14311,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.UIDeactivate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleInPlaceObject.UIDeactivate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:UIDeactivate");
             return ActiveXInstance.UIDeactivate();
@@ -14417,7 +14319,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceObject.SetObjectRects(NativeMethods.COMRECT lprcPosRect, NativeMethods.COMRECT lprcClipRect) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetObjectRects(" + lprcClipRect.left + ", " + lprcClipRect.top + ", " + lprcClipRect.right + ", " + lprcClipRect.bottom + ")");
             Debug.Indent();
@@ -14428,7 +14329,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleInPlaceObject.ReactivateAndUndo"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleInPlaceObject.ReactivateAndUndo() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:ReactivateAndUndo");
             // return NativeMethods.S_OK;
@@ -14437,7 +14337,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetClientSite"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.SetClientSite(UnsafeNativeMethods.IOleClientSite pClientSite) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetClientSite");
             ActiveXInstance.SetClientSite(pClientSite);
@@ -14447,7 +14346,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetClientSite"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         UnsafeNativeMethods.IOleClientSite UnsafeNativeMethods.IOleObject.GetClientSite() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClientSite");
             return ActiveXInstance.GetClientSite();
@@ -14456,7 +14354,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetHostNames"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.SetHostNames(string szContainerApp, string szContainerObj) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetHostNames");
             // Since ActiveX controls never "open" for editing, we shouldn't need
@@ -14467,7 +14364,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Close"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.Close(int dwSaveOption) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Close. Save option: " + dwSaveOption);
             ActiveXInstance.Close(dwSaveOption);
@@ -14477,7 +14373,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetMoniker"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.SetMoniker(int dwWhichMoniker, object pmk) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetMoniker");
             return NativeMethods.E_NOTIMPL;
@@ -14486,7 +14381,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetMoniker"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.GetMoniker(int dwAssign, int dwWhichMoniker, out object moniker) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMoniker");
             moniker = null;
@@ -14496,7 +14390,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.InitFromData"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.InitFromData(IComDataObject pDataObject, int fCreation, int dwReserved) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:InitFromData");
             return NativeMethods.E_NOTIMPL;
@@ -14505,7 +14398,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetClipboardData"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.GetClipboardData(int dwReserved, out IComDataObject data) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetClipboardData");
             data = null;
@@ -14515,7 +14407,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.DoVerb"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.DoVerb(int iVerb, IntPtr lpmsg, UnsafeNativeMethods.IOleClientSite pActiveSite, int lindex, IntPtr hwndParent, NativeMethods.COMRECT lprcPosRect) {
 
             // In Office they are internally casting an iverb to a short and not
@@ -14553,7 +14444,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.EnumVerbs"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.EnumVerbs(out UnsafeNativeMethods.IEnumOLEVERB e) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumVerbs");
             return ActiveXImpl.EnumVerbs(out e);
@@ -14562,7 +14452,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.OleUpdate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.OleUpdate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:OleUpdate");
             return NativeMethods.S_OK;
@@ -14571,7 +14460,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.IsUpToDate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.IsUpToDate() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IsUpToDate");
             return NativeMethods.S_OK;
@@ -14580,7 +14468,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetUserClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.GetUserClassID(ref Guid pClsid) {
             pClsid = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserClassID.  ClassID: " + pClsid.ToString());
@@ -14590,7 +14477,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetUserType"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.GetUserType(int dwFormOfType, out string userType) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetUserType");
             if (dwFormOfType == NativeMethods.USERCLASSTYPE_FULL) {
@@ -14605,7 +14491,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.SetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetExtent(" + pSizel.cx + ", " + pSizel.cy + ")");
             Debug.Indent();
@@ -14617,7 +14502,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.GetExtent(int dwDrawAspect, NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent.  Aspect: " + dwDrawAspect.ToString(CultureInfo.InvariantCulture));
             Debug.Indent();
@@ -14630,7 +14514,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Advise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.Advise(IAdviseSink pAdvSink, out int cookie) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Advise");
             cookie = ActiveXInstance.Advise(pAdvSink);
@@ -14640,7 +14523,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.Unadvise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.Unadvise(int dwConnection) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unadvise");
             Debug.Indent();
@@ -14652,7 +14534,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.EnumAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.EnumAdvise(out IEnumSTATDATA e) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:EnumAdvise");
             e = null;
@@ -14662,7 +14543,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.GetMiscStatus"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.GetMiscStatus(int dwAspect, out int cookie) {
             if ((dwAspect & NativeMethods.DVASPECT_CONTENT) != 0) {
                 int status = NativeMethods.OLEMISC_ACTIVATEWHENVISIBLE | NativeMethods.OLEMISC_INSIDEOUT | NativeMethods.OLEMISC_SETCLIENTSITEFIRST;
@@ -14689,7 +14569,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleObject.SetColorScheme"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleObject.SetColorScheme(NativeMethods.tagLOGPALETTE pLogpal) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetColorScheme");
             return NativeMethods.S_OK;
@@ -14698,7 +14577,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleWindow.GetWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IOleWindow.GetWindow(out IntPtr hwnd) {
             return((UnsafeNativeMethods.IOleInPlaceObject)this).GetWindow(out hwnd);
         }
@@ -14706,7 +14584,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IOleWindow.ContextSensitiveHelp(int fEnterMode) {
             ((UnsafeNativeMethods.IOleInPlaceObject)this).ContextSensitiveHelp(fEnterMode);
         }
@@ -14714,7 +14591,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersist.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersist.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersist.GetClassID.  ClassID: " + pClassID.ToString());
@@ -14723,7 +14599,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.InitNew"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistPropertyBag.InitNew() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.InitNew");
         }
@@ -14731,7 +14606,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistPropertyBag.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistPropertyBag.GetClassID.  ClassID: " + pClassID.ToString());
@@ -14740,7 +14614,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.Load"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistPropertyBag.Load(UnsafeNativeMethods.IPropertyBag pPropBag, UnsafeNativeMethods.IErrorLog pErrorLog) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Load (IPersistPropertyBag)");
             Debug.Indent();
@@ -14751,7 +14624,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistPropertyBag.Save"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistPropertyBag.Save(UnsafeNativeMethods.IPropertyBag pPropBag, bool fClearDirty, bool fSaveAllProperties) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Save (IPersistPropertyBag)");
             Debug.Indent();
@@ -14762,7 +14634,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStorage.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.GetClassID.  ClassID: " + pClassID.ToString());
@@ -14771,7 +14642,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.IsDirty"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IPersistStorage.IsDirty() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.IsDirty");
             return ActiveXInstance.IsDirty();
@@ -14780,7 +14650,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.InitNew"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStorage.InitNew(UnsafeNativeMethods.IStorage pstg) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.InitNew");
         }
@@ -14788,7 +14657,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.Load"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IPersistStorage.Load(UnsafeNativeMethods.IStorage pstg) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Load");
             Debug.Indent();
@@ -14800,7 +14668,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.Save"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStorage.Save(UnsafeNativeMethods.IStorage pstg, bool fSameAsLoad) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.Save");
             Debug.Indent();
@@ -14811,7 +14678,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.SaveCompleted"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStorage.SaveCompleted(UnsafeNativeMethods.IStorage pStgNew) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.SaveCompleted");
         }
@@ -14819,7 +14685,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStorage.HandsOffStorage"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStorage.HandsOffStorage() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStorage.HandsOffStorage");
         }
@@ -14827,7 +14692,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.GetClassID"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStreamInit.GetClassID(out Guid pClassID) {
             pClassID = GetType().GUID;
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.GetClassID.  ClassID: " + pClassID.ToString());
@@ -14836,7 +14700,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.IsDirty"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IPersistStreamInit.IsDirty() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.IsDirty");
             return ActiveXInstance.IsDirty();
@@ -14845,7 +14708,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.Load"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStreamInit.Load(UnsafeNativeMethods.IStream pstm) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Load");
             Debug.Indent();
@@ -14856,7 +14718,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.Save"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStreamInit.Save(UnsafeNativeMethods.IStream pstm, bool fClearDirty) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.Save");
             Debug.Indent();
@@ -14867,7 +14728,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.GetSizeMax"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStreamInit.GetSizeMax(long pcbSize) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetSizeMax");
         }
@@ -14875,7 +14735,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IPersistStreamInit.InitNew"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IPersistStreamInit.InitNew() {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:IPersistStreamInit.InitNew");
         }
@@ -14883,7 +14742,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.QuickActivate"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IQuickActivate.QuickActivate(UnsafeNativeMethods.tagQACONTAINER pQaContainer, UnsafeNativeMethods.tagQACONTROL pQaControl) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:QuickActivate");
             Debug.Indent();
@@ -14894,7 +14752,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.SetContentExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IQuickActivate.SetContentExtent(NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetContentExtent");
             Debug.Indent();
@@ -14905,7 +14762,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IQuickActivate.GetContentExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IQuickActivate.GetContentExtent(NativeMethods.tagSIZEL pSizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetContentExtent");
             Debug.Indent();
@@ -14916,7 +14772,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Draw"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                             IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
                                             IntPtr pfnContinue, int dwContinue) {
@@ -14941,7 +14796,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.GetColorSet"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject.GetColorSet(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                                    IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet) {
 
@@ -14955,7 +14809,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Freeze"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject.Freeze(int dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
             return NativeMethods.E_NOTIMPL;
@@ -14964,7 +14817,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.Unfreeze"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject.Unfreeze(int dwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unfreeze");
             return NativeMethods.E_NOTIMPL;
@@ -14973,7 +14825,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.SetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IViewObject.SetAdvise(int aspects, int advf, IAdviseSink pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
@@ -14982,7 +14833,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject.GetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IViewObject.GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
@@ -14991,7 +14841,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Draw"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IViewObject2.Draw(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                              IntPtr hdcTargetDev, IntPtr hdcDraw, NativeMethods.COMRECT lprcBounds, NativeMethods.COMRECT lprcWBounds,
                                              IntPtr pfnContinue, int dwContinue) {
@@ -15005,7 +14854,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetColorSet"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject2.GetColorSet(int dwDrawAspect, int lindex, IntPtr pvAspect, NativeMethods.tagDVTARGETDEVICE ptd,
                                                     IntPtr hicTargetDev, NativeMethods.tagLOGPALETTE ppColorSet) {
 
@@ -15019,7 +14867,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Freeze"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject2.Freeze(int dwDrawAspect, int lindex, IntPtr pvAspect, IntPtr pdwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Freezes");
             return NativeMethods.E_NOTIMPL;
@@ -15028,7 +14875,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.Unfreeze"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         int UnsafeNativeMethods.IViewObject2.Unfreeze(int dwFreeze) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:Unfreeze");
             return NativeMethods.E_NOTIMPL;
@@ -15037,7 +14883,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.SetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IViewObject2.SetAdvise(int aspects, int advf, IAdviseSink pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:SetAdvise");
             ActiveXInstance.SetAdvise(aspects, advf, pAdvSink);
@@ -15046,7 +14891,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetAdvise"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IViewObject2.GetAdvise(int[] paspects, int[] padvf, IAdviseSink[] pAdvSink) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAdvise");
             ActiveXInstance.GetAdvise(paspects, padvf, pAdvSink);
@@ -15055,7 +14899,6 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.UnsafeNativeMethods.IViewObject2.GetExtent"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void UnsafeNativeMethods.IViewObject2.GetExtent(int dwDrawAspect, int lindex, NativeMethods.tagDVTARGETDEVICE ptd, NativeMethods.tagSIZEL lpsizel) {
             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetExtent (IViewObject2)");
             // we already have an implementation of this [from IOleObject]
@@ -15226,7 +15069,6 @@ example usage
         ///      This class holds all of the state data for an ActiveX control and
         ///      supplies the implementation for many of the non-trivial methods.
         /// </devdoc>
-        /// <internalonly/>
         private class ActiveXImpl : MarshalByRefObject, IWindowTarget {
             // SECUNDONE : This call is private and is only used to expose a WinForm control as
             //           : an ActiveX control. This class needs more review.
@@ -15826,7 +15668,6 @@ example usage
             /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ActiveXImpl.GetControlInfo"]/*' />
             /// <devdoc>
             /// </devdoc>
-            /// <internalonly/>
             internal int GetControlInfo(NativeMethods.tagCONTROLINFO pCI) {
                 if (accelCount == -1) {
                     ArrayList mnemonicList = new ArrayList();
@@ -15977,7 +15818,6 @@ example usage
             /// <devdoc>
             ///      Converts coordinates in HiMetric to pixels.  Used for ActiveX sourcing.
             /// </devdoc>
-            /// <internalonly/>
             private Point HiMetricToPixel(int x, int y) {
                 Point pt = new Point();
                 pt.X = (LogPixels.X * x + hiMetricPerInch / 2) / hiMetricPerInch;
@@ -16523,7 +16363,6 @@ example usage
             /// <devdoc>
             ///      Converts coordinates in pixels to HiMetric.
             /// </devdoc>
-            /// <internalonly/>
             private Point PixelToHiMetric(int x, int y) {
                 Point pt = new Point();
                 pt.X = (hiMetricPerInch * x + (LogPixels.X >> 1)) / LogPixels.X;
@@ -16974,7 +16813,6 @@ example usage
             ///      Fires the OnSave event to all of our IAdviseSink
             ///      listeners.  Used for ActiveXSourcing.
             /// </devdoc>
-            /// <internalonly/>
             private void SendOnSave() {
                 int cnt = adviseList.Count;
                 for (int i = 0; i < cnt; i++) {
@@ -17479,7 +17317,6 @@ example usage
             /// <devdoc>
             ///     Notifies our site that we have changed our size and location.
             /// </devdoc>
-            /// <internalonly/>
             internal void UpdateBounds(ref int x, ref int y, ref int width, ref int height, int flags) {
                 if (!activeXState[adjustingRect] && activeXState[inPlaceVisible]) {
                     UnsafeNativeMethods.IOleInPlaceSite ioleClientSite = clientSite as UnsafeNativeMethods.IOleInPlaceSite;
@@ -17552,7 +17389,6 @@ example usage
             ///      Notifies our view advise sink (if it exists) that the view has
             ///      changed.
             /// </devdoc>
-            /// <internalonly/>
             private void ViewChanged() {
                 // send the view change notification to anybody listening.
                 //

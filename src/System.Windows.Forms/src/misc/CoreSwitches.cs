@@ -6,7 +6,6 @@ namespace System.ComponentModel {
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <internalonly/>
     // Shared between dlls
     [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
     internal static class CoreSwitches {   

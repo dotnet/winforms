@@ -133,7 +133,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       This is called when creating a window. Inheriting classes can overide
@@ -187,7 +186,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseEnter"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
@@ -198,7 +196,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
@@ -240,7 +237,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnClick"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       This method actually raises the Click event. Inheriting classes should
@@ -270,7 +266,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseUp"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
@@ -342,7 +337,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ProcessMnemonic"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Lets a control process mnmemonic characters. Inheriting classes can
@@ -361,7 +355,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ToString"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Provides some interesting information for the Button control in
@@ -380,7 +373,6 @@ namespace System.Windows.Forms {
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:

@@ -303,7 +303,6 @@ namespace System.Windows.Forms {
             return base.KeyPress(rowNum, keyData);
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Indicates whether the a mouse down event occurred at the specified row, at
@@ -337,7 +336,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>,
@@ -349,7 +347,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint1"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,

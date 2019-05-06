@@ -460,7 +460,6 @@ namespace System.Windows.Forms.ButtonInternal {
             ControlPaint.DrawBorder(g, r, c, ButtonBorderStyle.Solid);
         }
         
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Draws the flat border with specified bordersize. 

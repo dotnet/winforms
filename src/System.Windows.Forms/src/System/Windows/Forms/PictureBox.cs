@@ -203,7 +203,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CausesValidation"]/*' />
-        /// <internalonly/>
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CausesValidation {
@@ -216,7 +215,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CausesValidationChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
             add => base.CausesValidationChanged += value;
@@ -224,7 +222,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Returns the parameters needed to create the handle. Inheriting classes
         ///       can override this to provide extra functionality. They should not,
@@ -321,7 +318,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -343,7 +339,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.FontChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add => base.FontChanged += value;
@@ -527,7 +522,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -879,7 +873,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.RightToLeftChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
             add => base.RightToLeftChanged += value;
@@ -971,7 +964,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
@@ -993,7 +985,6 @@ namespace System.Windows.Forms {
         }     
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabIndexChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
             add => base.TabIndexChanged += value;
@@ -1015,7 +1006,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -1064,7 +1054,6 @@ namespace System.Windows.Forms {
         ///     If the PictureBox has the SizeMode property set to AutoSize, this makes
         ///     sure that the picturebox is large enough to hold the image.
         /// </devdoc>
-        /// <internalonly/>
         private void AdjustSize() {
             if (sizeMode == PictureBoxSizeMode.AutoSize) {
                 Size = PreferredSize;
@@ -1102,7 +1091,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -1199,7 +1187,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overridden onPaint to make sure that the image is painted correctly.
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnPaint(PaintEventArgs pe) {
 
             if (pictureBoxState[PICTUREBOXSTATE_needToLoadImageLocation])
@@ -1261,7 +1248,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     OnResize override to invalidate entire control in Stetch mode
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (sizeMode == PictureBoxSizeMode.Zoom || sizeMode == PictureBoxSizeMode.StretchImage || sizeMode == PictureBoxSizeMode.CenterImage || BackgroundImage != null) {
@@ -1282,7 +1268,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1313,14 +1298,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ISupportInitialize.BeginInit"]/*' />
-        /// <internalonly/>
         void ISupportInitialize.BeginInit()
         {
             pictureBoxState[PICTUREBOXSTATE_inInitialization] = true;
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ISupportInitialize.EndInit"]/*' />
-        /// <internalonly/>
         void ISupportInitialize.EndInit()
         {
             Debug.Assert(pictureBoxState[PICTUREBOXSTATE_inInitialization]);

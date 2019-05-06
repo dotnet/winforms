@@ -219,7 +219,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.BindingContext"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       The binding manager for the container control.
@@ -358,7 +357,6 @@ namespace System.Windows.Forms {
 
         // Package scope for Control
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.IContainerControl.ActivateControl"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Activates the specified control.</para>
         /// </devdoc>
@@ -404,7 +402,6 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///     Used for UserControls - checks if the control
         ///     has a focusable control inside or not
@@ -425,7 +422,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AdjustFormScrollbars"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -441,7 +437,6 @@ namespace System.Windows.Forms {
         ///     Cleans up form state after a control has been removed.
         ///     Package scope for Control
         /// </devdoc>
-        /// <internalonly/>
         internal virtual void AfterControlRemoved(Control control, Control oldParent) {
             ContainerControl cc;
             Debug.Assert(control != null);
@@ -1088,7 +1083,6 @@ namespace System.Windows.Forms {
         ///     Process an arrowKey press by selecting the next control in the group
         ///     that the activeControl belongs to.
         /// </devdoc>
-        /// <internalonly/>
         private bool ProcessArrowKey(bool forward) {
             Control group = this;
             if (activeControl != null) {
@@ -1098,7 +1092,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessDialogChar"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog character. Overrides Control.processDialogChar().
         ///    This method calls the processMnemonic() method to check if the character
@@ -1119,7 +1112,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessDialogKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog key. Overrides Control.processDialogKey(). This
         ///    method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
@@ -1153,7 +1145,6 @@ namespace System.Windows.Forms {
 
 
          /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessCmdKey"]/*' />
-         /// <internalonly/>
          protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessCmdKey " + msg.ToString());
 
@@ -1173,7 +1164,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessMnemonic"]/*' />
-        /// <internalonly/>
         protected internal override bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessMnemonic [" + charCode.ToString() + "]");
@@ -1389,7 +1379,6 @@ namespace System.Windows.Forms {
         ///     Updates the default button based on current selection, and the
         ///     acceptButton property.
         /// </devdoc>
-        /// <internalonly/>
         protected virtual void UpdateDefaultButton() {
             // hook for form
         }
@@ -1399,7 +1388,6 @@ namespace System.Windows.Forms {
         ///     activeControl variable, firing enter and leave events and validation
         ///     as necessary.
         /// </devdoc>
-        /// <internalonly/>
         internal void UpdateFocusedControl() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::UpdateFocusedControl() - " + this.Name);
 
@@ -1525,7 +1513,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Make sure we have a valid choice of last unvalidated control if at all possible.
         /// </devdoc>
-        /// <internalonly/>
         private void EnsureUnvalidatedControl(Control candidate) {
             // Don't change the unvalidated control while in the middle of validation (re-entrancy)
             if (state[stateValidating]) {
@@ -1572,7 +1559,6 @@ namespace System.Windows.Forms {
         ///     Validates the last unvalidated control and its ancestors (up through the ancestor in common
         ///     with enterControl) if enterControl causes validation.
         /// </devdoc>
-        /// <internalonly/>
         private void EnterValidation(Control enterControl) {
             // No unvalidated control to validate - stop now
             if (unvalidatedControl == null) {
@@ -1814,7 +1800,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_SETFOCUS handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetFocus(ref Message m) {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::WmSetFocus() - " + this.Name);
             if (!HostedInWin32DialogManager) {
@@ -1854,7 +1839,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]

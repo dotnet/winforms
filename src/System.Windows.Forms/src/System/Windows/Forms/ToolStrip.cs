@@ -423,7 +423,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.BackColor"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Just here so we can implement ShouldSerializeBackColor
         /// </devdoc>
@@ -706,7 +705,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.Dock"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Just here so we can add the default value attribute
         /// </devdoc>
@@ -771,7 +769,6 @@ namespace System.Windows.Forms {
 
         }
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DisplayedItems"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Just here so we can add the default value attribute
         /// </devdoc>
@@ -786,7 +783,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.DisplayRectangle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>
         /// Retreives the current display rectangle. The display rectangle
@@ -820,7 +816,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.ForeColor"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Forecolor really has no meaning for ToolStrips - so lets hide it
         /// </devdoc>
@@ -856,7 +851,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Summary of ToolStripGrip.
         /// </devdoc>
-        /// <internalonly/>
         internal ToolStripGrip Grip {
             get {
                 if (toolStripGrip == null) {
@@ -3078,7 +3072,6 @@ namespace System.Windows.Forms {
         ///     Process an arrowKey press by selecting the next control in the group
         ///     that the activeControl belongs to.
         /// </devdoc>
-        /// <internalonly/>
         private bool ProcessLeftRightArrowKey(bool right) {
             ToolStripItem selectedItem = GetSelectedItem();
             ToolStripItem nextItem = SelectNextToolStripItem(GetSelectedItem(), right);
@@ -4570,19 +4563,16 @@ namespace System.Windows.Forms {
 
         // Overriden to return Items instead of Controls.
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IArrangedElement.Children"]/*' />
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get { return Items; }
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="ToolStrip.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }
 
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="Control.IArrangedElement.ParticipatesInLayout"]/*' />
-        /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE);}
         }

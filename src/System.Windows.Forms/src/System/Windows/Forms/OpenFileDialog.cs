@@ -156,7 +156,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Displays a file open dialog.
         /// </devdoc>
-        /// <internalonly/>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);

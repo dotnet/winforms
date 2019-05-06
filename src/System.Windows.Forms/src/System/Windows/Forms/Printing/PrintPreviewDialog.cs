@@ -190,7 +190,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add => base.BackColorChanged += value;
@@ -345,7 +344,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MaximumSizeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MaximumSizeChanged {
             add => base.MaximumSizeChanged += value;
@@ -420,7 +418,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.MinimumSizeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MinimumSizeChanged {
             add => base.MinimumSizeChanged += value;
@@ -466,7 +463,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.SizeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler SizeChanged {
             add => base.SizeChanged += value;
@@ -599,7 +595,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CausesValidationChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
             add => base.CausesValidationChanged += value;
@@ -637,7 +632,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.EnabledChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
             add => base.EnabledChanged += value;
@@ -659,7 +653,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.LocationChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
             add => base.LocationChanged += value;
@@ -704,7 +697,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.CursorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
             add => base.CursorChanged += value;
@@ -725,7 +717,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -746,7 +737,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -767,7 +757,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -833,7 +822,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.VisibleChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged {
             add => base.VisibleChanged += value;
@@ -853,7 +841,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -896,7 +883,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.RightToLeftChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler RightToLeftChanged {
             add => base.RightToLeftChanged += value;
@@ -926,7 +912,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
@@ -948,7 +933,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -972,7 +956,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.DockChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DockChanged {
             add => base.DockChanged += value;
@@ -994,7 +977,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.FontChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add => base.FontChanged += value;
@@ -1016,7 +998,6 @@ namespace System.Windows.Forms {
             }
         }
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ContextMenuChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ContextMenuChanged {
             add => base.ContextMenuChanged += value;
@@ -1025,7 +1006,6 @@ namespace System.Windows.Forms {
 
         // DockPadding is not relevant to UpDownBase
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.DockPadding"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -1122,7 +1102,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.Opacity"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Opacity does not apply to PrintPreviewDialogs.
@@ -1463,7 +1442,6 @@ namespace System.Windows.Forms {
         
 
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.OnClosing"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Forces the preview to be regenerated every time the dialog comes up
@@ -1520,7 +1498,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewDialog.uex' path='docs/doc[@for="PrintPreviewDialog.ShouldSerializeAutoScaleBaseSize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       AutoScaleBaseSize should never be persisted for PrintPreviewDialogs.

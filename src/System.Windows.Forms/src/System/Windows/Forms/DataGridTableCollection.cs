@@ -24,92 +24,77 @@ namespace System.Windows.Forms {
         DataGrid         owner  = null;
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Add"]/*' />
-        /// <internalonly/>
         int IList.Add(object value) {
             return this.Add((DataGridTableStyle) value);            
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Clear"]/*' />
-        /// <internalonly/>
         void IList.Clear() {
             this.Clear();
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Contains"]/*' />
-        /// <internalonly/>
         bool IList.Contains(object value) {
             return items.Contains(value);
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
         int IList.IndexOf(object value) {
             return items.IndexOf(value);
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Insert"]/*' />
-        /// <internalonly/>
         void IList.Insert(int index, object value) {
             throw new NotSupportedException();
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object value) {
             this.Remove((DataGridTableStyle)value);
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.RemoveAt"]/*' />
-        /// <internalonly/>
         void IList.RemoveAt(int index) {
             this.RemoveAt(index);
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
         bool IList.IsFixedSize {
             get {return false;}
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.IsReadOnly"]/*' />
-        /// <internalonly/>
         bool IList.IsReadOnly {
             get {return false;}
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get { return items[index]; }
             set { throw new NotSupportedException(); }
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array array, int index) {
             this.items.CopyTo(array, index);
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.Count"]/*' />
-        /// <internalonly/>
         int ICollection.Count {
             get {return this.items.Count;}
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {return false;}
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {return this;}
         }
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IEnumerable.GetEnumerator"]/*' />
-        /// <internalonly/>
         IEnumerator IEnumerable.GetEnumerator() {
             return items.GetEnumerator();
         }

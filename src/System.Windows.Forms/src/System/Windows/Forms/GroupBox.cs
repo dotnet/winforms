@@ -58,7 +58,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.AllowDrop"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the control will allow drag and
@@ -177,7 +176,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.DisplayRectangle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets a rectangle that represents the
@@ -261,7 +259,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.TabStop"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the user may
@@ -281,7 +278,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
@@ -442,7 +438,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.OnPaint"]/*' />
-        /// <internalonly/>
         protected override void OnPaint(PaintEventArgs e) {
             
         
@@ -632,7 +627,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.OnFontChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected override void OnFontChanged(EventArgs e) {
@@ -647,7 +641,6 @@ namespace System.Windows.Forms {
         ///     We use this to process mnemonics and send them on to the first child
         ///     control.
         /// </devdoc>
-        /// <internalonly/>        
         protected internal override bool ProcessMnemonic(char charCode) {
             if (IsMnemonic(charCode, Text) && CanProcessMnemonic()) {
                 SelectNextControl(null, true, true, true, false);
@@ -674,7 +667,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -685,7 +677,6 @@ namespace System.Windows.Forms {
         ///     The Windows group box doesn't erase the background so we do it
         ///     ourselves here.
         /// </summary>
-        /// <internalonly/>
         private void WmEraseBkgnd(ref Message m) {
             NativeMethods.RECT rect = new NativeMethods.RECT();
             SafeNativeMethods.GetClientRect(new HandleRef(this, Handle), ref rect);
@@ -699,7 +690,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.WndProc"]/*' />
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
        
             if (OwnerDraw) {

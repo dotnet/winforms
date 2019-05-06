@@ -511,7 +511,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -737,7 +736,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void Dispose(bool disposing) {
             if (disposing) {
                 StopAnimate();
@@ -764,7 +762,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnGotFocus"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnGotFocus'/> event.
@@ -776,7 +773,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnLostFocus"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnLostFocus'/> event.
@@ -793,7 +789,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseEnter"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
@@ -812,7 +807,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseLeave"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
@@ -830,7 +824,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseMove"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseMove'/> event.
@@ -859,7 +852,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseDown"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseDown'/> event.
@@ -878,7 +870,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnMouseUp"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
@@ -890,7 +881,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.ResetFlagsandPaint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Used for quick re-painting of the button after the pressed state.
@@ -1020,7 +1010,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnKeyDown"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyDown'/> event.
@@ -1049,7 +1038,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnKeyUp"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnKeyUp'/> event.
@@ -1080,7 +1068,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.OnPaint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnPaint'/> event.
@@ -1176,7 +1163,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBase.UseVisualStyleBackColor"]/*' />
-        /// <internalonly/>
         [
             SRCategory(nameof(SR.CatAppearance)),
             SRDescription(nameof(SR.ButtonUseVisualStyleBackColorDescr))
@@ -1282,7 +1268,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ButtonBase.uex' path='docs/doc[@for="ButtonBaseAccessibleObject"]/*' />
-        /// <internalonly/>
         [System.Runtime.InteropServices.ComVisible(true)]        
         public class ButtonBaseAccessibleObject : ControlAccessibleObject {
             

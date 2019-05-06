@@ -1793,7 +1793,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Defines a window that the ActiveX window is attached to so that we can override it's wndproc.
         /// </devdoc>
-        /// <internalonly/>
         private class WebBrowserBaseNativeWindow : NativeWindow {
             private WebBrowserBase WebBrowserBase;
 
@@ -1805,7 +1804,6 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>
-            /// <internalonly/>
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
                     case Interop.WindowMessages.WM_WINDOWPOSCHANGING:

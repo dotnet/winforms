@@ -406,7 +406,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.TabStopChanged"]/*' />
-        /// <internalonly/>
         // Make this event visible through the property browser.
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler TabStopChanged {
@@ -523,7 +522,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///   Constructs the new instance of the accessibility object for this control. Subclasses
         ///   should not call base.CreateAccessibilityObject.
@@ -842,7 +840,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.IButtonControl.DialogResult"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>
         /// Gets or sets a value that is returned to the
@@ -867,7 +864,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.IButtonControl.NotifyDefault"]/*' />
-        /// <internalonly/>
         void IButtonControl.NotifyDefault(bool value) {
         }
 
@@ -1466,7 +1462,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.IButtonControl.PerformClick"]/*' />
-        /// <internalonly/>
         void IButtonControl.PerformClick() {
 
             // If a link is not currently focused, focus on the first link
@@ -1865,7 +1860,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Handles the WM_SETCURSOR message
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetCursor(ref Message m) {
 
             // Accessing through the Handle property has side effects that break this
@@ -1886,7 +1880,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected override void WndProc(ref Message msg) {
@@ -1934,7 +1927,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -1992,7 +1984,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -2000,7 +1991,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -2008,7 +1998,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
@@ -2101,7 +2090,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 if (value is Link) {
                     return Add((Link)value);
@@ -2112,7 +2100,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 if (value is Link) {
                     Add((Link)value);
@@ -2136,7 +2123,6 @@ namespace System.Windows.Forms {
             }
         
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object link) {
                 if (link is Link) {
                     return Contains((Link)link);
@@ -2152,7 +2138,6 @@ namespace System.Windows.Forms {
             }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object link) {
                 if (link is Link) {
                     return IndexOf((Link)link);
@@ -2197,7 +2182,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
-            /// <internalonly/> 
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
@@ -2223,7 +2207,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 owner.links.CopyTo(dest, index);
             }
@@ -2282,7 +2265,6 @@ namespace System.Windows.Forms {
                }
             
             /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 if (value is Link) {
                     Remove((Link)value);
@@ -2522,7 +2504,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\LinkLabel.uex' path='docs/doc[@for="LinkLabel.LinkAccessibleObject"]/*' />
-        /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        

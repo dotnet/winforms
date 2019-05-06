@@ -338,7 +338,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.AutoScroll"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
             get {
@@ -373,7 +372,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -392,7 +390,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -680,7 +677,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DrawFlatToolbar"]/*' />
-        ///<internalonly/>
         protected bool DrawFlatToolbar {
             get {
                 return drawFlatToolBar;
@@ -707,7 +703,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -959,7 +954,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.InPropertySet"]/*' />
-        /// <internalonly/>
         bool IComPropertyBrowser.InPropertySet {
             get {
                 return GetPropertyGridView().GetInPropertySet();
@@ -1372,7 +1366,6 @@ namespace System.Windows.Forms {
         }
        
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ShowFocusCues"]/*' />
-        ///<internalonly/>        
         protected internal override bool ShowFocusCues {
             get {
                 return true;
@@ -1659,7 +1652,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.ComComponentNameChanged"]/*' />
-        ///<internalonly/>        
         event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
             add => Events.AddHandler(EventComComponentNameChanged, value);
             remove => Events.RemoveHandler(EventComComponentNameChanged, value);
@@ -1960,7 +1952,6 @@ namespace System.Windows.Forms {
             return button;
         }
         
-        ///<internalonly/>        
         internal void DumpPropsToConsole() {
             gridView.DumpPropsToConsole(peMain, "");
         }
@@ -2197,7 +2188,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.DropDownDone"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.DropDownDone() {
             GetPropertyGridView().DropDownDone();
         }
@@ -2326,7 +2316,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.EnsurePendingChangesCommitted"]/*' />
-        /// <internalonly/>
         bool IComPropertyBrowser.EnsurePendingChangesCommitted() {
 
             // The commits sometimes cause transactions to open
@@ -2490,7 +2479,6 @@ namespace System.Windows.Forms {
         
  
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.HandleF4"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.HandleF4() {
             
             if (gridView.ContainsFocus) {
@@ -2509,7 +2497,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.LoadState"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.LoadState(RegistryKey optRoot) {
             if (optRoot != null) {
                 object val = optRoot.GetValue("PbrsAlpha", "0");
@@ -2575,7 +2562,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.UnsafeNativeMethods.IPropertyNotifySink.OnChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Called when a property on an Ole32 Object changes.
         /// See IPropertyNotifySink::OnChanged
@@ -3035,7 +3021,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Called when a property on an Ole32 Object that is tagged
         /// with "requestedit" is about to be edited.
@@ -3993,7 +3978,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.SaveState"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.SaveState(RegistryKey optRoot) {
 
             if (optRoot == null) {
@@ -4846,7 +4830,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -4854,7 +4837,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -4904,7 +4886,6 @@ namespace System.Windows.Forms {
             
             
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (owner == null) {
                     return;

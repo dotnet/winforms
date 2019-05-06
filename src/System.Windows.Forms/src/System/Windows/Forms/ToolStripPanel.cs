@@ -1268,7 +1268,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.IArrangedElement.Children"]/*' />
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
                 return RowsInternal;
@@ -1395,7 +1394,6 @@ namespace System.Windows.Forms {
             void IList.Insert(int index, object value) { Insert(index, value as ToolStripPanelRow); }
 
             /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanelRowCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get { return InnerList[index]; }
                 set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }

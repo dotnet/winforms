@@ -139,7 +139,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
@@ -224,7 +223,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.Text"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
@@ -238,7 +236,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -246,7 +243,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.OnResize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Fires the event indicating that the panel has been resized.
         ///       Inheriting controls should use this in favour of actually listening to
@@ -274,7 +270,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.StringFromBorderStyle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private static string StringFromBorderStyle(BorderStyle value) {      
             Type borderStyleType = typeof(BorderStyle);
             return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
@@ -284,7 +279,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();

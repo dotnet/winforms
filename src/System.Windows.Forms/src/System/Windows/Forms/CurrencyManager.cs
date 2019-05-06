@@ -27,7 +27,6 @@ namespace System.Windows.Forms {
         private bool shouldBind = true;
         
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.listposition"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [
@@ -208,7 +207,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.IsBinding"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Gets a value indicating whether the list is bound to a data source.</para>
         /// </devdoc>
@@ -879,7 +877,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.ResumeBinding"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Resumes binding of component properties to list items.</para>
         /// </devdoc>
@@ -901,7 +898,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListManager.uex' path='docs/doc[@for="CurrencyManager.SuspendBinding"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Suspends binding.</para>
         /// </devdoc>

@@ -159,7 +159,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 

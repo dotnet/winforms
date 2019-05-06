@@ -29725,7 +29725,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
-        /// <internalonly/>
         internal override void WmContextMenu(ref Message m) 
         {
             ContextMenuStrip contextMenuStrip;

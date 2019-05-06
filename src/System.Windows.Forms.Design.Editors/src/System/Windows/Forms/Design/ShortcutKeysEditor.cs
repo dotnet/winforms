@@ -11,7 +11,6 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.Design
 {
-    /// <internalonly />
     /// <summary>
     ///     Provides an editor for picking shortcut keys.
     /// </summary>

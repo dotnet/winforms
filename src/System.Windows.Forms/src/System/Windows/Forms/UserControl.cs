@@ -169,7 +169,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
@@ -233,7 +232,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -301,7 +299,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     OnResize override to invalidate entire control in Stetch mode
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnResize(EventArgs e) {
             base.OnResize(e);
             if (BackgroundImage != null) {

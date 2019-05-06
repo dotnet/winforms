@@ -231,7 +231,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Used to actually register the control as a drop target.
         /// </devdoc>
-        /// <internalonly/>
         /// <param name=accept></param>	
         private void SetAcceptDrops(bool accept) {
              if (accept && owner.IsHandleCreated) {

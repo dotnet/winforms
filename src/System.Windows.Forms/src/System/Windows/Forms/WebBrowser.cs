@@ -1654,7 +1654,6 @@ namespace System.Windows.Forms
             // IDocHostUIHandler Implementation
             //
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.ShowContextMenu(int dwID, NativeMethods.POINT pt, object pcmdtReserved, object pdispReserved) {
                 WebBrowser wb = (WebBrowser)this.Host;
 
@@ -1676,7 +1675,6 @@ namespace System.Windows.Forms
 
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetHostInfo(NativeMethods.DOCHOSTUIINFO info) {
                 WebBrowser wb = (WebBrowser)this.Host;
 
@@ -1702,13 +1700,11 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.EnableModeless"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.EnableModeless(bool fEnable) {
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.ShowUI"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.ShowUI(int dwID, UnsafeNativeMethods.IOleInPlaceActiveObject activeObject, 
                     NativeMethods.IOleCommandTarget commandTarget, UnsafeNativeMethods.IOleInPlaceFrame frame, 
                     UnsafeNativeMethods.IOleInPlaceUIWindow doc) {
@@ -1716,43 +1712,36 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.HideUI"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.HideUI() {
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.UpdateUI"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.UpdateUI() {
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.OnDocWindowActivate(bool fActivate) {
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.OnFrameWindowActivate(bool fActivate) {
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.ResizeBorder(NativeMethods.COMRECT rect, UnsafeNativeMethods.IOleInPlaceUIWindow doc, bool fFrameWindow) {
                 return NativeMethods.E_NOTIMPL;
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetOptionKeyPath(string[] pbstrKey, int dw) {
                 return NativeMethods.E_NOTIMPL;
             }
             
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetDropTarget(UnsafeNativeMethods.IOleDropTarget pDropTarget, out UnsafeNativeMethods.IOleDropTarget ppDropTarget) {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
@@ -1762,7 +1751,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.GetExternal"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.GetExternal(out object ppDispatch) {
                 WebBrowser wb = (WebBrowser)this.Host;
                 ppDispatch = wb.ObjectForScripting;
@@ -1770,7 +1758,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator"]/*' />
-            /// <internalonly/>
             [SuppressMessage("Microsoft.Performance", "CA1803:AvoidCostlyCallsWherePossible")]                     
             int UnsafeNativeMethods.IDocHostUIHandler.TranslateAccelerator(ref NativeMethods.MSG msg, ref Guid group, int nCmdID) {
                 //
@@ -1793,7 +1780,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.TranslateUrl(int dwTranslate, string strUrlIn, out string pstrUrlOut) {
                 //
                 // Set to null no matter what we return, to prevent the marshaller
@@ -1803,7 +1789,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\WebBrowser.uex' path='docs/doc[@for="WebBrowser.WebBrowserSite.UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject"]/*' />
-            /// <internalonly/>
             int UnsafeNativeMethods.IDocHostUIHandler.FilterDataObject(IComDataObject pDO, out IComDataObject ppDORet) 
             {
                 //

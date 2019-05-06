@@ -1156,7 +1156,6 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <internalonly />
         /// <summary>
         /// Forces the layout of any docked or anchored child controls.
         /// </summary>

@@ -246,7 +246,6 @@ namespace System.Windows.Forms {
         ///           of all the items that match. 
         ///     </para>
         /// </devdoc>
-        /// <internalonly/> 
         private ArrayList FindInternal(string key, bool searchAllChildren, ToolStripItemCollection itemsToLookIn, ArrayList foundItems)
         {
             if ((itemsToLookIn == null) || (foundItems == null)) {
@@ -314,7 +313,6 @@ namespace System.Windows.Forms {
         void IList.Insert(int index, object value) { Insert(index, value as ToolStripItem);  }
 
         /// <include file='doc\ToolStripItemCollection.uex' path='docs/doc[@for="ToolStripItemCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get { return InnerList[index]; }            
             set { throw new NotSupportedException(SR.ToolStripCollectionMustInsertAndRemove); /* InnerList[index] = value; */ }
@@ -375,7 +373,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     <para>Determines if the index is valid for the collection.</para>
         /// </devdoc>
-        /// <internalonly/> 
         private bool IsValidIndex(int index) {
             return ((index >= 0) && (index < this.Count));
         }

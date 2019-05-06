@@ -37,25 +37,20 @@ namespace System.Windows.Forms {
 #endif
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateAutoScrolling"]/*' />
-        /// <internalonly/>
         protected const int ScrollStateAutoScrolling     =  0x0001;
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateHScrollVisible"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateHScrollVisible    =  0x0002;
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateVScrollVisible"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateVScrollVisible    =  0x0004;
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateUserHasScrolled"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateUserHasScrolled   =  0x0008;
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.ScrollStateFullDrag"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected const int ScrollStateFullDrag          =  0x0010;
@@ -65,22 +60,18 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Current size of the displayRect.
         /// </devdoc>
-        /// <internalonly/>
         private Rectangle   displayRect = Rectangle.Empty;
         /// <devdoc>
         ///     Current margins for autoscrolling.
         /// </devdoc>
-        /// <internalonly/>
         private Size       scrollMargin = System.Drawing.Size.Empty;
         /// <devdoc>
         ///     User requested margins for autoscrolling.
         /// </devdoc>
-        /// <internalonly/>
         private Size       requestedScrollMargin = System.Drawing.Size.Empty;
         /// <devdoc>
         ///     User requested autoscroll position - used for form creation only.
         /// </devdoc>
-        /// <internalonly/>
         internal Point       scrollPosition = Point.Empty;
 
         private DockPaddingEdges dockPadding = null;
@@ -215,7 +206,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Retrieves the CreateParams used to create the window.
@@ -244,7 +234,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.DisplayRectangle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Retreives the current display rectangle. The display rectangle
@@ -272,7 +261,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.IArrangedElement.DisplayRectangle"]/*' />
-        /// <internalonly/>
         Rectangle IArrangedElement.DisplayRectangle {
             get {
                 Rectangle displayRectangle = this.DisplayRectangle;
@@ -657,7 +645,6 @@ namespace System.Windows.Forms {
       
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnLayout"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Forces the layout of any docked or anchored child controls.
         /// </devdoc>
@@ -687,7 +674,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ScrollableControl.uex' path='docs/doc[@for="ScrollableControl.OnMouseWheel"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     Handles mouse wheel processing for our scrollbars.
         /// </devdoc>
@@ -1113,7 +1099,6 @@ namespace System.Windows.Forms {
         ///     autoscrolling. This will also adjust the x and y location of the
         ///     virtual client area if the new size forces it.
         /// </devdoc>
-        /// <internalonly/>
         private bool SetDisplayRectangleSize(int width, int height) {
             bool needLayout = false;
 
@@ -1207,7 +1192,6 @@ namespace System.Windows.Forms {
         ///     Updates the value of the autoscroll scrollbars based on the current form
         ///     state. This is a one-way sync, updating the scrollbars only.
         /// </devdoc>
-        /// <internalonly/>
         private void SyncScrollbars(bool autoScroll) {
             Rectangle displayRect = this.displayRect;
 
@@ -1286,7 +1270,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_VSCROLL handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmVScroll(ref Message m) {
 
             // The lparam is handle of the sending scrollbar, or NULL when
@@ -1364,7 +1347,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_HSCROLL handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmHScroll(ref Message m) {
 
             // The lparam is handle of the sending scrollbar, or NULL when
@@ -1440,7 +1422,6 @@ namespace System.Windows.Forms {
         ///     This function gets called which populates the eventArgs and fires the OnScroll( ) event passing
         ///     the appropriate scroll event and scroll bar.
         /// </devdoc>
-        /// <internalonly/>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation) {
             ScrollEventType type = (ScrollEventType)NativeMethods.Util.LOWORD(m.WParam);
             if (type != ScrollEventType.EndScroll) { 
@@ -1460,7 +1441,6 @@ namespace System.Windows.Forms {
         ///    to add extra functionality, but should not forget to call
         ///    base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {

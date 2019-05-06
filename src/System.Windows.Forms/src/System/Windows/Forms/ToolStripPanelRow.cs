@@ -612,7 +612,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.Children"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
                 return Cells;
@@ -623,7 +622,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Should not be exposed as this returns an unexposed type.
         /// </devdoc>
-        /// <internalonly/>
         IArrangedElement IArrangedElement.Container {
             get {
                 return this.ToolStripPanel;
@@ -649,7 +647,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.Properties"]/*' />
-        /// <internalonly/>
         PropertyStore IArrangedElement.Properties {
             get {
                 return this.Properties;
@@ -657,7 +654,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.GetPreferredSize"]/*' />
-        /// <internalonly/>
         Size IArrangedElement.GetPreferredSize(Size constrainingSize) {
             Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
@@ -673,7 +669,6 @@ namespace System.Windows.Forms {
 
         // Sets the bounds for an element.
         /// <include file='doc\ToolStripPanelRow.uex' path='docs/doc[@for="ToolStripPanelRow.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             // in this case the parent is telling us to refresh our bounds - dont 
             // call PerformLayout

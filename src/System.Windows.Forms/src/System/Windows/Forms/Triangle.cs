@@ -127,19 +127,14 @@ namespace System.Windows.Forms {
     }
 
     /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection"]/*' />
-    /// <internalonly/>
     internal enum TriangleDirection {
         /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Up"]/*' />
-        /// <internalonly/>
         Up,
         /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Down"]/*' />
-        /// <internalonly/>
         Down,
         /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Left"]/*' />
-        /// <internalonly/>
         Left,
         /// <include file='doc\Triangle.uex' path='docs/doc[@for="TriangleDirection.Right"]/*' />
-        /// <internalonly/>
         Right
     }
 }

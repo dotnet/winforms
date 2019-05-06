@@ -544,7 +544,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Demand load and cache the default icon.
         /// </devdoc>
-        /// <internalonly/>
         static Icon DefaultIcon {
             get {
                 if (defaultIcon == null) {
@@ -589,7 +588,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Create the icon region on demand.
         /// </devdoc>
-        /// <internalonly/>
         internal IconRegion Region {
             
             
@@ -696,7 +694,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper to dispose the cached icon region.
         /// </devdoc>
-        /// <internalonly/>
         void DisposeRegion() {
             if (region != null) {
                 region.Dispose();
@@ -708,7 +705,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper to make sure we have allocated a control item for this control.
         /// </devdoc>
-        /// <internalonly/>
         private ControlItem EnsureControlItem(Control control) {
             if (control == null)
                 throw new ArgumentNullException(nameof(control));
@@ -724,7 +720,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper to make sure we have allocated an error window for this control.
         /// </devdoc>
-        /// <internalonly/>
         internal ErrorWindow EnsureErrorWindow(Control parent) {
             ErrorWindow window = (ErrorWindow)windows[parent];
             if (window == null) {
@@ -831,7 +826,6 @@ namespace System.Windows.Forms {
         ///     rectangle associated with each error icon being displayed is added as a
         ///     tool to the tooltip window.
         /// </devdoc>
-        /// <internalonly/>
         internal class ErrorWindow : NativeWindow {
 
             //

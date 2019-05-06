@@ -295,7 +295,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImage"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -318,7 +317,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -326,7 +324,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageLayout"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -340,7 +337,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -443,7 +439,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Returns the parameters needed to create the handle. Inheriting classes
@@ -1166,7 +1161,6 @@ namespace System.Windows.Forms {
         // double "TextChanged" events.
         //
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WindowText"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         internal override string WindowText {
@@ -1251,7 +1245,6 @@ namespace System.Windows.Forms {
         ///     Adjusts the height of a single-line edit control to match the height of
         ///     the control's font.
         /// </devdoc>
-        /// <internalonly/>
         private void AdjustHeight(bool returnIfAnchored) {
 
             // If we're anchored to two opposite sides of the form, don't adjust the size because
@@ -1359,7 +1352,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void CreateHandle() {
             // This "creatingHandle" stuff is to avoid property change events
             // when we set the Text property.
@@ -1398,7 +1390,6 @@ namespace System.Windows.Forms {
         }
 
                 /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.IsInputKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overridden to handle TAB key.
         /// </devdoc>
@@ -1429,7 +1420,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnHandleCreated"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overridden to update the newly created handle with the settings of the
         ///    MaxLength and PasswordChar properties.
@@ -1454,7 +1444,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.OnHandleDestroyed"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleDestroyed(EventArgs e) {
             textBoxFlags[modified] = Modified;
             textBoxFlags[setSelectionOnHandleCreated] = true;            
@@ -1834,7 +1823,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Overrides Control.setBoundsCore to enforce autoSize.
         /// </devdoc>
-        /// <internalonly/>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 
             if (!integralHeightAdjust && height != Height)
@@ -1998,7 +1986,6 @@ namespace System.Windows.Forms {
         ///    Provides some interesting information for the TextBox control in
         ///    String form.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -2041,7 +2028,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WmReflectCommand"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle]) {
                 if (NativeMethods.Util.HIWORD(m.WParam) == NativeMethods.EN_CHANGE && CanRaiseTextChangedEvent) {
@@ -2058,7 +2044,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WmSetFont"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         void WmSetFont(ref Message m) {
             base.WndProc(ref m);
             if (!textBoxFlags[multiline]) {
@@ -2085,7 +2070,6 @@ namespace System.Windows.Forms {
         ///     Yes                 strip   context system
         ///     No                  strip   context N/A
         /// </devdoc>
-        /// <internalonly/>
         private void WmTextBoxContextMenu(ref Message m) {
 
             if (ContextMenu != null || ContextMenuStrip != null) {
@@ -2123,7 +2107,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    The control's window procedure.  Inheriting classes can override this
         ///    to add extra functionality, but should not forget to call
