@@ -376,12 +376,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayout"]/*' />
@@ -399,12 +395,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BrowsableAttributes"]/*' />
@@ -718,12 +710,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         private bool FreezePainting {
@@ -1017,9 +1005,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySort"]/*' />
         /// <devdoc>
@@ -1439,12 +1426,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
 
@@ -1605,12 +1588,8 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
 
@@ -1618,12 +1597,8 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
 
@@ -1631,142 +1606,94 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseDown"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
-            add {
-                base.MouseDown += value;
-            }
-            remove {
-                base.MouseDown -= value;
-            }
+            add => base.MouseDown += value;
+            remove => base.MouseDown -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseUp"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
-            add {
-                base.MouseUp += value;
-            }
-            remove {
-                base.MouseUp -= value;
-            }
+            add => base.MouseUp += value;
+            remove => base.MouseUp -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseMove"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
-            add {
-                base.MouseMove += value;
-            }
-            remove {
-                base.MouseMove -= value;
-            }
+            add => base.MouseMove += value;
+            remove => base.MouseMove -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseEnter"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
-            add {
-                base.MouseEnter += value;
-            }
-            remove {
-                base.MouseEnter -= value;
-            }
+            add => base.MouseEnter += value;
+            remove => base.MouseEnter -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseLeave"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
-            add {
-                base.MouseLeave += value;
-            }
-            remove {
-                base.MouseLeave -= value;
-            }
+            add => base.MouseLeave += value;
+            remove => base.MouseLeave -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyValueChanged"]/*' />
         /// <devdoc> Event that is fired when a property value is modified.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
-            add {
-                Events.AddHandler(EventPropertyValueChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPropertyValueChanged, value);
-            }
+            add => Events.AddHandler(EventPropertyValueChanged, value);
+            remove => Events.RemoveHandler(EventPropertyValueChanged, value);
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.ComComponentNameChanged"]/*' />
         ///<internalonly/>        
         event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
-            add {
-                Events.AddHandler(EventComComponentNameChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventComComponentNameChanged, value);
-            }
+            add => Events.AddHandler(EventComComponentNameChanged, value);
+            remove => Events.RemoveHandler(EventComComponentNameChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabChanged"]/*' />
         /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
-            add {
-                Events.AddHandler(EventPropertyTabChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPropertyTabChanged, value);
-            }
+            add => Events.AddHandler(EventPropertyTabChanged, value);
+            remove => Events.RemoveHandler(EventPropertyTabChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySortChanged"]/*' />
         /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
-            add {
-                Events.AddHandler(EventPropertySortChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPropertySortChanged, value);
-            }
+            add => Events.AddHandler(EventPropertySortChanged, value);
+            remove => Events.RemoveHandler(EventPropertySortChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedGridItemChanged"]/*' />
         /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
-            add {
-                Events.AddHandler(EventSelectedGridItemChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSelectedGridItemChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedGridItemChanged, value);
+  remove => Events.RemoveHandler(EventSelectedGridItemChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelecteObjectsChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
-            add {
-                Events.AddHandler(EventSelectedObjectsChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSelectedObjectsChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedObjectsChanged, value);
+            remove => Events.RemoveHandler(EventSelectedObjectsChanged, value);
         }
         
         

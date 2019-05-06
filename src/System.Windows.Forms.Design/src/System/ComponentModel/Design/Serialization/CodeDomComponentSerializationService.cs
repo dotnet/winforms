@@ -1495,14 +1495,8 @@ namespace System.ComponentModel.Design.Serialization
 
                 event EventHandler IDesignerSerializationManager.SerializationComplete
                 {
-                    add
-                    {
-                        ((IDesignerSerializationManager)_manager).SerializationComplete += value;
-                    }
-                    remove
-                    {
-                        ((IDesignerSerializationManager)_manager).SerializationComplete -= value;
-                    }
+                    add => ((IDesignerSerializationManager)_manager).SerializationComplete += value;
+                    remove => ((IDesignerSerializationManager)_manager).SerializationComplete -= value;
                 }
 
                 void IDesignerSerializationManager.AddSerializationProvider(IDesignerSerializationProvider provider)

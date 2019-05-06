@@ -175,12 +175,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripDropDownClosedDecr))
         ]
         public event EventHandler DropDownClosed {
-            add {
-                Events.AddHandler(EventDropDownClosed, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownClosed, value);
-            }
+            add => Events.AddHandler(EventDropDownClosed, value);
+            remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
 
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownLocation"]/*' />
@@ -202,12 +198,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripDropDownOpeningDescr))
         ]
         public event EventHandler DropDownOpening {
-            add {
-                Events.AddHandler(EventDropDownShow, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownShow, value);
-            }
+            add => Events.AddHandler(EventDropDownShow, value);
+            remove => Events.RemoveHandler(EventDropDownShow, value);
         }   
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownOpened"]/*' />
         /// <devdoc>
@@ -218,12 +210,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ToolStripDropDownOpenedDescr))
         ]
         public event EventHandler DropDownOpened {
-            add {
-                Events.AddHandler(EventDropDownOpened, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownOpened, value);
-            }
+            add => Events.AddHandler(EventDropDownOpened, value);
+            remove => Events.RemoveHandler(EventDropDownOpened, value);
         }   
 
         /// <include file='doc\ToolStripDropDownItem.uex' path='docs/doc[@for="ToolStripDropDownItem.DropDownItems"]/*' />
@@ -247,12 +235,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction))]
         public event ToolStripItemClickedEventHandler DropDownItemClicked {
-            add {
-                Events.AddHandler(EventDropDownItemClicked, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownItemClicked, value);
-            }
+            add => Events.AddHandler(EventDropDownItemClicked, value);
+            remove => Events.RemoveHandler(EventDropDownItemClicked, value);
         }
 
         /// <include file='doc\ToolStripPopupItem.uex' path='docs/doc[@for="ToolStripDropDownItem.HasDropDownItems"]/*' />

@@ -241,14 +241,8 @@ namespace System.Windows.Forms
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.CollectionChanged"]/*' />
         public event CollectionChangeEventHandler CollectionChanged
         {
-            add
-            {
-                this.onCollectionChanged += value;
-            }
-            remove
-            {
-                this.onCollectionChanged -= value;
-            }
+            add => this.onCollectionChanged += value;
+            remove => this.onCollectionChanged -= value;
         }
 
         /// <include file='doc\DataGridViewCellCollection.uex' path='docs/doc[@for="DataGridViewCellCollection.Add"]/*' />

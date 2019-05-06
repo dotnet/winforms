@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using System.Text;
     using System.Threading;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.ConstrainedExecution;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
@@ -768,12 +767,8 @@ namespace System.Windows.Forms {
         ///    <para>Occurs when the application is about to shut down.</para>
         /// </devdoc>
         public static event EventHandler ApplicationExit {
-            add {
-                AddEventHandler(EVENT_APPLICATIONEXIT, value);
-            }
-            remove {
-                RemoveEventHandler(EVENT_APPLICATIONEXIT, value);
-            }
+            add => AddEventHandler(EVENT_APPLICATIONEXIT, value);
+            remove => RemoveEventHandler(EVENT_APPLICATIONEXIT, value);
         }
 
         private static void AddEventHandler(object key, Delegate value) {
@@ -927,12 +922,8 @@ namespace System.Windows.Forms {
         ///     event.</para>
         /// </devdoc>
         public static event EventHandler ThreadExit {
-            add {
-                AddEventHandler(EVENT_THREADEXIT, value);
-            }
-            remove {
-                RemoveEventHandler(EVENT_THREADEXIT, value);
-            }
+            add => AddEventHandler(EVENT_THREADEXIT, value);
+            remove => RemoveEventHandler(EVENT_THREADEXIT, value);
         }
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.BeginModalMessageLoop"]/*' />
@@ -2907,13 +2898,6 @@ namespace System.Windows.Forms {
 
             private bool GetState(int bit) {
                 return(threadState & bit) != 0;
-            }
-
-            /// <devdoc>
-            ///     Keep the object alive forever.
-            /// </devdoc>
-            public override object InitializeLifetimeService() {
-                return null;
             }
 
             /// <summary>

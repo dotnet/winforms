@@ -6,7 +6,6 @@
 namespace System.Windows.Forms {
     using System.Threading;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -215,12 +214,8 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContainerControlOnAutoValidateChangedDescr)),
         ]
         public event EventHandler AutoValidateChanged {
-            add {
-                this.autoValidateChanged += value;
-            }
-            remove {
-                this.autoValidateChanged -= value;
-            }
+            add => this.autoValidateChanged += value;
+            remove => this.autoValidateChanged -= value;
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.BindingContext"]/*' />

@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Windows.Forms;
     using System.Globalization;
 
@@ -136,12 +135,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImage"]/*' />
@@ -159,12 +154,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageLayout"]/*' />
@@ -182,12 +173,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Font"]/*' />
@@ -205,12 +192,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
-            remove {
-                base.FontChanged -= value;
-            }
+            add => base.FontChanged += value;
+            remove => base.FontChanged -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BorderStyle"]/*' />
@@ -338,12 +321,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.MinExtra"]/*' />
@@ -465,12 +444,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Text"]/*' />
@@ -492,90 +467,58 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Enter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
-            add {
-                base.Enter += value;
-            }
-            remove {
-                base.Enter -= value;
-            }
+            add => base.Enter += value;
+            remove => base.Enter -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.KeyPress"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Leave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
-            add {
-                base.Leave += value;
-            }
-            remove {
-                base.Leave -= value;
-            }
+            add => base.Leave += value;
+            remove => base.Leave -= value;
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitterMoving"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterEventHandler SplitterMoving {
-            add {
-                Events.AddHandler(EVENT_MOVING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOVING, value);
-            }
+            add => Events.AddHandler(EVENT_MOVING, value);
+            remove => Events.RemoveHandler(EVENT_MOVING, value);
         }
 
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.SplitterMoved"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
-            add {
-                Events.AddHandler(EVENT_MOVED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOVED, value);
-            }
+            add => Events.AddHandler(EVENT_MOVED, value);
+            remove => Events.RemoveHandler(EVENT_MOVED, value);
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.DrawSplitBar"]/*' />

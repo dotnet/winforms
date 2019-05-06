@@ -158,12 +158,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Always)
         ]
         public new event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.DefaultPadding"]/*' />
@@ -295,12 +291,8 @@ namespace System.Windows.Forms {
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public event EventHandler RendererChanged {
-            add {
-                Events.AddHandler(EventRendererChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRendererChanged, value);
-            }
+            add => Events.AddHandler(EventRendererChanged, value);
+            remove => Events.RemoveHandler(EventRendererChanged, value);
         }
 
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Rows"]/*' />
@@ -358,12 +350,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabIndexChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabIndex"]/*' />
@@ -386,12 +374,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TabStopChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.Text"]/*' />
@@ -412,12 +396,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripPanel.uex' path='docs/doc[@for="ToolStripPanel.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
 

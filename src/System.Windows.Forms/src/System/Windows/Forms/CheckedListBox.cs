@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using Accessibility;
 
     using System.Text;
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
 
@@ -379,83 +378,55 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DataSourceChanged {
-            add {
-                base.DataSourceChanged += value;
-            }
-            remove {
-                base.DataSourceChanged -= value;
-            }
+            add => base.DataSourceChanged += value;
+            remove => base.DataSourceChanged -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DisplayMemberChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DisplayMemberChanged {
-            add {
-                base.DisplayMemberChanged += value;
-            }
-            remove {
-                base.DisplayMemberChanged -= value;
-            }
+            add => base.DisplayMemberChanged += value;
+            remove => base.DisplayMemberChanged -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
-            add {
-                onItemCheck += value;
-            }
-            remove {
-                onItemCheck -= value;
-            }
+            add => onItemCheck += value;
+            remove => onItemCheck -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Click"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MouseClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawItem"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DrawItemEventHandler DrawItem {
-            add {
-                base.DrawItem += value;
-            }
-            remove {
-                base.DrawItem -= value;
-            }
+            add => base.DrawItem += value;
+            remove => base.DrawItem -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MeasureItem"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MeasureItemEventHandler MeasureItem {
-            add {
-                base.MeasureItem += value;
-            }
-            remove {
-                base.MeasureItem -= value;
-            }
+            add => base.MeasureItem += value;
+            remove => base.MeasureItem -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Padding"]/*' />
@@ -473,12 +444,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ValueMemberChanged {
-            add {
-                base.ValueMemberChanged += value;
-            }
-            remove {
-                base.ValueMemberChanged -= value;
-            }
+            add => base.ValueMemberChanged += value;
+            remove => base.ValueMemberChanged -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateAccessibilityInstance"]/*' />

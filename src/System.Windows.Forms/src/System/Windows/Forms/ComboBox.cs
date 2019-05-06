@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using Accessibility;
     using System.Runtime.Serialization.Formatters;
     using System.Threading;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.Diagnostics;
     using System;
@@ -331,24 +330,16 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.BackgroundImageLayoutChanged"]/*' />
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         internal ChildAccessibleObject ChildEditAccessibleObject {
@@ -868,9 +859,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
             
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.PreferredHeight"]/*' />
@@ -1352,34 +1342,22 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DrawItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
-            add {
-                Events.AddHandler(EVENT_DRAWITEM, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DRAWITEM, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWITEM, value);
+            remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown {
-            add {
-                Events.AddHandler(EVENT_DROPDOWN, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DROPDOWN, value);
-            }
+            add => Events.AddHandler(EVENT_DROPDOWN, value);
+            remove => Events.RemoveHandler(EVENT_DROPDOWN, value);
         }
 
 
@@ -1400,34 +1378,22 @@ namespace System.Windows.Forms {
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.SelectionChangeCommitted"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectionChangeCommittedEventDescr))]
         public event EventHandler SelectionChangeCommitted {
-            add {
-                Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTIONCHANGECOMMITTED, value);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.DropDownStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged {
-            add {
-                Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DROPDOWNSTYLE, value);
-            }
+            add => Events.AddHandler(EVENT_DROPDOWNSTYLE, value);
+            remove => Events.RemoveHandler(EVENT_DROPDOWNSTYLE, value);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.OnPaint"]/*' />
@@ -1437,12 +1403,8 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.TextUpdate"]/*' />
@@ -1454,12 +1416,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate {
-            add {
-                Events.AddHandler(EVENT_TEXTUPDATE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_TEXTUPDATE, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTUPDATE, value);
+            remove => Events.RemoveHandler(EVENT_TEXTUPDATE, value);
         }
 
 
@@ -1472,12 +1430,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed {
-            add {
-                Events.AddHandler(EVENT_DROPDOWNCLOSED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DROPDOWNCLOSED, value);
-            }
+            add => Events.AddHandler(EVENT_DROPDOWNCLOSED, value);
+            remove => Events.RemoveHandler(EVENT_DROPDOWNCLOSED, value);
         }
 
         /// <include file='doc\ComboBox.uex' path='docs/doc[@for="ComboBox.AddItemsCore"]/*' />

@@ -216,12 +216,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.CollectionChanged"]/*' />
         public event CollectionChangeEventHandler CollectionChanged {
-            add {
-                onCollectionChanged += value;
-            }
-            remove {
-                onCollectionChanged -= value;
-            }
+            add => onCollectionChanged += value;
+            remove => onCollectionChanged -= value;
         }
         
         /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Clear"]/*' />

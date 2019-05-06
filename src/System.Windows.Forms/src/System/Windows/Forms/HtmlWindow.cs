@@ -375,92 +375,50 @@ namespace System.Windows.Forms
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Error"]/*' />
         public event HtmlElementErrorEventHandler Error
         {
-            add
-            {
-                WindowShim.AddHandler(EventError, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventError, value);
-            }
+            add => WindowShim.AddHandler(EventError, value);
+            remove => WindowShim.RemoveHandler(EventError, value);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.GotFocus"]/*' />
         public event HtmlElementEventHandler GotFocus
         {
-            add
-            {
-                WindowShim.AddHandler(EventGotFocus, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventGotFocus, value);
-            }
+            add => WindowShim.AddHandler(EventGotFocus, value);
+            remove => WindowShim.RemoveHandler(EventGotFocus, value);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Load"]/*' />
         public event HtmlElementEventHandler Load
         {
-            add
-            {
-                WindowShim.AddHandler(EventLoad, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventLoad, value);
-            }
+            add => WindowShim.AddHandler(EventLoad, value);
+            remove => WindowShim.RemoveHandler(EventLoad, value);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.LostFocus"]/*' />
         public event HtmlElementEventHandler LostFocus
         {
-            add
-            {
-                WindowShim.AddHandler(EventLostFocus, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventLostFocus, value);
-            }
+            add => WindowShim.AddHandler(EventLostFocus, value);
+            remove => WindowShim.RemoveHandler(EventLostFocus, value);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Resize"]/*' />
         public event HtmlElementEventHandler Resize
         {
-            add
-            {
-                WindowShim.AddHandler(EventResize, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventResize, value);
-            }
+            add => WindowShim.AddHandler(EventResize, value);
+            remove => WindowShim.RemoveHandler(EventResize, value);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Scroll"]/*' />
         public event HtmlElementEventHandler Scroll
         {
-            add
-            {
-                WindowShim.AddHandler(EventScroll, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventScroll, value);
-            }
+            add => WindowShim.AddHandler(EventScroll, value);
+            remove => WindowShim.RemoveHandler(EventScroll, value);
         }
 
         /// <include file='doc\HtmlWindow.uex' path='docs/doc[@for="HtmlWindow.Unload"]/*' />
         public event HtmlElementEventHandler Unload
         {
-            add
-            {
-                WindowShim.AddHandler(EventUnload, value);
-            }
-            remove
-            {
-                WindowShim.RemoveHandler(EventUnload, value);
-            }
+            add => WindowShim.AddHandler(EventUnload, value);
+            remove => WindowShim.RemoveHandler(EventUnload, value);
         }
 
 

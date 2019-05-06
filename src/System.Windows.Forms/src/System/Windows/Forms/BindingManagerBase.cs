@@ -219,14 +219,8 @@ namespace System.Windows.Forms
 
         public event EventHandler PositionChanged
         {
-            add
-            {
-                onPositionChangedHandler += value;
-            }
-            remove
-            {
-                onPositionChangedHandler -= value;
-            }
+            add => onPositionChangedHandler += value;
+            remove => onPositionChangedHandler -= value;
         }
 
         protected abstract void UpdateIsBinding();

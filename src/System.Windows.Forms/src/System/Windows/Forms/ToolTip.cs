@@ -6,7 +6,6 @@
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
     using System.Threading;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -667,14 +666,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipDrawEventDescr))]
         public event DrawToolTipEventHandler Draw 
         {
-            add 
-            {
-                onDraw += value;
-            }
-            remove 
-            {
-                onDraw -= value;
-            }
+            add => onDraw += value;
+            remove => onDraw -= value;
         }
         
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Popup"]/*' />
@@ -684,14 +677,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatBehavior)),SRDescription(nameof(SR.ToolTipPopupEventDescr))]
         public event PopupEventHandler Popup 
         {
-            add 
-            {
-                onPopup += value;
-            }
-            remove 
-            {
-                onPopup -= value;
-            }
+            add => onPopup += value;
+            remove => onPopup -= value;
         }
 
 

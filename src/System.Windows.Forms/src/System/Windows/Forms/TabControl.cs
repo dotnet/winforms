@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Drawing.Design;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters;
     using System.Windows.Forms.Layout;
     using System.Globalization;
@@ -209,12 +208,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
-            remove {
-                base.BackColorChanged -= value;
-            }
+            add => base.BackColorChanged += value;
+            remove => base.BackColorChanged -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImage"]/*' />
@@ -232,12 +227,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.BackgroundImageLayout"]/*' />
@@ -255,12 +246,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DefaultSize"]/*' />
@@ -304,12 +291,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.CreateParams"]/*' />
@@ -893,46 +876,30 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.DrawItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
-            add {
-                onDrawItem += value;
-            }
-            remove {
-                onDrawItem -= value;
-            }
+            add => onDrawItem += value;
+            remove => onDrawItem -= value;
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_RIGHTTOLEFTLAYOUTCHANGED, value);
         }
 
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                onSelectedIndexChanged += value;
-            }
-            remove {
-                onSelectedIndexChanged -= value;
-            }
+            add => onSelectedIndexChanged += value;
+            remove => onSelectedIndexChanged -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Selecting"]/*' />
@@ -944,12 +911,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectingEventDescr))
         ]
         public event TabControlCancelEventHandler Selecting {
-            add {
-                Events.AddHandler(EVENT_SELECTING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTING, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTING, value);
+            remove => Events.RemoveHandler(EVENT_SELECTING, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Selected"]/*' />
@@ -961,12 +924,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlSelectedEventDescr))
         ]
         public event TabControlEventHandler Selected {
-            add {
-                Events.AddHandler(EVENT_SELECTED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTED, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Deselecting"]/*' />
@@ -978,12 +937,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectingEventDescr))
         ]
         public event TabControlCancelEventHandler Deselecting {
-            add {
-                Events.AddHandler(EVENT_DESELECTING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DESELECTING, value);
-            }
+            add => Events.AddHandler(EVENT_DESELECTING, value);
+            remove => Events.RemoveHandler(EVENT_DESELECTING, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.Deselected"]/*' />
@@ -995,12 +950,8 @@ namespace System.Windows.Forms {
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.TabControlDeselectedEventDescr))
         ]
         public event TabControlEventHandler Deselected {
-            add {
-                Events.AddHandler(EVENT_DESELECTED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DESELECTED, value);
-            }
+            add => Events.AddHandler(EVENT_DESELECTED, value);
+            remove => Events.RemoveHandler(EVENT_DESELECTED, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.OnPaint"]/*' />
@@ -1010,12 +961,8 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TabControl.AddItem"]/*' />

@@ -457,12 +457,8 @@ namespace System.Windows.Forms {
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public static event EventHandler RendererChanged {
-            add {
-                AddEventHandler(staticEventDefaultRendererChanged, value);
-            }
-            remove {
-                RemoveEventHandler(staticEventDefaultRendererChanged, value);
-            }
+            add => AddEventHandler(staticEventDefaultRendererChanged, value);
+            remove => RemoveEventHandler(staticEventDefaultRendererChanged, value);
         }
 
 

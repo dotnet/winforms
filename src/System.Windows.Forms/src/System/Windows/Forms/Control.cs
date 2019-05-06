@@ -28,7 +28,6 @@ namespace System.Windows.Forms {
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization;
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.Serialization.Formatters.Binary;
@@ -943,12 +942,8 @@ example usage
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler AutoSizeChanged {
-            add {
-                Events.AddHandler(EventAutoSizeChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventAutoSizeChanged, value);
-            }
+            add => Events.AddHandler(EventAutoSizeChanged, value);
+            remove => Events.RemoveHandler(EventAutoSizeChanged, value);
         }
 
         /// <devdoc>
@@ -1098,12 +1093,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackColorChangedDescr))]
         public event EventHandler BackColorChanged {
-            add {
-                Events.AddHandler(EventBackColor, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackColor, value);
-            }
+            add => Events.AddHandler(EventBackColor, value);
+            remove => Events.RemoveHandler(EventBackColor, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImage"]/*' />
@@ -1131,12 +1122,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageChangedDescr))]
         public event EventHandler BackgroundImageChanged {
-            add {
-                Events.AddHandler(EventBackgroundImage, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackgroundImage, value);
-            }
+            add => Events.AddHandler(EventBackgroundImage, value);
+            remove => Events.RemoveHandler(EventBackgroundImage, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayout"]/*' />
@@ -1183,12 +1170,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BackgroundImageLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBackgroundImageLayoutChangedDescr))]
         public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                Events.AddHandler(EventBackgroundImageLayout, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBackgroundImageLayout, value);
-            }
+            add => Events.AddHandler(EventBackgroundImageLayout, value);
+            remove => Events.RemoveHandler(EventBackgroundImageLayout, value);
         }
 
         // Set/reset by ContainerControl.AssignActiveControlInternal
@@ -1283,12 +1266,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BindingContextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnBindingContextChangedDescr))]
         public event EventHandler BindingContextChanged {
-            add {
-                Events.AddHandler(EventBindingContext, value);
-            }
-            remove {
-                Events.RemoveHandler(EventBindingContext, value);
-            }
+            add => Events.AddHandler(EventBindingContext, value);
+            remove => Events.RemoveHandler(EventBindingContext, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Bottom"]/*' />
@@ -1458,12 +1437,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CausesValidationChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCausesValidationChangedDescr))]
         public event EventHandler CausesValidationChanged {
-            add {
-                Events.AddHandler(EventCausesValidation, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCausesValidation, value);
-            }
+            add => Events.AddHandler(EventCausesValidation, value);
+            remove => Events.RemoveHandler(EventCausesValidation, value);
         }
 
 
@@ -1568,12 +1543,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnClientSizeChangedDescr))]
         public event EventHandler ClientSizeChanged {
-            add {
-                Events.AddHandler(EventClientSize, value);
-            }
-            remove {
-                Events.RemoveHandler(EventClientSize, value);
-            }
+            add => Events.AddHandler(EventClientSize, value);
+            remove => Events.RemoveHandler(EventClientSize, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CompanyName"]/*' />
@@ -1673,12 +1644,8 @@ example usage
             Browsable(false)
         ]
         public event EventHandler ContextMenuChanged {
-            add {
-                Events.AddHandler(EventContextMenu, value);
-            }
-            remove {
-                Events.RemoveHandler(EventContextMenu, value);
-            }
+            add => Events.AddHandler(EventContextMenu, value);
+            remove => Events.RemoveHandler(EventContextMenu, value);
         }
 
        /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenu"]/*' />
@@ -1721,12 +1688,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ContextMenuStripChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlContextMenuStripChangedDescr))]
         public event EventHandler ContextMenuStripChanged {
-            add {
-                Events.AddHandler(EventContextMenuStrip, value);
-            }
-            remove {
-                Events.RemoveHandler(EventContextMenuStrip, value);
-            }
+            add => Events.AddHandler(EventContextMenuStrip, value);
+            remove => Events.RemoveHandler(EventContextMenuStrip, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Controls"]/*' />
@@ -2030,12 +1993,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.CursorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnCursorChangedDescr))]
         public event EventHandler CursorChanged {
-            add {
-                Events.AddHandler(EventCursor, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCursor, value);
-            }
+            add => Events.AddHandler(EventCursor, value);
+            remove => Events.RemoveHandler(EventCursor, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DataBindings"]/*' />
@@ -2295,12 +2254,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DockChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnDockChangedDescr))]
         public event EventHandler DockChanged {
-            add {
-                Events.AddHandler(EventDock, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDock, value);
-            }
+            add => Events.AddHandler(EventDock, value);
+            remove => Events.RemoveHandler(EventDock, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoubleBuffered"]/*' />
@@ -2377,12 +2332,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnEnabledChangedDescr))]
         public event EventHandler EnabledChanged {
-            add {
-                Events.AddHandler(EventEnabled, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnabled, value);
-            }
+            add => Events.AddHandler(EventEnabled, value);
+            remove => Events.RemoveHandler(EventEnabled, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Focused"]/*' />
@@ -2516,12 +2467,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.FontChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnFontChangedDescr))]
         public event EventHandler FontChanged {
-            add {
-                Events.AddHandler(EventFont, value);
-            }
-            remove {
-                Events.RemoveHandler(EventFont, value);
-            }
+            add => Events.AddHandler(EventFont, value);
+            remove => Events.RemoveHandler(EventFont, value);
         }
 
         internal IntPtr FontHandle {
@@ -2662,12 +2609,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ForeColorChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnForeColorChangedDescr))]
         public event EventHandler ForeColorChanged {
-            add {
-                Events.AddHandler(EventForeColor, value);
-            }
-            remove {
-                Events.RemoveHandler(EventForeColor, value);
-            }
+            add => Events.AddHandler(EventForeColor, value);
+            remove => Events.RemoveHandler(EventForeColor, value);
         }
 
         private Font GetParentFont() {
@@ -3143,12 +3086,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LocationChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnLocationChangedDescr))]
         public event EventHandler LocationChanged {
-            add {
-                Events.AddHandler(EventLocation, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLocation, value);
-            }
+            add => Events.AddHandler(EventLocation, value);
+            remove => Events.RemoveHandler(EventLocation, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Margin"]/*' />
@@ -3180,14 +3119,8 @@ example usage
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMarginChangedDescr))]
         public event EventHandler MarginChanged
         {
-            add
-            {
-                Events.AddHandler(EventMarginChanged, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EventMarginChanged, value);
-            }
+            add => Events.AddHandler(EventMarginChanged, value);
+            remove => Events.RemoveHandler(EventMarginChanged, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MaximumSize"]/*' />
@@ -3493,12 +3426,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlRegionChangedDescr))]
         public event EventHandler RegionChanged {
-            add {
-               Events.AddHandler(EventRegionChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRegionChanged, value);
-            }
+            add => Events.AddHandler(EventRegionChanged, value);
+            remove => Events.RemoveHandler(EventRegionChanged, value);
         }
 
         // Helper function for Rtl
@@ -3663,12 +3592,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
-            add {
-                Events.AddHandler(EventRightToLeft, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRightToLeft, value);
-            }
+            add => Events.AddHandler(EventRightToLeft, value);
+            remove => Events.RemoveHandler(EventRightToLeft, value);
         }
 
 
@@ -3775,12 +3700,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnSizeChangedDescr))]
         public event EventHandler SizeChanged {
-            add {
-                Events.AddHandler(EventSize, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSize, value);
-            }
+            add => Events.AddHandler(EventSize, value);
+            remove => Events.RemoveHandler(EventSize, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndex"]/*' />
@@ -3815,12 +3736,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabIndexChangedDescr))]
         public event EventHandler TabIndexChanged {
-            add {
-                Events.AddHandler(EventTabIndex, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTabIndex, value);
-            }
+            add => Events.AddHandler(EventTabIndex, value);
+            remove => Events.RemoveHandler(EventTabIndex, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStop"]/*' />
@@ -3862,12 +3779,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TabStopChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTabStopChangedDescr))]
         public event EventHandler TabStopChanged {
-            add {
-                Events.AddHandler(EventTabStop, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTabStop, value);
-            }
+            add => Events.AddHandler(EventTabStop, value);
+            remove => Events.RemoveHandler(EventTabStop, value);
         }
 
 
@@ -3942,12 +3855,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.TextChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnTextChangedDescr))]
         public event EventHandler TextChanged {
-            add {
-                Events.AddHandler(EventText, value);
-            }
-            remove {
-                Events.RemoveHandler(EventText, value);
-            }
+            add => Events.AddHandler(EventText, value);
+            remove => Events.RemoveHandler(EventText, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Top"]/*' />
@@ -4235,12 +4144,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnVisibleChangedDescr))]
         public event EventHandler VisibleChanged {
-            add {
-                Events.AddHandler(EventVisible, value);
-            }
-            remove {
-                Events.RemoveHandler(EventVisible, value);
-            }
+            add => Events.AddHandler(EventVisible, value);
+            remove => Events.RemoveHandler(EventVisible, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.WaitForWaitHandle"]/*' />
@@ -4418,12 +4323,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click {
-            add {
-                Events.AddHandler(EventClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventClick, value);
-            }
+            add => Events.AddHandler(EventClick, value);
+            remove => Events.RemoveHandler(EventClick, value);
         }
 
 
@@ -4439,12 +4340,8 @@ example usage
         SRDescription(nameof(SR.ControlOnControlAddedDescr))
         ]
         public event ControlEventHandler ControlAdded {
-            add {
-                Events.AddHandler(EventControlAdded, value);
-            }
-            remove {
-                Events.RemoveHandler(EventControlAdded, value);
-            }
+            add => Events.AddHandler(EventControlAdded, value);
+            remove => Events.RemoveHandler(EventControlAdded, value);
         }
 
 
@@ -4459,70 +4356,46 @@ example usage
         SRDescription(nameof(SR.ControlOnControlRemovedDescr))
         ]
         public event ControlEventHandler ControlRemoved {
-            add {
-                Events.AddHandler(EventControlRemoved, value);
-            }
-            remove {
-                Events.RemoveHandler(EventControlRemoved, value);
-            }
+            add => Events.AddHandler(EventControlRemoved, value);
+            remove => Events.RemoveHandler(EventControlRemoved, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragDrop"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragDropDescr))]
         public event DragEventHandler DragDrop {
-            add {
-                Events.AddHandler(EventDragDrop, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragDrop, value);
-            }
+            add => Events.AddHandler(EventDragDrop, value);
+            remove => Events.RemoveHandler(EventDragDrop, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragEnter"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragEnterDescr))]
         public event DragEventHandler DragEnter {
-            add {
-                Events.AddHandler(EventDragEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragEnter, value);
-            }
+            add => Events.AddHandler(EventDragEnter, value);
+            remove => Events.RemoveHandler(EventDragEnter, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragOver"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragOverDescr))]
         public event DragEventHandler DragOver {
-            add {
-                Events.AddHandler(EventDragOver, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragOver, value);
-            }
+            add => Events.AddHandler(EventDragOver, value);
+            remove => Events.RemoveHandler(EventDragOver, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DragLeave"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnDragLeaveDescr))]
         public event EventHandler DragLeave {
-            add {
-                Events.AddHandler(EventDragLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDragLeave, value);
-            }
+            add => Events.AddHandler(EventDragLeave, value);
+            remove => Events.RemoveHandler(EventDragLeave, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GiveFeedback"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnGiveFeedbackDescr))]
         public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                Events.AddHandler(EventGiveFeedback, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGiveFeedback, value);
-            }
+            add => Events.AddHandler(EventGiveFeedback, value);
+            remove => Events.RemoveHandler(EventGiveFeedback, value);
         }
 
 
@@ -4532,12 +4405,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnCreateHandleDescr))]
         public event EventHandler HandleCreated {
-            add {
-                Events.AddHandler(EventHandleCreated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHandleCreated, value);
-            }
+            add => Events.AddHandler(EventHandleCreated, value);
+            remove => Events.RemoveHandler(EventHandleCreated, value);
         }
 
 
@@ -4547,36 +4416,24 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatPrivate)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnDestroyHandleDescr))]
         public event EventHandler HandleDestroyed {
-            add {
-                Events.AddHandler(EventHandleDestroyed, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHandleDestroyed, value);
-            }
+            add => Events.AddHandler(EventHandleDestroyed, value);
+            remove => Events.RemoveHandler(EventHandleDestroyed, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.HelpRequested"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnHelpDescr))]
         public event HelpEventHandler HelpRequested {
-            add {
-                Events.AddHandler(EventHelpRequested, value);
-            }
-            remove {
-                Events.RemoveHandler(EventHelpRequested, value);
-            }
+            add => Events.AddHandler(EventHelpRequested, value);
+            remove => Events.RemoveHandler(EventHelpRequested, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Invalidated"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced), SRDescription(nameof(SR.ControlOnInvalidateDescr))]
         public event InvalidateEventHandler Invalidated {
-            add {
-                Events.AddHandler(EventInvalidated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventInvalidated, value);
-            }
+            add => Events.AddHandler(EventInvalidated, value);
+            remove => Events.RemoveHandler(EventInvalidated, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PreferredSize"]/*' />
@@ -4616,47 +4473,31 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.PaddingChanged"]/*' />
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnPaddingChangedDescr))]
         public event EventHandler PaddingChanged {
-            add {
-                Events.AddHandler(EventPaddingChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPaddingChanged, value);
-            }
+            add => Events.AddHandler(EventPaddingChanged, value);
+            remove => Events.RemoveHandler(EventPaddingChanged, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Paint"]/*' />
         [SRCategory(nameof(SR.CatAppearance)), SRDescription(nameof(SR.ControlOnPaintDescr))]
         public event PaintEventHandler Paint {
-            add {
-                Events.AddHandler(EventPaint, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPaint, value);
-            }
+            add => Events.AddHandler(EventPaint, value);
+            remove => Events.RemoveHandler(EventPaint, value);
         }
 
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryContinueDrag"]/*' />
         [SRCategory(nameof(SR.CatDragDrop)), SRDescription(nameof(SR.ControlOnQueryContinueDragDescr))]
         public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                Events.AddHandler(EventQueryContinueDrag, value);
-            }
-            remove {
-                Events.RemoveHandler(EventQueryContinueDrag, value);
-            }
+            add => Events.AddHandler(EventQueryContinueDrag, value);
+            remove => Events.RemoveHandler(EventQueryContinueDrag, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.QueryAccessibilityHelp"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnQueryAccessibilityHelpDescr))]
         public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                Events.AddHandler(EventQueryAccessibilityHelp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventQueryAccessibilityHelp, value);
-            }
+            add => Events.AddHandler(EventQueryAccessibilityHelp, value);
+            remove => Events.RemoveHandler(EventQueryAccessibilityHelp, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DoubleClick"]/*' />
@@ -4665,12 +4506,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
-            add {
-                Events.AddHandler(EventDoubleClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDoubleClick, value);
-            }
+            add => Events.AddHandler(EventDoubleClick, value);
+            remove => Events.RemoveHandler(EventDoubleClick, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Enter"]/*' />
@@ -4679,12 +4516,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
-            add {
-                Events.AddHandler(EventEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnter, value);
-            }
+            add => Events.AddHandler(EventEnter, value);
+            remove => Events.RemoveHandler(EventEnter, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.GotFocus"]/*' />
@@ -4693,12 +4526,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnGotFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler GotFocus {
-            add {
-                Events.AddHandler(EventGotFocus, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGotFocus, value);
-            }
+            add => Events.AddHandler(EventGotFocus, value);
+            remove => Events.RemoveHandler(EventGotFocus, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.KeyDown"]/*' />
@@ -4707,12 +4536,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
         public event KeyEventHandler KeyDown {
-            add {
-                Events.AddHandler(EventKeyDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventKeyDown, value);
-            }
+            add => Events.AddHandler(EventKeyDown, value);
+            remove => Events.RemoveHandler(EventKeyDown, value);
         }
 
 
@@ -4722,12 +4547,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
         public event KeyPressEventHandler KeyPress {
-            add {
-                Events.AddHandler(EventKeyPress, value);
-            }
-            remove {
-                Events.RemoveHandler(EventKeyPress, value);
-            }
+            add => Events.AddHandler(EventKeyPress, value);
+            remove => Events.RemoveHandler(EventKeyPress, value);
         }
 
 
@@ -4737,12 +4558,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp {
-            add {
-                Events.AddHandler(EventKeyUp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventKeyUp, value);
-            }
+            add => Events.AddHandler(EventKeyUp, value);
+            remove => Events.RemoveHandler(EventKeyUp, value);
         }
 
 
@@ -4751,12 +4568,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnLayoutDescr))]
         public event LayoutEventHandler Layout {
-            add {
-                Events.AddHandler(EventLayout, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLayout, value);
-            }
+            add => Events.AddHandler(EventLayout, value);
+            remove => Events.RemoveHandler(EventLayout, value);
         }
 
 
@@ -4766,12 +4579,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
         public event EventHandler Leave {
-            add {
-                Events.AddHandler(EventLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLeave, value);
-            }
+            add => Events.AddHandler(EventLeave, value);
+            remove => Events.RemoveHandler(EventLeave, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.LostFocus"]/*' />
@@ -4780,12 +4589,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLostFocusDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler LostFocus {
-            add {
-                Events.AddHandler(EventLostFocus, value);
-            }
-            remove {
-                Events.RemoveHandler(EventLostFocus, value);
-            }
+            add => Events.AddHandler(EventLostFocus, value);
+            remove => Events.RemoveHandler(EventLostFocus, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseClick"]/*' />
@@ -4794,12 +4599,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseClickDescr))]
         public event MouseEventHandler MouseClick {
-            add {
-                Events.AddHandler(EventMouseClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseClick, value);
-            }
+            add => Events.AddHandler(EventMouseClick, value);
+            remove => Events.RemoveHandler(EventMouseClick, value);
         }
 
 
@@ -4809,12 +4610,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick {
-            add {
-                Events.AddHandler(EventMouseDoubleClick, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseDoubleClick, value);
-            }
+            add => Events.AddHandler(EventMouseDoubleClick, value);
+            remove => Events.RemoveHandler(EventMouseDoubleClick, value);
         }
 
 
@@ -4824,12 +4621,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnMouseCaptureChangedDescr))]
         public event EventHandler MouseCaptureChanged {
-            add {
-                Events.AddHandler(EventMouseCaptureChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseCaptureChanged, value);
-            }
+            add => Events.AddHandler(EventMouseCaptureChanged, value);
+            remove => Events.RemoveHandler(EventMouseCaptureChanged, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseDown"]/*' />
@@ -4839,12 +4632,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown {
-            add {
-                Events.AddHandler(EventMouseDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseDown, value);
-            }
+            add => Events.AddHandler(EventMouseDown, value);
+            remove => Events.RemoveHandler(EventMouseDown, value);
         }
 
 
@@ -4854,12 +4643,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseEnterDescr))]
         public event EventHandler MouseEnter {
-            add {
-                Events.AddHandler(EventMouseEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseEnter, value);
-            }
+            add => Events.AddHandler(EventMouseEnter, value);
+            remove => Events.RemoveHandler(EventMouseEnter, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseLeave"]/*' />
@@ -4868,12 +4653,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseLeaveDescr))]
         public event EventHandler MouseLeave {
-            add {
-                Events.AddHandler(EventMouseLeave, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseLeave, value);
-            }
+            add => Events.AddHandler(EventMouseLeave, value);
+            remove => Events.RemoveHandler(EventMouseLeave, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DpiChangedBeforeParent"]/*' />
@@ -4885,12 +4666,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedBeforeParentDescr))]
         public event EventHandler DpiChangedBeforeParent {
-            add {
-                Events.AddHandler(EventDpiChangedBeforeParent, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDpiChangedBeforeParent, value);
-            }
+            add => Events.AddHandler(EventDpiChangedBeforeParent, value);
+            remove => Events.RemoveHandler(EventDpiChangedBeforeParent, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.DpiChangedAfterParent"]/*' />
@@ -4902,12 +4679,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnDpiChangedAfterParentDescr))]
         public event EventHandler DpiChangedAfterParent {
-            add {
-                Events.AddHandler(EventDpiChangedAfterParent, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDpiChangedAfterParent, value);
-            }
+            add => Events.AddHandler(EventDpiChangedAfterParent, value);
+            remove => Events.RemoveHandler(EventDpiChangedAfterParent, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.MouseHover"]/*' />
@@ -4916,12 +4689,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseHoverDescr))]
         public event EventHandler MouseHover {
-            add {
-                Events.AddHandler(EventMouseHover, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseHover, value);
-            }
+            add => Events.AddHandler(EventMouseHover, value);
+            remove => Events.RemoveHandler(EventMouseHover, value);
         }
 
 
@@ -4931,12 +4700,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove {
-            add {
-                Events.AddHandler(EventMouseMove, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseMove, value);
-            }
+            add => Events.AddHandler(EventMouseMove, value);
+            remove => Events.RemoveHandler(EventMouseMove, value);
         }
 
 
@@ -4946,12 +4711,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp {
-            add {
-                Events.AddHandler(EventMouseUp, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseUp, value);
-            }
+            add => Events.AddHandler(EventMouseUp, value);
+            remove => Events.RemoveHandler(EventMouseUp, value);
         }
 
 
@@ -4961,12 +4722,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseWheelDescr)), Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public event MouseEventHandler MouseWheel {
-            add {
-                Events.AddHandler(EventMouseWheel, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMouseWheel, value);
-            }
+            add => Events.AddHandler(EventMouseWheel, value);
+            remove => Events.RemoveHandler(EventMouseWheel, value);
         }
 
 
@@ -4976,12 +4733,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnMoveDescr))]
         public event EventHandler Move {
-            add {
-                Events.AddHandler(EventMove, value);
-            }
-            remove {
-                Events.RemoveHandler(EventMove, value);
-            }
+            add => Events.AddHandler(EventMove, value);
+            remove => Events.RemoveHandler(EventMove, value);
         }
 
         /// <devdoc>
@@ -4989,12 +4742,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.PreviewKeyDownDescr))]
         public event PreviewKeyDownEventHandler PreviewKeyDown {
-            add {
-                Events.AddHandler(EventPreviewKeyDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPreviewKeyDown, value);
-            }
+            add => Events.AddHandler(EventPreviewKeyDown, value);
+            remove => Events.RemoveHandler(EventPreviewKeyDown, value);
         }
 
 
@@ -5005,45 +4754,29 @@ example usage
         [SRCategory(nameof(SR.CatLayout)), SRDescription(nameof(SR.ControlOnResizeDescr)),
          EditorBrowsable(EditorBrowsableState.Advanced)]
         public event EventHandler Resize {
-            add {
-                Events.AddHandler(EventResize, value);
-            }
-            remove {
-                Events.RemoveHandler(EventResize, value);
-            }
+            add => Events.AddHandler(EventResize, value);
+            remove => Events.RemoveHandler(EventResize, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ChangeUICues"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnChangeUICuesDescr))]
         public event UICuesEventHandler ChangeUICues {
-            add {
-                Events.AddHandler(EventChangeUICues, value);
-            }
-            remove {
-                Events.RemoveHandler(EventChangeUICues, value);
-            }
+            add => Events.AddHandler(EventChangeUICues, value);
+            remove => Events.RemoveHandler(EventChangeUICues, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.StyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnStyleChangedDescr))]
         public event EventHandler StyleChanged {
-            add {
-                Events.AddHandler(EventStyleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventStyleChanged, value);
-            }
+            add => Events.AddHandler(EventStyleChanged, value);
+            remove => Events.RemoveHandler(EventStyleChanged, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.SystemColorsChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ControlOnSystemColorsChangedDescr))]
         public event EventHandler SystemColorsChanged {
-            add {
-                Events.AddHandler(EventSystemColorsChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSystemColorsChanged, value);
-            }
+            add => Events.AddHandler(EventSystemColorsChanged, value);
+            remove => Events.RemoveHandler(EventSystemColorsChanged, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.Validating"]/*' />
@@ -5052,12 +4785,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
-            add {
-                Events.AddHandler(EventValidating, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidating, value);
-            }
+            add => Events.AddHandler(EventValidating, value);
+            remove => Events.RemoveHandler(EventValidating, value);
         }
 
 
@@ -5067,12 +4796,8 @@ example usage
         /// </devdoc>
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
-            add {
-                Events.AddHandler(EventValidated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidated, value);
-            }
+            add => Events.AddHandler(EventValidated, value);
+            remove => Events.RemoveHandler(EventValidated, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.AccessibilityNotifyClients"]/*' />
@@ -5331,12 +5056,8 @@ example usage
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ParentChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnParentChangedDescr))]
         public event EventHandler ParentChanged {
-            add {
-                Events.AddHandler(EventParent, value);
-            }
-            remove {
-                Events.RemoveHandler(EventParent, value);
-            }
+            add => Events.AddHandler(EventParent, value);
+            remove => Events.RemoveHandler(EventParent, value);
         }
 
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.BeginInvoke"]/*' />

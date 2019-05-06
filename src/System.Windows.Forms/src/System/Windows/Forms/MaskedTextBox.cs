@@ -638,14 +638,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler IsOverwriteModeChanged
         {
-            add
-            {
-                Events.AddHandler(EVENT_ISOVERWRITEMODECHANGED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_ISOVERWRITEMODECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_ISOVERWRITEMODECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_ISOVERWRITEMODECHANGED, value);
         }
 
         /// <devdoc>
@@ -789,14 +783,8 @@ namespace System.Windows.Forms
         ]
         public event EventHandler MaskChanged
         {
-            add
-            {
-                Events.AddHandler(EVENT_MASKCHANGED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_MASKCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_MASKCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_MASKCHANGED, value);
         }
 
         /// <devdoc>
@@ -854,14 +842,8 @@ namespace System.Windows.Forms
         ]
         public event MaskInputRejectedEventHandler MaskInputRejected
         {
-            add
-            {
-                Events.AddHandler(EVENT_MASKINPUTREJECTED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_MASKINPUTREJECTED, value);
-            }
+            add => Events.AddHandler(EVENT_MASKINPUTREJECTED, value);
+            remove => Events.RemoveHandler(EVENT_MASKINPUTREJECTED, value);
         }
 
         /// <devdoc>
@@ -1396,15 +1378,9 @@ namespace System.Windows.Forms
         ]
         public event EventHandler TextAlignChanged 
         {
-            add 
-            {
-                Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
-            remove 
-            {
-                Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
         /// <devdoc>
@@ -1519,14 +1495,8 @@ namespace System.Windows.Forms
         ]
         public event TypeValidationEventHandler TypeValidationCompleted
         {
-            add
-            {
-                Events.AddHandler(EVENT_VALIDATIONCOMPLETED, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(EVENT_VALIDATIONCOMPLETED, value);
-            }
+            add => Events.AddHandler(EVENT_VALIDATIONCOMPLETED, value);
+            remove => Events.RemoveHandler(EVENT_VALIDATIONCOMPLETED, value);
         }
 
         /// <devdoc>

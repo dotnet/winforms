@@ -308,14 +308,8 @@ namespace System.Windows.Forms
         ]
         new public event KeyEventHandler KeyDown
         {
-            add
-            {
-                base.KeyDown += value;
-            }
-            remove
-            {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
@@ -328,14 +322,8 @@ namespace System.Windows.Forms
         ]
         new public event KeyPressEventHandler KeyPress
         {
-            add
-            {
-                base.KeyPress += value;
-            }
-            remove
-            {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
@@ -348,14 +336,8 @@ namespace System.Windows.Forms
         ]
         new public event KeyEventHandler KeyUp
         {
-            add
-            {
-                base.KeyUp += value;
-            }
-            remove
-            {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
         /// <devdoc>
@@ -367,14 +349,8 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler LocationChanged
         {
-            add
-            {
-                base.LocationChanged += value;
-            }
-            remove
-            {
-                base.LocationChanged -= value;
-            }
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
@@ -387,25 +363,15 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler OwnerChanged
         {
-            add
-            {
-                base.OwnerChanged += value;
-            }
-            remove
-            {
-                base.OwnerChanged -= value;
-            }
+            add => base.OwnerChanged += value;
+            remove => base.OwnerChanged -= value;
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                Events.AddHandler(EventRightToLeftLayoutChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
-            }
+            add => Events.AddHandler(EventRightToLeftLayoutChanged, value);
+            remove => Events.RemoveHandler(EventRightToLeftLayoutChanged, value);
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
@@ -418,14 +384,8 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler TextChanged
         {
-            add
-            {
-                base.TextChanged += value;
-            }
-            remove
-            {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
 
@@ -439,14 +399,8 @@ namespace System.Windows.Forms
         ]
         new public event EventHandler Validated
         {
-            add
-            {
-                base.Validated += value;
-            }
-            remove
-            {
-                base.Validated -= value;
-            }
+            add => base.Validated += value;
+            remove => base.Validated -= value;
         }
 
         /// <include file='doc\ToolStripProgressBar.uex' path='docs/doc[@for="ToolStripProgressBar.Paint"]/*' />
@@ -459,14 +413,8 @@ namespace System.Windows.Forms
         ]
         new public event CancelEventHandler Validating
         {
-            add
-            {
-                base.Validating += value;
-            }
-            remove
-            {
-                base.Validating -= value;
-            }
+            add => base.Validating += value;
+            remove => base.Validating -= value;
         }
         public void Increment(int value) {
             ProgressBar.Increment(value);

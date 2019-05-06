@@ -68,14 +68,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.TimerTimerDescr))]
         public event EventHandler Tick
         {
-            add
-            {
-                _onTimer += value;
-            }
-            remove
-            {
-                _onTimer -= value;
-            }
+            add => _onTimer += value;
+            remove => _onTimer -= value;
         }
 
         /// <summary>

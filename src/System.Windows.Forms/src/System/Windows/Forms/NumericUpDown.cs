@@ -265,9 +265,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <devdoc>
         ///     Determines whether the UpDownButtons have been pressed for enough time to activate acceleration.
@@ -304,12 +303,8 @@ namespace System.Windows.Forms {
         /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
         
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.ThousandsSeparator"]/*' />
@@ -388,12 +383,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NumericUpDownOnValueChangedDescr))]
         public event EventHandler ValueChanged {
-            add {
-                onValueChanged += value;
-            }
-            remove {
-                onValueChanged -= value;
-            }
+            add => onValueChanged += value;
+            remove => onValueChanged -= value;
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.BeginInit"]/*' />

@@ -5,7 +5,6 @@
 
 
 namespace System.Windows.Forms.Design {
-    using System.Runtime.Remoting;
     using System.ComponentModel;
 
     using System.Diagnostics;
@@ -76,14 +75,8 @@ namespace System.Windows.Forms.Design {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <include file='doc\ComponentEditorPage.uex' path='docs/doc[@for="ComponentEditorPage.PageSite"]/*' />

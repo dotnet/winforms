@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
 
     using System.Diagnostics;
@@ -132,12 +131,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AppearanceChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.CheckBoxOnAppearanceChangedDescr))]
         public event EventHandler AppearanceChanged {
-            add {
-                Events.AddHandler(EVENT_APPEARANCECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_APPEARANCECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_APPEARANCECHANGED, value);
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.AutoCheck"]/*' />
@@ -273,24 +268,16 @@ namespace System.Windows.Forms {
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.MouseDoubleClick"]/*' />
         /// <internalonly/><hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateParams"]/*' />
@@ -460,12 +447,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
-            add {
-                Events.AddHandler(EVENT_CHECKEDCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_CHECKEDCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_CHECKEDCHANGED, value);
         }
         
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckStateChanged"]/*' />
@@ -476,12 +459,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
-            add {
-                Events.AddHandler(EVENT_CHECKSTATECHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CHECKSTATECHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_CHECKSTATECHANGED, value);
+            remove => Events.RemoveHandler(EVENT_CHECKSTATECHANGED, value);
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateAccessibilityInstance"]/*' />
