@@ -265,7 +265,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;

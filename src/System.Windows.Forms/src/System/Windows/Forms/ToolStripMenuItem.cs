@@ -895,7 +895,7 @@ namespace System.Windows.Forms {
             ClearShortcutCache();
             base.OnFontChanged(e);
         }
-        /// <devdoc/><internalonly/>
+        /// <devdoc/>
         internal void OnMenuAutoExpand() {
             this.ShowDropDown();
         }

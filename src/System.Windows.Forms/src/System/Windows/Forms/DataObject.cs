@@ -621,7 +621,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DAdvise"]/*' />
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
@@ -637,7 +636,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DUnadvise"]/*' />
         void IComDataObject.DUnadvise(int dwConnection)
         {
@@ -653,7 +651,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumDAdvise"]/*' />
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
@@ -669,7 +666,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumFormatEtc"]/*' />
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
@@ -691,7 +687,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetCanonicalFormatEtc"]/*' />
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
@@ -707,7 +702,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetData"]/*' />
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
@@ -760,7 +754,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetDataHere"]/*' />
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
@@ -778,7 +771,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.QueryGetData"]/*' />
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
@@ -824,7 +816,6 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.SetData"]/*' />
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {

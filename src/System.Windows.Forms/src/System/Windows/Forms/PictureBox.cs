@@ -130,7 +130,7 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.AllowDrop"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -304,7 +304,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.ForeColor"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -325,7 +325,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Font"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -859,7 +859,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.RightToLeft"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -950,7 +950,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabStop"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -971,7 +971,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.TabIndex"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -992,7 +992,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Text"]/*' />
-        /// <internalonly/><hideinheritance/>        
+        /// <hideinheritance/>        
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]        
@@ -1013,7 +1013,7 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Enter"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
             add => base.Enter += value;
@@ -1042,7 +1042,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PictureBox.uex' path='docs/doc[@for="PictureBox.Leave"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
             add => base.Leave += value;

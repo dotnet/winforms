@@ -842,7 +842,7 @@ namespace System.Windows.Forms {
         ///
         /// Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) - 
         /// then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
-        /// </devdoc> <internalonly/>
+        /// </devdoc> 
         private DropSource DropSource {
             get { 
                 if ((ParentInternal != null) && (ParentInternal.AllowItemReorder) && (ParentInternal.ItemReorderDropSource != null)) {

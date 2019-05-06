@@ -221,7 +221,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -229,7 +229,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RadioButton.uex' path='docs/doc[@for="RadioButton.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;

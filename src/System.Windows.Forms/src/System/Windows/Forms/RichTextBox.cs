@@ -3410,7 +3410,7 @@ namespace System.Windows.Forms {
             InternalSetForeColor(ForeColor);
         }
 
-        // <internalonly/>
+        // 
         // </doc>
         //
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />

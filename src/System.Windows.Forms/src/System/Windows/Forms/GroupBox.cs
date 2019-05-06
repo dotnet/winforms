@@ -341,7 +341,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler Click {
             add => base.Click += value;
@@ -349,7 +349,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseClick {
             add => base.MouseClick += value;
@@ -357,7 +357,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -366,7 +366,7 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
@@ -374,7 +374,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
@@ -382,7 +382,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
@@ -390,7 +390,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
@@ -398,7 +398,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
             add => base.MouseDown += value;
@@ -406,7 +406,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
             add => base.MouseUp += value;
@@ -414,7 +414,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseMove"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
             add => base.MouseMove += value;
@@ -422,7 +422,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseEnter"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
             add => base.MouseEnter += value;
@@ -430,7 +430,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\GroupBox.uex' path='docs/doc[@for="GroupBox.MouseLeave"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
             add => base.MouseLeave += value;

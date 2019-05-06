@@ -3833,7 +3833,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
         /// </devdoc>
-        /// <internalonly>
         protected override void OnMouseLeave(EventArgs e) {
             hoveredAlready = false;
             base.OnMouseLeave(e);

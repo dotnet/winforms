@@ -573,7 +573,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -581,7 +581,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
@@ -589,7 +589,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
@@ -597,7 +597,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
@@ -605,7 +605,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
@@ -630,7 +630,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     ProgressBar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;

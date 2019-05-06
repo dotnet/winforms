@@ -1578,7 +1578,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
@@ -1587,7 +1587,7 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
@@ -1596,7 +1596,7 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
@@ -1604,7 +1604,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
             add => base.MouseDown += value;
@@ -1612,7 +1612,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
             add => base.MouseUp += value;
@@ -1620,7 +1620,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseMove"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
             add => base.MouseMove += value;
@@ -1628,7 +1628,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseEnter"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
             add => base.MouseEnter += value;
@@ -1636,7 +1636,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseLeave"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
             add => base.MouseLeave += value;

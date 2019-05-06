@@ -926,7 +926,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     ToolBar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;

@@ -694,7 +694,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
@@ -702,7 +702,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
@@ -710,7 +710,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;

@@ -206,7 +206,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -214,7 +214,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;

@@ -195,7 +195,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     CheckedListBox DataSource.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new object DataSource {
             get {
@@ -210,7 +210,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     CheckedListBox DisplayMember.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string DisplayMember {
             get {
@@ -362,7 +362,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     CheckedListBox ValueMember.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string ValueMember {
             get {
@@ -396,7 +396,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
             add => base.Click += value;
@@ -404,7 +404,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
             add => base.MouseClick += value;
@@ -412,7 +412,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawItem"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DrawItemEventHandler DrawItem {
             add => base.DrawItem += value;
@@ -420,7 +420,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MeasureItem"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MeasureItemEventHandler MeasureItem {
             add => base.MeasureItem += value;

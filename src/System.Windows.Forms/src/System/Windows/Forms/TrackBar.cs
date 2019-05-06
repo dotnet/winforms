@@ -630,7 +630,7 @@ namespace System.Windows.Forms {
         }    
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
             add => base.Click += value;
@@ -638,7 +638,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -646,7 +646,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
             add => base.MouseClick += value;
@@ -654,7 +654,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
@@ -679,7 +679,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     TrackBar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;

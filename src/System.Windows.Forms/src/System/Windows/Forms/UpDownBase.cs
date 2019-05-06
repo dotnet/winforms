@@ -435,7 +435,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseEnter"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseEnter {
             add => base.MouseEnter += value;
@@ -443,7 +443,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseLeave"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseLeave {
             add => base.MouseLeave += value;
@@ -451,7 +451,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseHover"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler MouseHover {
             add => base.MouseHover += value;
@@ -459,7 +459,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\UpDownBase.uex' path='docs/doc[@for="UpDownBase.MouseMove"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseMove {
             add => base.MouseMove += value;

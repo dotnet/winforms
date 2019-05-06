@@ -507,7 +507,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     StatusBar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;

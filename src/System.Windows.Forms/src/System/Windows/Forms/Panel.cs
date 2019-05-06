@@ -186,7 +186,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
@@ -194,7 +194,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
@@ -202,7 +202,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;

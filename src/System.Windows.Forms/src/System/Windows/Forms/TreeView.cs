@@ -1442,7 +1442,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     TreeView Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
@@ -1969,7 +1969,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
         /// </devdoc>
-        /// <internalonly>
         protected override void OnMouseLeave(EventArgs e) {
             hoveredAlready = false;
             base.OnMouseLeave(e);
