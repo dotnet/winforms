@@ -8,6 +8,8 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
+using Xunit.Sdk;
+using static System.Windows.Forms.ComboBox;
 
 namespace System.Windows.Forms.Tests
 {
@@ -581,7 +583,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
-            
+
             // Set same.
             control.SelectedIndex = value;
             Assert.Equal(value, control.SelectedIndex);
@@ -606,7 +608,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(value, control.SelectedIndex);
             Assert.Equal(value == -1 ? null : control.Items[control.SelectedIndex], control.SelectedItem);
             Assert.Equal(expectedText, control.Text);
-            
+
             // Set same.
             control.SelectedIndex = value;
             Assert.Equal(value, control.SelectedIndex);
@@ -681,7 +683,7 @@ namespace System.Windows.Forms.Tests
             yield return new object[] { controlWithItems, null, 1, -1 };
             yield return new object[] { controlWithItems, null, 2, -1 };
             yield return new object[] { controlWithItems, null, 5, -1 };
-    
+
             yield return new object[] { controlWithItems, string.Empty, -1, 0 };
             yield return new object[] { controlWithItems, string.Empty, 0, 1 };
             yield return new object[] { controlWithItems, string.Empty, 1, 2 };
@@ -755,7 +757,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { controlWithItems, "abc", 2, ignoreCase, 0 };
                 yield return new object[] { controlWithItems, "abc", 5, ignoreCase, 0 };
             }
-            
+
             yield return new object[] { controlWithItems, "ABC", -1, false, 2 };
             yield return new object[] { controlWithItems, "ABC", 0, false, 2 };
             yield return new object[] { controlWithItems, "ABC", 1, false, 2 };
@@ -799,7 +801,7 @@ namespace System.Windows.Forms.Tests
                 yield return new object[] { controlWithItems, null, 1, ignoreCase, -1 };
                 yield return new object[] { controlWithItems, null, 2, ignoreCase, -1 };
                 yield return new object[] { controlWithItems, null, 5, ignoreCase, -1 };
-        
+
                 yield return new object[] { controlWithItems, string.Empty, -1, ignoreCase, 4 };
                 yield return new object[] { controlWithItems, string.Empty, 0, ignoreCase, 4 };
                 yield return new object[] { controlWithItems, string.Empty, 1, ignoreCase, 4 };
@@ -862,6 +864,43 @@ namespace System.Windows.Forms.Tests
         private class DataClass
         {
             public string Value { get; set; }
+        }
+
+        [Fact]
+        public void GettingComboBoxItemAccessibleObject_Not_ThrowsException()
+        {
+            var control = new ComboBox();
+
+            var h1 = new HashNotImplementedObject();
+            var h2 = new HashNotImplementedObject();
+            var h3 = new HashNotImplementedObject();
+
+            control.Items.AddRange(new[] { h1, h2, h3 });
+
+            var comboBoxAccObj = (ComboBoxAccessibleObject)control.AccessibilityObject;
+
+            var exceptionThrown = false;
+
+            try
+            {
+                var itemAccObj1 = comboBoxAccObj.ItemAccessibleObjects[h1];
+                var itemAccObj2 = comboBoxAccObj.ItemAccessibleObjects[h2];
+                var itemAccObj3 = comboBoxAccObj.ItemAccessibleObjects[h3];
+            }
+            catch
+            {
+                exceptionThrown = true;
+            }
+
+            Assert.False(exceptionThrown, "Getting accessible object for ComboBox item has thrown an exception.");
+        }
+
+        public class HashNotImplementedObject
+        {
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
