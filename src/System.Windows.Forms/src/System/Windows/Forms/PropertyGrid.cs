@@ -1724,9 +1724,8 @@ namespace System.Windows.Forms {
                 {
                     tab = CreateTab(tabType, host);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.Fail("Bad Tab.  We're not going to show it. ", e.ToString());
                     return;
                 }
 
@@ -3749,7 +3748,6 @@ namespace System.Windows.Forms {
             }
 
             if (tab == null) {
-                //Debug.Fail("How can we release a tab when it isn't here.");
                 return;
             }
 
@@ -4092,7 +4090,6 @@ namespace System.Windows.Forms {
                 int tab = state / viewTypes;
                 int view = state % viewTypes;
     
-                Debug.Assert(tab < viewTabs.Length, "Trying to select invalid tab!");
                 Debug.Assert(view < viewSortButtons.Length, "Can't select view type > 1");
     
                 OnViewTabButtonClick(viewTabButtons[tab], EventArgs.Empty);
@@ -4170,8 +4167,7 @@ namespace System.Windows.Forms {
                        }
                        alphaIndex = AddImage(bmpAlpha);
                    }
-                   catch (Exception e) {
-                       Debug.Fail("Failed to load Alpha bitmap", e.ToString());
+                   catch (Exception) {
                    }
    
                    try {
@@ -4180,8 +4176,7 @@ namespace System.Windows.Forms {
                        }
                        categoryIndex = AddImage(bmpCategory);
                    }
-                   catch (Exception e) {
-                       Debug.Fail("Failed to load category bitmap", e.ToString());
+                   catch (Exception) {
                    }
    
                    viewSortButtons[ALPHA] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
@@ -4247,8 +4242,7 @@ namespace System.Windows.Forms {
                    }
                    designpg = AddImage(bmpPropPage);
                }
-               catch (Exception e) {
-                   Debug.Fail(e.ToString());
+               catch (Exception) {
                }
    
                // we recreate this every time to ensure it's at the end

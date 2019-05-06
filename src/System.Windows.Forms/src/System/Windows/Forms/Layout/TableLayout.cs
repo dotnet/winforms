@@ -867,10 +867,11 @@ namespace System.Windows.Forms.Layout {
             return size;
         }
 
-        //set the minimum size for each element
-        private void DistributeSize(IList styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth) {
-            Debug.Assert(min <= max, "Error computing min/max strip size. (Min expected to be less than max).");
-            
+        /// <summary>
+        /// Sets the minimum size for each element
+        /// </summary>
+        private void DistributeSize(IList styles, Strip[] strips, int start, int stop, int min, int max, int cellBorderWidth)
+        {
             xDistributeSize(styles, strips, start, stop, min, MinSizeProxy.GetInstance, cellBorderWidth);
             xDistributeSize(styles, strips, start, stop, max, MaxSizeProxy.GetInstance, cellBorderWidth);
         }
@@ -959,14 +960,6 @@ namespace System.Windows.Forms.Layout {
                         strips[i] = sizeProxy.Strip;
                     }
                 }
-
-#if DEBUG
-                // not using assert here to prevent concatination in debug builds.
-                if (uninitializedStripIndex != numUninitializedStrips) {      
-                    Debug.Fail("should always get the same number of strips with size 0. " + "expecting: " + numUninitializedStrips + " actual: " + uninitializedStripIndex);
-                }
-#endif
-
             } 
         }
 

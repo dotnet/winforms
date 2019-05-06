@@ -1375,17 +1375,6 @@ namespace System.Windows.Forms
             }
 
             UnsafeNativeMethods.SetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
-
-#if DEBUG
-
-            info.fMask          = NativeMethods.MIIM_TYPE | NativeMethods.MIIM_STATE | NativeMethods.MIIM_SUBMENU;
-            info.dwTypeData     = new string('\0', 256);
-            info.cbSize         = Marshal.SizeOf<NativeMethods.MENUITEMINFO_T>();
-            info.cch            = info.dwTypeData.Length - 1;
-            UnsafeNativeMethods.GetMenuItemInfo(new HandleRef(Parent, Parent.handle), MenuID, false, info);
-            Debug.Assert(((info.fType & NativeMethods.MFT_RIGHTORDER) != 0) == setRightToLeftBit, "Failed to set bit!");
-
-#endif
         }
 
         internal void UpdateMenuItem(bool force)
