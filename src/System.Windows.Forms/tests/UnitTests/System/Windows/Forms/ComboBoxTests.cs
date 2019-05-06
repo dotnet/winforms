@@ -8,8 +8,6 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using Xunit.Sdk;
-using static System.Windows.Forms.ComboBox;
 
 namespace System.Windows.Forms.Tests
 {
@@ -877,7 +875,7 @@ namespace System.Windows.Forms.Tests
 
             control.Items.AddRange(new[] { h1, h2, h3 });
 
-            var comboBoxAccObj = (ComboBoxAccessibleObject)control.AccessibilityObject;
+            var comboBoxAccObj = (ComboBox.ComboBoxAccessibleObject)control.AccessibilityObject;
 
             var exceptionThrown = false;
 
