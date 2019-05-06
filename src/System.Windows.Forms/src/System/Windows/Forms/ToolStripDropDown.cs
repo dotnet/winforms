@@ -102,7 +102,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\ToolStripDropDown.uex' path='docs/doc[@for="ToolStripDropDown.AllowTransparency"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para> 
         ///       Gets or sets
@@ -253,7 +252,6 @@ namespace System.Windows.Forms {
             remove => base.ContextMenuStripChanged -= value; }
         
         /// <include file='doc\ToolStripPopup.uex' path='docs/doc[@for="ToolStripDropDown.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>
         /// This is called when creating a window. Inheriting classes can overide

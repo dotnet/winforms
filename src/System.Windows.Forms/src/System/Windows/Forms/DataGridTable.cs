@@ -706,7 +706,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkHoverColor"]/*' />
-        /// <internalonly/>
         [
          SRDescription(nameof(SR.DataGridLinkHoverColorDescr)),
          SRCategory(nameof(SR.CatColors)),
@@ -723,14 +722,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.LinkHoverColorChanged"]/*' />
-        /// <internalonly/>
         public event EventHandler LinkHoverColorChanged {
             add => Events.AddHandler(EventLinkHoverColor, value);
             remove => Events.RemoveHandler(EventLinkHoverColor, value);
         }
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ShouldSerializeLinkHoverColor"]/*' />
-        /// <internalonly/>
         protected virtual bool ShouldSerializeLinkHoverColor()
         {
             return false;
@@ -788,7 +785,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.ResetLinkHoverColor"]/*' />
-        /// <internalonly/>
         public void ResetLinkHoverColor() { 
             /*if (ShouldSerializeLinkHoverColor())
                 LinkHoverColor = defaultLinkHoverBrush.Color;*/
@@ -1099,7 +1095,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DefaultTableStyle"]/*' />
-        /// <internalonly/>
         [
             SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes")   // This has already shipped so we can't change it.
         ]
@@ -1107,7 +1102,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\DataGridTable.uex' path='docs/doc[@for="DataGridTableStyle.DataGridTableStyle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.DataGridTableStyle'/> class.</para>
         /// </devdoc>

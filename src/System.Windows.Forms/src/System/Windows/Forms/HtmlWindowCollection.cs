@@ -68,7 +68,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
                 return false;
@@ -76,7 +75,6 @@ namespace System.Windows.Forms
         }
         
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {
                 return this;
@@ -84,7 +82,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
             for (int i = 0; i < count; i++) {
@@ -93,7 +90,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\HtmlWindowCollection.uex' path='docs/doc[@for="HtmlWindowCollection.GetEnumerator"]/*' />
-        /// <internalonly/>
         public IEnumerator GetEnumerator() {
             HtmlWindow[] htmlWindows = new HtmlWindow[this.Count];
             ((ICollection)this).CopyTo(htmlWindows, 0);

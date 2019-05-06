@@ -107,7 +107,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.ImageIndexer"]/*' />
-        /// <internalonly/>
         internal ImageList.Indexer ImageIndexer {
              get {
                 if (imageIndexer == null) {
@@ -119,7 +118,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.SelectedImageIndexer"]/*' />
-        /// <internalonly/>
         internal ImageList.Indexer SelectedImageIndexer {
              get {
                    if (selectedImageIndexer == null) {
@@ -214,7 +212,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImage"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -226,7 +223,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -235,7 +231,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageLayout"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -247,7 +242,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -324,7 +318,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CreateParams"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -1274,7 +1267,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -1450,7 +1442,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     TreeView Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
@@ -1501,7 +1493,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -1521,7 +1512,6 @@ namespace System.Windows.Forms {
         ///     Resets the imageList to null.  We wire this method up to the imageList's
         ///     Dispose event, so that we don't hang onto an imageList that's gone away.
         /// </devdoc>
-        /// <internalonly/>
         private void DetachImageList(object sender, EventArgs e) {
             ImageList = null;
         }
@@ -1531,7 +1521,6 @@ namespace System.Windows.Forms {
         ///     Resets the stateimageList to null.  We wire this method up to the stateimageList's
         ///     Dispose event, so that we don't hang onto an stateimageList that's gone away.
         /// </devdoc>
-        /// <internalonly/>
         private void DetachStateImageList(object sender, EventArgs e) {
             internalStateImageList = null;
             StateImageList = null;
@@ -1541,7 +1530,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.Dispose"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void Dispose(bool disposing) {
             if (disposing) {
 
@@ -1586,7 +1574,6 @@ namespace System.Windows.Forms {
         ///     Forces the TreeView to recalculate all its nodes widths so that it updates the
         ///     scrollbars as appropriate.
         /// </devdoc>
-        /// <internalonly/>
         internal void ForceScrollbarUpdate(bool delayed) {
 
             // ForceScrollbarUpdate call WM_SETREDRAW( FALSE ) followed by WM_SETREDRAW( TRUE )
@@ -1609,7 +1596,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
-        /// <internalonly/>
         internal void SetToolTip(ToolTip toolTip, string toolTipText) {
             if (toolTip != null) {
                 UnsafeNativeMethods.SendMessage(new HandleRef(toolTip, toolTip.Handle), NativeMethods.TTM_SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
@@ -1646,7 +1632,6 @@ namespace System.Windows.Forms {
         ///     Defined so that a  tree node can use it
         ///
         /// </devdoc>
-        /// <internalonly/>
 
         internal bool TreeViewBeforeCheck(TreeNode node, TreeViewAction actionTaken) {
             TreeViewCancelEventArgs tvce = new TreeViewCancelEventArgs(node, false, actionTaken);
@@ -1770,7 +1755,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.IsInputKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overridden to handle RETURN key.
@@ -1799,7 +1783,6 @@ namespace System.Windows.Forms {
         ///    Note this can be null - particularly if any windows messages get generated during
         ///    the insertion of a tree node (TVM_INSERTITEM)
         /// </devdoc>
-        /// <internalonly/>
         internal TreeNode NodeFromHandle(IntPtr handle) {
             TreeNode node = (TreeNode)nodeTable[handle];
 
@@ -1817,7 +1800,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnHandleCreated"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleCreated(EventArgs e) {
 
             TreeNode savedSelectedNode = this.selectedNode;
@@ -1964,7 +1946,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.OnHandleDestroyed"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleDestroyed(EventArgs e) {
             selectedNode = SelectedNode;
 
@@ -1988,7 +1969,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///  We keep track of if we've hovered already so we don't fire multiple hover events
         /// </devdoc>
-        /// <internalonly>
         protected override void OnMouseLeave(EventArgs e) {
             hoveredAlready = false;
             base.OnMouseLeave(e);
@@ -2160,7 +2140,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnKeyDown(KeyEventArgs e) {
             base.OnKeyDown(e);
             if (e.Handled) return;
@@ -2184,7 +2163,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnKeyUp(KeyEventArgs e) {
             base.OnKeyUp(e);
             if (e.Handled) return;
@@ -2199,7 +2177,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the OnBeforeCheck / OnAfterCheck for keyboard clicks
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnKeyPress(KeyPressEventArgs e) {
             base.OnKeyPress(e);
             if (e.Handled) return;
@@ -2302,7 +2279,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -2521,7 +2497,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Performs custom draw handling
         /// </devdoc>
-        /// <internalonly/>
         private void CustomDraw(ref Message m) {
             NativeMethods.NMTVCUSTOMDRAW nmcd = (NativeMethods.NMTVCUSTOMDRAW)m.GetLParam(typeof(NativeMethods.NMTVCUSTOMDRAW));
 
@@ -2721,7 +2696,6 @@ namespace System.Windows.Forms {
         ///     basis, rather than using the ForeColor/BackColor/NodeFont properties on TreeNode.
         ///
         /// </devdoc>
-        /// <internalonly/>
         protected OwnerDrawPropertyBag GetItemRenderStyles(TreeNode node, int state) {
             OwnerDrawPropertyBag retval = new OwnerDrawPropertyBag();
             if (node == null || node.propBag == null) return retval;
@@ -2771,7 +2745,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.WmNeedText"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmNeedText(ref Message m) {
             NativeMethods.TOOLTIPTEXT ttt = (NativeMethods.TOOLTIPTEXT) m.GetLParam(typeof(NativeMethods.TOOLTIPTEXT));
             string tipText = controlToolTipText;
@@ -2904,7 +2877,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Shows the context menu for the Treenode.
         /// </devdoc>
-        /// <internalonly/>
         private void ShowContextMenu(TreeNode treeNode) {
 
             if (treeNode.ContextMenu != null || treeNode.ContextMenuStrip != null) {
@@ -2972,7 +2944,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeView.uex' path='docs/doc[@for="TreeView.WndProc"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_WINDOWPOSCHANGING:

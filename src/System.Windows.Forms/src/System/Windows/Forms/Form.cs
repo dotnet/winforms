@@ -427,7 +427,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.AllowTransparency"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets or sets
@@ -841,7 +840,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Retrieves the CreateParams used to create the window.
         ///    If a subclass overrides this function, it must call the base implementation.
@@ -2171,7 +2169,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.TabIndex"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [
@@ -2189,7 +2186,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.TabIndexChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
             add => base.TabIndexChanged += value;
@@ -2817,7 +2813,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.AdjustFormScrollbars"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2887,7 +2882,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     This forces the SystemMenu to look like we want.
         /// </devdoc>
-        /// <internalonly/>
         private void AdjustSystemMenu() {
             if (IsHandleCreated) {
                 IntPtr hmenu = UnsafeNativeMethods.GetSystemMenu(new HandleRef(this, Handle), false);
@@ -2900,7 +2894,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     This auto scales the form based on the AutoScaleBaseSize.
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("This method has been deprecated. Use the ApplyAutoScaling method instead.  http://go.microsoft.com/fwlink/?linkid=14202")]
         protected void ApplyAutoScaling() {
@@ -2945,7 +2938,6 @@ namespace System.Windows.Forms {
         ///     This adjusts the size of the windowRect so that the client rect is the
         ///     correct size.
         /// </devdoc>
-        /// <internalonly/>
         private void ApplyClientSize() {
             if ((FormWindowState)formState[FormStateWindowState] != FormWindowState.Normal
                 || !IsHandleCreated) {
@@ -3024,7 +3016,6 @@ namespace System.Windows.Forms {
             UpdateBounds();
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Assigns a new parent control. Sends out the appropriate property change
         ///       notifications for properties that are affected by the change of parent.</para>
@@ -3147,7 +3138,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.CreateControlsInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -3159,7 +3149,6 @@ namespace System.Windows.Forms {
         ///     Cleans up form state after a control has been removed.
         ///     Package scope for Control
         /// </devdoc>
-        /// <internalonly/>
         internal override void AfterControlRemoved(Control control, Control oldParent) {
             base.AfterControlRemoved(control, oldParent);
 
@@ -3312,7 +3301,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.DefWndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Calls the default window proc for the form. If
         ///       a
@@ -3784,7 +3772,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Centers the dialog to its parent.
         /// </devdoc>
-        /// <internalonly/>
         protected void CenterToParent() {
             if (TopLevel) {
                 Point p = new Point();
@@ -3826,7 +3813,6 @@ namespace System.Windows.Forms {
         ///     it will try the HWND owner of the form, and finally this will
         ///     center the form on the same monitor as the mouse cursor.
         /// </devdoc>
-        /// <internalonly/>
         protected void CenterToScreen() {
             Point p = new Point();
             Screen desktop = null;
@@ -4114,7 +4100,6 @@ namespace System.Windows.Forms {
             Application.OpenForms.Remove(this);
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///    Handles the event that a helpButton is clicked
         /// </devdoc>
@@ -4351,7 +4336,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnPaint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Raises the Paint event.</para>
         /// </devdoc>
@@ -4378,7 +4362,6 @@ namespace System.Windows.Forms {
         }
 
        /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnResize"]/*' />
-       /// <internalonly/>
         /// <devdoc>
         ///    <para>Raises the Resize event.</para>
         /// </devdoc>
@@ -4391,7 +4374,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnDpiChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Raises the DpiChanged event.</para>
         /// </devdoc>
@@ -4451,7 +4433,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.OnGetDpiScaledSize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Allows derived form to handle WM_GETDPISCALEDSIZE message.</para>
         /// </devdoc>
@@ -4534,7 +4515,6 @@ namespace System.Windows.Forms {
         ///     Simulates a InputLanguageChanged event. Used by Control to forward events
         ///     to the parent form.
         /// </devdoc>
-        /// <internalonly/>
         internal void PerformOnInputLanguageChanged(InputLanguageChangedEventArgs iplevent) {
             OnInputLanguageChanged(iplevent);
         }
@@ -4543,7 +4523,6 @@ namespace System.Windows.Forms {
         ///     Simulates a InputLanguageChanging event. Used by Control to forward
         ///     events to the parent form.
         /// </devdoc>
-        /// <internalonly/>
         internal void PerformOnInputLanguageChanging(InputLanguageChangingEventArgs iplcevent) {
             OnInputLanguageChanging(iplcevent);
         }
@@ -4627,7 +4606,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ProcessDialogChar"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog character For a MdiChild.
         /// </devdoc>
@@ -4685,7 +4663,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Raises the FormClosed event for this form when Application.Exit is called.</para>
         /// </devdoc>
@@ -4719,7 +4696,6 @@ namespace System.Windows.Forms {
             OnFormClosed(new FormClosedEventArgs(CloseReason.ApplicationExitCall));
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Raises the FormClosing event for this form when Application.Exit is called.
         ///          Returns e.Cancel returned by the event handler.</para>
@@ -4765,7 +4741,6 @@ namespace System.Windows.Forms {
             return e.Cancel;
         }
 
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [
@@ -5436,7 +5411,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.ShouldSerializeSize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Indicates whether the <see cref='System.Windows.Forms.Form.Size'/> property should be persisted.</para>
         /// </devdoc>
@@ -5480,7 +5454,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -5490,7 +5463,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Updates the autoscalebasesize based on the current font.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateAutoScaleBaseSize() {
             autoScaleBaseSize = Size.Empty;
         }
@@ -5536,7 +5508,6 @@ namespace System.Windows.Forms {
         ///     Updates the default button based on current selection, and the
         ///     acceptButton property.
         /// </devdoc>
-        /// <internalonly/>
         protected override void UpdateDefaultButton() {
             ContainerControl cc = this;
 
@@ -5568,7 +5539,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Updates the underlying hWnd with the correct parent/owner of the form.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateHandleWithOwner() {
             if (IsHandleCreated && TopLevel) {
                 HandleRef ownerHwnd = NativeMethods.NullHandleRef;
@@ -5617,7 +5587,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <internalonly/>
         private void UpdateMenuHandles() {
             Form form;
 
@@ -5985,7 +5954,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Updated the window state from the handle, if created.
         /// </devdoc>
-        /// <internalonly/>
         //
         // This function is called from all over the place, including my personal favorite,
         // WM_ERASEBKGRND.  Seems that's one of the first messages we get when a user clicks the min/max
@@ -6090,7 +6058,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_ACTIVATE handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmActivate(ref Message m) {
             Application.FormActivated(this.Modal, true); // inform MsoComponentManager we're active
             Active = NativeMethods.Util.LOWORD(m.WParam) != NativeMethods.WA_INACTIVE;
@@ -6100,7 +6067,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_ENTERSIZEMOVE handler, so that user can hook up OnResizeBegin event.
         /// </devdoc>
-        /// <internalonly/>
         private void WmEnterSizeMove(ref Message m) {
             formStateEx[FormStateExInModalSizingLoop] = 1;
             OnResizeBegin(EventArgs.Empty);
@@ -6109,7 +6075,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_EXITSIZEMOVE handler, so that user can hook up OnResizeEnd event.
         /// </devdoc>
-        /// <internalonly/>
         private void WmExitSizeMove(ref Message m) {
             formStateEx[FormStateExInModalSizingLoop] = 0;
             OnResizeEnd(EventArgs.Empty);
@@ -6118,7 +6083,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_CREATE handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmCreate(ref Message m) {
             base.WndProc(ref m);
             NativeMethods.STARTUPINFO_I si = new NativeMethods.STARTUPINFO_I();
@@ -6142,7 +6106,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_CLOSE, WM_QUERYENDSESSION, and WM_ENDSESSION handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmClose(ref Message m) {
             FormClosingEventArgs e = new FormClosingEventArgs(CloseReason, false);
 
@@ -6270,7 +6233,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_ENTERMENULOOP handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmEnterMenuLoop(ref Message m) {
             OnMenuStart(EventArgs.Empty);
             base.WndProc(ref m);
@@ -6279,7 +6241,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_ERASEBKGND message
         /// </devdoc>
-        /// <internalonly/>
         private void WmEraseBkgnd(ref Message m) {
             UpdateWindowState();
             base.WndProc(ref m);
@@ -6288,7 +6249,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_EXITMENULOOP handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmExitMenuLoop(ref Message m) {
             OnMenuComplete(EventArgs.Empty);
             base.WndProc(ref m);
@@ -6375,7 +6335,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_INITMENUPOPUP handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmInitMenuPopup(ref Message m) {
 
             MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
@@ -6392,7 +6351,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_MENUCHAR message
         /// </devdoc>
-        /// <internalonly/>
         private void WmMenuChar(ref Message m) {
             MainMenu curMenu = (MainMenu)Properties.GetObject(PropCurMenu);
             if (curMenu == null) {
@@ -6418,7 +6376,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_MDIACTIVATE handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmMdiActivate(ref Message m) {
             base.WndProc(ref m);
             Debug.Assert(Properties.GetObject(PropFormMdiParent) != null, "how is formMdiParent null?");
@@ -6453,7 +6410,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_NCDESTROY handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmNCDestroy(ref Message m) {
             MainMenu mainMenu   = Menu;
             MainMenu dummyMenu  = (MainMenu)Properties.GetObject(PropDummyMenu);
@@ -6493,7 +6449,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_NCHITTEST handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmNCHitTest(ref Message m) {
             if (formState[FormStateRenderSizeGrip] != 0 ) {
                 int x = NativeMethods.Util.LOWORD(m.LParam);
@@ -6537,7 +6492,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_SHOWWINDOW handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmShowWindow(ref Message m) {
             formState[FormStateSWCalled] = 1;
             base.WndProc(ref m);
@@ -6547,7 +6501,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_SYSCOMMAND handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmSysCommand(ref Message m) {
             bool callDefault = true;
 
@@ -6592,7 +6545,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_SIZE handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmSize(ref Message m) {
 
             // If this is an MDI parent, don't pass WM_SIZE to the default
@@ -6611,7 +6563,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_UNINITMENUPOPUP handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmUnInitMenuPopup(ref Message m) {
             if (Menu != null) {
                 //Whidbey addition - also raise the MainMenu.Collapse event for the current menu
@@ -6622,7 +6573,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_WINDOWPOSCHANGED handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmWindowPosChanged(ref Message m) {
 
             //           We must update the windowState, because resize is fired

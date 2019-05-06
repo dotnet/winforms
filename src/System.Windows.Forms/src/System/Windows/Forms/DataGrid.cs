@@ -2369,7 +2369,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.CursorChanged"]/*' />
-            /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler CursorChanged {
                 add => base.CursorChanged += value;
@@ -2409,7 +2408,6 @@ namespace System.Windows.Forms {
     
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageChanged"]/*' />
-            /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler BackgroundImageChanged {
                 add => base.BackgroundImageChanged += value;
@@ -2417,7 +2415,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.BackgroundImageLayoutChanged"]/*' />
-            /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler BackgroundImageLayoutChanged {
                 add => base.BackgroundImageLayoutChanged += value;
@@ -2767,7 +2764,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.TextChanged"]/*' />
-            /// <internalonly/>
             [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
                 add => base.TextChanged += value;
@@ -5258,7 +5254,6 @@ namespace System.Windows.Forms {
                     minRowHeaderWidth += 15; // the size of the plus/minus glyph and spacing around it
             }
     
-            /// <internalonly/>
             /// <devdoc>
             ///      Updates the internal variables with the number of columns visible
             ///      inside the Grid's client rectangle.
@@ -5452,7 +5447,6 @@ namespace System.Windows.Forms {
             }
     
     
-            /// <internalonly/>
             /// <devdoc>
             ///      Creates a DataGridState representing the child table retrieved
             ///      from the passed DataRelation.
@@ -6029,7 +6023,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Returns the row number underneath the given y coordinate.
             /// </devdoc>
-            /// <internalonly/>
             private int GetRowFromY(int y) {
                 Rectangle inside = layout.Data;
                 Debug.Assert(y >= inside.Y && y < inside.Bottom, "y must be inside the vertical bounds of the data");
@@ -6282,7 +6275,6 @@ namespace System.Windows.Forms {
                 return HitTest(position.X, position.Y);
             }
     
-            /// <internalonly/>
             /// <devdoc>
             ///      Initializes the values for column widths in the table.
             /// </devdoc>
@@ -8641,7 +8633,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.SubObjectsSiteChange"]/*' />
-            /// <internalonly/>
             public void SubObjectsSiteChange(bool site) {
                 DataGrid dgrid = this;
                 if (dgrid.DesignMode && dgrid.Site != null) {
@@ -8704,7 +8695,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\DataGrid.uex' path='docs/doc[@for="DataGrid.GetOutputTextDelimiter"]/*' />
-            /// <internalonly/>
             /// <devdoc>
             ///    Will return the string that will be used as a delimiter between columns
             ///    when copying rows contents to the Clipboard.

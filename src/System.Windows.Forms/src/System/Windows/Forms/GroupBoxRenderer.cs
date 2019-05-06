@@ -150,7 +150,6 @@ using Microsoft.Win32;
         /// <summary>
         ///     Draws a themed GroupBox with no text label.
         /// </summary>
-        /// <internalonly/>
         private static void DrawThemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state) {
             InitializeRenderer((int)state);
             visualStyleRenderer.DrawBackground(g, bounds);
@@ -159,7 +158,6 @@ using Microsoft.Win32;
         /// <summary>
         ///     Draws a themed GroupBox with a text label.
         /// </summary>
-        /// <internalonly/>
         private static void DrawThemedGroupBoxWithText(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state) {
             InitializeRenderer((int)state);
 
@@ -218,7 +216,6 @@ using Microsoft.Win32;
         /// <summary>
         ///     Draws an un-themed GroupBox with no text label.
         /// </summary>
-        /// <internalonly/>
         private static void DrawUnthemedGroupBoxNoText(Graphics g, Rectangle bounds, GroupBoxState state) {
             Color backColor = SystemColors.Control;         
             Pen light = new Pen(ControlPaint.Light(backColor, 1.0f));
@@ -254,7 +251,6 @@ using Microsoft.Win32;
         ///     Draws an un-themed GroupBox with a text label.
         ///     Variation of the logic in GroupBox.DrawGroupBox().
         /// </summary>
-        /// <internalonly/>
         private static void DrawUnthemedGroupBoxWithText(Graphics g, Rectangle bounds, string groupBoxText, Font font, Color textColor, TextFormatFlags flags, GroupBoxState state) {
             // Calculate text area, and render text inside it
             Rectangle textBounds = bounds;

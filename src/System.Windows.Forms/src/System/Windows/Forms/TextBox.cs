@@ -291,7 +291,6 @@ namespace System.Windows.Forms {
 
      
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Returns the parameters needed to create the handle. Inheriting classes
@@ -552,7 +551,6 @@ namespace System.Windows.Forms {
         }
        
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.IsInputKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overridden to handle RETURN key.
@@ -595,7 +593,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnGotFocus"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overrideen to focus the text on first focus.
         /// </devdoc>
@@ -614,7 +611,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnHandleCreated"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overridden to update the newly created handle with the settings of the
         ///    PasswordChar properties.
@@ -896,7 +892,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    The edits window procedure.  Inheritng classes can override this
         ///    to add extra functionality, but should not forget to call

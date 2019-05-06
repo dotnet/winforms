@@ -192,7 +192,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImage"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the image rendered on the background of the control.
@@ -214,7 +213,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -222,7 +220,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageLayout"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the image layout for the background of the control.
@@ -241,7 +238,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -294,7 +290,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overrides Control.  A Label is a Win32 STATIC control, which we setup here.
         /// </devdoc>
@@ -692,7 +687,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -700,7 +694,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
             add => base.KeyUp += value;
@@ -708,7 +702,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
             add => base.KeyDown += value;
@@ -716,7 +710,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
             add => base.KeyPress += value;
@@ -812,7 +806,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
@@ -976,7 +969,6 @@ namespace System.Windows.Forms {
         ///     Updates the control in response to events that could affect either
         ///     the size of the control, or the size of the text within it.
         /// </devdoc>
-        /// <internalonly/>
         internal void AdjustSize() {
             if (!SelfSizing) {
                 return;
@@ -1148,7 +1140,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <internalonly/>
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.GetLines"]/*' />
         /// <devdoc>
         ///    <para>
@@ -1336,7 +1327,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnMouseEnter"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
@@ -1358,7 +1348,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
@@ -1437,7 +1426,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.OnPaint"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnPaint(PaintEventArgs e) {
             Animate();
             ImageAnimator.UpdateFrames(this.Image);
@@ -1553,7 +1541,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.ProcessMnemonic"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overrides Control. This is called when the user has pressed an Alt-CHAR
@@ -1580,7 +1567,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Overrides Control.setBoundsCore to enforce autoSize.
         /// </devdoc>
-        /// <internalonly/>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None)
                 requestedHeight = height;
@@ -1612,7 +1598,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </devdoc>
-        /// <internalonly/>
         internal void SetToolTip(ToolTip toolTip) {
             if (toolTip != null && !controlToolTip) {
                 controlToolTip = true;
@@ -1625,14 +1610,12 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
             string s = base.ToString();
             return s + ", Text: " + Text;
         }
 
         /// <include file='doc\Label.uex' path='docs/doc[@for="Label.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overrides Control. This processes certain messages that the Win32 STATIC
@@ -1687,7 +1670,6 @@ namespace System.Windows.Forms {
 
 
     /// <include file='doc\Label.uex' path='docs/doc[@for="Label.LabelImageIndexer"]/*' />
-    /// <internalonly/>
     /// <devdoc>
     ///    <para>
     ///            Override ImageList.Indexer to support Label's ImageList semantics.

@@ -132,7 +132,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.EnabledChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler EnabledChanged {
                 add => base.EnabledChanged += value;
@@ -155,7 +154,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyleChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler DisplayStyleChanged {
                 add => base.DisplayStyleChanged += value;
@@ -308,7 +306,6 @@ namespace System.Windows.Forms {
             }
 
              /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.TextChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
                 add => base.TextChanged += value;

@@ -670,7 +670,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Shows the context menu for the tray icon.
         /// </devdoc>
-        /// <internalonly/>
         private void ShowContextMenu() {
 
             if (contextMenu != null || contextMenuStrip != null) {
@@ -707,7 +706,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Updates the icon in the system tray.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateIcon(bool showIconInTray) {
             lock(syncObj) {
 
@@ -758,7 +756,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the mouse-down event
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseDown(ref Message m, MouseButtons button, int clicks) {
             if (clicks == 2) {
                 OnDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
@@ -772,7 +769,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the mouse-move event
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseMove(ref Message m) {
             OnMouseMove(new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
         }
@@ -781,7 +777,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the mouse-up event
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseUp(ref Message m, MouseButtons button) {
             OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
             //subhag
@@ -936,7 +931,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Defines a placeholder window that the NotifyIcon is attached to.
         /// </devdoc>
-        /// <internalonly/>
         private class NotifyIconNativeWindow : NativeWindow {
             internal NotifyIcon reference;
             private  GCHandle   rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
@@ -945,7 +939,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Create a new NotifyIcon, and bind the window to the NotifyIcon component.
             /// </devdoc>
-            /// <internalonly/>
             internal NotifyIconNativeWindow(NotifyIcon component) {
                 reference = component;
             }
@@ -983,7 +976,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>
-            /// <internalonly/>
             protected override void WndProc(ref Message m) {
                 Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);

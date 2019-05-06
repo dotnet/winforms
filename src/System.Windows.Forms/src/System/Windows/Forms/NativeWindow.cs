@@ -622,7 +622,6 @@ namespace System.Windows.Forms
         ///     in a Message object and invokes the wndProc() method. A WM_NCDESTROY
         ///     message automatically causes the releaseHandle() method to be called.
         /// </devdoc>
-        /// <internalonly/>
         private IntPtr Callback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
 
             // Note: if you change this code be sure to change the 
@@ -653,7 +652,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Raises an exception if the window handle is not zero.
         /// </devdoc>
-        /// <internalonly/>
         private void CheckReleased() {
             if (handle != IntPtr.Zero) {
                 throw new InvalidOperationException(SR.HandleAlreadyExists);
@@ -735,7 +733,6 @@ namespace System.Windows.Forms
         ///     in a Message object and invokes the wndProc() method. A WM_NCDESTROY
         ///     message automatically causes the releaseHandle() method to be called.
         /// </devdoc>
-        /// <internalonly/>
         private IntPtr DebuggableCallback(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam) {
 
             // Note: if you change this code be sure to change the 
@@ -1394,7 +1391,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     WindowClass encapsulates a window class.
         /// </devdoc>
-        /// <internalonly/>
         private class WindowClass {
             internal static WindowClass cache;
 

@@ -233,7 +233,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -252,7 +251,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -2099,7 +2097,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetCharFormat"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private RichTextBoxSelectionAttribute GetCharFormat(int mask, int effect) {
             RichTextBoxSelectionAttribute charFormat = RichTextBoxSelectionAttribute.None;
 
@@ -2178,7 +2175,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetCharInCharSet"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private bool GetCharInCharSet(char c, char[] charSet, bool negate) {
             bool match = false;
             int charSetLen = charSet.Length;
@@ -2224,7 +2220,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetProtectedError"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private bool GetProtectedError() {
             if (ProtectedError) {
                 ProtectedError = false;
@@ -2618,7 +2613,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Core Zoom calculation and message passing (used by ZoomFactor property and CreateHandle()
         /// </devdoc>
-        /// <internalonly/>
         private void SendZoomFactor(float zoom) {
             int numerator;
             int denominator;
@@ -2660,7 +2654,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SetCharFormat"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private bool SetCharFormat(int mask, int effect, RichTextBoxSelectionAttribute charFormat) {
             // check to see if the control has been created
             if (IsHandleCreated) {
@@ -2751,7 +2744,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.StreamIn"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void StreamIn(string str, int flags) {
             if (str.Length == 0 ) {
                 // Destroy the selection if callers was setting
@@ -2882,7 +2874,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.StreamOut"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private string StreamOut(int flags) {
             Stream stream = new MemoryStream();
             StreamOut(stream, flags, false);
@@ -3091,7 +3082,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      Handles link messages (mouse move, down, up, dblclk, etc)
         /// </devdoc>
-        /// <internalonly/>
         private void EnLinkMsgHandler(ref Message m) {
             NativeMethods.ENLINK enlink;
             //On 64-bit, we do some custom marshalling to get this to work. The richedit control
@@ -3128,7 +3118,6 @@ namespace System.Windows.Forms {
         ///     class name being used. We have to create a CharBuffer of the type of RichTextBox DLL we're using,
         ///     not based on the SystemCharWidth.
         /// </devdoc>
-        /// <internalonly/>
         private string CharRangeToString(NativeMethods.CHARRANGE c) {
             NativeMethods.TEXTRANGE txrg = new NativeMethods.TEXTRANGE();
             txrg.chrg = c;
@@ -3166,7 +3155,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmReflectCommand"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
 
             // We check if we're in the middle of handle creation because
@@ -3197,7 +3185,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmReflectNotify"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal void WmReflectNotify(ref Message m) {
             if (m.HWnd == Handle) {
                 NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
@@ -3359,7 +3346,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmSelectionChange"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmSelectionChange(NativeMethods.SELCHANGE selChange) {
             int selStart = selChange.chrg.cpMin;
             int selEnd = selChange.chrg.cpMax;
@@ -3407,7 +3393,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmSetFont"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetFont(ref Message m) {
 
             // This function would normally cause two TextChanged events to be fired, one
@@ -3425,7 +3410,7 @@ namespace System.Windows.Forms {
             InternalSetForeColor(ForeColor);
         }
 
-        // <internalonly/>
+        // 
         // </doc>
         //
         /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />

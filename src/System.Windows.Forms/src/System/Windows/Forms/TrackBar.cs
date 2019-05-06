@@ -136,7 +136,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -155,7 +154,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -169,7 +167,6 @@ namespace System.Windows.Forms {
         ///     base.getCreateParams() to make sure the control continues to work
         ///     correctly.
         /// </devdoc>
-        /// <internalonly/>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -205,7 +202,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DefaultImeMode"]/*' />
-        /// <internalonly/>
         protected override ImeMode DefaultImeMode {
             get {
                 return ImeMode.Disable;
@@ -250,7 +246,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.FontChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add => base.FontChanged += value;
@@ -272,7 +267,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -280,7 +274,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ImeMode"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public ImeMode ImeMode {
             get {
@@ -292,7 +285,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -448,7 +440,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Little private routine that helps with auto-sizing.
         /// </devdoc>
-        /// <internalonly/>
         private int PreferredDimension {
             get {
                 int cyhscroll = UnsafeNativeMethods.GetSystemMetrics(NativeMethods.SM_CYHSCROLL);
@@ -463,7 +454,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Redraw control, if the handle's created
         /// </devdoc>
-        /// <internalonly/>
         private void RedrawControl()
         {
             if (IsHandleCreated)
@@ -544,7 +534,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -641,7 +630,7 @@ namespace System.Windows.Forms {
         }    
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
             add => base.Click += value;
@@ -649,7 +638,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -657,7 +646,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
             add => base.MouseClick += value;
@@ -665,7 +654,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
@@ -690,7 +679,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     TrackBar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
@@ -708,7 +697,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Enforces autoSizing
         /// </devdoc>
-        /// <internalonly/>
         private void AdjustSize() {
             if (IsHandleCreated) {
                 int saveDim = requestedDim;
@@ -728,7 +716,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      Handles tasks required when the control is being initialized.
         /// </devdoc>
-        /// <internalonly/>
         public void BeginInit() {
             initializing = true;
         }
@@ -757,7 +744,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();
@@ -776,7 +762,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///      Called when initialization of the control is complete.
         /// </devdoc>
-        /// <internalonly/>
         public void EndInit() {
             initializing = false;
 
@@ -823,7 +808,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TrackBar.uex' path='docs/doc[@for="TrackBar.OnHandleCreated"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.TBM_SETRANGEMIN, 0, minimum);
@@ -927,7 +911,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Actually fires the "valueChanged" event.
         /// </devdoc>
-        /// <internalonly/>
         protected virtual void OnValueChanged(EventArgs e) {
             EventHandler handler = (EventHandler)Events[EVENT_VALUECHANGED];
             if (handler != null) handler(this,e);
@@ -1055,7 +1038,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1068,7 +1050,6 @@ namespace System.Windows.Forms {
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_REFLECT+Interop.WindowMessages.WM_HSCROLL:

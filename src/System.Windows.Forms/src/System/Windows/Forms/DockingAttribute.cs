@@ -56,7 +56,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.Equals"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         public override bool Equals(object obj) {
@@ -75,7 +74,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DockingAttribute.uex' path='docs/doc[@for="DockingAttribute.IsDefaultAttribute"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         public override bool IsDefaultAttribute() {

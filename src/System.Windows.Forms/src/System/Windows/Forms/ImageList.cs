@@ -873,7 +873,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
             string s = base.ToString();
             if (Images != null) {
@@ -1045,7 +1044,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -1053,7 +1051,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -1061,7 +1058,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
@@ -1138,7 +1134,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 
                 
@@ -1218,7 +1213,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 if (value is Image) {
                     Add((Image)value);
@@ -1381,7 +1375,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object image) {
                 if (image is Image) {
                     return Contains((Image)image);
@@ -1406,7 +1399,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object image) {
                 if (image is Image) {
                     return IndexOf((Image)image);
@@ -1454,7 +1446,6 @@ namespace System.Windows.Forms {
 
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException();
             }
@@ -1463,13 +1454,11 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     <para>Determines if the index is valid for the collection.</para>
             /// </devdoc>
-            /// <internalonly/>
             private bool IsValidIndex(int index) {
                 return ((index >= 0) && (index < this.Count));
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 AssertInvariant();
                 for (int i = 0; i < Count; ++i) {
@@ -1496,7 +1485,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object image) {
                 if (image is Image) {
                     Remove((Image)image);
@@ -1550,7 +1538,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ImageList.uex' path='docs/doc[@for="ImageInfo"]/*' />
-            /// <internalonly/>
             internal class ImageInfo {
                 private string name;
                 public ImageInfo() {
@@ -1566,14 +1553,12 @@ namespace System.Windows.Forms {
     }
 
     /// <include file='doc\ImageListConverter.uex' path='docs/doc[@for="ImageListConverter"]/*' />
-    /// <internalonly/>
     internal class ImageListConverter : ComponentConverter {
 
         public ImageListConverter() : base(typeof(ImageList)) {
         }
 
         /// <include file='doc\ImageListConverter.uex' path='docs/doc[@for="ImageListConverter.GetPropertiesSupported"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Gets a value indicating
         ///       whether this object supports properties using the

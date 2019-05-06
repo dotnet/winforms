@@ -123,7 +123,6 @@ namespace System.Windows.Forms.Layout {
         void IList.Insert(int index, object value) { throw new NotSupportedException(); /* InnerList.Insert(index, value); */ }
 
         /// <include file='doc\ArrangedElementCollection.uex' path='docs/doc[@for="ArrangedElementCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get { return InnerList[index]; }            
             set { throw new NotSupportedException(); }

@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
 
     /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter"]/*' />
-    /// <internalonly/>
     /// <devdoc>
     ///    <para>
     ///       This class provides methods to perform locale based comparison of strings
@@ -122,7 +121,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.ArrayLength"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal static int ArrayLength(object[] array) {
             if (array == null)
                 return 0;
@@ -170,7 +168,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.Compare3"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private static int Compare(int lcid, string s1, string s2, int options) {
             if (s1 == null) return s2 == null? 0: -1;
             if (s2 == null) return 1;
@@ -180,7 +177,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\StringSorter.uex' path='docs/doc[@for="StringSorter.CompareKeys"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private int CompareKeys(string s1, string s2) {
             int result = Compare(lcid, s1, s2, options);
             return descending? -result: result;
@@ -193,7 +189,6 @@ namespace System.Windows.Forms {
         ///     side. This bounds the recursive depth by log2(n) in the worst case.
         ///     Otherwise, worst case recursive depth would be n.
         /// </devdoc>
-        /// <internalonly/>
         private void QuickSort(int left, int right) {
             do {
                 int i = left;

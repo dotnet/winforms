@@ -624,7 +624,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Handles the WM_INPUTLANGCHANGE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmInputLangChange( ref Message m ) {
             Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmInputLangChange(), this = " + this );
             Debug.Indent();
@@ -659,7 +658,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Handles the WM_INPUTLANGCHANGEREQUEST message
         /// </devdoc>
-        /// <internalonly/>
         private void WmInputLangChangeRequest( ref Message m ) {
             Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmInputLangChangeRequest(), this=" + this );
             Debug.Indent();
@@ -784,7 +782,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Handles the WM_KILLFOCUS message
         /// </devdoc>
-        /// <internalonly/>
         private void WmImeKillFocus() {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeKillFocus(), this=" + this);
             Debug.Indent();

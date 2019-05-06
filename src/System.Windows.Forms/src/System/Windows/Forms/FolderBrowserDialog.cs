@@ -66,7 +66,6 @@ namespace System.Windows.Forms
         public bool AutoUpgradeEnabled { get; set; } = true;
 
         /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.HelpRequest"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler HelpRequest 
         {

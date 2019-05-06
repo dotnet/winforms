@@ -892,7 +892,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Retrieve state bits for this node
         /// </devdoc>
-        /// <internalonly/>
         internal int State {
             get {
                 if (handle == IntPtr.Zero)
@@ -1063,7 +1062,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Adds a new child node at the appropriate sorted position
         /// </devdoc>
-        /// <internalonly/>
         internal int AddSorted(TreeNode node) {
             int index = 0;
             int iMin, iLim, iT;
@@ -1474,7 +1472,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Makes sure there is enough room to add n children
         /// </devdoc>
-        /// <internalonly/>
         internal void EnsureCapacity(int num) {
             Debug.Assert(num > 0,"required capacity can not be less than 1");
             int size = num;
@@ -1499,7 +1496,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Ensures the the node's StateImageIndex value is properly set.
         /// </devdoc>
-        /// <internalonly/>
         private void EnsureStateImageValue()
         {
             if (treeView == null) {
@@ -1621,7 +1617,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper function to add node at a given index after all validation has been done
         /// </devdoc>
-        /// <internalonly/>
         internal void InsertNodeAt(int index, TreeNode node) {
             EnsureCapacity(1);
             node.parent = this;
@@ -1648,7 +1643,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Realize"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal void Realize(bool insertFirst) {
             // Debug.assert(handle == 0, "Node already realized");
             TreeView tv = this.TreeView;
@@ -1764,7 +1758,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TreeNode.uex' path='docs/doc[@for="TreeNode.Remove1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal void Remove(bool notify) {
             bool expanded = IsExpanded;
 
@@ -1806,7 +1799,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Removes the propBag object if it's now devoid of useful data
         /// </devdoc>
-        /// <internalonly/>
         private void RemovePropBagIfEmpty() {
             if (propBag==null) return;
             if (propBag.IsEmpty()) propBag = null;
@@ -1958,7 +1950,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// ISerializable private implementation
         /// </devdoc>
-        /// <internalonly/>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
              Serialize(si, context);
         }

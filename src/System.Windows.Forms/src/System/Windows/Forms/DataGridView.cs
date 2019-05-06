@@ -1169,7 +1169,6 @@ namespace System.Windows.Forms
         }
         
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackColor"]/*' />
-        /// <internalonly/>
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never),
@@ -1188,7 +1187,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.BackColorChanged"]/*' />
-        /// <internalonly/>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Never)
@@ -3080,7 +3078,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ForeColor"]/*' />
-        /// <internalonly/>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced),
@@ -3099,7 +3096,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -3111,7 +3107,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.Font"]/*' />
-        /// <internalonly/>
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -3129,7 +3124,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.FontChanged"]/*' />
-        /// <internalonly/>
         [
             Browsable(false),
             EditorBrowsable(EditorBrowsableState.Advanced)
@@ -6087,7 +6081,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridView.uex' path='docs/doc[@for="DataGridView.StyleChanged"]/*' />
-        /// <internalonly/>
         [
             Browsable(false), 
             EditorBrowsable(EditorBrowsableState.Never)

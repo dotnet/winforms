@@ -303,7 +303,6 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.Equals"]/*' />
-        /// <internalonly/>
         public override bool Equals(object other) 
         {
             DataGridViewAdvancedBorderStyle dgvabsOther = other as DataGridViewAdvancedBorderStyle;
@@ -323,14 +322,12 @@ namespace System.Windows.Forms
         public override int GetHashCode() => HashCode.Combine(top, left, bottom, right);
 
         /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.ToString"]/*' />
-        /// <internalonly/>
         public override string ToString() 
         {
             return "DataGridViewAdvancedBorderStyle { All=" + this.All.ToString() + ", Left=" + this.Left.ToString() + ", Right=" + this.Right.ToString() + ", Top=" + this.Top.ToString() + ", Bottom=" + this.Bottom.ToString() + " }";
         }
 
         /// <include file='doc\DataGridViewAdvancedBorderStyle.uex' path='docs/doc[@for="DataGridViewAdvancedBorderStyle.ICloneable.Clone"]/*' />
-        /// <internalonly/>
         object ICloneable.Clone() 
         {
             DataGridViewAdvancedBorderStyle dgvabs = new DataGridViewAdvancedBorderStyle(this.owner, this.banned1, this.banned2, this.banned3);

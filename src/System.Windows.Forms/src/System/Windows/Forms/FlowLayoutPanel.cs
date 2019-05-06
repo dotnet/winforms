@@ -59,7 +59,6 @@ namespace System.Windows.Forms {
 
         #region Provided properties
         /// <include file='doc\FlowPanel.uex' path='docs/doc[@for="FlowPanel.IExtenderProvider.CanExtend"]/*' />
-        /// <internalonly/>
         bool IExtenderProvider.CanExtend(object obj) {
             Control control = obj as Control;
             return control != null && control.Parent == this;

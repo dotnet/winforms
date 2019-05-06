@@ -107,7 +107,6 @@ namespace System.Windows.Forms {
         }
     
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.CanConvertFrom"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Determines if this converter can convert an object in the given source
         ///    type to the native type of the converter.
@@ -140,7 +139,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.ConvertFrom"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Converts the given object to the converter's native type.
         /// </devdoc>
@@ -222,7 +220,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.ConvertTo"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Converts the given object to another type.  The most common types to convert
         ///    are to and from a string object.  The default implementation will make a call
@@ -326,7 +323,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.GetStandardValues"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Retrieves a collection containing a set of standard values
         ///    for the data type this validator is designed for.  This
@@ -351,7 +347,6 @@ namespace System.Windows.Forms {
         }
     
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.GetStandardValuesExclusive"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Determines if the list of standard values returned from
         ///    GetStandardValues is an exclusive list.  If the list
@@ -365,7 +360,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\KeysConverter.uex' path='docs/doc[@for="KeysConverter.GetStandardValuesSupported"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Determines if this object supports a standard set of values
         ///    that can be picked from a list.

@@ -511,7 +511,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// ISerializable private implementation
         /// </devdoc>
-        /// <internalonly/>
         void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
             if (cursorData != null) {
                 si.AddValue("CursorData", cursorData, typeof(byte[]));

@@ -278,7 +278,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.Text"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       The text displayed in the control.
@@ -300,7 +299,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -388,7 +386,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.BeginInit"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Handles tasks required when the control is being initialized.
         /// </devdoc>
@@ -455,7 +452,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.EndInit"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Called when initialization of the control is complete.
@@ -490,7 +486,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\NumericUpDown.uex' path='docs/doc[@for="NumericUpDown.OnTextBoxKeyPress"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Restricts the entry of characters to digits (including hex), the negative sign,
@@ -685,7 +680,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Provides some interesting info about this control in String form.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();

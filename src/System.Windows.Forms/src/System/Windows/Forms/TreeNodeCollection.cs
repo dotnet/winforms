@@ -37,7 +37,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.FixedIndex"]/*' />
-        /// <internalonly/>
         internal int FixedIndex
         {
             get {
@@ -68,7 +67,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index] {
             get {
                 return this[index];
@@ -115,7 +113,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {
                 return this;
@@ -123,7 +120,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
                 return false;
@@ -131,7 +127,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
         bool IList.IsFixedSize {
             get {
                 return false;
@@ -335,7 +330,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Add"]/*' />
-        /// <internalonly/>
         int IList.Add(object node) {
             if (node == null) {
                 throw new ArgumentNullException(nameof(node));
@@ -364,7 +358,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Contains"]/*' />
-        /// <internalonly/>
         bool IList.Contains(object node) {
             if (node is TreeNode) {
                 return Contains((TreeNode)node);
@@ -385,7 +378,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
         int IList.IndexOf(object node) {
             if (node is TreeNode) {
                 return IndexOf((TreeNode)node);
@@ -452,7 +444,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Insert"]/*' />
-        /// <internalonly/>
         void IList.Insert(int index, object node) {
             if (node is TreeNode) {
                 Insert(index, (TreeNode)node);
@@ -539,7 +530,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     <para>Determines if the index is valid for the collection.</para>
         /// </devdoc>
-        /// <internalonly/> 
         private bool IsValidIndex(int index) {
             return ((index >= 0) && (index < this.Count));
         }
@@ -565,7 +555,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TreeNodeCollection.uex' path='docs/doc[@for="TreeNodeCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object node) {
             if (node is TreeNode ) {
                 Remove((TreeNode)node);

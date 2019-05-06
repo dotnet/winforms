@@ -18,7 +18,6 @@ namespace System.Windows.Forms {
 
           /// <devdoc>
           /// </devdoc>
-          /// <internalonly/>
 
           private Rectangle bounds = Rectangle.Empty;
           private IArrangedElement parent = null;

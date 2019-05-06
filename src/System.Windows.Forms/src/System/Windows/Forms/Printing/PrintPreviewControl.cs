@@ -153,7 +153,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets the CreateParams used to create the window.
@@ -251,7 +250,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -472,7 +470,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnResize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Invalidate the layout, if necessary.
@@ -510,7 +507,6 @@ namespace System.Windows.Forms {
             
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.OnPaint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Paints the control.
@@ -695,7 +691,6 @@ namespace System.Windows.Forms {
         ///     WM_HSCROLL handler
         /// </devdoc>
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WmHScroll"]/*' />
-        /// <internalonly/>
 
         private void WmHScroll(ref Message m) {
 
@@ -758,7 +753,6 @@ namespace System.Windows.Forms {
         ///     WM_VSCROLL handler
         /// </devdoc>
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WmVScroll"]/*' />
-        /// <internalonly/>
 
         private void WmVScroll(ref Message m) {
 
@@ -782,7 +776,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_KEYDOWN message.
         /// </devdoc>
-        /// <internalonly/>
         //added to handle keyboard events
         //
         private void WmKeyDown(ref Message msg) {
@@ -893,7 +886,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintPreviewControl.uex' path='docs/doc[@for="PrintPreviewControl.WndProc"]/*' />
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_VSCROLL:

@@ -35,7 +35,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.color"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private Color color;
 
         /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ColorDialog"]/*' />
@@ -166,7 +165,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.Instance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Our HINSTANCE from Windows.
@@ -180,7 +178,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns our CHOOSECOLOR options.
         /// </devdoc>
-        /// <internalonly/>
         protected virtual int Options {
             get {
                 return options;
@@ -235,7 +232,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Lets us control the CHOOSECOLOR options.
         /// </devdoc>
-        /// <internalonly/>
         private bool GetOption(int option) {
             return(options & option) != 0;
         }
@@ -262,7 +258,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.RunDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override bool RunDialog(IntPtr hwndOwner) {
 
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);
@@ -296,7 +291,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Allows us to manipulate the CHOOSECOLOR options
         /// </devdoc>
-        /// <internalonly/>
         private void SetOption(int option, bool value) {
             if (value) {
                 options |= option;
@@ -318,7 +312,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ToString"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Provides a string version of this object.

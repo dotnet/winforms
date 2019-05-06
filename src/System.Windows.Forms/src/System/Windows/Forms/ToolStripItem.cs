@@ -842,7 +842,7 @@ namespace System.Windows.Forms {
         ///
         /// Else if the parent does not support reordering of items (Parent.AllowItemReorder = false) - 
         /// then call back on the ToolStripItem's OnQueryContinueDrag/OnGiveFeedback methods.
-        /// </devdoc> <internalonly/>
+        /// </devdoc> 
         private DropSource DropSource {
             get { 
                 if ((ParentInternal != null) && (ParentInternal.AllowItemReorder) && (ParentInternal.ItemReorderDropSource != null)) {
@@ -1026,7 +1026,6 @@ namespace System.Windows.Forms {
         /// ToolStripItems do not have children.  For perf reasons always return a static empty collection.
         /// Consider creating readonly collection.
         /// </devdoc>
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get {
                 return ToolStripItem.EmptyChildCollection;   
@@ -1036,7 +1035,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Should not be exposed as this returns an unexposed type.
         /// </devdoc>
-        /// <internalonly/>
         IArrangedElement IArrangedElement.Container { 
             get {
                 if (this.ParentInternal == null) {
@@ -1065,7 +1063,6 @@ namespace System.Windows.Forms {
 
        
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.Properties"]/*' />
-        /// <internalonly/>
         PropertyStore IArrangedElement.Properties { 
             get {
                 return this.Properties;
@@ -1075,7 +1072,6 @@ namespace System.Windows.Forms {
          
         // Sets the bounds for an element.
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             // in this case the parent is telling us to refresh our bounds - dont 
             // call PerformLayout
@@ -1300,7 +1296,6 @@ namespace System.Windows.Forms {
         ///       This object helps determine where the image and text should be drawn.
         ///    </para>
         /// </devdoc>
-        /// <internalonly/>
         internal ToolStripItemInternalLayout InternalLayout {
             get { 
                 if (toolStripItemInternalLayout == null) {
@@ -1331,7 +1326,6 @@ namespace System.Windows.Forms {
         ///       This is used by ToolStrip to pass on the mouseMessages for ActiveDropDown.
         ///    </para>
         /// </devdoc>
-        /// <internalonly/>
         internal bool IsInDesignMode {
             get {
                 return DesignMode;
@@ -2826,22 +2820,18 @@ namespace System.Windows.Forms {
         /// Explicit support of DropTarget 
         ///
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragEnter"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragEnter(DragEventArgs dragEvent) {
             OnDragEnter(dragEvent);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragOver"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragOver(DragEventArgs dragEvent) {
             OnDragOver(dragEvent);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragLeave"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragLeave(EventArgs e) {
             OnDragLeave(e);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.IDropTarget.OnDragDrop"]/*' />
-        /// <internalonly/>
         void IDropTarget.OnDragDrop(DragEventArgs dragEvent) {
             OnDragDrop(dragEvent);
         }
@@ -2849,12 +2839,10 @@ namespace System.Windows.Forms {
         /// Explicit support of DropSource 
         ///
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ISupportOleDropSource.OnGiveFeedback"]/*' />
-        /// <internalonly/>
         void ISupportOleDropSource.OnGiveFeedback(GiveFeedbackEventArgs giveFeedbackEventArgs)  {
             OnGiveFeedback(giveFeedbackEventArgs);
         }
         /// <include file='doc\ToolStripItem.uex' path='docs/doc[@for="ToolStripItem.ISupportOleDropSource.OnQueryContinueDrag"]/*' />
-        /// <internalonly/>
         void ISupportOleDropSource.OnQueryContinueDrag(QueryContinueDragEventArgs queryContinueDragEventArgs) {
             OnQueryContinueDrag(queryContinueDragEventArgs);
         }
@@ -3194,7 +3182,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Pushes the button.
         /// </devdoc>
-        /// <internalonly/>
         internal void Push(bool push) {
             if (!CanSelect || !Enabled || DesignMode) {
                return;
@@ -4283,7 +4270,6 @@ namespace System.Windows.Forms {
     ///       This class helps determine where the image and text should be drawn.
     ///    </para>
     /// </devdoc>
-    /// <internalonly/>
     internal class ToolStripItemInternalLayout { 
     
         private ToolStripItemLayoutOptions currentLayoutOptions;

@@ -132,7 +132,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -151,7 +150,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -170,7 +168,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -189,7 +186,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.FontChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
             add => base.FontChanged += value;
@@ -260,7 +256,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.Dock"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [
         Localizable(true),
         DefaultValue(DockStyle.Left)
@@ -298,7 +293,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Determines if the splitter is horizontal.
         /// </devdoc>
-        /// <internalonly/>
         private bool Horizontal {
             get {
                 DockStyle dock = Dock;
@@ -318,7 +312,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
             add => base.ImeModeChanged += value;
@@ -441,7 +434,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
             add => base.TabStopChanged += value;
@@ -464,7 +456,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -526,7 +517,6 @@ namespace System.Windows.Forms {
         ///     Draws the splitter bar at the current location. Will automatically
         ///     cleanup anyplace the splitter was drawn previously.
         /// </devdoc>
-        /// <internalonly/>
         private void DrawSplitBar(int mode) {
             if (mode != DRAW_START && lastDrawSplit != -1) {
                 DrawSplitHelper(lastDrawSplit);
@@ -583,7 +573,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Calculates the current size of the splitter-target.
         /// </devdoc>
-        /// <internalonly/>
         private int CalcSplitSize() {
             Control target = FindTarget();
             if (target == null) return -1;
@@ -604,7 +593,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Calculates the bounding criteria for the splitter.
         /// </devdoc>
-        /// <internalonly/>
         private SplitData CalcSplitBounds() {
             SplitData spd = new SplitData();
             Control target = FindTarget();
@@ -657,7 +645,6 @@ namespace System.Windows.Forms {
         ///     Draws the splitter line at the requested location. Should only be called
         ///     by drawSpltBar.
         /// </devdoc>
-        /// <internalonly/>
         private void DrawSplitHelper(int splitSize) {
             if (splitTarget == null) {
                 return;
@@ -678,7 +665,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Raises a splitter event
         /// </devdoc>
-        /// <internalonly/>
 
         /* No one seems to be calling this, so it is okay to comment it out
         private void RaiseSplitterEvent(object key, SplitterEventArgs spevent) {
@@ -694,7 +680,6 @@ namespace System.Windows.Forms {
         ///     is docked left, the target is the control that is just to the left
         ///     of the splitter.
         /// </devdoc>
-        /// <internalonly/>
         private Control FindTarget() {
             Control parent = ParentInternal;
             if (parent == null) return null;
@@ -727,7 +712,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Calculates the split size based on the mouse position (x, y).
         /// </devdoc>
-        /// <internalonly/>
         private int GetSplitSize(int x, int y) {
             int delta;
             if (Horizontal) {
@@ -757,7 +741,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnKeyDown"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnKeyDown(KeyEventArgs e) {
             base.OnKeyDown(e);
             if (splitTarget != null && e.KeyCode == Keys.Escape) {
@@ -768,7 +751,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnMouseDown"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnMouseDown(MouseEventArgs e) {
             base.OnMouseDown(e);
             if (e.Button == MouseButtons.Left && e.Clicks == 1) {
@@ -779,7 +761,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnMouseMove"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnMouseMove(MouseEventArgs e) {
             base.OnMouseMove(e);
             if (splitTarget != null) {
@@ -795,7 +776,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Splitter.uex' path='docs/doc[@for="Splitter.OnMouseUp"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnMouseUp(MouseEventArgs e) {
             base.OnMouseUp(e);
             if (splitTarget != null) {
@@ -859,7 +839,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Begins the splitter moving.
         /// </devdoc>
-        /// <internalonly/>
         private void SplitBegin(int x, int y) {
             SplitData spd = CalcSplitBounds();
             if (spd.target != null && (minSize < maxSize)) {
@@ -882,7 +861,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Finishes the split movement.
         /// </devdoc>
-        /// <internalonly/>
         private void SplitEnd(bool accept) {
             DrawSplitBar(DRAW_END);
             splitTarget = null;
@@ -907,7 +885,6 @@ namespace System.Windows.Forms {
         ///     Sets the split position to be the current split size. This is called
         ///     by splitEdit
         /// </devdoc>
-        /// <internalonly/>
         private void ApplySplitPosition() {
             SplitPosition = splitSize;
         }
@@ -917,7 +894,6 @@ namespace System.Windows.Forms {
         ///     Moves the splitter line to the splitSize for the mouse position
         ///     (x, y).
         /// </devdoc>
-        /// <internalonly/>
         private void SplitMove(int x, int y) {
             int size = GetSplitSize(x-Left+anchor.X, y-Top+anchor.Y);
             if (splitSize != size) {
@@ -930,7 +906,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -960,7 +935,6 @@ namespace System.Windows.Forms {
             /// <include file='doc\SplitterMessageFilter.uex' path='docs/doc[@for="SplitterMessageFilter.PreFilterMessage"]/*' />
             /// <devdoc>
             /// </devdoc>
-            /// <internalonly/>
             public bool PreFilterMessage(ref Message m) {
                 if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                     if (m.Msg == Interop.WindowMessages.WM_KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape) {

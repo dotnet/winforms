@@ -146,7 +146,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Menu.uex' path='docs/doc[@for="ContextMenu.ProcessCmdKey"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
             sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);

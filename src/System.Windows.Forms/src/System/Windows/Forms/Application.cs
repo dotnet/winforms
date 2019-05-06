@@ -931,7 +931,6 @@ namespace System.Windows.Forms {
         ///     Called immediately before we begin pumping messages for a modal message loop.
         ///     Does not actually start a message pump; that's the caller's responsibility.
         /// </devdoc>
-        /// <internalonly/>
         internal static void BeginModalMessageLoop() {
             ThreadContext.FromCurrent().BeginModalMessageLoop(null);
         }
@@ -972,7 +971,6 @@ namespace System.Windows.Forms {
         ///     Called immediately after we stop pumping messages for a modal message loop.
         ///     Does not actually end the message pump itself.
         /// </devdoc>
-        /// <internalonly/>
         internal static void EndModalMessageLoop() {
             ThreadContext.FromCurrent().EndModalMessageLoop(null);
         }
@@ -1170,7 +1168,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.ParkHandle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///     be parked.
@@ -1217,7 +1214,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Application.uex' path='docs/doc[@for="Application.UnparkHandle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     "Unparks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///     be parked.
@@ -1365,7 +1361,6 @@ namespace System.Windows.Forms {
         ///     the dialog has a valid DialogResult.  This is called internally by a form
         ///     when an application calls System.Windows.Forms.Form.ShowDialog().
         /// </devdoc>
-        /// <internalonly/>
         internal static void RunDialog(Form form) {
             ThreadContext.FromCurrent().RunMessageLoop(NativeMethods.MSOCM.msoloopModalForm, new ModalApplicationContext(form));
         }
@@ -2078,7 +2073,6 @@ namespace System.Windows.Forms {
         ///     TLS is really just an unfortunate artifact of using Win 32.  We want the world to be free
         ///     threaded.
         /// </devdoc>
-        /// <internalonly/>
         internal sealed class ThreadContext : MarshalByRefObject, UnsafeNativeMethods.IMsoComponent {
 
             private const int STATE_OLEINITIALIZED       = 0x00000001;
@@ -2344,7 +2338,6 @@ namespace System.Windows.Forms {
             ///     Retrieves the actual parking form.  This will demand create the parking window
             ///     if it needs to.
             /// </devdoc>
-            /// <internalonly/>
             internal ParkingWindow GetParkingWindow(DpiAwarenessContext context) {
 
                 // Locking 'this' here is ok since this is an internal class.
@@ -2421,7 +2414,6 @@ namespace System.Windows.Forms {
             ///     Retrieves the actual parking form.  This will demand create the MarshalingControl window
             ///     if it needs to.
             /// </devdoc>
-            /// <internalonly/>
             internal Control MarshalingControl {
                 get {
                     lock (this) {
@@ -2445,7 +2437,6 @@ namespace System.Windows.Forms {
             ///     Allows you to setup a message filter for the application's message pump.  This
             ///     installs the filter on the current thread.
             /// </devdoc>
-            /// <internalonly/>
             internal void AddMessageFilter(IMessageFilter f) {
                 if (messageFilters == null) {
                     messageFilters = new List<IMessageFilter>();
@@ -2515,7 +2506,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Disposes this thread context object.  Note that this will marshal to the owning thread.
             /// </devdoc>
-            /// <internalonly/>
             internal void Dispose(bool postQuit) {
 
                 // need to avoid multiple threads coming in here or we'll leak the thread
@@ -2595,7 +2585,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Disposes of this thread's parking form.
             /// </devdoc>
-            /// <internalonly/>
             private void DisposeParkingWindow() {
                 if (parkingWindows.Count != 0) {
 
@@ -2706,7 +2695,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Exits the program by disposing of all thread contexts and message loops.
             /// </devdoc>
-            /// <internalonly/>
             internal static void ExitApplication() {
                 ExitCommon(true /*disposing*/);
             }
@@ -2732,7 +2720,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Exits the program by disposing of all thread contexts and message loops.
             /// </devdoc>
-            /// <internalonly/>
             internal static void ExitDomain() {
                 ExitCommon(false /*disposing*/);
             }
@@ -2741,7 +2728,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Our finalization.  Minimal stuff... this shouldn't be called... We should always be disposed.
             /// </devdoc>
-            /// <internalonly/>
             ~ThreadContext() {
 
                 // We used to call OleUninitialize() here if we were
@@ -2785,7 +2771,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Retrieves a ThreadContext object for the current thread
             /// </devdoc>
-            /// <internalonly/>
             internal static ThreadContext FromCurrent() {
                 ThreadContext context = currentThreadContext;
 
@@ -2800,7 +2785,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Retrieves a ThreadContext object for the given thread ID
             /// </devdoc>
-            /// <internalonly/>
             internal static ThreadContext FromId(int id) {
                 ThreadContext context = (ThreadContext)contextHash[(object)id];
                 if (context == null && id == SafeNativeMethods.GetCurrentThreadId()) {
@@ -2823,7 +2807,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Retrieves the handle to this thread.
             /// </devdoc>
-            /// <internalonly/>
             internal IntPtr GetHandle() {
                 return handle;
             }
@@ -2832,7 +2815,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Retrieves the ID of this thread.
             /// </devdoc>
-            /// <internalonly/>
             internal int GetId() {
                 return id;
             }
@@ -2841,7 +2823,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Retrieves the culture for this thread.
             /// </devdoc>
-            /// <internalonly/>
             internal CultureInfo GetCulture() {
                 if (culture == null || culture.LCID != SafeNativeMethods.GetThreadLocale())
                     culture = new CultureInfo(SafeNativeMethods.GetThreadLocale());
@@ -2960,7 +2941,6 @@ namespace System.Windows.Forms {
             ///     programmer to trap these, and, if left untrapped, throws a standard error
             ///     dialog.
             /// </devdoc>
-            /// <internalonly/>
             internal void OnThreadException(Exception t) {
                 if (GetState(STATE_INTHREADEXCEPTION)) return;
 
@@ -3033,7 +3013,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Removes a message filter previously installed with addMessageFilter.
             /// </devdoc>
-            /// <internalonly/>
             internal void RemoveMessageFilter(IMessageFilter f) {
                 if (messageFilters != null) {
                     SetState(STATE_FILTERSNAPSHOTVALID, false);
@@ -3045,7 +3024,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Starts a message loop for the given reason.
             /// </devdoc>
-            /// <internalonly/>
             internal void RunMessageLoop(int reason, ApplicationContext context) {
                 // Ensure that we attempt to apply theming before doing anything
                 // that might create a window.
@@ -3446,7 +3424,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Sets the culture for this thread.
             /// </devdoc>
-            /// <internalonly/>
             internal void SetCulture(CultureInfo culture) {
                 if (culture != null && culture.LCID != SafeNativeMethods.GetThreadLocale()) {
                     SafeNativeMethods.SetThreadLocale(culture.LCID);
@@ -3746,7 +3723,6 @@ namespace System.Windows.Forms {
         ///     This class allows us to handle sends/posts in our winformssynchcontext on the correct thread via
         ///  control.invoke().
         /// </devdoc>
-        /// <internalonly/>
         internal sealed class MarshalingControl : Control {
             internal MarshalingControl()
                 : base(false) {
@@ -3783,7 +3759,6 @@ namespace System.Windows.Forms {
         ///     This class embodies our parking window, which we create when the
         ///     first message loop is pushed onto the thread.
         /// </devdoc>
-        /// <internalonly/>
         internal sealed class ParkingWindow : ContainerControl, IArrangedElement {
 
             // WHIDBEY CHANGES
@@ -3920,7 +3895,6 @@ namespace System.Windows.Forms {
         ///     be used to dispose all windows in a thread, which we do before returning from a message
         ///     loop.
         /// </devdoc>
-        /// <internalonly/>
         private sealed class ThreadWindows {
             private IntPtr[] windows;
             private int windowCount;

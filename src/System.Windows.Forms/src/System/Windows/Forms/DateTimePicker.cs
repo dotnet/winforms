@@ -88,7 +88,6 @@ namespace System.Windows.Forms {
         ///     validTime determines whether the CheckBox in the DTP is checked.  The CheckBox is only
         ///     displayed when ShowCheckBox is true.
         /// </devdoc>
-        /// <internalonly/>
         private bool                            validTime = true;
 
         // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
@@ -160,7 +159,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
             add => base.BackColorChanged += value;
@@ -179,7 +177,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
@@ -198,7 +195,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
@@ -570,7 +566,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
             add => base.ForeColorChanged += value;
@@ -620,7 +615,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     DateTimePicker Paint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
             add => base.Paint += value;
@@ -921,7 +916,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
@@ -1023,7 +1017,6 @@ namespace System.Windows.Forms {
         }
      
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
         /// <summary>
         /// <para>
         /// Constructs the new instance of the accessibility object for this control. Subclasses
@@ -1203,7 +1196,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFontChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Occurs when a property for the control changes.
         /// </devdoc>
@@ -1301,7 +1293,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     If the handle has been created, this applies the color to the control
         /// </devdoc>
-        /// <internalonly/>
         private void SetControlColor(int colorIndex, Color value) {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
@@ -1311,7 +1302,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     If the handle has been created, this applies the font to the control.
         /// </devdoc>
-        /// <internalonly/>
         private void SetControlCalendarFont() {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.DTM_SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
@@ -1321,7 +1311,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Applies all the colors to the control.
         /// </devdoc>
-        /// <internalonly/>
         private void SetAllControlColors() {
             SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
             SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
@@ -1334,7 +1323,6 @@ namespace System.Windows.Forms {
         ///     Updates the window handle with the min/max ranges if it has been
         ///     created.
         /// </devdoc>
-        /// <internalonly/>
         private void SetRange() {
             SetRange(EffectiveMinDate(min), EffectiveMaxDate(max));
         }
@@ -1371,7 +1359,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Turns on or off a given style bit
         /// </devdoc>
-        /// <internalonly/>
         private void SetStyleBit(bool flag, int bit) {
             if (((style & bit) != 0) == flag) return;
 
@@ -1464,7 +1451,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns the control as a string
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1474,7 +1460,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Forces a repaint of the updown control if it is displayed.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateUpDown() {
             // The upDown control doesn't repaint correctly.
             //
@@ -1509,7 +1494,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the DTN_CLOSEUP notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmCloseUp(ref Message m) {
             OnCloseUp(EventArgs.Empty);
         }
@@ -1517,7 +1501,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the DTN_DATETIMECHANGE notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDateTimeChange(ref Message m) {
             NativeMethods.NMDATETIMECHANGE nmdtc = (NativeMethods.NMDATETIMECHANGE)m.GetLParam(typeof(NativeMethods.NMDATETIMECHANGE));
             DateTime temp = value;
@@ -1539,7 +1522,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the DTN_DROPDOWN notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDropDown(ref Message m) {
 
             if (this.RightToLeftLayout == true && this.RightToLeft == RightToLeft.Yes) {
@@ -1558,7 +1540,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles system color changes
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnSystemColorsChanged(EventArgs e) {
             SetAllControlColors();
             base.OnSystemColorsChanged(e);
@@ -1567,7 +1548,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_COMMAND messages reflected from the parent control.
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
             if (m.HWnd == Handle) {
 
@@ -1590,7 +1570,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrided wndProc
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
@@ -1650,7 +1629,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject"]/*' />
-        /// <internalonly/>
         /// <summary>
         /// </summary>
         [ComVisible(true)]

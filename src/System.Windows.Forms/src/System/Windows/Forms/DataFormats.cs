@@ -258,7 +258,6 @@ namespace System.Windows.Forms
         /// Ensures that the Win32 predefined formats are setup in our format list.
         /// This is called anytime we need to search the list
         /// </devdoc>
-        /// <internalonly/>
         private static void EnsurePredefined()
         {
             if (s_formatCount == 0)

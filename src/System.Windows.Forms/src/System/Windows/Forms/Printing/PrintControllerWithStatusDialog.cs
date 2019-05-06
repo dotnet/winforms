@@ -47,7 +47,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnStartPrint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Implements StartPrint by delegating to the underlying controller.
@@ -84,7 +83,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnStartPage"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Implements StartPage by delegating to the underlying controller.
@@ -104,7 +102,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnEndPage"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Implements EndPage by delegating to the underlying controller.
@@ -121,7 +118,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PrintControllerWithStatusDialog.uex' path='docs/doc[@for="PrintControllerWithStatusDialog.OnEndPrint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Implements EndPrint by delegating to the underlying controller.

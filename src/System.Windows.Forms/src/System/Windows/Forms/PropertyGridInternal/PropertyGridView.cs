@@ -6656,7 +6656,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             ///      Overrides Control.ProcessDialogKey to handle the Escape and Return
             ///      keys.
             /// </devdoc>
-            /// <internalonly/>
             protected override bool ProcessDialogKey(Keys keyData) {
 
                 // We don't do anything with modified keys here.
@@ -6980,7 +6979,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <devdoc>
             ///     Sets up the needed windows hooks to catch messages.
             /// </devdoc>
-            /// <internalonly/>
             
             
             private void HookMouse() {
@@ -7012,7 +7010,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <devdoc>
             ///     HookProc used for catch mouse messages.
             /// </devdoc>
-            /// <internalonly/>
             private IntPtr MouseHookProc(int nCode, IntPtr wparam, IntPtr lparam) {
                 GC.KeepAlive(this);
                 if (nCode == NativeMethods.HC_ACTION) {
@@ -7042,7 +7039,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
             /// <devdoc>
             ///     Removes the windowshook that was installed.
             /// </devdoc>
-            /// <internalonly/>
             private void UnhookMouse() {
                 GC.KeepAlive(this);
                 // Locking 'this' here is ok since this is an internal class.
@@ -7129,7 +7125,6 @@ namespace System.Windows.Forms.PropertyGridInternal {
               /// <devdoc>
             ///     Forwards messageHook calls to ToolTip.messageHookProc
             /// </devdoc>
-            /// <internalonly/>
             private class MouseHookObject {
                 internal WeakReference reference;
 

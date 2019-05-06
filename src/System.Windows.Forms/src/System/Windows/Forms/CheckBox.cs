@@ -265,7 +265,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
             add => base.DoubleClick += value;
@@ -273,7 +273,7 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
             add => base.MouseDoubleClick += value;
@@ -281,7 +281,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets the information used to create the handle for the
@@ -360,7 +359,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OverChangeRectangle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         internal override Rectangle OverChangeRectangle {
@@ -383,7 +381,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.DownChangeRectangle"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         internal override Rectangle DownChangeRectangle {
@@ -399,7 +396,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.TextAlign"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating the alignment of the
@@ -464,7 +460,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Constructs the new instance of the accessibility object for this control. Subclasses
@@ -519,7 +514,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnClick"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Fires the event indicating that the control has been clicked.
@@ -563,7 +557,6 @@ namespace System.Windows.Forms {
         ///     We override this to ensure that the control's click values are set up
         ///     correctly.
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             
@@ -580,7 +573,6 @@ namespace System.Windows.Forms {
         ///     We override this to ensure that press '+' or '=' checks the box,
         ///     while pressing '-' unchecks the box
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnKeyDown(KeyEventArgs e) {
             /*
             if (Enabled) {
@@ -596,7 +588,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.OnMouseUp"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
@@ -639,7 +630,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overridden to handle mnemonics properly.
         /// </devdoc>
-        /// <internalonly/>        
         protected internal override bool ProcessMnemonic(char charCode) {
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanSelect) {
                 if (Focus()) {
@@ -661,7 +651,6 @@ namespace System.Windows.Forms {
         ///     Provides some interesting information for the CheckBox control in
         ///     String form.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -671,7 +660,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckBox.uex' path='docs/doc[@for="CheckBox.CheckBoxAccessibleObject"]/*' />
-        /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        

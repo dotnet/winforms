@@ -102,7 +102,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
             return "SelectionRange: Start: " + start.ToString() + ", End: " + end.ToString();
         }

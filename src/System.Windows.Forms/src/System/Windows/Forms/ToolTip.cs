@@ -225,7 +225,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     The createParams to create the window.
         /// </devdoc>
-        /// <internalonly/>
         protected virtual CreateParams CreateParams {
             get {
                 CreateParams cp = new CreateParams();
@@ -686,7 +685,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Adjusts the other delay values based on the Automatic value.
         /// </devdoc>
-        /// <internalonly/>
         private void AdjustBaseFromAuto() {
             delayTimes[NativeMethods.TTDT_RESHOW] = delayTimes[NativeMethods.TTDT_AUTOMATIC] / RESHOW_RATIO;
             delayTimes[NativeMethods.TTDT_AUTOPOP] = delayTimes[NativeMethods.TTDT_AUTOMATIC] * AUTOPOP_RATIO;
@@ -804,7 +802,6 @@ namespace System.Windows.Forms {
         ///    Returns true if the tooltip can offer an extender property to the
         ///    specified target component.
         /// </devdoc>
-        /// <internalonly/>
         public bool CanExtend(object target) {
             if (target is Control &&
                 !(target is ToolTip)) {
@@ -827,7 +824,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Creates the handle for the control.
         /// </devdoc>
-        /// <internalonly/>
         private void CreateHandle() {
             if (GetHandleCreated()) {
                 return;
@@ -991,7 +987,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Destroys the handle for this control.
         /// </devdoc>
-        /// <internalonly/>
         /// Required by Label to destroy the handle for the toolTip added for AutoEllipses.
         internal void DestroyHandle() {
 
@@ -1026,7 +1021,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.Dispose"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Disposes of the <see cref='System.Windows.Forms.ToolTip'/>
@@ -1067,7 +1061,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns the delayTime based on the NativeMethods.TTDT_* values.
         /// </devdoc>
-        /// <internalonly/>
         internal int GetDelayTime(int type) {
             if (GetHandleCreated()) {
                 return (int)UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), NativeMethods.TTM_GETDELAYTIME, type, 0);
@@ -1088,7 +1081,6 @@ namespace System.Windows.Forms {
         ///     required data to uniquely identify a region. This is used primarily
         ///     for delete operations. NOTE: This cannot force the creation of a handle.
         /// </devdoc>
-        /// <internalonly/>
         private NativeMethods.TOOLINFO_TOOLTIP GetMinTOOLINFO(Control ctl) {
             return this.GetMinToolInfoForHandle(ctl.Handle);
         }
@@ -1113,7 +1105,6 @@ namespace System.Windows.Forms {
         ///     If the out parameter allocatedString has been set to true, It is the responsibility of the caller
         ///		to free the string buffer referenced by lpszText (using Marshal.FreeHGlobal).
         /// </devdoc>
-        /// <internalonly/>
         private NativeMethods.TOOLINFO_TOOLTIP GetTOOLINFO(Control ctl, string caption, out bool allocatedString) {
             allocatedString = false;
             NativeMethods.TOOLINFO_TOOLTIP ti = GetMinTOOLINFO(ctl);
@@ -1206,7 +1197,6 @@ namespace System.Windows.Forms {
         ///     Returns the HWND of the window that is at the specified point. This
         ///     handles special cases where one Control owns multiple HWNDs (i.e. ComboBox).
         /// </devdoc>
-        /// <internalonly/>
         private IntPtr GetWindowFromPoint(Point screenCoords, ref bool success) {
             Control baseVar = TopLevelControl;
             //Special case the ActiveX Controls.
@@ -1293,7 +1283,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.RecreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void RecreateHandle() {
             if (!DesignMode) {
                 if (GetHandleCreated()) {
@@ -1339,7 +1328,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Sets the delayTime based on the NativeMethods.TTDT_* values.
         /// </devdoc>
-        /// <internalonly/>
         private void SetDelayTime(int type, int time) {
             if (type == NativeMethods.TTDT_AUTOMATIC) {
                 auto = true;
@@ -1456,7 +1444,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns true if the AutomaticDelay property should be persisted.
         /// </devdoc>
-        /// <internalonly/>
         private bool ShouldSerializeAutomaticDelay() {
             if (auto) {
                 if (AutomaticDelay != DEFAULT_DELAY) {
@@ -1470,7 +1457,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns true if the AutoPopDelay property should be persisted.
         /// </devdoc>
-        /// <internalonly/>
         private bool ShouldSerializeAutoPopDelay() {
             return !auto;
         }
@@ -1479,7 +1465,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns true if the InitialDelay property should be persisted.
         /// </devdoc>
-        /// <internalonly/>
         private bool ShouldSerializeInitialDelay() {
             return !auto;
         }
@@ -1488,7 +1473,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns true if the ReshowDelay property should be persisted.
         /// </devdoc>
-        /// <internalonly/>
         private bool ShouldSerializeReshowDelay() {
             return !auto;
         }
@@ -1498,7 +1482,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Shows a tooltip for specified text, window, and hotspot
         /// </devdoc>
-        /// <internalonly/>
         private void ShowTooltip(string text, IWin32Window win, int duration) {
             if (win == null) {
                 throw new ArgumentNullException(nameof(win));
@@ -2085,7 +2068,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToString"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Returns a string representation for this control.
@@ -2121,7 +2103,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_MOVE message.
         /// </devdoc>
-        /// <internalonly/>
         private void WmMove() {
             NativeMethods.RECT r = new NativeMethods.RECT();
             UnsafeNativeMethods.GetWindowRect(new HandleRef(this, Handle), ref r);
@@ -2166,7 +2147,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_MOUSEACTIVATE message.
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseActivate(ref Message msg) {
             
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
@@ -2203,7 +2183,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_WINDOWFROMPOINT message.
         /// </devdoc>
-        /// <internalonly/>
         private void WmWindowFromPoint(ref Message msg) {
             NativeMethods.POINT sc = (NativeMethods.POINT)msg.GetLParam(typeof(NativeMethods.POINT));
             Point screenCoords = new Point(sc.x, sc.y);
@@ -2217,7 +2196,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the TTN_SHOW message.
         /// </devdoc>
-        /// <internalonly/>
         private void WmShow() {
 
 
@@ -2305,7 +2283,6 @@ namespace System.Windows.Forms {
         ///     We need to Hide the window since the native tooltip actually calls SetWindowPos in its TTN_SHOW even if we cancel showing the
         ///     tooltip : Hence we need to listen to the WindowPosChanged message can hide the window ourselves.
         /// </devdoc>
-        /// <internalonly/>
         private bool WmWindowPosChanged() {
             if (cancelled)
             {
@@ -2321,7 +2298,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_WINDOWPOSCHANGING message.
         /// </devdoc>
-        /// <internalonly/>
         private unsafe void WmWindowPosChanging(ref Message m) {
             if (cancelled || isDisposing)
             {
@@ -2418,7 +2394,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Called just before the tooltip is hidden
         /// </devdoc>
-        /// <internalonly/>
         private void WmPop() {
 
             NativeMethods.TOOLINFO_TOOLTIP ti = new NativeMethods.TOOLINFO_TOOLTIP();
@@ -2478,7 +2453,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WNDPROC
         /// </devdoc>
-        /// <internalonly/>
         private void WndProc(ref Message msg) {
 
 
@@ -2581,7 +2555,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolTip.uex' path='docs/doc[@for="ToolTip.ToolTipNativeWindow"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private class ToolTipNativeWindow : NativeWindow {
             ToolTip control;
 
