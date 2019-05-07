@@ -809,10 +809,15 @@ namespace System.Windows.Forms
             return hr;
         }
 
-        object UnsafeNativeMethods.IAccessibleEx.GetObjectForChild(int idChild)
+        internal virtual object GetObjectForChildInternal(int idChild)
         {
             // No need to implement this for patterns and properties
             return null;
+        }
+
+        object UnsafeNativeMethods.IAccessibleEx.GetObjectForChild(int idChild)
+        {
+            return GetObjectForChildInternal(idChild);
         }
 
         // This method is never called
