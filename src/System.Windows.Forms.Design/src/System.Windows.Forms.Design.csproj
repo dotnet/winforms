@@ -111,7 +111,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\professional1.ico">
       <LogicalName>System.Windows.Forms.Design.professional1</LogicalName>
-      <Link>System.Windows.Forms.Design.professional1.bmp</Link>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\WinForms\Design\professional2.ico">
       <LogicalName>System.Windows.Forms.Design.professional2</LogicalName>

@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Design
             {
                 imageToolStripMenuItem = new ToolStripMenuItem();
                 imageToolStripMenuItem.Text = SR.ToolStripItemContextMenuSetImage;
-                imageToolStripMenuItem.Image = new Bitmap(typeof(ToolStripMenuItem), "image.bmp");
+                imageToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "image").ToBitmap();
                 imageToolStripMenuItem.ImageTransparentColor = Color.Magenta;
                 //Add event Handlers
                 imageToolStripMenuItem.Click += new EventHandler(OnImageToolStripMenuItemClick);
@@ -151,10 +151,10 @@ namespace System.Windows.Forms.Design
                     imageStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "Image", ToolStripItemDisplayStyle.Image);
                     imageTextStyleToolStripMenuItem = CreateEnumValueItem("DisplayStyle", "ImageAndText", ToolStripItemDisplayStyle.ImageAndText);
                     // alignmentToolStripMenuItem
-                    alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment.bmp");
+                    alignmentToolStripMenuItem = CreatePropertyBasedItem("Ali&gnment", "Alignment", "alignment");
                     alignmentToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { leftToolStripMenuItem, rightToolStripMenuItem});
                     // displayStyleToolStripMenuItem
-                    displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle.bmp");
+                    displayStyleToolStripMenuItem = CreatePropertyBasedItem("Displa&yStyle", "DisplayStyle", "displaystyle");
                     displayStyleToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { noneStyleToolStripMenuItem, textStyleToolStripMenuItem, imageStyleToolStripMenuItem, imageTextStyleToolStripMenuItem});
 
                     if (serviceProvider.GetService(typeof(IUIService)) is IUIService uis)
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Design
                         editItemsToolStripMenuItem = new ToolStripMenuItem();
                         editItemsToolStripMenuItem.Text = SR.ToolStripDropDownItemCollectionEditorVerb;
                         editItemsToolStripMenuItem.Click += new EventHandler(OnEditItemsMenuItemClick);
-                        editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist.bmp").ToBitmap();
+                        editItemsToolStripMenuItem.Image = new Icon(typeof(ToolStripMenuItem), "editdropdownlist").ToBitmap();
                         editItemsToolStripMenuItem.ImageTransparentColor = Color.Magenta;
                         this.Add(editItemsToolStripMenuItem);
                     }
@@ -548,7 +548,7 @@ namespace System.Windows.Forms.Design
                     Image image = null;
                     try
                     {
-                        image = new Bitmap(typeof(ToolStripButton), "blank.bmp");
+                        image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                     }
                     catch (Exception ex)
                     {

@@ -1395,10 +1395,9 @@ namespace System.Windows.Forms.Design
                 {
                     ItemTypeToolStripMenuItem firstItem = (ItemTypeToolStripMenuItem)_addItemButton.DropDownItems[0];
                     _addItemButton.ImageTransparentColor = Color.Lime;
-                    Bitmap bmp = new Bitmap(typeof(ToolStripTemplateNode), "ToolStripTemplateNode.bmp");
+                    Bitmap bmp = new Icon(typeof(ToolStripTemplateNode), "ToolStripTemplateNode").ToBitmap();
                     if (DpiHelper.IsScalingRequired)
                     {
-                        bmp.MakeTransparent(Color.Lime);
                         DpiHelper.ScaleBitmapLogicalToDevice(ref bmp);
                     }
                     _addItemButton.Image = bmp;

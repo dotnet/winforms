@@ -824,7 +824,7 @@ namespace System.Windows.Forms.Design
                         Image image = null;
                         try
                         {
-                            image = new Bitmap(typeof(ToolStripButton), "blank.bmp");
+                            image = new Icon(typeof(ToolStripButton), "blank").ToBitmap();
                         }
                         catch (Exception ex)
                         {

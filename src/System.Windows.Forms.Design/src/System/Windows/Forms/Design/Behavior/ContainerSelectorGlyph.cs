@@ -55,8 +55,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (_glyph == null)
                 {
-                    _glyph = new Bitmap(typeof(ContainerSelectorGlyph), "MoverGlyph.bmp");
-                    _glyph.MakeTransparent();
+                    _glyph = new Icon(typeof(ContainerSelectorGlyph), "MoverGlyph").ToBitmap();
                 }
                 return _glyph;
             }
