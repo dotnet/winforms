@@ -708,6 +708,7 @@ namespace System.Windows.Forms {
         LB_GETCURSEL = 0x0188,
         LB_GETTEXT = 0x0189,
         LB_GETTEXTLEN = 0x018A,
+        LB_GETCOUNT = 0x018B,
         LB_GETTOPINDEX = 0x018E,
         LB_FINDSTRING = 0x018F,
         LB_GETSELCOUNT = 0x0190,

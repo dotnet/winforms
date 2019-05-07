@@ -4890,21 +4890,11 @@ namespace System.Windows.Forms
         internal class ListBoxAccessibleObject : ControlAccessibleObject
         {
             private ListBox _owningListBox;
-            private ArrayList _itemAccessibleObjects;
+            private ListBoxItemAccessibleObjectCollection _itemAccessibleObjects;
 
             internal override object GetObjectForChildInternal(int idChild)
             {
-                if (idChild > 0)
-                {
-                    if (idChild > _itemAccessibleObjects.Count - 1)
-                    {
-                        ListBoxItemAccessibleObject newItemAccessibleObject = new ListBoxItemAccessibleObject(_owningListBox, idChild - 1);
-                        _itemAccessibleObjects.Add(newItemAccessibleObject);
-                        return newItemAccessibleObject;
-                    }
-                    return _itemAccessibleObjects[idChild - 1];
-                }
-                return base.GetObjectForChildInternal(idChild);
+                return _itemAccessibleObjects[_owningListBox.Items[idChild - 1]];
             }
 
             /// <summary>
@@ -4913,8 +4903,8 @@ namespace System.Windows.Forms
             /// <param name="owningListBox">The owning ListBox control.</param>
             public ListBoxAccessibleObject(ListBox owningListBox) : base(owningListBox)
             {
-                this._owningListBox = owningListBox;
-                _itemAccessibleObjects = new ArrayList();
+                _owningListBox = owningListBox;
+                _itemAccessibleObjects = new ListBoxItemAccessibleObjectCollection(owningListBox);
             }
 
             internal override bool IsIAccessibleExSupported()
@@ -4925,6 +4915,44 @@ namespace System.Windows.Forms
                 }
 
                 return base.IsIAccessibleExSupported();
+            }
+        }
+
+        internal class ListBoxItemAccessibleObjectCollection : Hashtable
+        {
+
+            private ListBox _owningListBoxBox;
+            private readonly ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
+
+            public ListBoxItemAccessibleObjectCollection(ListBox owningListBoxBox)
+            {
+                _owningListBoxBox = owningListBoxBox;
+            }
+
+            public override object this[object key]
+            {
+                get
+                {
+                    int id = GetId(key);
+                    if (!ContainsKey(id))
+                    {
+                        var itemAccessibleObject = new ListBoxItemAccessibleObject(_owningListBoxBox, id - 1);
+                        base[id] = itemAccessibleObject;
+                    }
+
+                    return base[id];
+                }
+
+                set
+                {
+                    int id = GetId(key);
+                    base[id] = value;
+                }
+            }
+
+            public int GetId(object item)
+            {
+                return unchecked((int)_idGenerator.GetId(item, out var _));
             }
         }
 
@@ -4947,7 +4975,44 @@ namespace System.Windows.Forms
 
             internal override void ScrollIntoView()
             {
-                _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, _itemId, 0);
+                if (_owningListBox.SelectedIndex == -1) //no item selected
+                {
+                    _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, _itemId, 0);
+                }
+                else
+                {
+                    int firstVisibleIndex = _owningListBox.SendMessage(NativeMethods.LB_GETTOPINDEX, 0, 0).ToInt32();
+                    int listBoxHeight = _owningListBox.Bounds.Height;
+                    int itemsCount = _owningListBox.SendMessage(NativeMethods.LB_GETCOUNT, 0, 0).ToInt32();
+
+                    if (_itemId < firstVisibleIndex)
+                    {
+                        _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId, 0);
+                    }
+                    else
+                    {
+                        int itemsHeightSum = 0;
+                        int visibleItemsCount = 0;
+                        
+                        for (int i = firstVisibleIndex; i < itemsCount; i++)
+                        {
+                            int itemHeight = _owningListBox.SendMessage(NativeMethods.LB_GETITEMHEIGHT, i, 0).ToInt32();
+
+                            if ((itemsHeightSum += itemHeight) > listBoxHeight)
+                            {
+                                int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
+                                visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin since 0
+
+                                if (_itemId > lastVisibleIndex)
+                                {
+                                    _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId - visibleItemsCount + 1, 0);
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             internal override bool IsPatternSupported(int patternId)
