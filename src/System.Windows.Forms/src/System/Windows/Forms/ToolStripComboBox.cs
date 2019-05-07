@@ -2,28 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Drawing.Design;
-    using System.Collections.Specialized;
-    using System.Drawing.Drawing2D;
-    using System.Windows.Forms.Design; 
-    using System.Security;
-    using System.Runtime.InteropServices;
-    using System.Windows.Forms.Internal;     
-    using System.Globalization;
-    
-    /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox"]/*' />
-    /// <devdoc/>
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Design;
+using System.Globalization;
+using System.Windows.Forms.Design;
+
+namespace System.Windows.Forms
+{
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.MenuStrip | ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.ContextMenuStrip)]
     [DefaultProperty(nameof(Items))]
-    public class ToolStripComboBox : ToolStripControlHost {
-
-
+    public class ToolStripComboBox : ToolStripControlHost
+    {
         internal static readonly object EventDropDown                                    = new object();
         internal static readonly object EventDropDownClosed                              = new object();
         internal static readonly object EventDropDownStyleChanged                        = new object();
@@ -246,44 +238,28 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick+=value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick+=value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownDescr))]
         public event EventHandler DropDown {
-            add {
-                Events.AddHandler(EventDropDown, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDown, value);
-            }
+            add => Events.AddHandler(EventDropDown, value);
+            remove => Events.RemoveHandler(EventDropDown, value);
         }
 
          /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDown"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnDropDownClosedDescr))]
         public event EventHandler DropDownClosed {
-            add {
-                Events.AddHandler(EventDropDownClosed, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownClosed, value);
-            }
+            add => Events.AddHandler(EventDropDownClosed, value);
+            remove => Events.RemoveHandler(EventDropDownClosed, value);
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.DropDownStyleChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxDropDownStyleChangedDescr))]
         public event EventHandler DropDownStyleChanged {
-            add {
-                Events.AddHandler(EventDropDownStyleChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventDropDownStyleChanged, value);
-            }
+            add => Events.AddHandler(EventDropDownStyleChanged, value);
+            remove => Events.RemoveHandler(EventDropDownStyleChanged, value);
         }
 
 
@@ -409,12 +385,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EventSelectedIndexChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSelectedIndexChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedIndexChanged, value);
+            remove => Events.RemoveHandler(EventSelectedIndexChanged, value);
         }
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.SelectedItem"]/*' />
         [
@@ -474,12 +446,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripComboBox.uex' path='docs/doc[@for="ToolStripComboBox.TextUpdate"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.ComboBoxOnTextUpdateDescr))]
         public event EventHandler TextUpdate {
-            add {
-                Events.AddHandler(EventTextUpdate, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTextUpdate, value);
-            }
+            add => Events.AddHandler(EventTextUpdate, value);
+            remove => Events.RemoveHandler(EventTextUpdate, value);
         }
 
 #region WrappedMethods        

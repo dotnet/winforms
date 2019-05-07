@@ -79,17 +79,12 @@ namespace System.Windows.Forms {
         /// </devdoc>
         
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
         public Stream OpenFile() {
-            string filename = FileNamesInternal[0];
-
+            string filename = FileNames[0];
             if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException( "FileName" );
+            {
+                throw new ArgumentNullException(nameof(FileName));
+            }
                 
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
@@ -128,19 +123,19 @@ namespace System.Windows.Forms {
         // If it's necessary to throw up a "This file exists, are you sure?" kind of
         // MessageBox, here's where we do it.
         // Return value is whether or not the user hit "okay".
-        internal override bool PromptUserIfAppropriate(string fileName) {
+        private protected override bool PromptUserIfAppropriate(string fileName) {
             if (!base.PromptUserIfAppropriate(fileName)) {
                 return false;
             }
 
             //Note: When we are using the Vista dialog mode we get two prompts (one from us and one from the OS) if we do this
-            if ((options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal) {
+            if ((_options & NativeMethods.OFN_OVERWRITEPROMPT) != 0 && FileExists(fileName) && !this.UseVistaDialogInternal) {
                 if (!PromptFileOverwrite(fileName)) {
                     return false;
                 }
             }
 
-            if ((options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName)) {
+            if ((_options & NativeMethods.OFN_CREATEPROMPT) != 0 && !FileExists(fileName)) {
                 if (!PromptFileCreate(fileName)) {
                     return false;
                 }
@@ -164,8 +159,7 @@ namespace System.Windows.Forms {
         /// <include file='doc\SaveFileDialog.uex' path='docs/doc[@for="SaveFileDialog.RunFileDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn) {
             bool result = UnsafeNativeMethods.GetSaveFileName(ofn);
 
             if (!result) {
@@ -179,17 +173,18 @@ namespace System.Windows.Forms {
             }
             
             return result;
-         }
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        }
+
+        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileSaveDialog saveDialog = (FileDialogNative.IFileSaveDialog)dialog;
-            FileDialogNative.IShellItem item;
-            dialog.GetResult(out item);
+            dialog.GetResult(out FileDialogNative.IShellItem item);
             return new string[] { GetFilePathFromShellItem(item) };
         }
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
-        { return new FileDialogNative.NativeFileSaveDialog(); }
 
-
+        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
+        {
+            return new FileDialogNative.NativeFileSaveDialog();
+        }
     }
 }

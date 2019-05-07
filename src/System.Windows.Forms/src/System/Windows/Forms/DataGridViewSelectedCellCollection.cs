@@ -26,70 +26,60 @@ namespace System.Windows.Forms
         ArrayList items = new ArrayList();
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Add"]/*' />
-        /// <internalonly/>
         int IList.Add(object value)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Clear"]/*' />
-        /// <internalonly/>
         void IList.Clear()
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Contains"]/*' />
-        /// <internalonly/>
         bool IList.Contains(object value)
         {
             return this.items.Contains(value);
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.IndexOf"]/*' />
-        /// <internalonly/>
         int IList.IndexOf(object value)
         {
             return this.items.IndexOf(value);
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Insert"]/*' />
-        /// <internalonly/>
         void IList.Insert(int index, object value)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Remove"]/*' />
-        /// <internalonly/>
         void IList.Remove(object value)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.RemoveAt"]/*' />
-        /// <internalonly/>
         void IList.RemoveAt(int index)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.IsFixedSize"]/*' />
-        /// <internalonly/>
         bool IList.IsFixedSize
         {
             get { return true; }
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.IsReadOnly"]/*' />
-        /// <internalonly/>
         bool IList.IsReadOnly
         {
             get { return true; }
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.this"]/*' />
-        /// <internalonly/>
         object IList.this[int index]
         {
             get { return this.items[index]; }
@@ -97,35 +87,30 @@ namespace System.Windows.Forms
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array array, int index)
         {
             this.items.CopyTo(array, index);
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.Count"]/*' />
-        /// <internalonly/>
         int ICollection.Count
         {
             get { return this.items.Count; }
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized
         {
             get { return false; }
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot
         {
             get { return this; }
         }
 
         /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IEnumerable.GetEnumerator"]/*' />
-        /// <internalonly/>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.items.GetEnumerator();

@@ -2,28 +2,18 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows.Forms.Layout;
-    using System.Security;
-    using System.Runtime.InteropServices;
-    
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
 
-    /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow"]/*' />
-    /// <devdoc>
-    /// ToolStripOverflow
-    /// </devdoc>
+namespace System.Windows.Forms
+{
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    public class ToolStripOverflow : ToolStripDropDown, IArrangedElement {
-
-       
-
+    public class ToolStripOverflow : ToolStripDropDown, IArrangedElement
+    {
 #if DEBUG        
         internal static readonly TraceSwitch PopupLayoutDebug = new TraceSwitch("PopupLayoutDebug", "Debug ToolStripPopup Layout code");
 #else
@@ -68,32 +58,27 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Children"]/*' />
-        /// <internalonly/>
         ArrangedElementCollection IArrangedElement.Children {
             get { return DisplayedItems; }
         }
         
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Container"]/*' />
-        /// <internalonly/>
         IArrangedElement IArrangedElement.Container {
             get { return ParentInternal; }
         }
         
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.ParticipatesInLayout"]/*' />
-        /// <internalonly/>
         bool IArrangedElement.ParticipatesInLayout {
             get { return GetState(STATE_VISIBLE); }
         }
                 
 
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.Properties"]/*' />
-        /// <internalonly/>
         PropertyStore IArrangedElement.Properties {
             get { return Properties; }
         }
         
         /// <include file='doc\ToolStripOverflow.uex' path='docs/doc[@for="ToolStripOverflow.IArrangedElement.SetBounds"]/*' />
-        /// <internalonly/>
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified) {
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
         }

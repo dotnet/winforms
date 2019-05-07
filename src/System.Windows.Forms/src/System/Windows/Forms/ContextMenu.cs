@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
 
     /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu"]/*' />
     /// <devdoc>
@@ -64,12 +63,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Popup"]/*' />
         [SRDescription(nameof(SR.MenuItemOnInitDescr))]
         public event EventHandler Popup {
-            add {
-                onPopup += value;
-            }
-            remove {
-                onPopup -= value;
-            }
+            add => onPopup += value;
+            remove => onPopup -= value;
         }
         
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.Collapse"]/*' />
@@ -78,12 +73,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.ContextMenuCollapseDescr))]
         public event EventHandler Collapse {
-            add {
-                onCollapse += value;
-            }
-            remove {
-                onCollapse -= value;
-            }
+            add => onCollapse += value;
+            remove => onCollapse -= value;
         }
         
         /// <include file='doc\ContextMenu.uex' path='docs/doc[@for="ContextMenu.RightToLeft"]/*' />
@@ -155,7 +146,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Menu.uex' path='docs/doc[@for="ContextMenu.ProcessCmdKey"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected internal virtual bool ProcessCmdKey(ref Message msg, Keys keyData, Control control) {
             sourceControl = control;
             return ProcessCmdKey(ref msg, keyData);

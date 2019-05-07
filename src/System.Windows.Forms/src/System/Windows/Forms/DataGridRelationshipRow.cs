@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
 
     using System;
     using System.Runtime.InteropServices;
@@ -204,7 +203,6 @@ namespace System.Windows.Forms {
         ///      Given an origin, this procedure returns
         ///      a rectangle that describes the location of an outline box.
         /// </devdoc>
-        /// <internalonly/>
         private Rectangle GetOutlineRect(int xOrigin, int yOrigin) {
             Rectangle outline = new Rectangle(xOrigin + 2,
                                               yOrigin + 2,
@@ -740,7 +738,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridRelationshipRow.uex' path='docs/doc[@for="DataGridRelationshipRow.PaintPlusMinusGlyph"]/*' />
-        /// <internalonly/>
         private void PaintPlusMinusGlyph(Graphics g, Rectangle bounds, Brush backBr, bool alignToRight) {
             if (CompModSwitches.DGRelationShpRowPaint.TraceVerbose) Debug.WriteLine("PlusMinusGlyph painting in bounds    -> " + bounds.ToString());
             Rectangle outline = GetOutlineRect(bounds.X, bounds.Y);

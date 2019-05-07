@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
 
     using System.Diagnostics;
@@ -134,7 +133,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       This is called when creating a window. Inheriting classes can overide
@@ -188,7 +186,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseEnter"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
@@ -199,7 +196,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
@@ -210,27 +206,19 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.NotifyDefault"]/*' />
@@ -249,7 +237,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnClick"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       This method actually raises the Click event. Inheriting classes should
@@ -261,7 +248,7 @@ namespace System.Windows.Forms {
         ///    </para>
         /// </devdoc>
         protected override void OnClick(EventArgs e) {
-            Form form = FindFormInternal();
+            Form form = FindForm();
             if (form != null) form.DialogResult = dialogResult;
 
 
@@ -279,7 +266,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseUp"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
@@ -351,7 +337,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ProcessMnemonic"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Lets a control process mnmemonic characters. Inheriting classes can
@@ -370,7 +355,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ToString"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Provides some interesting information for the Button control in
@@ -389,7 +373,6 @@ namespace System.Windows.Forms {
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_COMMAND:

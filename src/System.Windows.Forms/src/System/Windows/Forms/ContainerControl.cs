@@ -6,7 +6,6 @@
 namespace System.Windows.Forms {
     using System.Threading;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -215,16 +214,11 @@ namespace System.Windows.Forms {
         SRDescription(nameof(SR.ContainerControlOnAutoValidateChangedDescr)),
         ]
         public event EventHandler AutoValidateChanged {
-            add {
-                this.autoValidateChanged += value;
-            }
-            remove {
-                this.autoValidateChanged -= value;
-            }
+            add => this.autoValidateChanged += value;
+            remove => this.autoValidateChanged -= value;
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.BindingContext"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       The binding manager for the container control.
@@ -349,21 +343,20 @@ namespace System.Windows.Forms {
         internal Form ParentFormInternal {
             get {
                 if (ParentInternal != null) {
-                    return ParentInternal.FindFormInternal();
+                    return ParentInternal.FindForm();
                 }
                 else {
                     if (this is Form) {
                         return null;
                     }
 
-                    return FindFormInternal();
+                    return FindForm();
                 }
             }
         }
 
         // Package scope for Control
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.IContainerControl.ActivateControl"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Activates the specified control.</para>
         /// </devdoc>
@@ -385,7 +378,7 @@ namespace System.Windows.Forms {
             Control parent = this.ParentInternal;
             if (parent != null)
             {
-                cc = (parent.GetContainerControlInternal()) as ContainerControl;
+                cc = (parent.GetContainerControl()) as ContainerControl;
                 if (cc != null)
                 {
                     updateContainerActiveControl = (cc.ActiveControl != this);
@@ -409,7 +402,6 @@ namespace System.Windows.Forms {
             return ret;
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///     Used for UserControls - checks if the control
         ///     has a focusable control inside or not
@@ -430,7 +422,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.AdjustFormScrollbars"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -446,7 +437,6 @@ namespace System.Windows.Forms {
         ///     Cleans up form state after a control has been removed.
         ///     Package scope for Control
         /// </devdoc>
-        /// <internalonly/>
         internal virtual void AfterControlRemoved(Control control, Control oldParent) {
             ContainerControl cc;
             Debug.Assert(control != null);
@@ -466,17 +456,17 @@ namespace System.Windows.Forms {
                 }
                 else
                 {
-                    SetActiveControlInternal(null);
+                    SetActiveControl(null);
                 }
             }
             else if (activeControl == null && ParentInternal != null)
             {
                 // The last control of an active container was removed. Focus needs to be given to the next
                 // control in the Form.
-                cc = ParentInternal.GetContainerControlInternal() as ContainerControl;
+                cc = ParentInternal.GetContainerControl() as ContainerControl;
                 if (cc != null && cc.ActiveControl == this)
                 {
-                    Form f = FindFormInternal();
+                    Form f = FindForm();
                     if (f != null)
                     {
                         f.SelectNextControl(this, true, true, true, true);
@@ -495,7 +485,7 @@ namespace System.Windows.Forms {
                     break;
                 }
                 else {
-                    cc = parent.GetContainerControlInternal() as ContainerControl;
+                    cc = parent.GetContainerControl() as ContainerControl;
                 }
                 if (cc != null &&
                     cc.unvalidatedControl != null &&
@@ -514,7 +504,7 @@ namespace System.Windows.Forms {
 #if DEBUG            
             if (value == null || (value != null && value.ParentInternal != null && !value.ParentInternal.IsContainerControl))
             {
-                Debug.Assert(value == null || (value.ParentInternal != null && this == value.ParentInternal.GetContainerControlInternal()));
+                Debug.Assert(value == null || (value.ParentInternal != null && this == value.ParentInternal.GetContainerControl()));
             }
 #endif
                 
@@ -549,7 +539,7 @@ namespace System.Windows.Forms {
                         cont.OnNewActiveControl(value);
                     }
 #endif
-                    Form form = FindFormInternal();
+                    Form form = FindForm();
                     if (form != null)
                     {
                         form.UpdateDefaultButton();
@@ -635,11 +625,9 @@ namespace System.Windows.Forms {
 #endif
 
             if (activeControl != null && activeControl.Visible) {
-
-                // Avoid focus loops, especially with ComboBoxes, on Win98/ME.
-                //
+                // Avoid focus loops, especially with ComboBoxes.
                 IntPtr focusHandle = UnsafeNativeMethods.GetFocus();
-                if (focusHandle == IntPtr.Zero || Control.FromChildHandleInternal(focusHandle) != activeControl) {
+                if (focusHandle == IntPtr.Zero || Control.FromChildHandle(focusHandle) != activeControl) {
                     UnsafeNativeMethods.SetFocus(new HandleRef(activeControl, activeControl.Handle));
                 }
             }
@@ -651,7 +639,7 @@ namespace System.Windows.Forms {
                     Control parent = cc.ParentInternal;
                     if (parent != null)
                     {
-                        cc = parent.GetContainerControlInternal() as ContainerControl;
+                        cc = parent.GetContainerControl() as ContainerControl;
                     }
                     else {
                         break;
@@ -1095,7 +1083,6 @@ namespace System.Windows.Forms {
         ///     Process an arrowKey press by selecting the next control in the group
         ///     that the activeControl belongs to.
         /// </devdoc>
-        /// <internalonly/>
         private bool ProcessArrowKey(bool forward) {
             Control group = this;
             if (activeControl != null) {
@@ -1105,7 +1092,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessDialogChar"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog character. Overrides Control.processDialogChar().
         ///    This method calls the processMnemonic() method to check if the character
@@ -1120,13 +1106,12 @@ namespace System.Windows.Forms {
 #endif
             // If we're the top-level form or control, we need to do the mnemonic handling
             //
-            ContainerControl parent = GetContainerControlInternal() as ContainerControl;
+            ContainerControl parent = GetContainerControl() as ContainerControl;
             if (parent != null && charCode != ' ' && ProcessMnemonic(charCode)) return true;
             return base.ProcessDialogChar(charCode);
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessDialogKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog key. Overrides Control.processDialogKey(). This
         ///    method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
@@ -1160,7 +1145,6 @@ namespace System.Windows.Forms {
 
 
          /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessCmdKey"]/*' />
-         /// <internalonly/>
          protected override bool ProcessCmdKey(ref Message msg, Keys keyData) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessCmdKey " + msg.ToString());
 
@@ -1180,7 +1164,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.ProcessMnemonic"]/*' />
-        /// <internalonly/>
         protected internal override bool ProcessMnemonic(char charCode) {
 #if DEBUG
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessMnemonic [" + charCode.ToString() + "]");
@@ -1302,7 +1285,7 @@ namespace System.Windows.Forms {
             bool correctParentActiveControl = true;
             if (ParentInternal != null)
             {
-                IContainerControl c = ParentInternal.GetContainerControlInternal();
+                IContainerControl c = ParentInternal.GetContainerControl();
                 if (c != null)
                 {
                     c.ActiveControl = this;
@@ -1316,19 +1299,11 @@ namespace System.Windows.Forms {
         }
 
         /// <devdoc>
-        ///     Implements ActiveControl property setter.
+        /// Implements ActiveControl property setter.
         /// </devdoc>
-        private void SetActiveControl(Control ctl) {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::SetActiveControl(" + (ctl == null ? "null" : ctl.Name) + ") - " + this.Name);
+        internal void SetActiveControl(Control value) {
+            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::SetActiveControl(" + (value == null ? "null" : value.Name) + ") - " + Name);
 
-            SetActiveControlInternal(ctl);
-        }
-
-        /// <devdoc>
-        ///     Unsafe version of SetActiveControl - Use with caution!
-        /// </devdoc>
-        internal void SetActiveControlInternal(Control value) {
-            Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::SetActiveControlInternal(" + (value == null ? "null" : value.Name) + ") - " + this.Name);
             if (activeControl != value || (value != null && !value.Focused)) {
                 if (value != null && !Contains(value)) {
                     throw new ArgumentException(SR.CannotActivateControl, nameof(value));
@@ -1339,7 +1314,7 @@ namespace System.Windows.Forms {
 
                 if (value != null)
                 {
-                    cc = (value.ParentInternal.GetContainerControlInternal()) as ContainerControl;
+                    cc = (value.ParentInternal.GetContainerControl()) as ContainerControl;
                 }
                 if (cc != null)
                 {
@@ -1356,9 +1331,9 @@ namespace System.Windows.Forms {
                 {
                     ContainerControl ccAncestor = this;
                     while (ccAncestor.ParentInternal != null &&
-                           ccAncestor.ParentInternal.GetContainerControlInternal() is ContainerControl)
+                           ccAncestor.ParentInternal.GetContainerControl() is ContainerControl)
                     {
-                        ccAncestor = ccAncestor.ParentInternal.GetContainerControlInternal() as ContainerControl;
+                        ccAncestor = ccAncestor.ParentInternal.GetContainerControl() as ContainerControl;
                         Debug.Assert(ccAncestor != null);
                     }
 
@@ -1404,7 +1379,6 @@ namespace System.Windows.Forms {
         ///     Updates the default button based on current selection, and the
         ///     acceptButton property.
         /// </devdoc>
-        /// <internalonly/>
         protected virtual void UpdateDefaultButton() {
             // hook for form
         }
@@ -1414,7 +1388,6 @@ namespace System.Windows.Forms {
         ///     activeControl variable, firing enter and leave events and validation
         ///     as necessary.
         /// </devdoc>
-        /// <internalonly/>
         internal void UpdateFocusedControl() {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::UpdateFocusedControl() - " + this.Name);
 
@@ -1480,7 +1453,7 @@ namespace System.Windows.Forms {
                         // innerMostFCC.ParentInternal can be null when the ActiveControl is deleted.
                         if (innerMostFCC.ParentInternal != null)
                         {
-                            ContainerControl cc = (innerMostFCC.ParentInternal.GetContainerControlInternal()) as ContainerControl;
+                            ContainerControl cc = (innerMostFCC.ParentInternal.GetContainerControl()) as ContainerControl;
                             stopControl = cc;
                             if (cc != null && cc != this)
                             {
@@ -1528,7 +1501,7 @@ namespace System.Windows.Forms {
 #if DEBUG            
             if (activeControl == null || (activeControl != null && activeControl.ParentInternal != null && !activeControl.ParentInternal.IsContainerControl))
             {
-                Debug.Assert(activeControl == null || activeControl.ParentInternal.GetContainerControlInternal() == this);
+                Debug.Assert(activeControl == null || activeControl.ParentInternal.GetContainerControl() == this);
             }
 #endif
             focusedControl = activeControl;
@@ -1540,7 +1513,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Make sure we have a valid choice of last unvalidated control if at all possible.
         /// </devdoc>
-        /// <internalonly/>
         private void EnsureUnvalidatedControl(Control candidate) {
             // Don't change the unvalidated control while in the middle of validation (re-entrancy)
             if (state[stateValidating]) {
@@ -1587,7 +1559,6 @@ namespace System.Windows.Forms {
         ///     Validates the last unvalidated control and its ancestors (up through the ancestor in common
         ///     with enterControl) if enterControl causes validation.
         /// </devdoc>
-        /// <internalonly/>
         private void EnterValidation(Control enterControl) {
             // No unvalidated control to validate - stop now
             if (unvalidatedControl == null) {
@@ -1789,7 +1760,7 @@ namespace System.Windows.Forms {
                         }
                     }
                     // This bit forces the focus to move back to the invalid control
-                    SetActiveControlInternal(unvalidatedControl);
+                    SetActiveControl(unvalidatedControl);
                 }
             }
             finally {
@@ -1829,7 +1800,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     WM_SETFOCUS handler
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetFocus(ref Message m) {
             Debug.WriteLineIf(Control.FocusTracing.TraceVerbose, "ContainerControl::WmSetFocus() - " + this.Name);
             if (!HostedInWin32DialogManager) {
@@ -1844,7 +1814,7 @@ namespace System.Windows.Forms {
                 }
                 else {
                     if (ParentInternal != null) {
-                        IContainerControl c = ParentInternal.GetContainerControlInternal();
+                        IContainerControl c = ParentInternal.GetContainerControl();
                         if (c != null) {
                             bool succeeded = false;
 
@@ -1869,7 +1839,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ContainerControl.uex' path='docs/doc[@for="ContainerControl.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]

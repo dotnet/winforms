@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics;
@@ -173,13 +172,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClickedDescr))]
         public event EventHandler BalloonTipClicked {
-            add {
-                Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
-            }
+            add => Events.AddHandler(EVENT_BALLOONTIPCLICKED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_BALLOONTIPCLICKED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_BALLOONTIPCLICKED, value);
         }
 
         /// <include file='doc\NotifyIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipClosed"]/*' />
@@ -188,13 +183,9 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipClosedDescr))]
         public event EventHandler BalloonTipClosed {
-            add {
-                Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
-            }
+            add => Events.AddHandler(EVENT_BALLOONTIPCLOSED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_BALLOONTIPCLOSED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_BALLOONTIPCLOSED, value);
         }
 
         /// <include file='doc\NotifyIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipShown"]/*' />
@@ -203,12 +194,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconOnBalloonTipShownDescr))]
         public event EventHandler BalloonTipShown {
-            add {
-                Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
-            }
+            add => Events.AddHandler(EVENT_BALLOONTIPSHOWN, value);
+            remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
         }
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.ContextMenu"]/*' />
@@ -354,12 +341,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnClickDescr))]
         public event EventHandler Click {
-            add {
-                Events.AddHandler(EVENT_CLICK, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_CLICK, value);
-            }
+            add => Events.AddHandler(EVENT_CLICK, value);
+            remove => Events.RemoveHandler(EVENT_CLICK, value);
         }
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.DoubleClick"]/*' />
@@ -368,12 +351,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.ControlOnDoubleClickDescr))]
         public event EventHandler DoubleClick {
-            add {
-                Events.AddHandler(EVENT_DOUBLECLICK, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DOUBLECLICK, value);
-            }
+            add => Events.AddHandler(EVENT_DOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_DOUBLECLICK, value);
         }
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseClick"]/*' />
@@ -382,12 +361,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseClickDescr))]
         public event MouseEventHandler MouseClick {
-            add {
-                Events.AddHandler(EVENT_MOUSECLICK, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOUSECLICK, value);
-            }
+            add => Events.AddHandler(EVENT_MOUSECLICK, value);
+            remove => Events.RemoveHandler(EVENT_MOUSECLICK, value);
         }
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseDoubleClick"]/*' />
@@ -396,12 +371,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.NotifyIconMouseDoubleClickDescr))]
         public event MouseEventHandler MouseDoubleClick {
-            add {
-                Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOUSEDOUBLECLICK, value);
-            }
+            add => Events.AddHandler(EVENT_MOUSEDOUBLECLICK, value);
+            remove => Events.RemoveHandler(EVENT_MOUSEDOUBLECLICK, value);
         }
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseDown"]/*' />
@@ -413,12 +384,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseDownDescr))]
         public event MouseEventHandler MouseDown {
-            add {
-                Events.AddHandler(EVENT_MOUSEDOWN, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOUSEDOWN, value);
-            }
+            add => Events.AddHandler(EVENT_MOUSEDOWN, value);
+            remove => Events.RemoveHandler(EVENT_MOUSEDOWN, value);
         }        
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseMove"]/*' />
@@ -430,12 +397,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseMoveDescr))]
         public event MouseEventHandler MouseMove {
-            add {
-                Events.AddHandler(EVENT_MOUSEMOVE, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOUSEMOVE, value);
-            }
+            add => Events.AddHandler(EVENT_MOUSEMOVE, value);
+            remove => Events.RemoveHandler(EVENT_MOUSEMOVE, value);
         }        
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseUp"]/*' />
@@ -448,12 +411,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatMouse)), SRDescription(nameof(SR.ControlOnMouseUpDescr))]
         public event MouseEventHandler MouseUp {
-            add {
-                Events.AddHandler(EVENT_MOUSEUP, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOUSEUP, value);
-            }
+            add => Events.AddHandler(EVENT_MOUSEUP, value);
+            remove => Events.RemoveHandler(EVENT_MOUSEUP, value);
         }        
 
         /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.Dispose"]/*' />
@@ -711,7 +670,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Shows the context menu for the tray icon.
         /// </devdoc>
-        /// <internalonly/>
         private void ShowContextMenu() {
 
             if (contextMenu != null || contextMenuStrip != null) {
@@ -748,7 +706,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Updates the icon in the system tray.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateIcon(bool showIconInTray) {
             lock(syncObj) {
 
@@ -799,7 +756,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the mouse-down event
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseDown(ref Message m, MouseButtons button, int clicks) {
             if (clicks == 2) {
                 OnDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
@@ -813,7 +769,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the mouse-move event
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseMove(ref Message m) {
             OnMouseMove(new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
         }
@@ -822,7 +777,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the mouse-up event
         /// </devdoc>
-        /// <internalonly/>
         private void WmMouseUp(ref Message m, MouseButtons button) {
             OnMouseUp(new MouseEventArgs(button, 0, 0, 0, 0));
             //subhag
@@ -977,7 +931,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Defines a placeholder window that the NotifyIcon is attached to.
         /// </devdoc>
-        /// <internalonly/>
         private class NotifyIconNativeWindow : NativeWindow {
             internal NotifyIcon reference;
             private  GCHandle   rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
@@ -986,7 +939,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Create a new NotifyIcon, and bind the window to the NotifyIcon component.
             /// </devdoc>
-            /// <internalonly/>
             internal NotifyIconNativeWindow(NotifyIcon component) {
                 reference = component;
             }
@@ -1024,7 +976,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>
-            /// <internalonly/>
             protected override void WndProc(ref Message m) {
                 Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);

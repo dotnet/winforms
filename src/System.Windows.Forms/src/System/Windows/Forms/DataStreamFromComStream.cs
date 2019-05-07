@@ -12,7 +12,6 @@ namespace System.Windows.Forms
 
 
     /// <include file='doc\DataStreamFromComStream.uex' path='docs/doc[@for="DataStreamFromComStream"]/*' />
-    /// <internalonly/>
     /// <devdoc>
     /// </devdoc>
     internal class DataStreamFromComStream : Stream

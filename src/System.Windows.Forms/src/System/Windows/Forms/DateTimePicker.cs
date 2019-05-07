@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
 
@@ -89,7 +88,6 @@ namespace System.Windows.Forms {
         ///     validTime determines whether the CheckBox in the DTP is checked.  The CheckBox is only
         ///     displayed when ShowCheckBox is true.
         /// </devdoc>
-        /// <internalonly/>
         private bool                            validTime = true;
 
         // DateTime changeover: DateTime is a value class, not an object, so we need to keep track
@@ -161,15 +159,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                base.BackColorChanged += value;
-            }
-            remove {
-                base.BackColorChanged -= value;
-            }
+            add => base.BackColorChanged += value;
+            remove => base.BackColorChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImage"]/*' />
@@ -184,15 +177,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayout"]/*' />
@@ -207,15 +195,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CalendarForeColor"]/*' />
@@ -434,9 +417,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler Click {
-            add { base.Click += value; }
-            remove { base.Click -= value; }
-        }
+            add => base.Click += value; 
+            remove => base.Click -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateParams"]/*' />
         /// <devdoc>
@@ -536,9 +518,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event EventHandler DoubleClick {
-            add { base.DoubleClick += value; }
-            remove { base.DoubleClick -= value; }
-        }
+            add => base.DoubleClick += value; 
+            remove => base.DoubleClick -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.DropDownAlign"]/*' />
         /// <devdoc>
@@ -585,15 +566,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Format"]/*' />
@@ -631,27 +607,19 @@ namespace System.Windows.Forms {
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.FormatChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.DateTimePickerOnFormatChangedDescr))]
         public event EventHandler FormatChanged {
-            add {
-                Events.AddHandler(EVENT_FORMATCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_FORMATCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_FORMATCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_FORMATCHANGED, value);
         }
 
         /// <include file='doc\DateTimepicker.uex' path='docs/doc[@for="DateTimepicker.Paint"]/*' />
         /// <devdoc>
         ///     DateTimePicker Paint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         //Make sure the passed in minDate respects the current culture: this
@@ -798,18 +766,16 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event MouseEventHandler MouseClick {
-            add { base.MouseClick += value; }
-            remove { base.MouseClick -= value; }
-        }
+            add => base.MouseClick += value; 
+            remove => base.MouseClick -= value; }
 
         [
         Browsable(false),
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         new public event MouseEventHandler MouseDoubleClick {
-            add { base.MouseDoubleClick += value; }
-            remove { base.MouseDoubleClick -= value; }
-        }
+            add => base.MouseDoubleClick += value; 
+            remove => base.MouseDoubleClick -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Padding"]/*' />
         [
@@ -827,9 +793,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.PreferredHeight"]/*' />
         /// <devdoc>
@@ -951,15 +916,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.Value"]/*' />
@@ -1023,24 +983,16 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnCloseUpDescr))]
         public event EventHandler CloseUp {
-            add {
-                onCloseUp += value;
-            }
-            remove {
-                onCloseUp -= value;
-            }
+            add => onCloseUp += value;
+            remove => onCloseUp -= value;
         }
 
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
-            remove {
-                onRightToLeftLayoutChanged -= value;
-            }
+            add => onRightToLeftLayoutChanged += value;
+            remove => onRightToLeftLayoutChanged -= value;
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.ValueChanged"]/*' />
@@ -1049,12 +1001,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged {
-            add {
-                onValueChanged += value;
-            }
-            remove {
-                onValueChanged -= value;
-            }
+            add => onValueChanged += value;
+            remove => onValueChanged -= value;
         }
 
 
@@ -1064,16 +1012,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.DateTimePickerOnDropDownDescr))]
         public event EventHandler DropDown {
-            add {
-                onDropDown += value;
-            }
-            remove {
-                onDropDown -= value;
-            }
+            add => onDropDown += value;
+            remove => onDropDown -= value;
         }
      
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
         /// <summary>
         /// <para>
         /// Constructs the new instance of the accessibility object for this control. Subclasses
@@ -1253,7 +1196,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePicker.OnFontChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Occurs when a property for the control changes.
         /// </devdoc>
@@ -1351,7 +1293,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     If the handle has been created, this applies the color to the control
         /// </devdoc>
-        /// <internalonly/>
         private void SetControlColor(int colorIndex, Color value) {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.DTM_SETMCCOLOR, colorIndex, ColorTranslator.ToWin32(value));
@@ -1361,7 +1302,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     If the handle has been created, this applies the font to the control.
         /// </devdoc>
-        /// <internalonly/>
         private void SetControlCalendarFont() {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.DTM_SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
@@ -1371,7 +1311,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Applies all the colors to the control.
         /// </devdoc>
-        /// <internalonly/>
         private void SetAllControlColors() {
             SetControlColor(NativeMethods.MCSC_MONTHBK, calendarMonthBackground);
             SetControlColor(NativeMethods.MCSC_TEXT, calendarForeColor);
@@ -1384,7 +1323,6 @@ namespace System.Windows.Forms {
         ///     Updates the window handle with the min/max ranges if it has been
         ///     created.
         /// </devdoc>
-        /// <internalonly/>
         private void SetRange() {
             SetRange(EffectiveMinDate(min), EffectiveMaxDate(max));
         }
@@ -1421,7 +1359,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Turns on or off a given style bit
         /// </devdoc>
-        /// <internalonly/>
         private void SetStyleBit(bool flag, int bit) {
             if (((style & bit) != 0) == flag) return;
 
@@ -1514,7 +1451,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns the control as a string
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -1524,7 +1460,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Forces a repaint of the updown control if it is displayed.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateUpDown() {
             // The upDown control doesn't repaint correctly.
             //
@@ -1559,7 +1494,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the DTN_CLOSEUP notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmCloseUp(ref Message m) {
             OnCloseUp(EventArgs.Empty);
         }
@@ -1567,7 +1501,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the DTN_DATETIMECHANGE notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDateTimeChange(ref Message m) {
             NativeMethods.NMDATETIMECHANGE nmdtc = (NativeMethods.NMDATETIMECHANGE)m.GetLParam(typeof(NativeMethods.NMDATETIMECHANGE));
             DateTime temp = value;
@@ -1589,7 +1522,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the DTN_DROPDOWN notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDropDown(ref Message m) {
 
             if (this.RightToLeftLayout == true && this.RightToLeft == RightToLeft.Yes) {
@@ -1608,7 +1540,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles system color changes
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnSystemColorsChanged(EventArgs e) {
             SetAllControlColors();
             base.OnSystemColorsChanged(e);
@@ -1617,7 +1548,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_COMMAND messages reflected from the parent control.
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
             if (m.HWnd == Handle) {
 
@@ -1640,11 +1570,10 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrided wndProc
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    FocusInternal();
+                    Focus();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
@@ -1700,7 +1629,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DateTimePicker.uex' path='docs/doc[@for="DateTimePickerAccessibleObject"]/*' />
-        /// <internalonly/>
         /// <summary>
         /// </summary>
         [ComVisible(true)]

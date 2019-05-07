@@ -336,7 +336,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\PageSetupDialog.uex' path='docs/doc[@for="PageSetupDialog.RunDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override bool RunDialog(IntPtr hwndOwner) {
 
             NativeMethods.WndProc hookProcPtr = new NativeMethods.WndProc(this.HookProc);

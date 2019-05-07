@@ -44,7 +44,6 @@ using System.Runtime.Versioning;
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+PARAFORMAT):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+POINT):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+RECT&):System.IntPtr")]
-[assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+REPASTESPECIAL):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SIZE):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SYSTEMTIME):System.IntPtr")]
 [assembly: SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable", Scope="member", Target="System.Windows.Forms.UnsafeNativeMethods.SendMessage(System.Runtime.InteropServices.HandleRef,System.Int32,System.Int32,System.Windows.Forms.NativeMethods+SYSTEMTIMEARRAY):System.IntPtr")]
@@ -152,25 +151,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        // We need this for Vista specific features/fixes
-        private static readonly Version VistaOSVersion = new Version(6, 0);
-
-        /// <summary>
-        /// Used to tell if Vista API's are supported
-        /// </summary>
-        internal static bool IsVista
-        {
-            get
-            {
-                OperatingSystem os = Environment.OSVersion;
-                if (os == null)
-                    return false;
-
-                return (os.Platform == PlatformID.Win32NT) &&
-                       (os.Version.CompareTo(VistaOSVersion) >= 0);
-            }
-        }
-
         [DllImport(ExternDll.Kernel32, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
         
         public static extern int GetLocaleInfo(int Locale,int LCType,StringBuilder lpLCData,int cchData) ;
@@ -195,7 +175,6 @@ namespace System.Windows.Forms {
         public static extern int OleSaveToStream(IPersistStream pPersistStream, IStream pStream);
 
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
         public static extern int GetWindowThreadProcessId(HandleRef hWnd, out int lpdwProcessId);
 
         [DllImport(ExternDll.Comdlg32, SetLastError=true, CharSet=CharSet.Auto)]
@@ -821,7 +800,6 @@ namespace System.Windows.Forms {
 
         [DllImport(ExternDll.User32, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         [SuppressMessage("Microsoft.Portability", "CA1901:PInvokeDeclarationsShouldBePortable")]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr SendMessage(IntPtr hwnd, int msg, bool wparam, int lparam);
 
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
@@ -878,11 +856,8 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, NativeMethods.POINT wParam, int lParam);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
-        public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.REPASTESPECIAL lParam);
-        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
-        
+
+        [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]        
         public static extern IntPtr SendMessage(HandleRef hWnd, int msg, int wParam, NativeMethods.EDITSTREAM lParam);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
@@ -987,12 +962,11 @@ namespace System.Windows.Forms {
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         
         public static extern IntPtr GetWindow(HandleRef hWnd, int uCmd);
+
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
-
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
-        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
 
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
         public static extern IntPtr GetDlgItem(HandleRef hWnd, int nIDDlgItem);
         [DllImport(ExternDll.Kernel32, CharSet=CharSet.Auto)]
         
@@ -1126,7 +1100,6 @@ namespace System.Windows.Forms {
         public static extern int RevokeDragDrop(HandleRef hwnd);
 
         [DllImport(ExternDll.Ole32, ExactSpelling = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern int RevokeDragDrop(IntPtr hwnd);
         [DllImport(ExternDll.User32, CharSet=CharSet.Auto)]
         
@@ -1156,7 +1129,6 @@ namespace System.Windows.Forms {
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc);
 
         [DllImport(ExternDll.Oleacc, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.Process)]
         public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, IntPtr pAcc);
 
         [DllImport(ExternDll.Oleacc, ExactSpelling=true, CharSet=System.Runtime.InteropServices.CharSet.Auto)]
@@ -1185,7 +1157,6 @@ namespace System.Windows.Forms {
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "BeginPaint", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern IntPtr BeginPaint(IntPtr hWnd, [In, Out] ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="EndPaint", CharSet=CharSet.Auto)]
@@ -1197,7 +1168,6 @@ namespace System.Windows.Forms {
         }
 
         [DllImport(ExternDll.User32, ExactSpelling = true, EntryPoint = "EndPaint", CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool EndPaint(IntPtr hWnd, ref NativeMethods.PAINTSTRUCT lpPaint);
 
         [DllImport(ExternDll.User32, ExactSpelling=true, EntryPoint="GetDC", CharSet=CharSet.Auto)]
@@ -1606,6 +1576,15 @@ namespace System.Windows.Forms {
                 }
             }
             return regionRects;
+        }
+
+        public static ref T PtrToRef<T>(IntPtr ptr)
+            where T : unmanaged
+        {
+            unsafe
+            {
+                return ref *(T*)ptr;
+            }
         }
 
         /* Unused
@@ -7021,7 +7000,7 @@ namespace System.Windows.Forms {
     }
     [ComImport(), Guid("00020403-0000-0000-C000-000000000046"), InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface  ITypeComp {
-         void RemoteBind(
+         unsafe void RemoteBind(
                 [In, MarshalAs(UnmanagedType.LPWStr)] 
                  string szName,
                 [In, MarshalAs(UnmanagedType.U4)] 
@@ -7033,9 +7012,9 @@ namespace System.Windows.Forms {
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                   NativeMethods.tagDESCKIND[] pDescKind,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagFUNCDESC[] ppFuncDesc,
+                   NativeMethods.tagFUNCDESC*[] ppFuncDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
-                   NativeMethods.tagVARDESC[] ppVarDesc,
+                   NativeMethods.tagVARDESC*[] ppVarDesc,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 
                    UnsafeNativeMethods.ITypeComp[] ppTypeComp,
                 [Out, MarshalAs(UnmanagedType.LPArray)] 

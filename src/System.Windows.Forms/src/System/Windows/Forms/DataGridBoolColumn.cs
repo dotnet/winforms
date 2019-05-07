@@ -75,12 +75,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.TrueValueChanged"]/*' />
         public event EventHandler TrueValueChanged { 
-            add {
-                Events.AddHandler(EventTrueValue, value);
-            }
-            remove {
-                Events.RemoveHandler(EventTrueValue, value);
-            }
+            add => Events.AddHandler(EventTrueValue, value);
+            remove => Events.RemoveHandler(EventTrueValue, value);
         }
         
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.FalseValue"]/*' />
@@ -104,12 +100,8 @@ namespace System.Windows.Forms {
         
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.FalseValueChanged"]/*' />
         public event EventHandler FalseValueChanged { 
-            add {
-                Events.AddHandler(EventFalseValue, value);
-            }
-            remove {
-                Events.RemoveHandler(EventFalseValue, value);
-            }
+            add => Events.AddHandler(EventFalseValue, value);
+            remove => Events.RemoveHandler(EventFalseValue, value);
         }
         
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.NullValue"]/*' />
@@ -284,7 +276,7 @@ namespace System.Windows.Forms {
             //
             DataGrid grid = this.DataGridTableStyle.DataGrid;
             if (!grid.Focused)
-                grid.FocusInternal();
+                grid.Focus();
 
             if (!readOnly && !IsReadOnly()) {
                 editingRow = rowNum;
@@ -311,7 +303,6 @@ namespace System.Windows.Forms {
             return base.KeyPress(rowNum, keyData);
         }
 
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Indicates whether the a mouse down event occurred at the specified row, at
@@ -345,7 +336,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>,
@@ -357,7 +347,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.Paint1"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Draws the <see cref='System.Windows.Forms.DataGridBoolColumn'/>
         /// with the given <see cref='System.Drawing.Graphics'/>, <see cref='System.Drawing.Rectangle'/>,
@@ -443,12 +432,8 @@ namespace System.Windows.Forms {
 
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.AllowNullChanged"]/*' />
         public event EventHandler AllowNullChanged { 
-            add {
-                Events.AddHandler(EventAllowNull, value);
-            }
-            remove {
-                Events.RemoveHandler(EventAllowNull, value);
-            }
+            add => Events.AddHandler(EventAllowNull, value);
+            remove => Events.RemoveHandler(EventAllowNull, value);
         }
         
         /// <include file='doc\DataGridBoolColumn.uex' path='docs/doc[@for="DataGridBoolColumn.EnterNullValue"]/*' />

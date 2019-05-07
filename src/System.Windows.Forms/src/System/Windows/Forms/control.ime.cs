@@ -2,64 +2,41 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
 
-namespace System.Windows.Forms {
-    using Accessibility;
-    using Microsoft.Win32;
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-    using System.Configuration.Assemblies;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Drawing.Drawing2D;
-    using System.Globalization;
-    using System.Security;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Runtime.InteropServices.ComTypes;
-    using System.Runtime.Remoting;
-    using System.Runtime.Serialization;
-    using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.Text;
-    using System.Threading;
-    using System.Windows.Forms.Design;
-    using System.Windows.Forms.Internal;
-    using Encoding = System.Text.Encoding;
-    using System.Drawing.Imaging;
-    using System.Windows.Forms.Layout;
-
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     Control's IME feature.
+    /// Control's IME feature.
     /// </devdoc>
     public partial class Control :
-    Component,
-    UnsafeNativeMethods.IOleControl,
-    UnsafeNativeMethods.IOleObject,
-    UnsafeNativeMethods.IOleInPlaceObject,
-    UnsafeNativeMethods.IOleInPlaceActiveObject,
-    UnsafeNativeMethods.IOleWindow,
-    UnsafeNativeMethods.IViewObject,
-    UnsafeNativeMethods.IViewObject2,
-    UnsafeNativeMethods.IPersist,
-    UnsafeNativeMethods.IPersistStreamInit,
-    UnsafeNativeMethods.IPersistPropertyBag,
-    UnsafeNativeMethods.IPersistStorage,
-    UnsafeNativeMethods.IQuickActivate,
-    ISupportOleDropSource,
-    IDropTarget,
-    ISynchronizeInvoke,
-    IWin32Window,
-    IArrangedElement,
-    IBindableComponent {
-
+        Component,
+        UnsafeNativeMethods.IOleControl,
+        UnsafeNativeMethods.IOleObject,
+        UnsafeNativeMethods.IOleInPlaceObject,
+        UnsafeNativeMethods.IOleInPlaceActiveObject,
+        UnsafeNativeMethods.IOleWindow,
+        UnsafeNativeMethods.IViewObject,
+        UnsafeNativeMethods.IViewObject2,
+        UnsafeNativeMethods.IPersist,
+        UnsafeNativeMethods.IPersistStreamInit,
+        UnsafeNativeMethods.IPersistPropertyBag,
+        UnsafeNativeMethods.IPersistStorage,
+        UnsafeNativeMethods.IQuickActivate,
+        ISupportOleDropSource,
+        IDropTarget,
+        ISynchronizeInvoke,
+        IWin32Window,
+        IArrangedElement,
+        IBindableComponent
+    {
         /// <devdoc>
         ///     Constants starting/ending the WM_CHAR messages to ignore count.  See ImeWmCharsToIgnore property.
         /// </devdoc>
@@ -286,7 +263,7 @@ namespace System.Windows.Forms {
                             ctl = this;
                         }
                         else if( ContainsFocus ) {
-                            ctl = FromChildHandleInternal( UnsafeNativeMethods.GetFocus() );
+                            ctl = FromChildHandle(UnsafeNativeMethods.GetFocus());
                         }
 
                         if( ctl != null && ctl.CanEnableIme ) {
@@ -322,12 +299,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\Control.uex' path='docs/doc[@for="Control.ImeModeChanged"]/*' />
         [WinCategory( "Behavior" ), SRDescription( nameof(SR.ControlOnImeModeChangedDescr) )]
         public event EventHandler ImeModeChanged {
-            add {
-                Events.AddHandler( EventImeModeChanged, value );
-            }
-            remove {
-                Events.RemoveHandler( EventImeModeChanged, value );
-            }
+            add => Events.AddHandler( EventImeModeChanged, value );
+            remove => Events.RemoveHandler( EventImeModeChanged, value );
         }
 
         /// <devdoc>
@@ -651,7 +624,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_INPUTLANGCHANGE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmInputLangChange( ref Message m ) {
             Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmInputLangChange(), this = " + this );
             Debug.Indent();
@@ -668,7 +640,7 @@ namespace System.Windows.Forms {
                 IgnoreWmImeNotify = false;
             }
 
-            Form form = FindFormInternal();
+            Form form = FindForm();
 
             if( form != null ) {
                 InputLanguageChangedEventArgs e = InputLanguage.CreateInputLanguageChangedEventArgs( m );
@@ -686,13 +658,12 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_INPUTLANGCHANGEREQUEST message
         /// </devdoc>
-        /// <internalonly/>
         private void WmInputLangChangeRequest( ref Message m ) {
             Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmInputLangChangeRequest(), this=" + this );
             Debug.Indent();
 
             InputLanguageChangingEventArgs e = InputLanguage.CreateInputLanguageChangingEventArgs( m );
-            Form form = FindFormInternal();
+            Form form = FindForm();
 
             if( form != null ) {
                 Debug.WriteLineIf( CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Culture=" + e.Culture );
@@ -811,7 +782,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_KILLFOCUS message
         /// </devdoc>
-        /// <internalonly/>
         private void WmImeKillFocus() {
             Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeKillFocus(), this=" + this);
             Debug.Indent();

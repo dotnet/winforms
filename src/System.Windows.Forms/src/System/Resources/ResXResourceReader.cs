@@ -165,7 +165,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.IDisposable.Dispose"]/*' />
-        /// <internalonly/>
         // NOTE: Part of IDisposable - not protected by class level LinkDemand.
         void IDisposable.Dispose() {
             GC.SuppressFinalize(this);
@@ -255,7 +254,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents1"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     Creates a reader with the specified file contents.
         /// </devdoc>
@@ -267,7 +265,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.FromFileContents1"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     Creates a reader with the specified file contents.
         /// </devdoc>
@@ -279,7 +276,6 @@ namespace System.Resources {
         }
 
         /// <include file='doc\ResXResourceReader.uex' path='docs/doc[@for="ResXResourceReader.IEnumerable.GetEnumerator"]/*' />
-        /// <internalonly/>
         // NOTE: Part of IEnumerable - not protected by class level LinkDemand.
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();

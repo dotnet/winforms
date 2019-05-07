@@ -6,7 +6,6 @@
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System.ComponentModel.Design;
     using System.Diagnostics;
@@ -55,14 +54,12 @@ namespace System.Windows.Forms {
         ///     If this button has a string, what it's index is in the ToolBar's
         ///     internal list of strings.  Needs to be package protected.
         /// </devdoc>
-        /// <internalonly/>
         internal IntPtr stringIndex = (IntPtr)(-1);
 
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.parent"]/*' />
         /// <devdoc>
         ///     Our parent ToolBar control.
         /// </devdoc>
-        /// <internalonly/>
         internal ToolBar parent;
 
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.dropDownMenu"]/*' />
@@ -455,7 +452,6 @@ namespace System.Windows.Forms {
         ///     algorithm that doesn't include for things like drop down arrows, etc.
         ///     We need to do a bunch of work here to get all the widths correct. Ugh.
         /// </devdoc>
-        /// <internalonly/>
         internal short Width {
             get {
                 Debug.Assert(parent != null, "Parent should be non-null when button width is requested");
@@ -509,7 +505,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.Dispose"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
@@ -528,7 +523,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Finds out index in the parent.
         /// </devdoc>
-        /// <internalonly/>
         private int FindButtonIndex() {
             for (int x = 0; x < parent.Buttons.Count; x++) {
                 if (parent.Buttons[x] == this) {
@@ -625,9 +619,9 @@ namespace System.Windows.Forms {
             button.dwMask = NativeMethods.TBIF_IMAGE
                             | NativeMethods.TBIF_STATE | NativeMethods.TBIF_STYLE;
 
-            // Comctl on Win98 interprets null strings as empty strings, which forces
-            // the button to leave space for text.  The only workaround is to avoid having comctl 
-            // update the text.
+            // Older platforms interpret null strings as empty, which forces the button to
+            // leave space for text.
+            // The only workaround is to avoid having comctl update the text.
             if (updateText) {
                 button.dwMask |= NativeMethods.TBIF_TEXT;
             }
@@ -715,7 +709,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolBarButton.uex' path='docs/doc[@for="ToolBarButton.ToString"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
             return "ToolBarButton: " + Text + ", Style: " + Style.ToString("G");
         }

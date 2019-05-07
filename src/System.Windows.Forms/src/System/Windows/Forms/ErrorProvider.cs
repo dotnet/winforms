@@ -4,7 +4,6 @@
 
 namespace System.Windows.Forms {
     using System.Threading;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -239,12 +238,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftChangedDescr))]
         public event EventHandler RightToLeftChanged {
-            add {
-                onRightToLeftChanged += value;
-            }
-            remove {
-                onRightToLeftChanged -= value;
-            }
+            add => onRightToLeftChanged += value;
+            remove => onRightToLeftChanged -= value;
         }        
 
         /// <include file='doc\ErrorProvider.uex' path='docs/doc[@for="ErrorProvider.Tag"]/*' />
@@ -549,7 +544,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Demand load and cache the default icon.
         /// </devdoc>
-        /// <internalonly/>
         static Icon DefaultIcon {
             get {
                 if (defaultIcon == null) {
@@ -594,7 +588,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Create the icon region on demand.
         /// </devdoc>
-        /// <internalonly/>
         internal IconRegion Region {
             
             
@@ -701,7 +694,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper to dispose the cached icon region.
         /// </devdoc>
-        /// <internalonly/>
         void DisposeRegion() {
             if (region != null) {
                 region.Dispose();
@@ -713,7 +705,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper to make sure we have allocated a control item for this control.
         /// </devdoc>
-        /// <internalonly/>
         private ControlItem EnsureControlItem(Control control) {
             if (control == null)
                 throw new ArgumentNullException(nameof(control));
@@ -729,7 +720,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Helper to make sure we have allocated an error window for this control.
         /// </devdoc>
-        /// <internalonly/>
         internal ErrorWindow EnsureErrorWindow(Control parent) {
             ErrorWindow window = (ErrorWindow)windows[parent];
             if (window == null) {
@@ -836,7 +826,6 @@ namespace System.Windows.Forms {
         ///     rectangle associated with each error icon being displayed is added as a
         ///     tool to the tooltip window.
         /// </devdoc>
-        /// <internalonly/>
         internal class ErrorWindow : NativeWindow {
 
             //

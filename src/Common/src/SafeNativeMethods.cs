@@ -476,23 +476,8 @@ namespace System.Windows.Forms {
         
         public static extern bool ValidateRect(HandleRef hWnd, [In, Out] ref NativeMethods.RECT rect);
 
-
         [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
-        [ResourceExposure(ResourceScope.None)]
         public static extern bool ValidateRect(IntPtr hwnd, IntPtr prect);
-
-        //
-        // WARNING: Don't uncomment this code unless you absolutelly need it.  Use instead Marshal.GetLastWin32Error
-        // and mark your PInvoke [DllImport(..., SetLastError=true)]
-        // From MSDN:
-        // GetLastWin32Error exposes the Win32 GetLastError API method from Kernel32.DLL. This method exists because 
-        // it is not safe to make a direct platform invoke call to GetLastError to obtain this information. If you 
-        // want to access this error code, you must call GetLastWin32Error rather than writing your own platform invoke 
-        // definition for GetLastError and calling it. The common language runtime can make internal calls to APIs that 
-        // overwrite the operating system maintained GetLastError.
-        //
-        //[DllImport(ExternDll.Kernel32, ExactSpelling=true, CharSet=CharSet.Auto)]
-        //public extern static int GetLastError();
 
         [DllImport(ExternDll.User32, ExactSpelling=true, CharSet=CharSet.Auto)]
         

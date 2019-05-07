@@ -615,12 +615,12 @@
       </trans-unit>
       <trans-unit id="SerializerNullNestedProperty">
         <source>The object '{0}' returned null for the property '{1}' but this is not allowed.</source>
-        <target state="new">The object '{0}' returned null for the property '{1}' but this is not allowed.</target>
+        <target state="translated">L'objet '{0}' a retourné null pour la propriété '{1}' mais cela n'est pas autorisé.</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerPropertyGenFailed">
         <source>Code generation for property '{0}' failed.  Error was: '{1}'</source>
-        <target state="new">Code generation for property '{0}' failed.  Error was: '{1}'</target>
+        <target state="translated">Impossible de générer le code pour la propriété '{0}'. L'erreur était : '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="SerializerResourceException">
@@ -800,7 +800,7 @@
       </trans-unit>
       <trans-unit id="ToolStripActionList_Layout">
         <source>Layout &amp;&amp; Appearance</source>
-        <target state="translated">&amp;Disposition et apparence</target>
+        <target state="translated">Disposition et apparence</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_RenderMode">

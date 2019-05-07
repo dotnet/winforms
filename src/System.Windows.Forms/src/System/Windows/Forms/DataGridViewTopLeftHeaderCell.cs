@@ -280,7 +280,7 @@ namespace System.Windows.Forms
             {
                 if (this.DataGridView.ApplyVisualStylesToHeaderCells)
                 {
-                    // XP Theming
+                    // Theming
                     int state = (int)HeaderItemState.Normal;
 
                     if (this.ButtonState != ButtonState.Normal)
@@ -632,7 +632,7 @@ namespace System.Windows.Forms
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
                     // Focus the grid
-                    this.Owner.DataGridView.FocusInternal();
+                    this.Owner.DataGridView.Focus();
                     if (this.Owner.DataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible) > 0 &&
                         this.Owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible) > 0)
                     {

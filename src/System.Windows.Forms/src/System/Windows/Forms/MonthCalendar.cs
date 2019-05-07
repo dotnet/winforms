@@ -6,7 +6,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
 
     using System.Diagnostics;
@@ -84,14 +83,12 @@ namespace System.Windows.Forms {
         ///     This is the arbitrary number of pixels that the Win32 control
         ///     inserts between calendars horizontally, regardless of font.
         /// </devdoc>
-        /// <internalonly/>
         private const int   INSERT_WIDTH_SIZE = 6;
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.INSERT_HEIGHT_SIZE"]/*' />
         /// <devdoc>
         ///     This is the arbitrary number of pixels that the Win32 control
         ///     inserts between calendars vertically, regardless of font.
         /// </devdoc>
-        /// <internalonly/>
         private const int         INSERT_HEIGHT_SIZE = 6;       // From comctl32 MonthCalendar sources CALBORDER
         private const Day    DEFAULT_FIRST_DAY_OF_WEEK = Day.Default;
         private const int         DEFAULT_MAX_SELECTION_COUNT = 7;
@@ -139,20 +136,17 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Bitmask for the annually bolded dates.  Months start on January.
         /// </devdoc>
-        /// <internalonly/>
         private int[]       monthsOfYear = new int[12];
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.datesToBoldMonthly"]/*' />
         /// <devdoc>
         ///     Bitmask for the dates bolded monthly.
         /// </devdoc>
-        /// <internalonly/>
         private int         datesToBoldMonthly = 0;
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.arrayOfDates"]/*' />
         /// <devdoc>
         ///     Lists are slow, so this section can be optimized.
         ///     Implementation is such that inserts are fast, removals are slow.
         /// </devdoc>
-        /// <internalonly/>
         private ArrayList   arrayOfDates = new ArrayList();
         private ArrayList   annualArrayOfDates = new ArrayList(); // we have to maintain these lists too.
         private ArrayList   monthlyArrayOfDates = new ArrayList();
@@ -270,15 +264,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
 
@@ -294,15 +283,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
 
@@ -484,15 +468,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MaxDate"]/*' />
@@ -626,7 +605,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Now"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private DateTime Now {
             get {
                 return DateTime.Now.Date;
@@ -649,9 +627,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.RightToLeftLayout"]/*' />
         /// <devdoc>
@@ -952,15 +929,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.TodayDate"]/*' />
@@ -1125,100 +1097,68 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateChanged"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateChangedDescr))]
         public event DateRangeEventHandler DateChanged {
-            add {
-                onDateChanged += value;
-            }
-            remove {
-                onDateChanged -= value;
-            }
+            add => onDateChanged += value;
+            remove => onDateChanged -= value;
         }
 
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DateSelected"]/*' />
         [SRCategory(nameof(SR.CatAction)), SRDescription(nameof(SR.MonthCalendarOnDateSelectedDescr))]
         public event DateRangeEventHandler DateSelected {
-            add {
-                onDateSelected += value;
-            }
-            remove {
-                onDateSelected -= value;
-            }
+            add => onDateSelected += value;
+            remove => onDateSelected -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.OnPaint"]/*' />
         /// <devdoc>
         ///     MonthCalendar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
-            remove {
-                onRightToLeftLayoutChanged -= value;
-            }
+            add => onRightToLeftLayoutChanged += value;
+            remove => onRightToLeftLayoutChanged -= value;
         }
 
 
@@ -1228,7 +1168,6 @@ namespace System.Windows.Forms {
         ///     restricted by the maximum size of the parent control, hence the requested number
         ///     of rows and columns may not be what you get.
         /// </devdoc>
-        /// <internalonly/>
         private void AdjustSize() {
             Size minSize = GetMinReqRect();
             Size = minSize;
@@ -1238,7 +1177,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Event handler that bolds dates indicated by arrayOfDates
         /// </devdoc>
-        /// <internalonly/>
         private void BoldDates(DateBoldEventArgs e) {
             int months = e.Size;
             e.DaysToBold = new int[months];
@@ -1265,7 +1203,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Compares only the day and month of each time.
         /// </devdoc>
-        /// <internalonly/>
         private bool CompareDayAndMonth(DateTime t1, DateTime t2) {
             return(t1.Day == t2.Day && t1.Month == t2.Month);
         }
@@ -1273,7 +1210,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();   
@@ -1327,7 +1263,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Retrieves the enumeration value corresponding to the hit area.
         /// </devdoc>
-        /// <internalonly/>
         private HitArea GetHitArea(int hit) {
             switch (hit) {
                 case NativeMethods.MCHT_TITLEBK:
@@ -1363,7 +1298,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     stub for getMinReqRect (int, boolean)
         /// </devdoc>
-        /// <internalonly/>
         private Size GetMinReqRect() {
             return GetMinReqRect(0, false, false);
         }
@@ -1376,7 +1310,6 @@ namespace System.Windows.Forms {
         ///     is set to false.  If updateRows is true, then the
         ///     number of rows will be updated according to height.
         /// </devdoc>
-        /// <internalonly/>
         private Size GetMinReqRect(int newDimensionLength, bool updateRows, bool updateCols) {
             Size minSize = SingleMonthSize;
 
@@ -1431,7 +1364,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.GetMonthRange"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private SelectionRange GetMonthRange(int flag) {
             NativeMethods.SYSTEMTIMEARRAY sa = new NativeMethods.SYSTEMTIMEARRAY();
             SelectionRange range = new SelectionRange();
@@ -1458,7 +1390,6 @@ namespace System.Windows.Forms {
         ///     Called by setBoundsCore.  If updateRows is true, then the
         ///     number of rows will be updated according to height.
         /// </devdoc>
-        /// <internalonly/>
         private int GetPreferredHeight(int height, bool updateRows) {
             Size preferredSize = GetMinReqRect(height, updateRows, false);
             return preferredSize.Height;
@@ -1469,7 +1400,6 @@ namespace System.Windows.Forms {
         ///     Called by setBoundsCore.  If updateCols is true, then the
         ///     number of columns will be updated according to width.
         /// </devdoc>
-        /// <internalonly/>
         private int GetPreferredWidth(int width, bool updateCols) {
             Size preferredSize = GetMinReqRect(width, false, updateCols);
             return preferredSize.Width;
@@ -1536,7 +1466,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrides Control.OnHandleCreated()
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             SetSelRange(selectionStart, selectionEnd);
@@ -1578,7 +1507,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrides Control.OnHandleDestroyed()
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleDestroyed(EventArgs e) {
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(this.MarshaledUserPreferenceChanged);
             base.OnHandleDestroyed(e);
@@ -1820,7 +1748,6 @@ namespace System.Windows.Forms {
         ///     it is not necessary to decrease the size of an allocated
         ///     block if the new requested size is smaller.
         /// </devdoc>
-        /// <internalonly/>
         private IntPtr RequestBuffer(int reqSize) {
             Debug.Assert(reqSize > 0, "Requesting a ridiculously small buffer");
             int intSize = 4;
@@ -1848,7 +1775,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrides Control.SetBoundsCore to enforce auto-sizing.
         /// </devdoc>
-        /// <internalonly/>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
             Rectangle oldBounds = Bounds;
             Size max = SystemInformation.MaxWindowTrackSize;
@@ -1874,7 +1800,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     If the handle has been created, this applies the color to the control
         /// </devdoc>
-        /// <internalonly/>
         private void SetControlColor(int colorIndex, Color value) {
             if (IsHandleCreated) {
                 SendMessage(NativeMethods.MCM_SETCOLOR, colorIndex, ColorTranslator.ToWin32(value));
@@ -1886,7 +1811,6 @@ namespace System.Windows.Forms {
         ///     Updates the window handle with the min/max ranges if it has been
         ///     created.
         /// </devdoc>
-        /// <internalonly/>
         private void SetRange() {
             SetRange(DateTimePicker.EffectiveMinDate(minDate), DateTimePicker.EffectiveMaxDate(maxDate));
         }
@@ -2033,7 +1957,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Upper must be greater than Lower
         /// </devdoc>
-        /// <internalonly/>
         private void SetSelRange(DateTime lower, DateTime upper) {
 
             Debug.Assert(lower.Ticks <= upper.Ticks, "lower must be less than upper");
@@ -2133,7 +2056,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -2186,7 +2108,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the MCN_SELCHANGE notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDateChanged(ref Message m) {
             NativeMethods.NMSELCHANGE nmmcsc = (NativeMethods.NMSELCHANGE)m.GetLParam(typeof(NativeMethods.NMSELCHANGE));
             DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
@@ -2208,7 +2129,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the MCN_GETDAYSTATE notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDateBold(ref Message m) {
             NativeMethods.NMDAYSTATE nmmcds = (NativeMethods.NMDAYSTATE)m.GetLParam(typeof(NativeMethods.NMDAYSTATE));
             DateTime start = DateTimePicker.SysTimeToDateTime(nmmcds.stStart);
@@ -2226,7 +2146,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the MCN_VIEWCHANGE  notification
         /// </devdoc>
-        /// <internalonly/>
 
         private void WmCalViewChanged (ref Message m) {
             NativeMethods.NMVIEWCHANGE nmmcvm = (NativeMethods.NMVIEWCHANGE)m.GetLParam(typeof(NativeMethods.NMVIEWCHANGE));
@@ -2243,7 +2162,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the MCN_SELECT notification
         /// </devdoc>
-        /// <internalonly/>
         private void WmDateSelected(ref Message m) {
             NativeMethods.NMSELCHANGE nmmcsc = (NativeMethods.NMSELCHANGE)m.GetLParam(typeof(NativeMethods.NMSELCHANGE));
             DateTime start = selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc.stSelStart);
@@ -2267,7 +2185,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_GETDLGCODE message
         /// </devdoc>
-        /// <internalonly/>
         private void WmGetDlgCode(ref Message m) {
             // The MonthCalendar does its own handling of arrow keys
             m.Result = (IntPtr)NativeMethods.DLGC_WANTARROWS;
@@ -2277,7 +2194,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_COMMAND messages reflected from the parent control.
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectCommand(ref Message m) {
             if (m.HWnd == Handle) {
                 NativeMethods.NMHDR nmhdr = (NativeMethods.NMHDR)m.GetLParam(typeof(NativeMethods.NMHDR));
@@ -2302,11 +2218,10 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrided wndProc
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
-                    FocusInternal();
+                    Focus();
                     if (!ValidationCancelled) {
                         base.WndProc(ref m);
                     }
@@ -2341,7 +2256,6 @@ namespace System.Windows.Forms {
             /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.HitTestInfo.HitTestInfo"]/*' />
             /// <devdoc>
             /// </devdoc>
-            /// <internalonly/>
             internal HitTestInfo(Point pt, HitArea area, DateTime time) {
                 this.point = pt;
                 this.hitArea = area;
@@ -2352,7 +2266,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      This constructor is used when the DateTime member is invalid.
             /// </devdoc>
-            /// <internalonly/>
             internal HitTestInfo(Point pt, HitArea area) {
                 this.point = pt;
                 this.hitArea = area;
@@ -2388,7 +2301,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///      Determines whether a given HitArea should have a corresponding valid DateTime
             /// </devdoc>
-            /// <internalonly/>
             internal static bool HitAreaHasValidDateTime(HitArea hitArea) {
                 switch (hitArea) {
                     case HitArea.Date:
@@ -2494,7 +2406,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\MonthCalendar.uex' path='docs/doc[@for="MonthCalendar.MonthCalendarAccessibleObject"]/*' />
-        /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]

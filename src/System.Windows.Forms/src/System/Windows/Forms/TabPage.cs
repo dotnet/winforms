@@ -89,14 +89,8 @@ namespace System.Windows.Forms {
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
@@ -117,7 +111,7 @@ namespace System.Windows.Forms {
                 {
                     return color;
                 }
-                // If user has not set a color and if XP theming ON  and Parent's appearance is Normal, then return the Transparent Color....
+                // If user has not set a color and if theming ON  and Parent's appearance is Normal, then return the Transparent Color....
                 TabControl parent = ParentInternal as TabControl;
                 if (Application.RenderWithVisualStyles && UseVisualStyleBackColor && (parent != null && parent.Appearance == TabAppearance.Normal)) {
                     return Color.Transparent;
@@ -155,7 +149,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ImageIndexer"]/*' />
-        /// <internalonly/>
         internal ImageList.Indexer ImageIndexer {
             get {
                 if (imageIndexer == null) {
@@ -261,15 +254,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.DockChanged"]/*' />
-        /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler DockChanged {
-            add {
-                base.DockChanged += value;
-            }
-            remove {
-                base.DockChanged -= value;
-            }
+            add => base.DockChanged += value;
+            remove => base.DockChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Enabled"]/*' />
@@ -284,19 +272,13 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.EnabledChanged"]/*' />
-        /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
-            add {
-                base.EnabledChanged += value;
-            }
-            remove {
-                base.EnabledChanged -= value;
-            }
+            add => base.EnabledChanged += value;
+            remove => base.EnabledChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UseVisualStyleBackColor"]/*' />
-        /// <internalonly/>
         [
         DefaultValue (false),
         SRCategory(nameof(SR.CatAppearance)),
@@ -313,7 +295,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Location"]/*' />
-        /// <internalonly/>
         // Make the Location property non-browsable for the TabPages.
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public Point Location {
@@ -327,15 +308,10 @@ namespace System.Windows.Forms {
 
         
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.LocationChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler LocationChanged {
-            add {
-                base.LocationChanged += value;
-            }
-            remove {
-                base.LocationChanged -= value;
-            }
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.MaximumSize"]/*' />
@@ -381,7 +357,6 @@ namespace System.Windows.Forms {
         /// This property is required by certain controls (TabPage) to render its transparency using theming API.
         /// We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </devdoc>
-        /// <internalonly/>
         internal override bool RenderTransparencyWithVisualStyles {
             get {
                 return true;
@@ -389,15 +364,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabIndexChanged"]/*' />
-        /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStop"]/*' />
@@ -412,15 +382,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.Text"]/*' />
@@ -440,15 +405,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable (true), EditorBrowsable (EditorBrowsableState.Always)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.ToolTipText"]/*' />
@@ -490,15 +450,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.VisibleChanged"]/*' />
-        /// <internalonly/>
         [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
         new public event EventHandler VisibleChanged {
-            add {
-                base.VisibleChanged += value;
-            }
-            remove {
-                base.VisibleChanged -= value;
-            }
+            add => base.VisibleChanged += value;
+            remove => base.VisibleChanged -= value;
         }
 
         /// <devdoc>
@@ -535,7 +490,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.GetTCITEM"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal NativeMethods.TCITEM_T GetTCITEM () {
             NativeMethods.TCITEM_T tcitem = new NativeMethods.TCITEM_T ();
 
@@ -712,7 +666,6 @@ namespace System.Windows.Forms {
         ///     overrides main setting of our bounds so that we can control our size and that of our
         ///     TabPages...
         /// </devdoc>
-        /// <internalonly/>
         protected override void SetBoundsCore (int x, int y, int width, int height, BoundsSpecified specified) {
             Control parent = ParentInternal;
 
@@ -747,7 +700,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.UpdateParent"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal void UpdateParent () {
             TabControl parent = ParentInternal as TabControl;
 
@@ -762,7 +714,6 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [ComVisible(false)]
         public class TabPageControlCollection : Control.ControlCollection {
-            /// <internalonly/>
             /// <include file='doc\TabPage.uex' path='docs/doc[@for="TabPage.TabPageControlCollection.TabPageControlCollection"]/*' />
             /// <devdoc>
             ///      Creates a new TabPageControlCollection.

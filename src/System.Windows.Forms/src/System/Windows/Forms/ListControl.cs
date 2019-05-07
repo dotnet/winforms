@@ -91,14 +91,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlOnDataSourceChangedDescr))]
         public event EventHandler DataSourceChanged
         {
-            add
-            {
-                Events.AddHandler(s_dataSourceChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_dataSourceChangedEvent, value);
-            }
+            add => Events.AddHandler(s_dataSourceChangedEvent, value);
+            remove => Events.RemoveHandler(s_dataSourceChangedEvent, value);
         }
 
         protected CurrencyManager DataManager => _dataManager;
@@ -133,14 +127,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlOnDisplayMemberChangedDescr))]
         public event EventHandler DisplayMemberChanged
         {
-            add
-            {
-                Events.AddHandler(s_displayMemberChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_displayMemberChangedEvent, value);
-            }
+            add => Events.AddHandler(s_displayMemberChangedEvent, value);
+            remove => Events.RemoveHandler(s_displayMemberChangedEvent, value);
         }
 
         /// <summary>
@@ -206,14 +194,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlFormatInfoChangedDescr))]
         public event EventHandler FormatInfoChanged
         {
-            add
-            {
-                Events.AddHandler(s_formatInfoChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_formatInfoChangedEvent, value);
-            }
+            add => Events.AddHandler(s_formatInfoChangedEvent, value);
+            remove => Events.RemoveHandler(s_formatInfoChangedEvent, value);
         }
 
         [DefaultValue("")]
@@ -243,14 +225,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlFormatStringChangedDescr))]
         public event EventHandler FormatStringChanged
         {
-            add
-            {
-                Events.AddHandler(s_formatStringChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_formatStringChangedEvent, value);
-            }
+            add => Events.AddHandler(s_formatStringChangedEvent, value);
+            remove => Events.RemoveHandler(s_formatStringChangedEvent, value);
         }
 
         [DefaultValue(false)]
@@ -273,14 +249,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlFormattingEnabledChangedDescr))]
         public event EventHandler FormattingEnabledChanged
         {
-            add
-            {
-                Events.AddHandler(s_formattingEnabledChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_formattingEnabledChangedEvent, value);
-            }
+            add => Events.AddHandler(s_formattingEnabledChangedEvent, value);
+            remove => Events.RemoveHandler(s_formattingEnabledChangedEvent, value);
         }
 
         private static bool BindingMemberInfoInDataManager(CurrencyManager dataManager, BindingMemberInfo bindingMemberInfo)
@@ -361,14 +331,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlOnValueMemberChangedDescr))]
         public event EventHandler ValueMemberChanged
         {
-            add
-            {
-                Events.AddHandler(s_valueMemberChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_valueMemberChangedEvent, value);
-            }
+            add => Events.AddHandler(s_valueMemberChangedEvent, value);
+            remove => Events.RemoveHandler(s_valueMemberChangedEvent, value);
         }
 
         /// <devdoc>
@@ -420,14 +384,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListControlOnSelectedValueChangedDescr))]
         public event EventHandler SelectedValueChanged
         {
-            add
-            {
-                Events.AddHandler(s_selectedValueChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_selectedValueChangedEvent, value);
-            }
+            add => Events.AddHandler(s_selectedValueChangedEvent, value);
+            remove => Events.RemoveHandler(s_selectedValueChangedEvent, value);
         }
 
         private void DataManager_PositionChanged(object sender, EventArgs e)

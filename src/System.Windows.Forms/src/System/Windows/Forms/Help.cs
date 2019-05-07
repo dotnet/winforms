@@ -175,7 +175,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Displays HTML 1.0 Help with the specified parameters
         /// </devdoc>
-        /// <internalonly/>
         private static void ShowHTML10Help(Control parent, string url, HelpNavigator command, object param) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: ShowHTML10Help:: " + url + ", " + command.ToString("G") + ", " + param);
             
@@ -256,7 +255,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Displays HTMLFile with the specified parameters
         /// </devdoc>
-        /// <internalonly/>
         /// 
 
 
@@ -351,7 +349,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Help.uex' path='docs/doc[@for="Help.GetHelpFileType"]/*' />
-        /// <internalonly/>
         private static int GetHelpFileType(string url) {
             Debug.WriteLineIf(Help.WindowsFormsHelpTrace.TraceVerbose, "Help:: GetHelpFileType " + url);
 
@@ -380,7 +377,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Maps one of the COMMAND_* constants to the HTML 1.0 Help equivalent.
         /// </devdoc>
-        /// <internalonly/>
         private static int MapCommandToHTMLCommand(HelpNavigator command, string param, out object htmlParam) {
             htmlParam = param;
 

@@ -266,7 +266,7 @@ namespace System.Windows.Forms.VisualStyles {
 
         /// <include file='doc\VisualStyleInformation.uex' path='docs/doc[@for="VisualStyleInformation.TextControlBorder"]/*' />
         /// <devdoc>
-        ///    Border Color that Windows XP renders for controls like TextBox and ComboBox.
+        ///    Border Color that Windows renders for controls like TextBox and ComboBox.
         /// </devdoc>
         public static Color TextControlBorder {
             get {

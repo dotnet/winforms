@@ -110,9 +110,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.SelectedIndex"]/*' />
         /// <devdoc>
@@ -249,16 +248,11 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.DomainUpDownOnSelectedItemChangedDescr))]
         public event EventHandler SelectedItemChanged {
-            add {
-                onSelectedItemChanged += value;
-            }
-            remove {
-                onSelectedItemChanged -= value;
-            }
+            add => onSelectedItemChanged += value;
+            remove => onSelectedItemChanged -= value;
         }
         
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
         ///    should not call base.CreateAccessibilityObject.
@@ -375,7 +369,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.OnChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       In the case of a DomainUpDown, the handler for changing
@@ -388,7 +381,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.OnTextBoxKeyPress"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// <para>Handles the <see cref='System.Windows.Forms.Control.KeyPress'/>
         /// event, using the input character to find the next matching item in our 
@@ -505,7 +497,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Provides some interesting info about this control in String form.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -697,7 +688,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainUpDownAccessibleObject"]/*' />
-        /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        
@@ -831,7 +821,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\DomainUpDown.uex' path='docs/doc[@for="DomainUpDown.DomainItemAccessibleObject"]/*' />
-        /// <internalonly/>        
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]        

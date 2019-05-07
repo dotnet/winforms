@@ -2,35 +2,19 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
-namespace System.Windows.Forms {
-    
-    using Microsoft.Win32;
-    using System;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.Security;
-    using System.Windows.Forms;
-    using System.Drawing;
-    using System.Drawing.Design;
-    using System.Drawing.Imaging;
-    using System.Runtime.InteropServices;
-    using System.ComponentModel.Design;
-    using System.ComponentModel.Design.Serialization;
-
-    /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel"]/*' />
-    /// <devdoc>
-    ///     TBD.
-    /// </devdoc>
-    [
-    ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    Docking(DockingBehavior.Never),
-    Designer("System.Windows.Forms.Design.SplitterPanelDesigner, " + AssemblyRef.SystemDesign),
-    ToolboxItem(false)
-    ]
-    public sealed class SplitterPanel : Panel {
-
+namespace System.Windows.Forms
+{
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [Docking(DockingBehavior.Never)]
+    [Designer("System.Windows.Forms.Design.SplitterPanelDesigner, " + AssemblyRef.SystemDesign)]
+    [ToolboxItem(false)]
+    public sealed class SplitterPanel : Panel
+    {
         SplitContainer owner  = null;
         private bool collapsed = false;
         
@@ -73,12 +57,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <devdoc>
@@ -434,12 +414,8 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new event EventHandler VisibleChanged {
-            add {
-                base.VisibleChanged += value;
-            }
-            remove {
-                base.VisibleChanged -= value;
-            }
+            add => base.VisibleChanged += value;
+            remove => base.VisibleChanged -= value;
         }
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.DockChanged"]/*' />
@@ -452,12 +428,8 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new event EventHandler DockChanged {
-            add {
-                base.DockChanged += value;
-            }
-            remove {
-                base.DockChanged -= value;
-            }
+            add => base.DockChanged += value;
+            remove => base.DockChanged -= value;
         }
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.LocationChanged"]/*' />
@@ -470,12 +442,8 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new event EventHandler LocationChanged {
-            add {
-                base.LocationChanged += value;
-            }
-            remove {
-                base.LocationChanged -= value;
-            }
+            add => base.LocationChanged += value;
+            remove => base.LocationChanged -= value;
         }
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabIndexChanged"]/*' />
@@ -488,12 +456,8 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new event EventHandler TabIndexChanged {
-            add {
-                base.TabIndexChanged += value;
-            }
-            remove {
-                base.TabIndexChanged -= value;
-            }
+            add => base.TabIndexChanged += value;
+            remove => base.TabIndexChanged -= value;
         }        
 
         /// <include file='doc\SplitterPanel.uex' path='docs/doc[@for="SplitterPanel.TabStopChanged"]/*' />
@@ -506,12 +470,8 @@ namespace System.Windows.Forms {
         Browsable(false)    
         ]
         public new event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
     }

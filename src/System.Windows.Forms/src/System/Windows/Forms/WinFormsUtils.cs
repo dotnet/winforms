@@ -151,7 +151,7 @@ namespace System.Windows.Forms
             {
                 if (text[index] == '&')
                 {
-                    str.Append("&");
+                    str.Append('&');
                 }
                 if (index < text.Length)
                 {

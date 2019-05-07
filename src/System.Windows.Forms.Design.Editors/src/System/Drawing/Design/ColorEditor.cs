@@ -25,11 +25,9 @@ namespace System.Drawing.Design
         private ColorUI colorUI;
 
         /// <summary>
-        ///     Edits the given object value using the editor style
-        ///     provided by ColorEditor.GetEditStyle.
+        /// Edits the given object value using the editor style provided by ColorEditor.GetEditStyle.
         /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             object returnValue = value;
@@ -60,39 +58,34 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///     Gets the editing style of the Edit method. If the method
-        ///     is not supported, this will return UITypeEditorEditStyle.None.
+        /// Gets the editing style of the Edit method.
+        /// If the method is not supported, this will return UITypeEditorEditStyle.None.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;
         }
 
         /// <summary>
-        ///     Gets a value indicating if this editor supports the painting of a representation
-        ///     of an object's value.
+        /// Gets a value indicating if this editor supports the painting of a representation
+        /// of an object's value.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
             return true;
         }
 
         /// <summary>
-        ///     Paints a representative value of the given object to the provided
-        ///     canvas. Painting should be done within the boundaries of the
-        ///     provided rectangle.
+        /// Paints a representative value of the given object to the provided canvas.
+        /// Painting should be done within the boundaries of the provided rectangle.
         /// </summary>
         [SuppressMessage("Microsoft.Performance", "CA1808:AvoidCallsThatBoxValueTypes")]
         [SuppressMessage("Microsoft.Performance", "CA1800:DoNotCastUnnecessarily")]
-        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")] //Benign code
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")] // everything in this assembly is full trust.
+        [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers", Justification = "Benign code")]
         public override void PaintValue(PaintValueEventArgs e)
         {
-            if (e.Value is Color)
+            if (e.Value is Color color)
             {
-                Color color = (Color)e.Value;
                 SolidBrush b = new SolidBrush(color);
                 e.Graphics.FillRectangle(b, e.Bounds);
                 b.Dispose();

@@ -2,26 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Drawing;
-    using Microsoft.Win32;
-    using System.Drawing.Imaging;
-    using System.Threading;
-    using System.Diagnostics;
-    using System.Windows.Forms.ButtonInternal;
-    using System.Windows.Forms.Layout;
-    using System.Security;
-    using System.Windows.Forms.Design; 
-    /// <include file='doc\ToolStripPopupButton.uex' path='docs/doc[@for="ToolStripDropDownButton"]/*' />
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms.Design;
+using System.Windows.Forms.Layout;
+
+namespace System.Windows.Forms
+{
     /// <devdoc>
     /// A ToolStripButton that can display a popup.
     /// </devdoc>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip | ToolStripItemDesignerAvailability.StatusStrip)]
-    public class ToolStripDropDownButton : ToolStripDropDownItem {
-
+    public class ToolStripDropDownButton : ToolStripDropDownItem
+    {
         private bool showDropDownArrow = true;
         private byte openMouseId = 0;
             

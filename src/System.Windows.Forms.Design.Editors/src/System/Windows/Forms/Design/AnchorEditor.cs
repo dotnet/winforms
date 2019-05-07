@@ -25,7 +25,6 @@ namespace System.Windows.Forms.Design
         /// Edits the given object value using the editor style provided by
         /// GetEditorStyle.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             IWindowsFormsEditorService edSvc =
@@ -46,7 +45,6 @@ namespace System.Windows.Forms.Design
         /// <summary>>
         /// Gets the editing style of the Edit method.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;

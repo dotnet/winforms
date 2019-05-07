@@ -2,21 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Windows.Forms;
-using System.Security;
-using System.Runtime.InteropServices;
-using System.Net;
 using System.Collections;
+using System.Diagnostics;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection"]/*' />
-    public sealed class HtmlElementCollection : ICollection {
+namespace System.Windows.Forms
+{
+    public sealed class HtmlElementCollection : ICollection
+    {
         private UnsafeNativeMethods.IHTMLElementCollection htmlElementCollection;
         private HtmlElement[] elementsArray;
         private HtmlShimManager shimManager;
@@ -138,7 +130,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.IsSynchronized"]/*' />
-        /// <internalonly/>
         bool ICollection.IsSynchronized {
             get {
                 return false;
@@ -146,7 +137,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.SyncRoot"]/*' />
-        /// <internalonly/>
         object ICollection.SyncRoot {
             get {
                 return this;
@@ -154,7 +144,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.ICollection.CopyTo"]/*' />
-        /// <internalonly/>
         void ICollection.CopyTo(Array dest, int index) {
             int count = this.Count;
             for (int i = 0; i < count; i++) {
@@ -163,7 +152,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\HtmlElementCollection.uex' path='docs/doc[@for="HtmlElementCollection.GetEnumerator"]/*' />
-        /// <internalonly/>
         public IEnumerator GetEnumerator() {
             HtmlElement[] htmlElements = new HtmlElement[this.Count];
             ((ICollection)this).CopyTo(htmlElements, 0);

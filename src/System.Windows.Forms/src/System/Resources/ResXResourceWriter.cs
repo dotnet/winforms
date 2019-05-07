@@ -58,25 +58,19 @@ namespace System.Resources {
         internal static readonly string CompatSoapSerializedObjectMimeType = "text/microsoft-urt/soap-serialized/base64";
 
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.BinSerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string BinSerializedObjectMimeType = "application/x-microsoft.net.object.binary.base64";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.SoapSerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string SoapSerializedObjectMimeType = "application/x-microsoft.net.object.soap.base64";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.DefaultSerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string DefaultSerializedObjectMimeType = BinSerializedObjectMimeType;
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ByteArraySerializedObjectMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string ByteArraySerializedObjectMimeType = "application/x-microsoft.net.object.bytearray.base64";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResMimeType"]/*' />
-        /// <internalonly/>
         public static readonly string ResMimeType = "text/microsoft-resx";
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.Version"]/*' />
         public static readonly string Version = "2.0";
 
         /// <include file='doc\ResXResourceWriter.uex' path='docs/doc[@for="ResXResourceWriter.ResourceSchema"]/*' />
-        /// <internalonly/>
         public static readonly string ResourceSchema = @"
     <xsd:schema id=""root"" xmlns="""" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:msdata=""urn:schemas-microsoft-com:xml-msdata"">
         <xsd:import namespace=""http://www.w3.org/XML/1998/namespace""/>

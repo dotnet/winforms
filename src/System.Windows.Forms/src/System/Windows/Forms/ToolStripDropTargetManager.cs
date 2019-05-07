@@ -2,24 +2,22 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Diagnostics;
-    using System.Threading;
-    using System.Runtime.InteropServices;    
-    using System.Security;
-    using System.Globalization;
-    
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Threading;
+
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    /// Why do we have this class?  Well it seems that RegisterDropTarget
-    /// requires an HWND to back it's IDropTargets.  Since some ToolStripItems
-    /// do not have HWNDS, this guy's got to figure out who the event was
-    /// really supposed to go to and pass it on to it. 
+    /// RegisterDropTarget requires an HWND to back it's IDropTargets. Since some ToolStripItems
+    /// do not have HWNDS, this guy's got to figure out who the event was really supposed
+    /// to go to and pass it on to it. 
     /// </devdoc>
-    internal class ToolStripDropTargetManager : IDropTarget {
-	
+    internal class ToolStripDropTargetManager : IDropTarget
+    {
         private IDropTarget lastDropTarget;
         private ToolStrip owner;
 
@@ -233,7 +231,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Used to actually register the control as a drop target.
         /// </devdoc>
-        /// <internalonly/>
         /// <param name=accept></param>	
         private void SetAcceptDrops(bool accept) {
              if (accept && owner.IsHandleCreated) {

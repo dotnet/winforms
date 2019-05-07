@@ -128,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
         
         protected override void OnGotFocus(EventArgs e) {
-            Label.FocusInternal();
+            Label.Focus();
             Label.Invalidate();
         } 
 
@@ -147,7 +147,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
         }
 
         public void Select(bool forward) {
-            Label.FocusInternal();
+            Label.Focus();
         }
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs) {
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 if (verbs[i].Visible && verbs[i].Supported) {
                     if (!firstVerb) {
                         sb.Append(Application.CurrentCulture.TextInfo.ListSeparator);
-                        sb.Append(" ");
+                        sb.Append(' ');
                         charLoc += 2;
                     }
                     string name = verbs[i].Text;

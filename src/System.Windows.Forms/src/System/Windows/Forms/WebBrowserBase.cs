@@ -2,34 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
-using System.Configuration.Assemblies;
-using System.Runtime.Remoting;
-using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System;
-using System.Reflection;
+using System.Drawing;
 using System.Globalization;
-using Microsoft.Win32;
-using System.Collections.Specialized;
-using System.IO;
-using System.Drawing;    
-using System.Windows.Forms.Design;
-using System.Windows.Forms.ComponentModel;
-using System.Windows.Forms.ComponentModel.Com2Interop;
-using System.ComponentModel.Design;
-using System.Drawing.Imaging;
-using System.Drawing.Design;
-using System.Security;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Threading;
 
-namespace System.Windows.Forms {
-    /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase"]/*' />
+namespace System.Windows.Forms
+{
     /// <devdoc>
-    ///     <para>
     /// Wraps ActiveX controls and exposes them as fully featured windows forms controls
     /// (by inheriting from Control). Some of Control's properties that don't make sense
     /// for ActiveX controls are blocked here (by setting Browsable attributes on some and
@@ -41,16 +27,13 @@ namespace System.Windows.Forms {
     /// encapsulated in the class below.
     ///
     /// The classid of the ActiveX control is specified in the constructor.
-    ///     </para>
     /// </devdoc>
-    [ComVisible(true),
-    ClassInterface(ClassInterfaceType.AutoDispatch),
-    DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter)),
-    Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
-    public class WebBrowserBase : Control {
-        //
-        // Privates fields:
-        //
+    [ComVisible(true)]
+    [ClassInterface(ClassInterfaceType.AutoDispatch)]
+    [DefaultProperty(nameof(Name)), DefaultEvent(nameof(Enter))]
+    [Designer("System.Windows.Forms.Design.AxDesigner, " + AssemblyRef.SystemDesign)]
+    public class WebBrowserBase : Control
+    {
         private WebBrowserHelper.AXState axState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXState axReloadingState = WebBrowserHelper.AXState.Passive;
         private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
@@ -84,14 +67,8 @@ namespace System.Windows.Forms {
         // Internal fields:
         //
         internal WebBrowserContainer container;
-        internal object activeXInstance;    // this is internal to avoid the security demand
+        internal object activeXInstance;
 
-
-
-        //
-        // SECURITY NOTE: This must be internal, because by specifying a
-        // clsid here, someone will be able to create a native com object.
-        //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WebBrowserBase"]/*' />
         /// <devdoc>
         ///     <para>
@@ -255,7 +232,6 @@ namespace System.Windows.Forms {
             base.OnBoundsUpdate(x, y, width, height);
         }
 
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
@@ -363,7 +339,6 @@ namespace System.Windows.Forms {
         // mnemonic. We have to ask the ActiveX control for it.
         //
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ProcessMnemonic"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected internal override bool ProcessMnemonic(char charCode) {
             bool processed = false;
 
@@ -388,7 +363,7 @@ namespace System.Windows.Forms {
                         msg.pt_y = p.y;
                         if (SafeNativeMethods.IsAccelerator(new HandleRef(ctlInfo, ctlInfo.hAccel), ctlInfo.cAccel, ref msg, null)) {
                             this.axOleControl.OnMnemonic(ref msg);
-                            FocusInternal();
+                            Focus();
                             processed = true;
                         }
                     }
@@ -432,7 +407,7 @@ namespace System.Windows.Forms {
                     break;
 
                 case Interop.WindowMessages.WM_COMMAND:
-                    if (!ReflectMessageInternal(m.LParam, ref m))
+                    if (!ReflectMessage(m.LParam, ref m))
                         DefWndProc(ref m);
                     break;
                 
@@ -448,7 +423,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_MOUSEACTIVATE:
                     if (!DesignMode) {
                         if (containingControl != null && containingControl.ActiveControl != this) {
-                            FocusInternal();
+                            Focus();
                         } 
                     }
                     DefWndProc(ref m);
@@ -1016,7 +991,7 @@ namespace System.Windows.Forms {
                 // before we InPlaceDeactivate.
                 ContainerControl f = ContainingControl;
                 if (f != null && f.ActiveControl == this) {
-                    f.SetActiveControlInternal(null);
+                    f.SetActiveControl(null);
                 }
 
                 //
@@ -1534,212 +1509,149 @@ namespace System.Windows.Forms {
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackgroundImageLayoutChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Enter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Enter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Enter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Enter"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Leave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Leave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Leave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Leave"));
+            remove { }
         }
         
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseCaptureChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseCaptureChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseCaptureChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseCaptureChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseClick {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseDoubleClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDoubleClick {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
+            remove { }
         }
         
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BackgroundImageChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.BindingContextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.CursorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.EnabledChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.FontChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ForeColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.RightToLeftChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
+            remove { }
         }
         
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Click"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragDrop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
+            remove { }
         }
 
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragEnter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragOver"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DragLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.GiveFeedback"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.HelpRequested"]/*' />
@@ -1747,198 +1659,140 @@ namespace System.Windows.Forms {
         [SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")] //Everett
         new public event HelpEventHandler HelpRequested
         {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Paint"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.QueryContinueDrag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.QueryAccessibilityHelp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.DoubleClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
+            remove { }
         }
         
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ImeModeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.KeyDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.KeyPress"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.KeyUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.Layout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseDown"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseEnter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseHover"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseMove"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseUp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.MouseWheel"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.ChangeUICues"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
+            remove { }
         }
         
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.StyleChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
+            remove { }
         }
 
         /// <include file='doc\WebBrowserBase.uex' path='docs/doc[@for="WebBrowserBase.WebBrowserBaseNativeWindow"]/*' />
         /// <devdoc>
         ///     Defines a window that the ActiveX window is attached to so that we can override it's wndproc.
         /// </devdoc>
-        /// <internalonly/>
         private class WebBrowserBaseNativeWindow : NativeWindow {
             private WebBrowserBase WebBrowserBase;
 
@@ -1950,7 +1804,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>
-            /// <internalonly/>
             protected override void WndProc(ref Message m) {
                 switch (m.Msg) {
                     case Interop.WindowMessages.WM_WINDOWPOSCHANGING:

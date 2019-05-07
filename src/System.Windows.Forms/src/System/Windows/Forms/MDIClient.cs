@@ -14,12 +14,10 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Globalization;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Threading;
     using System.Windows.Forms;
     
     /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient"]/*' />
-    /// <internalonly/>
     /// <devdoc>
     ///    <para> 
     ///       Summary to
@@ -43,7 +41,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Creates a new MdiClient.
         /// </devdoc>
-        /// <internalonly/>
         public MdiClient() : base() {
             SetStyle(ControlStyles.Selectable, false);
             BackColor = SystemColors.AppWorkspace;
@@ -94,7 +91,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.CreateParams"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -176,7 +172,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.OnResize"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnResize(EventArgs e) {
             ISite site = (ParentInternal == null) ? null : ParentInternal.Site;
             if (site != null && site.DesignMode && Handle != IntPtr.Zero) {
@@ -272,7 +267,6 @@ namespace System.Windows.Forms {
         /// There is case when the form contains a MainMenu and also has IsMdiContainer property set, in which, the MdiClient fails to 
         /// resize and hence draw the correct backcolor.
         /// </devdoc>
-        /// <internalonly/>
         private void SetWindowRgn() {
             IntPtr rgn1 = IntPtr.Zero;
             IntPtr rgn2 = IntPtr.Zero;
@@ -334,7 +328,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\MDIClient.uex' path='docs/doc[@for="MdiClient.WndProc"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 

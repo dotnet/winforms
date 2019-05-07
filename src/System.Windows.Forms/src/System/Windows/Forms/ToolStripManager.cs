@@ -190,7 +190,7 @@ namespace System.Windows.Forms {
                 ModalMenuFilter.SetActiveToolStrip(toolStrip);
             }
             else {
-                toolStrip.FocusInternal();
+                toolStrip.Focus();
             }
             // copy over the hwnd that we want to restore focus to on ESC
             start.SnapFocusChange(toolStrip);
@@ -457,12 +457,8 @@ namespace System.Windows.Forms {
         // PM team has reviewed and decided on naming changes already
         [SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
         public static event EventHandler RendererChanged {
-            add {
-                AddEventHandler(staticEventDefaultRendererChanged, value);
-            }
-            remove {
-                RemoveEventHandler(staticEventDefaultRendererChanged, value);
-            }
+            add => AddEventHandler(staticEventDefaultRendererChanged, value);
+            remove => RemoveEventHandler(staticEventDefaultRendererChanged, value);
         }
 
 
@@ -741,7 +737,7 @@ namespace System.Windows.Forms {
 
                         // unsubscribe from handle recreate.
                         if (_activeHwnd.Handle != IntPtr.Zero) {
-                            control = Control.FromHandleInternal(_activeHwnd.Handle);
+                            control = Control.FromHandle(_activeHwnd.Handle);
                             if (control != null) {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
@@ -750,7 +746,7 @@ namespace System.Windows.Forms {
                         _activeHwnd = value;
 
                         // make sure we watch out for handle recreates.  
-                        control = Control.FromHandleInternal(_activeHwnd.Handle);
+                        control = Control.FromHandle(_activeHwnd.Handle);
                         if (control != null) {
                             control.HandleCreated += new EventHandler(OnActiveHwndHandleCreated);
                         }
@@ -860,7 +856,7 @@ namespace System.Windows.Forms {
 #endif
                         if (ActiveHwnd.Handle != IntPtr.Zero) {
                             // unsubscribe from handle creates
-                            Control control = Control.FromHandleInternal(ActiveHwnd.Handle);
+                            Control control = Control.FromHandle(ActiveHwnd.Handle);
                             if (control != null) {
                                 control.HandleCreated -= new EventHandler(OnActiveHwndHandleCreated);
                             }
@@ -925,7 +921,7 @@ namespace System.Windows.Forms {
             internal static void ProcessMenuKeyDown(ref Message m) {
                 Keys keyData = (Keys)(int)m.WParam;
 
-                ToolStrip toolStrip = Control.FromHandleInternal(m.HWnd) as ToolStrip;
+                ToolStrip toolStrip = Control.FromHandle(m.HWnd) as ToolStrip;
                 if (toolStrip != null && !toolStrip.IsDropDown) {
                     return;
                 }
@@ -1198,7 +1194,7 @@ namespace System.Windows.Forms {
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] Dismissing because: " + WindowsFormsUtils.GetControlInformation(hwndCurrentActiveWindow.Handle) + " has gotten activation. ");
                         ProcessActivationChange();
                     }
-                    else if (!(Control.FromChildHandleInternal(hwndCurrentActiveWindow.Handle) is ToolStripDropDown)   // its NOT a dropdown
+                    else if (!(Control.FromChildHandle(hwndCurrentActiveWindow.Handle) is ToolStripDropDown)   // its NOT a dropdown
                         && !IsChildOrSameWindow(hwndCurrentActiveWindow, hwndActiveToolStrip)    // and NOT a child of the active toolstrip
                         && !IsChildOrSameWindow(hwndCurrentActiveWindow, ActiveHwnd)) {          // and NOT a child of the active hwnd
                         Debug.WriteLineIf(ToolStrip.SnapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] Calling ProcessActivationChange because: " + WindowsFormsUtils.GetControlInformation(hwndCurrentActiveWindow.Handle) + " has gotten activation. ");
@@ -1221,7 +1217,7 @@ namespace System.Windows.Forms {
                         // Mouse move messages should be eaten if they arent for a dropdown.
                         // this prevents things like ToolTips and mouse over highlights from
                         // being processed.  
-                        Control control = Control.FromChildHandleInternal(m.HWnd);
+                        Control control = Control.FromChildHandle(m.HWnd);
                         if (control == null || !(control.TopLevelControlInternal is ToolStripDropDown)) {
                             // double check it's not a child control of the active toolstrip.
                             if (!IsChildOrSameWindow(hwndActiveToolStrip, new HandleRef(null, m.HWnd))) {
@@ -1497,7 +1493,7 @@ namespace System.Windows.Forms {
             if (!IsThreadUsingToolStrips()) {
                 return false;
             }
-            Control activeControl = Control.FromChildHandleInternal(m.HWnd);
+            Control activeControl = Control.FromChildHandle(m.HWnd);
             Control activeControlInChain = activeControl;
 
             if (activeControlInChain != null && IsValidShortcut(shortcut)) {
@@ -1585,9 +1581,9 @@ namespace System.Windows.Forms {
 
                                 if (rootWindowsMatch) {
                                     // Double check this is not an MDIContainer type situation...
-                                    Form mainForm = Control.FromHandleInternal(rootWindowOfControl.Handle) as Form;
+                                    Form mainForm = Control.FromHandle(rootWindowOfControl.Handle) as Form;
                                     if (mainForm != null && mainForm.IsMdiContainer) {
-                                        Form toolStripForm = topMostToolStrip.FindFormInternal();
+                                        Form toolStripForm = topMostToolStrip.FindForm();
                                         if (toolStripForm != mainForm && toolStripForm != null) {                     
                                            // we should only process shortcuts of the ActiveMDIChild or the Main Form.
                                            rootWindowsMatch = (toolStripForm == mainForm.ActiveMdiChildInternal);                                            
@@ -1638,7 +1634,7 @@ namespace System.Windows.Forms {
             Keys keyData = (Keys)(int)m.LParam;
 
             // search for our menu to work with
-            Control intendedControl = Control.FromHandleInternal(m.HWnd);
+            Control intendedControl = Control.FromHandle(m.HWnd);
             Control toplevelControl = null;
 
             MenuStrip menuStripToActivate = null;
@@ -1708,7 +1704,7 @@ namespace System.Windows.Forms {
             }
 
             // look for a particular main menu strip to be set.
-            Form mainForm = control.FindFormInternal();
+            Form mainForm = control.FindForm();
             if (mainForm != null && mainForm.MainMenuStrip != null) {
                 return mainForm.MainMenuStrip;
             }
@@ -1797,7 +1793,7 @@ namespace System.Windows.Forms {
                     //    Debug.WriteLine("candidate TS: " + candidateTS.Name + " | " + candidateTS.AllowMerge + " | " + (candidateTS.Parent == null ?  "null" : candidateTS.Parent.Name) +" | " + container.Name);
                     //}
                     //Debug.WriteLine(candidateTS == null ? "null" : "not null");
-                    if (candidateTS != null && candidateTS.AllowMerge && container == candidateTS.FindFormInternal()) {
+                    if (candidateTS != null && candidateTS.AllowMerge && container == candidateTS.FindForm()) {
                         //Debug.WriteLine("adding");
                         result.Add(candidateTS);
                     }

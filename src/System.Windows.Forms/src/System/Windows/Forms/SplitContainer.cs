@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Windows.Forms;
     using System.Collections;
     using System.Drawing.Drawing2D;
@@ -279,12 +278,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged {
-            add {
-                base.AutoSizeChanged += value;
-            }
-            remove {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
 
@@ -312,7 +307,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BindingContext"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       The binding manager for the container control.
@@ -397,22 +391,14 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="SplitContainer.ControlAdded"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlAdded {
-            add {
-                base.ControlAdded += value;
-            }
-            remove {
-                base.ControlAdded -= value;
-            }
+            add => base.ControlAdded += value;
+            remove => base.ControlAdded -= value;
         }
         /// <include file='doc\ToolStrip.uex' path='docs/doc[@for="SplitContainer.ControlRemoved"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event ControlEventHandler ControlRemoved {
-             add {
-                 base.ControlRemoved += value;
-             }
-             remove {
-                 base.ControlRemoved -= value;
-             }
+             add => base.ControlRemoved += value;
+             remove => base.ControlRemoved -= value;
         }
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Dock"]/*' />
         /// <devdoc>
@@ -637,9 +623,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.Panel1"]/*' />
         /// <devdoc>
@@ -1019,61 +1004,38 @@ namespace System.Windows.Forms {
         /////////////////////////////////////////////////////////////////////////////////////////////
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoving"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovingDescr))]
         public event SplitterCancelEventHandler SplitterMoving {
-            add {
-                Events.AddHandler(EVENT_MOVING, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOVING, value);
-            }
+            add => Events.AddHandler(EVENT_MOVING, value);
+            remove => Events.RemoveHandler(EVENT_MOVING, value);
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.SplitterMoved"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.SplitterSplitterMovedDescr))]
         public event SplitterEventHandler SplitterMoved {
-            add {
-                Events.AddHandler(EVENT_MOVED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MOVED, value);
-            }
+            add => Events.AddHandler(EVENT_MOVED, value);
+            remove => Events.RemoveHandler(EVENT_MOVED, value);
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1294,17 +1256,17 @@ namespace System.Windows.Forms {
                 if (e.Button == MouseButtons.Left && e.Clicks == 1 && !IsSplitterFixed) {
                     // Focus the current splitter OnMouseDown.
                     splitterFocused = true;
-                    IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                    IContainerControl c = this.ParentInternal.GetContainerControl();
                     if (c != null) {
                         ContainerControl cc = c as ContainerControl;
                         if (cc == null) {
                             c.ActiveControl = this;
                         }
                         else {
-                            cc.SetActiveControlInternal(this);
+                            cc.SetActiveControl(this);
                         }
                     }
-                    SetActiveControlInternal(null);
+                    SetActiveControl(null);
                     nextActiveControl = panel2;
 
                     SplitBegin(e.X, e.Y);
@@ -1483,7 +1445,6 @@ namespace System.Windows.Forms {
         ///     Sets the split position to be the current split size. This is called
         ///     by splitEdit
         /// </devdoc>
-        /// <internalonly/>
         private void ApplySplitterDistance() {
 
             using (new System.Windows.Forms.Layout.LayoutTransaction(this, this, "SplitterDistance", false)) {
@@ -1553,7 +1514,6 @@ namespace System.Windows.Forms {
         ///     Draws the splitter bar at the current location. Will automatically
         ///     cleanup anyplace the splitter was drawn previously.
         /// </devdoc>
-        /// <internalonly/>
         private void DrawSplitBar(int mode) {
             if (mode != DRAW_START && lastDrawSplit != -1) {
                 DrawSplitHelper(lastDrawSplit);
@@ -1600,7 +1560,6 @@ namespace System.Windows.Forms {
         ///     Draws the splitter line at the requested location. Should only be called
         ///     by drawSpltBar.
         /// </devdoc>
-        /// <internalonly/>
         private void DrawSplitHelper(int splitSize) {
 
             Rectangle r = CalcSplitLine(splitSize, 3);
@@ -1618,7 +1577,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Calculates the split size based on the mouse position (x, y).
         /// </devdoc>
-        /// <internalonly/>
         private int GetSplitterDistance(int x, int y) {
             int delta;
             if (Orientation == Orientation.Vertical) {
@@ -1658,7 +1616,6 @@ namespace System.Windows.Forms {
         ///     Process an arrowKey press by selecting the next control in the group
         ///     that the activeControl belongs to.
         /// </devdoc>
-        /// <internalonly/>
         private bool ProcessArrowKey(bool forward) {
             Control group = this;
             if (ActiveControl != null) {
@@ -1671,7 +1628,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Re paint SplitterRect for SplitContainer
         /// </devdoc>
-        /// <internalonly/>
         private void RepaintSplitterRect()
         {
             if (IsHandleCreated) {
@@ -1713,7 +1669,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Reize SplitContainer
         /// </devdoc>
-        /// <internalonly/>
         private void ResizeSplitContainer()
         {
             if (splitContainerScaling)
@@ -1947,17 +1902,17 @@ namespace System.Windows.Forms {
             if (ctl != null && this.TabStop) {
                 //we are on Splitter.....Focus it
                 splitterFocused = true;
-                IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                IContainerControl c = this.ParentInternal.GetContainerControl();
                 if (c != null) {
                     ContainerControl cc = c as ContainerControl;
                     if (cc == null) {
                         c.ActiveControl = this;
                     }
                     else {
-                        cc.SetActiveControlInternal(this);
+                        cc.SetActiveControl(this);
                     }
                 }
-                SetActiveControlInternal(null);
+                SetActiveControl(null);
                 nextActiveControl = ctl;
                 return true;
             }
@@ -2048,7 +2003,7 @@ namespace System.Windows.Forms {
                 bool correctParentActiveControl = true;
                 if (container.ParentInternal != null)
                 {
-                    IContainerControl c = container.ParentInternal.GetContainerControlInternal();
+                    IContainerControl c = container.ParentInternal.GetContainerControl();
                     if (c != null)
                     {
                         c.ActiveControl = container;
@@ -2129,7 +2084,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Begins the splitter moving.
         /// </devdoc>
-        /// <internalonly/>
         private void SplitBegin(int x, int y) {
             anchor = new Point(x, y);
             splitterDistance = GetSplitterDistance(x, y);
@@ -2150,7 +2104,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     The split movement.
         /// </devdoc>
-        /// <internalonly/>
         private void SplitMove(int x, int y) {
             int size = GetSplitterDistance(x, y);
             int delta = size - initialSplitterDistance;
@@ -2178,7 +2131,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Finishes the split movement.
         /// </devdoc>
-        /// <internalonly/>
         private void SplitEnd(bool accept) {
             DrawSplitBar(DRAW_END);
             if (splitContainerMessageFilter != null)
@@ -2203,7 +2155,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Update Splitter
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateSplitter() {
             if (splitContainerScaling)
             {
@@ -2297,7 +2248,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Handles the WM_SETCURSOR message
         /// </devdoc>
-        /// <internalonly/>
         private void WmSetCursor(ref Message m) {
 
             // Accessing through the Handle property has side effects that break this
@@ -2349,7 +2299,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.ProcessDialogKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Processes a dialog key. Overrides Control.processDialogKey(). This
         ///    method implements handling of the TAB, LEFT, RIGHT, UP, and DOWN
@@ -2398,7 +2347,7 @@ namespace System.Windows.Forms {
             }
 
             if (nextActiveControl != null) {
-                SetActiveControlInternal(nextActiveControl);
+                SetActiveControl(nextActiveControl);
                 nextActiveControl = null;
             }
 
@@ -2415,17 +2364,17 @@ namespace System.Windows.Forms {
                 else {
                     //We are om Splitter ......
                     splitterFocused = true;
-                    IContainerControl c = this.ParentInternal.GetContainerControlInternal();
+                    IContainerControl c = this.ParentInternal.GetContainerControl();
                     if (c != null) {
                         ContainerControl cc = c as ContainerControl;
                         if (cc == null) {
                             c.ActiveControl = this;
                         }
                         else {
-                            cc.SetActiveControlInternal(this);
+                            cc.SetActiveControl(this);
                         }
                     }
-                    SetActiveControlInternal(null);
+                    SetActiveControl(null);
                     return true;
                 }
             }
@@ -2441,7 +2390,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected override void WndProc(ref Message msg) {
@@ -2466,7 +2414,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.CreateControlsInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -2494,7 +2441,6 @@ namespace System.Windows.Forms {
             /// <include file='doc\SplitContainer.uex' path='docs/doc[@for="SplitContainer.PreFilterMessage"]/*' />
             /// <devdoc>
             /// </devdoc>
-            /// <internalonly/>
             bool IMessageFilter.PreFilterMessage(ref Message m) {
                 if (m.Msg >= Interop.WindowMessages.WM_KEYFIRST && m.Msg <= Interop.WindowMessages.WM_KEYLAST) {
                     if ((m.Msg == Interop.WindowMessages.WM_KEYDOWN && (int)m.WParam == (int)Keys.Escape)

@@ -80,11 +80,8 @@ namespace System.Windows.Forms {
                 deviceName = "DISPLAY";
             }
             else {
-                // MultiMonitor System
-                // We call the 'A' version of GetMonitorInfoA() because
-                // the 'W' version just never fills out the struct properly on Win2K.
-                //
-                NativeMethods.MONITORINFOEX info = new NativeMethods.MONITORINFOEX();
+                // Multiple monitor system
+                var info = new NativeMethods.MONITORINFOEX();
                 SafeNativeMethods.GetMonitorInfo(new HandleRef(null, monitor), info);
                 bounds = Rectangle.FromLTRB(info.rcMonitor.left, info.rcMonitor.top, info.rcMonitor.right, info.rcMonitor.bottom);
                 primary = ((info.dwFlags & MONITORINFOF_PRIMARY) != 0);
@@ -237,11 +234,8 @@ namespace System.Windows.Forms {
                         workingArea = SystemInformation.WorkingArea;
                     }
                     else {
-                        // MultiMonitor System
-                        // We call the 'A' version of GetMonitorInfoA() because
-                        // the 'W' version just never fills out the struct properly on Win2K.
-                        //
-                        NativeMethods.MONITORINFOEX info = new NativeMethods.MONITORINFOEX();
+                        // Multiple monitor System
+                        var info = new NativeMethods.MONITORINFOEX();
                         SafeNativeMethods.GetMonitorInfo(new HandleRef(null, hmonitor), info);
                         workingArea = Rectangle.FromLTRB(info.rcWork.left, info.rcWork.top, info.rcWork.right, info.rcWork.bottom);
                     }
@@ -330,35 +324,24 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromControl"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
-        ///       for the monitor that contains the largest
-        ///       region of the window of the control.
-        ///    </para>
+        /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
+        /// the largest region of the window of the control.
         /// </devdoc>
-        public static Screen FromControl(Control control) {
-            return FromHandleInternal(control.Handle);
-        }
+        public static Screen FromControl(Control control) => FromHandle(control.Handle);
 
-        /// <include file='doc\Screen.uex' path='docs/doc[@for="Screen.FromHandle"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Retrieves a <see cref='System.Windows.Forms.Screen'/>
-        ///       for the monitor that
-        ///       contains the largest region of the window.
-        ///    </para>
+        /// Retrieves a <see cref='System.Windows.Forms.Screen'/> for the monitor that contains
+        /// the largest region of the window.
         /// </devdoc>
-        public static Screen FromHandle(IntPtr hwnd) {
-            return FromHandleInternal(hwnd);
-        }
-
-        internal static Screen FromHandleInternal(IntPtr hwnd) {
-            if (multiMonitorSupport) {
+        public static Screen FromHandle(IntPtr hwnd)
+        {
+            if (multiMonitorSupport)
+            {
                 return new Screen(SafeNativeMethods.MonitorFromWindow(new HandleRef(null, hwnd), MONITOR_DEFAULTTONEAREST));
             }
-            else {
+            else
+            {
                 return new Screen((IntPtr)PRIMARY_MONITOR, IntPtr.Zero);
             }
         }

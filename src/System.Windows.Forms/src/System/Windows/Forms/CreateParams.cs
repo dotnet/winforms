@@ -89,8 +89,8 @@ namespace System.Windows.Forms
             builder.Append(Width);
             builder.Append(", ");
             builder.Append(Height);
-            builder.Append("}");
-            builder.Append("}");
+            builder.Append('}');
+            builder.Append('}');
             return builder.ToString();
         }
     }

@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
 
     using System.Diagnostics;
@@ -64,17 +63,14 @@ namespace System.Windows.Forms {
         public const int NoMatches = NativeMethods.LB_ERR;
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.DefaultItemHeight"]/*' />
         /// <devdoc>
-        ///     The default item height for an owner-draw ListBox.
+        /// The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        // item height is 13 for the default font on Windows.
         /// </devdoc>
-        public const int DefaultItemHeight = 13; // 13 == listbox's non-ownerdraw item height.  That's with Win2k and
-        // the default font; on other platforms and with other fonts, it may be different.
+        public const int DefaultItemHeight = 13;
 
         private static readonly object EVENT_SELECTEDINDEXCHANGED = new object();
         private static readonly object EVENT_DRAWITEM             = new object();
         private static readonly object EVENT_MEASUREITEM          = new object();
-
-        static bool checkedOS = false;
-        static bool runningOnWin2K = true;
 
         SelectedObjectCollection selectedItems;
         SelectedIndexCollection selectedIndices;
@@ -201,15 +197,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImageLayout"]/*' />
@@ -224,15 +215,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BorderStyle"]/*' />
@@ -314,7 +300,6 @@ namespace System.Windows.Forms {
         ///     however, forget to call base.getCreateParams() first to get the struct
         ///     filled up with the basic info.
         /// </devdoc>
-        /// <internalonly/>
         protected override CreateParams CreateParams {
             get {
                 CreateParams cp = base.CreateParams;
@@ -770,32 +755,6 @@ namespace System.Windows.Forms {
             return new Size(width, height) + Padding.Size;
         }
 
-        /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.RightToLeft"]/*' />
-        public override RightToLeft RightToLeft {
-            get {
-                if (!RunningOnWin2K) {
-                    return RightToLeft.No;
-                }
-                return base.RightToLeft;
-            }
-            set {
-                base.RightToLeft = value;
-            }
-        }
-
-        static bool RunningOnWin2K {
-            get {
-                if (!checkedOS) {
-                    if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                        Environment.OSVersion.Version.Major < 5) {
-                        runningOnWin2K = false;
-                        checkedOS = true;
-                    }
-                }
-                return runningOnWin2K;
-            }
-        }
-
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ScrollAlwaysVisible"]/*' />
         /// <devdoc>
         ///    <para>
@@ -1097,15 +1056,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.TopIndex"]/*' />
@@ -1196,23 +1150,15 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Click"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.MouseClick"]/*' />
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.Padding"]/*' />
@@ -1231,9 +1177,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.OnPaint"]/*' />
         /// <devdoc>
@@ -1241,47 +1186,31 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.DrawItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.drawItemEventDescr))]
         public event DrawItemEventHandler DrawItem {
-            add {
-                Events.AddHandler(EVENT_DRAWITEM, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_DRAWITEM, value);
-            }
+            add => Events.AddHandler(EVENT_DRAWITEM, value);
+            remove => Events.RemoveHandler(EVENT_DRAWITEM, value);
         }
 
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.MeasureItem"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.measureItemEventDescr))]
         public event MeasureItemEventHandler MeasureItem {
-            add {
-                Events.AddHandler(EVENT_MEASUREITEM, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_MEASUREITEM, value);
-            }
+            add => Events.AddHandler(EVENT_MEASUREITEM, value);
+            remove => Events.RemoveHandler(EVENT_MEASUREITEM, value);
         }
 
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.SelectedIndexChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.selectedIndexChangedEventDescr))]
         public event EventHandler SelectedIndexChanged {
-            add {
-                Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
-            remove {
-                Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_SELECTEDINDEXCHANGED, value);
+            remove => Events.RemoveHandler(EVENT_SELECTEDINDEXCHANGED, value);
         }
 
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.BeginUpdate"]/*' />
@@ -1514,12 +1443,10 @@ namespace System.Windows.Forms {
             }
 
             if (insertIndex == NativeMethods.LB_ERR) {
-                // On some platforms (e.g. Win98), the ListBox control
-                // appears to return LB_ERR if there are a large number (>32000)
-                // of items. It doesn't appear to set error codes appropriately,
-                // so we'll have to assume that LB_ERR corresponds to item
+                // On older platforms the ListBox control returns LB_ERR if there are a
+                // large number (>32000) of items. It doesn't appear to set error codes
+                // appropriately, so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
-                //
                 throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
@@ -1557,12 +1484,10 @@ namespace System.Windows.Forms {
             }
 
             if (insertIndex == NativeMethods.LB_ERR) {
-                // On some platforms (e.g. Win98), the ListBox control
-                // appears to return LB_ERR if there are a large number (>32000)
-                // of items. It doesn't appear to set error codes appropriately,
-                // so we'll have to assume that LB_ERR corresponds to item
+                // On older platforms the ListBox control returns LB_ERR if there are a
+                // large number (>32000) of items. It doesn't appear to set error codes
+                // appropriately, so we'll have to assume that LB_ERR corresponds to item
                 // overflow.
-                //
                 throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
@@ -1884,7 +1809,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
-        /// <internalonly/>
         protected override void RefreshItems() {
 
             // Store the currently selected object collection.
@@ -1947,7 +1871,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Reparses the object at the given index, getting new text string for it.
         /// </devdoc>
-        /// <internalonly/>
         protected override void RefreshItem(int index) {
             Items.SetItemInternal(index, Items[index]);
         }
@@ -1979,7 +1902,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Overrides Control.SetBoundsCore to remember the requestedHeight.
         /// </devdoc>
-        /// <internalonly/>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified) {
 
             // Avoid the listbox and textbox behaviour in Collection editors
@@ -2092,7 +2014,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -2203,7 +2124,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.WmReflectCommand"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected virtual void WmReflectCommand(ref Message m) {
             switch (NativeMethods.Util.HIWORD(m.WParam)) {
                 case NativeMethods.LBN_SELCHANGE:
@@ -2222,7 +2142,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.WmReflectDrawItem"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectDrawItem(ref Message m) {
             NativeMethods.DRAWITEMSTRUCT dis = (NativeMethods.DRAWITEMSTRUCT)m.GetLParam(typeof(NativeMethods.DRAWITEMSTRUCT));
             IntPtr dc = dis.hDC;
@@ -2260,7 +2179,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.WmReflectMeasureItem"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         // This method is only called if in owner draw mode
         private void WmReflectMeasureItem(ref Message m) {
 
@@ -2884,7 +2802,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -2892,7 +2809,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -2900,7 +2816,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ObjectCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
@@ -3003,7 +2918,6 @@ namespace System.Windows.Forms {
 
  
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ObjectCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object item) {
                 return Add(item);
             }
@@ -3111,7 +3025,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ObjectCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array destination, int index) {
                 int count = InnerArray.GetCount(0);
                 for(int i = 0; i < count; i++) {
@@ -3137,7 +3050,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="ListBox.ObjectCollection.IndexOfIdentifier"]/*' />
-            /// <internalonly/>
             internal int IndexOfIdentifier(object value) {
                 if (value == null) {
                     throw new ArgumentNullException(nameof(value));
@@ -3293,7 +3205,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -3301,7 +3212,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return true;
@@ -3309,7 +3219,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return false;
@@ -3329,7 +3238,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object item) {
                 if (item is int) {
                     return Contains((int)item);
@@ -3365,7 +3273,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object item) {
                 if (item is int) {
                     return IndexOf((int)item);
@@ -3408,7 +3315,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Add"]/*' />
-            /// <internalonly/>
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             [
                 SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "item" is the name of the param passed in.
@@ -3481,19 +3387,16 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Clear"]/*' />
-            /// <internalonly/>
             void IList.Clear() {
                 Clear();
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.Remove"]/*' />
-            /// <internalonly/>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             [
                 SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters") // "value" is the name of the param passed in.
@@ -3507,7 +3410,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
             void IList.RemoveAt(int index) {
                 RemoveAt(index);
             }
@@ -3570,7 +3472,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="IntegerCollection.IList.this"]/*' />
-            /// <internalonly/>            
             [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
             object IList.this[int index] {
                 get {
@@ -3684,7 +3585,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -3692,7 +3592,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return true;
@@ -3700,7 +3599,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return true;
@@ -3720,7 +3618,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object selectedIndex) {
                 if (selectedIndex is int) {
                     return Contains((int)selectedIndex);
@@ -3748,7 +3645,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object selectedIndex) {
                 if (selectedIndex is int) {
                     return IndexOf((int)selectedIndex);
@@ -3759,31 +3655,26 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Clear"]/*' />
-            /// <internalonly/>
             void IList.Clear() {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
             void IList.RemoveAt(int index) {
                 throw new NotSupportedException(SR.ListBoxSelectedIndexCollectionIsReadOnly);
             }
@@ -3800,7 +3691,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedIndexCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -3979,7 +3869,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -3987,7 +3876,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -3995,7 +3883,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return true;
@@ -4053,31 +3940,26 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Clear"]/*' />
-            /// <internalonly/>
             void IList.Clear() {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
 
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
             void IList.RemoveAt(int index) {
                 throw new NotSupportedException(SR.ListBoxSelectedObjectCollectionIsReadOnly);
             }
@@ -4089,7 +3971,6 @@ namespace System.Windows.Forms {
             // this "object" is then compared in the IndexOf( ) method of the itemsCollection.
             //
             /// <include file='doc\ListBox.uex' path='docs/doc[@for="SelectedObjectCollection.IList.GetObjectAt"]/*' />
-            /// <internalonly/>
             internal object GetObjectAt(int index) {
                return InnerArray.GetEntryObject(index, SelectedObjectCollection.SelectedObjectMask);
             }

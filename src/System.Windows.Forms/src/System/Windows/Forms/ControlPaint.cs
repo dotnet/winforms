@@ -1216,7 +1216,6 @@ namespace System.Windows.Forms {
         ///     draws a flat looking check box that is suitable for use in list boxes, etc. We
         ///     custom draw this because the windows version is soooo ugly.
         /// </devdoc>
-        /// <internalonly/>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, Color foreground, Brush background, ButtonState state) {
             if (graphics == null) {
                 throw new ArgumentNullException(nameof(graphics));
@@ -1310,7 +1309,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Draws a win32 frame control.
         /// </devdoc>
-        /// <internalonly/>
         private static void DrawFrameControl(Graphics graphics, int x, int y, int width, int height, 
                                              int kind, int state, Color foreColor, Color backColor) {
             if (graphics == null) {
@@ -2721,10 +2719,8 @@ namespace System.Windows.Forms {
             return flags;
         }
 
-        /// <include file='doc\ControlPaint.uex' path='docs/doc[@for="ControlPaint.HLSColor"]/*' />
         /// <devdoc>
-        ///     Logic copied from Win2K sources to copy the lightening and
-        ///     darkening of colors.
+        /// Logic copied from Windows sources to copy the lightening and darkening of colors.
         /// </devdoc>
         private struct HLSColor {
             private const int ShadowAdj         = -333;

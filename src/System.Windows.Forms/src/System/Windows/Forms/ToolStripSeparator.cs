@@ -132,15 +132,10 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.EnabledChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler EnabledChanged {
-                add {
-                    base.EnabledChanged += value;
-                }
-                remove {
-                    base.EnabledChanged -= value;
-                }
+                add => base.EnabledChanged += value;
+                remove => base.EnabledChanged -= value;
             }
 
             /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyle"]/*' />
@@ -159,15 +154,10 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.DisplayStyleChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler DisplayStyleChanged {
-                add {
-                    base.DisplayStyleChanged += value;
-                }
-                remove {
-                    base.DisplayStyleChanged -= value;
-                }
+                add => base.DisplayStyleChanged += value;
+                remove => base.DisplayStyleChanged -= value;
             }
 
             /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.Font"]/*' />
@@ -316,15 +306,10 @@ namespace System.Windows.Forms {
             }
 
              /// <include file='doc\TabPage.uex' path='docs/doc[@for="ToolStripSeparator.TextChanged"]/*' />
-            /// <internalonly/>
             [Browsable (false), EditorBrowsable (EditorBrowsableState.Never)]
             new public event EventHandler TextChanged {
-                add {
-                    base.TextChanged += value;
-                }
-                remove {
-                    base.TextChanged -= value;
-                }
+                add => base.TextChanged += value;
+                remove => base.TextChanged -= value;
             }
 
             /// <include file='doc\ToolStripSeparator.uex' path='docs/doc[@for="ToolStripSeparator.TextAlign"]/*' />

@@ -20,12 +20,9 @@ namespace System.Windows.Forms.Design
         private DockUI dockUI;
 
         /// <summary>
-        ///     Edits the given object value using the editor style provided by
-        ///     GetEditorStyle.  A service provider is provided so that any
-        ///     required editing services can be obtained.
+        /// Edits the given object value using the editor style provided by GetEditorStyle.
+        /// A service provider is provided so that any required editing services can be obtained.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // everything in this assembly is full trust.
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
             if (provider != null)
@@ -47,11 +44,9 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///     Retrieves the editing style of the Edit method.  If the method
-        ///     is not supported, this will return None.
+        /// Retrieves the editing style of the Edit method.
+        /// If the method is not supported, this will return None.
         /// </summary>
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // everything in this assembly is full trust.
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
             return UITypeEditorEditStyle.DropDown;

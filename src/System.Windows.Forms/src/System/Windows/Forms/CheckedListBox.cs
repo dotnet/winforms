@@ -7,7 +7,6 @@ namespace System.Windows.Forms {
     using Accessibility;
 
     using System.Text;
-    using System.Runtime.Remoting;
 
     using System.Diagnostics;
 
@@ -196,7 +195,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     CheckedListBox DataSource.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new object DataSource {
             get {
@@ -211,7 +210,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     CheckedListBox DisplayMember.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string DisplayMember {
             get {
@@ -363,7 +362,7 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     CheckedListBox ValueMember.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new string ValueMember {
             get {
@@ -376,86 +375,56 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DataSourceChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DataSourceChanged {
-            add {
-                base.DataSourceChanged += value;
-            }
-            remove {
-                base.DataSourceChanged -= value;
-            }
+            add => base.DataSourceChanged += value;
+            remove => base.DataSourceChanged -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.DisplayMemberChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DisplayMemberChanged {
-            add {
-                base.DisplayMemberChanged += value;
-            }
-            remove {
-                base.DisplayMemberChanged -= value;
-            }
+            add => base.DisplayMemberChanged += value;
+            remove => base.DisplayMemberChanged -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.ItemCheck"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.CheckedListBoxItemCheckDescr))]
         public event ItemCheckEventHandler ItemCheck {
-            add {
-                onItemCheck += value;
-            }
-            remove {
-                onItemCheck -= value;
-            }
+            add => onItemCheck += value;
+            remove => onItemCheck -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Click"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event EventHandler Click {
-            add {
-                base.Click += value;
-            }
-            remove {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MouseClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         public new event MouseEventHandler MouseClick {
-            add {
-                base.MouseClick += value;
-            }
-            remove {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.DrawItem"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DrawItemEventHandler DrawItem {
-            add {
-                base.DrawItem += value;
-            }
-            remove {
-                base.DrawItem -= value;
-            }
+            add => base.DrawItem += value;
+            remove => base.DrawItem -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.MeasureItem"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MeasureItemEventHandler MeasureItem {
-            add {
-                base.MeasureItem += value;
-            }
-            remove {
-                base.MeasureItem -= value;
-            }
+            add => base.MeasureItem += value;
+            remove => base.MeasureItem -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.Padding"]/*' />
@@ -470,19 +439,13 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="ComboBox.ValueMemberChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ValueMemberChanged {
-            add {
-                base.ValueMemberChanged += value;
-            }
-            remove {
-                base.ValueMemberChanged -= value;
-            }
+            add => base.ValueMemberChanged += value;
+            remove => base.ValueMemberChanged -= value;
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CreateAccessibilityInstance"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Constructs the new instance of the accessibility object for this control. Subclasses
         ///    should not call base.CreateAccessibilityObject.
@@ -521,7 +484,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Invalidates the given item in the listbox
         /// </devdoc>
-        /// <internalonly/>
         private void InvalidateItem(int index) {
             if (IsHandleCreated) {
                 NativeMethods.RECT rect = new NativeMethods.RECT();
@@ -534,7 +496,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     A redirected LBN_SELCHANGE message notification.
         /// </devdoc>
-        /// <internalonly/>
         private void LbnSelChange() {
 
             // prepare to change the selection.  we'll fire an event for
@@ -586,7 +547,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Ensures that mouse clicks can toggle...
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnClick(EventArgs e) {
             killnextselect = false;
             base.OnClick(e);
@@ -597,7 +557,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     When the handle is created we can dump any cached item-check pairs.
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.LB_SETITEMHEIGHT, 0, ItemHeight);
@@ -876,7 +835,6 @@ namespace System.Windows.Forms {
         ///     forget to call base.OnKeyPress() to ensure that KeyPrese events
         ///     are correctly fired for all other keys.
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnKeyPress(KeyPressEventArgs e) {
             if (e.KeyChar == ' ' && SelectionMode != SelectionMode.None) {
                LbnSelChange();
@@ -893,7 +851,6 @@ namespace System.Windows.Forms {
         ///     forget to call base.onItemCheck() to ensure that itemCheck vents
         ///     are correctly fired for all other keys.
         /// </devdoc>
-        /// <internalonly/>
         protected virtual void OnItemCheck(ItemCheckEventArgs ice) {
             if (onItemCheck != null) onItemCheck(this, ice);
         }
@@ -931,7 +888,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         /// Reparses the objects, getting new text strings for them.
         /// </devdoc>
-        /// <internalonly/>
         protected override void RefreshItems() {
             Hashtable savedcheckedItems = new Hashtable();
             for (int i =0; i < Items.Count ; i ++)
@@ -988,7 +944,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     We need to get LBN_SELCHANGE notifications
         /// </devdoc>
-        /// <internalonly/>
         protected override void WmReflectCommand(ref Message m) {
             switch (NativeMethods.Util.HIWORD(m.WParam)) {
                 case NativeMethods.LBN_SELCHANGE:
@@ -1015,7 +970,6 @@ namespace System.Windows.Forms {
         ///     Handle keyboard input to prevent arrow keys from toggling
         ///     checkboxes in CheckOnClick mode.
         /// </devdoc>
-        /// <internalonly/>
         private void WmReflectVKeyToItem(ref Message m) {
             int keycode = NativeMethods.Util.LOWORD(m.WParam);
             switch ((Keys)keycode) {
@@ -1042,7 +996,6 @@ namespace System.Windows.Forms {
         ///     to add extra functionality, but should not forget to call
         ///     base.wndProc(m); to ensure the button continues to function properly.
         /// </devdoc>
-        /// <internalonly/>
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -1139,7 +1092,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -1147,7 +1099,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -1155,7 +1106,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return true;
@@ -1182,7 +1132,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.this"]/*' />
-            /// <internalonly/>
             object IList.this[int index] {
                 get {
                     return this[index];
@@ -1193,31 +1142,26 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Clear"]/*' />
-            /// <internalonly/>
             void IList.Clear() {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
             void IList.RemoveAt(int index) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedIndexCollectionIsReadOnly);
             }
@@ -1228,7 +1172,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.Contains"]/*' />
-            /// <internalonly/>
             bool IList.Contains(object index) {
                 if (index is int) {
                     return Contains((int)index);
@@ -1273,7 +1216,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedIndexCollection.IList.IndexOf"]/*' />
-            /// <internalonly/>
             int IList.IndexOf(object index) {
                 if (index is int) {
                     return IndexOf((int)index);
@@ -1333,7 +1275,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -1341,7 +1282,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -1349,7 +1289,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize {
                 get {
                     return true;
@@ -1378,31 +1317,26 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Clear"]/*' />
-            /// <internalonly/>
             void IList.Clear() {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Insert"]/*' />
-            /// <internalonly/>
             void IList.Insert(int index, object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.Remove"]/*' />
-            /// <internalonly/>
             void IList.Remove(object value) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
 
             /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedItemCollection.IList.RemoveAt"]/*' />
-            /// <internalonly/>
             void IList.RemoveAt(int index) {
                 throw new NotSupportedException(SR.CheckedListBoxCheckedItemCollectionIsReadOnly);
             }
@@ -1476,7 +1410,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxAccessibleObject"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]
@@ -1566,7 +1499,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\CheckedListBox.uex' path='docs/doc[@for="CheckedListBox.CheckedListBoxItemAccessibleObject"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [System.Runtime.InteropServices.ComVisible(true)]

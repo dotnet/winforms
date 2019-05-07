@@ -338,39 +338,24 @@ namespace System.Windows.Forms {
             detailsButton.Image = detailsVisible ? collapseImage : expandImage;
         }
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSize"]/*' />
         /// <devdoc>
-        ///    <para>
-        ///       Hide the property
-        ///    </para>
+        /// Hide the property
         /// </devdoc>
-        [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Browsable(false)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public override bool AutoSize
         {
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-            get
-            {
-                return base.AutoSize;
-            }
-            [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-            set
-            {
-                base.AutoSize = value;
-            }
+            get => base.AutoSize;
+            set => base.AutoSize = value;
         }
 
         /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }                
 
         /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.DetailsClick"]/*' />

@@ -17,7 +17,6 @@ namespace System.Drawing.Design {
     using System.Drawing.Design;
 
     /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor"]/*' />
-    /// <internalonly/>
     /// <devdoc>
     ///    <para>Provides an editor that provides a way to visually edit the values of a COM2 
     ///       type.</para>

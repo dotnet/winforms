@@ -218,7 +218,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ImageListStreamer.uex' path='docs/doc[@for="ImageListStreamer.GetNativeImageList"]/*' />
-        /// <internalonly/>
         internal ImageList.NativeImageList GetNativeImageList() {
             return nativeImageList;
         }

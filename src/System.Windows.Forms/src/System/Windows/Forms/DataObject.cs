@@ -539,7 +539,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Returns true if the tymed is useable.
         /// </devdoc>
-        /// <internalonly/>
         private bool GetTymedUseable(TYMED tymed)
         {
             for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
@@ -557,7 +556,6 @@ namespace System.Windows.Forms
         ///     Populates Ole datastructes from a WinForms dataObject. This is the core
         ///     of WinForms to OLE conversion.
         /// </devdoc>
-        /// <internalonly/>
         private void GetDataIntoOleStructs(ref FORMATETC formatetc,
                                            ref STGMEDIUM medium)
         {
@@ -623,9 +621,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DAdvise"]/*' />
-        /// <internalonly/>
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
@@ -640,9 +636,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.DUnadvise"]/*' />
-        /// <internalonly/>
         void IComDataObject.DUnadvise(int dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
@@ -657,9 +651,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumDAdvise"]/*' />
-        /// <internalonly/>
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
@@ -674,9 +666,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.EnumFormatEtc"]/*' />
-        /// <internalonly/>
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
@@ -697,9 +687,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetCanonicalFormatEtc"]/*' />
-        /// <internalonly/>
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
@@ -714,9 +702,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetData"]/*' />
-        /// <internalonly/>
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
@@ -768,9 +754,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.GetDataHere"]/*' />
-        /// <internalonly/>
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
@@ -787,9 +771,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.QueryGetData"]/*' />
-        /// <internalonly/>
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
@@ -834,9 +816,7 @@ namespace System.Windows.Forms
         // <devdoc>
         //     Part of IComDataObject, used to interop with OLE.
         // </devdoc>
-        // <internalonly/>
         /// <include file='doc\DataObject.uex' path='docs/doc[@for="DataObject.IComDataObject.SetData"]/*' />
-        /// <internalonly/>
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
 
@@ -952,7 +932,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Saves stream out to handle.
         /// </devdoc>
-        /// <internalonly/>
         private unsafe int SaveStreamToHandle(ref IntPtr handle, Stream stream)
         {
             if (handle != IntPtr.Zero)
@@ -987,7 +966,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Saves a list of files out to the handle in HDROP format.
         /// </devdoc>
-        /// <internalonly/>
         private int SaveFileListToHandle(IntPtr handle, string[] files)
         {
             if (files == null)
@@ -1038,11 +1016,9 @@ namespace System.Windows.Forms
             Marshal.Copy(structData, 0, currentPtr, structData.Length);
             currentPtr = (IntPtr)((long)currentPtr + baseStructSize);
 
-            // Write out the strings...
-            //
+            // Write out the strings.
             for (int i = 0; i < files.Length; i++)
             {
-                // NOTE: DllLib.copy(char[]...) converts to ANSI on Windows 95...
                 UnsafeNativeMethods.CopyMemoryW(currentPtr, files[i], files[i].Length * 2);
                 currentPtr = (IntPtr)((long)currentPtr + (files[i].Length * 2));
                 Marshal.Copy(new byte[] { 0, 0 }, 0, currentPtr, 2);
@@ -1061,7 +1037,6 @@ namespace System.Windows.Forms
         ///     Save string to handle. If unicode is set to true
         ///     then the string is saved as Unicode, else it is saves as DBCS.
         /// </devdoc>
-        /// <internalonly/>
         private int SaveStringToHandle(IntPtr handle, string str, bool unicode)
         {
             if (handle == IntPtr.Zero)
@@ -1086,7 +1061,7 @@ namespace System.Windows.Forms
                 {
                     return (NativeMethods.E_OUTOFMEMORY);
                 }
-                // NOTE: DllLib.copy(char[]...) converts to ANSI on Windows 95...
+
                 char[] chars = str.ToCharArray(0, str.Length);
                 UnsafeNativeMethods.CopyMemoryW(ptr, chars, chars.Length * 2);
             }
@@ -1217,7 +1192,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Part of IComDataObject, used to interop with OLE.
         /// </devdoc>
-        /// <internalonly/>
         private class FormatEnumerator : IEnumFORMATETC
         {
 
@@ -1399,7 +1373,6 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///     Returns the data Object we are wrapping
             /// </devdoc>
-            /// <internalonly/>
             public IComDataObject OleDataObject
             {
                 get
@@ -1412,7 +1385,6 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///     Uses IStream and retrieves the specified format from the bound IComDataObject.
             /// </devdoc>
-            /// <internalonly/>
             private object GetDataFromOleIStream(string format)
             {
 
@@ -1468,7 +1440,6 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///     Retrieves the specified form from the specified hglobal.
             /// </devdoc>
-            /// <internalonly/>
             private object GetDataFromHGLOBAL(string format, IntPtr hglobal)
             {
                 object data = null;
@@ -1522,7 +1493,6 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///     Uses HGLOBALs and retrieves the specified format from the bound IComDatabject.
             /// </devdoc>
-            /// <internalonly/>
             private object GetDataFromOleHGLOBAL(string format, out bool done)
             {
                 done = false;
@@ -1568,7 +1538,6 @@ namespace System.Windows.Forms
             ///     other sources that IStream and HGLOBAL... this is really just a place
             ///     to put the "special" formats like BITMAP, ENHMF, etc.
             /// </devdoc>
-            /// <internalonly/>
             private object GetDataFromOleOther(string format)
             {
                 Debug.Assert(innerData != null, "You must have an innerData on all DataObjects");
@@ -1650,7 +1619,6 @@ namespace System.Windows.Forms
             ///     Extracts a managed Object from the innerData of the specified
             ///     format. This is the base of the OLE to managed conversion.
             /// </devdoc>
-            /// <internalonly/>
             private object GetDataFromBoundOleDataObject(string format, out bool done)
             {
                 object data = null;
@@ -1678,7 +1646,6 @@ namespace System.Windows.Forms
             /// <devdoc>
             ///     Creates an Stream from the data stored in handle.
             /// </devdoc>
-            /// <internalonly/>
             private Stream ReadByteStreamFromHandle(IntPtr handle, out bool isSerializedObject)
             {
                 IntPtr ptr = UnsafeNativeMethods.GlobalLock(new HandleRef(null, handle));
@@ -1735,7 +1702,6 @@ namespace System.Windows.Forms
             ///     Creates a new instance of the Object that has been persisted into the
             ///     handle.
             /// </devdoc>
-            /// <internalonly/>
             private object ReadObjectFromHandle(IntPtr handle, bool restrictDeserialization)
             {
                 object value = null;
@@ -1771,7 +1737,6 @@ namespace System.Windows.Forms
             ///     Parses the HDROP format and returns a list of strings using
             ///     the DragQueryFile function.
             /// </devdoc>
-            /// <internalonly/>
             private string[] ReadFileListFromHandle(IntPtr hdrop)
             {
 
@@ -1804,7 +1769,6 @@ namespace System.Windows.Forms
             ///     unicode is set to true, then the string is assume to be Unicode,
             ///     else DBCS (ASCI) is assumed.
             /// </devdoc>
-            /// <internalonly/>
             private unsafe string ReadStringFromHandle(IntPtr handle, bool unicode)
             {
                 string stringData = null;

@@ -129,18 +129,13 @@ namespace System.Windows.Forms
         ///    </para>
         /// </devdoc>        
         [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly")]
-        /// 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2103:ReviewImperativeSecurity")]
-        
-        
         public Stream OpenFile()
         {
-            string filename = FileNamesInternal[0];
-
-            if (filename == null || (filename.Length == 0))
+            string filename = FileNames[0];
+            if (string.IsNullOrEmpty(filename))
+            {
                 throw new ArgumentNullException(nameof(FileName));
+            }
 
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }
@@ -161,8 +156,7 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Displays a file open dialog.
         /// </devdoc>
-        /// <internalonly/>
-        internal override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
+        private protected override bool RunFileDialog(NativeMethods.OPENFILENAME_I ofn)
         {
             bool result = UnsafeNativeMethods.GetOpenFileName(ofn);
             if (!result)
@@ -185,7 +179,7 @@ namespace System.Windows.Forms
             return result;
         }
 
-        internal override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
+        private protected override string[] ProcessVistaFiles(FileDialogNative.IFileDialog dialog)
         {
             FileDialogNative.IFileOpenDialog openDialog = (FileDialogNative.IFileOpenDialog)dialog;
             if (Multiselect)
@@ -211,16 +205,13 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override FileDialogNative.IFileDialog CreateVistaDialog()
+        private protected override FileDialogNative.IFileDialog CreateVistaDialog()
         {
             return new FileDialogNative.NativeFileOpenDialog();
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string SafeFileName
         {
             get
@@ -241,12 +232,9 @@ namespace System.Windows.Forms
             return System.IO.Path.GetFileName(fullPath);
         }
 
-        [
-            Browsable(false),
-            DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
-            SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays"),
-            SuppressMessage("Microsoft.Security", "CA2106:SecureAsserts")
-        ]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public string[] SafeFileNames
         {
             get
@@ -263,12 +251,9 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SettingsSupportVistaDialog
+        private protected override bool SettingsSupportVistaDialog
         { 
-            get
-            {
-                return base.SettingsSupportVistaDialog && !this.ShowReadOnly;
-            }
+            get => base.SettingsSupportVistaDialog && !ShowReadOnly;
         }
     }
 }

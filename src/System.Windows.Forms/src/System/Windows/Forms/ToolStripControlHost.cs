@@ -2,24 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design;
-    using System.Diagnostics;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Drawing;
-    using System.Runtime.Versioning;
-    using System.Security;
-    using System.Windows.Forms.Layout;
-    
-    /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost"]/*' />
+using System.Collections;
+using System.ComponentModel;
+using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Windows.Forms.Layout;
+
+namespace System.Windows.Forms
+{
     /// <devdoc>
     /// ToolStripItem that can host Controls.
     /// </devdoc>
-    public class ToolStripControlHost : ToolStripItem {
- 
+    public class ToolStripControlHost : ToolStripItem
+    {
         private Control control;
         private int suspendSyncSizeCount = 0;
         private ContentAlignment controlAlign = ContentAlignment.MiddleCenter;
@@ -192,12 +189,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DisplayStyleChanged {
-            add { 
-                Events.AddHandler(EventDisplayStyleChanged, value); 
-            }
-            remove {
-                Events.RemoveHandler(EventDisplayStyleChanged, value);
-            }
+            add => Events.AddHandler(EventDisplayStyleChanged, value); 
+            remove => Events.RemoveHandler(EventDisplayStyleChanged, value);
         }
 
         /// <devdoc> 
@@ -238,12 +231,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.GotFocus"]/*' />
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnEnterDescr))]
         public event EventHandler Enter {
-            add {
-                Events.AddHandler(EventEnter, value);
-            }
-            remove {
-                Events.RemoveHandler(EventEnter, value);
-            }
+            add => Events.AddHandler(EventEnter, value);
+            remove => Events.RemoveHandler(EventEnter, value);
         }
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.Focused"]/*' />
@@ -274,12 +263,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Advanced)
         ]
         public event EventHandler GotFocus {
-            add {
-                Events.AddHandler(EventGotFocus, value);
-            }
-            remove {
-                Events.RemoveHandler(EventGotFocus, value);
-            }
+            add => Events.AddHandler(EventGotFocus, value);
+            remove => Events.RemoveHandler(EventGotFocus, value);
         }
 
         [
@@ -341,12 +326,8 @@ namespace System.Windows.Forms {
 
          [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnLeaveDescr))]
          public event EventHandler Leave {
-             add {
-                 Events.AddHandler(EventLeave, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventLeave, value);
-             }
+             add => Events.AddHandler(EventLeave, value);
+             remove => Events.RemoveHandler(EventLeave, value);
          }
 
          /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.LostFocus"]/*' />
@@ -360,12 +341,8 @@ namespace System.Windows.Forms {
          EditorBrowsable(EditorBrowsableState.Advanced)
          ]
          public event EventHandler LostFocus {
-             add {
-                 Events.AddHandler(EventLostFocus, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventLostFocus, value);
-             }
+             add => Events.AddHandler(EventLostFocus, value);
+             remove => Events.RemoveHandler(EventLostFocus, value);
          }
 
 
@@ -375,12 +352,8 @@ namespace System.Windows.Forms {
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyDownDescr))]
          public event KeyEventHandler KeyDown {
-             add {
-                 Events.AddHandler(EventKeyDown, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventKeyDown, value);
-             }
+             add => Events.AddHandler(EventKeyDown, value);
+             remove => Events.RemoveHandler(EventKeyDown, value);
          }
       
          /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyPress"]/*' />
@@ -389,12 +362,8 @@ namespace System.Windows.Forms {
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyPressDescr))]
          public event KeyPressEventHandler KeyPress {
-             add {
-                 Events.AddHandler(EventKeyPress, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventKeyPress, value);
-             }
+             add => Events.AddHandler(EventKeyPress, value);
+             remove => Events.RemoveHandler(EventKeyPress, value);
          }
       
          /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.KeyUp"]/*' />
@@ -403,12 +372,8 @@ namespace System.Windows.Forms {
          /// </devdoc>
          [SRCategory(nameof(SR.CatKey)), SRDescription(nameof(SR.ControlOnKeyUpDescr))]
          public event KeyEventHandler KeyUp {
-             add {
-                 Events.AddHandler(EventKeyUp, value);
-             }
-             remove {
-                 Events.RemoveHandler(EventKeyUp, value);
-             }
+             add => Events.AddHandler(EventKeyUp, value);
+             remove => Events.RemoveHandler(EventKeyUp, value);
          }
 
         /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.RightToLeft"]/*' />
@@ -552,23 +517,15 @@ namespace System.Windows.Forms {
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatingDescr))]
         public event CancelEventHandler Validating {
-            add {
-                Events.AddHandler(EventValidating, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidating, value);
-            }
+            add => Events.AddHandler(EventValidating, value);
+            remove => Events.RemoveHandler(EventValidating, value);
         }
 
 
         [SRCategory(nameof(SR.CatFocus)), SRDescription(nameof(SR.ControlOnValidatedDescr))]
         public event EventHandler Validated {
-            add {
-                Events.AddHandler(EventValidated, value);
-            }
-            remove {
-                Events.RemoveHandler(EventValidated, value);
-            }
+            add => Events.AddHandler(EventValidated, value);
+            remove => Events.RemoveHandler(EventValidated, value);
         }
 
                 /// </devdoc>
@@ -983,15 +940,7 @@ namespace System.Windows.Forms {
             this.Size = Control.Size;
         }
     
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessCmdKey"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessCmdKey(ref Message m, Keys keyData) => false;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:AvoidTypeNamesInParameters")] // 'charCode' matches control.cs
         protected internal override bool ProcessMnemonic(char charCode) {
@@ -1001,12 +950,7 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic( charCode );
         }
 
-        /// <include file='doc\ToolStripControlHost.uex' path='docs/doc[@for="ToolStripControlHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
-        protected internal override bool ProcessDialogKey(Keys keyData) {
-            // Control will get this from being in the control collection.
-            return false;
-        }
+        protected internal override bool ProcessDialogKey(Keys keyData) => false;
 
         protected override void SetVisibleCore(bool visible) {
             // This is needed, because if you try and set set visible to true before the parent is visible,

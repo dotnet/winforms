@@ -4,24 +4,24 @@
 
 namespace System.Windows.Forms.Design
 {
-    /// <devdoc>
+    /// <summary>
     /// Provides an interface to display Win Forms dialog boxes and controls.
-    /// </devdoc>
+    /// </summary>
     public interface IWindowsFormsEditorService
     {
-        /// <devdoc>
+        /// <summary>
         /// Closes a previously opened drop down list
-        /// </devdoc>
+        /// </summary>
         void CloseDropDown();
 
-        /// <devdoc>
+        /// <summary>
         /// Displays the specified control in a drop down list
-        /// </devdoc>
+        /// </summary>
         void DropDownControl(Control control);
 
-        /// <devdoc>
+        /// <summary>
         /// Shows the specified dialog box.
-        /// </devdoc>
+        /// </summary>
         DialogResult ShowDialog(Form dialog);
     }
 }

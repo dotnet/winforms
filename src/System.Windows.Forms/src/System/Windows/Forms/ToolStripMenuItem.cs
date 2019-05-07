@@ -405,12 +405,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
         public event EventHandler CheckedChanged {
-            add {
-                Events.AddHandler(EventCheckedChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCheckedChanged, value);
-            }
+            add => Events.AddHandler(EventCheckedChanged, value);
+            remove => Events.RemoveHandler(EventCheckedChanged, value);
         }   
         /// <include file='doc\ToolStripMenuItem.uex' path='docs/doc[@for="ToolStripMenuItem.CheckStateChanged"]/*' />
         /// <devdoc>
@@ -420,12 +416,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
         public event EventHandler CheckStateChanged {
-            add {
-                Events.AddHandler(EventCheckStateChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventCheckStateChanged, value);
-            }
+            add => Events.AddHandler(EventCheckStateChanged, value);
+            remove => Events.RemoveHandler(EventCheckStateChanged, value);
         }
 
 
@@ -903,7 +895,7 @@ namespace System.Windows.Forms {
             ClearShortcutCache();
             base.OnFontChanged(e);
         }
-        /// <devdoc/><internalonly/>
+        /// <devdoc/>
         internal void OnMenuAutoExpand() {
             this.ShowDropDown();
         }

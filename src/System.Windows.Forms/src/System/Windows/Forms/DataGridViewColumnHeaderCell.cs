@@ -816,7 +816,7 @@ namespace System.Windows.Forms
                         valBounds.Height -= cellStyle.Padding.Vertical;
                     }
                 }
-                // XP Theming
+                // Theming
                 if (paint && DataGridViewCell.PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
                 {
                     int state = (int) HeaderItemState.Normal;
@@ -847,7 +847,7 @@ namespace System.Windows.Forms
                         state = (int)HeaderItemState.Pressed;
                     }
 
-                    // Microsoft: even though XP provides support for theming the sort glyph, 
+                    // Even though Windows provides support for theming the sort glyph, 
                     // we rely on our own implementation for painting the sort glyph
                     if (this.DataGridView.RightToLeftInternal)
                     {
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms
                 }
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
-                    dataGridView.FocusInternal();
+                    dataGridView.Focus();
                 }
                 if (dataGridViewCell.OwningColumn != null &&
                     (dataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||

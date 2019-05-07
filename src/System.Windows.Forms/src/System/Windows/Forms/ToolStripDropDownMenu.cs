@@ -2,29 +2,21 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-namespace System.Windows.Forms {
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows.Forms.Layout;
 
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.ComponentModel.Design.Serialization;
-    using System.Diagnostics;
-    using System.Drawing;
-    using System.Globalization;
-    using System.Windows.Forms.Layout;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.Security;
-    using System.Windows.Forms.Internal;
-    using System.Collections.Specialized;
-    using System.Diagnostics.CodeAnalysis;
-    
-    /// <include file='doc\ToolStripDropDownMenu.uex' path='docs/doc[@for="ToolStripDropDownMenu"]/*' />
+namespace System.Windows.Forms
+{
     [Designer("System.Windows.Forms.Design.ToolStripDropDownDesigner, " + AssemblyRef.SystemDesign)]
     [ComVisible(true)]
     [ClassInterface(ClassInterfaceType.AutoDispatch)]
-    public class ToolStripDropDownMenu : ToolStripDropDown {
-
+    public class ToolStripDropDownMenu : ToolStripDropDown
+    {
             private static readonly Padding ImagePadding    = new Padding(2);
             private static readonly Padding TextPadding     = new Padding(8,1,9,1);
             private static readonly Padding CheckPadding    = new Padding(5,2,2,2);

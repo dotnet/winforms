@@ -6,7 +6,6 @@
 
 namespace System.Windows.Forms.PropertyGridInternal {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.Diagnostics;
@@ -2202,16 +2201,13 @@ namespace System.Windows.Forms.PropertyGridInternal {
                         format |= IntNativeMethods.DT_RIGHT | IntNativeMethods.DT_RTLREADING;
                     }
 
-                    // For password mode, Replace the string value either with * or a bullet, depending on the OS platform
-                    if (ShouldRenderPassword) {
-
-                        if (passwordReplaceChar == (char)0) {
-                            if (Environment.OSVersion.Version.Major > 4) {
-                                passwordReplaceChar = (char)0x25CF; // Bullet is 2022, but edit box uses round circle 25CF
-                            }
-                            else {
-                                passwordReplaceChar = '*';
-                            }
+                    // For password mode, replace the string value with a bullet.
+                    if (ShouldRenderPassword)
+                    {
+                        if (passwordReplaceChar == '\0')
+                        {
+                            // Bullet is 2022, but edit box uses round circle 25CF
+                            passwordReplaceChar = '\u25CF';
                         }
 
                         strValue = new string(passwordReplaceChar, strValue.Length);
@@ -3046,7 +3042,7 @@ namespace System.Windows.Forms.PropertyGridInternal {
                 // Focus the PropertyGridView window
                 //
                 if ( (flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus) {
-                    bool focused = PropertyGridView.FocusInternal();
+                    bool focused = PropertyGridView.Focus();
                 }
 
                 // Select the grid entry

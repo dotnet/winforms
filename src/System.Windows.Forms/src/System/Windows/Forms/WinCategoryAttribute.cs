@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
 
     /// <include file='doc\WinCategoryAttribute.uex' path='docs/doc[@for="WinCategoryAttribute"]/*' />
-    /// <internalonly/>
     /// <devdoc>
     ///    <para>
     ///       CategoryAttribute that can access WinForms localized strings.

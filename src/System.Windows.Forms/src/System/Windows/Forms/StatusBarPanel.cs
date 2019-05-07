@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Runtime.InteropServices;
     using System.ComponentModel;
     using System.ComponentModel.Design;
@@ -167,7 +166,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Created"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         internal bool Created {
             get {
                 return this.parent != null && this.parent.ArePanelsRealized();
@@ -506,7 +504,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Dispose"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         protected override void Dispose(bool disposing) {
@@ -534,7 +531,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetContentsWidth"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     Gets the width of the contents of the panel
         /// </devdoc>
@@ -561,7 +557,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.GetIndex"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     Returns the index of the panel by making the parent control search
         ///     for it within its list.
@@ -571,7 +566,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\StatusBarPanel.uex' path='docs/doc[@for="StatusBarPanel.Realize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///     Sets all the properties for this panel.
         /// </devdoc>

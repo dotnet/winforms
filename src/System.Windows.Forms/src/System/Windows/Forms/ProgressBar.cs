@@ -5,7 +5,6 @@
 
 namespace System.Windows.Forms {
     using System.Runtime.Serialization.Formatters;
-    using System.Runtime.Remoting;
     using System.Diagnostics;
     using System.Diagnostics.CodeAnalysis;
     using System;
@@ -74,7 +73,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       This is called when creating a window. Inheriting classes can ovveride
@@ -105,7 +103,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.AllowDrop"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -119,7 +116,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.BackgroundImage"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -168,20 +164,14 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.BackgroundImageLayout"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -195,20 +185,14 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.CausesValidation"]/*' />
-        /// <internalonly/>
         /// <devdoc/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new bool CausesValidation {
@@ -221,15 +205,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.CausesValidationChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CausesValidationChanged {
-            add {
-                base.CausesValidationChanged += value;
-            }
-            remove {
-                base.CausesValidationChanged -= value;
-            }
+            add => base.CausesValidationChanged += value;
+            remove => base.CausesValidationChanged -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.DefaultImeMode"]/*' />
@@ -282,15 +261,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.FontChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                base.FontChanged += value;
-            }
-            remove {
-                base.FontChanged -= value;
-            }
+            add => base.FontChanged += value;
+            remove => base.FontChanged -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.ImeMode"]/*' />
@@ -305,15 +279,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.ImeModeChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged {
-            add {
-                base.ImeModeChanged += value;
-            }
-            remove {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <devdoc>
@@ -474,8 +443,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.RightToLeftLayout"]/*' />
@@ -511,12 +480,8 @@ namespace System.Windows.Forms {
         /// <include file='doc\Form.uex' path='docs/doc[@for="Form.RightToLeftLayoutChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnRightToLeftLayoutChangedDescr))]
         public event EventHandler RightToLeftLayoutChanged {
-            add {
-                onRightToLeftLayoutChanged += value;
-            }
-            remove {
-                onRightToLeftLayoutChanged -= value;
-            }
+            add => onRightToLeftLayoutChanged += value;
+            remove => onRightToLeftLayoutChanged -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.Step"]/*' />
@@ -542,7 +507,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.TabStop"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
@@ -556,19 +520,13 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.TabStopChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TabStopChanged {
-            add {
-                base.TabStopChanged += value;
-            }
-            remove {
-                base.TabStopChanged -= value;
-            }
+            add => base.TabStopChanged += value;
+            remove => base.TabStopChanged -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.Text"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
@@ -582,15 +540,10 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.Value"]/*' />
@@ -620,109 +573,74 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.DoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick {
-            add {
-                base.DoubleClick += value;
-            }
-            remove {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.MouseDoubleClick"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick {
-            add {
-                base.MouseDoubleClick += value;
-            }
-            remove {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.Enter"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Enter {
-            add {
-                base.Enter += value;
-            }
-            remove {
-                base.Enter -= value;
-            }
+            add => base.Enter += value;
+            remove => base.Enter -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.Leave"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Leave {
-            add {
-                base.Leave += value;
-            }
-            remove {
-                base.Leave -= value;
-            }
+            add => base.Leave += value;
+            remove => base.Leave -= value;
         }
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.OnPaint"]/*' />
         /// <devdoc>
         ///     ProgressBar Onpaint.
         /// </devdoc>
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint {
-            add {
-                base.Paint += value;
-            }
-            remove {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
 
         /// <include file='doc\ProgressBar.uex' path='docs/doc[@for="ProgressBar.CreateHandle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         protected override void CreateHandle() {
             if (!RecreatingHandle) {
                 IntPtr userCookie = UnsafeNativeMethods.ThemingScope.Activate();   
@@ -766,7 +684,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Overridden to set up our properties.
         /// </devdoc>
-        /// <internalonly/>
         protected override void OnHandleCreated(EventArgs e) {
             base.OnHandleCreated(e);
             SendMessage(NativeMethods.PBM_SETRANGE32, minimum, maximum);
@@ -782,7 +699,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Overridden to remove event handler.
         /// </devdoc>
-        /// <internalonly/>  
         protected override void OnHandleDestroyed(EventArgs e)
         {
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
@@ -847,7 +763,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///    Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();
@@ -859,7 +774,6 @@ namespace System.Windows.Forms {
         ///     Sends the underlying window a PBM_SETPOS message to update
         ///     the current value of the progressbar.
         /// </devdoc>
-        /// <internalonly/>
         private void UpdatePos() {
             if (IsHandleCreated) SendMessage(NativeMethods.PBM_SETPOS, value, 0);
         }

@@ -266,17 +266,7 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsText"]/*' />
-        public static bool ContainsText() {
-            if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5) 
-            {
-                return ContainsText(TextDataFormat.Text);
-            }
-            else {
-                return ContainsText(TextDataFormat.UnicodeText);
-            }
-        }
+        public static bool ContainsText() => ContainsText(TextDataFormat.UnicodeText);
 
         /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.ContainsText1"]/*' />
         public static bool ContainsText(TextDataFormat format) {
@@ -338,18 +328,7 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetText"]/*' />
-        public static string GetText() {
-            // Pass in Text format for Win98...
-            if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5) 
-            {
-                return GetText(TextDataFormat.Text);
-            }
-            else {
-                return GetText(TextDataFormat.UnicodeText);
-            }
-        }
+        public static string GetText() => GetText(TextDataFormat.UnicodeText);
 
         /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.GetText1"]/*' />
         public static string GetText(TextDataFormat format) {
@@ -440,18 +419,7 @@ namespace System.Windows.Forms {
             Clipboard.SetDataObject(dataObject, true);
         }
 
-        /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText"]/*' />
-        public static void SetText(string text) {
-            // Pass in Text format for Win98...
-            if (Environment.OSVersion.Platform != System.PlatformID.Win32NT ||
-                Environment.OSVersion.Version.Major < 5) 
-            {
-                SetText(text, TextDataFormat.Text);
-            }
-            else {
-               SetText(text, TextDataFormat.UnicodeText);
-            }
-        }
+        public static void SetText(string text) => SetText(text, TextDataFormat.UnicodeText);
 
         /// <include file='doc\Clipboard.uex' path='docs/doc[@for="Clipboard.SetText1"]/*' />
         public static void SetText(string text, TextDataFormat format) {

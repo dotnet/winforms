@@ -68,14 +68,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         [Browsable(false)]
@@ -90,14 +84,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackColorChanged
         {
-            add
-            {
-                base.BackColorChanged += value;
-            }
-            remove
-            {
-                base.BackColorChanged -= value;
-            }
+            add => base.BackColorChanged += value;
+            remove => base.BackColorChanged -= value;
         }
 
         [Browsable(false)]
@@ -118,14 +106,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackgroundImageChanged
         {
-            add
-            {
-                base.BackgroundImageChanged += value;
-            }
-            remove
-            {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         [Browsable(false)]
@@ -140,14 +122,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler BackgroundImageLayoutChanged
         {
-            add
-            {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove
-            {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         protected override CreateParams CreateParams
@@ -186,14 +162,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ForeColorChanged
         {
-            add
-            {
-                base.ForeColorChanged += value;
-            }
-            remove
-            {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         [Browsable(false)]
@@ -208,14 +178,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler FontChanged
         {
-            add
-            {
-                base.FontChanged += value;
-            }
-            remove
-            {
-                base.FontChanged -= value;
-            }
+            add => base.FontChanged += value;
+            remove => base.FontChanged -= value;
         }
 
         [Browsable(false)]
@@ -230,14 +194,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler ImeModeChanged
         {
-            add
-            {
-                base.ImeModeChanged += value;
-            }
-            remove
-            {
-                base.ImeModeChanged -= value;
-            }
+            add => base.ImeModeChanged += value;
+            remove => base.ImeModeChanged -= value;
         }
 
         /// <summary>
@@ -384,14 +342,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler TextChanged
         {
-            add
-            {
-                base.TextChanged += value;
-            }
-            remove
-            {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <summary>
@@ -439,56 +391,32 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click
         {
-            add
-            {
-                base.Click += value;
-            }
-            remove
-            {
-                base.Click -= value;
-            }
+            add => base.Click += value;
+            remove => base.Click -= value;
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event PaintEventHandler Paint
         {
-            add
-            {
-                base.Paint += value;
-            }
-            remove
-            {
-                base.Paint -= value;
-            }
+            add => base.Paint += value;
+            remove => base.Paint -= value;
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DoubleClick
         {
-            add
-            {
-                base.DoubleClick += value;
-            }
-            remove
-            {
-                base.DoubleClick -= value;
-            }
+            add => base.DoubleClick += value;
+            remove => base.DoubleClick -= value;
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseClick
         {
-            add
-            {
-                base.MouseClick += value;
-            }
-            remove
-            {
-                base.MouseClick -= value;
-            }
+            add => base.MouseClick += value;
+            remove => base.MouseClick -= value;
         }
 
 
@@ -496,56 +424,32 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDoubleClick
         {
-            add
-            {
-                base.MouseDoubleClick += value;
-            }
-            remove
-            {
-                base.MouseDoubleClick -= value;
-            }
+            add => base.MouseDoubleClick += value;
+            remove => base.MouseDoubleClick -= value;
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseDown
         {
-            add
-            {
-                base.MouseDown += value;
-            }
-            remove
-            {
-                base.MouseDown -= value;
-            }
+            add => base.MouseDown += value;
+            remove => base.MouseDown -= value;
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseUp
         {
-            add
-            {
-                base.MouseUp += value;
-            }
-            remove
-            {
-                base.MouseUp -= value;
-            }
+            add => base.MouseUp += value;
+            remove => base.MouseUp -= value;
         }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event MouseEventHandler MouseMove
         {
-            add
-            {
-                base.MouseMove += value;
-            }
-            remove
-            {
-                base.MouseMove -= value;
-            }
+            add => base.MouseMove += value;
+            remove => base.MouseMove -= value;
         }
 
         /// <summary>
@@ -555,14 +459,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ScrollBarOnScrollDescr))]
         public event ScrollEventHandler Scroll
         {
-            add
-            {
-                Events.AddHandler(s_scrollEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_scrollEvent, value);
-            }
+            add => Events.AddHandler(s_scrollEvent, value);
+            remove => Events.RemoveHandler(s_scrollEvent, value);
         }
 
         /// <summary>
@@ -574,14 +472,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.valueChangedEventDescr))]
         public event EventHandler ValueChanged
         {
-            add
-            {
-                Events.AddHandler(s_valueChangedEvent, value);
-            }
-            remove
-            {
-                Events.RemoveHandler(s_valueChangedEvent, value);
-            }
+            add => Events.AddHandler(s_valueChangedEvent, value);
+            remove => Events.RemoveHandler(s_valueChangedEvent, value);
         }
 
         /// <summary>

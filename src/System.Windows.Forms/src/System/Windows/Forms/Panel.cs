@@ -71,14 +71,8 @@ namespace System.Windows.Forms {
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
         {
-            add
-            {
-                base.AutoSizeChanged += value;
-            }
-            remove
-            {
-                base.AutoSizeChanged -= value;
-            }
+            add => base.AutoSizeChanged += value;
+            remove => base.AutoSizeChanged -= value;
         }
 
         /// <devdoc>
@@ -145,7 +139,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
@@ -193,39 +186,27 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.TabStop"]/*' />
@@ -242,7 +223,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.Text"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
@@ -256,19 +236,13 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.TextChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.OnResize"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>Fires the event indicating that the panel has been resized.
         ///       Inheriting controls should use this in favour of actually listening to
@@ -296,7 +270,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.StringFromBorderStyle"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private static string StringFromBorderStyle(BorderStyle value) {      
             Type borderStyleType = typeof(BorderStyle);
             return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
@@ -306,7 +279,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
-        /// <internalonly/>
         public override string ToString() {
 
             string s = base.ToString();

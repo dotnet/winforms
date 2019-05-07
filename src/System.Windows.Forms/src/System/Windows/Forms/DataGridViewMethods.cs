@@ -6,7 +6,6 @@ namespace System.Windows.Forms
 {
     using System.Text;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System;
     using System.Diagnostics.CodeAnalysis;
@@ -5202,7 +5201,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(this.CurrentCellInternal != null);
                 //Debug.Assert(this.editingControl.CanFocus);
-                this.editingControl.FocusInternal();
+                this.editingControl.Focus();
             }
         }
 
@@ -6258,7 +6257,7 @@ namespace System.Windows.Forms
                     if (keepFocus)
                     {
                         // Debug.Assert(this.CanFocus || this.Focused); // Invalid assertion
-                        FocusInternal();
+                        Focus();
                     }
                     this.ImeMode = editingControlImeMode;
                 }
@@ -29726,7 +29725,6 @@ namespace System.Windows.Forms
         /// <devdoc>
         ///     Handles the WM_CONTEXTMENU message
         /// </devdoc>
-        /// <internalonly/>
         internal override void WmContextMenu(ref Message m) 
         {
             ContextMenuStrip contextMenuStrip;
@@ -29745,7 +29743,7 @@ namespace System.Windows.Forms
             }
             else 
             {
-                client = PointToClientInternal(new Point(x, y));
+                client = PointToClient(new Point(x, y));
                 HitTestInfo hti = HitTest(client.X, client.Y);
                 DataGridViewCell dataGridViewCell = null;
                 switch (hti.Type)

@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     /// <include file='doc\MDIWindowDialog.uex' path='docs/doc[@for="MdiWindowDialog"]/*' />
     /// <devdoc>
     /// </devdoc>
-    /// <internalonly/>
     internal sealed class MdiWindowDialog : Form {
         private System.Windows.Forms.ListBox itemList;
         private System.Windows.Forms.Button okButton;

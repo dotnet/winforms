@@ -312,7 +312,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.Options"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Gets the value passed to CHOOSEFONT.Flags.
@@ -436,19 +435,14 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [SRDescription(nameof(SR.FnDapplyDescr))]
         public event EventHandler Apply {
-            add {
-                Events.AddHandler(EventApply, value);
-            }
-            remove {
-                Events.RemoveHandler(EventApply, value);
-            }
+            add => Events.AddHandler(EventApply, value);
+            remove => Events.RemoveHandler(EventApply, value);
         }
 
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.GetOption"]/*' />
         /// <devdoc>
         ///     Returns the state of the given option flag.
         /// </devdoc>
-        /// <internalonly/>
         internal bool GetOption(int option) {
             return(options & option) != 0;
         }
@@ -534,7 +528,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.RunDialog"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       The actual implementation of running the dialog. Inheriting classes
@@ -617,7 +610,6 @@ namespace System.Windows.Forms {
         /// <devdoc>
         ///     Sets the given option to the given boolean value.
         /// </devdoc>
-        /// <internalonly/>
         internal void SetOption(int option, bool value) {
             if (value) {
                 options |= option;
@@ -639,7 +631,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.ToString"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Retrieves a string that includes the name of the current font selected in
@@ -655,7 +646,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.UpdateColor"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateColor(int rgb) {
             if (ColorTranslator.ToWin32(color) != rgb) {
                 color = ColorTranslator.FromOle(rgb);
@@ -666,7 +656,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\FontDialog.uex' path='docs/doc[@for="FontDialog.UpdateFont"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private void UpdateFont(NativeMethods.LOGFONT lf) {
             IntPtr screenDC = UnsafeNativeMethods.GetDC(NativeMethods.NullHandleRef);
             try {

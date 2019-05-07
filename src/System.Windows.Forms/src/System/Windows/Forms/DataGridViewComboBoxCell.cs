@@ -2790,7 +2790,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot
             {
                 get
@@ -2800,7 +2799,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized 
             {
                 get
@@ -2810,7 +2808,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.IList.IsFixedSize"]/*' />
-            /// <internalonly/>
             bool IList.IsFixedSize 
             {
                 get
@@ -2871,7 +2868,6 @@ namespace System.Windows.Forms
             }
             
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.IList.Add"]/*' />
-            /// <internalonly/>
             int IList.Add(object item) 
             {
                 return Add(item);
@@ -3000,7 +2996,6 @@ namespace System.Windows.Forms
             }
 
             /// <include file='doc\DataGridViewComboBoxCell.uex' path='docs/doc[@for="ObjectCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array destination, int index)
             {
                 int count = this.InnerArray.Count;
@@ -3164,7 +3159,7 @@ namespace System.Windows.Forms
                 ComboBoxRenderer.DrawDropDownButton(g, bounds, state);
             }
 
-            // Post XP theming functions
+            // Post theming functions
             public static void DrawBorder(Graphics g, Rectangle bounds)
             {
                 if (visualStyleRenderer == null)

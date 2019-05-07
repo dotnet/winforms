@@ -21,7 +21,6 @@ namespace System.Windows.Forms {
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using System.Runtime.Remoting;
     using System.Runtime.Serialization.Formatters.Binary;
     using System.Runtime.Serialization;
     using System.Threading;
@@ -80,7 +79,6 @@ namespace System.Windows.Forms {
         
             /// <devdoc>
             /// </devdoc>
-            /// <internalonly/>
             internal const int IgnoreThreadModel     = 0x10000000;
         }
 
@@ -399,21 +397,15 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseClick {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseClick"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDoubleClick"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseDoubleClick {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDoubleClick"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Cursor"]/*' />
@@ -639,61 +631,43 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackColorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackColorChanged"));
+            remove { }
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BackgroundImageLayoutChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BackgroundImageLayoutChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.BindingContextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BindingContextChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "BindingContextChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ContextMenuChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ContextMenuChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ContextMenuChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.CursorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler CursorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "CursorChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.EnabledChanged"]/*' />
@@ -702,51 +676,36 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler EnabledChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "EnabledChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.FontChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler FontChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "FontChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ForeColorChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ForeColorChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RightToLeftChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler RightToLeftChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "RightToLeftChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "TextChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Click"]/*' />
@@ -755,103 +714,73 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler Click {
-            add { 
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Click"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragDrop"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragDrop {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragDrop"));
+            remove { }
         }
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragEnter"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragEnter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragEnter"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragOver"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event DragEventHandler DragOver {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragOver"));
+            remove { }
         }
 
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DragLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DragLeave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DragLeave"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GiveFeedback"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event GiveFeedbackEventHandler GiveFeedback {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "GiveFeedback"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.HelpRequested"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event HelpEventHandler HelpRequested {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "HelpRequested"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.Paint"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event PaintEventHandler Paint {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Paint"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryContinueDrag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryContinueDragEventHandler QueryContinueDrag {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryContinueDrag"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.QueryAccessibilityHelp"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event QueryAccessibilityHelpEventHandler QueryAccessibilityHelp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "QueryAccessibilityHelp"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DoubleClick"]/*' />
@@ -860,21 +789,15 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler DoubleClick {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "DoubleClick"));
+            remove { }
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ImeModeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ImeModeChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ImeModeChanged"));
+            remove { }
         }
 
 
@@ -884,11 +807,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyDown {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyDown"));
+            remove { }
         }
 
 
@@ -898,11 +818,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyPressEventHandler KeyPress {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyPress"));
+            remove { }
         }
 
 
@@ -912,11 +829,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event KeyEventHandler KeyUp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "KeyUp"));
+            remove { }
         }
 
 
@@ -925,11 +839,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event LayoutEventHandler Layout {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "Layout"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseDown"]/*' />
@@ -939,11 +850,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseDown {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseDown"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseEnter"]/*' />
@@ -952,11 +860,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseEnter {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseEnter"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseLeave"]/*' />
@@ -965,11 +870,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseLeave {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseLeave"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseHover"]/*' />
@@ -978,11 +880,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler MouseHover {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseHover"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseMove"]/*' />
@@ -991,11 +890,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseMove {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseMove"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseUp"]/*' />
@@ -1004,11 +900,8 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseUp {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseUp"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.MouseWheel"]/*' />
@@ -1017,31 +910,22 @@ namespace System.Windows.Forms {
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event MouseEventHandler MouseWheel {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "MouseWheel"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ChangeUICues"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event UICuesEventHandler ChangeUICues {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "ChangeUICues"));
+            remove { }
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StyleChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler StyleChanged {
-            add {
-                throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
-            }
-            remove {
-            }
+            add => throw new NotSupportedException(string.Format(SR.AXAddInvalidEvent, "StyleChanged"));
+            remove { }
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnFontChanged"]/*' />
@@ -1506,13 +1390,10 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.DestroyHandle"]/*' />
         /// <devdoc>
-        ///     Destroys the handle associated with this control.
-        ///     User code should in general not call this function.
+        /// Destroys the handle associated with this control.
+        /// User code should in general not call this function.
         /// </devdoc>        
-        [SuppressMessage("Microsoft.Security", "CA2123:OverrideLinkDemandsShouldBeIdenticalToBase")]
-        // security review: this is a breaking change, but should it be fixed?
         protected override void DestroyHandle() {
             if (axState[fOwnWindow]) {
                 base.DestroyHandle();
@@ -1680,7 +1561,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.OnInPlaceActive"]/*' />
-        /// <internalonly/>
         protected virtual void OnInPlaceActive() {
         }
 
@@ -1857,11 +1737,14 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessDialogKey"]/*' />
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override bool ProcessDialogKey(Keys keyData) 
         {
-            return ignoreDialogKeys ? false : base.ProcessDialogKey(keyData);
+            if (ignoreDialogKeys)
+            {
+                return false;
+            }
+
+            return base.ProcessDialogKey(keyData);
         }
         
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.PreProcessMessage"]/*' />
@@ -1955,13 +1838,11 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ProcessMnemonic"]/*' />
         /// <devdoc>
-        ///     Process a mnemonic character.
-        ///     This is done by manufacturing a WM_SYSKEYDOWN message and passing it
-        ///     to the ActiveX control.
+        /// Process a mnemonic character.
+        /// This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
+        /// ActiveX control.
         /// </devdoc>
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected internal override bool ProcessMnemonic(char charCode) {
             Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
             if (CanSelect) {
@@ -2566,7 +2447,6 @@ namespace System.Windows.Forms {
         //
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetAttributes"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         AttributeCollection ICustomTypeDescriptor.GetAttributes() {
             if (!axState[editorRefresh] && HasPropertyPages()) {
@@ -2577,7 +2457,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetClassName"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the class name for this object.  If null is returned,
         /// the type name is used.
@@ -2588,7 +2467,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetComponentName"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the name for this object.  If null is returned,
         /// the default is used.
@@ -2599,7 +2477,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetConverter"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the type converter for this object.
         /// </devdoc>
@@ -2609,21 +2486,18 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultEvent"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptor ICustomTypeDescriptor.GetDefaultEvent() {
             return TypeDescriptor.GetDefaultEvent(this, true);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetDefaultProperty"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty() {
             return TypeDescriptor.GetDefaultProperty(this, true);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEditor"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Retrieves the an editor for this object.
         /// </devdoc>
@@ -2642,14 +2516,12 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetEvents"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents() {
             return TypeDescriptor.GetEvents(this, true);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetEvents(Attribute"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes) {
             return TypeDescriptor.GetEvents(this, attributes, true);
@@ -2815,21 +2687,18 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties() {
             return FillProperties(null);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.GetProperties1"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes) {
             return FillProperties(attributes);
         }
 
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ICustomTypeDescriptor.GetPropertyOwner"]/*' />
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd) {
             return this;
@@ -3276,8 +3145,10 @@ namespace System.Windows.Forms {
                 }
 
                 case Interop.WindowMessages.WM_COMMAND:
-                    if (!ReflectMessageInternal(m.LParam, ref m))
+                    if (!ReflectMessage(m.LParam, ref m))
+                    {
                         DefWndProc(ref m);
+                    }
                     break;
                 
                 case Interop.WindowMessages.WM_CONTEXTMENU:
@@ -3595,7 +3466,6 @@ namespace System.Windows.Forms {
             }
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.ConnectionPointCookie.Finalize"]/*' />
-            /// <internalonly/>
             ~ConnectionPointCookie(){
                 if (connectionPoint != null && cookie != 0) {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload()) {
@@ -4795,7 +4665,6 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private int Convert2int(object o, bool xDirection) {
             o = ((Array)o).GetValue(0);
             // yacky yacky yacky...
@@ -4809,7 +4678,6 @@ namespace System.Windows.Forms {
 
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         private short Convert2short(object o) {
             o = ((Array)o).GetValue(0);
             return Convert.ToInt16(o, CultureInfo.InvariantCulture);
@@ -4818,7 +4686,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
         protected void RaiseOnMouseMove(object o1, object o2, object o3, object o4) {
             RaiseOnMouseMove(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
@@ -4827,7 +4694,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, float x, float y) {
             RaiseOnMouseMove(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
@@ -4836,7 +4702,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseMove2"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseMove(short button, short shift, int x, int y) {
             base.OnMouseMove(new MouseEventArgs( (MouseButtons)(((int)button) << 20), 1, x, y, 0));
@@ -4845,7 +4710,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]
         protected void RaiseOnMouseUp(object o1, object o2, object o3, object o4) {
             RaiseOnMouseUp(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
@@ -4854,7 +4718,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, float x, float y) {
             RaiseOnMouseUp(button, shift, Twip2Pixel((int) x, true), Twip2Pixel((int) y, false));
@@ -4863,7 +4726,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseUp2"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseUp(short button, short shift, int x, int y) {
             base.OnMouseUp(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
@@ -4872,7 +4734,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced), SuppressMessage("Microsoft.Design", "CA1025:ReplaceRepetitiveArgumentsWithParamsArray")]        
         protected void RaiseOnMouseDown(object o1, object o2, object o3, object o4) {
             RaiseOnMouseDown(Convert2short(o1), Convert2short(o2), Convert2int(o3, true), Convert2int(o4, false));
@@ -4881,7 +4742,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown1"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, float x, float y) {
             RaiseOnMouseDown(button, shift, Twip2Pixel((int) x,true), Twip2Pixel((int) y, false));
@@ -4890,7 +4750,6 @@ namespace System.Windows.Forms {
         /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.RaiseOnMouseDown2"]/*' />
         /// <devdoc>
         /// </devdoc>
-        /// <internalonly/>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void RaiseOnMouseDown(short button, short shift, int x, int y) {
             base.OnMouseDown(new MouseEventArgs((MouseButtons)(((int)button) << 20), 1, x, y, 0));
@@ -6112,7 +5971,6 @@ namespace System.Windows.Forms {
         ///      State from one data type to another.  Access this
         ///      class through the TypeDescriptor.
         /// </devdoc>
-        /// <internalonly/>
         public class StateConverter : TypeConverter {
 
             /// <include file='doc\AxHost.uex' path='docs/doc[@for="AxHost.StateConverter.CanConvertFrom"]/*' />
@@ -6121,7 +5979,6 @@ namespace System.Windows.Forms {
             ///       convert an object in the given source type to the native type of the converter
             ///       using the context.</para>
             /// </devdoc>
-            /// <internalonly/>
             public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType) {
                 if (sourceType == typeof(byte[])) {
                     return true;
@@ -6135,7 +5992,6 @@ namespace System.Windows.Forms {
             ///    <para>Gets a value indicating whether this converter can
             ///       convert an object to the given destination type using the context.</para>
             /// </devdoc>
-            /// <internalonly/>
             public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType) {
                 if (destinationType == typeof(byte[])) {
                     return true;
@@ -6148,7 +6004,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             ///    <para>Converts the given object to the converter's native type.</para>
             /// </devdoc>
-            /// <internalonly/>
             public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
                 if (value is byte[]) {
                     MemoryStream ms = new MemoryStream((byte[])value);
@@ -6166,7 +6021,6 @@ namespace System.Windows.Forms {
             ///      type is string.  If this cannot convert to the desitnation type, this will
             ///      throw a NotSupportedException.
             /// </devdoc>
-            /// <internalonly/>
             public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType) {
                 if (destinationType == null) {
                     throw new ArgumentNullException(nameof(destinationType));
@@ -6464,7 +6318,6 @@ namespace System.Windows.Forms {
             /// <devdoc>
             /// ISerializable private implementation
             /// </devdoc>
-            /// <internalonly/>
             void ISerializable.GetObjectData(SerializationInfo si, StreamingContext context) {
                 MemoryStream stream = new MemoryStream();
                 Save(stream);

@@ -1543,51 +1543,21 @@ namespace System.Windows.Forms.Tests
 
         #endregion
 
-        #region FindForm
-
         [Fact]
-        public void Control_FindForm()
+        public void Control_FindFormWithParent_ReturnsForm()
         {
-            var cont = new Control();
+            var control = new Control();
             var form = new Form();
-            cont.Parent = form;
-
-            // act and assert
-            Assert.Equal(form, cont.FindForm());
+            control.Parent = form;
+            Assert.Equal(form, control.FindForm());
         }
 
         [Fact]
-        public void Control_FindFormNot()
+        public void Control_FindFormWithoutParent_ReturnsNull()
         {
-            var cont = new Control();
-
-            // act and assert
-            Assert.NotEqual(cont, cont.FindForm());
-            // returns the control itself if not found
+            var control = new Control();
+            Assert.Null(control.FindForm());
         }
-
-        [Fact]
-        public void Control_FindFormInternal()
-        {
-            var cont = new Control();
-            var form = new Form();
-            cont.Parent = form;
-
-            // act and assert
-            Assert.Equal(form, cont.FindFormInternal());
-        }
-
-        [Fact]
-        public void Control_FindFormInternalNot()
-        {
-            var cont = new Control();
-
-            // act and assert
-            Assert.NotEqual(cont, cont.FindFormInternal());
-            // returns the control itself if not found
-        }
-
-        #endregion
 
         #region GetChildAtPoint
 

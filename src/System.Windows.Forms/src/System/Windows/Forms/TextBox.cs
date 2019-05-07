@@ -4,7 +4,6 @@
 
 
 namespace System.Windows.Forms {
-    using System.Runtime.Remoting;
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
@@ -292,7 +291,6 @@ namespace System.Windows.Forms {
 
      
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.CreateParams"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Returns the parameters needed to create the handle. Inheriting classes
@@ -527,13 +525,9 @@ namespace System.Windows.Forms {
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.TextAlignChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.RadioButtonOnTextAlignChangedDescr))]
         public event EventHandler TextAlignChanged {
-            add {
-                Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            add => Events.AddHandler(EVENT_TEXTALIGNCHANGED, value);
 
-            remove {
-                Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
-            }
+            remove => Events.RemoveHandler(EVENT_TEXTALIGNCHANGED, value);
         }
 
         /// <include file='doc\TabControl.uex' path='docs/doc[@for="TextBox.Dispose"]/*' />
@@ -557,7 +551,6 @@ namespace System.Windows.Forms {
         }
        
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.IsInputKey"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    <para>
         ///       Overridden to handle RETURN key.
@@ -600,7 +593,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnGotFocus"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overrideen to focus the text on first focus.
         /// </devdoc>
@@ -619,7 +611,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.OnHandleCreated"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    Overridden to update the newly created handle with the settings of the
         ///    PasswordChar properties.
@@ -771,25 +762,19 @@ namespace System.Windows.Forms {
         
                 }
                 else {
-                    try {
-                        if (IsHandleCreated) {
-                            int mode = 0;
-                            if (AutoCompleteMode == AutoCompleteMode.Suggest) {
-                                mode |=  NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
-                            }
-                            if (AutoCompleteMode == AutoCompleteMode.Append) {
-                                mode |=  NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
-                            }
-                            if (AutoCompleteMode == AutoCompleteMode.SuggestAppend) {
-                                mode |=  NativeMethods.AUTOSUGGEST;
-                                mode |=  NativeMethods.AUTOAPPEND;
-                            }
-                            int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle) , (int)AutoCompleteSource | mode);
+                    if (IsHandleCreated) {
+                        int mode = 0;
+                        if (AutoCompleteMode == AutoCompleteMode.Suggest) {
+                            mode |=  NativeMethods.AUTOSUGGEST | NativeMethods.AUTOAPPEND_OFF;
                         }
-                    }
-                    catch (System.Security.SecurityException) {
-                        // If we don't have full trust, degrade gracefully. Allow the control to
-                        // function without auto-complete. Allow the app to continue running.
+                        if (AutoCompleteMode == AutoCompleteMode.Append) {
+                            mode |=  NativeMethods.AUTOAPPEND | NativeMethods.AUTOSUGGEST_OFF;
+                        }
+                        if (AutoCompleteMode == AutoCompleteMode.SuggestAppend) {
+                            mode |=  NativeMethods.AUTOSUGGEST;
+                            mode |=  NativeMethods.AUTOAPPEND;
+                        }
+                        int ret = SafeNativeMethods.SHAutoComplete(new HandleRef(this, Handle) , (int)AutoCompleteSource | mode);
                     }
                 }
             }
@@ -907,7 +892,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\TextBox.uex' path='docs/doc[@for="TextBox.WndProc"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         ///    The edits window procedure.  Inheritng classes can override this
         ///    to add extra functionality, but should not forget to call
@@ -919,7 +903,7 @@ namespace System.Windows.Forms {
                 case Interop.WindowMessages.WM_LBUTTONDOWN:
                     MouseButtons realState = MouseButtons;
                     bool wasValidationCancelled = ValidationCancelled;
-                    FocusInternal();
+                    Focus();
                     if (realState == MouseButtons && 
                        (!ValidationCancelled || wasValidationCancelled)) {
                            base.WndProc(ref m);

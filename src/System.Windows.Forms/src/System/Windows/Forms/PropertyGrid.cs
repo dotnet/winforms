@@ -256,7 +256,7 @@ namespace System.Windows.Forms {
               
                 Controls.AddRange(new Control[] { doccomment, hotcommands, gridView, toolStrip });
 
-                SetActiveControlInternal(gridView);
+                SetActiveControl(gridView);
                 toolStrip.ResumeLayout(false);  // SetupToolbar should perform the layout
                 SetupToolbar();
                 this.PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
@@ -338,7 +338,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.AutoScroll"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override bool AutoScroll {
             get {
@@ -373,15 +372,10 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
-            add {
-                base.BackgroundImageChanged += value;
-            }
-            remove {
-                base.BackgroundImageChanged -= value;
-            }
+            add => base.BackgroundImageChanged += value;
+            remove => base.BackgroundImageChanged -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayout"]/*' />
@@ -396,15 +390,10 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BackgroundImageLayoutChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
-            add {
-                base.BackgroundImageLayoutChanged += value;
-            }
-            remove {
-                base.BackgroundImageLayoutChanged -= value;
-            }
+            add => base.BackgroundImageLayoutChanged += value;
+            remove => base.BackgroundImageLayoutChanged -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.BrowsableAttributes"]/*' />
@@ -688,7 +677,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.DrawFlatToolbar"]/*' />
-        ///<internalonly/>
         protected bool DrawFlatToolbar {
             get {
                 return drawFlatToolBar;
@@ -715,15 +703,10 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ForeColorChanged"]/*' />
-        /// <internalonly/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler ForeColorChanged {
-            add {
-                base.ForeColorChanged += value;
-            }
-            remove {
-                base.ForeColorChanged -= value;
-            }
+            add => base.ForeColorChanged += value;
+            remove => base.ForeColorChanged -= value;
         }
 
         private bool FreezePainting {
@@ -971,7 +954,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.InPropertySet"]/*' />
-        /// <internalonly/>
         bool IComPropertyBrowser.InPropertySet {
             get {
                 return GetPropertyGridView().GetInPropertySet();
@@ -1017,9 +999,8 @@ namespace System.Windows.Forms {
         EditorBrowsable(EditorBrowsableState.Never)
         ]
         public new event EventHandler PaddingChanged {
-            add { base.PaddingChanged += value; }
-            remove { base.PaddingChanged -= value; }
-        }
+            add => base.PaddingChanged += value; 
+            remove => base.PaddingChanged -= value; }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySort"]/*' />
         /// <devdoc>
@@ -1385,7 +1366,6 @@ namespace System.Windows.Forms {
         }
        
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.ShowFocusCues"]/*' />
-        ///<internalonly/>        
         protected internal override bool ShowFocusCues {
             get {
                 return true;
@@ -1439,12 +1419,8 @@ namespace System.Windows.Forms {
 
         [Browsable(false)]
         new public event EventHandler TextChanged {
-            add {
-                base.TextChanged += value;
-            }
-            remove {
-                base.TextChanged -= value;
-            }
+            add => base.TextChanged += value;
+            remove => base.TextChanged -= value;
         }
 
 
@@ -1602,171 +1578,114 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyDown {
-            add {
-                base.KeyDown += value;
-            }
-            remove {
-                base.KeyDown -= value;
-            }
+            add => base.KeyDown += value;
+            remove => base.KeyDown -= value;
         }
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyPress"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyPressEventHandler KeyPress {
-            add {
-                base.KeyPress += value;
-            }
-            remove {
-                base.KeyPress -= value;
-            }
+            add => base.KeyPress += value;
+            remove => base.KeyPress -= value;
         }
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.KeyUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event KeyEventHandler KeyUp {
-            add {
-                base.KeyUp += value;
-            }
-            remove {
-                base.KeyUp -= value;
-            }
+            add => base.KeyUp += value;
+            remove => base.KeyUp -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseDown"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDown {
-            add {
-                base.MouseDown += value;
-            }
-            remove {
-                base.MouseDown -= value;
-            }
+            add => base.MouseDown += value;
+            remove => base.MouseDown -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseUp"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseUp {
-            add {
-                base.MouseUp += value;
-            }
-            remove {
-                base.MouseUp -= value;
-            }
+            add => base.MouseUp += value;
+            remove => base.MouseUp -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseMove"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseMove {
-            add {
-                base.MouseMove += value;
-            }
-            remove {
-                base.MouseMove -= value;
-            }
+            add => base.MouseMove += value;
+            remove => base.MouseMove -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseEnter"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseEnter {
-            add {
-                base.MouseEnter += value;
-            }
-            remove {
-                base.MouseEnter -= value;
-            }
+            add => base.MouseEnter += value;
+            remove => base.MouseEnter -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.MouseLeave"]/*' />
-        /// <internalonly/><hideinheritance/>
+        /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler MouseLeave {
-            add {
-                base.MouseLeave += value;
-            }
-            remove {
-                base.MouseLeave -= value;
-            }
+            add => base.MouseLeave += value;
+            remove => base.MouseLeave -= value;
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyValueChanged"]/*' />
         /// <devdoc> Event that is fired when a property value is modified.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged {
-            add {
-                Events.AddHandler(EventPropertyValueChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPropertyValueChanged, value);
-            }
+            add => Events.AddHandler(EventPropertyValueChanged, value);
+            remove => Events.RemoveHandler(EventPropertyValueChanged, value);
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.ComComponentNameChanged"]/*' />
-        ///<internalonly/>        
         event ComponentRenameEventHandler IComPropertyBrowser.ComComponentNameChanged {
-            add {
-                Events.AddHandler(EventComComponentNameChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventComComponentNameChanged, value);
-            }
+            add => Events.AddHandler(EventComComponentNameChanged, value);
+            remove => Events.RemoveHandler(EventComComponentNameChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertyTabChanged"]/*' />
         /// <devdoc> Event that is fired when the current view tab is changed, such as changing from Properties to Events</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged {
-            add {
-                Events.AddHandler(EventPropertyTabChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPropertyTabChanged, value);
-            }
+            add => Events.AddHandler(EventPropertyTabChanged, value);
+            remove => Events.RemoveHandler(EventPropertyTabChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.PropertySortChanged"]/*' />
         /// <devdoc> Event that is fired when the sort mode is changed.</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged {
-            add {
-                Events.AddHandler(EventPropertySortChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventPropertySortChanged, value);
-            }
+            add => Events.AddHandler(EventPropertySortChanged, value);
+            remove => Events.RemoveHandler(EventPropertySortChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelectedGridItemChanged"]/*' />
         /// <devdoc> Event that is fired when the selected GridItem is changed</devdoc>
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged {
-            add {
-                Events.AddHandler(EventSelectedGridItemChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSelectedGridItemChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedGridItemChanged, value);
+  remove => Events.RemoveHandler(EventSelectedGridItemChanged, value);
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.SelecteObjectsChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.PropertyGridSelectedObjectsChangedDescr))]
         public event EventHandler SelectedObjectsChanged {
-            add {
-                Events.AddHandler(EventSelectedObjectsChanged, value);
-            }
-            remove {
-                Events.RemoveHandler(EventSelectedObjectsChanged, value);
-            }
+            add => Events.AddHandler(EventSelectedObjectsChanged, value);
+            remove => Events.RemoveHandler(EventSelectedObjectsChanged, value);
         }
         
         
@@ -1805,9 +1724,8 @@ namespace System.Windows.Forms {
                 {
                     tab = CreateTab(tabType, host);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Debug.Fail("Bad Tab.  We're not going to show it. ", e.ToString());
                     return;
                 }
 
@@ -2033,7 +1951,6 @@ namespace System.Windows.Forms {
             return button;
         }
         
-        ///<internalonly/>        
         internal void DumpPropsToConsole() {
             gridView.DumpPropsToConsole(peMain, "");
         }
@@ -2270,7 +2187,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.DropDownDone"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.DropDownDone() {
             GetPropertyGridView().DropDownDone();
         }
@@ -2399,7 +2315,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.EnsurePendingChangesCommitted"]/*' />
-        /// <internalonly/>
         bool IComPropertyBrowser.EnsurePendingChangesCommitted() {
 
             // The commits sometimes cause transactions to open
@@ -2563,7 +2478,6 @@ namespace System.Windows.Forms {
         
  
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.HandleF4"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.HandleF4() {
             
             if (gridView.ContainsFocus) {
@@ -2571,9 +2485,9 @@ namespace System.Windows.Forms {
             }
         
             if (this.ActiveControl != gridView) {
-                this.SetActiveControlInternal(gridView);
+                this.SetActiveControl(gridView);
             }
-            gridView.FocusInternal();
+            gridView.Focus();
         }
 
         internal bool HavePropEntriesChanged() {
@@ -2582,7 +2496,6 @@ namespace System.Windows.Forms {
 
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.LoadState"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.LoadState(RegistryKey optRoot) {
             if (optRoot != null) {
                 object val = optRoot.GetValue("PbrsAlpha", "0");
@@ -2648,7 +2561,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.UnsafeNativeMethods.IPropertyNotifySink.OnChanged"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Called when a property on an Ole32 Object changes.
         /// See IPropertyNotifySink::OnChanged
@@ -2843,13 +2755,13 @@ namespace System.Windows.Forms {
             base.OnGotFocus(e);
             
             if (this.ActiveControl == null) {
-                this.SetActiveControlInternal(gridView);
+                this.SetActiveControl(gridView);
             }
             else {
                 // sometimes the edit is still the active control
                 // when it's hidden or disabled...
-                if (!this.ActiveControl.FocusInternal()) {
-                    this.SetActiveControlInternal(gridView);
+                if (!this.ActiveControl.Focus()) {
+                    this.SetActiveControl(gridView);
                 }
             }
         }
@@ -3108,7 +3020,6 @@ namespace System.Windows.Forms {
         }
 
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.UnsafeNativeMethods.IPropertyNotifySink.OnRequestEdit"]/*' />
-        /// <internalonly/>
         /// <devdoc>
         /// Called when a property on an Ole32 Object that is tagged
         /// with "requestedit" is about to be edited.
@@ -3135,7 +3046,7 @@ namespace System.Windows.Forms {
         private void OnButtonClick(object sender, EventArgs e) {
             // we don't want to steal focus from the property pages...
             if (sender != btnViewPropertyPages) {
-                gridView.FocusInternal();
+                gridView.Focus();
             }
         }
 
@@ -3609,7 +3520,7 @@ namespace System.Windows.Forms {
                         }
                         else if (gridView.FocusInside) {
                             if (toolStrip.Visible) {
-                                toolStrip.FocusInternal();
+                                toolStrip.Focus();
 
                                 // we need to select first ToolStrip item, otherwise, ToolStrip container has the focus
                                 if (toolStrip.Items.Count > 0) {
@@ -3637,7 +3548,7 @@ namespace System.Windows.Forms {
                                     gridView.ReverseFocus();
                                 }
                                 else if (toolStrip.Visible) {
-                                    toolStrip.FocusInternal();
+                                    toolStrip.Focus();
                                 }
                                 else {
                                     return base.ProcessDialogKey(keyData);
@@ -3654,7 +3565,7 @@ namespace System.Windows.Forms {
                         if (toolStrip.Focused) {
                             // normal stuff, just do the propsheet
                             if (peMain != null) {
-                                gridView.FocusInternal();
+                                gridView.Focus();
                             }
                             else {
                                 base.ProcessDialogKey(keyData);
@@ -3677,10 +3588,10 @@ namespace System.Windows.Forms {
                         else {
                             // coming from out side, start with the toolStrip
                             if (toolStrip.Visible) {
-                                toolStrip.FocusInternal();
+                                toolStrip.Focus();
                             }
                             else {
-                                gridView.FocusInternal();
+                                gridView.Focus();
                             }
                         }
 
@@ -3837,7 +3748,6 @@ namespace System.Windows.Forms {
             }
 
             if (tab == null) {
-                //Debug.Fail("How can we release a tab when it isn't here.");
                 return;
             }
 
@@ -4066,7 +3976,6 @@ namespace System.Windows.Forms {
         }
         
         /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.IComPropertyBrowser.SaveState"]/*' />
-        /// <internalonly/>
         void IComPropertyBrowser.SaveState(RegistryKey optRoot) {
 
             if (optRoot == null) {
@@ -4181,7 +4090,6 @@ namespace System.Windows.Forms {
                 int tab = state / viewTypes;
                 int view = state % viewTypes;
     
-                Debug.Assert(tab < viewTabs.Length, "Trying to select invalid tab!");
                 Debug.Assert(view < viewSortButtons.Length, "Can't select view type > 1");
     
                 OnViewTabButtonClick(viewTabButtons[tab], EventArgs.Empty);
@@ -4259,8 +4167,7 @@ namespace System.Windows.Forms {
                        }
                        alphaIndex = AddImage(bmpAlpha);
                    }
-                   catch (Exception e) {
-                       Debug.Fail("Failed to load Alpha bitmap", e.ToString());
+                   catch (Exception) {
                    }
    
                    try {
@@ -4269,8 +4176,7 @@ namespace System.Windows.Forms {
                        }
                        categoryIndex = AddImage(bmpCategory);
                    }
-                   catch (Exception e) {
-                       Debug.Fail("Failed to load category bitmap", e.ToString());
+                   catch (Exception) {
                    }
    
                    viewSortButtons[ALPHA] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
@@ -4336,8 +4242,7 @@ namespace System.Windows.Forms {
                    }
                    designpg = AddImage(bmpPropPage);
                }
-               catch (Exception e) {
-                   Debug.Fail(e.ToString());
+               catch (Exception) {
                }
    
                // we recreate this every time to ensure it's at the end
@@ -4691,11 +4596,6 @@ namespace System.Windows.Forms {
             SetupToolbar(true);
         }
 
-        /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyGrid.WndProc"]/*' />
-        // 
-
-
-        [SuppressMessage("Microsoft.Security", "CA2114:MethodSecurityShouldBeASupersetOfType")]
         protected override void WndProc(ref Message m) {
 
             switch (m.Msg) {
@@ -4924,7 +4824,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.SyncRoot"]/*' />
-            /// <internalonly/>
             object ICollection.SyncRoot {
                 get {
                     return this;
@@ -4932,7 +4831,6 @@ namespace System.Windows.Forms {
             }
     
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.IsSynchronized"]/*' />
-            /// <internalonly/>
             bool ICollection.IsSynchronized {
                 get {
                     return false;
@@ -4982,7 +4880,6 @@ namespace System.Windows.Forms {
             
             
             /// <include file='doc\PropertyGrid.uex' path='docs/doc[@for="PropertyTabCollection.ICollection.CopyTo"]/*' />
-            /// <internalonly/>
             void ICollection.CopyTo(Array dest, int index) {
                 if (owner == null) {
                     return;
