@@ -26,8 +26,8 @@ namespace System.Windows.Forms.Design
             {
                 if (s_inheritanceGlyph == null)
                 {
-                    s_inheritanceGlyph = new Bitmap(typeof(InheritanceUI), "InheritedGlyph.bmp");
-                    s_inheritanceGlyph.MakeTransparent();
+                    s_inheritanceGlyph = new Icon(typeof(InheritanceUI), "InheritedGlyph").ToBitmap();
+
                     if (DpiHelper.IsScalingRequired)
                     {
                         DpiHelper.ScaleBitmapLogicalToDevice(ref s_inheritanceGlyph);

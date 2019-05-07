@@ -416,39 +416,39 @@ namespace System.Windows.Forms.Design
             Bitmap image = null;
             if (name.StartsWith("new"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "new.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "new").ToBitmap();
             }
             else if (name.StartsWith("open"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "open.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "open").ToBitmap();
             }
             else if (name.StartsWith("save"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "save.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "save").ToBitmap();
             }
             else if (name.StartsWith("printPreview"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "printPreview.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "printPreview").ToBitmap();
             }
             else if (name.StartsWith("print"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "print.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "print").ToBitmap();
             }
             else if (name.StartsWith("cut"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "cut.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "cut").ToBitmap();
             }
             else if (name.StartsWith("copy"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "copy.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "copy").ToBitmap();
             }
             else if (name.StartsWith("paste"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "paste.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "paste").ToBitmap();
             }
             else if (name.StartsWith("help"))
             {
-                image = new Bitmap(typeof(ToolStripMenuItem), "help.bmp");
+                image = new Icon(typeof(ToolStripMenuItem), "help").ToBitmap();
             }
             return image;
         }

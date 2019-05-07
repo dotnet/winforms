@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Design
                     {
                         if (_name != null)
                         {
-                            _image = new Icon(typeof(ToolStripMenuItem), _name + ".bmp").ToBitmap();
+                            _image = new Icon(typeof(ToolStripMenuItem), _name).ToBitmap();
                         }
                         ImageTransparentColor = Color.Magenta;
                     }
