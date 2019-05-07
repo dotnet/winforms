@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms;
     using System.Collections;
     
-    /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Displays a
@@ -40,7 +39,6 @@ namespace System.Windows.Forms {
 
         
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.MessageBox"]/*' />
         /// <devdoc>
         ///     This constructor is private so people aren't tempted to try and create
         ///     instances of these -- they should just use the static show
@@ -139,7 +137,6 @@ namespace System.Windows.Forms {
         //START WHIDBEY ADDS                                                                                           //
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show12"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style with Help Button.
@@ -152,7 +149,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show13"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style and Help file Path .
@@ -166,7 +162,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show14"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style and Help file Path for a IWin32Window.
@@ -181,7 +176,6 @@ namespace System.Windows.Forms {
 
         
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show15"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and keyword.
@@ -195,7 +189,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show16"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and keyword for a IWin32Window.
@@ -209,7 +202,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show17"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and HelpNavigator.
@@ -222,7 +214,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, options, hpi);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show18"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path and HelpNavigator for IWin32Window.
@@ -235,7 +226,6 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, hpi);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show19"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator and object.
@@ -250,7 +240,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show20"]/*' />
         /// <devdoc>
         ///    <para>
         ///      Displays a message box with specified text, caption, style, Help file Path ,HelpNavigator and object for a IWin32Window.
@@ -269,7 +258,6 @@ namespace System.Windows.Forms {
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -280,7 +268,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, options, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -291,7 +278,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, defaultButton, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show2"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -301,7 +287,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show3"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -311,7 +296,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, buttons, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show4"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text and caption.
@@ -321,7 +305,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, caption, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show5"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text.
@@ -331,7 +314,6 @@ namespace System.Windows.Forms {
             return ShowCore(null, text, string.Empty, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show6"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -342,7 +324,6 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, options, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show7"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -353,7 +334,6 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, defaultButton, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show8"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -363,7 +343,6 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, icon, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show9"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text, caption, and style.
@@ -373,7 +352,6 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, buttons, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show10"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text and caption.
@@ -383,7 +361,6 @@ namespace System.Windows.Forms {
             return ShowCore(owner, text, caption, MessageBoxButtons.OK, MessageBoxIcon.None, MessageBoxDefaultButton.Button1, 0, false);
         }
 
-        /// <include file='doc\MessageBox.uex' path='docs/doc[@for="MessageBox.Show11"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a message box with specified text.

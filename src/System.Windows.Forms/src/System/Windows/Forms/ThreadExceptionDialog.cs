@@ -350,7 +350,6 @@ namespace System.Windows.Forms {
             set => base.AutoSize = value;
         }
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -358,7 +357,6 @@ namespace System.Windows.Forms {
             remove => base.AutoSizeChanged -= value;
         }                
 
-        /// <include file='doc\ThreadExceptionDialog.uex' path='docs/doc[@for="ThreadExceptionDialog.DetailsClick"]/*' />
         /// <devdoc>
         ///     Called when the details button is clicked.
         /// </devdoc>

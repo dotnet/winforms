@@ -18,7 +18,6 @@ namespace System.Windows.Forms
     using System.Diagnostics.CodeAnalysis;
     using Microsoft.Win32.SafeHandles;
 
-    /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a common dialog box that allows the user to specify options for 
@@ -45,7 +44,6 @@ namespace System.Windows.Forms
         // Show the 'New Folder' button?
         private bool showNewFolderButton;
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.FolderBrowserDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.FolderBrowserDialog'/> class.
@@ -65,7 +63,6 @@ namespace System.Windows.Forms
         ]
         public bool AutoUpgradeEnabled { get; set; } = true;
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.HelpRequest"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler HelpRequest 
         {
@@ -73,7 +70,6 @@ namespace System.Windows.Forms
             remove => base.HelpRequest -= value;
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.ShowNewFolderButton"]/*' />
         /// <devdoc>
         ///     Determines if the 'New Folder' button should be exposed.
         ///     This property has no effect if the Vista style dialog is used; in that case, the New Folder button is always shown.
@@ -97,7 +93,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.SelectedPath"]/*' />
         /// <devdoc>
         ///     Gets the directory path of the folder the user picked.
         ///     Sets the directory path of the initial folder shown in the dialog box.
@@ -122,7 +117,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.RootFolder"]/*' />
         /// <devdoc>
         ///     Gets/sets the root node of the directory tree.
         /// </devdoc>
@@ -153,7 +147,6 @@ namespace System.Windows.Forms
             }
         }
     
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.Description"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a description to show above the folders. Here you can provide instructions for
@@ -207,7 +200,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets all properties to their default values.
@@ -221,7 +213,6 @@ namespace System.Windows.Forms
             showNewFolderButton = true;
         }
 
-        /// <include file='doc\FolderBrowserDialog.uex' path='docs/doc[@for="FolderBrowserDialog.RunDialog"]/*' />
         /// <devdoc>
         ///    Implements running of a folder browser dialog.
         /// </devdoc>

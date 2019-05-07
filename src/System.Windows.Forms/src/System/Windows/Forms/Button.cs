@@ -19,7 +19,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Internal;
     using Microsoft.Win32;
 
-    /// <include file='doc\Button.uex' path='docs/doc[@for="Button"]/*' />
     /// <devdoc>
     ///    <para>Represents a
     ///       Windows button.</para>
@@ -31,7 +30,6 @@ namespace System.Windows.Forms {
     ]
     public class Button : ButtonBase, IButtonControl {
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
         /// <devdoc>
         ///     The dialog result that will be sent to the parent dialog form when
         ///     we are clicked.
@@ -40,14 +38,12 @@ namespace System.Windows.Forms {
 
         private const int InvalidDimensionValue = int.MinValue;
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.dialogResult"]/*' />
         /// <devdoc>
         ///     For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels  
         ///     of the border around the button.
         /// </devdoc>
         private Size systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.Button"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Button'/>
@@ -132,7 +128,6 @@ namespace System.Windows.Forms {
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.CreateParams"]/*' />
         /// <devdoc>
         ///    <para>
         ///       This is called when creating a window. Inheriting classes can overide
@@ -159,7 +154,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DialogResult"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value that is returned to the
@@ -185,7 +179,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseEnter"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseEnter'/> event.
@@ -195,7 +188,6 @@ namespace System.Windows.Forms {
             base.OnMouseEnter(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseLeave"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.Control.OnMouseLeave'/> event.
@@ -205,7 +197,6 @@ namespace System.Windows.Forms {
             base.OnMouseLeave(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.DoubleClick"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event EventHandler DoubleClick {
@@ -213,7 +204,6 @@ namespace System.Windows.Forms {
             remove => base.DoubleClick -= value;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.MouseDoubleClick"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Advanced)]
         public new event MouseEventHandler MouseDoubleClick {
@@ -221,7 +211,6 @@ namespace System.Windows.Forms {
             remove => base.MouseDoubleClick -= value;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.NotifyDefault"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Notifies the <see cref='System.Windows.Forms.Button'/>
@@ -236,7 +225,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       This method actually raises the Click event. Inheriting classes should
@@ -265,7 +253,6 @@ namespace System.Windows.Forms {
             base.OnFontChanged(e);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.OnMouseUp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.ButtonBase.OnMouseUp'/> event.
@@ -315,7 +302,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.PerformClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Generates a <see cref='System.Windows.Forms.Control.Click'/> event for a
@@ -336,7 +322,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ProcessMnemonic"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Lets a control process mnmemonic characters. Inheriting classes can
@@ -354,7 +339,6 @@ namespace System.Windows.Forms {
             return base.ProcessMnemonic(charCode);
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Provides some interesting information for the Button control in
@@ -367,7 +351,6 @@ namespace System.Windows.Forms {
             return s + ", Text: " + Text;
         }
 
-        /// <include file='doc\Button.uex' path='docs/doc[@for="Button.WndProc"]/*' />
         /// <devdoc>
         ///     The button's window procedure.  Inheriting classes can override this
         ///     to add extra functionality, but should not forget to call

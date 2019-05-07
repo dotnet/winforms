@@ -16,7 +16,6 @@ namespace System.Drawing.Design {
     using System.Drawing;
     using System.Drawing.Design;
 
-    /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor"]/*' />
     /// <devdoc>
     ///    <para>Provides an editor that provides a way to visually edit the values of a COM2 
     ///       type.</para>
@@ -39,7 +38,6 @@ namespace System.Drawing.Design {
             }
         }
   
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.EditValue"]/*' />
         /// <devdoc>
         ///      Edits the given object value using the editor style provided by
         ///      GetEditorStyle.  A service provider is provided so that any
@@ -54,7 +52,6 @@ namespace System.Drawing.Design {
             }
         }
   
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.GetPaintValueSupported"]/*' />
         /// <devdoc>
         ///      Determines if this editor supports the painting of a representation
         ///      of an object's value.
@@ -66,7 +63,6 @@ namespace System.Drawing.Design {
             return base.GetPaintValueSupported(context);
         }
 
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.GetEditStyle"]/*' />
         /// <devdoc>
         ///      Retrieves the editing style of the Edit method.  If the method
         ///      is not supported, this will return None.
@@ -78,7 +74,6 @@ namespace System.Drawing.Design {
             return base.GetEditStyle(context);
         }
 
-        /// <include file='doc\COM2ExtendedUITypeEditor.uex' path='docs/doc[@for="Com2ExtendedUITypeEditor.PaintValue"]/*' />
         /// <devdoc>
         ///      Paints a representative value of the given object to the provided
         ///      canvas.  Painting should be done within the boundaries of the

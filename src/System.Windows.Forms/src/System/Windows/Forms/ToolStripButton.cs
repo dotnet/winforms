@@ -10,7 +10,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Windows.Forms.Design; 
     	
-    /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton"]/*' />
     /// <devdoc/>
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
     public class ToolStripButton : ToolStripItem {
@@ -23,7 +22,6 @@ namespace System.Windows.Forms {
         private static readonly object EventCheckedChanged      = new object();
         private static readonly object EventCheckStateChanged   = new object();
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.ToolStripButton"]/*' />
         /// <devdoc>
         /// Summary of ToolStripButton.
         /// </devdoc>
@@ -58,7 +56,6 @@ namespace System.Windows.Forms {
         }
 
        
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CanSelect"]/*' />
         /// <devdoc>
         /// Summary of CanSelect.
         /// </devdoc>
@@ -68,7 +65,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckOnClick"]/*' />
         [
         DefaultValue(false),
         SRCategory(nameof(SR.CatBehavior)),
@@ -83,7 +79,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.Checked"]/*' />
         /// <devdoc>
         /// <para>
         /// Gets or sets a value indicating whether the item is checked.
@@ -108,7 +103,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckState"]/*' />
         /// <devdoc>
         /// <para>Gets
         /// or sets a value indicating whether the check box is checked.</para>
@@ -139,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckedChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.Checked'/>
@@ -150,7 +143,6 @@ namespace System.Windows.Forms {
             add => Events.AddHandler(EventCheckedChanged, value);
             remove => Events.RemoveHandler(EventCheckedChanged, value);
         }   
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CheckStateChanged"]/*' />
         /// <devdoc>
         /// <para>Occurs when the
         /// value of the <see cref='System.Windows.Forms.CheckBox.CheckState'/>
@@ -169,7 +161,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.CreateAccessibilityInstance"]/*' />
         /// <devdoc>
         /// constructs the new instance of the accessibility object for this ToolStripItem. Subclasses
         /// should not call base.CreateAccessibilityObject.
@@ -195,7 +186,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnCheckedChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckedChanged'/>
         /// event.</para>
@@ -205,7 +195,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnCheckStateChanged"]/*' />
         /// <devdoc>
         /// <para>Raises the <see cref='System.Windows.Forms.ToolStripMenuItem.CheckStateChanged'/> event.</para>
         /// </devdoc>
@@ -215,7 +204,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
         
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnPaint"]/*' />
         /// <devdoc>
         /// Inheriting classes should override this method to handle this event.
         /// </devdoc>
@@ -238,7 +226,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripButton.uex' path='docs/doc[@for="ToolStripButton.OnClick"]/*' />
         protected override void OnClick(EventArgs e) {
             if (checkOnClick) {
                 this.Checked = !this.Checked;

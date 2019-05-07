@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     
     using Microsoft.Win32;
 
-    /// <include file='doc\Command.uex' path='docs/doc[@for="Command"]/*' />
     internal class Command : WeakReference {
 
         private static Command[] cmds;

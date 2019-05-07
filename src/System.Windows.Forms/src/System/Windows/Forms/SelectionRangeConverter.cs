@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Globalization;
     using System.Reflection;
 
-    /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter"]/*' />
     /// <devdoc>
     ///      SelectionRangeConverter is a class that can be used to convert
     ///      SelectionRange objects from one data type to another.  Access this
@@ -24,7 +23,6 @@ namespace System.Windows.Forms {
     /// </devdoc>
     public class SelectionRangeConverter : TypeConverter {
     
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.CanConvertFrom"]/*' />
         /// <devdoc>
         ///      Determines if this converter can convert an object in the given source
         ///      type to the native type of the converter.
@@ -36,7 +34,6 @@ namespace System.Windows.Forms {
             return base.CanConvertFrom(context, sourceType);
         }
 
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.CanConvertTo"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether this converter can
         ///       convert an object to the given destination type using the context.</para>
@@ -48,7 +45,6 @@ namespace System.Windows.Forms {
             return base.CanConvertTo(context, destinationType);
         }
         
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.ConvertFrom"]/*' />
         /// <devdoc>
         ///      Converts the given object to the converter's native type.
         /// </devdoc>
@@ -88,7 +84,6 @@ namespace System.Windows.Forms {
         }
 
         
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.ConvertTo"]/*' />
         /// <devdoc>
         ///      Converts the given object to another type.  The most common types to convert
         ///      are to and from a string object.  The default implementation will make a call
@@ -132,7 +127,6 @@ namespace System.Windows.Forms {
             return base.ConvertTo(context, culture, value, destinationType);
         }
         
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.CreateInstance"]/*' />
         /// <devdoc>
         ///      Creates an instance of this type given a set of property values
         ///      for the object.  This is useful for objects that are immutable, but still
@@ -154,7 +148,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.GetCreateInstanceSupported"]/*' />
         /// <devdoc>
         ///      Determines if changing a value on this object should require a call to
         ///      CreateInstance to create a new value.
@@ -163,7 +156,6 @@ namespace System.Windows.Forms {
             return true;
         }
 
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.GetProperties"]/*' />
         /// <devdoc>
         ///      Retrieves the set of properties for this type.  By default, a type has
         ///      does not return any properties.  An easy implementation of this method
@@ -174,7 +166,6 @@ namespace System.Windows.Forms {
             return props.Sort(new string[] {"Start", "End"});
         }
        
-        /// <include file='doc\SelectionRangeConverter.uex' path='docs/doc[@for="SelectionRangeConverter.GetPropertiesSupported"]/*' />
         /// <devdoc>
         ///      Determines if this object supports properties.  By default, this
         ///      is false.

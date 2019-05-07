@@ -14,7 +14,6 @@ namespace System.Windows.Forms.Design {
     using Microsoft.Win32;
 
 
-    /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab"]/*' />
     /// <devdoc>
     ///    <para>Provides a tab on the property browser to display events for selection and linking.</para>
     /// </devdoc>
@@ -23,7 +22,6 @@ namespace System.Windows.Forms.Design {
         private IDesignerHost currentHost;
         private bool          sunkEvent;
 
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.EventsTab"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Design.EventsTab'/> class.</para>
         /// </devdoc>
@@ -31,7 +29,6 @@ namespace System.Windows.Forms.Design {
             this.sp = sp;
         }
 
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.TabName"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the name of the tab.</para>
         /// </devdoc>
@@ -41,7 +38,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.HelpKeyword"]/*' />
         /// <devdoc>
         ///    <para>Gets or sets the help keyword for the tab.</para>
         /// </devdoc>
@@ -52,7 +48,6 @@ namespace System.Windows.Forms.Design {
         }
         
              // override this to reject components you don't want to support.
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.CanExtend"]/*' />
         /// <devdoc>
         ///    <para>Gets a value indicating whether the specified object can be extended.</para>
         /// </devdoc>
@@ -64,7 +59,6 @@ namespace System.Windows.Forms.Design {
             currentHost = adevent.NewDesigner;
         }
 
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.GetDefaultProperty"]/*' />
         /// <devdoc>
         ///    <para>Gets the default property from the specified object.</para>
         /// </devdoc>
@@ -118,7 +112,6 @@ namespace System.Windows.Forms.Design {
             return eventPropertySvc;
         }
 
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.GetProperties"]/*' />
         /// <devdoc>
         ///    <para> Gets all the properties of the tab.</para>
         /// </devdoc>
@@ -126,7 +119,6 @@ namespace System.Windows.Forms.Design {
             return GetProperties(null, component, attributes);
         }
 
-        /// <include file='doc\EventsTab.uex' path='docs/doc[@for="EventsTab.GetProperties2"]/*' />
         /// <devdoc>
         ///    <para>Gets the properties of the specified component...</para>
         /// </devdoc>

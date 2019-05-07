@@ -11,7 +11,6 @@ namespace System.Windows.Forms {
     using System.Diagnostics;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer"]/*' />
     /// <summary>
     /// Summary description for ProfessionalToolStripRenderer.
     /// </summary>
@@ -41,7 +40,6 @@ namespace System.Windows.Forms {
         private ToolStripRenderer toolStripHighContrastRenderer;
         private ToolStripRenderer toolStripLowResolutionRenderer;
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.ToolStripProfessionalRenderer"]/*' />
         public ToolStripProfessionalRenderer() {
         }
         internal ToolStripProfessionalRenderer(bool isDefault) : base(isDefault) {
@@ -106,7 +104,6 @@ namespace System.Windows.Forms {
             get { return (ColorTable.UseSystemColors || !ToolStripManager.VisualStylesEnabled); }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderBackground"]/*' />
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderToolStripBackground(e);
@@ -133,7 +130,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderOverflowButton"]/*' />
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e) {
             ScaleObjectSizesIfNeeded(); 
             
@@ -201,7 +197,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderDropDownButton"]/*' />
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderDropDownButtonBackground(e);
@@ -220,7 +215,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderSeparator"]/*' />
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderSeparator(e);
@@ -230,7 +224,6 @@ namespace System.Windows.Forms {
             RenderSeparatorInternal(e.Graphics, e.Item, new Rectangle(Point.Empty, e.Item.Size), e.Vertical);
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderSplitButton"]/*' />
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderSplitButtonBackground(e);
@@ -289,7 +282,6 @@ namespace System.Windows.Forms {
             ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0,0,item.Width, item.Height), item.BorderStyle, (Border3DSide)item.BorderSides);
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderLabel"]/*' />
         protected override void OnRenderLabelBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderLabelBackground(e);
@@ -300,7 +292,6 @@ namespace System.Windows.Forms {
         }
 
    
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderButton"]/*' />
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderButtonBackground(e);
@@ -350,7 +341,6 @@ namespace System.Windows.Forms {
 
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderBorder"]/*' />
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderToolStripBorder(e);
@@ -417,7 +407,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderGrip"]/*' />
         protected override void OnRenderGrip(ToolStripGripRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderGrip(e);
@@ -478,7 +467,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderMenuItem"]/*' />
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderMenuItemBackground(e);
@@ -580,7 +568,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderArrow"]/*' />
         protected override void OnRenderArrow(ToolStripArrowRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderArrow(e);
@@ -596,7 +583,6 @@ namespace System.Windows.Forms {
             base.OnRenderArrow(e);
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderImageMargin"]/*' />
         protected override void OnRenderImageMargin(ToolStripRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderImageMargin(e);
@@ -616,7 +602,6 @@ namespace System.Windows.Forms {
             FillWithDoubleGradient(begin, ColorTable.ImageMarginGradientMiddle, end, e.Graphics, bounds, iconWellGradientWidth, iconWellGradientWidth, LinearGradientMode.Horizontal, /*flipHorizontal=*/(e.ToolStrip.RightToLeft == RightToLeft.Yes));
         }
 
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderItemText"]/*' />
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderItemText(e);
@@ -630,7 +615,6 @@ namespace System.Windows.Forms {
             base.OnRenderItemText(e);
         }
         
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderItemCheck"]/*' />
         protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)  {
             if (RendererOverride != null) {
                 base.OnRenderItemCheck(e);
@@ -640,7 +624,6 @@ namespace System.Windows.Forms {
             RenderCheckBackground(e);
             base.OnRenderItemCheck(e);
         }
-        /// <include file='doc\ToolStripProfessionalRenderer.uex' path='docs/doc[@for="ToolStripProfessionalRenderer.OnRenderItemImage"]/*' />
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e) {
             if (RendererOverride != null) {
                 base.OnRenderItemImage(e);

@@ -14,7 +14,6 @@ namespace System.Windows.Forms {
     using System.Drawing;
     using System.Globalization;
 
-    /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Specifies a component that creates
@@ -64,7 +63,6 @@ namespace System.Windows.Forms {
         // there would be no way to create a hidden NotifyIcon without being visible for a moment.
         private bool visible = false;
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.NotifyIcon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.NotifyIcon'/> class.
@@ -76,7 +74,6 @@ namespace System.Windows.Forms {
             UpdateIcon(visible);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.NotifyIcon1"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.NotifyIcon'/> class.
@@ -90,7 +87,6 @@ namespace System.Windows.Forms {
             container.Add(this);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipText"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the BalloonTip text displayed when
@@ -115,7 +111,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipIcon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the BalloonTip icon displayed when
@@ -142,7 +137,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipTitle"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the BalloonTip title displayed when
@@ -166,7 +160,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\NotifyIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipClicked"]/*' />
         /// <devdoc>
         ///    <para>[This event is raised on the NIN_BALLOONUSERCLICK message.]</para>
         /// </devdoc>
@@ -177,7 +170,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_BALLOONTIPCLICKED, value);
         }
 
-        /// <include file='doc\NotifyIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipClosed"]/*' />
         /// <devdoc>
         ///    <para>[This event is raised on the NIN_BALLOONTIMEOUT message.]</para>
         /// </devdoc>
@@ -188,7 +180,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_BALLOONTIPCLOSED, value);
         }
 
-        /// <include file='doc\NotifyIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipShown"]/*' />
         /// <devdoc>
         ///    <para>[This event is raised on the NIN_BALLOONSHOW or NIN_BALLOONHIDE message.]</para>
         /// </devdoc>
@@ -198,7 +189,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_BALLOONTIPSHOWN, value);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.ContextMenu"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets context menu
@@ -236,7 +226,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.Icon"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the current
@@ -261,7 +250,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.Text"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the ToolTip text displayed when
@@ -293,7 +281,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.Visible"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the icon is visible in the Windows System Tray.
@@ -317,7 +304,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="TrayIcon.Tag"]/*' />
         [
         SRCategory(nameof(SR.CatData)),
         Localizable(false),
@@ -335,7 +321,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.Click"]/*' />
         /// <devdoc>
         ///     Occurs when the user clicks the icon in the system tray.
         /// </devdoc>
@@ -345,7 +330,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_CLICK, value);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.DoubleClick"]/*' />
         /// <devdoc>
         ///     Occurs when the user double-clicks the icon in the system tray.
         /// </devdoc>
@@ -355,7 +339,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_DOUBLECLICK, value);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseClick"]/*' />
         /// <devdoc>
         ///     Occurs when the user clicks the icon in the system tray.
         /// </devdoc>
@@ -365,7 +348,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_MOUSECLICK, value);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseDoubleClick"]/*' />
         /// <devdoc>
         ///     Occurs when the user mouse double clicks the icon in the system tray.
         /// </devdoc>
@@ -375,7 +357,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_MOUSEDOUBLECLICK, value);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseDown"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the
@@ -388,7 +369,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_MOUSEDOWN, value);
         }        
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseMove"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs
@@ -401,7 +381,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_MOUSEMOVE, value);
         }        
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.MouseUp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Occurs when the
@@ -415,7 +394,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_MOUSEUP, value);
         }        
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.Dispose"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Disposes of the resources (other than memory) used by the
@@ -446,7 +424,6 @@ namespace System.Windows.Forms {
             base.Dispose(disposing);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.BalloonTipClicked"]/*' />
         /// <devdoc>
         ///    <para>
         ///       This method raised the BalloonTipClicked event. 
@@ -459,7 +436,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnBalloonTipClosed"]/*' />
         /// <devdoc>
         ///    <para>
         ///       This method raised the BalloonTipClosed event. 
@@ -472,7 +448,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnBalloonTipShown"]/*' />
         /// <devdoc>
         ///    <para>
         ///       This method raised the BalloonTipShown event. 
@@ -485,7 +460,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnClick"]/*' />
         /// <devdoc>
         ///    <para>
         ///       This method actually raises the Click event. Inheriting classes should
@@ -501,7 +475,6 @@ namespace System.Windows.Forms {
                 handler( this, e );
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnDoubleClick"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.onDoubleClick to send this event to any registered event listeners.
@@ -513,7 +486,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnMouseClick"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseClick to send this event to any registered event listeners.
@@ -524,7 +496,6 @@ namespace System.Windows.Forms {
                 handler( this, mea );
         }
         
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnMouseDoubleClick"]/*' />
         /// <devdoc>
         ///     Inheriting classes should override this method to handle this event.
         ///     Call base.OnMouseDoubleClick to send this event to any registered event listeners.
@@ -535,7 +506,6 @@ namespace System.Windows.Forms {
                 handler( this, mea );
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnMouseDown"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Raises the <see cref='System.Windows.Forms.NotifyIcon.MouseDown'/> event.
@@ -550,7 +520,6 @@ namespace System.Windows.Forms {
                 handler(this, e);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnMouseMove"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Inheriting classes should override this method to handle this event.
@@ -564,7 +533,6 @@ namespace System.Windows.Forms {
                 handler(this, e);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.OnMouseUp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Inheriting classes should override this method to handle this event.
@@ -577,7 +545,6 @@ namespace System.Windows.Forms {
                 handler(this, e);
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.ShowBalloonTip"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a balloon tooltip in the taskbar.
@@ -602,7 +569,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.ShowBalloonTip"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Displays a balloon tooltip in the taskbar with the specified title,
@@ -666,7 +632,6 @@ namespace System.Windows.Forms {
            }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.ShowContextMenu"]/*' />
         /// <devdoc>
         ///     Shows the context menu for the tray icon.
         /// </devdoc>
@@ -702,7 +667,6 @@ namespace System.Windows.Forms {
             }
         }
     
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.UpdateIcon"]/*' />
         /// <devdoc>
         ///     Updates the icon in the system tray.
         /// </devdoc>
@@ -752,7 +716,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.WmMouseDown"]/*' />
         /// <devdoc>
         ///     Handles the mouse-down event
         /// </devdoc>
@@ -765,7 +728,6 @@ namespace System.Windows.Forms {
             OnMouseDown(new MouseEventArgs(button, clicks, 0, 0, 0));
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.WmMouseMove"]/*' />
         /// <devdoc>
         ///     Handles the mouse-move event
         /// </devdoc>
@@ -773,7 +735,6 @@ namespace System.Windows.Forms {
             OnMouseMove(new MouseEventArgs(Control.MouseButtons, 0, 0, 0, 0));
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.WmMouseUp"]/*' />
         /// <devdoc>
         ///     Handles the mouse-up event
         /// </devdoc>
@@ -927,7 +888,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.NotifyIconNativeWindow"]/*' />
         /// <devdoc>
         ///     Defines a placeholder window that the NotifyIcon is attached to.
         /// </devdoc>
@@ -935,7 +895,6 @@ namespace System.Windows.Forms {
             internal NotifyIcon reference;
             private  GCHandle   rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
 
-            /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.NotifyIconNativeWindow.NotifyIconNativeWindow"]/*' />
             /// <devdoc>
             ///     Create a new NotifyIcon, and bind the window to the NotifyIcon component.
             /// </devdoc>
@@ -972,7 +931,6 @@ namespace System.Windows.Forms {
                 Application.OnThreadException(e);
             }
 
-            /// <include file='doc\TrayIcon.uex' path='docs/doc[@for="NotifyIcon.NotifyIconNativeWindow.WndProc"]/*' />
             /// <devdoc>
             ///     Pass messages on to the NotifyIcon object's wndproc handler.
             /// </devdoc>

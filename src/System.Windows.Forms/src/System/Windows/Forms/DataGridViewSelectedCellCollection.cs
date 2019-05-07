@@ -12,7 +12,6 @@ namespace System.Windows.Forms
     using System.Globalization;
     using System.Diagnostics.CodeAnalysis;
 
-    /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection"]/*' />
     /// <devdoc>
     /// <para>Represents a collection of selected <see cref='System.Windows.Forms.DataGridViewCell'/> objects in the <see cref='System.Windows.Forms.DataGridView'/> 
     /// control.</para>
@@ -25,92 +24,77 @@ namespace System.Windows.Forms
     {
         ArrayList items = new ArrayList();
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Add"]/*' />
         int IList.Add(object value)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Clear"]/*' />
         void IList.Clear()
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Contains"]/*' />
         bool IList.Contains(object value)
         {
             return this.items.Contains(value);
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.IndexOf"]/*' />
         int IList.IndexOf(object value)
         {
             return this.items.IndexOf(value);
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Insert"]/*' />
         void IList.Insert(int index, object value)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.Remove"]/*' />
         void IList.Remove(object value)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.RemoveAt"]/*' />
         void IList.RemoveAt(int index)
         {
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.IsFixedSize"]/*' />
         bool IList.IsFixedSize
         {
             get { return true; }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.IsReadOnly"]/*' />
         bool IList.IsReadOnly
         {
             get { return true; }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IList.this"]/*' />
         object IList.this[int index]
         {
             get { return this.items[index]; }
             set { throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection)); }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.CopyTo"]/*' />
         void ICollection.CopyTo(Array array, int index)
         {
             this.items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.Count"]/*' />
         int ICollection.Count
         {
             get { return this.items.Count; }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.IsSynchronized"]/*' />
         bool ICollection.IsSynchronized
         {
             get { return false; }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.ICollection.SyncRoot"]/*' />
         object ICollection.SyncRoot
         {
             get { return this; }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.IEnumerable.GetEnumerator"]/*' />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.items.GetEnumerator();
@@ -120,7 +104,6 @@ namespace System.Windows.Forms
         {
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.List"]/*' />
         protected override ArrayList List
         {
             get
@@ -129,7 +112,6 @@ namespace System.Windows.Forms
             }
         }
         
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.this"]/*' />
         public DataGridViewCell this[int index]
         {
             get
@@ -138,7 +120,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.Add"]/*' />
         /// <devdoc>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridViewCell'/> to this collection.</para>
         /// </devdoc>
@@ -170,7 +151,6 @@ namespace System.Windows.Forms
         }
         */
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.AddCellLinkedList"]/*' />
         /// <devdoc>
         /// <para>Adds all the <see cref='System.Windows.Forms.DataGridViewCell'/> objects from the provided linked list to this collection.</para>
         /// </devdoc>
@@ -184,7 +164,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.Clear"]/*' />
         [
             EditorBrowsable(EditorBrowsableState.Never)
         ]
@@ -193,7 +172,6 @@ namespace System.Windows.Forms
             throw new NotSupportedException(string.Format(SR.DataGridView_ReadOnlyCollection));
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.Contains"]/*' />
         /// <devdoc>
         ///      Checks to see if a DataGridViewCell is contained in this collection.
         /// </devdoc>
@@ -202,13 +180,11 @@ namespace System.Windows.Forms
             return this.items.IndexOf(dataGridViewCell) != -1;
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.CopyTo"]/*' />
         public void CopyTo(DataGridViewCell[] array, int index)
         {
             this.items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridViewSelectedCellCollection.uex' path='docs/doc[@for="DataGridViewSelectedCellCollection.Insert"]/*' />
         [
             EditorBrowsable(EditorBrowsableState.Never),
             SuppressMessage("Microsoft.Performance", "CA1801:AvoidUnusedParameters")
