@@ -17,17 +17,31 @@ internal static partial class Interop
 
         public static unsafe string GetWindowText(HandleRef hWnd)
         {
-            int textLength = GetWindowTextLengthW(hWnd) + 2;
-            char[] windowTitleBuffer = ArrayPool<char>.Shared.Rent(textLength);
-            string windowTitle;
-            fixed (char *pWindowTitle = windowTitleBuffer)
+            while (true)
             {
-                int actualTextLength = GetWindowTextW(hWnd, pWindowTitle, textLength);
-                windowTitle = new string(pWindowTitle, 0, actualTextLength);
+                // GetWindowTextLengthW returns the length of the text not
+                // including the null terminator.
+                int textLengthWithNullTerminator = GetWindowTextLengthW(hWnd) + 1;
+                char[] windowTitleBuffer = ArrayPool<char>.Shared.Rent(textLengthWithNullTerminator);
+                string windowTitle;
+                fixed (char *pWindowTitle = windowTitleBuffer)
+                {
+                    int actualTextLength = GetWindowTextW(hWnd, pWindowTitle, textLengthWithNullTerminator + 1);
+
+                    // The window text may have changed between calls.
+                    // Keep looping until we get a buffer that can fit.
+                    if (actualTextLength > textLengthWithNullTerminator)
+                    {
+                        ArrayPool<char>.Shared.Return(windowTitleBuffer);
+                        continue;
+                    }
+    
+                    windowTitle = new string(pWindowTitle, 0, actualTextLength);
+                }
+                
+                ArrayPool<char>.Shared.Return(windowTitleBuffer);
+                return windowTitle;
             }
-            
-            ArrayPool<char>.Shared.Return(windowTitleBuffer);
-            return windowTitle;
         }
     }
 }
