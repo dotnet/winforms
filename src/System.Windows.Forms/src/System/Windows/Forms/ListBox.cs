@@ -4080,13 +4080,8 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         internal class ListBoxAccessibleObject : ControlAccessibleObject
         {
-            private ListBox _owningListBox;
-            private ListBoxItemAccessibleObjectCollection _itemAccessibleObjects;
-
-            internal override object GetObjectForChildInternal(int idChild)
-            {
-                return _itemAccessibleObjects[_owningListBox.Items[idChild - 1]];
-            }
+            private readonly ListBox _owningListBox;
+            private readonly ListBoxItemAccessibleObjectCollection _itemAccessibleObjects;
 
             /// <summary>
             /// Initializes new instance of ListBoxAccessibleObject.
@@ -4096,6 +4091,11 @@ namespace System.Windows.Forms {
             {
                 _owningListBox = owningListBox;
                 _itemAccessibleObjects = new ListBoxItemAccessibleObjectCollection(owningListBox);
+            }
+                                                         
+            internal override object GetObjectForChildInternal(int idChild)
+            {
+                return _itemAccessibleObjects[_owningListBox.Items[idChild - 1]];
             }
 
             internal override bool IsIAccessibleExSupported()
@@ -4111,8 +4111,7 @@ namespace System.Windows.Forms {
 
         internal class ListBoxItemAccessibleObjectCollection : Hashtable
         {
-
-            private ListBox _owningListBoxBox;
+            private readonly ListBox _owningListBoxBox;
             private readonly ObjectIDGenerator _idGenerator = new ObjectIDGenerator();
 
             public ListBoxItemAccessibleObjectCollection(ListBox owningListBoxBox)
@@ -4127,7 +4126,7 @@ namespace System.Windows.Forms {
                     int id = GetId(key);
                     if (!ContainsKey(id))
                     {
-                        var itemAccessibleObject = new ListBoxItemAccessibleObject(_owningListBoxBox, id - 1);
+                        var itemAccessibleObject = new ListBoxItemAccessibleObject(_owningListBoxBox, key);
                         base[id] = itemAccessibleObject;
                     }
 
@@ -4155,13 +4154,13 @@ namespace System.Windows.Forms {
         [ComVisible(true)]
         internal class ListBoxItemAccessibleObject : AccessibleObject
         {
-            ListBox _owningListBox;
-            int _itemId;
+            private readonly ListBox _owningListBox;
+            private readonly int _itemId;
 
-            public ListBoxItemAccessibleObject(ListBox owningListBox, int itemId)
+            public ListBoxItemAccessibleObject(ListBox owningListBox, object item)
             {
                 _owningListBox = owningListBox;
-                _itemId = itemId;
+                _itemId = owningListBox.Items.IndexOf(item);
             }
 
             internal override void ScrollIntoView()
@@ -4169,39 +4168,39 @@ namespace System.Windows.Forms {
                 if (_owningListBox.SelectedIndex == -1) //no item selected
                 {
                     _owningListBox.SendMessage(NativeMethods.LB_SETCARETINDEX, _itemId, 0);
+
+                    return;
                 }
-                else
+                
+                int firstVisibleIndex = _owningListBox.SendMessage(NativeMethods.LB_GETTOPINDEX, 0, 0).ToInt32();
+
+                if (_itemId < firstVisibleIndex)
                 {
-                    int firstVisibleIndex = _owningListBox.SendMessage(NativeMethods.LB_GETTOPINDEX, 0, 0).ToInt32();
-                    int listBoxHeight = _owningListBox.Bounds.Height;
-                    int itemsCount = _owningListBox.SendMessage(NativeMethods.LB_GETCOUNT, 0, 0).ToInt32();
+                    _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId, 0);
 
-                    if (_itemId < firstVisibleIndex)
-                    {
-                        _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId, 0);
-                    }
-                    else
-                    {
-                        int itemsHeightSum = 0;
-                        int visibleItemsCount = 0;
+                    return;
+                }
 
-                        for (int i = firstVisibleIndex; i < itemsCount; i++)
+                int itemsHeightSum = 0;
+                int visibleItemsCount = 0;
+                int listBoxHeight = _owningListBox.Bounds.Height;
+                int itemsCount = _owningListBox.SendMessage(NativeMethods.LB_GETCOUNT, 0, 0).ToInt32();
+
+                for (int i = firstVisibleIndex; i < itemsCount; i++)
+                {
+                    int itemHeight = _owningListBox.SendMessage(NativeMethods.LB_GETITEMHEIGHT, i, 0).ToInt32();
+
+                    if ((itemsHeightSum += itemHeight) > listBoxHeight)
+                    {
+                        int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
+                        visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin since 0
+
+                        if (_itemId > lastVisibleIndex)
                         {
-                            int itemHeight = _owningListBox.SendMessage(NativeMethods.LB_GETITEMHEIGHT, i, 0).ToInt32();
-
-                            if ((itemsHeightSum += itemHeight) > listBoxHeight)
-                            {
-                                int lastVisibleIndex = i - 1; // - 1 because last "i" index is invisible
-                                visibleItemsCount = lastVisibleIndex - firstVisibleIndex + 1; // + 1 because array indexes begin since 0
-
-                                if (_itemId > lastVisibleIndex)
-                                {
-                                    _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId - visibleItemsCount + 1, 0);
-                                }
-
-                                break;
-                            }
+                            _owningListBox.SendMessage(NativeMethods.LB_SETTOPINDEX, _itemId - visibleItemsCount + 1, 0);
                         }
+
+                        break;
                     }
                 }
             }
