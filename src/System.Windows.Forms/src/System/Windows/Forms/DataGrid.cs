@@ -5677,11 +5677,20 @@ namespace System.Windows.Forms {
                 InvalidateRowHeader(this.currentRow);
     
                 // tell the current row to lose the childFocuse
-                localGridRows[currentRow].LoseChildFocus(layout.RowHeaders, isRightToLeft());
+                if (currentRow < localGridRows.Length)
+                {
+                    localGridRows[currentRow].LoseChildFocus(layout.RowHeaders, isRightToLeft());
+                }
             }
     
-            internal protected virtual void ColumnStartedEditing(Control editingControl) {
-                this.ColumnStartedEditing(editingControl.Bounds);
+            internal protected virtual void ColumnStartedEditing(Control editingControl)
+            {
+                if (editingControl == null)
+                {
+                    return;
+                }
+
+                ColumnStartedEditing(editingControl.Bounds);
             }
     
             /// <devdoc>
