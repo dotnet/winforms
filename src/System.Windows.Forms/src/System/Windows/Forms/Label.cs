@@ -1721,6 +1721,16 @@ namespace System.Windows.Forms
         }
 
         [ComVisible(true)]
+        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
+        {
+            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
+
+            // When Font is derived from parent, Dpi changed event required to clear the cache 
+            // to recalculate the label size. 
+            MeasureTextCache.InvalidateCache();
+        }
+
+        [System.Runtime.InteropServices.ComVisible(true)]
         internal class LabelAccessibleObject : ControlAccessibleObject
         {
             public LabelAccessibleObject(Label owner) : base(owner)

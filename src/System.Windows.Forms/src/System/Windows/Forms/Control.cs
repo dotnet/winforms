@@ -2345,7 +2345,7 @@ namespace System.Windows.Forms
         {
             Font local = (Font)Properties.GetObject(s_fontProperty);
             Font resolved = Font;
-            Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
+            Font newFont = new Font(this.Font.FontFamily, this.Font.Size * factor, this.Font.Style, this.Font.Unit, this.Font.GdiCharSet, this.Font.GdiVerticalFont);
 
             if ((local == null) || !local.Equals(newFont))
             {

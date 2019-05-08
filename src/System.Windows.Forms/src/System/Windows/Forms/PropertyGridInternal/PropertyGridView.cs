@@ -1890,13 +1890,49 @@ namespace System.Windows.Forms.PropertyGridInternal
             return (int)(InternalLabelWidth * (labelRatio - 1));
         }
 
+        private void SetDropDownWindowPosition(Rectangle rect, bool setBounds = false)  {
+            Size size = dropDownHolder.Size;
+
+            // Setting size to the width of selected row value field at the minimum.
+            size.Width = Math.Max(rect.Width + 1, size.Width);
+
+            Point loc = PointToScreen(new Point(0, 0));
+            Rectangle rectScreen = Screen.FromControl(Edit).WorkingArea;
+
+            loc.X = Math.Min(rectScreen.X + rectScreen.Width - size.Width, Math.Max(rectScreen.X, loc.X + rect.X + rect.Width - size.Width));
+            loc.Y += rect.Y;
+            if (rectScreen.Y + rectScreen.Height < (size.Height + loc.Y + Edit.Height)) {
+                loc.Y -= size.Height;
+                dropDownHolder.ResizeUp = true;
+            }
+            else {
+                loc.Y += rect.Height + 1;
+                dropDownHolder.ResizeUp = false;
+            }
+
+            int flags = NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE;
+
+            if (loc.X == 0 && loc.Y == 0) {
+                flags |= NativeMethods.SWP_NOMOVE;
+            }
+
+            if (this.Width == size.Width && this.Height == size.Height)  {
+                flags |= NativeMethods.SWP_NOSIZE;
+            }
+
+            SafeNativeMethods.SetWindowPos(new HandleRef(this.dropDownHolder, this.dropDownHolder.Handle), NativeMethods.NullHandleRef, loc.X, loc.Y, size.Width, size.Height, flags);
+            if (setBounds) {
+                dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
+            }
+        }
+
         /// <summary>
-        ///  Displays the provided control in a drop down.  When possible, the
-        ///  current dimensions of the control will be respected.  If this is not possible
-        ///  for the current screen layout the control may be resized, so it should
-        ///  be implemented using appropriate docking and anchoring so it will resize
-        ///  nicely.  If the user performs an action that would cause the drop down
-        ///  to prematurely disappear the control will be hidden.
+        ///      Displays the provided control in a drop down.  When possible, the
+        ///      current dimensions of the control will be respected.  If this is not possible
+        ///      for the current screen layout the control may be resized, so it should
+        ///      be implemented using appropriate docking and anchoring so it will resize
+        ///      nicely.  If the user performs an action that would cause the drop down
+        ///      to prematurely disappear the control will be hidden.
         /// </summary>
         public void /* cpr IWindowsFormsEditorService. */ DropDownControl(Control ctl)
         {
@@ -1908,36 +1944,29 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             dropDownHolder.Visible = false;
-            dropDownHolder.SetComponent(ctl, GetFlag(FlagResizableDropDown));
             Rectangle rect = GetRectangle(selectedRow, ROWVALUE);
-            Size size = dropDownHolder.Size;
-            Point loc = PointToScreen(new Point(0, 0));
-            Rectangle rectScreen = Screen.FromControl(Edit).WorkingArea;
-            size.Width = Math.Max(rect.Width + 1, size.Width);
 
-            // Not needed... CYMAXDDLHEIGHT used to be 200, but why limit it???
-            //size.Height = Math.Min(size.Height,CYMAXDDLHEIGHT);
+            dropDownHolder.SuspendAllLayout(dropDownHolder);
 
-            loc.X = Math.Min(rectScreen.X + rectScreen.Width - size.Width,
-                             Math.Max(rectScreen.X, loc.X + rect.X + rect.Width - size.Width));
-            loc.Y += rect.Y;
-            if (rectScreen.Y + rectScreen.Height < (size.Height + loc.Y + Edit.Height))
-            {
-                loc.Y -= size.Height;
-                dropDownHolder.ResizeUp = true;
-            }
-            else
-            {
-                loc.Y += rect.Height + 1;
-                dropDownHolder.ResizeUp = false;
-            }
+            // Parenting the dropdown holder - may cause WM_DPI changed event
+            UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
+
+            // WMDPI changed events are raised when parent DPi changed or windows is positioned on a screen with different Dpi than primary monitor.
+            // So order of the parenting and positioning of the window need to be in synch to avoid repetitive WM_DPI changed messages.
+            SetDropDownWindowPosition(rect);
+
+            dropDownHolder.SetComponent(ctl, GetFlag(FlagResizableDropDown));
+
+            //Set window position but not bounds to avoid moving window to primary monitor ( set bounds cause it ).
+            SetDropDownWindowPosition(rect);
+            dropDownHolder.ResumeAllLayout(dropDownHolder, true);
 
             // control is a top=level window. standard way of setparent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
-            // We are not touching this for this relase. We may revisit it in next release.
-            UnsafeNativeMethods.SetWindowLong(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.GWL_HWNDPARENT, new HandleRef(this, Handle));
-            dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
+            // We are not touching this for this release. We may revisit it in next release.
             SafeNativeMethods.ShowWindow(new HandleRef(dropDownHolder, dropDownHolder.Handle), NativeMethods.SW_SHOWNA);
+            SetDropDownWindowPosition(rect, setBounds: true);
+
             Edit.Filter = true;
             dropDownHolder.Visible = true;
             dropDownHolder.FocusComponent();
@@ -6299,53 +6328,51 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // all the resizing goo...
             //
-            private bool resizable = true;  // true if we're showing the resize widget.
-            private bool resizing = false; // true if we're in the middle of a resize operation.
-            private bool resizeUp = false; // true if the dropdown is above the grid row, which means the resize widget is at the top.
-            private Point dragStart = Point.Empty;     // the point at which the drag started to compute the delta
-            private Rectangle dragBaseRect = Rectangle.Empty; // the original bounds of our control.
-            private int currentMoveType = MoveTypeNone;    // what type of move are we processing? left, bottom, or both?
+            private bool                            resizable       = true;  // true if we're showing the resize widget.
+            private bool                            resizing        = false; // true if we're in the middle of a resize operation.
+            private  bool                           resizeUp        = false; // true if the dropdown is above the grid row, which means the resize widget is at the top.
+            private Point                           dragStart       = Point.Empty;     // the point at which the drag started to compute the delta
+            private Rectangle                       dragBaseRect    = Rectangle.Empty; // the original bounds of our control.
+            private int                             currentMoveType = MoveTypeNone;    // what type of move are we processing? left, bottom, or both?
+        
+            private int             ResizeBarSize;    // the thickness of the resize bar
+            private int             ResizeBorderSize; // the thickness of the 2-way resize area along the outer edge of the resize bar
+            private int             ResizeGripSize;   // the size of the 4-way resize grip at outermost corner of the resize bar
+            private Size            MinDropDownSize;  // the minimum size for the control.
+            private Bitmap                          sizeGripGlyph;    // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
 
-            private readonly static int ResizeBarSize;    // the thickness of the resize bar
-            private readonly static int ResizeBorderSize; // the thickness of the 2-way resize area along the outer edge of the resize bar
-            private readonly static int ResizeGripSize;   // the size of the 4-way resize grip at outermost corner of the resize bar
-            private readonly static Size MinDropDownSize;  // the minimum size for the control.
-            private Bitmap sizeGripGlyph;    // our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
+            private const int                       DropDownHolderBorder = 1;
+            private const int                       MoveTypeNone    = 0x0;
+            private const int                       MoveTypeBottom	= 0x1;
+            private const int                       MoveTypeLeft	= 0x2;
+            private const int                       MoveTypeTop  	= 0x4;
 
-            private const int DropDownHolderBorder = 1;
-            private const int MoveTypeNone = 0x0;
-            private const int MoveTypeBottom = 0x1;
-            private const int MoveTypeLeft = 0x2;
-            private const int MoveTypeTop = 0x4;
-
-            static DropDownHolder()
-            {
+            
+            
+            // DropDownHolder's caption is not visible,  So we don't have to localize its text.
+            [SuppressMessage("Microsoft.Globalization", "CA1303:DoNotPassLiteralsAsLocalizedParameters")]
+            internal DropDownHolder(PropertyGridView psheet)
+            : base() {
                 MinDropDownSize = new Size(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4);
                 ResizeGripSize = SystemInformation.HorizontalScrollBarHeight;
                 ResizeBarSize = ResizeGripSize + 1;
                 ResizeBorderSize = ResizeBarSize / 2;
-            }
 
-            internal DropDownHolder(PropertyGridView psheet)
-            : base()
-            {
-                ShowInTaskbar = false;
-                ControlBox = false;
-                MinimizeBox = false;
-                MaximizeBox = false;
-                Text = string.Empty;
-                FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-                AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
+                this.ShowInTaskbar = false;
+                this.ControlBox = false;
+                this.MinimizeBox = false;
+                this.MaximizeBox = false;
+                this.Text = "";
+                this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+                this.AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
                 mouseHook = new MouseHook(this, this, psheet);
                 Visible = false;
                 gridView = psheet;
-                BackColor = gridView.BackColor;
+                this.BackColor = gridView.BackColor;
             }
 
-            protected override CreateParams CreateParams
-            {
-                get
-                {
+            protected override CreateParams CreateParams {
+                get {
                     CreateParams cp = base.CreateParams;
                     cp.ExStyle |= NativeMethods.WS_EX_TOOLWINDOW;
                     cp.Style |= NativeMethods.WS_POPUP | NativeMethods.WS_BORDER;
@@ -6963,8 +6990,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // set the size stuff.
                         //
                         Size = sz;
-                        ctl.Dock = DockStyle.Fill;
+
+                        // DockStyle property on child control is forcing to resize to Parent control size that is not yet scaled.
+                        // Parent control's Preffered size, by this time, is calculated based on child controls scaled dimensions.
+                        // Also, making sure we are not shrinking if we are already there.
+
                         ctl.Visible = true;
+                        if (this.Size.Height < this.PreferredSize.Height)  {
+                            this.Size = new Size(this.Size.Width, this.PreferredSize.Height);
+                        }
+                        ctl.Dock = DockStyle.Fill;
 
                         if (editor != null)
                         {
@@ -7016,11 +7051,33 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     // Dropdownholder in PropertyGridView is already scaled based on parent font and other properties that were already set for new DPI
                     // This case is to avoid rescaling(double scaling) of this form
+
+                    var oldDpi = this.deviceDpi;
+                    this.deviceDpi =  (int)UnsafeNativeMethods.GetDpiForWindow(new HandleRef(this, HandleInternal));
+                    if (oldDpi != deviceDpi)  {
+                        RescaleConstantsForDpi(oldDpi, this.deviceDpi);
+                        this.PerformLayout();
+                    }
+
                     m.Result = IntPtr.Zero;
                     return;
                 }
 
                 base.WndProc(ref m);
+            }
+
+            protected override void RescaleConstantsForDpi(int oldDpi, int newDpi) {
+                base.RescaleConstantsForDpi(oldDpi, newDpi);
+
+                var scrollbarHeight = SystemInformation.GetHorizontalScrollBarHeightForDpi(newDpi);
+                MinDropDownSize = new Size(SystemInformation.GetVerticalScrollBarWidthForDpi(newDpi) * 4, scrollbarHeight * 4);
+                ResizeGripSize = scrollbarHeight;
+
+                ResizeBarSize = ResizeGripSize + 1;
+                ResizeBorderSize = ResizeBarSize / 2;
+
+                var factor = (double)newDpi / oldDpi;
+                Height = (int)Math.Round(factor * Height);
             }
         }
 
