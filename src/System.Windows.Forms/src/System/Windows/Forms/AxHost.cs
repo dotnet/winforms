@@ -3579,7 +3579,7 @@ namespace System.Windows.Forms {
             object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder,
                                                     object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters) {
                 if (name.StartsWith("[DISPID=")) {
-                    int endIndex = name.IndexOf("]");
+                    int endIndex = name.IndexOf(']');
                     int dispid = int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
                     object ambient = host.GetAmbientProperty(dispid);
                     if (ambient != null) return ambient;

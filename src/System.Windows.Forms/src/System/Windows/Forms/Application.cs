@@ -267,7 +267,7 @@ namespace System.Windows.Forms {
                                 string ns = t.Namespace;
 
                                 if (!string.IsNullOrEmpty(ns)){
-                                    int firstDot = ns.IndexOf(".");
+                                    int firstDot = ns.IndexOf('.');
                                     if( firstDot != -1 ){
                                         companyName = ns.Substring(0, firstDot);
                                     }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms {
                                 string ns = t.Namespace;
 
                                 if (!string.IsNullOrEmpty(ns)) {
-                                    int lastDot = ns.LastIndexOf(".");
+                                    int lastDot = ns.LastIndexOf('.');
                                     if (lastDot != -1 && lastDot < ns.Length - 1) {
                                         productName = ns.Substring(lastDot+1);
                                     }

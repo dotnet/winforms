@@ -906,7 +906,7 @@ namespace System.Resources {
                     if (asm != null) {
                         result = asm.GetType(name, false, ignoreCase);
                         if(result == null) {
-                            int indexOfComma = name.IndexOf(",");
+                            int indexOfComma = name.IndexOf(',');
                             if(indexOfComma != -1) {
                                 string shortName = name.Substring(0, indexOfComma );
                                 result = asm.GetType(shortName, false, ignoreCase);

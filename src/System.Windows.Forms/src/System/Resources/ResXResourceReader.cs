@@ -571,14 +571,14 @@ namespace System.Resources {
 
         private string GetAliasFromTypeName(string typeName) {
              
-             int indexStart = typeName.IndexOf(",");
+             int indexStart = typeName.IndexOf(',');
              return typeName.Substring(indexStart + 2); 
         
         }
 
         private string GetTypeFromTypeName(string typeName) {
              
-             int indexStart = typeName.IndexOf(",");
+             int indexStart = typeName.IndexOf(',');
              return typeName.Substring(0, indexStart); 
         
         }

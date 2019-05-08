@@ -34,9 +34,9 @@ namespace System.Windows.Forms
         {
             if (value is string valueString)
             {
-                string text =valueString.Replace('%', ' ').Trim();
+                string text = valueString.Replace('%', ' ').Trim();
                 double val = double.Parse(text, CultureInfo.CurrentCulture);
-                int indexOfPercent = valueString.IndexOf("%");
+                int indexOfPercent = valueString.IndexOf('%');
                 if (indexOfPercent > 0 && (val >= 0.0 && val <= 1.0))
                 {
                     val /= 100.0;

@@ -132,7 +132,7 @@ namespace System.Resources {
         public override string ToString() {
             string result = string.Empty;
             
-            if(fileName.IndexOf(";") != -1 || fileName.IndexOf("\"") != -1) {
+            if(fileName.IndexOf(';') != -1 || fileName.IndexOf('\"') != -1) {
                 result += ("\""+ fileName + "\";");
             } else {
                 result += (fileName + ";");
@@ -179,7 +179,7 @@ namespace System.Resources {
                     string fileName;
                     string remainingString;
                     if(stringValue.StartsWith("\"")) {
-                        int lastIndexOfQuote = stringValue.LastIndexOf("\"");
+                        int lastIndexOfQuote = stringValue.LastIndexOf('\"');
                         if (lastIndexOfQuote - 1 < 0)
                             throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(1, lastIndexOfQuote - 1); // remove the quotes in" ..... " 
@@ -187,7 +187,7 @@ namespace System.Resources {
                             throw new ArgumentException(nameof(stringValue));
                         remainingString = stringValue.Substring(lastIndexOfQuote + 2);
                     } else {
-                        int nextSemiColumn = stringValue.IndexOf(";");
+                        int nextSemiColumn = stringValue.IndexOf(';');
                         if(nextSemiColumn == -1)
                             throw new ArgumentException(nameof(stringValue));
                         fileName = stringValue.Substring(0, nextSemiColumn);
