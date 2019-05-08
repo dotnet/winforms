@@ -55,7 +55,6 @@ namespace System.Windows.Forms
             _backColor = backColor;
         }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Graphics"]/*' />
         /// <devdoc>
         /// Graphics object with which painting should be done.
         /// </devdoc>
@@ -66,7 +65,6 @@ namespace System.Windows.Forms
         /// </devdoc>
         public Font Font { get; }
 
-        /// <include file='doc\DrawItemEvent.uex' path='docs/doc[@for="DrawItemEventArgs.Bounds"]/*' />
         /// <devdoc>
         /// The rectangle outlining the area in which the painting should be  done.
         /// </devdoc>

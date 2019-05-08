@@ -12,7 +12,6 @@ namespace System.Windows.Forms {
     using System.ComponentModel;
     using System.Globalization;
     
-    /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection"]/*' />
     /// <devdoc>
     /// <para>Represents a collection of <see cref='System.Windows.Forms.DataGridTableStyle'/> objects in the <see cref='System.Windows.Forms.DataGrid'/> 
     /// control.</para>
@@ -23,78 +22,63 @@ namespace System.Windows.Forms {
         ArrayList        items = new ArrayList();
         DataGrid         owner  = null;
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Add"]/*' />
         int IList.Add(object value) {
             return this.Add((DataGridTableStyle) value);            
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Clear"]/*' />
         void IList.Clear() {
             this.Clear();
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Contains"]/*' />
         bool IList.Contains(object value) {
             return items.Contains(value);
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.IndexOf"]/*' />
         int IList.IndexOf(object value) {
             return items.IndexOf(value);
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Insert"]/*' />
         void IList.Insert(int index, object value) {
             throw new NotSupportedException();
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.Remove"]/*' />
         void IList.Remove(object value) {
             this.Remove((DataGridTableStyle)value);
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.RemoveAt"]/*' />
         void IList.RemoveAt(int index) {
             this.RemoveAt(index);
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.IsFixedSize"]/*' />
         bool IList.IsFixedSize {
             get {return false;}
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.IsReadOnly"]/*' />
         bool IList.IsReadOnly {
             get {return false;}
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IList.this"]/*' />
         object IList.this[int index] {
             get { return items[index]; }
             set { throw new NotSupportedException(); }
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.CopyTo"]/*' />
         void ICollection.CopyTo(Array array, int index) {
             this.items.CopyTo(array, index);
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.Count"]/*' />
         int ICollection.Count {
             get {return this.items.Count;}
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.IsSynchronized"]/*' />
         bool ICollection.IsSynchronized {
             get {return false;}
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.ICollection.SyncRoot"]/*' />
         object ICollection.SyncRoot {
             get {return this;}
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.IEnumerable.GetEnumerator"]/*' />
         IEnumerator IEnumerable.GetEnumerator() {
             return items.GetEnumerator();
         }
@@ -103,7 +87,6 @@ namespace System.Windows.Forms {
             owner = grid;
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.List"]/*' />
         protected override ArrayList List {
             get {
                 return items;
@@ -124,7 +107,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.this"]/*' />
         /// <devdoc>
         ///      Retrieves the DataGridTable with the specified index.
         /// </devdoc>
@@ -134,7 +116,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.this1"]/*' />
         /// <devdoc>
         ///      Retrieves the DataGridTable with the name provided.
         /// </devdoc>
@@ -161,7 +142,6 @@ namespace System.Windows.Forms {
                     throw new ArgumentException(SR.DataGridTableStyleDuplicateMappingName, "table");
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Add"]/*' />
         /// <devdoc>
         /// <para>Adds a <see cref='System.Windows.Forms.DataGridTableStyle'/> to this collection.</para>
         /// </devdoc>
@@ -186,7 +166,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
         
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.AddRange"]/*' />
         public virtual void AddRange(DataGridTableStyle[] tables) {
             if (tables == null) {
                 throw new ArgumentNullException(nameof(tables));
@@ -199,13 +178,11 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.CollectionChanged"]/*' />
         public event CollectionChangeEventHandler CollectionChanged {
             add => onCollectionChanged += value;
             remove => onCollectionChanged -= value;
         }
         
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Clear"]/*' />
         public void Clear() {
             for (int i = 0; i < items.Count; i++) {
                 DataGridTableStyle element = (DataGridTableStyle)items[i];
@@ -216,7 +193,6 @@ namespace System.Windows.Forms {
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Contains"]/*' />
         /// <devdoc>
         ///      Checks to see if a DataGridTableStyle is contained in this collection.
         /// </devdoc>
@@ -225,7 +201,6 @@ namespace System.Windows.Forms {
             return index != -1;
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Contains1"]/*' />
         /// <devdoc>
         /// <para>Checks to see if a <see cref='System.Windows.Forms.DataGridTableStyle'/> with the given name
         ///    is contained in this collection.</para>
@@ -254,7 +229,6 @@ namespace System.Windows.Forms {
         }
         */
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.OnCollectionChanged"]/*' />
         protected void OnCollectionChanged(CollectionChangeEventArgs e) {
             if (onCollectionChanged != null)
                 onCollectionChanged(this, e);
@@ -276,7 +250,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.Remove"]/*' />
         public void Remove(DataGridTableStyle table) {
             int tableIndex = -1;
             int itemsCount = items.Count;
@@ -291,7 +264,6 @@ namespace System.Windows.Forms {
                 RemoveAt(tableIndex);
         }
 
-        /// <include file='doc\DataGridTableCollection.uex' path='docs/doc[@for="GridTableStylesCollection.RemoveAt"]/*' />
         public void RemoveAt(int index) {
             DataGridTableStyle element = (DataGridTableStyle)items[index];
             element.MappingNameChanged -= new EventHandler(TableStyleMappingNameChanged);

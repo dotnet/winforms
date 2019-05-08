@@ -16,7 +16,6 @@ namespace System.Windows.Forms {
     using System.Windows.Forms.Design;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl"]/*' />
     /// <devdoc>
     ///     Represents an empty control that can be used in the Forms Designer to create other  controls.   By extending form, UserControl inherits all of
     ///     the standard positioning and mnemonic handling code that is necessary
@@ -34,7 +33,6 @@ namespace System.Windows.Forms {
         private static readonly object EVENT_LOAD = new object();
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.UserControl"]/*' />
         /// <devdoc>
         ///    Creates a new UserControl object. A vast majority of people
         ///    will not want to instantiate this class directly, but will be a
@@ -110,7 +108,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.AutoValidate"]/*' />
         /// <devdoc>
         ///     Indicates whether controls in this container will be automatically validated when the focus changes.
         /// </devdoc>
@@ -127,7 +124,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.AutoValidateChanged"]/*' />
         [
         Browsable(true),
         EditorBrowsable(EditorBrowsableState.Always),
@@ -137,7 +133,6 @@ namespace System.Windows.Forms {
             remove => base.AutoValidateChanged -= value;
         }
 
-		/// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.BorderStyle"]/*' />
         /// <devdoc>
         ///    <para> 
         ///       Indicates the borderstyle for the UserControl.
@@ -168,7 +163,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.CreateParams"]/*' />
         /// <devdoc>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
@@ -196,7 +190,6 @@ namespace System.Windows.Forms {
             }
         }
         
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.DefaultSize"]/*' />
         /// <devdoc>
         ///     The default size for this user control.
         /// </devdoc>
@@ -206,7 +199,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.Load"]/*' />
         /// <devdoc>
         ///    <para>Occurs before the control becomes visible.</para>
         /// </devdoc>
@@ -216,7 +208,6 @@ namespace System.Windows.Forms {
             remove => Events.RemoveHandler(EVENT_LOAD, value);
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.Text"]/*' />
         [
         Browsable(false), EditorBrowsable(EditorBrowsableState.Never), 
         Bindable(false), 
@@ -231,14 +222,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
         
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.ValidateChildren"]/*' />
         /// <devdoc>
         ///     Validates all selectable child controls in the container, including descendants. This is
         ///     equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
@@ -249,7 +238,6 @@ namespace System.Windows.Forms {
             return base.ValidateChildren();
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.ValidateChildren1"]/*' />
         /// <devdoc>
         ///     Validates all the child controls in the container. Exactly which controls are
         ///     validated and which controls are skipped is determined by <paramref name="flags"/>.
@@ -272,7 +260,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.OnCreateControl"]/*' />
         /// <devdoc>
         ///    <para> Raises the CreateControl event.</para>
         /// </devdoc>
@@ -283,7 +270,6 @@ namespace System.Windows.Forms {
             OnLoad(EventArgs.Empty);
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.OnLoad"]/*' />
         /// <devdoc>
         ///    <para>The Load event is fired before the control becomes visible for the first time.</para>
         /// </devdoc>
@@ -295,7 +281,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.OnResize"]/*' />
         /// <devdoc>
         ///     OnResize override to invalidate entire control in Stetch mode
         /// </devdoc>
@@ -306,7 +291,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.OnMouseDown"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnMouseDown(MouseEventArgs e) {
             if (!FocusInside())
@@ -325,7 +309,6 @@ namespace System.Windows.Forms {
             
         }
 
-        /// <include file='doc\UserControl.uex' path='docs/doc[@for="UserControl.WndProc"]/*' />
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {

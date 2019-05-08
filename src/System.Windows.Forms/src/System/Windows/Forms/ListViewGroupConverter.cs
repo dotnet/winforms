@@ -134,7 +134,6 @@ namespace System.Windows.Forms
             return null;
         }
 
-        /// <include file='doc\ListViewGroupConverter.uex' path='docs/doc[@for="ListViewGroupConverter.GetStandardValuesExclusive"]/*' />
         /// <devdoc>
         /// Determines if the list of standard values returned from GetStandardValues is an
         /// exclusive list.  If the list is exclusive, then no other values are valid, such as

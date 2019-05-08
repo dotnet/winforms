@@ -17,7 +17,6 @@ namespace System.Windows.Forms.Design {
     using Microsoft.Win32;
     using Message = System.Windows.Forms.Message;
 
-    /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm"]/*' />
     /// <devdoc>
     /// <para>Provides a user interface for <see cref='System.Windows.Forms.Design.WindowsFormsComponentEditor'/>.</para>
     /// </devdoc>
@@ -52,7 +51,6 @@ namespace System.Windows.Forms.Design {
         private const int SELECTOR_PADDING = 10;
         private const int STRIP_HEIGHT = 4;
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorForm"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.Design.ComponentEditorForm'/> class.
@@ -81,7 +79,6 @@ namespace System.Windows.Forms.Design {
             OnConfigureUI();
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ApplyChanges"]/*' />
         /// <devdoc>
         ///     Applies any changes in the set of ComponentPageControl to the actual component.
         /// </devdoc>
@@ -134,7 +131,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.AutoSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Hide the property
@@ -153,7 +149,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.AutoSizeChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler AutoSizeChanged
         {
@@ -169,7 +164,6 @@ namespace System.Windows.Forms.Design {
         }
         */
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.OnButtonClick"]/*' />
         /// <devdoc>
         ///     Handles ok/cancel/apply/help button click events
         /// </devdoc>
@@ -189,7 +183,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.OnConfigureUI"]/*' />
         /// <devdoc>
         ///     Lays out the UI of the form.
         /// </devdoc>
@@ -327,7 +320,6 @@ namespace System.Windows.Forms.Design {
 
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.OnActivated"]/*' />
         /// <devdoc>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
@@ -346,7 +338,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.OnHelpRequested"]/*' />
         /// <devdoc>
         /// </devdoc>
         [SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
@@ -356,7 +347,6 @@ namespace System.Windows.Forms.Design {
             ShowPageHelp();
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.OnNewObjects"]/*' />
         /// <devdoc>
         ///     Called to initialize this form with the new component.
         /// </devdoc>
@@ -386,7 +376,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.OnSelChangeSelector"]/*' />
         /// <devdoc>
         ///     Handles switching between pages.
         /// </devdoc>
@@ -415,7 +404,6 @@ namespace System.Windows.Forms.Design {
             helpButton.Enabled = pageSites[activePage].GetPageControl().SupportsHelp();
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.PreProcessMessage"]/*' />
         /// <devdoc>
         ///    <para>Provides a method to override in order to pre-process input messages before 
         ///       they are dispatched.</para>
@@ -427,7 +415,6 @@ namespace System.Windows.Forms.Design {
             return base.PreProcessMessage(ref msg);
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.SetDirty"]/*' />
         /// <devdoc>
         ///     Sets the controls of the form to dirty.  This enables the "apply"
         ///     button.
@@ -438,7 +425,6 @@ namespace System.Windows.Forms.Design {
             cancelButton.Text = SR.CancelCaption;
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ShowForm"]/*' />
         /// <devdoc>
         ///    <para>Shows the form. The form will have no owner window.</para>
         /// </devdoc>
@@ -446,7 +432,6 @@ namespace System.Windows.Forms.Design {
             return ShowForm(null, 0);
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ShowForm1"]/*' />
         /// <devdoc>
         ///    <para> Shows the form and the specified page. The form will have no owner window.</para>
         /// </devdoc>
@@ -454,7 +439,6 @@ namespace System.Windows.Forms.Design {
             return ShowForm(null, page);
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ShowForm2"]/*' />
         /// <devdoc>
         ///    <para>Shows the form with the specified owner.</para>
         /// </devdoc>
@@ -462,7 +446,6 @@ namespace System.Windows.Forms.Design {
             return ShowForm(owner, 0);
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ShowForm3"]/*' />
         /// <devdoc>
         ///    <para>Shows the form and the specified page with the specified owner.</para>
         /// </devdoc>
@@ -488,7 +471,6 @@ namespace System.Windows.Forms.Design {
             return DialogResult;
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ShowPageHelp"]/*' />
         /// <devdoc>
         ///     Shows help for the active page.
         /// </devdoc>
@@ -500,7 +482,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorPageSite"]/*' />
         /// <devdoc>
         ///     Implements a standard version of ComponentEditorPageSite for use within a
         ///     ComponentEditorForm.
@@ -513,7 +494,6 @@ namespace System.Windows.Forms.Design {
             internal bool isDirty;
             private ComponentEditorForm form;
 
-            /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorPageSite.ComponentEditorPageSite"]/*' />
             /// <devdoc>
             ///     Creates the page site.
             /// </devdoc>
@@ -540,7 +520,6 @@ namespace System.Windows.Forms.Design {
                 pageControl.SetComponent(component);
             }
 
-            /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorPageSite.Active"]/*' />
             /// <devdoc>
             ///     Called by the ComponentEditorForm to activate / deactivate the page.
             /// </devdoc>
@@ -575,7 +554,6 @@ namespace System.Windows.Forms.Design {
                 }
             }
 
-            /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorPageSite.GetControl"]/*' />
             /// <devdoc>
             ///     Called by a page to return a parenting control for itself.
             /// </devdoc>
@@ -583,7 +561,6 @@ namespace System.Windows.Forms.Design {
                 return parent;
             }
 
-            /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorPageSite.GetPageControl"]/*' />
             /// <devdoc>
             ///     Called by the ComponentEditorForm to get the actual page.
             /// </devdoc>
@@ -591,7 +568,6 @@ namespace System.Windows.Forms.Design {
                 return pageControl;
             }
 
-            /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.ComponentEditorPageSite.SetDirty"]/*' />
             /// <devdoc>
             ///     Called by a page to mark it's contents as dirty.
             /// </devdoc>
@@ -602,7 +578,6 @@ namespace System.Windows.Forms.Design {
             }
         }
 
-        /// <include file='doc\ComponentEditorForm.uex' path='docs/doc[@for="ComponentEditorForm.PageSelector"]/*' />
         /// <devdoc>
         /// </devdoc>
         //  This should be moved into a shared location

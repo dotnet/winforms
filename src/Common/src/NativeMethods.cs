@@ -939,7 +939,6 @@ namespace System.Windows.Forms
             return ((((ushort)(sub)) << 10) | (ushort)(primary));
         }
         
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.Lang.MAKELCID"]/*' />
         /// <devdoc>
         ///     Creates an LCID from a LangId
         /// </devdoc>
@@ -947,7 +946,6 @@ namespace System.Windows.Forms
             return MAKELCID(lgid, SORT_DEFAULT);
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.Lang.MAKELCID1"]/*' />
         /// <devdoc>
         ///     Creates an LCID from a LangId
         /// </devdoc>
@@ -1941,7 +1939,6 @@ namespace System.Windows.Forms
             public bool     fStrikethrough;
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCbmp"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
@@ -1958,7 +1955,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCicon"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]
@@ -1974,7 +1970,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <include file='doc\NativeMethods.uex' path='docs/doc[@for="NativeMethods.PICTDESCemf"]/*' />
         /// <devdoc>
         /// </devdoc>
         [StructLayout(LayoutKind.Sequential)]

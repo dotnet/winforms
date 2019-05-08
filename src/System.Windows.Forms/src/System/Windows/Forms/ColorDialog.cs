@@ -17,7 +17,6 @@ namespace System.Windows.Forms {
 
     using Microsoft.Win32;
 
-    /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a common dialog box that displays available colors along with
@@ -32,12 +31,10 @@ namespace System.Windows.Forms {
         private int options;
         private int[] customColors;
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.color"]/*' />
         /// <devdoc>
         /// </devdoc>
         private Color color;
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ColorDialog"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Initializes a new instance of the <see cref='System.Windows.Forms.ColorDialog'/>
@@ -53,7 +50,6 @@ namespace System.Windows.Forms {
             Reset();
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.AllowFullOpen"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the user can use the dialog box
@@ -75,7 +71,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.AnyColor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the dialog box displays all available colors in
@@ -97,7 +92,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.Color"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the color selected by the user.
@@ -121,7 +115,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.CustomColors"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the set of
@@ -142,7 +135,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.FullOpen"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the controls used to create custom
@@ -164,7 +156,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.Instance"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Our HINSTANCE from Windows.
@@ -174,7 +165,6 @@ namespace System.Windows.Forms {
             get { return UnsafeNativeMethods.GetModuleHandle(null);}
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.Options"]/*' />
         /// <devdoc>
         ///    Returns our CHOOSECOLOR options.
         /// </devdoc>
@@ -184,7 +174,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ShowHelp"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether a Help button appears
@@ -205,7 +194,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.SolidColorOnly"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets
@@ -228,7 +216,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.GetOption"]/*' />
         /// <devdoc>
         ///     Lets us control the CHOOSECOLOR options.
         /// </devdoc>
@@ -236,7 +223,6 @@ namespace System.Windows.Forms {
             return(options & option) != 0;
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.Reset"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Resets
@@ -255,7 +241,6 @@ namespace System.Windows.Forms {
 		Color = Color.Black;
 	}
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.RunDialog"]/*' />
         /// <devdoc>
         /// </devdoc>
         protected override bool RunDialog(IntPtr hwndOwner) {
@@ -287,7 +272,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.SetOption"]/*' />
         /// <devdoc>
         ///     Allows us to manipulate the CHOOSECOLOR options
         /// </devdoc>
@@ -300,7 +284,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ShouldSerializeColor"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Indicates whether the <see cref='System.Windows.Forms.ColorDialog.Color'/> property should be
@@ -311,7 +294,6 @@ namespace System.Windows.Forms {
             return !Color.Equals(Color.Black);
         }
 
-        /// <include file='doc\ColorDialog.uex' path='docs/doc[@for="ColorDialog.ToString"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Provides a string version of this object.

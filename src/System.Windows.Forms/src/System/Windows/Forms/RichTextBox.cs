@@ -31,7 +31,6 @@ namespace System.Windows.Forms {
 
 
 
-    /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox"]/*' />
     /// <devdoc>
     ///     Rich Text control. The RichTextBox is a control that contains formatted text.
     ///     It supports font selection, boldface, and other type attributes.
@@ -54,7 +53,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DV_E_DVASPECT"]/*' />
         /// <devdoc>
         ///     Paste special flags.
         /// </devdoc>
@@ -132,7 +130,6 @@ namespace System.Windows.Forms {
         private static readonly BitVector32.Section scrollBarsSection = BitVector32.CreateSection((short) RichTextBoxScrollBars.ForcedBoth, allowOleObjectsSection);
         private static readonly BitVector32.Section enableAutoDragDropSection = BitVector32.CreateSection(1, scrollBarsSection);
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.RichTextBox"]/*' />
         /// <devdoc>
         ///     Constructs a new RichTextBox.
         /// </devdoc>
@@ -149,7 +146,6 @@ namespace System.Windows.Forms {
             InConstructor = false;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.AllowDrop"]/*' />
         /// <devdoc>
         ///     RichTextBox controls have built-in drag and drop support, but AllowDrop, DragEnter, DragDrop
         ///     may still be used: this should be hidden in the property grid, but not in code
@@ -174,7 +170,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\TextBoxBase.uex' path='docs/doc[@for="TextBoxBase.AutoSize"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets a value indicating whether the size
@@ -200,7 +195,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.AutoWordSelection"]/*' />
         /// <devdoc>
         ///     Controls whether whether mouse selection snaps to whole words.
         /// </devdoc>
@@ -221,7 +215,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImage"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override Image BackgroundImage {
             get {
@@ -232,14 +225,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageChanged {
             add => base.BackgroundImageChanged += value;
             remove => base.BackgroundImageChanged -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayout"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public override ImageLayout BackgroundImageLayout {
             get {
@@ -250,14 +241,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BackgroundImageLayoutChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler BackgroundImageLayoutChanged {
             add => base.BackgroundImageLayoutChanged += value;
             remove => base.BackgroundImageLayoutChanged -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.BulletIndent"]/*' />
         /// <devdoc>
         ///     Returns the amount of indent used in a RichTextBox control when
         ///     SelectionBullet is set to true.
@@ -298,7 +287,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CanRedo"]/*' />
         /// <devdoc>
         ///      Whether or not there are actions that can be Redone on the RichTextBox control.
         /// </devdoc>
@@ -319,7 +307,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CreateParams"]/*' />
         protected override CreateParams CreateParams {
             get {
                 // Check for library
@@ -384,7 +371,6 @@ namespace System.Windows.Forms {
 
         // public bool CanUndo {}; <-- inherited from TextBoxBase
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DetectUrls"]/*' />
         /// <devdoc>
         ///     Controls whether or not the rich edit control will automatically highlight URLs.
         ///     By default, this is true. Note that changing this property will not update text that is
@@ -411,14 +397,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DefaultSize"]/*' />
         protected override Size DefaultSize {
             get {
                 return new Size(100, 96);
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.EnableAutoDragDrop"]/*' />
         /// <devdoc>
         ///     We can't just enable drag/drop of text by default: it's a breaking change.
         ///     Should be false by default.
@@ -441,7 +425,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ForeColor"]/*' />
         public override Color ForeColor {
             get {
                 return base.ForeColor;
@@ -458,7 +441,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Font"]/*' />
         public override Font Font {
             get {
                 return base.Font;
@@ -561,7 +543,6 @@ namespace System.Windows.Forms {
             set { richTextBoxFlags[linkcursorSection] = value ? 1 : 0; }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.MaxLength"]/*' />
         [
         DefaultValue(int.MaxValue),
         ]
@@ -573,7 +554,6 @@ namespace System.Windows.Forms {
                 base.MaxLength = value;
             }
         }
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Multiline"]/*' />
         [DefaultValue(true)]
         public override bool Multiline {
             get {
@@ -589,7 +569,6 @@ namespace System.Windows.Forms {
             set { richTextBoxFlags[protectedErrorSection] = value ? 1 : 0; }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.RedoActionName"]/*' />
         /// <devdoc>
         ///     Returns the name of the action that will be performed if the user
         ///     Redo's their last Undone operation. If no operation can be redone,
@@ -612,7 +591,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.RichTextBoxShortcutsEnabled"]/*' />
         //Description: Specifies whether rich text formatting keyboard shortcuts are enabled.
         [
         DefaultValue(true),
@@ -629,7 +607,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.RightMargin"]/*' />
         /// <devdoc>
         ///     The right margin of a RichTextBox control.  A nonzero margin implies WordWrap.
         /// </devdoc>
@@ -669,7 +646,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Rtf"]/*' />
         /// <devdoc>
         ///     The text of a RichTextBox control, including all Rtf codes.
         /// </devdoc>
@@ -710,7 +686,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ScrollBars"]/*' />
         /// <devdoc>
         ///     The current scrollbar settings for a multi-line rich edit control.
         ///     Possible return values are given by the RichTextBoxScrollBars enumeration.
@@ -750,7 +725,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionAlignment"]/*' />
         /// <devdoc>
         ///     The alignment of the paragraphs in a RichTextBox control.
         /// </devdoc>
@@ -820,7 +794,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionBullet"]/*' />
         /// <devdoc>
         ///     Determines if a paragraph in the RichTextBox control
         ///     contains the current selection or insertion point has the bullet style.
@@ -874,7 +847,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionCharOffset"]/*' />
         /// <devdoc>
         ///     Determines whether text in the RichTextBox control
         ///     appears on the baseline (normal), as a superscript above the baseline,
@@ -922,7 +894,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionColor"]/*' />
         /// <devdoc>
         ///     The color of the currently selected text in the
         ///     RichTextBox control.
@@ -957,7 +928,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionBackColor"]/*' />
         /// <devdoc>
         ///     The background color of the currently selected text in the RichTextBox control.
         ///     Returns Color.Empty if the selection has more than one color.
@@ -1009,7 +979,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionFont"]/*' />
         /// <devdoc>
         ///     The font used to display the currently selected text
         ///     or the characters(s) immediately following the insertion point in the
@@ -1030,7 +999,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionHangingIndent"]/*' />
         /// <devdoc>
         ///     The distance (in pixels) between the left edge of the first line of text
         ///     in the selected paragraph(s) (as specified by the SelectionIndent property)
@@ -1071,7 +1039,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionIndent"]/*' />
         /// <devdoc>
         ///     The distance (in pixels) between the left edge of the RichTextBox control and
         ///     the left edge of the text that is selected or added at the current
@@ -1112,7 +1079,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionLength"]/*' />
         /// <devdoc>
         ///    <para>
         ///       Gets or sets the number of characters selected in the text
@@ -1145,7 +1111,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionProtected"]/*' />
         /// <devdoc>
         ///     true if the current selection prevents any changes to its contents.
         /// </devdoc>
@@ -1166,7 +1131,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectedRtf"]/*' />
         /// <devdoc>
         ///     The currently selected text of a RichTextBox control, including
         ///     all Rtf codes.
@@ -1189,7 +1153,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionRightIndent"]/*' />
         /// <devdoc>
         ///     The distance (in pixels) between the right edge of the RichTextBox control and
         ///     the right edge of the text that is selected or added at the current
@@ -1233,7 +1196,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionTabs"]/*' />
         /// <devdoc>
         ///     The absolute tab positions (in pixels) of text in a RichTextBox control.
         /// </devdoc>
@@ -1285,7 +1247,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectedText"]/*' />
         /// <devdoc>
         ///     The currently selected text of a RichTextBox control; consists of a
         ///     zero length string if no characters are selected.
@@ -1309,7 +1270,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionType"]/*' />
         /// <devdoc>
         ///     The type of the current selection. The returned value is one
         ///     of the values enumerated in RichTextBoxSelectionType.
@@ -1334,7 +1294,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ShowSelectionMargin"]/*' />
         /// <devdoc>
         ///     Whether or not the left edge of the control will have a "selection margin" which
         ///     can be used to select entire lines
@@ -1359,7 +1318,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Text"]/*' />
         [
         Localizable(true),
         RefreshProperties(RefreshProperties.All)
@@ -1424,7 +1382,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.TextLength"]/*' />
         [Browsable(false)]
         public override int TextLength {
             get
@@ -1439,7 +1396,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.UndoActionName"]/*' />
         /// <devdoc>
         ///     Returns the name of the action that will be undone if the user
         ///     Undo's their last operation. If no operation can be undone, it will
@@ -1482,7 +1438,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ZoomFactor"]/*' />
         /// <devdoc>
         ///     The current zoom level for the RichTextBox control. This may be between 1/64 and 64. 1.0 indicates
         ///     no zoom (i.e. normal viewing).  Zoom works best with TrueType fonts;
@@ -1526,7 +1481,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ContentsResized"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxContentsResized))]
         public event ContentsResizedEventHandler ContentsResized {
             add => Events.AddHandler(EVENT_REQUESTRESIZE, value);
@@ -1534,7 +1488,6 @@ namespace System.Windows.Forms {
         }        
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragDrop"]/*' />
         /// <devdoc>
         ///     RichTextBox controls have built-in drag and drop support, but AllowDrop, DragEnter, DragDrop
         ///     may still be used: this should be hidden in the property grid, but not in code
@@ -1545,7 +1498,6 @@ namespace System.Windows.Forms {
             remove => base.DragDrop -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragEnter"]/*' />
         /// <devdoc>
         ///     RichTextBox controls have built-in drag and drop support, but AllowDrop, DragEnter, DragDrop
         ///     may still be used: this should be hidden in the property grid, but not in code
@@ -1556,42 +1508,36 @@ namespace System.Windows.Forms {
             remove => base.DragEnter -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragLeave"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler DragLeave {
             add => base.DragLeave += value;
             remove => base.DragLeave -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.DragOver"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event DragEventHandler DragOver {
             add => base.DragOver += value;
             remove => base.DragOver -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GiveFeedback"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event GiveFeedbackEventHandler GiveFeedback {
             add => base.GiveFeedback += value;
             remove => base.GiveFeedback -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.QueryContinueDrag"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event QueryContinueDragEventHandler QueryContinueDrag {
             add => base.QueryContinueDrag += value;
             remove => base.QueryContinueDrag -= value;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.HScroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxHScroll))]
         public event EventHandler HScroll {
             add => Events.AddHandler(EVENT_HSCROLL, value);
             remove => Events.RemoveHandler(EVENT_HSCROLL, value);
         }        
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LinkClicked"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxLinkClick))]
         public event LinkClickedEventHandler LinkClicked {
             add => Events.AddHandler(EVENT_LINKACTIVATE, value);
@@ -1599,7 +1545,6 @@ namespace System.Windows.Forms {
         }        
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ImeChange"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxIMEChange))]
         public event EventHandler ImeChange {
             add => Events.AddHandler(EVENT_IMECHANGE, value);
@@ -1607,7 +1552,6 @@ namespace System.Windows.Forms {
         }        
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Protected"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxProtected))]
         public event EventHandler Protected {
             add => Events.AddHandler(EVENT_PROTECTED, value);
@@ -1615,7 +1559,6 @@ namespace System.Windows.Forms {
         }        
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SelectionChanged"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxSelChange))]
         public event EventHandler SelectionChanged {
             add => Events.AddHandler(EVENT_SELCHANGE, value);
@@ -1623,14 +1566,12 @@ namespace System.Windows.Forms {
         }        
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.VScroll"]/*' />
         [SRCategory(nameof(SR.CatBehavior)), SRDescription(nameof(SR.RichTextBoxVScroll))]
         public event EventHandler VScroll {
             add => Events.AddHandler(EVENT_VSCROLL, value);
             remove => Events.RemoveHandler(EVENT_VSCROLL, value);
         }
    
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CanPaste"]/*' />
         /// <devdoc>
         ///     Returns a boolean indicating whether the RichTextBoxConstants control can paste the
         ///     given clipboard format.
@@ -1769,7 +1710,6 @@ namespace System.Windows.Forms {
             return ret;       // tell the RichTextBoxConstants how we are doing 0 - Okay, 1 - quit
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for a given string.
         /// </devdoc>
@@ -1777,7 +1717,6 @@ namespace System.Windows.Forms {
             return Find(str, 0, 0, RichTextBoxFinds.None);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find1"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for a given string.
         /// </devdoc>
@@ -1785,7 +1724,6 @@ namespace System.Windows.Forms {
             return Find(str, 0, 0, options);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find2"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for a given string.
         /// </devdoc>
@@ -1793,7 +1731,6 @@ namespace System.Windows.Forms {
             return Find(str, start, -1, options);
         }                                   
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find3"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for a given string.
         /// </devdoc>
@@ -1910,7 +1847,6 @@ namespace System.Windows.Forms {
             return position;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find4"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for the given characters.
         /// </devdoc>
@@ -1918,7 +1854,6 @@ namespace System.Windows.Forms {
             return Find(characterSet, 0, -1);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find5"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for the given characters.
         /// </devdoc>
@@ -1926,7 +1861,6 @@ namespace System.Windows.Forms {
             return Find(characterSet, start, -1);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Find6"]/*' />
         /// <devdoc>
         ///     Searches the text in a RichTextBox control for the given characters.
         /// </devdoc>
@@ -2094,7 +2028,6 @@ namespace System.Windows.Forms {
             return cf2;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetCharFormat"]/*' />
         /// <devdoc>
         /// </devdoc>
         private RichTextBoxSelectionAttribute GetCharFormat(int mask, int effect) {
@@ -2154,7 +2087,6 @@ namespace System.Windows.Forms {
             return null;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetCharIndexFromPosition"]/*' />
         /// <devdoc>
         ///     Returns the index of the character nearest to the given point.
         /// </devdoc>
@@ -2172,7 +2104,6 @@ namespace System.Windows.Forms {
             return index;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetCharInCharSet"]/*' />
         /// <devdoc>
         /// </devdoc>
         private bool GetCharInCharSet(char c, char[] charSet, bool negate) {
@@ -2186,7 +2117,6 @@ namespace System.Windows.Forms {
             return negate ? !match : match;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetLineFromCharIndex"]/*' />
         /// <devdoc>
         ///     Returns the number of the line containing a specified character position
         ///     in a RichTextBox control. Note that this returns the physical line number
@@ -2199,7 +2129,6 @@ namespace System.Windows.Forms {
             return unchecked( (int) (long)SendMessage(Interop.EditMessages.EM_EXLINEFROMCHAR, 0, index));
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetPositionFromCharIndex"]/*' />
         /// <devdoc>
         ///     Returns the location of the character at the given index.
         /// </devdoc>
@@ -2217,7 +2146,6 @@ namespace System.Windows.Forms {
             return new Point(pt.x, pt.y);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.GetProtectedError"]/*' />
         /// <devdoc>
         /// </devdoc>
         private bool GetProtectedError() {
@@ -2229,7 +2157,6 @@ namespace System.Windows.Forms {
             return false;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LoadFile"]/*' />
         /// <devdoc>
         ///     Loads the contents of the given RTF or text file into a RichTextBox control.
         /// </devdoc>
@@ -2239,7 +2166,6 @@ namespace System.Windows.Forms {
             LoadFile(path, RichTextBoxStreamType.RichText);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LoadFile1"]/*' />
         /// <devdoc>
         ///     Loads the contents of a RTF or text into a RichTextBox control.
         /// </devdoc>
@@ -2260,7 +2186,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.LoadFile2"]/*' />
         /// <devdoc>
         ///     Loads the contents of a RTF or text into a RichTextBox control.
         /// </devdoc>
@@ -2291,7 +2216,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnBackColorChanged"]/*' />
         protected override void OnBackColorChanged(EventArgs e) {
             if (IsHandleCreated)
             {
@@ -2300,14 +2224,12 @@ namespace System.Windows.Forms {
             base.OnBackColorChanged(e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnContextMenuChanged"]/*' />
         protected override void OnContextMenuChanged(EventArgs e)
         {
             base.OnContextMenuChanged(e);
             UpdateOleCallback();
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnRightToLeftChanged"]/*' />
         protected override void OnRightToLeftChanged(EventArgs e) {
             base.OnRightToLeftChanged(e);
             // When the RTL property is changed, here's what happens. Let's assume that we change from
@@ -2343,7 +2265,6 @@ namespace System.Windows.Forms {
             ForceWindowText(oldText);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnContentsResized"]/*' />
         /// <devdoc>
         ///     Fires an event when the user changes the control's contents
         ///     are either smaller or larger than the control's window size.
@@ -2353,7 +2274,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleCreated"]/*' />
         protected override void OnHandleCreated(EventArgs e) {
             // base.OnHandleCreated is called somewhere in the middle of this
 
@@ -2443,7 +2363,6 @@ namespace System.Windows.Forms {
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHandleDestroyed"]/*' />
         protected override void OnHandleDestroyed(EventArgs e) {
             base.OnHandleDestroyed(e);
             
@@ -2457,7 +2376,6 @@ namespace System.Windows.Forms {
             SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(UserPreferenceChangedHandler);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnHScroll"]/*' />
         /// <devdoc>
         ///     Fires an event when the user clicks a RichTextBox control's horizontal
         ///     scroll bar.
@@ -2467,7 +2385,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnLinkClicked"]/*' />
         /// <devdoc>
         ///     Fires an event when the user clicks on a link
         ///     in a rich-edit control.
@@ -2478,7 +2395,6 @@ namespace System.Windows.Forms {
         }
 
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnImeChange"]/*' />
         /// <devdoc>
         ///     Fires an event when the user changes the control's IME conversion status.
         /// </devdoc>
@@ -2487,7 +2403,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnProtected"]/*' />
         /// <devdoc>
         ///     Fires an event when the user is taking an action that would change
         ///     a protected range of text in the RichTextBox control.
@@ -2498,7 +2413,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnSelectionChanged"]/*' />
         /// <devdoc>
         ///     Fires an event when the current selection of text in the RichTextBox
         ///     control has changed or the insertion point has moved.
@@ -2508,7 +2422,6 @@ namespace System.Windows.Forms {
             if (handler != null) handler(this,e);
         }
         
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.OnVScroll"]/*' />
         /// <devdoc>
         ///     Fires an event when the user clicks a RichTextBox control's vertical
         ///     scroll bar.
@@ -2526,7 +2439,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_PASTESPECIAL, clipFormat.Id, 0);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.ProcessCmdKey"]/*' />
         protected override bool ProcessCmdKey(ref Message m, Keys keyData) {
             if (this.RichTextShortcutsEnabled == false) {
                 foreach (int shortcutValue in shortcutsToDisable) {
@@ -2538,7 +2450,6 @@ namespace System.Windows.Forms {
             return base.ProcessCmdKey(ref m, keyData);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.Redo"]/*' />
         /// <devdoc>
         ///     Redoes the last undone editing operation.
         /// </devdoc>
@@ -2548,7 +2459,6 @@ namespace System.Windows.Forms {
 
         //NOTE: Undo is implemented on TextBox
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SaveFile"]/*' />
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
@@ -2558,7 +2468,6 @@ namespace System.Windows.Forms {
             SaveFile(path, RichTextBoxStreamType.RichText);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SaveFile1"]/*' />
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
@@ -2580,7 +2489,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SaveFile2"]/*' />
         /// <devdoc>
         ///     Saves the contents of a RichTextBox control to a file.
         /// </devdoc>
@@ -2609,7 +2517,6 @@ namespace System.Windows.Forms {
             StreamOut(data, flags, true);
         }
         
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SendZoomFactor"]/*' />
         /// <devdoc>
         ///     Core Zoom calculation and message passing (used by ZoomFactor property and CreateHandle()
         /// </devdoc>
@@ -2651,7 +2558,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SetCharFormat"]/*' />
         /// <devdoc>
         /// </devdoc>
         private bool SetCharFormat(int mask, int effect, RichTextBoxSelectionAttribute charFormat) {
@@ -2713,7 +2619,6 @@ namespace System.Windows.Forms {
             UnsafeNativeMethods.SendMessage(new HandleRef(this, Handle), Interop.EditMessages.EM_SETCHARFORMAT, selectionOnly ? RichTextBoxConstants.SCF_SELECTION : RichTextBoxConstants.SCF_ALL, cfW);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.SetupLogPixels"]/*' />
         /// <devdoc>
         /// </devdoc>
         private static void SetupLogPixels(IntPtr hDC) {
@@ -2741,7 +2646,6 @@ namespace System.Windows.Forms {
             return(int) (((((double) v) / 20.0) / 72.0) * logP);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.StreamIn"]/*' />
         /// <devdoc>
         /// </devdoc>
         private void StreamIn(string str, int flags) {
@@ -2871,7 +2775,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.StreamOut"]/*' />
         /// <devdoc>
         /// </devdoc>
         private string StreamOut(int flags) {
@@ -3068,7 +2971,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CreateRichEditOleCallback"]/*' />
         /// <devdoc>
         ///   Creates the IRichEditOleCallback compatible object for handling RichEdit callbacks. For more
         ///   information look up the MSDN info on this interface. This is designed to be a back door of 
@@ -3078,7 +2980,6 @@ namespace System.Windows.Forms {
             return new OleCallback(this);
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.EnLinkMsgHandler"]/*' />
         /// <devdoc>
         ///      Handles link messages (mouse move, down, up, dblclk, etc)
         /// </devdoc>
@@ -3112,7 +3013,6 @@ namespace System.Windows.Forms {
             return;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.CharRangeToString"]/*' />
         /// <devdoc>
         ///     Converts a CHARRANGE to a string. Note: The behavior of this is dependent on the current window
         ///     class name being used. We have to create a CharBuffer of the type of RichTextBox DLL we're using,
@@ -3152,7 +3052,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmReflectCommand"]/*' />
         /// <devdoc>
         /// </devdoc>
         private void WmReflectCommand(ref Message m) {
@@ -3182,7 +3081,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmReflectNotify"]/*' />
         /// <devdoc>
         /// </devdoc>
         internal void WmReflectNotify(ref Message m) {
@@ -3343,7 +3241,6 @@ namespace System.Windows.Forms {
             return es;
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmSelectionChange"]/*' />
         /// <devdoc>
         /// </devdoc>
         private void WmSelectionChange(NativeMethods.SELCHANGE selChange) {
@@ -3390,7 +3287,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WmSetFont"]/*' />
         /// <devdoc>
         /// </devdoc>
         private void WmSetFont(ref Message m) {
@@ -3413,7 +3309,6 @@ namespace System.Windows.Forms {
         // 
         // </doc>
         //
-        /// <include file='doc\RichTextBox.uex' path='docs/doc[@for="RichTextBox.WndProc"]/*' />
         protected override void WndProc(ref Message m) {
             switch (m.Msg) {
                 case Interop.WindowMessages.WM_REFLECT + Interop.WindowMessages.WM_NOTIFY:

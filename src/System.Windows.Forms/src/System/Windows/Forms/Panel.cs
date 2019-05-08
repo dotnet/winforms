@@ -15,7 +15,6 @@ namespace System.Windows.Forms {
     using Microsoft.Win32;
     using System.Windows.Forms.Layout;
 
-    /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel"]/*' />
     /// <devdoc>
     ///    <para>
     ///       Represents a <see cref='System.Windows.Forms.Panel'/>
@@ -34,7 +33,6 @@ namespace System.Windows.Forms {
 
         private BorderStyle borderStyle = System.Windows.Forms.BorderStyle.None;
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.Panel"]/*' />
         /// <devdoc>
         /// <para>Initializes a new instance of the <see cref='System.Windows.Forms.Panel'/> class.</para>
         /// </devdoc>
@@ -48,7 +46,6 @@ namespace System.Windows.Forms {
             SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.AutoSize"]/*' />
         /// <devdoc>
         ///    <para> Override to re-expose AutoSize.</para>
         /// </devdoc>
@@ -66,7 +63,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.AutoSizeChanged"]/*' />
         [SRCategory(nameof(SR.CatPropertyChanged)), SRDescription(nameof(SR.ControlOnAutoSizeChangedDescr))]
         [Browsable(true), EditorBrowsable(EditorBrowsableState.Always)]
         new public event EventHandler AutoSizeChanged
@@ -108,7 +104,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.BorderStyle"]/*' />
         /// <devdoc>
         ///    <para> Indicates the
         ///       border style for the control.</para>
@@ -138,7 +133,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.CreateParams"]/*' />
         /// <devdoc>
         ///    Returns the parameters needed to create the handle.  Inheriting classes
         ///    can override this to provide extra functionality.  They should not,
@@ -165,7 +159,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.DefaultSize"]/*' />
         /// <devdoc>
         ///     Deriving classes can override this to configure a default size for their control.
         ///     This is more efficient than setting the size in the control's constructor.
@@ -185,7 +178,6 @@ namespace System.Windows.Forms {
             return LayoutEngine.GetPreferredSize(this, proposedSize - totalPadding) + totalPadding;
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyUp"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyUp {
@@ -193,7 +185,6 @@ namespace System.Windows.Forms {
             remove => base.KeyUp -= value;
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyDown"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyEventHandler KeyDown {
@@ -201,7 +192,6 @@ namespace System.Windows.Forms {
             remove => base.KeyDown -= value;
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.KeyPress"]/*' />
         /// <hideinheritance/>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         public new event KeyPressEventHandler KeyPress {
@@ -209,7 +199,6 @@ namespace System.Windows.Forms {
             remove => base.KeyPress -= value;
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.TabStop"]/*' />
         /// <devdoc>
         /// </devdoc>
         [DefaultValue(false)]
@@ -222,7 +211,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.Text"]/*' />
         /// <devdoc>
         /// </devdoc>
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never), Bindable(false)]
@@ -235,14 +223,12 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.TextChanged"]/*' />
         [Browsable(false), EditorBrowsable(EditorBrowsableState.Never)]
         new public event EventHandler TextChanged {
             add => base.TextChanged += value;
             remove => base.TextChanged -= value;
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.OnResize"]/*' />
         /// <devdoc>
         ///    <para>Fires the event indicating that the panel has been resized.
         ///       Inheriting controls should use this in favour of actually listening to
@@ -267,7 +253,6 @@ namespace System.Windows.Forms {
             }
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.StringFromBorderStyle"]/*' />
         /// <devdoc>
         /// </devdoc>
         private static string StringFromBorderStyle(BorderStyle value) {      
@@ -275,7 +260,6 @@ namespace System.Windows.Forms {
             return (ClientUtils.IsEnumValid(value, (int)value, (int)BorderStyle.None, (int)BorderStyle.Fixed3D)) ? (borderStyleType.ToString() + "." + value.ToString()) : "[Invalid BorderStyle]";
         }
 
-        /// <include file='doc\Panel.uex' path='docs/doc[@for="Panel.ToString"]/*' />
         /// <devdoc>
         ///     Returns a string representation for this control.
         /// </devdoc>
