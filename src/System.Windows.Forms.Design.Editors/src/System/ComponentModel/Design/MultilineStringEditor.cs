@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public sealed class MultilineStringEditor : UITypeEditor
     {
-        private MultilineStringEditorUI _editorUI = null;
+        private MultilineStringEditorUI _editorUI;
 
         /// <summary>
         /// Edits the given value, returning the editing results.
@@ -444,15 +444,12 @@ namespace System.ComponentModel.Design
                 base.WndProc(ref m);
                 switch (m.Msg)
                 {
-                    case NativeMethods.WM_PAINT:
+                    case Interop.WindowMessages.WM_PAINT:
                     {
                         if (ShouldShowWatermark)
                         {
-                            using (Graphics g = CreateGraphics())
-                            {
-                                g.DrawString( SR.MultilineStringEditorWatermark, Font, WatermarkBrush, new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height), _watermarkFormat
-                                );
-                            }
+                            using Graphics g = CreateGraphics();
+                            g.DrawString(SR.MultilineStringEditorWatermark, Font, WatermarkBrush, new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height), _watermarkFormat);
                         }
                         break;
                     }
