@@ -114,7 +114,7 @@ System.PlatformNotSupportedException: 'Configuration files are not supported.'
 
 ### Additional Types and Namespaces
 
-You can search for additional types which you may need in porting your apps to .NET Core on [APIs of DotNet][apisofnet]. For example, when you search for `System.AppDomain` type, you will see that it has been moved to `System.Runtime.Extensions` namespace during the .NET Core 2.0 timeframe is supported on .NET Core 3.0
+You can search for additional types which you may need in porting your apps to .NET Core on [APIs of DotNet][apisofnet]. For example, when you search for the type `System.AppDomain`, you will see that the type has been moved to `System.Runtime.Extensions` namespace starting in .NET Core 2.0.
 
 [comment]: <> (URI Links)
 
