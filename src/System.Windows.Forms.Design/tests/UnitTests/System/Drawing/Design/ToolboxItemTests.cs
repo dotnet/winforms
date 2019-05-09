@@ -133,20 +133,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_Company_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_Company_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 Company = value
             };
-            Assert.Same(value, item.Company);
-            Assert.Same(value, item.Properties["Company"]);
+            Assert.Same(expected, item.Company);
+            Assert.Same(expected, item.Properties["Company"]);
 
             // Set same.
             item.Company = value;
-            Assert.Same(value, item.Company);
-            Assert.Same(value, item.Properties["Company"]);
+            Assert.Same(expected, item.Company);
+            Assert.Same(expected, item.Properties["Company"]);
         }
 
         [Fact]
@@ -209,20 +209,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_Description_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_Description_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 Description = value
             };
-            Assert.Same(value, item.Description);
-            Assert.Same(value, item.Properties["Description"]);
+            Assert.Same(expected, item.Description);
+            Assert.Same(expected, item.Properties["Description"]);
 
             // Set same.
             item.Description = value;
-            Assert.Same(value, item.Description);
-            Assert.Same(value, item.Properties["Description"]);
+            Assert.Same(expected, item.Description);
+            Assert.Same(expected, item.Properties["Description"]);
         }
 
         [Fact]
@@ -233,20 +233,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_DisplayName_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_DisplayName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 DisplayName = value
             };
-            Assert.Same(value ?? string.Empty, item.DisplayName);
-            Assert.Same(value ?? string.Empty, item.Properties["DisplayName"]);
+            Assert.Same(expected, item.DisplayName);
+            Assert.Same(expected, item.Properties["DisplayName"]);
 
             // Set same.
             item.DisplayName = value;
-            Assert.Same(value ?? string.Empty, item.DisplayName);
-            Assert.Same(value ?? string.Empty, item.Properties["DisplayName"]);
+            Assert.Same(expected, item.DisplayName);
+            Assert.Same(expected, item.Properties["DisplayName"]);
         }
 
         [Fact]
@@ -344,20 +344,20 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
-        public void ToolboxItem_TypeName_Set_GetReturnsExpected(string value)
+        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        public void ToolboxItem_TypeName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
             {
                 TypeName = value
             };
-            Assert.Same(value ?? string.Empty, item.TypeName);
-            Assert.Same(value ?? string.Empty, item.Properties["TypeName"]);
+            Assert.Same(expected, item.TypeName);
+            Assert.Same(expected, item.Properties["TypeName"]);
 
             // Set same.
             item.TypeName = value;
-            Assert.Same(value ?? string.Empty, item.TypeName);
-            Assert.Same(value ?? string.Empty, item.Properties["TypeName"]);
+            Assert.Same(expected, item.TypeName);
+            Assert.Same(expected, item.Properties["TypeName"]);
         }
 
         [Fact]

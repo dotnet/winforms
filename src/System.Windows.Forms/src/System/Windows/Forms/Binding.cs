@@ -556,8 +556,6 @@ namespace System.Windows.Forms
 
         protected virtual void OnBindingComplete(BindingCompleteEventArgs e)
         {
-            // This recursion guard will only be in effect if FormattingEnabled because this method
-            // is only called if formatting is enabled.
             if (!_inOnBindingComplete)
             {
                 try
@@ -571,7 +569,10 @@ namespace System.Windows.Forms
                     // User code should not be throwing exceptions from this event as a way to signal new error conditions (they should use
                     // things like the Format or Parse events for that). Exceptions thrown here can mess up currency manager behavior big time.
                     // For now, eat any non-critical exceptions and instead just cancel the current push/pull operation.
-                    e.Cancel = true;
+                    if (e != null)
+                    {
+                        e.Cancel = true;
+                    }
                 }
                 finally
                 {
@@ -584,7 +585,7 @@ namespace System.Windows.Forms
         {
             _onParse?.Invoke(this, cevent);
 
-            if (!_formattingEnabled)
+            if (!_formattingEnabled && cevent != null)
             {
                 if (!(cevent.Value is DBNull) && cevent.Value != null && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
@@ -597,7 +598,7 @@ namespace System.Windows.Forms
         {
             _onFormat?.Invoke(this, cevent);
 
-            if (!_formattingEnabled)
+            if (!_formattingEnabled && cevent != null)
             {
                 if (!(cevent.Value is DBNull) && cevent.DesiredType != null && !cevent.DesiredType.IsInstanceOfType(cevent.Value) && (cevent.Value is IConvertible))
                 {
@@ -976,7 +977,7 @@ namespace System.Windows.Forms
                     {
                         _propIsNullInfo.SetValue(_control, true);
                     }
-                    else
+                    else if (_propInfo != null)
                     {
                         if (_propInfo.PropertyType == typeof(object))
                         {
