@@ -8,7 +8,8 @@ using System.Globalization;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    /// This is a nested container.  Anything added to the nested container will be hostable in a designer.
+    /// This is a nested container.static Anything added to the nested container
+    /// will be hostable in a designer.
     /// </summary>
     internal sealed class SiteNestedContainer : NestedContainer
     {
@@ -32,11 +33,12 @@ namespace System.ComponentModel.Design
             get
             {
                 string ownerName = base.OwnerName;
-                if (_containerName != null && _containerName.Length > 0)
+                if (string.IsNullOrEmpty(_containerName))
                 {
-                    ownerName = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", ownerName, _containerName);
+                    return ownerName;
                 }
-                return ownerName;
+
+                return $"{ownerName}.{_containerName}";
             }
         }
 
@@ -45,22 +47,25 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override void Add(IComponent component, string name)
         {
-            if (_host.AddToContainerPreProcess(component, name, this))
+            if (!_host.AddToContainerPreProcess(component, name, this))
             {
-                // Site creation fabricates a name for this component.
-                base.Add(component, name);
-                try
+                return;
+            }
+
+            // Site creation fabricates a name for this component.
+            base.Add(component, name);
+            try
+            {
+                _host.AddToContainerPostProcess(component, name, this);
+            }
+            catch (Exception t)
+            {
+                if (t != CheckoutException.Canceled)
                 {
-                    _host.AddToContainerPostProcess(component, name, this);
+                    Remove(component);
                 }
-                catch (Exception t)
-                {
-                    if (t != CheckoutException.Canceled)
-                    {
-                        Remove(component);
-                    }
-                    throw;
-                }
+
+                throw;
             }
         }
 
@@ -73,6 +78,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             return new NestedSite(component, _host, name, this);
         }
 
@@ -81,15 +87,16 @@ namespace System.ComponentModel.Design
         /// </summary>
         public override void Remove(IComponent component)
         {
-            if (_host.RemoveFromContainerPreProcess(component, this))
+            if (!_host.RemoveFromContainerPreProcess(component, this))
             {
-                ISite site = component.Site;
-                Debug.Assert(site != null, "RemoveFromContainerPreProcess should have returned false for this.");
-                RemoveWithoutUnsiting(component);
-                _host.RemoveFromContainerPostProcess(component, this);
+                return;
             }
-        }
 
+            ISite site = component.Site;
+            Debug.Assert(site != null, "RemoveFromContainerPreProcess should have returned false for this.");
+            RemoveWithoutUnsiting(component);
+            _host.RemoveFromContainerPostProcess(component, this);
+        }
 
         protected override object GetService(Type serviceType)
         {
@@ -99,43 +106,33 @@ namespace System.ComponentModel.Design
                 return service;
             }
 
-
             if (serviceType == typeof(IServiceContainer))
             {
-                if (_services == null)
-                {
-                    _services = new ServiceContainer(_host);
-                }
-                return _services;
+                return _services ?? (_services = new ServiceContainer(_host));
             }
-
 
             if (_services != null)
             {
                 return _services.GetService(serviceType);
             }
-            else
+
+            if (Owner.Site == null || !_safeToCallOwner)
             {
-                if (Owner.Site != null && _safeToCallOwner)
-                {
-                    try
-                    {
-                        _safeToCallOwner = false;
-                        return Owner.Site.GetService(serviceType);
-                    }
-                    finally
-                    {
-                        _safeToCallOwner = true;
-                    }
-                }
+                return null;
             }
-            return null;
+
+            try
+            {
+                _safeToCallOwner = false;
+                return Owner.Site.GetService(serviceType);
+            }
+            finally
+            {
+                _safeToCallOwner = true;
+            }
         }
 
-        internal object GetServiceInternal(Type serviceType)
-        {
-            return GetService(serviceType);
-        }
+        internal object GetServiceInternal(Type serviceType) => GetService(serviceType);
 
         private sealed class NestedSite : DesignerHost.Site, INestedSite
         {
@@ -152,17 +149,19 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    if (_name != null)
+                    if (_name == null)
                     {
-                        string ownerName = _container.OwnerName;
-                        string childName = ((ISite)this).Name;
-                        if (ownerName != null)
-                        {
-                            childName = string.Format(CultureInfo.CurrentCulture, "{0}.{1}", ownerName, childName);
-                        }
+                        return null;
+                    }
+
+                    string ownerName = _container.OwnerName;
+                    string childName = ((ISite)this).Name;
+                    if (ownerName == null)
+                    {
                         return childName;
                     }
-                    return _name;
+
+                    return $"{ownerName}.{childName}";
                 }
             }
         }
